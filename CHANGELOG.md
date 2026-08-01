@@ -1,3 +1,9 @@
+## [0.19.0] - 2026-08-01
+
+### Features
+
+- *(rushwallet)* Add 30 RushWallet brainwallet contest puzzles (#152)
+- *(b1000)* Change `135` to solved (#159)
 ## [0.18.1] - 2026-05-09
 
 ### Features
@@ -11,6 +17,7 @@
 ### Miscellaneous Tasks
 
 - *(cli)* Remove unused #[allow(dead_code)] annotations
+- *(release)* V0.18.1
 ## [0.18.0] - 2026-03-30
 
 ### Features
