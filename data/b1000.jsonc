@@ -13,7 +13,7 @@
   "metadata": {
     "source_url": "https://bitcointalk.org/index.php?topic=5218972",
     "total_puzzles": 256,
-    "solved_count": 82,
+    "solved_count": 83,
     "with_pubkey_count": 184
   },
   "puzzles": [
@@ -5943,7 +5943,11 @@
     },
     {
       "key": {
-        "bits": 135
+        "bits": 135,
+        "hex": "0000000000000000000000000000006d9392a16883f90903d5f78da57af07eb2",
+        "wif": {
+          "decrypted": "KwDiBf89QgGbjEhKnhXJuHd5nqdUrAnYX4EBqgA3Lxm2rHQuQMih"
+        }
       },
       "address": {
         "value": "16RGFo6hjq9ym6Pj7N5H7L1NR1rVPJyw2v",
@@ -5951,12 +5955,14 @@
         "hash160": "3b6f58a75a54bfd85d1bc6c51180fdc732992326"
       },
       "prize": 13.50003408,
-      "status": "unsolved",
+      "status": "solved",
       "pubkey": {
         "value": "02145d2611c823a396ef6712ce0f712f09b9b4f3135e3e0aa3230fb9b6d08d1e16",
         "format": "compressed"
       },
+      "solve_date": "2026-07-28 08:20:16",
       "start_date": "2015-01-15 18:07:14",
+      "solve_time": 363881582,
       "transactions": [
         {
           "type": "funding",
@@ -6005,8 +6011,21 @@
           "txid": "3f2ec8791ec73c2216bf1dba98d79624c30bc9bf86abc314404eeec87d43f0c0",
           "date": "2025-03-30 01:49:24",
           "amount": 0.000006
+        },
+        {
+          "type": "claim",
+          "txid": "817535430c600810080662dd425a2e335f771effd950d28fc443bce4a92fa812",
+          "date": "2026-07-28 08:20:16",
+          "amount": 13.5
+        },
+        {
+          "type": "claim",
+          "txid": "840d3ed5183fd1309c364d5f5a71a9686e78b24ec2e8a502062fc5a9258a9ba7",
+          "date": "2026-07-29 19:35:34",
+          "amount": 0.00003408
         }
-      ]
+      ],
+      "solver": "retired_coder"
     },
     {
       "key": {
