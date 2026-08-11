@@ -7,6 +7,9 @@
 
 Crypto bounties, puzzles and challenges data library.
 
+> [!WARNING]
+> **boha is experimental.** The package name, public API, provider model, CLI flags, and tool surfaces may change before the first stable release. Pin exact versions if you build on it now.
+
 ## Installation
 
 ### CLI
