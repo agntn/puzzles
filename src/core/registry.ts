@@ -50,7 +50,8 @@ function isEntry(value: AnyCollection | CollectionEntry): value is CollectionEnt
 
 /**
  * The one load of an entry, shared by every caller until the key is registered again. A custom
- * loader that builds an instance runs once, and a rejected load is forgotten so the next call retries.
+ * loader that builds an instance runs once, a rejected load is forgotten so the next call retries,
+ * and a loader that replaces its own key while running leaves nothing cached for the old entry.
  *
  * @param {TableEntry} entry - The entry to resolve.
  * @returns {Promise<AnyCollection>} The collection instance.
@@ -59,9 +60,12 @@ function load(entry: TableEntry): Promise<AnyCollection> {
   if (entry.instance !== undefined) {
     return Promise.resolve(entry.instance);
   }
-  let promise = pending.get(entry.key);
-  if (promise === undefined) {
-    promise = entry.load();
+  const cached = pending.get(entry.key);
+  if (cached !== undefined) {
+    return cached;
+  }
+  const promise = entry.load();
+  if (table().get(entry.key) === entry) {
     pending.set(entry.key, promise);
     promise.catch(() => {
       if (pending.get(entry.key) === promise) {

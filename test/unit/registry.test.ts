@@ -46,6 +46,32 @@ describe("registry consistency", () => {
     expect((await lib.get("lazyfixture/one"))?.id()).toBe("lazyfixture/one");
   });
 
+  it("caches nothing for a loader that replaces its own key while running", async () => {
+    const lib = await freshLibrary();
+    const build = (name: string) =>
+      new lib.NamedCollection("selffixture", lib.party(name), [
+        lib.bitcoinPuzzle({
+          id: `selffixture/${name}`,
+          address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+          sourceUrl: "https://example.com/puzzle",
+          startedAt: "2026-01-01",
+        }),
+      ]);
+    lib.registerCollection({
+      key: "selffixture",
+      load: () => {
+        lib.registerCollection({
+          key: "selffixture",
+          load: () => Promise.resolve(build("second")),
+        });
+        return Promise.resolve(build("first"));
+      },
+    });
+
+    expect((await lib.getCollection("selffixture"))?.author.name).toBe("first");
+    expect((await lib.getCollection("selffixture"))?.author.name).toBe("second");
+  });
+
   it("resolves a historical alias in the collection segment of an identifier", async () => {
     const lib = await freshLibrary();
 
