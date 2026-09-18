@@ -121,6 +121,17 @@ function assetProblems(puzzle: Puzzle): string[] {
 }
 
 function mutablePartProblem(puzzle: Puzzle): string | undefined {
+  const seen = new WeakSet<object>();
+  const walk = (value: unknown, path: string): string[] => {
+    if (typeof value !== "object" || value === null || seen.has(value)) {
+      return [];
+    }
+    seen.add(value);
+    return [
+      ...(Object.isFrozen(value) ? [] : [path]),
+      ...Object.entries(value).flatMap(([key, item]) => walk(item, `${path}.${key}`)),
+    ];
+  };
   const parts = {
     address: puzzle.address(),
     assets: puzzle.assets(),
@@ -129,9 +140,7 @@ function mutablePartProblem(puzzle: Puzzle): string | undefined {
     solver: puzzle.solver(),
     transactions: puzzle.transactions(),
   };
-  const mutable = Object.entries(parts)
-    .filter(([, part]) => part !== undefined && !Object.isFrozen(part))
-    .map(([name]) => name);
+  const mutable = Object.entries(parts).flatMap(([name, part]) => walk(part, name));
   return mutable.length === 0 ? undefined : `${puzzle.id()}: mutable ${mutable.join(", ")}`;
 }
 
