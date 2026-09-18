@@ -175,18 +175,44 @@ export abstract class Collection<Query> {
   }
 }
 
-/** A collection addressed by string names. */
+/** The digits of a puzzle number as its identifier spells them: no sign, no leading zero. */
+const PUZZLE_NUMBER = /^[1-9]\d*$/;
+
+/**
+ * A collection addressed by string names, `decred_janus` or `zden/decred_janus`. A query of
+ * another type is a miss, not a `TypeError`.
+ */
 export class NamedCollection extends Collection<string> {
-  protected override idFor(query: string): string {
+  protected override idFor(query: string): string | undefined {
+    if (typeof query !== "string") {
+      return undefined;
+    }
     return query.includes("/") ? query : `${this.key}/${query}`;
   }
 }
 
-/** A collection addressed by puzzle numbers. */
+/**
+ * A collection addressed by puzzle numbers, `71`, `"71"` or `"b1000/71"`. Only that spelling
+ * resolves: `Number()` would read `"0x47"`, `" 71 "` and `"71.0"` as 71 and `"7e1"` as 70.
+ */
 export class NumericCollection extends Collection<number | string> {
   protected override idFor(query: number | string): string | undefined {
-    const number = typeof query === "number" ? query : Number(query.replace(`${this.key}/`, ""));
-    return Number.isSafeInteger(number) && number >= 1 ? `${this.key}/${number}` : undefined;
+    const number = typeof query === "number" ? query : this.#numberOf(query);
+    return number !== undefined && Number.isSafeInteger(number) && number >= 1
+      ? `${this.key}/${number}`
+      : undefined;
+  }
+
+  /**
+   * Reads the number off `71` or `b1000/71`, and nothing off any other spelling.
+   *
+   * @param {string} query - Query in the collection's own terms.
+   * @returns {number | undefined} The puzzle number, or `undefined` for any other spelling.
+   */
+  #numberOf(query: string): number | undefined {
+    const prefix = `${this.key}/`;
+    const digits = query.startsWith(prefix) ? query.slice(prefix.length) : query;
+    return PUZZLE_NUMBER.test(digits) ? Number(digits) : undefined;
   }
 }
 

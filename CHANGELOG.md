@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- `NumericCollection` resolves a query only in the spelling its identifier uses. `Number()` used to read `b1000.get("0x47")`, `b1000.get(" 71 ")` and `b1000.get("71.0")` as puzzle 71 and `b1000.get("7e1")` as puzzle 70, so `require()`, `balance()` and `verify()` answered for a record the caller never named. A `NamedCollection` handed a non-string query answers `undefined` instead of throwing `TypeError: query.includes is not a function`.
 - `collectionSummaries()`, `datasetCollections()`, `dataset()` and `toJSON()` hand back frozen data. The memoized views used to freeze only the outer array, so an assignment to a summary row or a serialized record, or a push into a collection's `puzzles`, rewrote the export for every later reader while `dataVersion()` kept the old hash.
 - Puzzle records are frozen through. `address()`, `transactions()`, `keyData()`, `solver()`, `assets()` and `Collection.author` hand back immutable data, where an assignment through any of them used to rewrite the record for every other reader while the memoized `dataVersion()` kept the old hash.
 - `puzzles_show` prints the whole record: the key in every form it has, the solve date, the solver, every transaction, the claim link and the assets. It used to stop at `private key known: yes`, and MCP clients never see `details`.
