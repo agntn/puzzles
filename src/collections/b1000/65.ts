@@ -1,0 +1,53 @@
+import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import {
+  claim,
+  compressed,
+  funding,
+  hex,
+  increase,
+  p2pkh,
+  pubkeyReveal,
+} from "../../core/parts.ts";
+
+/** Puzzle `b1000/65`. */
+export const b1000Puzzle65 = bitcoinPuzzle({
+  id: "b1000/65",
+  address: p2pkh("18ZMbwUFLMHoZBbfpCjUJQTCMCbktshgpe", "52e763a7ddc1aa4fa811578c491c1bc7fd570137"),
+  sourceUrl: "https://bitcointalk.org/index.php?topic=5218972",
+  startedAt: "2015-01-15 18:07:14",
+  status: Status.Solved,
+  pubkey: compressed("0230210c23b1a047bc9bdbb13448e67deddc108946de6de639bcc75d47c0216b1b"),
+  key: hex("000000000000000000000000000000000000000000000001a838b13505b26867", 65).wif(
+    "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qZM21gaY8WN2CdwnTG57",
+  ),
+  prize: 0.65,
+  solvedAt: "2019-06-07 16:39:02",
+  solveTime: 138580308,
+  transactions: [
+    funding(
+      "08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",
+      "2015-01-15 18:07:14",
+      0.065,
+    ),
+    increase(
+      "5d45587cfd1d5b0fb826805541da7d94c61fe432259e68ee26f4a04544384164",
+      "2017-07-11 05:00:53",
+      0.585,
+    ),
+    increase(
+      "7c432398c7631600af01695c9767eff109cbfae4f7ecccaff388043a474d4f1e",
+      "2019-05-16 04:25:45",
+      0.00001,
+    ),
+    pubkeyReveal(
+      "17e4e323cfbc68d7f0071cad09364e8193eedf8fefbcbd8a21b4b65717a4b3d3",
+      "2019-06-01 02:07:26",
+      0.00001,
+    ),
+    claim(
+      "43bb89f7d16fb47fee3eaeee0fa26aa2d0d6874c8907b2eca4ec2420bf4a9dc3",
+      "2019-06-07 16:39:02",
+      0.65,
+    ),
+  ],
+});

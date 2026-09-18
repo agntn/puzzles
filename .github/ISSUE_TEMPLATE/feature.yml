@@ -1,0 +1,11 @@
+name: Idea
+description: Suggest a change
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What's missing?
+      description: Explain what you want to do and why the current behavior gets in the way. A possible approach is welcome, but not required.
+    validations:
+      required: true

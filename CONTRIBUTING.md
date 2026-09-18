@@ -1,38 +1,30 @@
 # Contributing
 
-Contributions welcome! This includes code, bug fixes, new puzzle collections, and data updates.
-
-## Getting Started
-
-1. Fork the repository
-2. Clone your fork
-3. Create a feature branch (`git checkout -b feature/my-change`)
+Code fixes, new puzzle collections, and evidence-backed data updates are welcome.
 
 ## Development
 
 ```bash
-cargo build
-cargo test
-cargo fmt
-cargo clippy
+pnpm install
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm test:packed
 ```
 
-## Pull Requests
+`pnpm typecheck` builds the package first, then checks the library, the Pi extension, and the OMP extension. Node.js 24 or newer runs the TypeScript sources directly, so `node src/cli.ts stats` works without a loader.
 
-1. Push to your fork
-2. Open a PR against `main`
-3. CI will run tests, formatting, and linting checks
+## Adding or updating puzzle data
 
-## Adding Puzzle Data
+Each puzzle is a `PuzzleSpec` record in `src/collections/<collection>/<name>.ts`, built by a factory for its chain and listed in `src/collections/<collection>.ts`. Singleton collections keep their puzzle in the collection module. There is no generated data file.
 
-Puzzle data lives in `data/*.jsonc` files with JSON Schema validation. The build script generates Rust code from these at compile time.
+1. Fixing one puzzle means editing its record. Declare only what the puzzle has; absent fields disappear from the serialized record.
+2. A new puzzle gets its own file, a record built with the matching factory (`bitcoinPuzzle`, `ethereumPuzzle`, and so on), an import, and an entry in the collection's `puzzles` list. Export it as `<collection>Puzzle<Name>` in camelCase. A puzzle needing custom behavior may still extend a chain base directly.
+3. A new collection gets a class with a `static readonly key`, a canonical instance exported from its module, and a `{ key, load }` entry in `src/collections/index.ts`. No `registerCollection()` call and no root export: the manifest is the registration.
+4. Build addresses, keys, transactions, assets, and parties with the constructors in `src/core/parts.ts`. Do not hand-write the record shapes.
+5. Keep source URLs and on-chain evidence with the record.
+6. Run `pnpm test`. The data gate checks unique identifiers, collection ownership, private key derivation, WIF and BIP38 consistency, claimed public keys, asset paths, and that nothing serializes as null.
 
-When adding or updating puzzles:
-- Follow the existing JSONC structure
-- Use JSON Schema for validation (schemas in `data/schemas/`)
-- Verify addresses are valid
-- Include source references where possible
+## Pull requests
 
-## Questions?
-
-Open an issue if something is unclear.
+Create a focused branch, push it to your fork, and open a pull request against `main`. Keep unrelated formatting and data changes out of the same patch.

@@ -3,7 +3,7 @@ name: autofix.ci
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -12,14 +12,25 @@ jobs:
   autofix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
         with:
-          components: rustfmt
+          node-version: 26
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            docs/pnpm-lock.yaml
 
-      - uses: Swatinem/rust-cache@v2
+      - run: pnpm install
 
-      - run: cargo fmt --all
+      - run: pnpm --dir docs install
 
-      - uses: autofix-ci/action@v1
+      - name: Fix lint issues
+        run: pnpm run lint:fix
+
+      - uses: autofix-ci/action@7a166d7532b277f34e16238930461bf77f9d7ed8
+        with:
+          commit-message: "chore: apply automated updates"

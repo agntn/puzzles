@@ -1,0 +1,87 @@
+# Collections
+
+Counts come from the class data. Run `puzzles collections` after a data change instead of trusting the numbers below.
+
+## b1000
+
+[Bitcoin Puzzle Transaction](https://privatekeys.pw/puzzles/bitcoin-puzzle-tx), 256 puzzles. Puzzle N holds its private key in `[2^(N-1), 2^N - 1]`, which is the entire reason anyone brute-forces this collection. Unsolved puzzles above 130 expose public keys at every fifth index, so they are the interesting targets.
+
+```ts
+import { b1000 } from "@agntn/puzzles";
+
+const puzzle = b1000.require(66); // number or string
+const [low, high] = puzzle.keyRange() ?? [];
+```
+
+## arweave
+
+Tiamat's Arweave bounties from chronobot.io, 12 puzzles. Balances resolve through arweave.net. Key derivation does not work on this chain, so `verify()` returns a failure value rather than a match.
+
+```ts
+arweave.require("weave1");
+```
+
+## ballet
+
+Bobby Lee's Ballet Crypto puzzles, 3 physical Bitcoin notes with BIP38-encrypted keys. The passphrase is the puzzle.
+
+```ts
+ballet.require("AA007448");
+```
+
+## bitaps
+
+One Shamir secret sharing puzzle, 3 of 5 threshold with 2 shares published. Two more shares to go.
+
+```ts
+bitaps.require();
+```
+
+## bitimage
+
+Keys derived from files with `SHA256(Base64(file))` as BIP39 entropy. Two puzzles: `kitten` is solved, `kitten_passphrase` still needs a passphrase nobody has.
+
+```ts
+bitimage.require("kitten");
+```
+
+## gsmg
+
+GSMG.IO multi-phase challenge, one puzzle. The prize halves at every Bitcoin halving, so it shrinks while you think.
+
+```ts
+gsmg.require();
+```
+
+## hash_collision
+
+Peter Todd's P2SH hash-collision bounties: `sha1`, `sha256`, `ripemd160`, `hash160`, `hash256`, `op_abs`. SHA-1 fell in 2017. The `peter_todd` alias still works.
+
+```ts
+hashCollision.require("sha256");
+get("peter_todd/sha256");
+```
+
+## rushwallet
+
+Dmitri Kryptokov and KryptoKit's RushWallet brainwallet contest from September 2014. 30 P2PKH targets derived as `sha256(passphrase)` into an uncompressed key. 28 passphrases came back out of contest videos, OCR, morse audio, and social clue carriers. #26 is claimed on-chain with the passphrase still unknown, #30 is untouched. All 30 contest UTXOs were funded by `1GShq18eb4V6uBtqgwxkmuPTUHCtyBcNYA`.
+
+```ts
+rushwallet.require("9").key()?.data().wif?.passphrase;
+```
+
+## warp
+
+Keybase WarpWallet challenges, 6 puzzles. Four solved, two expired and later reclaimed by Keybase.
+
+```ts
+warp.require("challenge_1");
+```
+
+## zden
+
+Visual crypto puzzles by Zden, 15 across Bitcoin, Ethereum, Litecoin, and Decred. Keys hide in images, animations, and visual patterns, so the asset matters as much as the record.
+
+```ts
+zden.require("level_4").assetUrl(); // raw asset URL
+```

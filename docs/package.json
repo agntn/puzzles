@@ -1,0 +1,34 @@
+{
+  "name": "docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev --extends docus",
+    "build": "NUXT_SITE_URL=https://puzzles.agntn.dev nuxt build --extends docus",
+    "generate": "NUXT_SITE_URL=https://puzzles.agntn.dev nuxt generate --extends docus",
+    "preview": "nuxt preview --extends docus",
+    "deploy": "pnpm build && wrangler deploy",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@agntn/chains": "0.3.5",
+    "@agntn/explorers": "0.5.3",
+    "@noble/curves": "2.3.0",
+    "@noble/hashes": "2.3.0",
+    "@scure/base": "2.3.0",
+    "@scure/bip32": "2.3.0",
+    "@scure/bip39": "2.3.0",
+    "better-sqlite3": "12.11.1",
+    "docus": "5.13.0",
+    "nuxt": "4.5.2"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "1.2.128",
+    "@iconify-json/simple-icons": "1.2.94",
+    "@iconify-json/token": "1.2.40",
+    "@iconify-json/vscode-icons": "1.2.76",
+    "vue-tsc": "^3.3.11",
+    "wrangler": "4.128.0"
+  },
+  "packageManager": "pnpm@11.22.0"
+}
