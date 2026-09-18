@@ -27,6 +27,7 @@ const aliases: ReadonlyMap<string, string> = new Map([
 
 let entries: Map<string, TableEntry> | undefined;
 let snapshot: Promise<readonly AnyCollection[]> | undefined;
+const pending = new Map<string, Promise<AnyCollection>>();
 
 /**
  * The registry table, seeded from the built-in manifest on first use rather than at module scope,
@@ -48,6 +49,30 @@ function isEntry(value: AnyCollection | CollectionEntry): value is CollectionEnt
 }
 
 /**
+ * The one load of an entry, shared by every caller until the key is registered again. A custom
+ * loader that builds an instance runs once, and a rejected load is forgotten so the next call retries.
+ *
+ * @param {TableEntry} entry - The entry to resolve.
+ * @returns {Promise<AnyCollection>} The collection instance.
+ */
+function load(entry: TableEntry): Promise<AnyCollection> {
+  if (entry.instance !== undefined) {
+    return Promise.resolve(entry.instance);
+  }
+  let promise = pending.get(entry.key);
+  if (promise === undefined) {
+    promise = entry.load();
+    pending.set(entry.key, promise);
+    promise.catch(() => {
+      if (pending.get(entry.key) === promise) {
+        pending.delete(entry.key);
+      }
+    });
+  }
+  return promise;
+}
+
+/**
  * Registers a collection under its stable key, or replaces what the key held. Built-ins are listed
  * already. This is the door for collections outside the package.
  *
@@ -61,6 +86,7 @@ export function registerCollection(collection: AnyCollection | CollectionEntry):
     return;
   }
   table().set(entry.key, entry);
+  pending.delete(entry.key);
   snapshot = undefined;
 }
 
@@ -92,7 +118,7 @@ export function hasCollection(name: string): boolean {
  */
 export async function getCollection(name: string): Promise<AnyCollection | undefined> {
   const entry = table().get(canonical(name));
-  return entry === undefined ? undefined : entry.load();
+  return entry === undefined ? undefined : load(entry);
 }
 
 /**
@@ -116,9 +142,9 @@ export async function requireCollection(name: string): Promise<AnyCollection> {
  * @returns {Promise<readonly AnyCollection[]>} Every collection, loaded once and frozen.
  */
 export async function collections(): Promise<readonly AnyCollection[]> {
-  const pending = (snapshot ??= Promise.all(
-    [...table().values()].map((entry) => entry.load()),
-  ).then((loaded) => Object.freeze(loaded)));
+  const pending = (snapshot ??= Promise.all([...table().values()].map(load)).then((loaded) =>
+    Object.freeze(loaded),
+  ));
   try {
     return await pending;
   } catch (error) {

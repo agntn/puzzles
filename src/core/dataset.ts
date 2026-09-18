@@ -115,15 +115,21 @@ export async function selectPuzzles(query: PuzzleQuery = {}): Promise<readonly P
 }
 
 /**
- * Looks up a puzzle by its exact universal identifier, loading only its collection.
+ * Looks up a puzzle by its universal identifier, loading only its collection. A historical
+ * alias in the collection segment resolves too, so `peter_todd/sha1` finds `hash_collision/sha1`.
  *
  * @param {string} id - Universal puzzle identifier.
  * @returns {Promise<Puzzle | undefined>} The puzzle, or `undefined` when no collection claims the identifier.
  */
 export async function get(id: string): Promise<Puzzle | undefined> {
-  const collection = await getCollection(id.split("/", 1)[0] ?? id);
-  const puzzle = collection?.get(id);
-  return puzzle?.id() === id ? puzzle : undefined;
+  const [prefix, ...rest] = id.split("/");
+  const collection = await getCollection(prefix ?? id);
+  if (collection === undefined) {
+    return undefined;
+  }
+  const canonical = rest.length === 0 ? collection.key : `${collection.key}/${rest.join("/")}`;
+  const puzzle = collection.get(canonical);
+  return puzzle?.id() === canonical ? puzzle : undefined;
 }
 
 /**

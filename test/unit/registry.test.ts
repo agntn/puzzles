@@ -15,6 +15,45 @@ describe("registry consistency", () => {
     vi.resetModules();
   });
 
+  it("loads a lazy entry once, however many callers ask", async () => {
+    const lib = await freshLibrary();
+    const puzzle = lib.bitcoinPuzzle({
+      id: "lazyfixture/one",
+      address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+    });
+    let loads = 0;
+    lib.registerCollection({
+      key: "lazyfixture",
+      load: () => {
+        loads += 1;
+        return Promise.resolve(
+          new lib.NamedCollection("lazyfixture", lib.party("fixture"), [puzzle]),
+        );
+      },
+    });
+
+    const [first, second] = await Promise.all([
+      lib.getCollection("lazyfixture"),
+      lib.getCollection("lazyfixture"),
+    ]);
+    const third = await lib.getCollection("lazyfixture");
+
+    expect(loads).toBe(1);
+    expect(second).toBe(first);
+    expect(third).toBe(first);
+    expect((await lib.get("lazyfixture/one"))?.id()).toBe("lazyfixture/one");
+  });
+
+  it("resolves a historical alias in the collection segment of an identifier", async () => {
+    const lib = await freshLibrary();
+
+    expect((await lib.get("peter_todd/sha1"))?.id()).toBe("hash_collision/sha1");
+    expect((await lib.get("warpwallet/challenge_1"))?.id()).toBe("warp/challenge_1");
+    expect(await lib.get("peter_todd/nope")).toBeUndefined();
+  });
+
   it("refreshes every aggregate after registration and replacement", async () => {
     const lib = await freshLibrary();
     const originalPuzzles = await lib.all();
