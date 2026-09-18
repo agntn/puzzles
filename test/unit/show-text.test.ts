@@ -41,6 +41,7 @@ describe("puzzles_show text", () => {
   it("prints every key representation a record carries", async () => {
     const ballet = await lines("ballet/AA007448");
     const bitaps = await lines("bitaps");
+    const movieEnigma = await lines("movie_enigma");
 
     expect(ballet).toContain(
       "encrypted wif: 6PnWfKaBfDW6mFFhhFsbNRHnVgojUhdf2b5NXP3FfwXiQ69MxEzVK2J4cH (bip38)",
@@ -51,6 +52,9 @@ describe("puzzles_show text", () => {
     expect(bitaps.some((line) => line.startsWith("shares: 2 of 5 published, 3 needed:"))).toBe(
       true,
     );
+    expect(movieEnigma.some((line) => line.startsWith("private key: path mad alien"))).toBe(true);
+    expect(movieEnigma.some((line) => line.endsWith("ghost shine (seed phrase)"))).toBe(true);
+    expect(movieEnigma).toContain("derivation path: m/84'/0'/0'/0/0");
   });
 
   it("keeps the seed phrase when a WIF outranks it", () => {

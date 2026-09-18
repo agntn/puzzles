@@ -6,7 +6,7 @@ export default defineAppConfig({
   seo: {
     title: "@agntn/puzzles",
     description:
-      "Public crypto bounties, puzzles and challenges as typed records. 332 puzzles in ten collections with addresses, key material and outcomes. Library, CLI, MCP server, Pi and OMP.",
+      "Public crypto bounties, puzzles and challenges as typed records. 333 puzzles in eleven collections with addresses, key material and outcomes. Library, CLI, MCP server, Pi and OMP.",
     schema: {
       type: "SoftwareApplication",
       applicationCategory: "DeveloperApplication",

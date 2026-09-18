@@ -47,7 +47,7 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(332);
+    expect(result.total).toBe(333);
     expect(result.unsolved).toBe(93);
   });
 
@@ -81,7 +81,7 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result).toHaveLength(10);
+    expect(result).toHaveLength(11);
     expect(result.map((entry) => entry.key)).toContain("hash_collision");
   });
 
@@ -91,7 +91,7 @@ describe.concurrent("puzzles CLI", () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(10);
+    expect(result.collections).toHaveLength(11);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 
