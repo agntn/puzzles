@@ -1,6 +1,7 @@
 import { defineCommand } from "citty";
 import { jsonArg, printLine } from "./output.ts";
 import { all, requirePuzzle } from "../core/dataset.ts";
+import { InvalidArgumentError } from "../core/errors.ts";
 import type { Puzzle } from "../core/puzzle.ts";
 import { toJson } from "../core/utils.ts";
 import { verifyPuzzle, type VerifyResult } from "../core/verify.ts";
@@ -12,7 +13,7 @@ async function selectPuzzles(
     return all();
   }
   if (args.id === undefined) {
-    throw new Error("verify requires a puzzle identifier or --all");
+    throw new InvalidArgumentError("id", "pass a puzzle identifier or --all");
   }
   return [await requirePuzzle(args.id)];
 }
