@@ -120,6 +120,21 @@ function assetProblems(puzzle: Puzzle): string[] {
     .map((path) => `${puzzle.id()}: missing asset assets/${puzzle.collection()}/${path}`);
 }
 
+function mutablePartProblem(puzzle: Puzzle): string | undefined {
+  const parts = {
+    address: puzzle.address(),
+    assets: puzzle.assets(),
+    key: puzzle.keyData(),
+    pubkey: puzzle.pubkey(),
+    solver: puzzle.solver(),
+    transactions: puzzle.transactions(),
+  };
+  const mutable = Object.entries(parts)
+    .filter(([, part]) => part !== undefined && !Object.isFrozen(part))
+    .map(([name]) => name);
+  return mutable.length === 0 ? undefined : `${puzzle.id()}: mutable ${mutable.join(", ")}`;
+}
+
 function collect(check: (puzzle: Puzzle) => string | undefined): string[] {
   return puzzles.map((puzzle) => check(puzzle)).filter((problem) => problem !== undefined);
 }
@@ -180,6 +195,11 @@ describe("collection class data", () => {
 
   it("references only existing assets", () => {
     expect(puzzles.flatMap((puzzle) => assetProblems(puzzle))).toEqual([]);
+  });
+
+  it("hands back every record frozen", () => {
+    expect(collect(mutablePartProblem)).toEqual([]);
+    expect(registered.filter((collection) => !Object.isFrozen(collection.author))).toEqual([]);
   });
 
   it("serializes without null placeholders", () => {

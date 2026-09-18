@@ -5,6 +5,7 @@ import {
   type Address,
   type Assets,
   defined,
+  frozen,
   type Key,
   type KeyData,
   type Party,
@@ -421,7 +422,8 @@ export abstract class MoneroPuzzle extends Puzzle {
 
 /**
  * Static data record behind a puzzle a factory builds. An absent field means the puzzle doesn't have
- * it, like a missing override on a handwritten subclass.
+ * it, like a missing override on a handwritten subclass. The factory freezes the record through, so
+ * every accessor hands back the data as written and no caller can rewrite it for everyone else.
  */
 export interface PuzzleSpec {
   readonly address: Address;
@@ -448,7 +450,7 @@ class SpecPuzzle extends Puzzle {
   constructor(chain: Chain, spec: PuzzleSpec) {
     super();
     this.#chain = chain;
-    this.#spec = spec;
+    this.#spec = frozen(spec);
   }
 
   override id(): string {
