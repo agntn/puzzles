@@ -1,4 +1,3 @@
-import { validateMnemonic } from "@agntn/keys/bip39";
 import type { Chain } from "./chains.ts";
 import {
   addressesEqual,
@@ -59,9 +58,6 @@ function resolveSeedKey(
 ): ResolvedKey | UnresolvedKey {
   if (seed.path === undefined) {
     return unavailable("Seed has no derivation path");
-  }
-  if (!validateMnemonic(seed.phrase)) {
-    return failed("Invalid BIP39 mnemonic");
   }
   if (seed.passphrase === "Required") {
     return unavailable("Seed requires an unknown passphrase");

@@ -35,7 +35,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 - **Registration is a lazy manifest:** `src/collections/index.ts` lists `{ key, load }` entries and imports no collection module statically; `src/core/registry.ts` seeds its table from that list on first use, so importing the package has no side effects and `sideEffects` names only the CLI entry. `registerCollection()` stays open for instances and for `{ key, load }` entries. A new collection needs a `static readonly key`, a manifest entry, and nothing else: `build.config.ts` reads the directory and `test/unit/library.test.ts` compares the modules on disk with the manifest and loads each entry.
 - **Views are asynchronous:** everything that needs instances (`collections()`, `getCollection()`, `all()`, `get()`, `stats()`, `dataVersion()`, `dataset()`, the tools, the commands) awaits the loads; `collectionKeys()` and `hasCollection()` stay synchronous on the manifest. The root entry never re-exports a collection; consumers import one from `@agntn/puzzles/collections/<key>`.
 - **One registry:** `src/core/registry.ts` is the only registry. Keep the `peter_todd` and `warpwallet` aliases.
-- **Identifiers:** IDs stay `collection/name`; singleton IDs are `gsmg` and `bitaps`. A collection resolves a query only in the spelling its identifier uses, `71`, `"71"` or `"b1000/71"`, never a `Number()` reading such as `"0x47"` or `"7e1"`, and a query of another type is a miss, not a `TypeError`.
+- **Identifiers:** IDs stay `collection/name`; singleton IDs are `gsmg`, `bitaps` and `movie_enigma`. A collection resolves a query only in the spelling its identifier uses, `71`, `"71"` or `"b1000/71"`, never a `Number()` reading such as `"0x47"` or `"7e1"`, and a query of another type is a miss, not a `TypeError`.
 - **Data version:** `dataVersion()` is the first 12 hex characters of SHA-256 over the serialized collection array. It must stay free of timestamps and environment data.
 - **Runtime split:** `src/core/` and `src/index.ts` stay neutral ESM with no APIs that need Node. Code that needs Node belongs to `src/cli.ts`, `src/commands/`, and `src/mcp.ts`.
 - **Balances:** `Puzzle.balance()` is the one entry; collections forward to it. Base units are `bigint`, providers come from `@agntn/explorers` and load on the first lookup, and API keys are redacted from every error. Tests stub `globalThis.fetch` instead of injecting a transport.
@@ -55,6 +55,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 - New CLI command: add `src/commands/<name>.ts`, register it in `src/cli.ts`, cover it in `test/unit/cli.test.ts`.
 - New agent tool: implement it in `src/tool-operations.ts`, add its `facts` entry and its schema in `packages/shared/puzzles-tool-schemas.ts`, register it in `src/mcp.ts` and both extensions, extend the tool test files.
 - New public export: add it to `src/index.ts`; build before checking extensions because they resolve `dist/index.d.mts`.
+- Commit and PR scope is the layer, never the element. Anything under `src/collections/` is `collections`, with the collection or puzzle identifier in the subject: `feat(collections): add movie_enigma`, `fix(collections): b1000/135 solved`. Code takes the module name (`verify`, `dataset`, `cli`, `tools`), so the scope vocabulary stays a dozen names and never grows with the dataset.
 
 ## Proof before handoff
 
@@ -66,7 +67,7 @@ pnpm test:packed # packs the tarball and runs every published entry without src/
 node src/cli.ts collections
 ```
 
-`node src/cli.ts collections` must list all ten collections. Node.js 24 or newer runs the TypeScript sources directly; no loader is required.
+`node src/cli.ts collections` must list all eleven collections. Node.js 24 or newer runs the TypeScript sources directly; no loader is required.
 
 ## Known debt
 

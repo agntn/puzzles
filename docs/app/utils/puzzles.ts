@@ -66,6 +66,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Peter Todd's P2SH scripts that pay for a collision. SHA-1 fell in 2017.",
   },
+  movie_enigma: {
+    icon: "i-lucide-clapperboard",
+    title: "Bitcoin Movie Enigma",
+    sample: "movie_enigma",
+    chains: ["bitcoin"],
+    blurb:
+      "34 film stills, one BIP39 word each, ten intruders. Solved in 2026 with a phrase whose checksum fails.",
+  },
   rushwallet: {
     icon: "i-lucide-brain",
     title: "RushWallet contest",

@@ -100,7 +100,9 @@ export function wifToPrivateKey(
 }
 
 /**
- * Derives the private key at a BIP39 seed's derivation path.
+ * Derives the private key at a BIP39 seed's derivation path. The checksum isn't enforced: the seed
+ * is PBKDF2 over the words, a puzzle can publish a phrase whose checksum fails, and the address
+ * comparison decides. Keys still refuses a word outside the list.
  *
  * @param {string} phrase - BIP39 mnemonic.
  * @param {string} path - Derivation path such as `m/44'/0'/0'/0/0`.
@@ -118,8 +120,11 @@ export function privateKeyFromSeed(
   if (wallet === undefined || chain === Chain.Decred) {
     return undefined;
   }
-  const options = passphrase === undefined ? {} : { passphrase };
-  return wallet.deriveHDWallet(phrase, path, options).keys.private;
+  const derived = wallet.deriveHDWallet(phrase, path, {
+    allowInvalidChecksum: true,
+    ...(passphrase === undefined ? {} : { passphrase }),
+  });
+  return derived.keys.private;
 }
 
 /**

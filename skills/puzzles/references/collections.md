@@ -62,6 +62,14 @@ hashCollision.require("sha256");
 get("peter_todd/sha256");
 ```
 
+## movie_enigma
+
+Bitcoin Movie Enigma, one puzzle by klems: 34 film stills, each title turned into a BIP39 word, ten intruders to drop. Solved in 2026. The 24-word phrase fails the BIP39 checksum and still derives the address, and `verify()` confirms it.
+
+```ts
+movieEnigma.require();
+```
+
 ## rushwallet
 
 Dmitri Kryptokov and KryptoKit's RushWallet brainwallet contest from September 2014. 30 P2PKH targets derived as `sha256(passphrase)` into an uncompressed key. 28 passphrases came back out of contest videos, OCR, morse audio, and social clue carriers. #26 is claimed on-chain with the passphrase still unknown, #30 is untouched. All 30 contest UTXOs were funded by `1GShq18eb4V6uBtqgwxkmuPTUHCtyBcNYA`.

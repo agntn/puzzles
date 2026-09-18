@@ -42,7 +42,7 @@ describe("puzzles MCP server", () => {
   it("reports dataset statistics", async () => {
     const result = await client.callTool({ name: "puzzles_stats", arguments: {} });
 
-    expect(firstText(result)).toContain("Total: 332 puzzles in 10 collections");
+    expect(firstText(result)).toContain("Total: 333 puzzles in 11 collections");
   });
 
   it("lists collections with the same rows as the CLI", async () => {
@@ -51,7 +51,7 @@ describe("puzzles MCP server", () => {
     expect(firstText(result)).toContain(
       "b1000: 256 puzzles, 83 solved, 77 unsolved, by saatoshi_rising",
     );
-    expect(firstText(result).split("\n")).toHaveLength(10);
+    expect(firstText(result).split("\n")).toHaveLength(11);
   });
 
   it("shows one puzzle", async () => {
