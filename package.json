@@ -1,0 +1,126 @@
+{
+  "name": "@agntn/puzzles",
+  "version": "0.20.0",
+  "description": "Crypto bounties, puzzles and challenges as class-owned data for agents",
+  "keywords": [
+    "bitcoin",
+    "bounty",
+    "cryptocurrency",
+    "mcp",
+    "omp-extension",
+    "pi-package",
+    "puzzle"
+  ],
+  "homepage": "https://github.com/agntn/puzzles#readme",
+  "bugs": "https://github.com/agntn/puzzles/issues",
+  "license": "MIT",
+  "author": "oritwoen (https://github.com/oritwoen)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agntn/puzzles.git"
+  },
+  "bin": {
+    "puzzles": "./dist/cli.mjs"
+  },
+  "files": [
+    "dist",
+    "packages/shared",
+    "packages/omp/extensions",
+    "packages/pi/extensions"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "./dist/cli.mjs"
+  ],
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./collections/*": {
+      "types": "./dist/collections/*.d.mts",
+      "import": "./dist/collections/*.mjs"
+    },
+    "./tools": {
+      "types": "./dist/tool-operations.d.mts",
+      "import": "./dist/tool-operations.mjs"
+    },
+    "./mcp": {
+      "types": "./dist/mcp.d.mts",
+      "import": "./dist/mcp.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "obuild",
+    "dev": "obuild --stub",
+    "docs": "pnpm --dir docs dev",
+    "lint": "pnpm build && oxlint . && oxfmt --check .",
+    "lint:fix": "pnpm build && oxlint . --fix && oxfmt .",
+    "typecheck": "tsc --noEmit --skipLibCheck && pnpm build && tsc -p tsconfig.extensions.json",
+    "test": "vitest --run",
+    "test:live": "PUZZLES_LIVE=1 vitest --run",
+    "test:packed": "node test/eval-packed.ts",
+    "test:watch": "vitest",
+    "prepack": "pnpm run build",
+    "release": "pnpm test && pnpm build && changelogen --release --push"
+  },
+  "dependencies": {
+    "@agntn/chains": "0.3.5",
+    "@agntn/explorers": "0.5.3",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@noble/curves": "2.3.0",
+    "@noble/hashes": "2.3.0",
+    "@scure/base": "2.3.0",
+    "@scure/bip32": "2.3.0",
+    "@scure/bip39": "2.3.0",
+    "citty": "0.2.2",
+    "typebox": "1.3.15"
+  },
+  "devDependencies": {
+    "@agntn/ox": "0.1.0",
+    "@earendil-works/pi-coding-agent": "0.85.1",
+    "@oh-my-pi/omptype": "18.2.4",
+    "@oh-my-pi/pi-coding-agent": "18.2.4",
+    "@types/node": "26.2.0",
+    "changelogen": "0.6.2",
+    "obuild": "0.4.38",
+    "oxfmt": "0.63.0",
+    "oxlint": "1.78.0",
+    "oxlint-tsgolint": "7.0.2001",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": ">=0.84.2 <1",
+    "@oh-my-pi/pi-coding-agent": ">=18.0.0 <19",
+    "typebox": ">=1.3.14 <2"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    },
+    "@oh-my-pi/pi-coding-agent": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@11.22.0",
+  "omp": {
+    "extensions": [
+      "./packages/omp/extensions/puzzles.ts"
+    ]
+  },
+  "pi": {
+    "extensions": [
+      "./packages/pi/extensions/puzzles.ts"
+    ]
+  }
+}

@@ -1,137 +1,78 @@
-# BOHA - Project Knowledge Base
+# AGENTS.md for `@agntn/puzzles`
 
-**Updated:** 2026-03-30
-**Branch:** main
+## Scope
 
-## OVERVIEW
+Repository-wide operating contract for agents changing this package. It supplements higher-priority safety and user instructions. A nested `AGENTS.md`, if introduced, overrides this file within its directory.
 
-Rust library + CLI for crypto puzzle/bounty data. Build-time JSONC→Rust codegen with JSON Schema validation. Ten collections: arweave (11 bounties), b1000 (256 puzzles), ballet (3 puzzles), bitaps (1 SSSS puzzle), bitimage (2 puzzles), gsmg (1 puzzle), hash_collision (6 bounties), rushwallet (30 brainwallet contest), warp (6 WarpWallet challenges), zden (15 visual puzzles).
+`@agntn/puzzles` is a dataset kept as code of public crypto bounties, puzzles, and challenges. Every puzzle is a typed record built by a factory for its chain; a collection is a list of those puzzles. The library, CLI, MCP server, and the Pi/OMP extensions all read the same registry. There is no build-time data artifact and no editable JSON.
 
-## STRUCTURE
+## Architecture
 
-```
-boha/
-├── src/
-│   ├── lib.rs              # Library entry: get(), all(), stats()
-│   ├── cli.rs              # CLI binary (--features cli) - NOT main.rs
-│   ├── puzzle.rs           # Puzzle, Address, Key, Status, Chain, Profile structs
-│   ├── balance.rs          # Multi-chain async balance fetch (BTC/LTC/ETH)
-│   ├── verify.rs           # Cryptographic key→address verification (--features cli)
-│   └── collections/        # Ten collection modules with generated data
-├── data/
-│   ├── *.jsonc             # Source of truth (arweave, b1000, ballet, bitaps, bitimage, gsmg, hash_collision, rushwallet, warp, zden)
-│   ├── solvers.jsonc       # Solver definitions (referenced by ID in puzzle files)
-│   ├── schemas/            # JSON Schema files for validation
-│   └── cache/              # API response cache for scripts
-├── scripts/                # Separate Cargo project - see scripts/AGENTS.md
-├── build.rs                # JSONC→Rust codegen
-└── tests/
-    ├── validation.rs       # Data validation tests
-    ├── cli.rs              # CLI integration tests
-    └── author_lineage.rs   # Funding source and author metadata tests
-```
+- `src/core/puzzle.ts` holds the abstract `Puzzle`, the chain bases (`BitcoinPuzzle`, `EthereumPuzzle`, `LitecoinPuzzle`, `DecredPuzzle`, `ArweavePuzzle`, `MoneroPuzzle`), `Status`, `toJSON()`, and the `PuzzleSpec` record with its chain factories (`bitcoinPuzzle` … `moneroPuzzle`).
+- `src/core/parts.ts` holds the constructors a puzzle class calls: addresses (`p2pkh`, `p2sh`, `p2wpkh`, `standard`), pubkeys, transactions, assets, parties, and the chained `Key` builder.
+- `src/core/collection.ts` freezes and indexes the puzzle list and implements lookup, filters, balances, and verification once.
+- `src/core/registry.ts` is a lazy manifest registry: a table seeded on first use from `builtins` in `src/collections/index.ts`, where each entry is a key plus a literal `import()` of the collection module. Keys, aliases, and `hasCollection()` answer synchronously; instances load on the first lookup for their key.
+- `src/core/dataset.ts` computes the asynchronous aggregate views `all()`, `selectPuzzles()`, `get()`, `collectionSummaries()`, `stats()`, `dataVersion()`, `dataset()`; the cached ones are memoized per loaded snapshot, so a registration invalidates them by identity.
+- `src/core/chains.ts` narrows `@agntn/chains` to the six supported chains and reads names, symbols, decimals, explorer bases, and address format checks from it.
+- `src/core/balance.ts` holds the balance contract (`BalanceOptions` and the error classes); `src/core/providers.ts` maps each chain to its `@agntn/explorers` provider and is imported by `Puzzle.balance()` on first use.
+- `src/core/verify.ts` and `crypto.ts` cover key-to-address verification and the secp256k1, WIF, and address helpers that no published `@agntn` package provides yet.
+- `src/collections/index.ts` is the manifest; `src/collections/<key>.ts` is a collection: author and the puzzle list, published as `@agntn/puzzles/collections/<key>` and bundled as its own input.
+- `src/collections/<key>/<name>.ts` is one puzzle record built with a factory for its chain. Singleton collections keep their single puzzle in the collection file.
+- `src/commands/` and `src/cli.ts` are the citty commands and the `puzzles` entry point.
+- `src/tool-operations.ts` implements every agent tool once, for MCP and both extensions, holds the `facts` table they register from (names, prose, parameter constraints, the status list), and enforces those constraints in the executors.
+- `packages/shared/puzzles-tool-schemas.ts` builds the TypeBox parameter schemas from `facts` for Pi and the MCP server; the OMP wrapper rebuilds them from the host TypeBox build.
+- `src/mcp.ts` runs the MCP server on the low-level SDK `Server` with the shared typebox schemas.
+- `packages/{pi,omp}/extensions/puzzles.ts` are the harness-specific wrappers over `tool-operations.ts`.
 
-## WHERE TO LOOK
+## Invariants
 
-| Task | Location | Notes |
-|------|----------|-------|
-| Add puzzle collection | `data/*.jsonc` + `build.rs` + `src/collections/` | Follow b1000 pattern |
-| Update puzzle data | `data/*.jsonc` | Rebuild auto-triggers |
-| Add CLI command | `src/cli.rs` | clap derive macros |
-| Modify Puzzle struct | `src/puzzle.rs` + `build.rs` | Must sync both |
-| Add address type | `src/puzzle.rs` (kind field) | P2PKH/P2SH/P2WPKH/P2WSH/P2TR |
-| Add chain support | `src/puzzle.rs` + `src/balance.rs` | Chain enum + API integration |
-| Fetch/update data | `scripts/src/bin/` | `cargo run -p scripts --bin <name>` |
+- **Source of truth:** puzzle data lives in the collection modules' `PuzzleSpec` literals and nowhere else. Never reintroduce a generated JSONC artifact or a second data module that mirrors them.
+- **A puzzle answers, it does not describe:** consumers read through methods: `id()`, `address()`, `sourceUrl()`, `startedAt()`, `chain()`, and the computed ones. The data itself is one `PuzzleSpec` literal handed to the matching chain factory; a hand-written subclass of a chain base stays valid for a puzzle that needs behavior of its own.
+- **No nulls:** absent data means no spec field and no key in the serialized record. `toJSON()` omits, never nulls.
+- **Status is explicit:** it defaults to `unsolved` and cannot be derived, because a claim transaction plus a published key still means `solved`.
+- **Parts, not literals:** build addresses, keys, transactions, assets, and parties with the `parts.ts` constructors so optional fields stay absent instead of empty.
+- **Registration is a lazy manifest:** `src/collections/index.ts` lists `{ key, load }` entries and imports no collection module statically; `src/core/registry.ts` seeds its table from that list on first use, so importing the package has no side effects and `sideEffects` names only the CLI entry. `registerCollection()` stays open for instances and for `{ key, load }` entries. A new collection needs a `static readonly key`, a manifest entry, and nothing else: `build.config.ts` reads the directory and `test/unit/library.test.ts` compares the modules on disk with the manifest and loads each entry.
+- **Views are asynchronous:** everything that needs instances (`collections()`, `getCollection()`, `all()`, `get()`, `stats()`, `dataVersion()`, `dataset()`, the tools, the commands) awaits the loads; `collectionKeys()` and `hasCollection()` stay synchronous on the manifest. The root entry never re-exports a collection; consumers import one from `@agntn/puzzles/collections/<key>`.
+- **One registry:** `src/core/registry.ts` is the only registry. Keep the `peter_todd` and `warpwallet` aliases.
+- **Identifiers:** IDs stay `collection/name`; singleton IDs are `gsmg` and `bitaps`.
+- **Data version:** `dataVersion()` is the first 12 hex characters of SHA-256 over the serialized collection array. It must stay free of timestamps and environment data.
+- **Runtime split:** `src/core/` and `src/index.ts` stay neutral ESM with no APIs that need Node. Code that needs Node belongs to `src/cli.ts`, `src/commands/`, and `src/mcp.ts`.
+- **Balances:** `Puzzle.balance()` is the one entry; collections forward to it. Base units are `bigint`, providers come from `@agntn/explorers` and load on the first lookup, and API keys are redacted from every error. Tests stub `globalThis.fetch` instead of injecting a transport.
+- **Verification:** expected verification failures are values, not exceptions.
+- **CLI output:** command output goes through `src/commands/output.ts`. Never print data with a logger, because consola silences machine-readable output under `NODE_ENV=test`.
+- **Tools:** add an agent tool once in `src/tool-operations.ts`, with its entry in `facts` and its schema in `packages/shared/puzzles-tool-schemas.ts`; MCP and both extensions never restate a name, description, limit, or status list. Executors enforce the same argument limits the schemas declare and throw `InvalidArgumentError`; `test/unit/tool-schemas.test.ts` pins both sides. Discovery is one contract: `puzzles_collections` prints the rows of `puzzles collections`.
+- **Extensions:** their factories are asynchronous because they load `tool-operations` first through literal `import()` specifiers, `src/` in a checkout and `dist/` when installed; their types come from `src/`, so typechecking them does not depend on a fresh `dist`. The MCP error path sanitizes control characters and quotes echoed values.
+- **Verification is lazy:** `Collection.verify()` imports `verify.ts` on first use so the signing crypto stays out of CLI startup; keep `collection.ts` free of static imports from `verify.ts` and `crypto.ts`.
+- **Tests share module state:** vitest runs with `isolate: false`, so a test that mutates the registry works on a fresh module graph (`vi.resetModules()` plus a dynamic import) and resets the graph again when it is done.
 
-## CODE MAP
+## Change routing
 
-| Symbol | Type | Location | Role |
-|--------|------|----------|------|
-| `get(id)` | fn | lib.rs:36 | Universal puzzle lookup by ID |
-| `all()` | fn | lib.rs:65 | Iterator over all puzzles |
-| `stats()` | fn | lib.rs:88 | Aggregate statistics |
-| `Puzzle` | struct | puzzle.rs | Core data type (16 fields) |
-| `Address` | struct | puzzle.rs | value, chain, kind, hash160, witness_program |
-| `Key` | struct | puzzle.rs | hex, wif, seed, bits, shares |
-| `Status` | enum | puzzle.rs | Solved/Unsolved/Claimed/Swept/Expired |
-| `Chain` | enum | puzzle.rs | Bitcoin/Ethereum/Litecoin/Monero/Decred/Arweave |
-| `Seed` | struct | puzzle.rs | BIP39: phrase, path, xpub, entropy |
-| `Shares` | struct | puzzle.rs | SSSS: threshold, total, shares[] |
-| `Profile` | struct | puzzle.rs | Social/web profile: name, url |
-| `Author` | struct | puzzle.rs | name, addresses[], profiles[] |
-| `Solver` | struct | puzzle.rs | name, addresses[], profiles[] |
+- New puzzle: add `src/collections/<key>/<name>.ts` exporting a record built with the right chain factory, then import it and append it to the collection's `puzzles` list. Export names are `<collection>Puzzle<Name>` in camelCase; file names are the identifier segment in kebab-case.
+- Puzzle data fix: edit the one record. `test/unit/validation.test.ts` re-checks identifiers, key material, BIP38 payloads, claimed and swept public keys, asset paths, and the no nulls rule.
+- New collection: follow the registration invariant, add its author with `party()`, add its `{ key, load }` entry to the manifest, and extend `test/unit/library.test.ts`.
+- New puzzle field: add the method to `Puzzle` with a safe default, extend `toJSON()`, `PuzzleSpec`, and the internal spec-backed puzzle, then teach `parts.ts` how to build it.
+- New CLI command: add `src/commands/<name>.ts`, register it in `src/cli.ts`, cover it in `test/unit/cli.test.ts`.
+- New agent tool: implement it in `src/tool-operations.ts`, add its `facts` entry and its schema in `packages/shared/puzzles-tool-schemas.ts`, register it in `src/mcp.ts` and both extensions, extend the tool test files.
+- New public export: add it to `src/index.ts`; build before checking extensions because they resolve `dist/index.d.mts`.
 
-## BUILD-TIME CODEGEN
-
-**Non-standard pattern**: Puzzle data in `data/*.jsonc` → compiled to Rust via `build.rs`.
-
-```
-data/*.jsonc        ──build.rs──>  $OUT_DIR/*_data.rs  ──include!()──>  src/collections/*.rs
-data/solvers.jsonc  ──build.rs──>  (solver references resolved during codegen)
-data/schemas/       ──editor──>    (JSON Schema validation & autocomplete)
-```
-
-- `cargo:rerun-if-changed` triggers rebuild on JSONC changes
-- Generated: `static PUZZLES: &[Puzzle] = &[...]`
-- build.rs validates: key bits match hex, WIF↔hex consistency
-- Solvers: defined once in `solvers.jsonc`, referenced by ID in puzzle files
-- JSON Schema provides editor validation and autocomplete
-
-## FEATURES
-
-| Feature | Adds | Key deps |
-|---------|------|----------|
-| `cli` | Binary at `src/cli.rs`, output formats | clap, tabled, owo-colors, human-panic |
-| `balance` | Multi-chain async fetch (BTC/LTC/ETH) | reqwest, tokio |
-
-## CONVENTIONS
-
-- **IDs**: `collection/identifier` (e.g., `b1000/66`, `bitimage/kitten`); exceptions: `gsmg`, `bitaps` (no slash)
-- **Static data**: All `&'static` - no heap allocation
-- **Address types**: P2PKH (legacy), P2SH (script), P2WPKH/P2WSH (SegWit), P2TR (Taproot)
-- **Optional fields**: `Option<T>` for missing data
-- **Solver vs Claimer**: Solver is who revealed/found the key (the "solution"). Claimer is who swept the funds. These may be different people - both are worth tracking.
-
-## ANTI-PATTERNS
-
-- **Don't hardcode puzzle data in Rust** → Put in `data/*.jsonc`
-- **Don't add runtime config** → All data embedded at compile time
-- **Don't use non-static strings** → Must be `&'static str`
-
-## COMMANDS
+## Proof before handoff
 
 ```bash
-cargo test --all-features                    # all tests (254 passed, 15 ignored)
-cargo test --all-features -- test_name       # single test
-cargo build --release --features cli,balance # release build
-cargo clippy --all-features -- -D warnings   # lint
-cargo fmt --check                            # format check
-
-# CLI dev
-cargo run --features cli -- stats
-cargo run --features cli -- list b1000 --unsolved
-cargo run --features cli -- show b1000/90
-cargo run --features cli,balance -- balance b1000/71
-cargo run --features cli -- verify --all --quiet
+pnpm lint
+pnpm typecheck   # builds first, then checks src, Pi, and OMP
+pnpm test
+pnpm test:packed # packs the tarball and runs every published entry without src/
+node src/cli.ts collections
 ```
 
-## TESTING
+`node src/cli.ts collections` must list all ten collections. Node.js 24 or newer runs the TypeScript sources directly; no loader is required.
 
-Data-driven validation (254 tests, 3 test files):
-- **validation.rs**: Cryptographic checks (h160, script_hash), range validation, format checks
-- **cli.rs**: Integration tests via assert_cmd
-- **author_lineage.rs**: Funding source tracking and author metadata
+## Known debt
 
-## NOTES
+Do not mistake these for intentional architecture:
 
-- b1000 puzzle #N: private key in `[2^(N-1), 2^N - 1]`
-- b1000 puzzles 1-2: `pre_genesis = true` (claimed before puzzle creation 2015-01-15)
-- ballet: Physical crypto wallet cards with BIP38 encrypted keys (Bobby Lee's challenge)
-- bitaps: Shamir Secret Sharing - 2 of 3 shares published, third unknown
-- bitimage: Keys derived from files using SHA256(Base64(file)) as BIP39 entropy
-- hash_collision: Peter Todd's P2SH bounties for finding hash collisions
-- rushwallet: Dmitri Kryptokov / Kryptokit 2014 brainwallet contest, 30 targets, derivation `sha256(passphrase)` → uncompressed P2PKH; 28 passphrases recovered locally, #26 claimed on-chain with passphrase still unknown, #30 unclaimed/unsolved; all 30 UTXOs funded by `1GShq18eb4V6uBtqgwxkmuPTUHCtyBcNYA`
-- warp: Keybase WarpWallet challenges - deterministic brainwallet (scrypt+pbkdf2) security tests
-- zden: Visual puzzles - keys encoded in images/animations
-- arweave: Tiamat's bounties on Arweave blockchain (chronobot.io)
-- Balances: mempool.space (BTC/LTC), Etherscan (ETH)
+- `src/mcp.ts` uses the SDK's low-level `Server`, which the SDK marks deprecated; the high-level `McpServer` accepts only Zod schemas, and typebox is shared with the Pi and OMP wrappers.
+- `dataVersion()` serializes the whole dataset on first use.
+- Puzzle accessors rebuild their parts on every call; only the instances themselves are cached.
+- Pi and OMP wrappers keep their own loader and schema code because OMP cannot re-export another module's extension and the two harnesses ship different typebox builds; the facts they register come from one table.
+- Balance adapters have no retry, timeout, or rate-limit handling.

@@ -1,0 +1,11 @@
+name: Bug
+description: Something isn't working
+labels: ["bug"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What went wrong?
+      description: Describe what happened in your own words. Include a reproduction, error output, or environment details when they matter.
+    validations:
+      required: true

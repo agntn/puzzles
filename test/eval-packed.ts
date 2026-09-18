@@ -1,0 +1,376 @@
+#!/usr/bin/env node
+/*
+ * Packed-package gate for everything `files` publishes. Unit tests import the library from src/,
+ * so none of them touch the tarball npm installs. This script packs the package the way
+ * `pnpm publish` does, unpacks it inside the checkout so the packed files resolve their
+ * dependencies from the repository's node_modules, and exercises every published entry from
+ * there: the library and its lazy collections, the MCP server over an in-memory transport, the
+ * Pi and OMP extensions without any src/ next to them, and the CLI bin run as a command. The load
+ * hook in record-loads.ts records which packed modules each step pulled in, so the lazy manifest
+ * is checked on the published layout, not only on the sources. Run: pnpm test:packed
+ */
+
+import { loaded, recordSourcesUnder, type LoadedModule } from "./record-loads.ts";
+import assert from "node:assert/strict";
+import { execFile, execFileSync } from "node:child_process";
+import { existsSync } from "node:fs";
+import { mkdtemp, readdir, readFile, rm, stat } from "node:fs/promises";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+import { promisify } from "node:util";
+import type { ExtensionAPI as PiExtensionApi } from "@earendil-works/pi-coding-agent";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import type { ExtensionAPI as OmpExtensionApi } from "@oh-my-pi/pi-coding-agent";
+import * as OmpTypeBox from "@oh-my-pi/omptype/typebox";
+
+type Library = typeof import("../src/index.ts");
+type McpEntry = typeof import("../src/mcp.ts");
+type PiExtension = typeof import("../packages/pi/extensions/puzzles.ts");
+type OmpExtension = typeof import("../packages/omp/extensions/puzzles.ts");
+
+interface Manifest {
+  readonly bin: Readonly<Record<string, string>>;
+  readonly exports: Readonly<Record<string, { readonly import: string }>>;
+  readonly name: string;
+  readonly version: string;
+}
+
+/** The slice of a registered tool the gate exercises; Pi and OMP differ beyond it. */
+interface RegisteredTool {
+  readonly execute: (
+    toolCallId: string,
+    params: Readonly<Record<string, unknown>>,
+  ) => Promise<unknown>;
+  readonly name: string;
+  readonly parameters?: { readonly safeParse?: (input: unknown) => { readonly success: boolean } };
+  readonly renderCall?: (
+    args: Readonly<Record<string, unknown>>,
+    options: unknown,
+    theme: unknown,
+  ) => { readonly text: string };
+}
+
+type ModuleMatcher = (module: LoadedModule) => boolean;
+
+const root = path.resolve(import.meta.dirname, "..");
+const execFileAsync = promisify(execFile);
+
+const expectedCollections = [
+  "arweave",
+  "b1000",
+  "ballet",
+  "bitaps",
+  "bitimage",
+  "gsmg",
+  "hash_collision",
+  "rushwallet",
+  "warp",
+  "zden",
+];
+
+const expectedToolNames = [
+  "puzzles_balance",
+  "puzzles_collections",
+  "puzzles_list",
+  "puzzles_show",
+  "puzzles_stats",
+  "puzzles_verify",
+];
+
+function run(command: string, args: readonly string[]): string {
+  return execFileSync(command, args, {
+    cwd: root,
+    encoding: "utf8",
+    env: { ...process.env, CI: "true" },
+    stdio: ["ignore", "pipe", "pipe"],
+    timeout: 120_000,
+  });
+}
+
+async function walk(directory: string): Promise<string[]> {
+  const entries = await readdir(directory, { recursive: true, withFileTypes: true });
+  return entries
+    .filter((entry) => entry.isFile())
+    .map((entry) => path.relative(directory, path.join(entry.parentPath, entry.name)));
+}
+
+function firstText(result: unknown): string {
+  if (typeof result !== "object" || result === null || !("content" in result)) {
+    return "";
+  }
+  const { content } = result;
+  if (!Array.isArray(content)) {
+    return "";
+  }
+  return content
+    .map((part: unknown) =>
+      typeof part === "object" && part !== null && "text" in part ? String(part.text) : "",
+    )
+    .join("");
+}
+
+function isError(result: unknown): boolean {
+  return typeof result === "object" && result !== null && "isError" in result
+    ? result.isError === true
+    : false;
+}
+
+const temporaryRoot = await mkdtemp(path.join(root, ".puzzles-packed-test-"));
+const packageRoot = path.join(temporaryRoot, "package");
+const packageRootUrl = pathToFileURL(`${packageRoot}/`).href;
+recordSourcesUnder(packageRootUrl);
+
+function loadedPackageModules(): LoadedModule[] {
+  return loaded.filter((module) => module.url.startsWith(packageRootUrl));
+}
+
+function assertNotLoaded(matches: ModuleMatcher, reason: string): void {
+  const offending = loadedPackageModules()
+    .filter(matches)
+    .map((module) => module.url.slice(packageRootUrl.length));
+  assert.deepEqual(offending, [], reason);
+}
+
+function assertLoaded(matches: ModuleMatcher, reason: string): void {
+  assert.ok(loadedPackageModules().some(matches), reason);
+}
+
+const collectionModule: ModuleMatcher = (module) =>
+  module.url.startsWith(`${packageRootUrl}dist/collections/`);
+const collectionNamed =
+  (file: string): ModuleMatcher =>
+  (module) =>
+    module.url === `${packageRootUrl}dist/collections/${file}.mjs`;
+const otherCollections =
+  (file: string): ModuleMatcher =>
+  (module) =>
+    collectionModule(module) && !collectionNamed(file)(module);
+const executors: ModuleMatcher = (module) =>
+  module.url === `${packageRootUrl}dist/tool-operations.mjs`;
+
+/**
+ * Imports a packed entry under a unique URL, so every step evaluates its own copy
+ * of the entry while the chunks behind it stay shared through Node's cache.
+ *
+ * @param {string} relative - Path inside the packed package.
+ * @returns {Promise<T>} The entry's module namespace.
+ */
+function importPacked<T>(relative: string): Promise<T> {
+  return import(`${packageRootUrl}${relative}?packed=${Date.now()}-${Math.random()}`) as Promise<T>;
+}
+
+class PackedText {
+  readonly text: string;
+
+  constructor(text: string) {
+    this.text = text;
+  }
+}
+
+async function registerPackedExtension(
+  relative: string,
+  api: Readonly<Record<string, unknown>>,
+): Promise<Readonly<Record<string, RegisteredTool>>> {
+  const extension = await importPacked<PiExtension | OmpExtension>(relative);
+  const tools: Record<string, RegisteredTool> = {};
+  const host = {
+    ...api,
+    registerTool(tool: RegisteredTool) {
+      tools[tool.name] = tool;
+    },
+  } as unknown as PiExtensionApi & OmpExtensionApi;
+  await extension.default(host);
+  assert.deepEqual(
+    Object.keys(tools).sort(),
+    expectedToolNames,
+    `${relative} registers every tool`,
+  );
+  return tools;
+}
+
+function requireTool(
+  tools: Readonly<Record<string, RegisteredTool>>,
+  name: string,
+): RegisteredTool {
+  const tool = tools[name];
+  assert.ok(tool, `${name} was not registered`);
+  return tool;
+}
+
+async function assertPackedLayout(manifest: Manifest): Promise<void> {
+  assert.equal(manifest.name, "@agntn/puzzles");
+  assert.match(manifest.version, /^\d+\.\d+\.\d+/u);
+  assert.equal(typeof manifest.bin["puzzles"], "string", "the packed package declares no bin");
+  for (const entry of [".", "./collections/*", "./tools", "./mcp", "./package.json"]) {
+    assert.ok(entry in manifest.exports, `export ${entry} is missing from the packed package.json`);
+  }
+  const files = await walk(packageRoot);
+  assert.deepEqual(
+    files.filter((file) => file.startsWith("src/")),
+    [],
+    "the packed package must not carry src/",
+  );
+  assert.deepEqual(
+    files.filter((file) => file.startsWith("dist/") && file.endsWith(".js")),
+    [],
+    "every emitted runtime file must be .mjs",
+  );
+  const collectionTarget = manifest.exports["./collections/*"]?.import ?? "";
+  assert.notEqual(collectionTarget, "", "the collections export has no import target");
+  for (const key of expectedCollections) {
+    const file = collectionTarget.replace("*", key.replaceAll("_", "-"));
+    assert.ok(
+      existsSync(path.join(packageRoot, file)),
+      `collection entry ${key} resolves to a missing file ${file}`,
+    );
+  }
+  for (const file of [
+    "packages/shared/puzzles-tool-schemas.ts",
+    "packages/pi/extensions/puzzles.ts",
+    "packages/omp/extensions/puzzles.ts",
+  ]) {
+    assert.ok(files.includes(file), `${file} is missing from the packed package`);
+  }
+}
+
+async function assertPackedLibrary(): Promise<void> {
+  const library = await importPacked<Library>("dist/index.mjs");
+  assert.deepEqual([...library.collectionKeys()].sort(), expectedCollections);
+  assertNotLoaded(collectionModule, "importing the library must not load a collection");
+  const puzzle = await library.get("b1000/1");
+  assert.equal(puzzle?.id(), "b1000/1");
+  assertLoaded(collectionNamed("b1000"), "a lookup loads its collection");
+  assertNotLoaded(otherCollections("b1000"), "a lookup must not load the other collections");
+  assert.equal(library.hasCollection("peter_todd"), true, "the historical alias survives packing");
+}
+
+/**
+ * The MCP bundle is the only entry that carries the SDK and the inlined typebox,
+ * so a chunk split or a missing dependency would surface here first.
+ */
+async function assertPackedMcpServer(): Promise<void> {
+  const { createMcpServer } = await importPacked<McpEntry>("dist/mcp.mjs");
+  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+  const server = createMcpServer();
+  const client = new Client({ name: "packed-test", version: "1.0.0" });
+  await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+  try {
+    const { tools } = await client.listTools();
+    assert.deepEqual(tools.map((tool) => tool.name).sort(), expectedToolNames);
+
+    const rejected = await client.callTool({ name: "puzzles_show", arguments: { id: "" } });
+    assert.equal(isError(rejected), true);
+    assert.match(
+      firstText(rejected),
+      /^Invalid arguments at \/id/u,
+      "the rejection must come from the bundled validator",
+    );
+
+    const shown = await client.callTool({ name: "puzzles_show", arguments: { id: "b1000/1" } });
+    assert.equal(isError(shown), false, firstText(shown));
+    assert.match(firstText(shown), /b1000\/1/u);
+    assertNotLoaded(otherCollections("b1000"), "showing a puzzle must not load other collections");
+
+    const listed = await client.callTool({ name: "puzzles_collections", arguments: {} });
+    assert.equal(firstText(listed).trim().split("\n").length, expectedCollections.length);
+  } finally {
+    await Promise.all([client.close(), server.close()]);
+  }
+}
+
+async function assertPackedExtensions(): Promise<void> {
+  const ompApi = { typebox: OmpTypeBox, pi: { Text: PackedText }, setLabel() {} };
+  const [piTools, ompTools] = await Promise.all([
+    registerPackedExtension("packages/pi/extensions/puzzles.ts", {}),
+    registerPackedExtension("packages/omp/extensions/puzzles.ts", ompApi),
+  ]);
+  assertLoaded(executors, "the extensions read the facts from the packed executors");
+  const piShow = requireTool(piTools, "puzzles_show");
+  const ompShow = requireTool(ompTools, "puzzles_show");
+  assert.ok(ompShow.renderCall !== undefined, "the OMP tool renders its call line");
+  assert.equal(ompShow.renderCall({ id: "b1000/1" }, {}, {}).text, "Show puzzle b1000/1");
+  const result = await piShow.execute("packed-test", { id: "b1000/1" });
+  assert.match(firstText(result), /b1000\/1/u);
+  assert.equal(
+    ompShow.parameters?.safeParse?.({ id: "" }).success,
+    false,
+    "the OMP schema keeps the executors' limits",
+  );
+}
+
+/**
+ * citty resolves every subcommand to print usage, so a static SDK import inside `mcp` would load
+ * the whole server on `--help`. The child runs under the same load hook and reports every module on
+ * exit.
+ *
+ * @param {string} binPath - The packed bin file.
+ */
+async function assertHelpStaysLight(binPath: string): Promise<void> {
+  const hook = new URL("./record-loads.ts", import.meta.url).href;
+  const { stdout, stderr } = await execFileAsync(
+    process.execPath,
+    ["--import", hook, binPath, "--help"],
+    { cwd: root, encoding: "utf8", env: { ...process.env, PUZZLES_REPORT_LOADS: "1" } },
+  );
+  assert.match(stdout, /mcp/u, "usage names the mcp command");
+  const recorded = /@loaded (\[.*\])/u.exec(stderr)?.[1];
+  assert.ok(recorded !== undefined, "the load hook reported nothing");
+  const urls: unknown = JSON.parse(recorded);
+  assert.ok(Array.isArray(urls), "the load hook reported something other than a list");
+  const strings = urls.map(String);
+  assert.deepEqual(
+    /* pnpm's store paths carry peer hashes, so only the package directory itself counts as the SDK. */
+    strings.filter((url) => url.includes("/node_modules/@modelcontextprotocol/")),
+    [],
+    "puzzles --help must not load the MCP SDK",
+  );
+  assert.deepEqual(
+    strings.filter((url) => url.startsWith(packageRootUrl) && /typebox|dist\/mcp\.mjs/u.test(url)),
+    [],
+    "puzzles --help must not load the server entry or the tool schemas",
+  );
+  assert.deepEqual(
+    strings.filter((url) => url.startsWith(`${packageRootUrl}dist/collections/`)),
+    [],
+    "puzzles --help must not load a collection",
+  );
+}
+
+async function assertPackedBin(manifest: Manifest): Promise<void> {
+  const binEntry = manifest.bin["puzzles"];
+  assert.ok(binEntry !== undefined, "the packed package declares no puzzles bin");
+  const binPath = path.join(packageRoot, binEntry);
+  const source = await readFile(binPath, "utf8");
+  assert.match(source, /^#!\/usr\/bin\/env node\n/u, `${binEntry} lost its shebang`);
+  if (process.platform !== "win32") {
+    const { mode } = await stat(binPath);
+    assert.ok(mode & 0o111, `${binEntry} is not executable, mode ${(mode & 0o777).toString(8)}`);
+    /* Run the file itself, the way npm's bin symlink does, not through node. */
+    const listed = run(binPath, ["collections"]);
+    assert.equal(listed.trim().split("\n").length, expectedCollections.length);
+  }
+  await assertHelpStaysLight(binPath);
+}
+
+try {
+  /* pnpm pack runs prepack, so the tarball always carries a fresh build. */
+  const tarball = path.join(temporaryRoot, "puzzles.tgz");
+  run("pnpm", ["pack", "--out", tarball]);
+  run("tar", ["-xzf", tarball, "-C", temporaryRoot]);
+  const manifest = JSON.parse(
+    await readFile(path.join(packageRoot, "package.json"), "utf8"),
+  ) as Manifest;
+
+  await assertPackedLayout(manifest);
+  await assertPackedLibrary();
+  await assertPackedMcpServer();
+  await assertPackedExtensions();
+  await assertPackedBin(manifest);
+
+  console.log(
+    `Packed ${manifest.name}@${manifest.version}: ${expectedCollections.length} lazy collection entries, ${expectedToolNames.length} tools over MCP, Pi and OMP without src/, and ${manifest.bin["puzzles"]} ran as a command`,
+  );
+} finally {
+  await rm(temporaryRoot, { recursive: true, force: true });
+}
