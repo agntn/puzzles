@@ -32,7 +32,7 @@ async function command<T extends ArgsDef>(
     ...loaded,
     async run(context) {
       try {
-        return await run(context);
+        await run(context);
       } catch (error) {
         if (!(error instanceof PuzzlesError)) {
           throw error;
