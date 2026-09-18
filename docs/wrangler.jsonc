@@ -12,9 +12,12 @@
     {
       "binding": "DB",
       "database_name": "agntn-puzzles",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "b1ac3966-1335-4bf7-ab67-9f241377ed4c",
     },
   ],
+  "cache": {
+    "enabled": true
+  },
   "routes": [{ "pattern": "puzzles.agntn.dev", "custom_domain": true }],
   "observability": {
     "logs": {
