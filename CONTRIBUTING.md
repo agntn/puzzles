@@ -6,13 +6,14 @@ Code fixes, new puzzle collections, and evidence-backed data updates are welcome
 
 ```bash
 pnpm install
+pnpm --dir docs install
 pnpm lint
 pnpm typecheck
 pnpm test
 pnpm test:packed
 ```
 
-`pnpm typecheck` builds the package first, then checks the library, the Pi extension, and the OMP extension. Node.js 24 or newer runs the TypeScript sources directly, so `node src/cli.ts stats` works without a loader.
+The docs site is its own pnpm workspace whose postinstall runs `nuxt prepare`. `pnpm lint` and `pnpm test` both read what it generates: the linter type checks the docs through `.nuxt/`, and the landing test imports `docs/app/utils`, which vite compiles through the Nuxt tsconfig. `pnpm typecheck` builds the package first, then checks the library, the Pi extension, and the OMP extension. Node.js 24 or newer runs the TypeScript sources directly, so `node src/cli.ts stats` works without a loader.
 
 ## Adding or updating puzzle data
 

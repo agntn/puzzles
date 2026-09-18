@@ -25,6 +25,9 @@ jobs:
 
       - run: pnpm i
 
+      - name: Install the docs site, its postinstall generates the Nuxt tsconfig vite reads for the landing test
+        run: pnpm --dir docs i --frozen-lockfile
+
       - run: pnpm test
 
       - run: pnpm test:packed
