@@ -6,6 +6,7 @@ import {
   Ethereum,
   getChain,
   InvalidAddressError,
+  InvalidTxidError,
   Litecoin,
   Monero,
   UnknownChainError,
@@ -28,7 +29,7 @@ export type Chain = (typeof Chain)[keyof typeof Chain];
 /** Every supported blockchain identifier. */
 export const chains = Object.freeze(Object.values(Chain));
 
-/** Chain metadata, format checks, and explorer bases come from `@agntn/chains`. */
+/** Chain metadata, address and txid format checks, and explorer bases come from `@agntn/chains`. */
 const metadata = Object.freeze({
   arweave: new Arweave(),
   bitcoin: new Bitcoin(),
@@ -138,15 +139,16 @@ export function isValidAddress(chain: Chain, address: string): boolean {
  *
  * @param {Chain} chain - Chain the value belongs to.
  * @param {string} txid - Transaction identifier.
- * @returns {boolean} `true` for a well-formed txid.
+ * @returns {boolean} `true` when the chain's format check passes.
  */
 export function isValidTransactionId(chain: Chain, txid: string): boolean {
-  switch (metadata[chain].type) {
-    case "evm":
-      return /^0x[0-9a-fA-F]{64}$/.test(txid);
-    case "arweave":
-      return /^[A-Za-z0-9_-]{43}$/.test(txid);
-    default:
-      return /^[0-9a-fA-F]{64}$/.test(txid);
+  try {
+    metadata[chain].assertTxid(txid);
+    return true;
+  } catch (error) {
+    if (error instanceof InvalidTxidError) {
+      return false;
+    }
+    throw error;
   }
 }

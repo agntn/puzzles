@@ -26,3 +26,4 @@ minimumReleaseAgeExclude:
   - "@oh-my-pi/pi-utils@18.2.4"
   - "@oh-my-pi/pi-wire@18.2.4"
   - "@oh-my-pi/snapcompact@18.2.4"
+  - "@agntn/chains@0.3.6"

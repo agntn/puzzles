@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { isValidAddress } from "../../src/core/chains.ts";
+import { isValidAddress, isValidTransactionId } from "../../src/core/chains.ts";
 import {
   addressesEqual,
   addressFromPrivateKey,
@@ -99,6 +99,16 @@ function claimedPubkeyProblem(puzzle: Puzzle): string | undefined {
     : undefined;
 }
 
+function transactionProblems(puzzle: Puzzle): string[] {
+  return puzzle
+    .transactions()
+    .filter((transaction) => !isValidTransactionId(puzzle.chain(), transaction.txid))
+    .map(
+      (transaction) =>
+        `${puzzle.id()}: ${transaction.tx_type} txid does not match the ${puzzle.chain()} format`,
+    );
+}
+
 function assetProblems(puzzle: Puzzle): string[] {
   const assets = puzzle.assets();
   if (assets === undefined) {
@@ -150,6 +160,10 @@ describe("collection class data", () => {
           : `${puzzle.id()}: address does not match the ${puzzle.chain()} format`,
       ),
     ).toEqual([]);
+  });
+
+  it("keeps every transaction identifier in its chain's format", () => {
+    expect(puzzles.flatMap((puzzle) => transactionProblems(puzzle))).toEqual([]);
   });
 
   it("keeps encrypted WIF material consistent", () => {

@@ -24,7 +24,7 @@ Each puzzle is a `PuzzleSpec` record in `src/collections/<collection>/<name>.ts`
 3. A new collection gets a class with a `static readonly key`, a canonical instance exported from its module, and a `{ key, load }` entry in `src/collections/index.ts`. No `registerCollection()` call and no root export: the manifest is the registration.
 4. Build addresses, keys, transactions, assets, and parties with the constructors in `src/core/parts.ts`. Do not hand-write the record shapes.
 5. Keep source URLs and on-chain evidence with the record.
-6. Run `pnpm test`. The data gate checks unique identifiers, collection ownership, private key derivation, WIF and BIP38 consistency, claimed public keys, asset paths, and that nothing serializes as null.
+6. Run `pnpm test`. The data gate checks unique identifiers, collection ownership, address and txid formats, private key derivation, WIF and BIP38 consistency, claimed public keys, asset paths, and that nothing serializes as null.
 
 ## Pull requests
 

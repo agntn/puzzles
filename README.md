@@ -133,7 +133,7 @@ It doesn't solve anything. No scanner, no kangaroo, no brainwallet cracker, and 
 
 ## 🧩 Adding a puzzle
 
-One record file under `src/collections/<key>/` and one line in the collection module. Then `pnpm test` runs the data gate: unique ids, address formats, key derivation, BIP38 payloads, asset paths, no nulls. The shape of a record is in [Puzzle records](https://puzzles.agntn.dev/guide/records) and the rules in [CONTRIBUTING.md](./CONTRIBUTING.md).
+One record file under `src/collections/<key>/` and one line in the collection module. Then `pnpm test` runs the data gate: unique ids, address and txid formats, key derivation, BIP38 payloads, asset paths, no nulls. The shape of a record is in [Puzzle records](https://puzzles.agntn.dev/guide/records) and the rules in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## 🛠️ Development
 
