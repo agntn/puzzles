@@ -5,22 +5,25 @@ import { formatPrize, shorten } from "../../utils/format";
 const props = defineProps<{ collection: string }>();
 
 /** One row per puzzle, plain data; the page for each is `/collections/<id>`. */
-const { data } = await useAsyncData(`collection-puzzles-${props.collection}`, async () => {
-  const collection = await requireCollection(props.collection);
-  return {
-    numeric: collection instanceof NumericCollection,
-    rows: collection.all().map((puzzle) => ({
-      id: puzzle.id(),
-      name: puzzle.name(),
-      status: puzzle.status(),
-      prize: formatPrize(puzzle.prize(), puzzle.prizeCurrency()),
-      address: puzzle.address().value,
-      pubkey: puzzle.hasPubkey(),
-      key: puzzle.hasPrivateKey(),
-      bits: puzzle.keyData()?.bits,
-    })),
-  };
-});
+const { data } = await useAsyncData(
+  () => `collection-puzzles-${props.collection}`,
+  async () => {
+    const collection = await requireCollection(props.collection);
+    return {
+      numeric: collection instanceof NumericCollection,
+      rows: collection.all().map((puzzle) => ({
+        id: puzzle.id(),
+        name: puzzle.name(),
+        status: puzzle.status(),
+        prize: formatPrize(puzzle.prize(), puzzle.prizeCurrency()),
+        address: puzzle.address().value,
+        pubkey: puzzle.hasPubkey(),
+        key: puzzle.hasPrivateKey(),
+        bits: puzzle.keyData()?.bits,
+      })),
+    };
+  },
+);
 
 const rows = computed(() => data.value?.rows ?? []);
 

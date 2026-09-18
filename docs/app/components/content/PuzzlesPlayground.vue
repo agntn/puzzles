@@ -61,7 +61,7 @@ interface ShowAnswer {
 interface ListAnswer {
   kind: "list";
   matched: number;
-  rows: { id: string; status: string; prize: string; address: string }[];
+  rows: { id: string; status: Status; prize: string; address: string }[];
   text: string;
 }
 interface VerifyAnswer {

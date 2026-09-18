@@ -1,4 +1,4 @@
-import type { KeyData, Puzzle, VerifyResult } from "../../../src/index.ts";
+import type { Chain, KeyData, Puzzle, Status, VerifyResult } from "../../../src/index.ts";
 import { formatPrize } from "./format.ts";
 
 /** The slice of the library a sample needs, passed in so this module never imports it by name. */
@@ -11,8 +11,8 @@ export interface SampleLibrary {
 export interface LandingSample {
   readonly id: string;
   readonly collection: string;
-  readonly chain: string;
-  readonly status: string;
+  readonly chain: Chain;
+  readonly status: Status;
   readonly address: string;
   readonly kind: string;
   readonly hash160: string | undefined;

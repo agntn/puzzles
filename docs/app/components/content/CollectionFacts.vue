@@ -7,8 +7,9 @@ import { CHAIN_ICONS, collectionEntry } from "../../utils/puzzles";
 const props = defineProps<{ collection: string }>();
 
 /** The collection module loads on the server for the prerender and again in the browser on navigation. */
-const { data } = await useAsyncData(`collection-facts-${props.collection}`, async () =>
-  collectionFacts(await requireCollection(props.collection)),
+const { data } = await useAsyncData(
+  () => `collection-facts-${props.collection}`,
+  async () => collectionFacts(await requireCollection(props.collection)),
 );
 
 const entry = computed(() => collectionEntry(props.collection));

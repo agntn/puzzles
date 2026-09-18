@@ -5,7 +5,7 @@ import { collectionEntry } from "../../utils/puzzles";
 const props = defineProps<{ puzzle: string }>();
 
 /** Singletons render this inside their collection page through `::puzzle-page`. */
-const { data } = await usePuzzlePage(props.puzzle);
+const { data } = await usePuzzlePage(() => props.puzzle);
 
 const entry = computed(() =>
   data.value ? collectionEntry(data.value.view.collection) : undefined,

@@ -46,7 +46,7 @@ Two resolution traps, both because the repo root is its own pnpm workspace:
 - `pnpm-workspace.yaml` sets `shamefullyHoist: true`. Without it `docs/node_modules` holds only direct dependencies, Node walks up to the root `node_modules`, and the server bundle can end up with a second copy of Vue.
 - `nuxt.config.ts` pins `workspaceDir` to `docs/` and disables devtools and telemetry, which would otherwise resolve from the root.
 
-`pnpm install` here runs `nuxt prepare` on postinstall, so `.nuxt/` and its types exist before the root `pnpm lint` reads them: oxlint's type-aware rules resolve the auto-imports and `@agntn/puzzles` alias through those files, and without them every docs file lints as `error` typed. CI installs the docs for that reason alone.
+`pnpm exec nuxt typecheck` runs vue-tsc over the `.vue` files too, which plain `tsc -p .nuxt/tsconfig.app.json` skips; read the `app/` and `server/` lines only, because Docus's own sources report errors under this config. `pnpm install` here runs `nuxt prepare` on postinstall, so `.nuxt/` and its types exist before the root `pnpm lint` reads them: oxlint's type-aware rules resolve the auto-imports and `@agntn/puzzles` alias through those files, and without them every docs file lints as `error` typed. CI installs the docs for that reason alone.
 
 ## Pages per puzzle
 

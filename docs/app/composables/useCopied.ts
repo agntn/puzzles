@@ -6,6 +6,7 @@
  */
 export function useCopied() {
   const copied = ref<string | null>(null);
+  let timer: ReturnType<typeof setTimeout> | undefined;
 
   async function copy(key: string, value: string): Promise<void> {
     try {
@@ -13,9 +14,10 @@ export function useCopied() {
     } catch {
       return;
     }
+    clearTimeout(timer);
     copied.value = key;
-    setTimeout(() => {
-      if (copied.value === key) copied.value = null;
+    timer = setTimeout(() => {
+      copied.value = null;
     }, 1200);
   }
 

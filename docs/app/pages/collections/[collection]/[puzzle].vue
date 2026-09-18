@@ -10,7 +10,7 @@ const collection = computed(() => String(route.params.collection ?? ""));
 const id = computed(() => `${collection.value}/${String(route.params.puzzle ?? "")}`);
 
 /** The same record `PuzzlePage` renders below, resolved once under one key. */
-const { data } = await usePuzzlePage(id.value);
+const { data } = await usePuzzlePage(() => id.value);
 
 if (data.value === null) {
   throw createError({
