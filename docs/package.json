@@ -20,7 +20,7 @@
     "nuxt": "4.5.2"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "1.2.128",
+    "@iconify-json/lucide": "1.2.134",
     "@iconify-json/simple-icons": "1.2.94",
     "@iconify-json/token": "1.2.40",
     "@iconify-json/vscode-icons": "1.2.76",
