@@ -45,7 +45,8 @@ export default defineCommand({
     ...jsonArg,
   },
   async run({ args }) {
-    const [puzzles, { verifyPuzzle }] = await Promise.all([selectPuzzles(args), verification()]);
+    const puzzles = await selectPuzzles(args);
+    const { verifyPuzzle } = await verification();
     const results = puzzles.map((puzzle) => verifyPuzzle(puzzle));
     if (args.json) {
       printLine(toJson(results));
