@@ -10,6 +10,7 @@ import {
   hex,
   litecoinPuzzle,
   p2pkh,
+  p2wpkh,
   seed,
   verifyPuzzle,
   wif,
@@ -101,6 +102,45 @@ describe("Collection.verify", () => {
     expect(result).toMatchObject({
       verified: true,
       derivedAddress: "1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7",
+    });
+  });
+
+  it("derives a seed whose BIP39 checksum fails, the way the Bitcoin Movie Enigma phrase does", () => {
+    /* The phrase, the address and the compressed key it spent with are all on chain. */
+    const result = verifyPuzzle(
+      bitcoinPuzzle({
+        ...synthetic,
+        address: p2wpkh("bc1q94ecsn0qk8lap2gefrycnms3ruepy889z969a6"),
+        key: seed(
+          "path mad alien apology escape spare miss goddess leopard crime visit clock start first blade guard close barrel term screen matrix toy ghost shine",
+          "m/84'/0'/0'/0/0",
+        ),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: true,
+      derivedAddress: "bc1q94ecsn0qk8lap2gefrycnms3ruepy889z969a6",
+      privateKey: "c823cde62ae38f9c5c94ccd92c067d9687390d1c5fd148f9d81c67ec70851c3d",
+    });
+  });
+
+  it("fails a seed with a word outside the BIP39 list", () => {
+    const result = verifyPuzzle(
+      bitcoinPuzzle({
+        ...synthetic,
+        address: p2pkh("1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7"),
+        key: seed(
+          "since desk thrive carbon zone prison leaf depart hobby practice ivory nope",
+          "m/44'/0'/0'/0/0",
+        ),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: false,
+      unavailable: false,
+      error: "Invalid BIP39 mnemonic",
     });
   });
 
