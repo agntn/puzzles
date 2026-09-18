@@ -82,6 +82,15 @@ describe("puzzle record factories", () => {
     expect(puzzle.address().value).toBe(required.address.value);
   });
 
+  it("keeps freezing below a record the caller froze shallowly", () => {
+    const transactions = [claim("0".repeat(64), "2026-01-02", 0)];
+    const puzzle = bitcoinPuzzle(Object.freeze({ ...required, transactions }));
+
+    expect(Object.isFrozen(puzzle.transactions())).toBe(true);
+    expect(Object.isFrozen(puzzle.transactions()[0])).toBe(true);
+    expect(Reflect.set(transactions, 0, undefined)).toBe(false);
+  });
+
   it.each(factories)("preserves the minimal Puzzle contract for %s", (chain, factory) => {
     /* Factories assign chains. Address validation is a separate concern. */
     const puzzle = factory(required);

@@ -205,19 +205,27 @@ export function defined<T>(value: Readonly<Record<string, unknown>>): T {
 
 /**
  * Freezes a record and everything nested in it, so the data a factory took stays as written. A
- * frozen object refuses a new value in strict mode, and every module here is strict. An object
- * that is frozen already counts as frozen through, which also ends the walk at a shared part.
+ * frozen object refuses a new value in strict mode, and every module here is strict. The walk
+ * goes on below an object that is frozen already, because a shallow `Object.freeze` by the caller
+ * leaves the parts under it open, and it visits each object once, so a shared or circular part
+ * ends it.
  *
  * @param {T} value - Record, array or primitive to freeze.
  * @returns {T} The same value, frozen through.
  */
 export function frozen<T>(value: T): T {
-  if (typeof value === "object" && value !== null && !Object.isFrozen(value)) {
-    Object.freeze(value);
-    for (const item of Object.values(value)) {
-      frozen(item);
+  const seen = new WeakSet<object>();
+  const walk = (item: unknown): void => {
+    if (typeof item !== "object" || item === null || seen.has(item)) {
+      return;
     }
-  }
+    seen.add(item);
+    Object.freeze(item);
+    for (const nested of Object.values(item)) {
+      walk(nested);
+    }
+  };
+  walk(value);
   return value;
 }
 
