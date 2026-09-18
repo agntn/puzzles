@@ -34,7 +34,7 @@ IDs are `collection/identifier`. Two singletons have no slash, which trips peopl
 | `bitimage`       | `bitimage/kitten`       | name                                              |
 | `gsmg`           | `gsmg`                  | singleton, no argument                            |
 | `hash_collision` | `hash_collision/sha256` | sha1, sha256, ripemd160, hash160, hash256, op_abs |
-| `rushwallet`     | `rushwallet/9`          | number 1-30                                       |
+| `rushwallet`     | `rushwallet/9`          | name "1"-"30"                                     |
 | `warp`           | `warp/challenge_1`      | challenge_1-4, warp_challenge_1-2                 |
 | `zden`           | `zden/level_1`          | snake_case level name                             |
 

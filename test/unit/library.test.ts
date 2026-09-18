@@ -1,13 +1,13 @@
 import { readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
-import { B1000Collection } from "../../src/collections/b1000.ts";
+import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash_collision.ts";
-import { RushwalletCollection } from "../../src/collections/rushwallet.ts";
+import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
 import {
@@ -22,6 +22,7 @@ import {
   get,
   getCollection,
   hasCollection,
+  PuzzleNotFoundError,
   stats,
   Status,
 } from "../../src/index.ts";
@@ -79,6 +80,28 @@ describe("lazy collection registry", () => {
     expect((await getCollection("peter_todd"))?.key).toBe("hash_collision");
     expect((await getCollection("warpwallet"))?.key).toBe("warp");
     expect(await get("missing")).toBeUndefined();
+  });
+
+  it("resolves a collection query only in the spelling its identifier uses", () => {
+    expect([71, "71", "b1000/71"].map((query) => b1000.get(query)?.id())).toEqual([
+      "b1000/71",
+      "b1000/71",
+      "b1000/71",
+    ]);
+    /* Number() and replace() used to read all of these as 71 or 70, or die on the foreign types. */
+    const spellings = ["0x47", "0b1000111", " 71 ", "71.0", "+71", "0071", "7e1"];
+    const prefixed = ["b1000/7e1", "b1000/71.0", "b1000/ 71", "71b1000/"];
+    const foreign = [undefined, null, true, 71n, {}] as never[];
+    expect([...spellings, ...prefixed, ...foreign].map((query) => b1000.get(query))).toEqual(
+      [...spellings, ...prefixed, ...foreign].map(() => undefined),
+    );
+    expect(() => b1000.require("7e1")).toThrow(PuzzleNotFoundError);
+    expect(() => b1000.require("7e1")).toThrow("Puzzle not found: 7e1");
+
+    expect(rushwallet.get("9")?.id()).toBe("rushwallet/9");
+    expect(rushwallet.get("rushwallet/9")?.id()).toBe("rushwallet/9");
+    expect(rushwallet.get(9 as never)).toBeUndefined();
+    expect(() => rushwallet.require(9 as never)).toThrow(PuzzleNotFoundError);
   });
 
   it("summarizes collections with the fields every discovery surface shares", async () => {
