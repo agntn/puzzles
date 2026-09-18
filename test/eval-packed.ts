@@ -321,7 +321,12 @@ async function runPackedBin(binPath: string, args: readonly string[]): Promise<B
     const { stdout, stderr } = await execFileAsync(
       process.execPath,
       ["--import", hook, binPath, ...args],
-      { cwd: root, encoding: "utf8", env: { ...process.env, PUZZLES_REPORT_LOADS: "1" } },
+      {
+        cwd: root,
+        encoding: "utf8",
+        env: { ...process.env, PUZZLES_REPORT_LOADS: "1" },
+        timeout: 120_000,
+      },
     );
     return { code: 0, stdout, stderr };
   } catch (error) {
