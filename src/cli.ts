@@ -2,10 +2,10 @@
 import { defineCommand, runMain } from "citty";
 import { version } from "./version.ts";
 
-/** A closed pipe, `puzzles export | head`, ends the process quietly instead of an EPIPE trace. */
+/** A closed pipe, `puzzles export | head`, ends the process quietly and keeps the exit code a command set. */
 process.stdout.on("error", (error: Readonly<NodeJS.ErrnoException>) => {
   if (error.code === "EPIPE") {
-    process.exit(0);
+    process.exit(typeof process.exitCode === "number" ? process.exitCode : 0);
   }
   throw error;
 });
