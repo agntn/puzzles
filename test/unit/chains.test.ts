@@ -59,15 +59,19 @@ describe("chain metadata", () => {
     expect(isValidAddress(Chain.Arweave, "not base64url!")).toBe(false);
   });
 
-  it("checks transaction identifiers by chain family", () => {
+  it("checks transaction identifiers through @agntn/chains", () => {
     const hex64 = "a".repeat(64);
     expect(isValidTransactionId(Chain.Bitcoin, hex64)).toBe(true);
     expect(isValidTransactionId(Chain.Litecoin, `0x${hex64}`)).toBe(false);
+    expect(isValidTransactionId(Chain.Decred, hex64)).toBe(true);
     expect(isValidTransactionId(Chain.Ethereum, `0x${hex64}`)).toBe(true);
     expect(isValidTransactionId(Chain.Ethereum, hex64)).toBe(false);
     expect(isValidTransactionId(Chain.Arweave, "vLRHFqCw1uHu75xqB4fCDW-QxpkpJxBtFD9g4QYUbfw")).toBe(
       true,
     );
+    /* 43 base64url characters carry 258 bits, so the last one can only encode 256 with two zero bits. */
+    expect(isValidTransactionId(Chain.Arweave, "a".repeat(43))).toBe(false);
     expect(isValidTransactionId(Chain.Monero, hex64)).toBe(true);
+    expect(isValidTransactionId(Chain.Monero, hex64.slice(1))).toBe(false);
   });
 });

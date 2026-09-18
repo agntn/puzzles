@@ -8,3 +8,6 @@ allowBuilds:
   esbuild: true
   workerd: true
   vue-demi: true
+
+minimumReleaseAgeExclude:
+  - "@agntn/chains@0.3.6"

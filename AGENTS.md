@@ -13,7 +13,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 - `src/core/collection.ts` freezes and indexes the puzzle list and implements lookup, filters, balances, and verification once.
 - `src/core/registry.ts` is a lazy manifest registry: a table seeded on first use from `builtins` in `src/collections/index.ts`, where each entry is a key plus a literal `import()` of the collection module. Keys, aliases, and `hasCollection()` answer synchronously; instances load on the first lookup for their key.
 - `src/core/dataset.ts` computes the asynchronous aggregate views `all()`, `selectPuzzles()`, `get()`, `collectionSummaries()`, `stats()`, `dataVersion()`, `dataset()`; the cached ones are memoized per loaded snapshot, so a registration invalidates them by identity.
-- `src/core/chains.ts` narrows `@agntn/chains` to the six supported chains and reads names, symbols, decimals, explorer bases, and address format checks from it.
+- `src/core/chains.ts` narrows `@agntn/chains` to the six supported chains and reads names, symbols, decimals, explorer bases, and the address and txid format checks from it.
 - `src/core/balance.ts` holds the balance contract (`BalanceOptions` and the error classes); `src/core/providers.ts` maps each chain to its `@agntn/explorers` provider and is imported by `Puzzle.balance()` on first use.
 - `src/core/verify.ts` and `crypto.ts` cover key-to-address verification and the secp256k1, WIF, and address helpers that no published `@agntn` package provides yet.
 - `src/collections/index.ts` is the manifest; `src/collections/<key>.ts` is a collection: author and the puzzle list, published as `@agntn/puzzles/collections/<key>` and bundled as its own input.
@@ -48,7 +48,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 ## Change routing
 
 - New puzzle: add `src/collections/<key>/<name>.ts` exporting a record built with the right chain factory, then import it and append it to the collection's `puzzles` list. Export names are `<collection>Puzzle<Name>` in camelCase; file names are the identifier segment in kebab-case.
-- Puzzle data fix: edit the one record. `test/unit/validation.test.ts` re-checks identifiers, key material, BIP38 payloads, claimed and swept public keys, asset paths, and the no nulls rule.
+- Puzzle data fix: edit the one record. `test/unit/validation.test.ts` re-checks identifiers, address and txid formats, key material, BIP38 payloads, claimed and swept public keys, asset paths, and the no nulls rule.
 - New collection: follow the registration invariant, add its author with `party()`, add its `{ key, load }` entry to the manifest, and extend `test/unit/library.test.ts`.
 - New puzzle field: add the method to `Puzzle` with a safe default, extend `toJSON()`, `PuzzleSpec`, and the internal spec-backed puzzle, then teach `parts.ts` how to build it.
 - New CLI command: add `src/commands/<name>.ts`, register it in `src/cli.ts`, cover it in `test/unit/cli.test.ts`.
