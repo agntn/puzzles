@@ -129,4 +129,20 @@ describe.concurrent("puzzles CLI", () => {
       stderr: "Ethereum balance lookup requires an Etherscan API key\n",
     });
   });
+
+  it("asks for an id or --all before verifying", async () => {
+    await expect(failure("verify")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid id: pass a puzzle identifier or --all\n",
+    });
+  });
+
+  it("keeps an identifier with a line break and an escape on one line", async () => {
+    await expect(failure("show", "nope\n\u001B[31mx")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Puzzle not found: nope  [31mx\n",
+    });
+  });
 });
