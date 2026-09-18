@@ -24,7 +24,7 @@ defineProps<{ sample: LandingSample }>();
         <p class="puzzles-eyebrow mb-3">output · content[0].text</p>
         <pre
           :key="sample.tool"
-          class="puzzles-tool puzzles-derive"
+          class="puzzles-tool puzzles-derive max-h-[32rem] overflow-y-auto"
         ><code>{{ sample.tool }}</code></pre>
       </div>
     </div>

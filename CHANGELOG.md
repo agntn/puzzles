@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+### Fixed
+
+- `puzzles_show` prints the whole record: the key in every form it has, the solve date, the solver, every transaction, the claim link and the assets. It used to stop at `private key known: yes`, and MCP clients never see `details`.
+
+## [0.20.0] - 2026-09-18
+
 ### Changed
 
 - Rename the package to `@agntn/puzzles` and the binary to `puzzles`.
