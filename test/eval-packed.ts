@@ -300,47 +300,94 @@ async function assertPackedExtensions(): Promise<void> {
   );
 }
 
+/** What one run of the packed bin printed and how it exited. */
+interface BinRun {
+  readonly code: number;
+  readonly stderr: string;
+  readonly stdout: string;
+}
+
 /**
- * citty resolves every subcommand to print usage, so a static import inside `mcp` or `verify` would
- * load the whole MCP server or the verification crypto on `--help`. The child runs under the same
+ * Runs the packed bin under the load hook. A non-zero exit comes back as a run too, because an
+ * unknown command prints the usage and exits 1 on purpose.
+ *
+ * @param {string} binPath - The packed bin file.
+ * @param {readonly string[]} args - Arguments for the bin.
+ * @returns {Promise<BinRun>} The exit code and both streams.
+ */
+async function runPackedBin(binPath: string, args: readonly string[]): Promise<BinRun> {
+  const hook = new URL("./record-loads.ts", import.meta.url).href;
+  try {
+    const { stdout, stderr } = await execFileAsync(
+      process.execPath,
+      ["--import", hook, binPath, ...args],
+      { cwd: root, encoding: "utf8", env: { ...process.env, PUZZLES_REPORT_LOADS: "1" } },
+    );
+    return { code: 0, stdout, stderr };
+  } catch (error) {
+    const failed = error as Partial<BinRun>;
+    if (
+      typeof failed.code !== "number" ||
+      typeof failed.stdout !== "string" ||
+      typeof failed.stderr !== "string"
+    ) {
+      throw error;
+    }
+    return { code: failed.code, stdout: failed.stdout, stderr: failed.stderr };
+  }
+}
+
+/**
+ * citty resolves every subcommand to print the usage, for `--help` and `-h`, and again to look for
+ * an alias when the command is unknown, so a static import inside `mcp` or `verify` would load the
+ * whole MCP server or the verification crypto on each of those paths. The child runs under the
  * load hook and reports every module on exit.
  *
  * @param {string} binPath - The packed bin file.
  */
 async function assertHelpStaysLight(binPath: string): Promise<void> {
-  const hook = new URL("./record-loads.ts", import.meta.url).href;
-  const { stdout, stderr } = await execFileAsync(
-    process.execPath,
-    ["--import", hook, binPath, "--help"],
-    { cwd: root, encoding: "utf8", env: { ...process.env, PUZZLES_REPORT_LOADS: "1" } },
-  );
-  assert.match(stdout, /mcp/u, "usage names the mcp command");
-  const recorded = /@loaded (\[.*\])/u.exec(stderr)?.[1];
-  assert.ok(recorded !== undefined, "the load hook reported nothing");
-  const urls: unknown = JSON.parse(recorded);
-  assert.ok(Array.isArray(urls), "the load hook reported something other than a list");
-  const strings = urls.map(String);
-  assert.deepEqual(
-    /* pnpm's store paths carry peer hashes, so only the package directory itself counts as the SDK. */
-    strings.filter((url) => url.includes("/node_modules/@modelcontextprotocol/")),
-    [],
-    "puzzles --help must not load the MCP SDK",
-  );
-  assert.deepEqual(
-    strings.filter((url) => url.startsWith(packageRootUrl) && /typebox|dist\/mcp\.mjs/u.test(url)),
-    [],
-    "puzzles --help must not load the server entry or the tool schemas",
-  );
-  assert.deepEqual(
-    strings.filter((url) => url.startsWith(`${packageRootUrl}dist/collections/`)),
-    [],
-    "puzzles --help must not load a collection",
-  );
-  assert.deepEqual(
-    strings.filter((url) => /\/node_modules\/(?:@agntn\/keys|@noble\/curves)\//u.test(url)),
-    [],
-    "puzzles --help must not load the verification crypto",
-  );
+  const usages = [
+    { args: ["--help"], code: 0 },
+    { args: ["-h"], code: 0 },
+    { args: ["no-such-command"], code: 1 },
+  ] as const;
+  for (const usage of usages) {
+    const label = `puzzles ${usage.args.join(" ")}`;
+    const { code, stdout, stderr } = await runPackedBin(binPath, usage.args);
+    assert.equal(code, usage.code, `${label} exited ${code}`);
+    assert.match(stdout, /mcp/u, `${label} prints the usage naming the mcp command`);
+    const recorded = /@loaded (\[.*\])/u.exec(stderr)?.[1];
+    assert.ok(recorded !== undefined, `the load hook reported nothing for ${label}`);
+    const urls: unknown = JSON.parse(recorded);
+    assert.ok(
+      Array.isArray(urls),
+      `the load hook reported something other than a list for ${label}`,
+    );
+    const strings = urls.map(String);
+    assert.deepEqual(
+      /* pnpm's store paths carry peer hashes, so only the package directory itself counts as the SDK. */
+      strings.filter((url) => url.includes("/node_modules/@modelcontextprotocol/")),
+      [],
+      `${label} must not load the MCP SDK`,
+    );
+    assert.deepEqual(
+      strings.filter(
+        (url) => url.startsWith(packageRootUrl) && /typebox|dist\/mcp\.mjs/u.test(url),
+      ),
+      [],
+      `${label} must not load the server entry or the tool schemas`,
+    );
+    assert.deepEqual(
+      strings.filter((url) => url.startsWith(`${packageRootUrl}dist/collections/`)),
+      [],
+      `${label} must not load a collection`,
+    );
+    assert.deepEqual(
+      strings.filter((url) => /\/node_modules\/(?:@agntn\/keys|@noble\/curves)\//u.test(url)),
+      [],
+      `${label} must not load the verification crypto`,
+    );
+  }
 }
 
 async function assertPackedBin(manifest: Manifest): Promise<void> {
