@@ -58,6 +58,39 @@ describe("puzzle record factories", () => {
     expect(puzzle.key()).toBe(key);
   });
 
+  it("freezes the record it builds, nested parts included", () => {
+    const puzzle = bitcoinPuzzle({
+      ...required,
+      key: hex("1".padStart(64, "0"), 1).wif(
+        "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn",
+      ),
+      solver: party("Fixture", { addresses: ["1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"] }),
+      transactions: [claim("0".repeat(64), "2026-01-02", 0)],
+    });
+    const parts = [
+      puzzle.address(),
+      puzzle.transactions(),
+      puzzle.transactions()[0],
+      puzzle.solver(),
+      puzzle.solver()?.addresses,
+      puzzle.keyData(),
+      puzzle.keyData()?.wif,
+    ];
+
+    expect(parts.map((part) => Object.isFrozen(part))).toEqual(parts.map(() => true));
+    expect(Reflect.set(puzzle.address(), "value", "1Mutated")).toBe(false);
+    expect(puzzle.address().value).toBe(required.address.value);
+  });
+
+  it("keeps freezing below a record the caller froze shallowly", () => {
+    const transactions = [claim("0".repeat(64), "2026-01-02", 0)];
+    const puzzle = bitcoinPuzzle(Object.freeze({ ...required, transactions }));
+
+    expect(Object.isFrozen(puzzle.transactions())).toBe(true);
+    expect(Object.isFrozen(puzzle.transactions()[0])).toBe(true);
+    expect(Reflect.set(transactions, 0, undefined)).toBe(false);
+  });
+
   it.each(factories)("preserves the minimal Puzzle contract for %s", (chain, factory) => {
     /* Factories assign chains. Address validation is a separate concern. */
     const puzzle = factory(required);
@@ -65,6 +98,7 @@ describe("puzzle record factories", () => {
     expect(puzzle.chain()).toBe(chain);
     expect(puzzle.preGenesis()).toBe(false);
     expect(puzzle.transactions()).toEqual([]);
+    expect(Object.isFrozen(puzzle.transactions())).toBe(true);
     expect(puzzle.toJSON()).toEqual({
       id: required.id,
       address: required.address,

@@ -203,6 +203,32 @@ export function defined<T>(value: Readonly<Record<string, unknown>>): T {
   return Object.fromEntries(Object.entries(value).filter(([, item]) => item !== undefined)) as T;
 }
 
+/**
+ * Freezes a record and everything nested in it, so the data a factory took stays as written. A
+ * frozen object refuses a new value in strict mode, and every module here is strict. The walk
+ * goes on below an object that is frozen already, because a shallow `Object.freeze` by the caller
+ * leaves the parts under it open, and it visits each object once, so a shared or circular part
+ * ends it.
+ *
+ * @param {T} value - Record, array or primitive to freeze.
+ * @returns {T} The same value, frozen through.
+ */
+export function frozen<T>(value: T): T {
+  const seen = new WeakSet<object>();
+  const walk = (item: unknown): void => {
+    if (typeof item !== "object" || item === null || seen.has(item)) {
+      return;
+    }
+    seen.add(item);
+    Object.freeze(item);
+    for (const nested of Object.values(item)) {
+      walk(nested);
+    }
+  };
+  walk(value);
+  return value;
+}
+
 function address(kind: AddressKind, value: string, hash160?: string): Address {
   return defined({ value, kind, hash160 });
 }
@@ -284,15 +310,15 @@ export function uncompressed(value: string): Pubkey {
 }
 
 /**
- * Private key material assembled through chained calls. Each call returns a new builder, so the
- * one a record hands back through `key()` stays as written.
+ * Private key material assembled through chained calls. Each call returns a new builder and every
+ * record is frozen, so what a puzzle hands back through `key()` and `keyData()` stays as written.
  */
 export class Key {
   readonly #data: KeyData;
 
-  /** Starts an empty key record. */
+  /** Starts an empty key record, or freezes the one it is given. */
   constructor(data: KeyData = {}) {
-    this.#data = data;
+    this.#data = frozen(data);
   }
 
   #with(patch: KeyData): Key {

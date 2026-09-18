@@ -1,6 +1,6 @@
 import type { BalanceOptions } from "./balance.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
-import { type Party } from "./parts.ts";
+import { frozen, type Party } from "./parts.ts";
 import { Puzzle, Status } from "./puzzle.ts";
 import { type Balance } from "./types.ts";
 import { filterPuzzles } from "./utils.ts";
@@ -21,10 +21,10 @@ export abstract class Collection<Query> {
   readonly #byId: ReadonlyMap<string, Puzzle>;
   readonly #puzzles: readonly Puzzle[];
 
-  /** Freezes the puzzle list and indexes it by identifier. */
+  /** Freezes the author and the puzzle list, then indexes the list by identifier. */
   constructor(key: string, author: Party, puzzles: readonly Puzzle[]) {
     this.key = key;
-    this.author = author;
+    this.author = frozen(author);
     this.#puzzles = Object.freeze([...puzzles]);
     this.#byId = new Map(this.#puzzles.map((puzzle) => [puzzle.id(), puzzle]));
   }

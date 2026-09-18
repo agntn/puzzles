@@ -5,6 +5,7 @@ import {
   type Address,
   type Assets,
   defined,
+  frozen,
   type Key,
   type KeyData,
   type Party,
@@ -45,6 +46,9 @@ export interface PuzzleData {
   readonly status: Status;
   readonly transactions?: readonly Transaction[];
 }
+
+/** The transaction list of a puzzle that recorded none, frozen like every other part. */
+const NO_TRANSACTIONS: readonly Transaction[] = Object.freeze([]);
 
 const SOLVE_TIME_UNITS = [
   [365 * 24 * 60 * 60, "y"],
@@ -152,7 +156,7 @@ export abstract class Puzzle {
    * @returns {readonly Transaction[]} Transactions recorded for the address, in chronological order.
    */
   transactions(): readonly Transaction[] {
-    return [];
+    return NO_TRANSACTIONS;
   }
 
   /**
@@ -421,7 +425,8 @@ export abstract class MoneroPuzzle extends Puzzle {
 
 /**
  * Static data record behind a puzzle a factory builds. An absent field means the puzzle doesn't have
- * it, like a missing override on a handwritten subclass.
+ * it, like a missing override on a handwritten subclass. The factory freezes the record through, so
+ * every accessor hands back the data as written and no caller can rewrite it for everyone else.
  */
 export interface PuzzleSpec {
   readonly address: Address;
@@ -448,7 +453,7 @@ class SpecPuzzle extends Puzzle {
   constructor(chain: Chain, spec: PuzzleSpec) {
     super();
     this.#chain = chain;
-    this.#spec = spec;
+    this.#spec = frozen(spec);
   }
 
   override id(): string {
@@ -504,7 +509,7 @@ class SpecPuzzle extends Puzzle {
   }
 
   override transactions(): readonly Transaction[] {
-    return this.#spec.transactions ?? [];
+    return this.#spec.transactions ?? NO_TRANSACTIONS;
   }
 
   override solver(): Party | undefined {
