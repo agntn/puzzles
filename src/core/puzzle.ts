@@ -47,6 +47,9 @@ export interface PuzzleData {
   readonly transactions?: readonly Transaction[];
 }
 
+/** The transaction list of a puzzle that recorded none, frozen like every other part. */
+const NO_TRANSACTIONS: readonly Transaction[] = Object.freeze([]);
+
 const SOLVE_TIME_UNITS = [
   [365 * 24 * 60 * 60, "y"],
   [30 * 24 * 60 * 60, "mo"],
@@ -153,7 +156,7 @@ export abstract class Puzzle {
    * @returns {readonly Transaction[]} Transactions recorded for the address, in chronological order.
    */
   transactions(): readonly Transaction[] {
-    return [];
+    return NO_TRANSACTIONS;
   }
 
   /**
@@ -506,7 +509,7 @@ class SpecPuzzle extends Puzzle {
   }
 
   override transactions(): readonly Transaction[] {
-    return this.#spec.transactions ?? [];
+    return this.#spec.transactions ?? NO_TRANSACTIONS;
   }
 
   override solver(): Party | undefined {

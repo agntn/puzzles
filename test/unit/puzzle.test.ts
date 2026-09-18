@@ -98,6 +98,7 @@ describe("puzzle record factories", () => {
     expect(puzzle.chain()).toBe(chain);
     expect(puzzle.preGenesis()).toBe(false);
     expect(puzzle.transactions()).toEqual([]);
+    expect(Object.isFrozen(puzzle.transactions())).toBe(true);
     expect(puzzle.toJSON()).toEqual({
       id: required.id,
       address: required.address,
