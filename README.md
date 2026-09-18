@@ -129,7 +129,7 @@ Six tools: `puzzles_stats`, `puzzles_collections`, `puzzles_show`, `puzzles_list
 
 ## 🚫 What this does not do
 
-It doesn't solve anything. No scanner, no kangaroo, no brainwallet cracker, and no guessing a status from a transaction list. `solved`, `swept`, `claimed` and `expired` are written down by hand, because a claim transaction plus a published key still means solved. Chain facts come from `@agntn/chains` and balances from `@agntn/explorers`. This package doesn't reimplement either.
+It doesn't solve anything. No scanner, no kangaroo, no brainwallet cracker, and no guessing a status from a transaction list. `solved`, `swept`, `claimed` and `expired` are written down by hand, because a claim transaction plus a published key still means solved. Chain facts come from `@agntn/chains`, key derivation from `@agntn/keys` and balances from `@agntn/explorers`. This package doesn't reimplement any of them.
 
 ## 🧩 Adding a puzzle
 

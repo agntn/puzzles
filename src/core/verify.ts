@@ -1,8 +1,11 @@
-import { HDKey } from "@scure/bip32";
-import { mnemonicToSeedSync, validateMnemonic } from "@scure/bip39";
-import { wordlist } from "@scure/bip39/wordlists/english.js";
-import { bytesToHex } from "@noble/hashes/utils.js";
-import { addressesEqual, addressFromPrivateKey, wifToPrivateKey } from "./crypto.ts";
+import { validateMnemonic } from "@agntn/keys/bip39";
+import type { Chain } from "./chains.ts";
+import {
+  addressesEqual,
+  addressFromPrivateKey,
+  privateKeyFromSeed,
+  wifToPrivateKey,
+} from "./crypto.ts";
 import { PubkeyFormat, type Secret, secretOf } from "./parts.ts";
 import { type Puzzle } from "./puzzle.ts";
 
@@ -51,34 +54,32 @@ function failed(reason: string): UnresolvedKey {
 
 function resolveSeedKey(
   seed: Extract<Secret, { kind: "seed" }>,
+  chain: Chain,
   format: PubkeyFormat,
 ): ResolvedKey | UnresolvedKey {
   if (seed.path === undefined) {
     return unavailable("Seed has no derivation path");
   }
-  if (!validateMnemonic(seed.phrase, wordlist)) {
+  if (!validateMnemonic(seed.phrase)) {
     return failed("Invalid BIP39 mnemonic");
   }
   if (seed.passphrase === "Required") {
     return unavailable("Seed requires an unknown passphrase");
   }
-  const knownPassphrase = seed.passphrase === undefined ? "" : seed.passphrase.Known;
   try {
-    const privateKey = HDKey.fromMasterSeed(
-      mnemonicToSeedSync(seed.phrase, knownPassphrase),
-    ).derive(seed.path).privateKey;
-    if (privateKey === null) {
-      return failed("Derived key does not contain private material");
+    const hex = privateKeyFromSeed(seed.phrase, seed.path, chain, seed.passphrase?.Known);
+    if (hex === undefined) {
+      return unavailable(`Seed derivation is not supported for ${chain}`);
     }
-    return { hex: bytesToHex(privateKey), format };
+    return { hex, format };
   } catch (error) {
     return failed(error instanceof Error ? error.message : "Seed derivation failed");
   }
 }
 
-function resolveWifKey(wif: string): ResolvedKey | UnresolvedKey {
+function resolveWifKey(wif: string, chain: Chain): ResolvedKey | UnresolvedKey {
   try {
-    const decoded = wifToPrivateKey(wif);
+    const decoded = wifToPrivateKey(wif, chain);
     return {
       hex: decoded.hex,
       format: decoded.compressed ? PubkeyFormat.Compressed : PubkeyFormat.Uncompressed,
@@ -100,11 +101,11 @@ function resolveKey(puzzle: Puzzle): ResolvedKey | UnresolvedKey {
     case "hex":
       return { hex: secret.hex, format: preferredFormat(puzzle) };
     case "wif":
-      return resolveWifKey(secret.wif);
+      return resolveWifKey(secret.wif, puzzle.chain());
     case "encrypted":
       return unavailable("WIF is encrypted");
     case "seed":
-      return resolveSeedKey(secret, preferredFormat(puzzle));
+      return resolveSeedKey(secret, puzzle.chain(), preferredFormat(puzzle));
     case "mini":
       return unavailable("Mini private keys are not verified");
   }

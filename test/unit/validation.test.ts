@@ -33,7 +33,7 @@ function bip38KeyProblem(
     return `${puzzle.id()}: BIP38 private key does not match the declared hex key`;
   }
   const wif = key?.wif?.decrypted;
-  if (wif !== undefined && wif !== privateKeyToWif(hexKey, decrypted.compressed)) {
+  if (wif !== undefined && wif !== privateKeyToWif(hexKey, puzzle.chain(), decrypted.compressed)) {
     return `${puzzle.id()}: BIP38 private key does not match the decrypted WIF`;
   }
   return undefined;
@@ -57,7 +57,7 @@ function declaredKeyProblem(puzzle: Puzzle, key: KeyData, hexKey: string): strin
     return `${puzzle.id()}: declared bit length does not match the key`;
   }
   const decrypted = key.wif?.decrypted;
-  if (decrypted !== undefined && wifToPrivateKey(decrypted).hex !== hexKey) {
+  if (decrypted !== undefined && wifToPrivateKey(decrypted, puzzle.chain()).hex !== hexKey) {
     return `${puzzle.id()}: decrypted WIF does not match the hex key`;
   }
   return undefined;

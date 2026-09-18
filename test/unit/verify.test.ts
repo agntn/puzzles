@@ -5,12 +5,24 @@ import { bitaps } from "../../src/collections/bitaps.ts";
 import { bitimage } from "../../src/collections/bitimage.ts";
 import {
   BitcoinPuzzle,
+  bitcoinPuzzle,
+  decredPuzzle,
   hex,
+  litecoinPuzzle,
   p2pkh,
+  seed,
   verifyPuzzle,
+  wif,
   type Address,
   type Key,
 } from "../../src/index.ts";
+
+/** The fields every synthetic record below shares; the dataset never exercises these branches. */
+const synthetic = {
+  id: "test/synthetic",
+  sourceUrl: "https://example.com",
+  startedAt: "2020-01-01 00:00:00",
+} as const;
 
 describe("Collection.verify", () => {
   it("verifies a known direct private key", async () => {
@@ -20,7 +32,7 @@ describe("Collection.verify", () => {
     expect(result.derivedAddress).toBe("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH");
   });
 
-  it("verifies a known decrypted WIF", async () => {
+  it("verifies a record that carries hex, a WIF and a BIP38 payload", async () => {
     const result = await ballet.verify("AA007448");
 
     expect(result.verified).toBe(true);
@@ -41,6 +53,73 @@ describe("Collection.verify", () => {
     expect(await bitaps.verifyById(puzzle.id())).toMatchObject({
       verified: false,
       unavailable: true,
+    });
+  });
+
+  it("derives the address from a WIF alone", () => {
+    const result = verifyPuzzle(
+      bitcoinPuzzle({
+        ...synthetic,
+        address: p2pkh("1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj"),
+        key: wif("5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF"),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: true,
+      privateKey: "e9873d79c6d87dc0fb6a5778633389f4453213303da61f20bd67fc233aa33262",
+    });
+  });
+
+  it("decodes a Litecoin WIF against Litecoin, not Bitcoin", () => {
+    const result = verifyPuzzle(
+      litecoinPuzzle({
+        ...synthetic,
+        address: p2pkh("LTVsBSEBS8oCBdpE7b6SwwrguZzMUnjsWr"),
+        key: wif("TAsve34b6yMQn1hBGTc472BfW8kvEoct5MhZrxADHEB7oZgBbky4"),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: true,
+      derivedAddress: "LTVsBSEBS8oCBdpE7b6SwwrguZzMUnjsWr",
+    });
+  });
+
+  it("derives the address at a seed's path", () => {
+    const result = verifyPuzzle(
+      bitcoinPuzzle({
+        ...synthetic,
+        address: p2pkh("1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7"),
+        key: seed(
+          "since desk thrive carbon zone prison leaf depart hobby practice ivory luggage",
+          "m/44'/0'/0'/0/0",
+        ),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: true,
+      derivedAddress: "1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7",
+    });
+  });
+
+  it("marks a Decred seed as unavailable, because keys derives no Decred HD wallet", () => {
+    const result = verifyPuzzle(
+      decredPuzzle({
+        ...synthetic,
+        address: p2pkh("DsmcYVbP1Nmag2H4AS17UTvmWXmGeA7nLDx"),
+        key: seed(
+          "since desk thrive carbon zone prison leaf depart hobby practice ivory luggage",
+          "m/44'/42'/0'/0/0",
+        ),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: false,
+      unavailable: true,
+      error: "Seed derivation is not supported for decred",
     });
   });
 

@@ -13,11 +13,8 @@
   "dependencies": {
     "@agntn/chains": "0.3.6",
     "@agntn/explorers": "0.5.3",
-    "@noble/curves": "2.3.0",
-    "@noble/hashes": "2.3.0",
-    "@scure/base": "2.3.0",
-    "@scure/bip32": "2.3.0",
-    "@scure/bip39": "2.3.0",
+    "@agntn/keys": "0.3.0",
+    "@noble/hashes": "2.4.0",
     "better-sqlite3": "12.11.1",
     "docus": "5.13.0",
     "nuxt": "4.5.2"

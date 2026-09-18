@@ -1,106 +1,68 @@
-import { secp256k1 } from "@noble/curves/secp256k1.js";
-import { blake256 } from "@noble/hashes/blake1.js";
-import { ripemd160 } from "@noble/hashes/legacy.js";
-import { sha256 } from "@noble/hashes/sha2.js";
-import { keccak_256 } from "@noble/hashes/sha3.js";
-import { bytesToHex, concatBytes, hexToBytes } from "@noble/hashes/utils.js";
-import { base58, base58check, bech32 } from "@scure/base";
+import { type AbstractBlockchain, decodeWIF, encodeWIF, type WIFChain } from "@agntn/keys";
+import { Bitcoin } from "@agntn/keys/blockchains/bitcoin";
+import { Decred } from "@agntn/keys/blockchains/decred";
+import { Ethereum } from "@agntn/keys/blockchains/ethereum";
+import { Litecoin } from "@agntn/keys/blockchains/litecoin";
 import { Chain } from "./chains.ts";
 import { AddressKind, PubkeyFormat } from "./parts.ts";
 
-const bitcoinBase58 = base58check(sha256);
-
-function hash160(data: Uint8Array): Uint8Array {
-  return ripemd160(sha256(data));
-}
-
-function blakeHash160(data: Uint8Array): Uint8Array {
-  return ripemd160(blake256(data));
-}
-
-function privateKeyBytes(hexKey: string): Uint8Array {
-  const bytes = hexToBytes(hexKey);
-  if (bytes.length !== 32 || !secp256k1.utils.isValidSecretKey(bytes)) {
-    throw new TypeError("Private key must be a valid 32-byte secp256k1 scalar");
-  }
-  return bytes;
-}
-
-function segwitAddress(prefix: "bc" | "ltc", digest: Uint8Array): string {
-  return bech32.encode(prefix, [0, ...bech32.toWords(digest)]);
-}
-
 /**
- * Derives a secp256k1 public key from a private key.
- *
- * @param {string} hexKey - Private key as 64 hex characters.
- * @param {PubkeyFormat} format - Public key serialization to use.
- * @returns {Uint8Array} The secp256k1 public key.
+ * The `@agntn/keys` wallets behind key to address derivation. A record's chain, pubkey format and
+ * address kind map onto a wallet, its `compressed` flag and its address type here, and nothing
+ * below this module touches a curve or a checksum.
  */
-function publicKeyFromPrivateKey(hexKey: string, format: PubkeyFormat): Uint8Array {
-  return secp256k1.getPublicKey(privateKeyBytes(hexKey), format === PubkeyFormat.Compressed);
+
+const bitcoin = new Bitcoin();
+const litecoin = new Litecoin();
+const decred = new Decred();
+const ethereum = new Ethereum();
+
+function walletFor(chain: Chain): AbstractBlockchain | undefined {
+  switch (chain) {
+    case Chain.Bitcoin:
+      return bitcoin;
+    case Chain.Litecoin:
+      return litecoin;
+    case Chain.Decred:
+      return decred;
+    case Chain.Ethereum:
+      return ethereum;
+    case Chain.Arweave:
+    case Chain.Monero:
+      return undefined;
+  }
+}
+
+function wifChain(chain: Chain): WIFChain {
+  switch (chain) {
+    case Chain.Bitcoin:
+    case Chain.Litecoin:
+    case Chain.Decred:
+      return chain;
+    case Chain.Arweave:
+    case Chain.Ethereum:
+    case Chain.Monero:
+      throw new TypeError(`${chain} has no WIF encoding`);
+  }
 }
 
 /**
- * Encodes a private key in Bitcoin mainnet WIF.
+ * Maps an address kind onto the keys address type. Standard is for chains without script kinds,
+ * so on a UTXO chain it names nothing a key could derive.
  *
- * @param {string} hexKey - Private key as 64 hex characters.
- * @param {boolean} compressed - Whether the public key is compressed.
- * @returns {string} The WIF string.
- */
-export function privateKeyToWif(hexKey: string, compressed: boolean): string {
-  const payload = compressed
-    ? concatBytes(Uint8Array.of(0x80), privateKeyBytes(hexKey), Uint8Array.of(0x01))
-    : concatBytes(Uint8Array.of(0x80), privateKeyBytes(hexKey));
-  return bitcoinBase58.encode(payload);
-}
-
-/**
- * Decodes and validates a Bitcoin mainnet WIF.
- *
- * @param {string} wif - Wallet Import Format key.
- * @returns {{ readonly compressed: boolean; readonly hex: string; }} The private key in hex and whether the WIF marks it compressed.
- */
-export function wifToPrivateKey(wif: string): {
-  readonly compressed: boolean;
-  readonly hex: string;
-} {
-  const payload = bitcoinBase58.decode(wif);
-  if (payload[0] !== 0x80) {
-    throw new TypeError("WIF must use the Bitcoin mainnet version byte");
-  }
-  if (payload.length === 34 && payload[33] === 0x01) {
-    return { compressed: true, hex: bytesToHex(payload.slice(1, 33)) };
-  }
-  if (payload.length === 33) {
-    return { compressed: false, hex: bytesToHex(payload.slice(1)) };
-  }
-  throw new TypeError("WIF has an invalid payload length or compression marker");
-}
-
-/**
- * Derives a Bitcoin or Litecoin P2PKH/P2WPKH address.
- *
- * @param {string} hexKey - Private key as 64 hex characters.
- * @param {typeof Chain.Bitcoin | typeof Chain.Litecoin} chain - Chain the value belongs to.
- * @param {PubkeyFormat} format - Public key serialization to use.
+ * @param {Chain} chain - Chain the address belongs to.
  * @param {AddressKind} kind - Address encoding.
- * @returns {string} The Bitcoin or Litecoin P2PKH/P2WPKH address.
+ * @returns {string | undefined} The keys address type, or `undefined` where the wallet has one shape.
  */
-function utxoAddressFromPrivateKey(
-  hexKey: string,
-  chain: typeof Chain.Bitcoin | typeof Chain.Litecoin,
-  format: PubkeyFormat,
-  kind: AddressKind,
-): string {
-  const digest = hash160(publicKeyFromPrivateKey(hexKey, format));
+function addressType(chain: Chain, kind: AddressKind): string | undefined {
+  if (chain === Chain.Ethereum) {
+    return undefined;
+  }
   switch (kind) {
-    case AddressKind.P2WPKH:
-      return segwitAddress(chain === Chain.Bitcoin ? "bc" : "ltc", digest);
     case AddressKind.P2PKH:
-      return bitcoinBase58.encode(
-        concatBytes(Uint8Array.of(chain === Chain.Bitcoin ? 0x00 : 0x30), digest),
-      );
+      return "legacy";
+    case AddressKind.P2WPKH:
+      return "segwit";
     case AddressKind.P2SH:
     case AddressKind.Standard:
       throw new TypeError(`Cannot derive a ${kind} address from a private key alone`);
@@ -108,30 +70,56 @@ function utxoAddressFromPrivateKey(
 }
 
 /**
- * Derives an Ethereum address from a secp256k1 private key.
+ * Encodes a private key as the chain's mainnet WIF.
  *
  * @param {string} hexKey - Private key as 64 hex characters.
- * @returns {string} The Ethereum address.
+ * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Litecoin and Decred have one.
+ * @param {boolean} compressed - Whether the public key is compressed.
+ * @returns {string} The WIF string.
  */
-function ethereumAddressFromPrivateKey(hexKey: string): string {
-  const publicKey = secp256k1.getPublicKey(privateKeyBytes(hexKey), false);
-  return `0x${bytesToHex(keccak_256(publicKey.slice(1)).slice(-20))}`;
+export function privateKeyToWif(hexKey: string, chain: Chain, compressed: boolean): string {
+  return encodeWIF(hexKey, { chain: wifChain(chain), compressed });
 }
 
 /**
- * Derives a Decred mainnet P2PKH address from a secp256k1 private key.
+ * Decodes a mainnet WIF against the chain the record says it belongs to.
  *
- * @param {string} hexKey - Private key as 64 hex characters.
- * @param {PubkeyFormat} format - Public key serialization to use.
- * @returns {string} The Decred mainnet P2PKH address.
+ * @param {string} wif - Wallet Import Format key.
+ * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Litecoin and Decred have one.
+ * @returns {{ readonly compressed: boolean; readonly hex: string; }} The private key in hex and whether the WIF marks it compressed.
  */
-function decredAddressFromPrivateKey(hexKey: string, format: PubkeyFormat): string {
-  const payload = concatBytes(
-    Uint8Array.of(0x07, 0x3f),
-    blakeHash160(publicKeyFromPrivateKey(hexKey, format)),
-  );
-  const checksum = blake256(blake256(payload)).slice(0, 4);
-  return base58.encode(concatBytes(payload, checksum));
+export function wifToPrivateKey(
+  wif: string,
+  chain: Chain,
+): {
+  readonly compressed: boolean;
+  readonly hex: string;
+} {
+  const decoded = decodeWIF(wif, { chain: wifChain(chain) });
+  return { compressed: decoded.compressed, hex: decoded.privateKey };
+}
+
+/**
+ * Derives the private key at a BIP39 seed's derivation path.
+ *
+ * @param {string} phrase - BIP39 mnemonic.
+ * @param {string} path - Derivation path such as `m/44'/0'/0'/0/0`.
+ * @param {Chain} chain - Chain the seed belongs to.
+ * @param {string} [passphrase] - BIP39 passphrase, when the seed has one.
+ * @returns {string | undefined} The private key in hex, or `undefined` when the chain has no seed derivation: keys refuses Decred, whose HD keys drop leading zeros.
+ */
+export function privateKeyFromSeed(
+  phrase: string,
+  path: string,
+  chain: Chain,
+  passphrase?: string,
+): string | undefined {
+  const wallet = walletFor(chain);
+  if (wallet === undefined || chain === Chain.Decred) {
+    return undefined;
+  }
+  const options = passphrase === undefined ? {} : { passphrase };
+  return wallet.deriveHDWallet(phrase, path, options).keys.private;
 }
 
 /**
@@ -149,18 +137,14 @@ export function addressFromPrivateKey(
   format: PubkeyFormat,
   kind: AddressKind,
 ): string | undefined {
-  switch (chain) {
-    case Chain.Bitcoin:
-    case Chain.Litecoin:
-      return utxoAddressFromPrivateKey(hexKey, chain, format, kind);
-    case Chain.Decred:
-      return decredAddressFromPrivateKey(hexKey, format);
-    case Chain.Ethereum:
-      return ethereumAddressFromPrivateKey(hexKey);
-    case Chain.Arweave:
-    case Chain.Monero:
-      return undefined;
+  const wallet = walletFor(chain);
+  if (wallet === undefined) {
+    return undefined;
   }
+  const publicKey = wallet.getKeyPublic(hexKey, {
+    compressed: format === PubkeyFormat.Compressed,
+  });
+  return wallet.getAddress(publicKey, addressType(chain, kind));
 }
 
 /**

@@ -5,15 +5,7 @@ const repoRoot = resolve(import.meta.dirname, "..");
 const librarySource = resolve(repoRoot, "src");
 
 /** Runtime deps under src/index.ts, installed here so they resolve from docs/node_modules. */
-const libraryDependencies = [
-  "@agntn/chains",
-  "@agntn/explorers",
-  "@noble/curves",
-  "@noble/hashes",
-  "@scure/base",
-  "@scure/bip32",
-  "@scure/bip39",
-];
+const libraryDependencies = ["@agntn/chains", "@agntn/explorers", "@agntn/keys", "@noble/hashes"];
 
 /** Every subpath src/ imports, dynamic ones too, so dev bundles them up front, not on demand. */
 const libraryEntries = [
@@ -23,16 +15,14 @@ const libraryEntries = [
   "@agntn/explorers/providers/dcrdata",
   "@agntn/explorers/providers/etherscan",
   "@agntn/explorers/providers/mempool",
-  "@noble/curves/secp256k1.js",
-  "@noble/hashes/blake1.js",
-  "@noble/hashes/legacy.js",
+  "@agntn/keys",
+  "@agntn/keys/bip39",
+  "@agntn/keys/blockchains/bitcoin",
+  "@agntn/keys/blockchains/decred",
+  "@agntn/keys/blockchains/ethereum",
+  "@agntn/keys/blockchains/litecoin",
   "@noble/hashes/sha2.js",
-  "@noble/hashes/sha3.js",
   "@noble/hashes/utils.js",
-  "@scure/base",
-  "@scure/bip32",
-  "@scure/bip39",
-  "@scure/bip39/wordlists/english.js",
 ];
 
 export default defineNuxtConfig({

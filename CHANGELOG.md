@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Changed
+
+- Derive addresses, decode WIFs and walk seed paths through `@agntn/keys` instead of local secp256k1, hash and Base58 code. `@scure/bip32` and `@scure/bip39` leave the dependencies, `@noble/curves` and `@scure/base` stay only for the BIP38 test helper. A WIF now decodes against the chain of its record, so a Litecoin WIF verifies instead of failing on the Bitcoin version byte, and an Ethereum `derivedAddress` carries the EIP-55 checksum. A Decred seed answers `unavailable`, because keys derives no Decred HD wallet.
+
 ### Fixed
 
 - `puzzles_show` prints the whole record: the key in every form it has, the solve date, the solver, every transaction, the claim link and the assets. It used to stop at `private key known: yes`, and MCP clients never see `details`.
