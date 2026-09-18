@@ -72,7 +72,7 @@
   },
   "dependencies": {
     "@agntn/chains": "0.3.6",
-    "@agntn/explorers": "0.5.3",
+    "@agntn/explorers": "0.5.4",
     "@agntn/keys": "0.3.0",
     "@modelcontextprotocol/sdk": "1.30.0",
     "@noble/hashes": "2.4.0",
