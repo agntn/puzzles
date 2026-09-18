@@ -45,7 +45,7 @@ Old names still resolve: `peter_todd` gives you `hash_collision`, `warpwallet` g
 ```ts
 import { all, collectionKeys, collections, get, stats } from "@agntn/puzzles";
 import { b1000 } from "@agntn/puzzles/collections/b1000";
-import { hashCollision } from "@agntn/puzzles/collections/hash-collision";
+import { hashCollision } from "@agntn/puzzles/collections/hash_collision";
 
 const puzzle = b1000.require(66); // collection query, throws when missing, synchronous
 const same = await get("b1000/66"); // universal ID, loads b1000 only

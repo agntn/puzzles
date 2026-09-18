@@ -6,7 +6,7 @@ import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
-import { HashCollisionCollection } from "../../src/collections/hash-collision.ts";
+import { HashCollisionCollection } from "../../src/collections/hash_collision.ts";
 import { RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
@@ -63,7 +63,7 @@ describe("lazy collection registry", () => {
     /* A collection written but never added to the manifest is the failure mode of a lazy registry. */
     const modules = readdirSync(new URL("../../src/collections/", import.meta.url))
       .filter((entry) => entry.endsWith(".ts") && entry !== "index.ts")
-      .map((entry) => entry.slice(0, -3).replaceAll("-", "_"))
+      .map((entry) => entry.slice(0, -3))
       .sort();
 
     expect(builtins.map((entry) => entry.key).sort()).toEqual(modules);

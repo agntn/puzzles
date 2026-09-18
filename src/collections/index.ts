@@ -12,7 +12,7 @@ export const builtins: readonly CollectionEntry[] = [
   { key: "bitaps", load: () => import("./bitaps.ts").then((m) => m.bitaps) },
   { key: "bitimage", load: () => import("./bitimage.ts").then((m) => m.bitimage) },
   { key: "gsmg", load: () => import("./gsmg.ts").then((m) => m.gsmg) },
-  { key: "hash_collision", load: () => import("./hash-collision.ts").then((m) => m.hashCollision) },
+  { key: "hash_collision", load: () => import("./hash_collision.ts").then((m) => m.hashCollision) },
   { key: "rushwallet", load: () => import("./rushwallet.ts").then((m) => m.rushwallet) },
   { key: "warp", load: () => import("./warp.ts").then((m) => m.warp) },
   { key: "zden", load: () => import("./zden.ts").then((m) => m.zden) },

@@ -219,7 +219,7 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
   const collectionTarget = manifest.exports["./collections/*"]?.import ?? "";
   assert.notEqual(collectionTarget, "", "the collections export has no import target");
   for (const key of expectedCollections) {
-    const file = collectionTarget.replace("*", key.replaceAll("_", "-"));
+    const file = collectionTarget.replace("*", key);
     assert.ok(
       existsSync(path.join(packageRoot, file)),
       `collection entry ${key} resolves to a missing file ${file}`,
