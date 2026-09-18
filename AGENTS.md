@@ -15,7 +15,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 - `src/core/dataset.ts` computes the asynchronous aggregate views `all()`, `selectPuzzles()`, `get()`, `collectionSummaries()`, `stats()`, `dataVersion()`, `dataset()`; the cached ones are memoized per loaded snapshot, so a registration invalidates them by identity.
 - `src/core/chains.ts` narrows `@agntn/chains` to the six supported chains and reads names, symbols, decimals, explorer bases, and the address and txid format checks from it.
 - `src/core/balance.ts` holds the balance contract (`BalanceOptions` and the error classes); `src/core/providers.ts` maps each chain to its `@agntn/explorers` provider and is imported by `Puzzle.balance()` on first use.
-- `src/core/verify.ts` and `crypto.ts` cover key-to-address verification and the secp256k1, WIF, and address helpers that no published `@agntn` package provides yet.
+- `src/core/verify.ts` resolves a record's secret and compares the derived address; `src/core/crypto.ts` maps each chain to its `@agntn/keys` wallet and translates a record's pubkey format and address kind into keys' options. Curves, checksums, WIF and seed derivation live in keys.
 - `src/collections/index.ts` is the manifest; `src/collections/<key>.ts` is a collection: author and the puzzle list, published as `@agntn/puzzles/collections/<key>` and bundled as its own input.
 - `src/collections/<key>/<name>.ts` is one puzzle record built with a factory for its chain. Singleton collections keep their single puzzle in the collection file.
 - `src/commands/` and `src/cli.ts` are the citty commands and the `puzzles` entry point.
@@ -42,7 +42,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 - **CLI output:** command output goes through `src/commands/output.ts`. Never print data with a logger, because consola silences machine-readable output under `NODE_ENV=test`.
 - **Tools:** add an agent tool once in `src/tool-operations.ts`, with its entry in `facts` and its schema in `packages/shared/puzzles-tool-schemas.ts`; MCP and both extensions never restate a name, description, limit, or status list. Executors enforce the same argument limits the schemas declare and throw `InvalidArgumentError`; `test/unit/tool-schemas.test.ts` pins both sides. Discovery is one contract: `puzzles_collections` prints the rows of `puzzles collections`.
 - **Extensions:** their factories are asynchronous because they load `tool-operations` first through literal `import()` specifiers, `src/` in a checkout and `dist/` when installed; their types come from `src/`, so typechecking them does not depend on a fresh `dist`. The MCP error path sanitizes control characters and quotes echoed values.
-- **Verification is lazy:** `Collection.verify()` imports `verify.ts` on first use so the signing crypto stays out of CLI startup; keep `collection.ts` free of static imports from `verify.ts` and `crypto.ts`.
+- **Verification is lazy:** `Collection.verify()` imports `verify.ts` on first use so keys stays out of CLI startup; keep `collection.ts` free of static imports from `verify.ts` and `crypto.ts`.
 - **Tests share module state:** vitest runs with `isolate: false`, so a test that mutates the registry works on a fresh module graph (`vi.resetModules()` plus a dynamic import) and resets the graph again when it is done.
 
 ## Change routing
