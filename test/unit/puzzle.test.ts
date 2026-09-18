@@ -75,10 +75,12 @@ describe("puzzle record factories", () => {
       puzzle.solver()?.addresses,
       puzzle.keyData(),
       puzzle.keyData()?.wif,
+      puzzle.toJSON(),
     ];
 
     expect(parts.map((part) => Object.isFrozen(part))).toEqual(parts.map(() => true));
     expect(Reflect.set(puzzle.address(), "value", "1Mutated")).toBe(false);
+    expect(Reflect.set(puzzle.toJSON(), "status", Status.Solved)).toBe(false);
     expect(puzzle.address().value).toBe(required.address.value);
   });
 

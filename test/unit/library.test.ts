@@ -23,6 +23,7 @@ import {
   getCollection,
   hasCollection,
   stats,
+  Status,
 } from "../../src/index.ts";
 
 const concreteClasses = [
@@ -135,5 +136,30 @@ describe("lazy collection registry", () => {
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
     ).toBe(332);
+  });
+
+  it("hands back the memoized views frozen through", async () => {
+    const summaries = await collectionSummaries();
+    const { collections: serialized } = await dataset();
+    const records = serialized.flatMap((entry) => entry.puzzles);
+    const parts = [
+      ...summaries,
+      ...serialized,
+      ...serialized.map((entry) => entry.puzzles),
+      ...serialized.map((entry) => entry.author),
+      ...records,
+    ];
+
+    expect(parts.map((part) => Object.isFrozen(part))).toEqual(parts.map(() => true));
+    expect(summaries.map((row) => Reflect.set(row, "total", 0))).toEqual(
+      summaries.map(() => false),
+    );
+    expect(records.map((record) => Reflect.set(record, "status", Status.Solved))).toEqual(
+      records.map(() => false),
+    );
+    expect(summaries.map((row) => row.total)).toEqual(
+      concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
+    );
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(130);
   });
 });
