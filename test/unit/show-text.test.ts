@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { bitcoinPuzzle, p2pkh, seed } from "../../src/index.ts";
+import { formatPuzzleRecord } from "../../src/core/utils.ts";
 import { showTool } from "../../src/tool-operations.ts";
 
 /*
@@ -13,6 +15,7 @@ describe("puzzles_show text", () => {
   it("prints the key, the solve and every transaction of a solved puzzle", async () => {
     const text = await lines("b1000/1");
 
+    expect(text).toContain("hash160: 751e76e8199196d454941c45d1b3a323f1433bd6");
     expect(text).toContain(
       "private key: 0000000000000000000000000000000000000000000000000000000000000001 (hex)",
     );
@@ -48,5 +51,24 @@ describe("puzzles_show text", () => {
     expect(bitaps.some((line) => line.startsWith("shares: 2 of 5 published, 3 needed:"))).toBe(
       true,
     );
+  });
+
+  it("keeps the seed phrase when a WIF outranks it", () => {
+    const puzzle = bitcoinPuzzle({
+      id: "fixture/seed",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      key: seed("abandon abandon about", "m/0").wif(
+        "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn",
+      ),
+    });
+    const text = formatPuzzleRecord(puzzle).split("\n");
+
+    expect(text).toContain(
+      "private key: KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn (wif)",
+    );
+    expect(text).toContain("seed phrase: abandon abandon about");
+    expect(text).toContain("derivation path: m/0");
   });
 });

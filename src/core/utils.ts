@@ -155,10 +155,11 @@ function formatShares(shares: Shares): string {
   return `${published.length} of ${shares.total} published, ${shares.threshold} needed: ${published.join("; ")}`;
 }
 
-function seedLines(key: KeyData): string[] {
+function seedLines(key: KeyData, secret: Secret["kind"] | undefined): string[] {
   const seed: Partial<Seed> = key.seed ?? {};
   const entropy = seed.entropy;
   return [
+    ...field("seed phrase", secret === "seed" ? undefined : seed.phrase),
     ...field("derivation path", seed.path),
     ...field("xpub", seed.xpub),
     ...field("entropy", entropy, formatEntropy),
@@ -176,7 +177,8 @@ function seedLines(key: KeyData): string[] {
 function keyLines(key: KeyData | undefined): string[] {
   const secret = secretOf(key);
   const lines = [`private key: ${formatSecret(secret)}`];
-  return key === undefined ? lines : [...lines, ...wifLines(key, secret?.kind), ...seedLines(key)];
+  const kind = secret?.kind;
+  return key === undefined ? lines : [...lines, ...wifLines(key, kind), ...seedLines(key, kind)];
 }
 
 function formatPubkey(pubkey: Pubkey | undefined): string {
@@ -248,6 +250,7 @@ export function formatPuzzleRecord(puzzle: Puzzle): string {
   return [
     formatPuzzle(puzzle),
     `chain: ${puzzle.chain()}  address kind: ${address.kind}`,
+    ...field("hash160", address.hash160),
     ...field("redeem script", address.redeem_script, formatRedeemScript),
     `public key: ${formatPubkey(puzzle.pubkey())}`,
     ...keyLines(key),
