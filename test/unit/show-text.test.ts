@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bitcoinPuzzle, p2pkh, seed } from "../../src/index.ts";
+import { BitcoinPuzzle, bitcoinPuzzle, p2pkh, seed } from "../../src/index.ts";
 import { formatPuzzleRecord } from "../../src/core/utils.ts";
 import { showTool } from "../../src/tool-operations.ts";
 
@@ -70,5 +70,31 @@ describe("puzzles_show text", () => {
     );
     expect(text).toContain("seed phrase: abandon abandon about");
     expect(text).toContain("derivation path: m/0");
+  });
+
+  it("prints a range a handwritten puzzle computes without declaring bits", () => {
+    class Ranged extends BitcoinPuzzle {
+      override id(): string {
+        return "fixture/ranged";
+      }
+
+      override address() {
+        return p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH");
+      }
+
+      override sourceUrl(): string {
+        return "https://example.com/puzzle";
+      }
+
+      override startedAt(): string {
+        return "2026-01-01";
+      }
+
+      override keyRange(): readonly [bigint, bigint] {
+        return [10n, 20n];
+      }
+    }
+
+    expect(formatPuzzleRecord(new Ranged()).split("\n")).toContain("key range: a..14 (hex)");
   });
 });

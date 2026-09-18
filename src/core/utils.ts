@@ -200,9 +200,9 @@ function formatSolved(date: string, duration: string | undefined): string {
   return duration === undefined ? date : `${date} (${duration})`;
 }
 
-function formatRange(range: readonly [bigint, bigint], bits: number): string {
-  const width = bits === 1 ? "1 bit" : `${bits} bits`;
-  return `${range[0].toString(16)}..${range[1].toString(16)} (hex, ${width})`;
+function formatRange(range: readonly [bigint, bigint], bits: number | undefined): string {
+  const width = bits === undefined ? "" : bits === 1 ? ", 1 bit" : `, ${bits} bits`;
+  return `${range[0].toString(16)}..${range[1].toString(16)} (hex${width})`;
 }
 
 /**
@@ -246,7 +246,6 @@ export function formatPuzzleRecord(puzzle: Puzzle): string {
   const address = puzzle.address();
   const key = puzzle.keyData();
   const bits = key?.bits;
-  const range = puzzle.keyRange();
   return [
     formatPuzzle(puzzle),
     `chain: ${puzzle.chain()}  address kind: ${address.kind}`,
@@ -265,10 +264,7 @@ export function formatPuzzleRecord(puzzle: Puzzle): string {
     ...formatAssets(puzzle),
     `explorer: ${puzzle.explorerUrl()}`,
     `source: ${puzzle.sourceUrl()}`,
-    ...field(
-      "key range",
-      range === undefined || bits === undefined ? undefined : formatRange(range, bits),
-    ),
+    ...field("key range", puzzle.keyRange(), (range) => formatRange(range, bits)),
   ].join("\n");
 }
 
