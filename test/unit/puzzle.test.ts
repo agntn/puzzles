@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   arweavePuzzle,
   assets,
+  BitcoinPuzzle,
   bitcoinPuzzle,
   Chain,
   claim,
@@ -82,6 +83,33 @@ describe("puzzle record factories", () => {
     expect(Reflect.set(puzzle.address(), "value", "1Mutated")).toBe(false);
     expect(Reflect.set(puzzle.toJSON(), "status", Status.Solved)).toBe(false);
     expect(puzzle.address().value).toBe(required.address.value);
+  });
+
+  it("freezes through what a handwritten subclass hands to toJSON()", () => {
+    const transactions = [claim("0".repeat(64), "2026-01-02", 0)];
+    class Handwritten extends BitcoinPuzzle {
+      override id(): string {
+        return "fixture/handwritten";
+      }
+      override address() {
+        return p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH");
+      }
+      override sourceUrl(): string {
+        return required.sourceUrl;
+      }
+      override startedAt(): string {
+        return required.startedAt;
+      }
+      override transactions() {
+        return transactions;
+      }
+    }
+
+    const record = new Handwritten().toJSON();
+
+    expect(Object.isFrozen(record.transactions)).toBe(true);
+    expect(Object.isFrozen(record.address)).toBe(true);
+    expect(Reflect.set(transactions, 0, undefined)).toBe(false);
   });
 
   it("keeps freezing below a record the caller froze shallowly", () => {

@@ -354,8 +354,8 @@ export abstract class Puzzle {
   }
 
   /**
-   * Serializes the puzzle, omitting everything it doesn't have. The record comes back frozen, and
-   * the parts in it are frozen by the factory, so the dataset views built from it stay as written.
+   * Serializes the puzzle, omitting everything it doesn't have. The record comes back frozen
+   * through, so the dataset views built from it stay as written whatever a subclass hands over.
    *
    * @returns {PuzzleData} The serialized record without absent fields.
    */
@@ -379,7 +379,7 @@ export abstract class Puzzle {
       solver: this.solver(),
       assets: this.assets(),
     });
-    return Object.freeze(record);
+    return frozen(record);
   }
 }
 

@@ -209,14 +209,14 @@ export async function dataVersion(): Promise<string> {
 }
 
 /**
- * The complete serializable dataset envelope.
+ * The complete serializable dataset envelope, frozen over the memoized collections.
  *
  * @returns {Promise<Dataset>} `{ version, data_version, collections }`.
  */
 export async function dataset(): Promise<Dataset> {
-  return {
+  return Object.freeze({
     version,
     data_version: await dataVersion(),
     collections: await datasetCollections(),
-  };
+  });
 }

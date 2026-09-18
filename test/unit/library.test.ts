@@ -140,9 +140,11 @@ describe("lazy collection registry", () => {
 
   it("hands back the memoized views frozen through", async () => {
     const summaries = await collectionSummaries();
-    const { collections: serialized } = await dataset();
+    const envelope = await dataset();
+    const serialized = envelope.collections;
     const records = serialized.flatMap((entry) => entry.puzzles);
     const parts = [
+      envelope,
       ...summaries,
       ...serialized,
       ...serialized.map((entry) => entry.puzzles),
