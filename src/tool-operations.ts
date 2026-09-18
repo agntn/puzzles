@@ -8,7 +8,13 @@ import {
 import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/puzzle.ts";
 import { collectionKeys } from "./core/registry.ts";
-import { formatCollection, formatPrizeTotals, formatPuzzle, parseStatus } from "./core/utils.ts";
+import {
+  formatCollection,
+  formatPrizeTotals,
+  formatPuzzle,
+  formatPuzzleRecord,
+  parseStatus,
+} from "./core/utils.ts";
 
 /** Result shape shared by the MCP server and the Pi/OMP extensions. */
 export interface ToolResult {
@@ -213,20 +219,7 @@ export async function collectionsTool(): Promise<ToolResult> {
  */
 export async function showTool(id: string): Promise<ToolResult> {
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
-  const pubkey = puzzle.pubkey();
-  const lines = [
-    formatPuzzle(puzzle),
-    `chain: ${puzzle.chain()}  address kind: ${puzzle.address().kind}`,
-    `public key: ${pubkey === undefined ? "unknown" : pubkey.value}`,
-    `private key known: ${puzzle.hasPrivateKey() ? "yes" : "no"}`,
-    `explorer: ${puzzle.explorerUrl()}`,
-    `source: ${puzzle.sourceUrl()}`,
-  ];
-  const range = puzzle.keyRange();
-  if (range !== undefined) {
-    lines.push(`key range: ${range[0].toString(16)}..${range[1].toString(16)} (hex)`);
-  }
-  return text(lines.join("\n"), { puzzle });
+  return text(formatPuzzleRecord(puzzle), { puzzle });
 }
 
 /**

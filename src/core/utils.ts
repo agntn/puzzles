@@ -1,5 +1,19 @@
 import type { CollectionSummary } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
+import {
+  type Entropy,
+  type EntropySource,
+  type KeyData,
+  type Party,
+  type Passphrase,
+  type Pubkey,
+  type RedeemScript,
+  type Secret,
+  type Seed,
+  secretOf,
+  type Shares,
+  type Wif,
+} from "./parts.ts";
 import { type Puzzle, Status } from "./puzzle.ts";
 
 /**
@@ -67,6 +81,192 @@ export function formatPrizeTotals(totals: Readonly<Record<string, number>>): str
  */
 export function formatPuzzle(puzzle: Puzzle): string {
   return `${puzzle.id()}\t${puzzle.status()}\t${formatPrize(puzzle.prize(), puzzle.prizeCurrency())}\t${puzzle.address().value}`;
+}
+
+/**
+ * `label: value` as one line, or no line when the record has no value for it.
+ *
+ * @param {string} label - The field name.
+ * @param {T | undefined} value - The field value, when the record has one.
+ * @param {(value: T) => string} [format] - Renders the value; `String` by default.
+ * @returns {string[]} The line, or nothing.
+ */
+function field<T>(
+  label: string,
+  value: T | undefined,
+  format: (value: T) => string = String,
+): string[] {
+  return value === undefined ? [] : [`${label}: ${format(value)}`];
+}
+
+function formatSecret(secret: Secret | undefined): string {
+  if (secret === undefined) {
+    return "unknown";
+  }
+  switch (secret.kind) {
+    case "hex":
+      return `${secret.hex} (hex)`;
+    case "wif":
+      return `${secret.wif} (wif)`;
+    case "encrypted":
+      return `${secret.encrypted} (bip38)`;
+    case "seed":
+      return `${secret.phrase} (seed phrase)`;
+    case "mini":
+      return `${secret.mini} (mini)`;
+  }
+}
+
+/**
+ * The WIF forms and the mini key, minus the one the private key line already printed.
+ *
+ * @param {KeyData} key - The serialized key material.
+ * @param {Secret["kind"] | undefined} secret - The kind the private key line printed.
+ * @returns {string[]} One line per remaining form.
+ */
+function wifLines(key: KeyData, secret: Secret["kind"] | undefined): string[] {
+  const wif: Partial<Wif> = key.wif ?? {};
+  return [
+    ...field("wif", secret === "wif" ? undefined : wif.decrypted),
+    ...field("encrypted wif", secret === "encrypted" ? undefined : wif.encrypted, bip38),
+    ...field("passphrase", wif.passphrase),
+    ...field("salt", wif.salt),
+    ...field("mini key", secret === "mini" ? undefined : key.mini),
+  ];
+}
+
+function bip38(payload: string): string {
+  return `${payload} (bip38)`;
+}
+
+function formatEntropy(entropy: Entropy): string {
+  const source: Partial<EntropySource> = entropy.source ?? {};
+  const from = source.url === undefined ? "" : ` from ${source.url}`;
+  const note = source.description === undefined ? "" : ` (${source.description})`;
+  return `${entropy.hash}${from}${note}`;
+}
+
+function formatPassphrase(passphrase: Passphrase): string {
+  return passphrase === "Required" ? "required" : passphrase.Known;
+}
+
+function formatShares(shares: Shares): string {
+  const published = shares.shares.map((share) => `${share.index} "${share.data}"`);
+  return `${published.length} of ${shares.total} published, ${shares.threshold} needed: ${published.join("; ")}`;
+}
+
+function seedLines(key: KeyData): string[] {
+  const seed: Partial<Seed> = key.seed ?? {};
+  const entropy = seed.entropy;
+  return [
+    ...field("derivation path", seed.path),
+    ...field("xpub", seed.xpub),
+    ...field("entropy", entropy, formatEntropy),
+    ...field("seed passphrase", entropy?.passphrase, formatPassphrase),
+    ...field("shares", key.shares, formatShares),
+  ];
+}
+
+/**
+ * The private key line always prints, so an unknown key says so, and the other forms follow.
+ *
+ * @param {KeyData | undefined} key - The serialized key material, when the record has any.
+ * @returns {string[]} The key lines.
+ */
+function keyLines(key: KeyData | undefined): string[] {
+  const secret = secretOf(key);
+  const lines = [`private key: ${formatSecret(secret)}`];
+  return key === undefined ? lines : [...lines, ...wifLines(key, secret?.kind), ...seedLines(key)];
+}
+
+function formatPubkey(pubkey: Pubkey | undefined): string {
+  return pubkey === undefined ? "unknown" : `${pubkey.value} (${pubkey.format})`;
+}
+
+function formatRedeemScript(script: RedeemScript): string {
+  return `${script.script} (hash ${script.hash})`;
+}
+
+function formatParty(party: Party): string {
+  const profiles = (party.profiles ?? []).map((item) => `${item.name} ${item.url}`);
+  return [party.name, ...profiles, ...(party.addresses ?? [])]
+    .filter((item) => item !== undefined)
+    .join(", ");
+}
+
+function formatSolved(date: string, duration: string | undefined): string {
+  return duration === undefined ? date : `${date} (${duration})`;
+}
+
+function formatRange(range: readonly [bigint, bigint], bits: number): string {
+  const width = bits === 1 ? "1 bit" : `${bits} bits`;
+  return `${range[0].toString(16)}..${range[1].toString(16)} (hex, ${width})`;
+}
+
+/**
+ * The transaction count, then one tab-separated line per transaction in record order.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {string[]} The count line and the transaction lines.
+ */
+function formatTransactions(puzzle: Puzzle): string[] {
+  const currency = puzzle.prizeCurrency();
+  const transactions = puzzle.transactions();
+  return [
+    `transactions: ${transactions.length}`,
+    ...transactions.map(
+      (item) => `\t${item.tx_type}\t${item.date}\t${item.amount} ${currency}\t${item.txid}`,
+    ),
+  ];
+}
+
+function formatAssets(puzzle: Puzzle): string[] {
+  const assets = puzzle.assets();
+  if (assets === undefined) {
+    return [];
+  }
+  return [
+    ...field("asset", puzzle.assetUrl()),
+    ...field("hints", assets.hints, (hints) => hints.join(", ")),
+    ...field("solver asset", assets.solver),
+    ...field("asset source", assets.source_url),
+  ];
+}
+
+/**
+ * Formats a puzzle as the lines `puzzles_show` prints: the summary row, then every field the
+ * record has as `name: value`, so a client that only sees the text still has the record.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {string} The record as lines.
+ */
+export function formatPuzzleRecord(puzzle: Puzzle): string {
+  const address = puzzle.address();
+  const key = puzzle.keyData();
+  const bits = key?.bits;
+  const range = puzzle.keyRange();
+  return [
+    formatPuzzle(puzzle),
+    `chain: ${puzzle.chain()}  address kind: ${address.kind}`,
+    ...field("redeem script", address.redeem_script, formatRedeemScript),
+    `public key: ${formatPubkey(puzzle.pubkey())}`,
+    ...keyLines(key),
+    `started: ${puzzle.startedAt()}`,
+    ...field("solved", puzzle.solvedAt(), (date) =>
+      formatSolved(date, puzzle.formattedSolveTime()),
+    ),
+    ...field("solver", puzzle.solver(), formatParty),
+    ...(puzzle.preGenesis() ? ["pre-genesis: yes"] : []),
+    ...formatTransactions(puzzle),
+    ...field("claim", puzzle.claimExplorerUrl()),
+    ...formatAssets(puzzle),
+    `explorer: ${puzzle.explorerUrl()}`,
+    `source: ${puzzle.sourceUrl()}`,
+    ...field(
+      "key range",
+      range === undefined || bits === undefined ? undefined : formatRange(range, bits),
+    ),
+  ].join("\n");
 }
 
 /**
