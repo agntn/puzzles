@@ -42,6 +42,22 @@ describe("puzzle record factories", () => {
     expect(puzzle.hasPrivateKey()).toBe(false);
   });
 
+  it("hands back a key builder that leaves the record alone", () => {
+    const key = hex("1".padStart(64, "0"), 1);
+    const puzzle = bitcoinPuzzle({ ...required, key });
+    const wif = "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn";
+
+    const extended = puzzle.key()?.wif(wif);
+
+    expect(extended?.data()).toEqual({
+      hex: "1".padStart(64, "0"),
+      bits: 1,
+      wif: { decrypted: wif },
+    });
+    expect(puzzle.keyData()).toEqual({ hex: "1".padStart(64, "0"), bits: 1 });
+    expect(puzzle.key()).toBe(key);
+  });
+
   it.each(factories)("preserves the minimal Puzzle contract for %s", (chain, factory) => {
     /* Factories assign chains. Address validation is a separate concern. */
     const puzzle = factory(required);

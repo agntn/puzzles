@@ -283,18 +283,20 @@ export function uncompressed(value: string): Pubkey {
   return { value, format: PubkeyFormat.Uncompressed };
 }
 
-/** Private key material assembled through chained calls. */
+/**
+ * Private key material assembled through chained calls. Each call returns a new builder, so the
+ * one a record hands back through `key()` stays as written.
+ */
 export class Key {
-  #data: KeyData;
+  readonly #data: KeyData;
 
   /** Starts an empty key record. */
   constructor(data: KeyData = {}) {
     this.#data = data;
   }
 
-  #with(patch: KeyData): this {
-    this.#data = { ...this.#data, ...patch };
-    return this;
+  #with(patch: KeyData): Key {
+    return new Key({ ...this.#data, ...patch });
   }
 
   /**
@@ -302,9 +304,9 @@ export class Key {
    *
    * @param {string} value - Private key in hex.
    * @param {number} [bits] - Search space width in bits.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  hex(value: string, bits?: number): this {
+  hex(value: string, bits?: number): Key {
     return this.#with(defined({ hex: value, bits }));
   }
 
@@ -312,9 +314,9 @@ export class Key {
    * Records the search space width in bits.
    *
    * @param {number} value - Search space width in bits.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  bits(value: number): this {
+  bits(value: number): Key {
     return this.#with({ bits: value });
   }
 
@@ -322,9 +324,9 @@ export class Key {
    * Records a decrypted Wallet Import Format key.
    *
    * @param {string} decrypted - Decrypted Wallet Import Format key.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  wif(decrypted: string): this {
+  wif(decrypted: string): Key {
     return this.#with({ wif: { ...this.#data.wif, decrypted } });
   }
 
@@ -333,9 +335,9 @@ export class Key {
    *
    * @param {string} payload - Encrypted BIP38 payload.
    * @param {Readonly<{ passphrase?: string; salt?: string }>} [options] - Passphrase and salt, when known.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  encrypted(payload: string, options: Readonly<{ passphrase?: string; salt?: string }> = {}): this {
+  encrypted(payload: string, options: Readonly<{ passphrase?: string; salt?: string }> = {}): Key {
     return this.#with({ wif: defined({ ...this.#data.wif, encrypted: payload, ...options }) });
   }
 
@@ -343,9 +345,9 @@ export class Key {
    * Records the passphrase that produced the key.
    *
    * @param {string} value - Passphrase in clear text.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  passphrase(value: string): this {
+  passphrase(value: string): Key {
     return this.#with({ wif: { ...this.#data.wif, passphrase: value } });
   }
 
@@ -353,9 +355,9 @@ export class Key {
    * Records the salt the key derivation used, for example a WarpWallet email.
    *
    * @param {string} value - Salt string.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  salt(value: string): this {
+  salt(value: string): Key {
     return this.#with({ wif: { ...this.#data.wif, salt: value } });
   }
 
@@ -364,9 +366,9 @@ export class Key {
    *
    * @param {string} phrase - BIP39 mnemonic phrase.
    * @param {string} [path] - BIP32 derivation path.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  seed(phrase: string, path?: string): this {
+  seed(phrase: string, path?: string): Key {
     return this.#with({ seed: defined({ ...this.#data.seed, phrase, path }) });
   }
 
@@ -374,9 +376,9 @@ export class Key {
    * Records a derivation path without a known phrase.
    *
    * @param {string} value - BIP32 derivation path.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  path(value: string): this {
+  path(value: string): Key {
     return this.#with({ seed: { ...this.#data.seed, path: value } });
   }
 
@@ -384,9 +386,9 @@ export class Key {
    * Records the extended public key of a seed.
    *
    * @param {string} value - Extended public key.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  xpub(value: string): this {
+  xpub(value: string): Key {
     return this.#with({ seed: { ...this.#data.seed, xpub: value } });
   }
 
@@ -396,9 +398,9 @@ export class Key {
    * @param {string} hash - Hash of the entropy, in hex.
    * @param {EntropySource} [source] - Where the entropy came from.
    * @param {Passphrase} [passphrase] - BIP39 passphrase, known or marked required.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  entropy(hash: string, source?: EntropySource, passphrase?: Passphrase): this {
+  entropy(hash: string, source?: EntropySource, passphrase?: Passphrase): Key {
     return this.#with({
       seed: { ...this.#data.seed, entropy: defined({ hash, source, passphrase }) },
     });
@@ -408,9 +410,9 @@ export class Key {
    * Records a mini private key.
    *
    * @param {string} value - Mini private key.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  mini(value: string): this {
+  mini(value: string): Key {
     return this.#with({ mini: value });
   }
 
@@ -420,9 +422,9 @@ export class Key {
    * @param {number} threshold - Shares needed to recover the key.
    * @param {number} total - Shares issued in total.
    * @param {readonly Share[]} published - Shares the author published.
-   * @returns {this} This builder, for chaining.
+   * @returns {Key} A new builder with the value recorded.
    */
-  shares(threshold: number, total: number, published: readonly Share[]): this {
+  shares(threshold: number, total: number, published: readonly Share[]): Key {
     return this.#with({ shares: { threshold, total, shares: published } });
   }
 
