@@ -7,7 +7,8 @@
     "build": "NUXT_SITE_URL=https://puzzles.agntn.dev nuxt build --extends docus",
     "generate": "NUXT_SITE_URL=https://puzzles.agntn.dev nuxt generate --extends docus",
     "preview": "nuxt preview --extends docus",
-    "deploy": "pnpm build && wrangler deploy"
+    "deploy": "pnpm build && wrangler deploy",
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "@agntn/chains": "0.3.5",

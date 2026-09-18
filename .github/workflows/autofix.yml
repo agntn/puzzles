@@ -20,8 +20,13 @@ jobs:
         with:
           node-version: 26
           cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            docs/pnpm-lock.yaml
 
       - run: pnpm install
+
+      - run: pnpm --dir docs install
 
       - name: Fix lint issues
         run: pnpm run lint:fix

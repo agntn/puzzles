@@ -46,6 +46,8 @@ Two resolution traps, both because the repo root is its own pnpm workspace:
 - `pnpm-workspace.yaml` sets `shamefullyHoist: true`. Without it `docs/node_modules` holds only direct dependencies, Node walks up to the root `node_modules`, and the server bundle can end up with a second copy of Vue.
 - `nuxt.config.ts` pins `workspaceDir` to `docs/` and disables devtools and telemetry, which would otherwise resolve from the root.
 
+`pnpm install` here runs `nuxt prepare` on postinstall, so `.nuxt/` and its types exist before the root `pnpm lint` reads them: oxlint's type-aware rules resolve the auto-imports and `@agntn/puzzles` alias through those files, and without them every docs file lints as `error` typed. CI installs the docs for that reason alone.
+
 ## Pages per puzzle
 
 `app/pages/collections/[collection]/[puzzle].vue` renders any `collection/name` id through `PuzzlePage`, which reads the record with `toPuzzleView` inside `useAsyncData`, so the prerender and the browser agree and the payload carries plain data. An unknown id throws a 404. The two singletons, `gsmg` and `bitaps`, have no `name` segment: their collection pages embed `::puzzle-page{puzzle="gsmg"}` instead, and that's why the prop is called `puzzle`, MDC keeps `id` for the element. The prerender finds the 330 puzzle routes by crawling the lists `::collection-puzzles` renders on the collection pages; nothing enumerates them in `nuxt.config.ts`, because that file runs under jiti from `docs/` and can't import the library on Workers Builds. The sitemap route can, through the Nitro alias, and lists them all.

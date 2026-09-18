@@ -24,8 +24,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            docs/pnpm-lock.yaml
 
       - run: pnpm i --frozen-lockfile
+
+      - name: Install the docs site, its postinstall generates the Nuxt types the linter reads
+        run: pnpm --dir docs i --frozen-lockfile
 
       - name: Lint
         run: pnpm lint
