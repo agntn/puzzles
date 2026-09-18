@@ -354,13 +354,14 @@ export abstract class Puzzle {
   }
 
   /**
-   * Serializes the puzzle, omitting everything it doesn't have.
+   * Serializes the puzzle, omitting everything it doesn't have. The record comes back frozen
+   * through, so the dataset views built from it stay as written whatever a subclass hands over.
    *
    * @returns {PuzzleData} The serialized record without absent fields.
    */
   toJSON(): PuzzleData {
     const transactions = this.transactions();
-    return defined<PuzzleData>({
+    const record = defined<PuzzleData>({
       id: this.id(),
       chain: this.chain(),
       address: this.address(),
@@ -378,6 +379,7 @@ export abstract class Puzzle {
       solver: this.solver(),
       assets: this.assets(),
     });
+    return frozen(record);
   }
 }
 

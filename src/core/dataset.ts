@@ -2,7 +2,7 @@ import { sha256 } from "@noble/hashes/sha2.js";
 import { bytesToHex, utf8ToBytes } from "@noble/hashes/utils.js";
 import { version } from "../version.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
-import { type Party } from "./parts.ts";
+import { frozen, type Party } from "./parts.ts";
 import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
 import { type AnyCollection, collections, getCollection, requireCollection } from "./registry.ts";
 import { filterPuzzles, prizeTotals } from "./utils.ts";
@@ -50,7 +50,10 @@ export interface PuzzleQuery {
   readonly withPubkey?: boolean | undefined;
 }
 
-/** Views derived from one loaded registry snapshot; a new snapshot starts an empty record. */
+/**
+ * Views derived from one loaded registry snapshot; a new snapshot starts an empty record. Each
+ * view is shared by every later caller, so it is frozen before it is kept.
+ */
 interface DerivedViews {
   dataVersion?: string;
   puzzles?: readonly Puzzle[];
@@ -88,7 +91,7 @@ export async function all(): Promise<readonly Puzzle[]> {
  */
 export async function collectionSummaries(): Promise<readonly CollectionSummary[]> {
   const [snapshot, record] = await views();
-  record.summaries ??= Object.freeze(
+  record.summaries ??= frozen(
     snapshot.map((collection) => ({
       key: collection.key,
       author: collection.author.name,
@@ -181,7 +184,7 @@ export async function stats(): Promise<Stats> {
  */
 export async function datasetCollections(): Promise<readonly DatasetCollection[]> {
   const [snapshot, record] = await views();
-  record.serialized ??= Object.freeze(
+  record.serialized ??= frozen(
     snapshot.map((collection) => ({
       name: collection.key,
       author: collection.author,
@@ -206,14 +209,14 @@ export async function dataVersion(): Promise<string> {
 }
 
 /**
- * The complete serializable dataset envelope.
+ * The complete serializable dataset envelope, frozen over the memoized collections.
  *
  * @returns {Promise<Dataset>} `{ version, data_version, collections }`.
  */
 export async function dataset(): Promise<Dataset> {
-  return {
+  return Object.freeze({
     version,
     data_version: await dataVersion(),
     collections: await datasetCollections(),
-  };
+  });
 }

@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- `collectionSummaries()`, `datasetCollections()`, `dataset()` and `toJSON()` hand back frozen data. The memoized views used to freeze only the outer array, so an assignment to a summary row or a serialized record, or a push into a collection's `puzzles`, rewrote the export for every later reader while `dataVersion()` kept the old hash.
 - Puzzle records are frozen through. `address()`, `transactions()`, `keyData()`, `solver()`, `assets()` and `Collection.author` hand back immutable data, where an assignment through any of them used to rewrite the record for every other reader while the memoized `dataVersion()` kept the old hash.
 - `puzzles_show` prints the whole record: the key in every form it has, the solve date, the solver, every transaction, the claim link and the assets. It used to stop at `private key known: yes`, and MCP clients never see `details`.
 
