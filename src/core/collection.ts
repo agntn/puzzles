@@ -197,8 +197,8 @@ export class NamedCollection extends Collection<string> {
  */
 export class NumericCollection extends Collection<number | string> {
   protected override idFor(query: number | string): string | undefined {
-    const number = typeof query === "number" ? query : this.#numberOf(query);
-    return number !== undefined && Number.isSafeInteger(number) && number >= 1
+    const number = typeof query === "string" ? this.#numberOf(query) : query;
+    return typeof number === "number" && Number.isSafeInteger(number) && number >= 1
       ? `${this.key}/${number}`
       : undefined;
   }

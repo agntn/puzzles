@@ -88,9 +88,13 @@ describe("lazy collection registry", () => {
       "b1000/71",
       "b1000/71",
     ]);
-    /* Number() read the first six as 71 and "7e1" as 70; replace() cut the key out of the last. */
-    const spellings = ["0x47", "0b1000111", " 71 ", "71.0", "+71", "0071", "7e1", "71b1000/"];
-    expect(spellings.map((query) => b1000.get(query))).toEqual(spellings.map(() => undefined));
+    /* Number() and replace() used to read all of these as 71 or 70, or die on the foreign types. */
+    const spellings = ["0x47", "0b1000111", " 71 ", "71.0", "+71", "0071", "7e1"];
+    const prefixed = ["b1000/7e1", "b1000/71.0", "b1000/ 71", "71b1000/"];
+    const foreign = [undefined, null, true, 71n, {}] as never[];
+    expect([...spellings, ...prefixed, ...foreign].map((query) => b1000.get(query))).toEqual(
+      [...spellings, ...prefixed, ...foreign].map(() => undefined),
+    );
     expect(() => b1000.require("7e1")).toThrow(PuzzleNotFoundError);
     expect(() => b1000.require("7e1")).toThrow("Puzzle not found: 7e1");
 
