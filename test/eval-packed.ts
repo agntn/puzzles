@@ -301,9 +301,9 @@ async function assertPackedExtensions(): Promise<void> {
 }
 
 /**
- * citty resolves every subcommand to print usage, so a static SDK import inside `mcp` would load
- * the whole server on `--help`. The child runs under the same load hook and reports every module on
- * exit.
+ * citty resolves every subcommand to print usage, so a static import inside `mcp` or `verify` would
+ * load the whole MCP server or the verification crypto on `--help`. The child runs under the same
+ * load hook and reports every module on exit.
  *
  * @param {string} binPath - The packed bin file.
  */
@@ -335,6 +335,11 @@ async function assertHelpStaysLight(binPath: string): Promise<void> {
     strings.filter((url) => url.startsWith(`${packageRootUrl}dist/collections/`)),
     [],
     "puzzles --help must not load a collection",
+  );
+  assert.deepEqual(
+    strings.filter((url) => /\/node_modules\/(?:@agntn\/keys|@noble\/curves)\//u.test(url)),
+    [],
+    "puzzles --help must not load the verification crypto",
   );
 }
 

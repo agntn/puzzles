@@ -4,7 +4,7 @@ import { all, requirePuzzle } from "../core/dataset.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
 import type { Puzzle } from "../core/puzzle.ts";
 import { toJson } from "../core/utils.ts";
-import { verifyPuzzle, type VerifyResult } from "../core/verify.ts";
+import type { VerifyResult } from "../core/verify.ts";
 
 async function selectPuzzles(
   args: Readonly<{ all?: boolean | undefined; id?: string | undefined }>,
@@ -16,6 +16,15 @@ async function selectPuzzles(
     throw new InvalidArgumentError("id", "pass a puzzle identifier or --all");
   }
   return [await requirePuzzle(args.id)];
+}
+
+/**
+ * citty resolves every subcommand to print usage, so the crypto loads here and `--help` stays light.
+ *
+ * @returns {Promise<typeof import("../core/verify.ts")>} The verification module.
+ */
+function verification(): Promise<typeof import("../core/verify.ts")> {
+  return import("../core/verify.ts");
 }
 
 function formatResult(result: VerifyResult): string {
@@ -36,7 +45,7 @@ export default defineCommand({
     ...jsonArg,
   },
   async run({ args }) {
-    const puzzles = await selectPuzzles(args);
+    const [puzzles, { verifyPuzzle }] = await Promise.all([selectPuzzles(args), verification()]);
     const results = puzzles.map((puzzle) => verifyPuzzle(puzzle));
     if (args.json) {
       printLine(toJson(results));
