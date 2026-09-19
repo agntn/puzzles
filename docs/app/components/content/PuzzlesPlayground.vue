@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as library from "@agntn/puzzles";
-import { PuzzlesError, selectPuzzles, type Status } from "@agntn/puzzles";
+import { type CollectionSummary, PuzzlesError, selectPuzzles, type Status } from "@agntn/puzzles";
 import {
   collectionsTool,
   facts,
@@ -33,7 +33,7 @@ const NOTES: Readonly<Record<Operation, string>> = {
   balance: "",
   list: `A page holds ${facts.parameters.limit.maximum} puzzles at most. Ask for more and the tool says no, same as its schema.`,
   collections:
-    "The rows puzzles collections prints. One per collection, with the author and both counts.",
+    "The rows puzzles collections prints. One per collection, with the author and a count per status.",
   stats:
     "Totals over every collection. Loading them all is the one thing this call does that a show doesn't.",
 };
@@ -78,13 +78,7 @@ interface BalanceAnswerView {
 }
 interface CollectionsAnswer {
   kind: "collections";
-  rows: {
-    key: string;
-    author: string | undefined;
-    total: number;
-    solved: number;
-    unsolved: number;
-  }[];
+  rows: readonly CollectionSummary[];
   text: string;
 }
 interface StatsAnswer {
@@ -122,6 +116,22 @@ function failure(error: unknown): ErrorAnswer {
 
 function firstText(result: { content: readonly { text: string }[] }): string {
   return result.content.map((part) => part.text).join("");
+}
+
+/**
+ * `83 solved · 77 open · 96 swept`: the two poles always, the other statuses when the collection has any.
+ *
+ * @param {CollectionSummary} row - The collection summary.
+ * @returns {string} The counts joined for the row.
+ */
+function collectionCounts(row: CollectionSummary): string {
+  return [
+    `${row.solved} solved`,
+    `${row.unsolved} open`,
+    ...(["claimed", "swept", "expired"] as const)
+      .filter((status) => row[status] > 0)
+      .map((status) => `${row[status]} ${status}`),
+  ].join(" · ");
 }
 
 async function computeShow(trimmed: string): Promise<ShowAnswer> {
@@ -568,15 +578,13 @@ const shareLink = computed(() => {
             <li
               v-for="row in answer.rows"
               :key="row.key"
-              class="grid grid-cols-[7rem_3rem_1fr] gap-3 px-4 py-2.5 font-mono text-[12px] sm:grid-cols-[8rem_3rem_9rem_1fr]"
+              class="grid grid-cols-[7rem_3rem_1fr] gap-3 px-4 py-2.5 font-mono text-[12px] sm:grid-cols-[8rem_3rem_14rem_1fr]"
             >
               <NuxtLink :to="`/collections/${row.key}`" class="text-highlighted hover:underline">{{
                 row.key
               }}</NuxtLink>
               <span class="text-muted">{{ row.total }}</span>
-              <span class="hidden text-dimmed sm:block"
-                >{{ row.solved }} solved · {{ row.unsolved }} open</span
-              >
+              <span class="hidden text-dimmed sm:block">{{ collectionCounts(row) }}</span>
               <span class="truncate text-muted">{{ row.author ?? "unknown" }}</span>
             </li>
           </ol>
