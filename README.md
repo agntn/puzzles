@@ -24,7 +24,7 @@ Docs, one page per puzzle and a live playground: [puzzles.agntn.dev](https://puz
 - 💤 **Lazy registry.** Importing the package loads no records. `get("b1000/71")` imports one collection module.
 - ✅ **Verification is a value.** A published key derives the address or it doesn't. Nothing throws for a bad record.
 - 💰 **Live balances.** `puzzle.balance()` through `@agntn/explorers`. Base units as `bigint`, API keys redacted from errors.
-- 🤖 **Six agent tools.** One executor behind MCP, Pi and OMP. Same answer everywhere.
+- 🤖 **Seven agent tools.** One executor behind MCP, Pi and OMP. Same answer everywhere.
 - 🌐 **Runs anywhere.** Neutral ESM on the Fetch API. Node, browsers, edge workers.
 
 ## 📦 Install
@@ -126,7 +126,7 @@ pi install npm:@agntn/puzzles
 }
 ```
 
-Six tools: `puzzles_stats`, `puzzles_collections`, `puzzles_show`, `puzzles_list`, `puzzles_verify` and `puzzles_balance`. Only the last one leaves the process, and its annotations say so. What the text carries and where the limits live: the [agents guide](https://puzzles.agntn.dev/guide/agents).
+Seven tools: `puzzles_stats`, `puzzles_collections`, `puzzles_show`, `puzzles_hints`, `puzzles_list`, `puzzles_verify` and `puzzles_balance`. Only the last one leaves the process, and its annotations say so. What the text carries and where the limits live: the [agents guide](https://puzzles.agntn.dev/guide/agents).
 
 ## 🚫 What this does not do
 

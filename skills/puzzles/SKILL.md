@@ -118,13 +118,14 @@ Plain output is tab-separated as `id  status  prize  address`, so `cut` and `awk
 
 ## Agent tools
 
-MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same six operations:
+MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same seven operations:
 
 | Tool                  | Arguments                                     | Reaches the network |
 | --------------------- | --------------------------------------------- | ------------------- |
 | `puzzles_stats`       | none                                          | no                  |
 | `puzzles_collections` | none                                          | no                  |
 | `puzzles_show`        | `id`                                          | no                  |
+| `puzzles_hints`       | `id`                                          | no                  |
 | `puzzles_list`        | `collection`, `status`, `withPubkey`, `limit` | no                  |
 | `puzzles_verify`      | `id`                                          | no                  |
 | `puzzles_balance`     | `id`, `apiKey`                                | yes                 |

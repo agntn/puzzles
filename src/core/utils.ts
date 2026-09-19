@@ -284,6 +284,18 @@ function formatHints(label: string, hints: readonly Hint[]): string[] {
 }
 
 /**
+ * The hint blocks `puzzles_show` and `puzzles_hints` share: the collection's under
+ * `collection hints`, then the puzzle's own under `hints`, each block only when it has any.
+ *
+ * @param {readonly Hint[]} inherited - The hints of the puzzle's collection.
+ * @param {readonly Hint[]} own - The puzzle's own hints.
+ * @returns {string[]} The lines, empty when neither list has a hint.
+ */
+export function formatHintBlocks(inherited: readonly Hint[], own: readonly Hint[]): string[] {
+  return [...formatHints("collection hints", inherited), ...formatHints("hints", own)];
+}
+
+/**
  * Formats a puzzle as the lines `puzzles_show` prints: the summary row, then every field the
  * record has as `name: value`, so a client that only sees the text still has the record. The
  * hints the collection shares print as `collection hints` ahead of the puzzle's own.
@@ -312,8 +324,7 @@ export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = 
     ...formatTransactions(puzzle),
     ...field("claim", puzzle.claimExplorerUrl()),
     ...formatAssets(puzzle),
-    ...formatHints("collection hints", inherited),
-    ...formatHints("hints", puzzle.hints()),
+    ...formatHintBlocks(inherited, puzzle.hints()),
     `explorer: ${puzzle.explorerUrl()}`,
     `source: ${puzzle.sourceUrl()}`,
     ...field("key range", puzzle.keyRange(), (range) => formatRange(range, bits)),

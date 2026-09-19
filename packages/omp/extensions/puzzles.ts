@@ -103,6 +103,17 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
   });
 
   pi.registerTool({
+    ...registration(tools.facts.tools.hints),
+    parameters: Type.Object({ id: puzzleId }),
+    renderCall(args) {
+      return line(`Hints for puzzle ${args.id}`);
+    },
+    async execute(_toolCallId, params) {
+      return tools.hintsTool(params.id);
+    },
+  });
+
+  pi.registerTool({
     ...registration(tools.facts.tools.list),
     parameters: Type.Object({
       collection: Type.Optional(Type.String(parameters.collection)),

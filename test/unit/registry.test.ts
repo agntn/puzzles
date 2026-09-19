@@ -139,7 +139,7 @@ describe("registry consistency", () => {
 
   it("serializes a collection's hints once and prints them ahead of a puzzle's own", async () => {
     const lib = await freshLibrary();
-    const { showTool } = await import("../../src/tool-operations.ts");
+    const { hintsTool, showTool } = await import("../../src/tool-operations.ts");
     const shared = lib.official(
       "Every key is a consecutive one from a deterministic wallet.",
       "https://example.com/thread",
@@ -171,6 +171,12 @@ describe("registry consistency", () => {
 
     const text = (await showTool("hinted/one")).content[0]?.text.split("\n") ?? [];
     expect(text.indexOf("collection hints: 1")).toBeLessThan(text.indexOf("hints: 1"));
+    const listed = await hintsTool("hinted/one");
+    expect(listed.content[0]?.text.split("\n").slice(0, 2)).toEqual([
+      "hinted/one: 2 hints",
+      "collection hints: 1",
+    ]);
+    expect(listed.details["hints"]).toEqual([shared, own]);
     expect(text).toContain(
       "\tofficial\t-\tEvery key is a consecutive one from a deterministic wallet.\tsource: https://example.com/thread\tconfirmation: https://archive.ph/thread",
     );

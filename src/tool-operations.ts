@@ -10,6 +10,7 @@ import { Status } from "./core/puzzle.ts";
 import { collectionKeys, requireCollection } from "./core/registry.ts";
 import {
   formatCollection,
+  formatHintBlocks,
   formatPrizeTotals,
   formatPuzzle,
   formatPuzzleRecord,
@@ -68,6 +69,19 @@ export const facts = {
       description: "Show one puzzle's address, status, key material, hints, and explorer links.",
       promptSnippet: "Use puzzles_show to inspect a single puzzle by identifier.",
       promptGuidelines: ["Identifiers are collection/name, for example b1000/90, or gsmg."],
+      openWorld: false,
+    },
+    hints: {
+      name: "puzzles_hints",
+      title: "Puzzle Hints",
+      description:
+        "List the hints recorded for one puzzle, its collection's and its own, each with where it was said and what confirms that.",
+      promptSnippet:
+        "Use puzzles_hints for what the author or the community said about a puzzle before searching for its key.",
+      promptGuidelines: [
+        "An official hint comes from the puzzle's author; a community hint comes from anyone else and may be wrong.",
+        "The confirmation link shows the source said it, an archive capture for example; it does not vouch for the hint.",
+      ],
       openWorld: false,
     },
     list: {
@@ -223,6 +237,27 @@ export async function showTool(id: string): Promise<ToolResult> {
   return text(formatPuzzleRecord(puzzle, collection.hints), {
     puzzle,
     hints: collection.hintsById(puzzle.id()),
+  });
+}
+
+/**
+ * Every hint that holds for one puzzle, the collection's and its own, in the blocks `puzzles_show`
+ * prints them in.
+ *
+ * @param {string} id - Universal puzzle identifier.
+ * @returns {Promise<ToolResult>} The hints as text, with the joined list in `details`.
+ */
+export async function hintsTool(id: string): Promise<ToolResult> {
+  const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
+  const collection = await requireCollection(puzzle.collection());
+  const hints = collection.hintsById(puzzle.id());
+  const header =
+    hints.length === 0
+      ? `${puzzle.id()}: no hints recorded`
+      : `${puzzle.id()}: ${hints.length} ${hints.length === 1 ? "hint" : "hints"}`;
+  return text([header, ...formatHintBlocks(collection.hints, puzzle.hints())].join("\n"), {
+    id: puzzle.id(),
+    hints,
   });
 }
 

@@ -53,6 +53,7 @@ export function puzzleToolSchemas(facts: PuzzleToolFacts) {
     stats: Type.Object({}),
     collections: Type.Object({}),
     show: Type.Object({ id: puzzleId }),
+    hints: Type.Object({ id: puzzleId }),
     list: Type.Object({
       collection: Type.Optional(Type.String(parameters.collection)),
       status: Type.Optional(

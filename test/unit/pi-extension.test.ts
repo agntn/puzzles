@@ -11,7 +11,10 @@ interface RegisteredTool {
   readonly execute: (
     toolCallId: string,
     params: Readonly<Record<string, unknown>>,
-  ) => Promise<{ readonly content: readonly { readonly type: string; readonly text: string }[] }>;
+  ) => Promise<{
+    readonly content: readonly { readonly type: string; readonly text: string }[];
+    readonly details: Readonly<Record<string, unknown>>;
+  }>;
 }
 
 async function registerTools(): Promise<Map<string, RegisteredTool>> {
@@ -39,6 +42,15 @@ describe("Pi extension", () => {
     const result = await tool?.execute("call-1", { id: "gsmg" });
 
     expect(result?.content[0]?.text).toContain("1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe");
+  });
+
+  it("hands the joined hint list to the harness as details", async () => {
+    const tool = (await registerTools()).get("puzzles_hints");
+    const result = await tool?.execute("call-3", { id: "warp/warp_challenge_2" });
+
+    expect(result?.content[0]?.text).toContain("warp/warp_challenge_2: 1 hint");
+    expect(result?.details).toMatchObject({ id: "warp/warp_challenge_2" });
+    expect(result?.details["hints"]).toHaveLength(1);
   });
 
   it("executes the list tool with filters", async () => {
