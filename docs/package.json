@@ -23,7 +23,7 @@
     "@iconify-json/lucide": "1.2.128",
     "@iconify-json/simple-icons": "1.2.94",
     "@iconify-json/token": "1.2.40",
-    "@iconify-json/vscode-icons": "1.2.76",
+    "@iconify-json/vscode-icons": "1.2.77",
     "vue-tsc": "^3.3.11",
     "wrangler": "4.128.0"
   },
