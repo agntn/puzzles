@@ -131,36 +131,74 @@ function assetProblems(puzzle: Puzzle): string[] {
 }
 
 /** A hint date is the record's `YYYY-MM-DD HH:MM:SS`, or the day alone when the source has no time. */
-const HINT_DATE = /^\d{4}-\d{2}-\d{2}(?: \d{2}:\d{2}:\d{2})?$/u;
+const HINT_DATE = /^(\d{4}-\d{2}-\d{2})(?: (\d{2}:\d{2}:\d{2}))?$/u;
 
+/**
+ * Whether a field is one line that parses as an `http(s)` URL.
+ *
+ * @param {string} value - The field.
+ * @returns {boolean} `true` for `https://example.com/x`, `false` for `ftp://`, a tab or a line break.
+ */
 function isWebUrl(value: string): boolean {
-  return URL.canParse(value) && /^https?:$/u.test(new URL(value).protocol);
+  return isOneLine(value) && /^https?:$/u.test(URL.parse(value)?.protocol ?? "");
 }
 
 /**
- * The problems of one hint: a text that is empty or spans lines, a source or a confirmation that
- * is not a web URL, a confirmation that repeats the source and so confirms nothing, or a date in
- * another format.
+ * Whether a hint date names a day, and a time when it has one, that exist on the calendar.
+ *
+ * @param {string} value - The date as the record spells it.
+ * @returns {boolean} `true` for `2013-11-19` and `2013-11-19 20:12:25`, `false` for `2026-02-30`.
+ */
+function isRecordDate(value: string): boolean {
+  const match = HINT_DATE.exec(value);
+  if (match === null) {
+    return false;
+  }
+  const iso = `${match[1]}T${match[2] ?? "00:00:00"}.000Z`;
+  const parsed = new Date(iso);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString() === iso;
+}
+
+/**
+ * Whether a printed field stays on the tab-separated line `puzzles_show` gives it.
+ *
+ * @param {string | undefined} value - The field, when the record has it.
+ * @returns {boolean} `true` for an absent field or a non-empty one without line or tab breaks.
+ */
+function isOneLine(value: string | undefined): boolean {
+  return value === undefined || (value.trim() !== "" && !/[\n\r\t]/u.test(value));
+}
+
+/**
+ * The problems of one hint: a field that is empty or spans lines, a source or a confirmation that
+ * is not a web URL, a confirmation that repeats the source and so confirms nothing, or a date
+ * that is not on the calendar.
  *
  * @param {Hint} hint - The hint.
  * @returns {string[]} One problem per failed check.
  */
-function hintProblems(hint: Hint): string[] {
+function problemsOf(hint: Hint): string[] {
   return [
-    ...(hint.text.trim() === "" || /[\n\r\t]/u.test(hint.text) ? ["text is not one line"] : []),
+    ...(isOneLine(hint.text) ? [] : ["text is not one line"]),
+    ...(isOneLine(hint.confirmation.description) ? [] : ["description is not one line"]),
     ...(isWebUrl(hint.source) ? [] : ["source is not a web URL"]),
     ...(isWebUrl(hint.confirmation.url) ? [] : ["confirmation is not a web URL"]),
     ...(hint.confirmation.url === hint.source ? ["confirmation repeats the source"] : []),
-    ...(hint.date === undefined || HINT_DATE.test(hint.date) ? [] : ["date is not a record date"]),
+    ...(hint.date === undefined || isRecordDate(hint.date) ? [] : ["date is not a record date"]),
   ];
 }
 
-function hintRecordProblems(puzzle: Puzzle): string[] {
-  return puzzle
-    .hints()
-    .flatMap((hint, index) =>
-      hintProblems(hint).map((problem) => `${puzzle.id()}: hint ${index + 1} ${problem}`),
-    );
+/**
+ * The problems of every hint an owner carries, named after the owner and the hint number.
+ *
+ * @param {string} owner - The puzzle identifier or the collection key the hints belong to.
+ * @param {readonly Hint[]} hints - The hints.
+ * @returns {string[]} One line per failed check.
+ */
+function hintProblems(owner: string, hints: readonly Hint[]): string[] {
+  return hints.flatMap((hint, index) =>
+    problemsOf(hint).map((problem) => `${owner}: hint ${index + 1} ${problem}`),
+  );
 }
 
 function mutablePartProblem(puzzle: Puzzle): string | undefined {
@@ -265,13 +303,9 @@ describe("collection class data", () => {
   });
 
   it("keeps every hint on one line with a source and a separate confirmation", () => {
-    expect(puzzles.flatMap((puzzle) => hintRecordProblems(puzzle))).toEqual([]);
+    expect(puzzles.flatMap((puzzle) => hintProblems(puzzle.id(), puzzle.hints()))).toEqual([]);
     expect(
-      registered.flatMap((collection) =>
-        collection.hints.flatMap((hint, index) =>
-          hintProblems(hint).map((problem) => `${collection.key}: hint ${index + 1} ${problem}`),
-        ),
-      ),
+      registered.flatMap((collection) => hintProblems(collection.key, collection.hints)),
     ).toEqual([]);
   });
 
@@ -282,21 +316,37 @@ describe("collection class data", () => {
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
       hints: [
-        official("one\ntwo", "ftp://example.com/puzzle", confirmation("not a url")),
+        official(
+          "one\ntwo",
+          "ftp://example.com/puzzle",
+          confirmation("https://archive.ph/x\ty", "two\nlines"),
+        ),
         official(" ", "https://example.com/puzzle", confirmation("https://example.com/puzzle"), {
-          date: "2026-1-3",
+          date: "2026-02-30",
+        }),
+        official("Fine.", "https://example.com/puzzle", confirmation("https://archive.ph/x"), {
+          date: "2026-01-01 25:00:00",
         }),
       ],
     });
 
-    expect(hintRecordProblems(hinted)).toEqual([
+    expect(hintProblems(hinted.id(), hinted.hints())).toEqual([
       "fixture/hinted: hint 1 text is not one line",
+      "fixture/hinted: hint 1 description is not one line",
       "fixture/hinted: hint 1 source is not a web URL",
       "fixture/hinted: hint 1 confirmation is not a web URL",
       "fixture/hinted: hint 2 text is not one line",
       "fixture/hinted: hint 2 confirmation repeats the source",
       "fixture/hinted: hint 2 date is not a record date",
+      "fixture/hinted: hint 3 date is not a record date",
     ]);
+    expect(
+      hintProblems("fixture", [
+        official("Fine.", "https://example.com/puzzle", confirmation("https://archive.ph/x"), {
+          date: "2013-11-19 20:12:25",
+        }),
+      ]),
+    ).toEqual([]);
   });
 
   it("hands back every record frozen", () => {

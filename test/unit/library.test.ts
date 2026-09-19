@@ -151,14 +151,15 @@ describe("lazy collection registry", () => {
 
     expect(collection.hints).toEqual([shared]);
     expect(Object.isFrozen(collection.hints)).toBe(true);
-    expect(collection.hintsFor("1")).toBe(collection.hints);
+    expect(collection.hintsFor("1")).toEqual([shared]);
     expect(collection.hintsFor("2")).toEqual([shared, own]);
     expect(Object.isFrozen(collection.hintsFor("2"))).toBe(true);
     expect(collection.hintsById("fixture/2")).toEqual([shared, own]);
     expect(hinted.hints()).toEqual([own]);
     expect(plain.toJSON().hints).toBeUndefined();
     expect(bare.hints).toEqual([]);
-    expect(bare.hintsFor("1")).toBe(bare.require("1").hints());
+    expect(bare.hintsFor("1")).toEqual([]);
+    expect(Object.isFrozen(bare.hintsFor("1"))).toBe(true);
     expect(() => collection.hintsFor("3")).toThrow(PuzzleNotFoundError);
     const single = bitcoinPuzzle({
       id: "single",

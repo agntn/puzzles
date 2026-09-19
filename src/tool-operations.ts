@@ -215,12 +215,15 @@ export async function collectionsTool(): Promise<ToolResult> {
  * One puzzle's complete record for a model.
  *
  * @param {string} id - Universal puzzle identifier.
- * @returns {Promise<ToolResult>} The record as text, with the puzzle in `details`.
+ * @returns {Promise<ToolResult>} The record as text, with the puzzle and every hint that holds for it in `details`.
  */
 export async function showTool(id: string): Promise<ToolResult> {
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
-  return text(formatPuzzleRecord(puzzle, collection.hints), { puzzle });
+  return text(formatPuzzleRecord(puzzle, collection.hints), {
+    puzzle,
+    hints: collection.hintsById(puzzle.id()),
+  });
 }
 
 /**

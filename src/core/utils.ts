@@ -6,7 +6,6 @@ import {
   type EntropySource,
   type Hint,
   type KeyData,
-  NO_HINTS,
   type Party,
   type Passphrase,
   type Pubkey,
@@ -142,11 +141,21 @@ function bip38(payload: string): string {
   return `${payload} (bip38)`;
 }
 
+/**
+ * `value (note)`, or the value alone when there is no note.
+ *
+ * @param {string} value - The value.
+ * @param {string | undefined} note - The note, when the record has one.
+ * @returns {string} The value with the note in parentheses.
+ */
+function withNote(value: string, note: string | undefined): string {
+  return note === undefined ? value : `${value} (${note})`;
+}
+
 function formatEntropy(entropy: Entropy): string {
   const source: Partial<EntropySource> = entropy.source ?? {};
   const from = source.url === undefined ? "" : ` from ${source.url}`;
-  const note = source.description === undefined ? "" : ` (${source.description})`;
-  return `${entropy.hash}${from}${note}`;
+  return withNote(`${entropy.hash}${from}`, source.description);
 }
 
 function formatPassphrase(passphrase: Passphrase): string {
@@ -200,7 +209,7 @@ function formatParty(party: Party): string {
 }
 
 function formatSolved(date: string, duration: string | undefined): string {
-  return duration === undefined ? date : `${date} (${duration})`;
+  return withNote(date, duration);
 }
 
 function formatRange(range: readonly [bigint, bigint], bits: number | undefined): string {
@@ -248,8 +257,7 @@ function formatAssets(puzzle: Puzzle): string[] {
 }
 
 function formatConfirmation(confirmation: Confirmation): string {
-  const note = confirmation.description === undefined ? "" : ` (${confirmation.description})`;
-  return `${confirmation.url}${note}`;
+  return withNote(confirmation.url, confirmation.description);
 }
 
 /**
@@ -284,7 +292,7 @@ function formatHints(label: string, hints: readonly Hint[]): string[] {
  * @param {readonly Hint[]} [inherited] - The hints of the puzzle's collection.
  * @returns {string} The record as lines.
  */
-export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = NO_HINTS): string {
+export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = []): string {
   const address = puzzle.address();
   const key = puzzle.keyData();
   const bits = key?.bits;

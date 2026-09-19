@@ -238,10 +238,16 @@ const { copied, copy } = useCopied();
                 hostPath(hint.source)
               }}</a>
               · confirmation
-              <a :href="hint.confirmation" target="_blank" rel="noopener" class="hover:underline">{{
-                hostPath(hint.confirmation)
-              }}</a>
-              <template v-if="hint.note"> ({{ hint.note }})</template>
+              <a
+                :href="hint.confirmation.url"
+                target="_blank"
+                rel="noopener"
+                class="hover:underline"
+                >{{ hostPath(hint.confirmation.url) }}</a
+              >
+              <template v-if="hint.confirmation.description">
+                ({{ hint.confirmation.description }})</template
+              >
             </p>
           </li>
         </ul>

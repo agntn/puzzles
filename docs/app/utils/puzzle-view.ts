@@ -24,18 +24,9 @@ export interface AssetLink {
   readonly image: boolean;
 }
 
-/**
- * One hint as the page prints it: who gave it, what it says, the two links behind it, and whether
- * the whole collection shares it.
- */
-export interface HintRow {
-  readonly kind: string;
+/** One hint as the page prints it: the record, plus whether the whole collection shares it. */
+export interface HintRow extends Hint {
   readonly shared: boolean;
-  readonly text: string;
-  readonly date: string | undefined;
-  readonly source: string;
-  readonly confirmation: string;
-  readonly note: string | undefined;
 }
 
 /** Everything a puzzle page shows: the landing sample plus the parts the panels leave out. */
@@ -176,32 +167,20 @@ function assetLinks(collection: string, assets: Assets | undefined): AssetLink[]
   );
 }
 
-function hintRow(hint: Hint, shared: boolean): HintRow {
-  return {
-    kind: hint.kind,
-    shared,
-    text: hint.text,
-    date: hint.date,
-    source: hint.source,
-    confirmation: hint.confirmation.url,
-    note: hint.confirmation.description,
-  };
-}
-
 /**
  * Reads one puzzle into everything its page renders. Plain data, safe for the Nuxt payload.
  *
  * @param {ViewLibrary} library - `secretOf`, `verifyPuzzle` and `transactionExplorerUrl`.
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
- * @param {readonly Hint[]} [shared] - The hints of the puzzle's collection, listed ahead of its own.
+ * @param {readonly Hint[]} shared - The hints of the puzzle's collection, listed ahead of its own.
  * @returns {PuzzleView} The sample plus key rows, transactions, assets, hints, solver and the JSON.
  */
 export function toPuzzleView(
   library: ViewLibrary,
   puzzle: Puzzle,
   tool: string,
-  shared: readonly Hint[] = [],
+  shared: readonly Hint[],
 ): PuzzleView {
   const sample = toSample(library, puzzle, tool);
   const assets = puzzle.assets();
@@ -221,8 +200,8 @@ export function toPuzzleView(
     assets: assetLinks(puzzle.collection(), assets),
     assetSource: assets?.source_url,
     hints: [
-      ...shared.map((hint) => hintRow(hint, true)),
-      ...puzzle.hints().map((hint) => hintRow(hint, false)),
+      ...shared.map((hint) => ({ ...hint, shared: true })),
+      ...puzzle.hints().map((hint) => ({ ...hint, shared: false })),
     ],
     solverName: solver?.name,
     solverUrl: solver?.profiles?.[0]?.url,

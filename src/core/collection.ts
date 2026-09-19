@@ -1,6 +1,6 @@
 import type { BalanceOptions } from "./balance.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
-import { frozen, type Hint, NO_HINTS, type Party } from "./parts.ts";
+import { frozen, type Hint, type Party } from "./parts.ts";
 import { Puzzle, Status } from "./puzzle.ts";
 import { type Balance } from "./types.ts";
 import { filterPuzzles } from "./utils.ts";
@@ -25,12 +25,7 @@ export abstract class Collection<Query> {
   readonly #puzzles: readonly Puzzle[];
 
   /** Freezes the author, the hints and the puzzle list, then indexes the list by identifier. */
-  constructor(
-    key: string,
-    author: Party,
-    puzzles: readonly Puzzle[],
-    hints: readonly Hint[] = NO_HINTS,
-  ) {
+  constructor(key: string, author: Party, puzzles: readonly Puzzle[], hints: readonly Hint[] = []) {
     this.key = key;
     this.author = frozen(author);
     this.hints = frozen(hints);
@@ -40,6 +35,16 @@ export abstract class Collection<Query> {
 
   /** Turns a collection-specific query into a universal puzzle identifier. */
   protected abstract idFor(query: Query): string | undefined;
+
+  /**
+   * The identifier a query names, or the query itself for the error a miss will carry.
+   *
+   * @param {Query} query - Query in the collection's own terms.
+   * @returns {string} The universal identifier, or the query spelled out.
+   */
+  #resolveId(query: Query): string {
+    return this.idFor(query) ?? String(query);
+  }
 
   /**
    * Every puzzle, in list order.
@@ -68,7 +73,7 @@ export abstract class Collection<Query> {
    * @returns {Puzzle} The matching puzzle.
    */
   require(query: Query): Puzzle {
-    return this.requireId(this.idFor(query) ?? String(query));
+    return this.requireId(this.#resolveId(query));
   }
 
   /**
@@ -114,7 +119,7 @@ export abstract class Collection<Query> {
    * @returns {Promise<VerifyResult>} The verification outcome.
    */
   async verify(query: Query): Promise<VerifyResult> {
-    return this.verifyById(this.idFor(query) ?? String(query));
+    return this.verifyById(this.#resolveId(query));
   }
 
   /**
@@ -136,7 +141,7 @@ export abstract class Collection<Query> {
    * @returns {readonly Hint[]} The hints, or an empty list when neither recorded any.
    */
   hintsFor(query: Query): readonly Hint[] {
-    return this.hintsById(this.idFor(query) ?? String(query));
+    return this.hintsById(this.#resolveId(query));
   }
 
   /**
@@ -146,11 +151,7 @@ export abstract class Collection<Query> {
    * @returns {readonly Hint[]} The collection's hints, then the puzzle's own.
    */
   hintsById(id: string): readonly Hint[] {
-    const own = this.requireId(id).hints();
-    if (own.length === 0) {
-      return this.hints;
-    }
-    return this.hints.length === 0 ? own : frozen([...this.hints, ...own]);
+    return frozen([...this.hints, ...this.requireId(id).hints()]);
   }
 
   /**

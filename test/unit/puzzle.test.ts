@@ -286,7 +286,10 @@ describe("puzzle record factories", () => {
     expect(Object.isFrozen(puzzle.assetLinks())).toBe(true);
     expect(Object.isFrozen(puzzle.assetLinks()[0])).toBe(true);
     expect(puzzle.hints()).toBe(spec.hints);
-    expect(Object.isFrozen(puzzle.hints()[0]?.confirmation)).toBe(true);
+    expect(Object.isFrozen(puzzle.hints())).toBe(true);
+    expect(
+      puzzle.hints().map((hint) => [Object.isFrozen(hint), Object.isFrozen(hint.confirmation)]),
+    ).toEqual([[true, true]]);
     expect(puzzle.formattedSolveTime()).toBe("0s");
     expect(puzzle.prizeCurrency()).toBe("TEST");
   });
