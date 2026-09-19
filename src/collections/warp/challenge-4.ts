@@ -42,7 +42,7 @@ export const warpPuzzleChallenge4 = bitcoinPuzzle({
       "This passphrase is the username of someone in the Hacker News top 100 karma list as of November 19, 2013. However, we dropped 2 characters from his or her username.",
       "https://keybase.io/warp",
       confirmation(
-        "https://web.archive.org/web/20140328141542/https://keybase.io/warp",
+        "https://web.archive.org/web/20131213023906/https://keybase.io/warp/warp_1.0.6_SHA256_e68d4587b0e2ec34a7b554fbd1ed2d0fedfaeacf3e47fbb6c5403e252348cbfc.html",
         "Wayback capture of the challenge page",
       ),
     ),

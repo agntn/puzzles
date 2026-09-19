@@ -110,7 +110,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn",
     source: "https://keybase.io/warp",
     transactions: 2,
-    tool: "warp/challenge_1\tsolved\t0.1 BTC\t1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn\nchain: bitcoin  address kind: p2pkh\nhash160: bdfe0236c752bbf8610b47c57b8c8592230dc575\npublic key: 045f751d820a69524eb71d48ddc6a231ba019b1461f58b0266cbbec617f9e80c6e573582b37014ce7ba7eaf9031265c5f022d8cb286f2194344f207eaa44bb51af (uncompressed)\nprivate key: 20f5df9cba8251e90a66d3aa1ca2849b12eaca135abb837671ac4a2bc2014e2b (hex)\nwif: 5J4oWdwA5mSCP4GVWF237zgYK4h1csD2PfrmK3uh3YcRFSWZ2H1\npassphrase: Je\nstarted: 2013-11-19 20:12:25\nsolved: 2013-11-20 03:52:13 (7h 39m)\ntransactions: 2\n\tfunding\t2013-11-19 20:12:25\t0.1 BTC\t66e4f6fdf399ce95804347fc4bdbd9e35de7d4044e2cfcb3b51d44db9522f00b\n\tclaim\t2013-11-20 03:52:13\t0.1 BTC\t1384234046c03e8dfcb868aa68b82df29078dcdda01e243fe006e4e0793b8cd8\nclaim: https://blockstream.info/tx/1384234046c03e8dfcb868aa68b82df29078dcdda01e243fe006e4e0793b8cd8\nhints: 1\n\tofficial\t-\tthis passphrase is 2 random alphanumeric characters, such as 'X9'.\tsource: https://keybase.io/warp\tconfirmation: https://web.archive.org/web/20140328141542/https://keybase.io/warp (Wayback capture of the challenge page)\nexplorer: https://blockstream.info/address/1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn\nsource: https://keybase.io/warp",
+    tool: "warp/challenge_1\tsolved\t0.1 BTC\t1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn\nchain: bitcoin  address kind: p2pkh\nhash160: bdfe0236c752bbf8610b47c57b8c8592230dc575\npublic key: 045f751d820a69524eb71d48ddc6a231ba019b1461f58b0266cbbec617f9e80c6e573582b37014ce7ba7eaf9031265c5f022d8cb286f2194344f207eaa44bb51af (uncompressed)\nprivate key: 20f5df9cba8251e90a66d3aa1ca2849b12eaca135abb837671ac4a2bc2014e2b (hex)\nwif: 5J4oWdwA5mSCP4GVWF237zgYK4h1csD2PfrmK3uh3YcRFSWZ2H1\npassphrase: Je\nstarted: 2013-11-19 20:12:25\nsolved: 2013-11-20 03:52:13 (7h 39m)\ntransactions: 2\n\tfunding\t2013-11-19 20:12:25\t0.1 BTC\t66e4f6fdf399ce95804347fc4bdbd9e35de7d4044e2cfcb3b51d44db9522f00b\n\tclaim\t2013-11-20 03:52:13\t0.1 BTC\t1384234046c03e8dfcb868aa68b82df29078dcdda01e243fe006e4e0793b8cd8\nclaim: https://blockstream.info/tx/1384234046c03e8dfcb868aa68b82df29078dcdda01e243fe006e4e0793b8cd8\nhints: 1\n\tofficial\t-\tthis passphrase is 2 random alphanumeric characters, such as 'X9'.\tsource: https://keybase.io/warp\tconfirmation: https://web.archive.org/web/20131213023906/https://keybase.io/warp/warp_1.0.6_SHA256_e68d4587b0e2ec34a7b554fbd1ed2d0fedfaeacf3e47fbb6c5403e252348cbfc.html (Wayback capture of the challenge page)\nexplorer: https://blockstream.info/address/1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn\nsource: https://keybase.io/warp",
   },
   {
     id: "hash_collision/sha1",
@@ -464,7 +464,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "243718a6b923",
+  dataVersion: "17b06e5ca402",
   total: 333,
   solved: 131,
   unsolved: 93,

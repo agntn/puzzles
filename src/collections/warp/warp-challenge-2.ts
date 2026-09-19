@@ -42,7 +42,7 @@ export const warpPuzzleWarpChallenge2 = bitcoinPuzzle({
       "this passphrase is 8 characters long, only alphanumerics. For example, 'b234FEzz'. the salt is a@b.c",
       "https://keybase.io/warp",
       confirmation(
-        "https://web.archive.org/web/20160304012744/https://keybase.io/warp",
+        "https://web.archive.org/web/20160305003531/https://keybase.io/warp/warp_1.0.8_SHA256_5111a723fe008dbf628237023e6f2de72c7953f8bb4265d5c16fc9fd79384b7a.html",
         "Wayback capture of the challenge page",
       ),
     ),

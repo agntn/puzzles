@@ -42,7 +42,7 @@ export const warpPuzzleChallenge1 = bitcoinPuzzle({
       "this passphrase is 2 random alphanumeric characters, such as 'X9'.",
       "https://keybase.io/warp",
       confirmation(
-        "https://web.archive.org/web/20140328141542/https://keybase.io/warp",
+        "https://web.archive.org/web/20131213023906/https://keybase.io/warp/warp_1.0.6_SHA256_e68d4587b0e2ec34a7b554fbd1ed2d0fedfaeacf3e47fbb6c5403e252348cbfc.html",
         "Wayback capture of the challenge page",
       ),
     ),
