@@ -1,5 +1,5 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, funding, p2pkh, uncompressed } from "../../core/parts.ts";
+import { assets, claim, funding, hex, p2pkh, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `zden/level_xm17`. */
 export const zdenPuzzleLevelXm17 = bitcoinPuzzle({
@@ -10,6 +10,9 @@ export const zdenPuzzleLevelXm17 = bitcoinPuzzle({
   status: Status.Solved,
   pubkey: uncompressed(
     "04a7daaeb780428349a532386cbe4570c2765265099a5cabb6614abbbc16e0eed968f012d4e999a2726ec101402af57d4d99813d86ca6a1de7bf15ec6ff740ab6e",
+  ),
+  key: hex("f85204261fa2cef0febb7eefc1bf64105e51351039ed4dd26ee6f427cc403e98").wif(
+    "5KhebJWTSHq8wpSKKMhxroKuwrCA8UMS4WKSLpTcH4gDGJz1jqo",
   ),
   prize: 0.0260414,
   solvedAt: "2017-12-26 19:28:42",
