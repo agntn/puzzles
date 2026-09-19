@@ -140,6 +140,18 @@ describe.concurrent("puzzles CLI", () => {
     expect(result.map((entry) => entry.key)).toContain("hash_collision");
   });
 
+  it("prints every status a collection has puzzles in", async () => {
+    const rows = (await puzzles("collections")).split("\n");
+
+    expect(rows).toContain(
+      "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
+    );
+    expect(rows).toContain(
+      "hash_collision: 6 puzzles, 0 solved, 4 unsolved, 2 claimed, by Peter Todd",
+    );
+    expect(rows).toContain("ballet: 3 puzzles, 1 solved, 2 unsolved, by Bobby Lee");
+  });
+
   it("exports the dataset envelope built from the classes", async () => {
     const result = await json<{
       readonly collections: readonly unknown[];

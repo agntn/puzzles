@@ -180,9 +180,17 @@ describe("lazy collection registry", () => {
       key: "b1000",
       author: "saatoshi_rising",
       total: 256,
+      claimed: 0,
+      expired: 0,
       solved: 83,
+      swept: 96,
       unsolved: 77,
     });
+    for (const entry of summaries) {
+      expect(entry.claimed + entry.expired + entry.solved + entry.swept + entry.unsolved).toBe(
+        entry.total,
+      );
+    }
   });
 
   it("preserves the dataset statistics", async () => {

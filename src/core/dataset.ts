@@ -5,7 +5,7 @@ import { PuzzleNotFoundError } from "./errors.ts";
 import { defined, frozen, type Hint, type Party } from "./parts.ts";
 import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
 import { type AnyCollection, collections, getCollection, requireCollection } from "./registry.ts";
-import { filterPuzzles, prizeTotals } from "./utils.ts";
+import { filterPuzzles, prizeTotals, statusCounts } from "./utils.ts";
 
 /** Aggregate puzzle statistics. */
 export interface Stats {
@@ -38,8 +38,11 @@ export interface Dataset {
 /** One registered collection as every discovery surface lists it. */
 export interface CollectionSummary {
   readonly author: string | undefined;
+  readonly claimed: number;
+  readonly expired: number;
   readonly key: string;
   readonly solved: number;
+  readonly swept: number;
   readonly total: number;
   readonly unsolved: number;
 }
@@ -97,8 +100,7 @@ export async function collectionSummaries(): Promise<readonly CollectionSummary[
       key: collection.key,
       author: collection.author.name,
       total: collection.count(),
-      solved: collection.solvedCount(),
-      unsolved: collection.unsolvedCount(),
+      ...statusCounts(collection.all()),
     })),
   );
   return record.summaries;
@@ -157,22 +159,10 @@ export async function requirePuzzle(id: string): Promise<Puzzle> {
  */
 export async function stats(): Promise<Stats> {
   const puzzles = await all();
-  const counts: Record<Status, number> = {
-    claimed: 0,
-    expired: 0,
-    solved: 0,
-    swept: 0,
-    unsolved: 0,
-  };
-  let withPubkey = 0;
-  for (const puzzle of puzzles) {
-    counts[puzzle.status()] += 1;
-    withPubkey += Number(puzzle.hasPubkey());
-  }
   return {
     total: puzzles.length,
-    ...counts,
-    with_pubkey: withPubkey,
+    ...statusCounts(puzzles),
+    with_pubkey: puzzles.filter((puzzle) => puzzle.hasPubkey()).length,
     total_prize: prizeTotals(puzzles),
     unsolved_prize: prizeTotals(filterPuzzles(puzzles, { status: Status.Unsolved })),
   };
