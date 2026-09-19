@@ -54,6 +54,7 @@ const main = defineCommand({
     balance: () => command(() => import("./commands/balance.ts")),
     collections: () => command(() => import("./commands/collections.ts")),
     export: () => command(() => import("./commands/export.ts")),
+    hints: () => command(() => import("./commands/hints.ts")),
     list: () => command(() => import("./commands/list.ts")),
     mcp: () => command(() => import("./commands/mcp.ts")),
     show: () => command(() => import("./commands/show.ts")),

@@ -10,7 +10,7 @@ import { Status } from "./core/puzzle.ts";
 import { collectionKeys, requireCollection } from "./core/registry.ts";
 import {
   formatCollection,
-  formatHintBlocks,
+  formatHintReport,
   formatPrizeTotals,
   formatPuzzle,
   formatPuzzleRecord,
@@ -250,14 +250,9 @@ export async function showTool(id: string): Promise<ToolResult> {
 export async function hintsTool(id: string): Promise<ToolResult> {
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
-  const hints = collection.hintsById(puzzle.id());
-  const header =
-    hints.length === 0
-      ? `${puzzle.id()}: no hints recorded`
-      : `${puzzle.id()}: ${hints.length} ${hints.length === 1 ? "hint" : "hints"}`;
-  return text([header, ...formatHintBlocks(collection.hints, puzzle.hints())].join("\n"), {
+  return text(formatHintReport(puzzle.id(), collection.hints, puzzle.hints()).join("\n"), {
     id: puzzle.id(),
-    hints,
+    hints: collection.hintsById(puzzle.id()),
   });
 }
 

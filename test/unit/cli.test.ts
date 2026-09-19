@@ -61,6 +61,43 @@ describe.concurrent("puzzles CLI", () => {
     expect(result).toMatchObject({ id: "b1000/1", status: "solved" });
   });
 
+  it("prints the hints that hold for a puzzle as the tool does", async () => {
+    const output = await puzzles("hints", "warp/challenge_1");
+
+    expect(output.split("\n")).toEqual([
+      "warp/challenge_1: 1 hint",
+      "hints: 1",
+      "\tofficial\t-\tthis passphrase is 2 random alphanumeric characters, such as 'X9'.\tsource: https://keybase.io/warp\tconfirmation: https://web.archive.org/web/20131213023906/https://keybase.io/warp/warp_1.0.6_SHA256_e68d4587b0e2ec34a7b554fbd1ed2d0fedfaeacf3e47fbb6c5403e252348cbfc.html (Wayback capture of the challenge page)",
+    ]);
+  });
+
+  it("hands a script the collection's hint, which the record alone leaves out", async () => {
+    const record = await json<{ readonly hints?: readonly unknown[] }>(
+      "show",
+      "b1000/71",
+      "--json",
+    );
+    const hints = await json<readonly unknown[]>("hints", "b1000/71", "--json");
+
+    expect(record.hints).toBeUndefined();
+    expect(hints).toEqual([
+      {
+        kind: "official",
+        date: "2017-04-27 06:41:08",
+        text: "There is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).",
+        source: "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941",
+        confirmation: {
+          url: "https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941",
+          description: "Wayback capture of the thread page",
+        },
+      },
+    ]);
+  });
+
+  it("says so when a puzzle has no hints and exits 0", async () => {
+    await expect(puzzles("hints", "gsmg")).resolves.toBe("gsmg: no hints recorded");
+  });
+
   it("lists a single collection filtered by status", async () => {
     const result = await json<readonly { readonly id: string; readonly status: string }[]>(
       "list",

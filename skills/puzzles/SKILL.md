@@ -107,6 +107,7 @@ dataset(); // { version, data_version, collections }
 puzzles stats [--json]
 puzzles collections [--json]
 puzzles show b1000/90 [--json]
+puzzles hints b1000/71 [--json]
 puzzles list [collection] [--status unsolved] [--with-pubkey] [--json]
 puzzles balance b1000/71 [--api-key KEY] [--json]
 puzzles verify b1000/1 | puzzles verify --all [--quiet] [--json]

@@ -68,6 +68,7 @@ b1000/71	unsolved	7.100226 BTC	1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU
 | `puzzles stats`             | Totals and status counts. `--json` adds the prize sums                              |
 | `puzzles collections`       | One row per collection: key, counts, author                                         |
 | `puzzles show <id>`         | One puzzle. `--json` for the whole record                                           |
+| `puzzles hints <id>`        | Every hint that holds for one puzzle, its collection's first. `--json` for the list |
 | `puzzles list [collection]` | One puzzle per line. `--status` and `--with-pubkey` narrow it                       |
 | `puzzles verify [id]`       | A published key against its address. `--all` for every puzzle, exit 1 on a mismatch |
 | `puzzles balance <id>`      | The live balance. `--api-key` or `ETHERSCAN_API_KEY` for Ethereum                   |
