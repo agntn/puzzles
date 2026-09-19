@@ -291,8 +291,28 @@ function formatHints(label: string, hints: readonly Hint[]): string[] {
  * @param {readonly Hint[]} own - The puzzle's own hints.
  * @returns {string[]} The lines, empty when neither list has a hint.
  */
-export function formatHintBlocks(inherited: readonly Hint[], own: readonly Hint[]): string[] {
+function formatHintBlocks(inherited: readonly Hint[], own: readonly Hint[]): string[] {
   return [...formatHints("collection hints", inherited), ...formatHints("hints", own)];
+}
+
+/**
+ * The lines `puzzles hints` and `puzzles_hints` print: `id: N hints`, or `id: no hints recorded`,
+ * then the blocks of `formatHintBlocks`.
+ *
+ * @param {string} id - Universal puzzle identifier.
+ * @param {readonly Hint[]} inherited - The hints of the puzzle's collection.
+ * @param {readonly Hint[]} own - The puzzle's own hints.
+ * @returns {string[]} The header, then the hint lines.
+ */
+export function formatHintReport(
+  id: string,
+  inherited: readonly Hint[],
+  own: readonly Hint[],
+): string[] {
+  const count = inherited.length + own.length;
+  const header =
+    count === 0 ? `${id}: no hints recorded` : `${id}: ${count} ${count === 1 ? "hint" : "hints"}`;
+  return [header, ...formatHintBlocks(inherited, own)];
 }
 
 /**
