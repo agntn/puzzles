@@ -129,6 +129,8 @@ describe("puzzle record factories", () => {
     expect(puzzle.preGenesis()).toBe(false);
     expect(puzzle.transactions()).toEqual([]);
     expect(Object.isFrozen(puzzle.transactions())).toBe(true);
+    expect(puzzle.assetLinks()).toEqual([]);
+    expect(Object.isFrozen(puzzle.assetLinks())).toBe(true);
     expect(puzzle.toJSON()).toEqual({
       id: required.id,
       address: required.address,
@@ -137,6 +139,57 @@ describe("puzzle record factories", () => {
       chain,
       status: Status.Unsolved,
     });
+  });
+
+  it("encodes an asset file name for the URL and leaves the path alone", () => {
+    const puzzle = bitcoinPuzzle({ ...required, assets: assets({ solver: "notes #1?.md" }) });
+
+    expect(puzzle.assetUrl()).toBeUndefined();
+    expect(puzzle.assetLinks()).toEqual([
+      {
+        kind: "solver",
+        file: "notes #1?.md",
+        path: "assets/fixture/notes #1?.md",
+        url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/notes%20%231%3F.md",
+      },
+    ]);
+  });
+
+  it("follows an overridden assetPath() into assetUrl() and assetLinks()", () => {
+    class Mirrored extends BitcoinPuzzle {
+      override id(): string {
+        return "fixture/mirrored";
+      }
+
+      override address() {
+        return required.address;
+      }
+
+      override sourceUrl(): string {
+        return required.sourceUrl;
+      }
+
+      override startedAt(): string {
+        return required.startedAt;
+      }
+
+      override assets() {
+        return assets({ puzzle: "puzzle.png", hints: ["hint.png"] });
+      }
+
+      override assetPath(): string {
+        return "mirror/puzzle.png";
+      }
+    }
+    const puzzle = new Mirrored();
+
+    expect(puzzle.assetUrl()).toBe(
+      "https://raw.githubusercontent.com/agntn/puzzles/main/mirror/puzzle.png",
+    );
+    expect(puzzle.assetLinks().map((link) => [link.kind, link.path])).toEqual([
+      ["puzzle", "mirror/puzzle.png"],
+      ["hint", "assets/fixture/hint.png"],
+    ]);
   });
 
   it("serializes every optional record field and retains derived behavior", () => {
@@ -177,6 +230,22 @@ describe("puzzle record factories", () => {
     expect(puzzle.keyRange()).toEqual([1n, 1n]);
     expect(puzzle.claimTransaction()).toEqual(spec.transactions[0]);
     expect(puzzle.assetPath()).toBe("assets/fixture/puzzle.png");
+    expect(puzzle.assetLinks()).toEqual([
+      {
+        kind: "puzzle",
+        file: "puzzle.png",
+        path: "assets/fixture/puzzle.png",
+        url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/puzzle.png",
+      },
+      {
+        kind: "hint",
+        file: "hint.txt",
+        path: "assets/fixture/hint.txt",
+        url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint.txt",
+      },
+    ]);
+    expect(Object.isFrozen(puzzle.assetLinks())).toBe(true);
+    expect(Object.isFrozen(puzzle.assetLinks()[0])).toBe(true);
     expect(puzzle.formattedSolveTime()).toBe("0s");
     expect(puzzle.prizeCurrency()).toBe("TEST");
   });

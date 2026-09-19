@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { resolve, sep } from "node:path";
 import { describe, expect, it } from "vitest";
 import { isValidAddress, isValidTransactionId } from "../../src/core/chains.ts";
 import {
@@ -8,8 +8,15 @@ import {
   privateKeyToWif,
   wifToPrivateKey,
 } from "../../src/core/crypto.ts";
-import { AddressKind, type KeyData, PubkeyFormat, TransactionType } from "../../src/core/parts.ts";
-import { type Puzzle, Status } from "../../src/core/puzzle.ts";
+import {
+  AddressKind,
+  assets,
+  type KeyData,
+  p2pkh,
+  PubkeyFormat,
+  TransactionType,
+} from "../../src/core/parts.ts";
+import { bitcoinPuzzle, type Puzzle, Status } from "../../src/core/puzzle.ts";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { all, collections } from "../../src/index.ts";
 import { decryptBip38, isBip38 } from "../support/bip38.ts";
@@ -110,14 +117,14 @@ function transactionProblems(puzzle: Puzzle): string[] {
 }
 
 function assetProblems(puzzle: Puzzle): string[] {
-  const assets = puzzle.assets();
-  if (assets === undefined) {
-    return [];
-  }
-  return [assets.puzzle, assets.solver, ...(assets.hints ?? [])]
-    .filter((path): path is string => path !== undefined)
-    .filter((path) => !existsSync(resolve("assets", puzzle.collection(), path)))
-    .map((path) => `${puzzle.id()}: missing asset assets/${puzzle.collection()}/${path}`);
+  const directory = resolve("assets", puzzle.collection());
+  return puzzle.assetLinks().flatMap((link) => {
+    const target = resolve(link.path);
+    if (!target.startsWith(`${directory}${sep}`)) {
+      return [`${puzzle.id()}: asset ${link.file} leaves assets/${puzzle.collection()}/`];
+    }
+    return existsSync(target) ? [] : [`${puzzle.id()}: missing asset ${link.path}`];
+  });
 }
 
 function mutablePartProblem(puzzle: Puzzle): string | undefined {
@@ -204,6 +211,20 @@ describe("collection class data", () => {
 
   it("references only existing assets", () => {
     expect(puzzles.flatMap((puzzle) => assetProblems(puzzle))).toEqual([]);
+  });
+
+  it("refuses an asset that resolves outside its collection directory", () => {
+    const escaped = bitcoinPuzzle({
+      id: "fixture/escaped",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      assets: assets({ puzzle: "../../README.md" }),
+    });
+
+    expect(assetProblems(escaped)).toEqual([
+      "fixture/escaped: asset ../../README.md leaves assets/fixture/",
+    ]);
   });
 
   it("hands back every record frozen", () => {

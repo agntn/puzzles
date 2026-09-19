@@ -222,15 +222,23 @@ function formatTransactions(puzzle: Puzzle): string[] {
   ];
 }
 
+/**
+ * Every asset as a URL, the hints and the solver's notes under the same root as the puzzle image.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {string[]} The asset lines.
+ */
 function formatAssets(puzzle: Puzzle): string[] {
   const assets = puzzle.assets();
   if (assets === undefined) {
     return [];
   }
+  const links = puzzle.assetLinks();
+  const hints = links.filter((link) => link.kind === "hint").map((link) => link.url);
   return [
     ...field("asset", puzzle.assetUrl()),
-    ...field("hints", assets.hints, (hints) => hints.join(", ")),
-    ...field("solver asset", assets.solver),
+    ...field("hints", hints.length === 0 ? undefined : hints, (list) => list.join(", ")),
+    ...field("solver asset", links.find((link) => link.kind === "solver")?.url),
     ...field("asset source", assets.source_url),
   ];
 }

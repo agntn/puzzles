@@ -46,6 +46,7 @@ puzzle.claimTransaction();
 puzzle.formattedSolveTime(); // "1y 2mo 3d"
 puzzle.assetPath(); // "assets/zden/level_4/puzzle.png"
 puzzle.assetUrl(); // raw GitHub URL
+puzzle.assetLinks(); // every file with its kind, path and URL: the image, the hints, the solver's notes
 await puzzle.balance({ apiKey?, baseUrl?, timeout? }); // Balance through the chain's @agntn/explorers provider
 puzzle.explorerUrl();
 puzzle.claimExplorerUrl();

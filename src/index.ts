@@ -25,6 +25,7 @@ export {
   moneroPuzzle,
   Puzzle,
   Status,
+  type AssetLink,
   type PuzzleData,
   type PuzzleSpec,
 } from "./core/puzzle.ts";
