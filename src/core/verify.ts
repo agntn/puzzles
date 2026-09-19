@@ -4,6 +4,7 @@ import {
   addressFromPrivateKey,
   privateKeyFromSeed,
   wifToPrivateKey,
+  UnsupportedAddressKindError,
 } from "./crypto.ts";
 import { PubkeyFormat, type Secret, secretOf } from "./parts.ts";
 import { type Puzzle } from "./puzzle.ts";
@@ -161,6 +162,9 @@ export function verifyPuzzle(puzzle: Puzzle): VerifyResult {
       error: null,
     };
   } catch (error) {
-    return fail(error instanceof Error ? error.message : "Verification failed", false);
+    return fail(
+      error instanceof Error ? error.message : "Verification failed",
+      error instanceof UnsupportedAddressKindError,
+    );
   }
 }

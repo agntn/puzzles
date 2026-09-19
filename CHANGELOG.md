@@ -1,3 +1,9 @@
+## Unreleased
+
+### Fixes
+
+- **verify:** Mark P2SH and UTXO standard address derivation as unavailable instead of failed.
+
 ## v0.20.2
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.20.1...v0.20.2)
