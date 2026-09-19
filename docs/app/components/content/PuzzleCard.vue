@@ -224,33 +224,7 @@ const { copied, copy } = useCopied();
         <p class="puzzles-eyebrow mb-3">
           hints · {{ view.hints.length }} · who said it, where, and what confirms that
         </p>
-        <ul class="space-y-3">
-          <li v-for="(hint, index) in view.hints" :key="index">
-            <p class="text-sm text-highlighted">
-              <span class="puzzles-chip me-2 font-mono text-[11px]">{{ hint.kind }}</span
-              ><span v-if="hint.shared" class="puzzles-chip me-2 font-mono text-[11px]"
-                >whole collection</span
-              >{{ hint.text }}
-            </p>
-            <p class="mt-1 font-mono text-[11px] text-dimmed">
-              <template v-if="hint.date">{{ hint.date }} · </template>source
-              <a :href="hint.source" target="_blank" rel="noopener" class="hover:underline">{{
-                hostPath(hint.source)
-              }}</a>
-              · confirmation
-              <a
-                :href="hint.confirmation.url"
-                target="_blank"
-                rel="noopener"
-                class="hover:underline"
-                >{{ hostPath(hint.confirmation.url) }}</a
-              >
-              <template v-if="hint.confirmation.description">
-                ({{ hint.confirmation.description }})</template
-              >
-            </p>
-          </li>
-        </ul>
+        <HintList :hints="view.hints" />
       </div>
 
       <div v-if="view.solverName || view.solverUrl" class="border-t border-muted px-5 py-4">

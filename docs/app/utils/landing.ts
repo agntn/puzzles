@@ -512,6 +512,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 0,
     firstStarted: "2019-05-22 10:27:23",
     lastStarted: "2020-05-18 23:53:09",
+    hints: [],
   },
   {
     key: "b1000",
@@ -534,6 +535,18 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 83,
     firstStarted: "2013-01-09 11:59:15",
     lastStarted: "2015-01-15 18:07:14",
+    hints: [
+      {
+        kind: "official",
+        text: "There is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).",
+        source: "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941",
+        confirmation: {
+          url: "https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941",
+          description: "Wayback capture of the thread page",
+        },
+        date: "2017-04-27 06:41:08",
+      },
+    ],
   },
   {
     key: "ballet",
@@ -555,6 +568,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 2,
     firstStarted: "2020-07-24 05:46:12",
     lastStarted: "2020-07-24 05:46:12",
+    hints: [],
   },
   {
     key: "bitaps",
@@ -575,6 +589,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 0,
     firstStarted: "2020-06-19 13:24:41",
     lastStarted: "2020-06-19 13:24:41",
+    hints: [],
   },
   {
     key: "bitimage",
@@ -596,6 +611,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 0,
     firstStarted: "2019-06-28 08:06:08",
     lastStarted: "2019-07-03 02:48:04",
+    hints: [],
   },
   {
     key: "gsmg",
@@ -616,6 +632,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 0,
     firstStarted: "2019-04-13 16:32:40",
     lastStarted: "2019-04-13 16:32:40",
+    hints: [],
   },
   {
     key: "hash_collision",
@@ -637,6 +654,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 0,
     firstStarted: "2013-09-13 04:48:29",
     lastStarted: "2013-09-13 05:59:09",
+    hints: [],
   },
   {
     key: "movie_enigma",
@@ -655,6 +673,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 1,
     firstStarted: "2022-04-08 16:15:24",
     lastStarted: "2022-04-08 16:15:24",
+    hints: [],
   },
   {
     key: "rushwallet",
@@ -673,6 +692,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 28,
     firstStarted: "2014-09-22 17:36:08",
     lastStarted: "2014-09-22 21:24:40",
+    hints: [],
   },
   {
     key: "warp",
@@ -692,6 +712,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 6,
     firstStarted: "2013-11-19 20:12:25",
     lastStarted: "2016-02-01 15:19:33",
+    hints: [],
   },
   {
     key: "zden",
@@ -716,5 +737,6 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 3,
     firstStarted: "2016-06-07 21:05:42",
     lastStarted: "2024-04-18 10:59:41",
+    hints: [],
   },
 ];

@@ -72,5 +72,14 @@ describe("docs landing fixtures", () => {
     expect(facts.total).toBe(6);
     expect(facts.chains).toEqual(["bitcoin"]);
     expect(facts.withKey).toBe(0);
+    expect(facts.hints).toEqual([]);
+  });
+
+  it("carry the hints every puzzle of the collection shares", async () => {
+    const library = await import("../../src/index.ts");
+    const b1000 = await library.requireCollection("b1000");
+
+    expect(b1000.hints).toHaveLength(1);
+    expect(collectionFacts(b1000).hints).toEqual(b1000.hints);
   });
 });

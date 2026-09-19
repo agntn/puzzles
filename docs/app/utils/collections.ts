@@ -1,7 +1,7 @@
-import type { AnyCollection } from "../../../src/index.ts";
+import type { AnyCollection, Hint } from "../../../src/index.ts";
 import { prizeTotals } from "../../../src/core/utils.ts";
 
-/** The facts strip of a collection page: plain numbers and strings, safe for the Nuxt payload. */
+/** The facts strip of a collection page: numbers, strings and the hint records, safe for the Nuxt payload. */
 export interface CollectionFactsData {
   readonly key: string;
   readonly author: string | undefined;
@@ -15,13 +15,15 @@ export interface CollectionFactsData {
   readonly withKey: number;
   readonly firstStarted: string;
   readonly lastStarted: string;
+  /** The hints every puzzle of the collection shares, in record order. */
+  readonly hints: readonly Hint[];
 }
 
 /**
  * Reads the facts strip off a loaded collection.
  *
  * @param {AnyCollection} collection - The collection instance.
- * @returns {CollectionFactsData} Counts, chains, prize sums and the date range.
+ * @returns {CollectionFactsData} Counts, chains, prize sums, the date range and the shared hints.
  */
 export function collectionFacts(collection: AnyCollection): CollectionFactsData {
   const puzzles = collection.all();
@@ -43,6 +45,7 @@ export function collectionFacts(collection: AnyCollection): CollectionFactsData 
     withKey: puzzles.filter((puzzle) => puzzle.hasPrivateKey()).length,
     firstStarted: started[0] ?? "",
     lastStarted: started.at(-1) ?? "",
+    hints: collection.hints,
   };
 }
 
