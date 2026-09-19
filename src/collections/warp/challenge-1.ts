@@ -1,5 +1,13 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { claim, funding, hex, p2pkh, uncompressed } from "../../core/parts.ts";
+import {
+  claim,
+  confirmation,
+  funding,
+  hex,
+  official,
+  p2pkh,
+  uncompressed,
+} from "../../core/parts.ts";
 
 /** Puzzle `warp/challenge_1`. */
 export const warpPuzzleChallenge1 = bitcoinPuzzle({
@@ -27,6 +35,16 @@ export const warpPuzzleChallenge1 = bitcoinPuzzle({
       "1384234046c03e8dfcb868aa68b82df29078dcdda01e243fe006e4e0793b8cd8",
       "2013-11-20 03:52:13",
       0.1,
+    ),
+  ],
+  hints: [
+    official(
+      "this passphrase is 2 random alphanumeric characters, such as 'X9'.",
+      "https://keybase.io/warp",
+      confirmation(
+        "https://web.archive.org/web/20131213023906/https://keybase.io/warp/warp_1.0.6_SHA256_e68d4587b0e2ec34a7b554fbd1ed2d0fedfaeacf3e47fbb6c5403e252348cbfc.html",
+        "Wayback capture of the challenge page",
+      ),
     ),
   ],
 });

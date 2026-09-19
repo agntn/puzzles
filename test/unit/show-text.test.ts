@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { BitcoinPuzzle, bitcoinPuzzle, p2pkh, seed } from "../../src/index.ts";
+import {
+  BitcoinPuzzle,
+  bitcoinPuzzle,
+  community,
+  confirmation,
+  official,
+  p2pkh,
+  seed,
+} from "../../src/index.ts";
 import { formatPuzzleRecord } from "../../src/core/utils.ts";
 import { showTool } from "../../src/tool-operations.ts";
 
@@ -35,9 +43,64 @@ describe("puzzles_show text", () => {
       "asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/puzzle.png",
     );
     expect(text).toContain(
-      "hints: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
     );
     expect(text.some((line) => line.startsWith("solved:"))).toBe(false);
+    expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
+  });
+
+  it("prints every hint with its kind, its source and what confirms it", async () => {
+    const text = await lines("warp/warp_challenge_2");
+
+    expect(text).toContain("hints: 1");
+    expect(text).toContain(
+      "\tofficial\t-\tthis passphrase is 8 characters long, only alphanumerics. For example, 'b234FEzz'. the salt is a@b.c\tsource: https://keybase.io/warp\tconfirmation: https://web.archive.org/web/20160305003531/https://keybase.io/warp/warp_1.0.8_SHA256_5111a723fe008dbf628237023e6f2de72c7953f8bb4265d5c16fc9fd79384b7a.html (Wayback capture of the challenge page)",
+    );
+  });
+
+  it("dates a hint and leaves out a confirmation note it does not have", () => {
+    const puzzle = bitcoinPuzzle({
+      id: "fixture/hinted",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      hints: [
+        community(
+          "The top is a decoy.",
+          "https://example.com/thread",
+          confirmation("https://archive.ph/thread"),
+          { date: "2026-01-03 12:00:00" },
+        ),
+      ],
+    });
+    const text = formatPuzzleRecord(puzzle).split("\n");
+
+    expect(text).toContain("hints: 1");
+    expect(text).toContain(
+      "\tcommunity\t2026-01-03 12:00:00\tThe top is a decoy.\tsource: https://example.com/thread\tconfirmation: https://archive.ph/thread",
+    );
+    expect(text.some((line) => line.startsWith("collection hints:"))).toBe(false);
+  });
+
+  it("prints the hints a collection shares under their own label", () => {
+    const puzzle = bitcoinPuzzle({
+      id: "fixture/plain",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+    });
+    const shared = official(
+      "Start at the top.",
+      "https://example.com/puzzle",
+      confirmation("https://web.archive.org/web/2026/https://example.com/puzzle"),
+    );
+    const text = formatPuzzleRecord(puzzle, [shared]).split("\n");
+
+    expect(text).toContain("collection hints: 1");
+    expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
+    expect(text.indexOf("collection hints: 1")).toBeLessThan(
+      text.findIndex((line) => line.startsWith("explorer:")),
+    );
   });
 
   it("links the solver's notes of a puzzle that ships no image", async () => {

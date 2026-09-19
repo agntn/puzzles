@@ -25,12 +25,11 @@ export function usePuzzlePage(id: () => string) {
       const puzzle = await library.get(current);
       if (puzzle === undefined) return null;
       const tool = (await showTool(current)).content[0]?.text ?? "";
-      const siblings = (await library.requireCollection(puzzle.collection()))
-        .all()
-        .map((row) => row.id());
+      const collection = await library.requireCollection(puzzle.collection());
+      const siblings = collection.all().map((row) => row.id());
       const position = siblings.indexOf(current);
       return {
-        view: toPuzzleView(library, puzzle, tool),
+        view: toPuzzleView(library, puzzle, tool, collection.hints),
         previous: siblings[position - 1],
         next: siblings[position + 1],
         position: position + 1,

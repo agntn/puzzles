@@ -73,6 +73,7 @@ const expectedCollections = [
 const expectedToolNames = [
   "puzzles_balance",
   "puzzles_collections",
+  "puzzles_hints",
   "puzzles_list",
   "puzzles_show",
   "puzzles_stats",

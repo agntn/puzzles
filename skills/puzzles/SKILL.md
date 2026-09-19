@@ -118,13 +118,14 @@ Plain output is tab-separated as `id  status  prize  address`, so `cut` and `awk
 
 ## Agent tools
 
-MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same six operations:
+MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same seven operations:
 
 | Tool                  | Arguments                                     | Reaches the network |
 | --------------------- | --------------------------------------------- | ------------------- |
 | `puzzles_stats`       | none                                          | no                  |
 | `puzzles_collections` | none                                          | no                  |
 | `puzzles_show`        | `id`                                          | no                  |
+| `puzzles_hints`       | `id`                                          | no                  |
 | `puzzles_list`        | `collection`, `status`, `withPubkey`, `limit` | no                  |
 | `puzzles_verify`      | `id`                                          | no                  |
 | `puzzles_balance`     | `id`, `apiKey`                                | yes                 |
@@ -152,7 +153,7 @@ export const zdenPuzzleLevel6 = bitcoinPuzzle({
 });
 ```
 
-Then import it in `src/collections/zden.ts` and append it to `static readonly puzzles`. Leave out every field the puzzle does not have: an absent field is how "no data" is spelled. `pnpm test` re-checks identifiers, key derivation, assets, and the no nulls rule.
+Then import it in `src/collections/zden.ts` and append it to `static readonly puzzles`. Leave out every field the puzzle does not have: an absent field is how "no data" is spelled. A hint goes in as `official(text, source, confirmation(url))` or `community(…)`, with the URL it was published at and a second URL that shows the source said it, an archive capture for instance; one that holds for the whole collection goes to the collection constructor once, not into every record. `pnpm test` re-checks identifiers, key derivation, assets, hints, and the no nulls rule.
 
 ## References
 

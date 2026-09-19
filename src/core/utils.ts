@@ -1,8 +1,10 @@
 import type { CollectionSummary } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
 import {
+  type Confirmation,
   type Entropy,
   type EntropySource,
+  type Hint,
   type KeyData,
   type Party,
   type Passphrase,
@@ -139,11 +141,21 @@ function bip38(payload: string): string {
   return `${payload} (bip38)`;
 }
 
+/**
+ * `value (note)`, or the value alone when there is no note.
+ *
+ * @param {string} value - The value.
+ * @param {string | undefined} note - The note, when the record has one.
+ * @returns {string} The value with the note in parentheses.
+ */
+function withNote(value: string, note: string | undefined): string {
+  return note === undefined ? value : `${value} (${note})`;
+}
+
 function formatEntropy(entropy: Entropy): string {
   const source: Partial<EntropySource> = entropy.source ?? {};
   const from = source.url === undefined ? "" : ` from ${source.url}`;
-  const note = source.description === undefined ? "" : ` (${source.description})`;
-  return `${entropy.hash}${from}${note}`;
+  return withNote(`${entropy.hash}${from}`, source.description);
 }
 
 function formatPassphrase(passphrase: Passphrase): string {
@@ -197,7 +209,7 @@ function formatParty(party: Party): string {
 }
 
 function formatSolved(date: string, duration: string | undefined): string {
-  return duration === undefined ? date : `${date} (${duration})`;
+  return withNote(date, duration);
 }
 
 function formatRange(range: readonly [bigint, bigint], bits: number | undefined): string {
@@ -223,7 +235,8 @@ function formatTransactions(puzzle: Puzzle): string[] {
 }
 
 /**
- * Every asset as a URL, the hints and the solver's notes under the same root as the puzzle image.
+ * Every asset as a URL, the hint files and the solver's notes under the same root as the puzzle
+ * image.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @returns {string[]} The asset lines.
@@ -237,20 +250,61 @@ function formatAssets(puzzle: Puzzle): string[] {
   const hints = links.filter((link) => link.kind === "hint").map((link) => link.url);
   return [
     ...field("asset", puzzle.assetUrl()),
-    ...field("hints", hints.length === 0 ? undefined : hints, (list) => list.join(", ")),
+    ...field("hint assets", hints.length === 0 ? undefined : hints, (list) => list.join(", ")),
     ...field("solver asset", links.find((link) => link.kind === "solver")?.url),
     ...field("asset source", assets.source_url),
   ];
 }
 
+function formatConfirmation(confirmation: Confirmation): string {
+  return withNote(confirmation.url, confirmation.description);
+}
+
+/**
+ * One tab-separated line per hint: its kind, its date or a dash, the text, then the source and
+ * what confirms it as `label: value` pairs, so the two URLs stay apart.
+ *
+ * @param {Hint} hint - The hint.
+ * @returns {string} The line.
+ */
+function formatHint(hint: Hint): string {
+  return `\t${hint.kind}\t${hint.date ?? "-"}\t${hint.text}\tsource: ${hint.source}\tconfirmation: ${formatConfirmation(hint.confirmation)}`;
+}
+
+/**
+ * The hint count under its label, then one line per hint in record order, or nothing for an
+ * empty list.
+ *
+ * @param {string} label - `collection hints` for the inherited ones, `hints` for the puzzle's own.
+ * @param {readonly Hint[]} hints - The hints.
+ * @returns {string[]} The count line and the hint lines.
+ */
+function formatHints(label: string, hints: readonly Hint[]): string[] {
+  return hints.length === 0 ? [] : [`${label}: ${hints.length}`, ...hints.map(formatHint)];
+}
+
+/**
+ * The hint blocks `puzzles_show` and `puzzles_hints` share: the collection's under
+ * `collection hints`, then the puzzle's own under `hints`, each block only when it has any.
+ *
+ * @param {readonly Hint[]} inherited - The hints of the puzzle's collection.
+ * @param {readonly Hint[]} own - The puzzle's own hints.
+ * @returns {string[]} The lines, empty when neither list has a hint.
+ */
+export function formatHintBlocks(inherited: readonly Hint[], own: readonly Hint[]): string[] {
+  return [...formatHints("collection hints", inherited), ...formatHints("hints", own)];
+}
+
 /**
  * Formats a puzzle as the lines `puzzles_show` prints: the summary row, then every field the
- * record has as `name: value`, so a client that only sees the text still has the record.
+ * record has as `name: value`, so a client that only sees the text still has the record. The
+ * hints the collection shares print as `collection hints` ahead of the puzzle's own.
  *
  * @param {Puzzle} puzzle - The puzzle.
+ * @param {readonly Hint[]} [inherited] - The hints of the puzzle's collection.
  * @returns {string} The record as lines.
  */
-export function formatPuzzleRecord(puzzle: Puzzle): string {
+export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = []): string {
   const address = puzzle.address();
   const key = puzzle.keyData();
   const bits = key?.bits;
@@ -270,6 +324,7 @@ export function formatPuzzleRecord(puzzle: Puzzle): string {
     ...formatTransactions(puzzle),
     ...field("claim", puzzle.claimExplorerUrl()),
     ...formatAssets(puzzle),
+    ...formatHintBlocks(inherited, puzzle.hints()),
     `explorer: ${puzzle.explorerUrl()}`,
     `source: ${puzzle.sourceUrl()}`,
     ...field("key range", puzzle.keyRange(), (range) => formatRange(range, bits)),

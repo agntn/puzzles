@@ -63,6 +63,21 @@ describe("puzzles MCP server", () => {
     expect(firstText(result)).toContain("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH");
   });
 
+  it("lists the hints of one puzzle with their source and confirmation", async () => {
+    const hinted = await client.callTool({
+      name: "puzzles_hints",
+      arguments: { id: "warp/challenge_1" },
+    });
+    const bare = await client.callTool({ name: "puzzles_hints", arguments: { id: "b1000/1" } });
+
+    expect(firstText(hinted).split("\n")).toEqual([
+      "warp/challenge_1: 1 hint",
+      "hints: 1",
+      "\tofficial\t-\tthis passphrase is 2 random alphanumeric characters, such as 'X9'.\tsource: https://keybase.io/warp\tconfirmation: https://web.archive.org/web/20131213023906/https://keybase.io/warp/warp_1.0.6_SHA256_e68d4587b0e2ec34a7b554fbd1ed2d0fedfaeacf3e47fbb6c5403e252348cbfc.html (Wayback capture of the challenge page)",
+    ]);
+    expect(firstText(bare)).toBe("b1000/1: no hints recorded");
+  });
+
   it("limits list results and reports the match count", async () => {
     const result = await client.callTool({
       name: "puzzles_list",

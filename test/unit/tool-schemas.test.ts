@@ -1,7 +1,7 @@
 import { Value } from "typebox/value";
 import { describe, expect, it } from "vitest";
 import { puzzleToolSchemas } from "../../packages/shared/puzzles-tool-schemas.ts";
-import { facts, listTool, showTool } from "../../src/tool-operations.ts";
+import { facts, hintsTool, listTool, showTool } from "../../src/tool-operations.ts";
 
 const schemas = puzzleToolSchemas(facts);
 
@@ -27,6 +27,8 @@ describe("tool schemas and executors share one argument contract", () => {
 
     expect(Value.Check(schemas.show, { id: "" })).toBe(false);
     expect(Value.Check(schemas.show, { id: "x".repeat(id.maxLength + 1) })).toBe(false);
+    expect(Value.Check(schemas.hints, { id: "" })).toBe(false);
+    expect(Value.Check(schemas.hints, { id: "warp/challenge_1" })).toBe(true);
     expect(Value.Check(schemas.verify, { id: "b1000/1" })).toBe(true);
     expect(Value.Check(schemas.list, { collection: "x".repeat(collection.maxLength + 1) })).toBe(
       false,
@@ -57,6 +59,8 @@ describe("tool schemas and executors share one argument contract", () => {
     ).rejects.toThrow(/collection/);
     await expect(showTool("")).rejects.toThrow(/id/);
     await expect(showTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
+    await expect(hintsTool("")).rejects.toThrow(/id/);
+    await expect(hintsTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
     expect((await listTool({ collection: "gsmg", limit: 1 })).details).toMatchObject({
       matched: 1,
       returned: 1,

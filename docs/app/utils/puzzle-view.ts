@@ -1,4 +1,4 @@
-import type { Assets, Chain, Entropy, KeyData, Puzzle } from "../../../src/index.ts";
+import type { Assets, Chain, Entropy, Hint, KeyData, Puzzle } from "../../../src/index.ts";
 import { formatPrize } from "./format.ts";
 import { toSample, type LandingSample, type SampleLibrary } from "./samples.ts";
 
@@ -24,6 +24,11 @@ export interface AssetLink {
   readonly image: boolean;
 }
 
+/** One hint as the page prints it: the record, plus whether the whole collection shares it. */
+export interface HintRow extends Hint {
+  readonly shared: boolean;
+}
+
 /** Everything a puzzle page shows: the landing sample plus the parts the panels leave out. */
 export interface PuzzleView extends LandingSample {
   readonly name: string;
@@ -32,6 +37,7 @@ export interface PuzzleView extends LandingSample {
   readonly transactionRows: readonly TransactionRow[];
   readonly assets: readonly AssetLink[];
   readonly assetSource: string | undefined;
+  readonly hints: readonly HintRow[];
   readonly solverName: string | undefined;
   readonly solverUrl: string | undefined;
   readonly claimUrl: string | undefined;
@@ -167,9 +173,15 @@ function assetLinks(collection: string, assets: Assets | undefined): AssetLink[]
  * @param {ViewLibrary} library - `secretOf`, `verifyPuzzle` and `transactionExplorerUrl`.
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
- * @returns {PuzzleView} The sample plus key rows, transactions, assets, solver and the JSON.
+ * @param {readonly Hint[]} shared - The hints of the puzzle's collection, listed ahead of its own.
+ * @returns {PuzzleView} The sample plus key rows, transactions, assets, hints, solver and the JSON.
  */
-export function toPuzzleView(library: ViewLibrary, puzzle: Puzzle, tool: string): PuzzleView {
+export function toPuzzleView(
+  library: ViewLibrary,
+  puzzle: Puzzle,
+  tool: string,
+  shared: readonly Hint[],
+): PuzzleView {
   const sample = toSample(library, puzzle, tool);
   const assets = puzzle.assets();
   const solver = puzzle.solver();
@@ -187,6 +199,10 @@ export function toPuzzleView(library: ViewLibrary, puzzle: Puzzle, tool: string)
     })),
     assets: assetLinks(puzzle.collection(), assets),
     assetSource: assets?.source_url,
+    hints: [
+      ...shared.map((hint) => ({ ...hint, shared: true })),
+      ...puzzle.hints().map((hint) => ({ ...hint, shared: false })),
+    ],
     solverName: solver?.name,
     solverUrl: solver?.profiles?.[0]?.url,
     claimUrl: puzzle.claimExplorerUrl(),

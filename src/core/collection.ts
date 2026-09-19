@@ -1,6 +1,6 @@
 import type { BalanceOptions } from "./balance.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
-import { frozen, type Party } from "./parts.ts";
+import { frozen, type Hint, type Party } from "./parts.ts";
 import { Puzzle, Status } from "./puzzle.ts";
 import { type Balance } from "./types.ts";
 import { filterPuzzles } from "./utils.ts";
@@ -8,12 +8,15 @@ import { filterPuzzles } from "./utils.ts";
 import type { VerifyResult } from "./verify.ts";
 
 /**
- * A named set of puzzles. The subclass supplies identity, author and the list. Everything a caller
- * does with them is implemented once, here.
+ * A named set of puzzles. The subclass supplies identity, author, the list and the hints every
+ * puzzle in it inherits. Everything a caller does with them is implemented once, here.
  */
 export abstract class Collection<Query> {
   /** Collection author. */
   readonly author: Party;
+
+  /** Hints that hold for every puzzle in the collection, ahead of a puzzle's own. */
+  readonly hints: readonly Hint[];
 
   /** Stable collection key used in puzzle identifiers. */
   readonly key: string;
@@ -21,16 +24,27 @@ export abstract class Collection<Query> {
   readonly #byId: ReadonlyMap<string, Puzzle>;
   readonly #puzzles: readonly Puzzle[];
 
-  /** Freezes the author and the puzzle list, then indexes the list by identifier. */
-  constructor(key: string, author: Party, puzzles: readonly Puzzle[]) {
+  /** Freezes the author, the hints and the puzzle list, then indexes the list by identifier. */
+  constructor(key: string, author: Party, puzzles: readonly Puzzle[], hints: readonly Hint[] = []) {
     this.key = key;
     this.author = frozen(author);
+    this.hints = frozen(hints);
     this.#puzzles = Object.freeze([...puzzles]);
     this.#byId = new Map(this.#puzzles.map((puzzle) => [puzzle.id(), puzzle]));
   }
 
   /** Turns a collection-specific query into a universal puzzle identifier. */
   protected abstract idFor(query: Query): string | undefined;
+
+  /**
+   * The identifier a query names, or the query itself for the error a miss will carry.
+   *
+   * @param {Query} query - Query in the collection's own terms.
+   * @returns {string} The universal identifier, or the query spelled out.
+   */
+  #resolveId(query: Query): string {
+    return this.idFor(query) ?? String(query);
+  }
 
   /**
    * Every puzzle, in list order.
@@ -59,7 +73,7 @@ export abstract class Collection<Query> {
    * @returns {Puzzle} The matching puzzle.
    */
   require(query: Query): Puzzle {
-    return this.requireId(this.idFor(query) ?? String(query));
+    return this.requireId(this.#resolveId(query));
   }
 
   /**
@@ -105,7 +119,7 @@ export abstract class Collection<Query> {
    * @returns {Promise<VerifyResult>} The verification outcome.
    */
   async verify(query: Query): Promise<VerifyResult> {
-    return this.verifyById(this.idFor(query) ?? String(query));
+    return this.verifyById(this.#resolveId(query));
   }
 
   /**
@@ -118,6 +132,26 @@ export abstract class Collection<Query> {
     const puzzle = this.requireId(id);
     const { verifyPuzzle } = await import("./verify.ts");
     return verifyPuzzle(puzzle);
+  }
+
+  /**
+   * Every hint that holds for the selected puzzle: the collection's, then the puzzle's own.
+   *
+   * @param {Query} query - Query in the collection's own terms.
+   * @returns {readonly Hint[]} The hints, or an empty list when neither recorded any.
+   */
+  hintsFor(query: Query): readonly Hint[] {
+    return this.hintsById(this.#resolveId(query));
+  }
+
+  /**
+   * Every hint that holds for a puzzle, through the universal identifier.
+   *
+   * @param {string} id - Universal puzzle identifier.
+   * @returns {readonly Hint[]} The collection's hints, then the puzzle's own.
+   */
+  hintsById(id: string): readonly Hint[] {
+    return frozen([...this.hints, ...this.requireId(id).hints()]);
   }
 
   /**
@@ -219,8 +253,8 @@ export class NumericCollection extends Collection<number | string> {
 /** A collection holding one puzzle whose ID equals the collection key. */
 export class SingletonCollection extends Collection<void | string> {
   /** Builds a singleton collection and rejects anything that isn't one. */
-  constructor(key: string, author: Party, puzzles: readonly Puzzle[]) {
-    super(key, author, puzzles);
+  constructor(key: string, author: Party, puzzles: readonly Puzzle[], hints?: readonly Hint[]) {
+    super(key, author, puzzles, hints);
     const only = this.all()[0];
     if (this.count() !== 1 || only?.id() !== key) {
       throw new TypeError(`Singleton collection ${key} must contain exactly its canonical puzzle`);

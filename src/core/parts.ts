@@ -80,6 +80,34 @@ export interface Assets {
   readonly source_url?: string;
 }
 
+/** Who gave a hint: the puzzle's author, or someone else. */
+export const HintKind = {
+  Community: "community",
+  Official: "official",
+} as const;
+
+/** A hint's origin. */
+export type HintKind = (typeof HintKind)[keyof typeof HintKind];
+
+/** What confirms where a hint came from: an archive capture, the author's reply, a transaction. */
+export interface Confirmation {
+  readonly description?: string;
+  readonly url: string;
+}
+
+/**
+ * One hint about a puzzle. `official` comes from the author, `community` from anyone else and
+ * may be wrong; both say where they were published and what confirms that, never whether they
+ * are right.
+ */
+export interface Hint {
+  readonly confirmation: Confirmation;
+  readonly date?: string;
+  readonly kind: HintKind;
+  readonly source: string;
+  readonly text: string;
+}
+
 /** Where external entropy came from. */
 export interface EntropySource {
   readonly description?: string;
@@ -710,4 +738,61 @@ export function assets(
     hints: options.hints,
     source_url: options.sourceUrl,
   });
+}
+
+/**
+ * What confirms where a hint came from.
+ *
+ * @param {string} url - An archive capture of the source, the author's reply, a transaction.
+ * @param {string} [description] - What the link shows.
+ * @returns {Confirmation} The confirmation.
+ */
+export function confirmation(url: string, description?: string): Confirmation {
+  return defined({ url, description });
+}
+
+function hint(
+  kind: HintKind,
+  text: string,
+  source: string,
+  confirmation: Confirmation,
+  options: Readonly<{ date?: string }>,
+): Hint {
+  return defined({ kind, text, source, confirmation, date: options.date });
+}
+
+/**
+ * Records a hint the puzzle's author published.
+ *
+ * @param {string} text - The hint as the source states it, on one line.
+ * @param {string} source - Where the author published it.
+ * @param {Confirmation} confirmation - What confirms the source said it.
+ * @param {Readonly<{ date?: string }>} [options] - When it was published, `YYYY-MM-DD HH:MM:SS` or the day alone.
+ * @returns {Hint} The hint.
+ */
+export function official(
+  text: string,
+  source: string,
+  confirmation: Confirmation,
+  options: Readonly<{ date?: string }> = {},
+): Hint {
+  return hint(HintKind.Official, text, source, confirmation, options);
+}
+
+/**
+ * Records a hint someone other than the author gave, right or not.
+ *
+ * @param {string} text - The hint as the source states it, on one line.
+ * @param {string} source - Where it was published.
+ * @param {Confirmation} confirmation - What confirms the source said it.
+ * @param {Readonly<{ date?: string }>} [options] - When it was published, `YYYY-MM-DD HH:MM:SS` or the day alone.
+ * @returns {Hint} The hint.
+ */
+export function community(
+  text: string,
+  source: string,
+  confirmation: Confirmation,
+  options: Readonly<{ date?: string }> = {},
+): Hint {
+  return hint(HintKind.Community, text, source, confirmation, options);
 }

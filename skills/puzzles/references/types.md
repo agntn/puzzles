@@ -25,6 +25,7 @@ abstract class Puzzle {
   transactions(): readonly Transaction[]; // ([])
   solver(): Party | undefined;
   assets(): Assets | undefined;
+  hints(): readonly Hint[]; // ([])
 }
 ```
 
@@ -76,6 +77,16 @@ sweep(txid, date, amount);
 assets({ puzzle, solver, hints, sourceUrl });
 party(name, { addresses, profiles });
 profile(name, url);
+official(text, source, confirmation(url, description?), { date? }); // from the author
+community(text, source, confirmation(url, description?), { date? }); // from anyone else, right or not
+```
+
+A hint's `source` is where it was published and `confirmation` is what shows the source said it, an archive capture, the author's reply or a transaction. Neither says the hint is right; `kind` says who gave it. A hint shared by a whole collection sits on the collection once, `super(key, author, puzzles, hints)`, and a puzzle inherits it:
+
+```ts
+collection.hints; // readonly Hint[], the shared ones
+collection.hintsFor(query); // the collection's, then the puzzle's own
+collection.hintsById(id);
 ```
 
 Key material chains from whichever starter fits, then adds what else is known:
@@ -116,6 +127,14 @@ interface Transaction {
   txid: string;
   date: string;
   amount: number;
+}
+
+interface Hint {
+  kind: "official" | "community";
+  text: string; // one line, as the source states it
+  source: string; // URL
+  confirmation: { url: string; description?: string };
+  date?: string;
 }
 ```
 

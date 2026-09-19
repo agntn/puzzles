@@ -2,7 +2,7 @@ import { sha256 } from "@noble/hashes/sha2.js";
 import { bytesToHex, utf8ToBytes } from "@noble/hashes/utils.js";
 import { version } from "../version.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
-import { frozen, type Party } from "./parts.ts";
+import { defined, frozen, type Hint, type Party } from "./parts.ts";
 import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
 import { type AnyCollection, collections, getCollection, requireCollection } from "./registry.ts";
 import { filterPuzzles, prizeTotals } from "./utils.ts";
@@ -20,9 +20,10 @@ export interface Stats {
   readonly with_pubkey: number;
 }
 
-/** One collection as it appears in a serialized dataset. */
+/** One collection as it appears in a serialized dataset. Absent hints are omitted, never null. */
 export interface DatasetCollection {
   readonly author: Party;
+  readonly hints?: readonly Hint[];
   readonly name: string;
   readonly puzzles: readonly PuzzleData[];
 }
@@ -185,11 +186,14 @@ export async function stats(): Promise<Stats> {
 export async function datasetCollections(): Promise<readonly DatasetCollection[]> {
   const [snapshot, record] = await views();
   record.serialized ??= frozen(
-    snapshot.map((collection) => ({
-      name: collection.key,
-      author: collection.author,
-      puzzles: collection.all().map((puzzle) => puzzle.toJSON()),
-    })),
+    snapshot.map((collection) =>
+      defined<DatasetCollection>({
+        name: collection.key,
+        author: collection.author,
+        hints: collection.hints.length === 0 ? undefined : collection.hints,
+        puzzles: collection.all().map((puzzle) => puzzle.toJSON()),
+      }),
+    ),
   );
   return record.serialized;
 }

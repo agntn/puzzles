@@ -13,17 +13,25 @@ import { WarpCollection } from "../../src/collections/warp.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
 import {
   all,
+  bitcoinPuzzle,
   builtins,
   Collection,
   collectionKeys,
   collections,
   collectionSummaries,
+  community,
+  confirmation,
   dataset,
   dataVersion,
   get,
   getCollection,
   hasCollection,
+  NamedCollection,
+  official,
+  p2pkh,
+  party,
   PuzzleNotFoundError,
+  SingletonCollection,
   stats,
   Status,
 } from "../../src/index.ts";
@@ -105,6 +113,63 @@ describe("lazy collection registry", () => {
     expect(rushwallet.get("rushwallet/9")?.id()).toBe("rushwallet/9");
     expect(rushwallet.get(9 as never)).toBeUndefined();
     expect(() => rushwallet.require(9 as never)).toThrow(PuzzleNotFoundError);
+  });
+
+  it("hands a puzzle the collection's hints ahead of its own", () => {
+    const shared = official(
+      "Every key is a consecutive one from a deterministic wallet.",
+      "https://example.com/thread",
+      confirmation("https://archive.ph/thread"),
+    );
+    const own = community(
+      "Number two sits in the upper half.",
+      "https://example.com/thread#reply",
+      confirmation("https://archive.ph/thread#reply"),
+    );
+    const plain = bitcoinPuzzle({
+      id: "fixture/1",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+    });
+    const hinted = bitcoinPuzzle({
+      id: "fixture/2",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      hints: [own],
+    });
+    const collection = new NamedCollection("fixture", party("Fixture"), [plain, hinted], [shared]);
+    const bare = new NamedCollection("bare", party("Bare"), [
+      bitcoinPuzzle({
+        id: "bare/1",
+        address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+        sourceUrl: "https://example.com/puzzle",
+        startedAt: "2026-01-01",
+      }),
+    ]);
+
+    expect(collection.hints).toEqual([shared]);
+    expect(Object.isFrozen(collection.hints)).toBe(true);
+    expect(collection.hintsFor("1")).toEqual([shared]);
+    expect(collection.hintsFor("2")).toEqual([shared, own]);
+    expect(Object.isFrozen(collection.hintsFor("2"))).toBe(true);
+    expect(collection.hintsById("fixture/2")).toEqual([shared, own]);
+    expect(hinted.hints()).toEqual([own]);
+    expect(plain.toJSON().hints).toBeUndefined();
+    expect(bare.hints).toEqual([]);
+    expect(bare.hintsFor("1")).toEqual([]);
+    expect(Object.isFrozen(bare.hintsFor("1"))).toBe(true);
+    expect(() => collection.hintsFor("3")).toThrow(PuzzleNotFoundError);
+    const single = bitcoinPuzzle({
+      id: "single",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+    });
+    expect(new SingletonCollection("single", party("Single"), [single], [shared]).hints).toEqual([
+      shared,
+    ]);
   });
 
   it("summarizes collections with the fields every discovery surface shares", async () => {

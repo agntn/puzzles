@@ -12,6 +12,7 @@ import {
   balanceTool,
   collectionsTool,
   facts,
+  hintsTool,
   listTool,
   showTool,
   statsTool,
@@ -40,6 +41,11 @@ const tools: readonly ToolDefinition[] = [
     ...facts.tools.show,
     inputSchema: schemas.show,
     execute: (args) => showTool(args["id"] as string),
+  },
+  {
+    ...facts.tools.hints,
+    inputSchema: schemas.hints,
+    execute: (args) => hintsTool(args["id"] as string),
   },
   {
     ...facts.tools.list,

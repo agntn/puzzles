@@ -6,6 +6,7 @@ import {
   type Assets,
   defined,
   frozen,
+  type Hint,
   type Key,
   type KeyData,
   type Party,
@@ -33,6 +34,7 @@ export interface PuzzleData {
   readonly assets?: Assets;
   readonly chain: Chain;
   readonly currency?: string;
+  readonly hints?: readonly Hint[];
   readonly id: string;
   readonly key?: KeyData;
   readonly pre_genesis?: boolean;
@@ -60,6 +62,9 @@ const NO_TRANSACTIONS: readonly Transaction[] = Object.freeze([]);
 
 /** The asset list of a puzzle that ships no files. */
 const NO_ASSET_LINKS: readonly AssetLink[] = Object.freeze([]);
+
+/** The hint list of a puzzle that recorded none. */
+const NO_HINTS: readonly Hint[] = Object.freeze([]);
 
 const ASSET_ROOT = "https://raw.githubusercontent.com/agntn/puzzles/main";
 
@@ -231,6 +236,15 @@ export abstract class Puzzle {
    */
   assets(): Assets | undefined {
     return undefined;
+  }
+
+  /**
+   * Hints about this puzzle alone, in record order; the collection's sit on `Collection.hints`.
+   *
+   * @returns {readonly Hint[]} The hints, or an empty list when the record has none.
+   */
+  hints(): readonly Hint[] {
+    return NO_HINTS;
   }
 
   /**
@@ -435,6 +449,7 @@ export abstract class Puzzle {
    */
   toJSON(): PuzzleData {
     const transactions = this.transactions();
+    const hints = this.hints();
     const record = defined<PuzzleData>({
       id: this.id(),
       chain: this.chain(),
@@ -452,6 +467,7 @@ export abstract class Puzzle {
       transactions: transactions.length === 0 ? undefined : transactions,
       solver: this.solver(),
       assets: this.assets(),
+      hints: hints.length === 0 ? undefined : hints,
     });
     return frozen(record);
   }
@@ -508,6 +524,7 @@ export interface PuzzleSpec {
   readonly address: Address;
   readonly assets?: Assets;
   readonly currency?: string;
+  readonly hints?: readonly Hint[];
   readonly id: string;
   readonly key?: Readonly<Key>;
   readonly preGenesis?: boolean;
@@ -594,6 +611,10 @@ class SpecPuzzle extends Puzzle {
 
   override assets(): Assets | undefined {
     return this.#spec.assets;
+  }
+
+  override hints(): readonly Hint[] {
+    return this.#spec.hints ?? NO_HINTS;
   }
 }
 

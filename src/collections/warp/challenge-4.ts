@@ -1,5 +1,13 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { claim, funding, hex, p2pkh, uncompressed } from "../../core/parts.ts";
+import {
+  claim,
+  confirmation,
+  funding,
+  hex,
+  official,
+  p2pkh,
+  uncompressed,
+} from "../../core/parts.ts";
 
 /** Puzzle `warp/challenge_4`. */
 export const warpPuzzleChallenge4 = bitcoinPuzzle({
@@ -27,6 +35,16 @@ export const warpPuzzleChallenge4 = bitcoinPuzzle({
       "921bf858098acb6a8ad4d4184fc7654e68cc2e2f4f6ebe7c59cec4e8540e1b12",
       "2013-11-20 01:23:39",
       1,
+    ),
+  ],
+  hints: [
+    official(
+      "This passphrase is the username of someone in the Hacker News top 100 karma list as of November 19, 2013. However, we dropped 2 characters from his or her username.",
+      "https://keybase.io/warp",
+      confirmation(
+        "https://web.archive.org/web/20131213023906/https://keybase.io/warp/warp_1.0.6_SHA256_e68d4587b0e2ec34a7b554fbd1ed2d0fedfaeacf3e47fbb6c5403e252348cbfc.html",
+        "Wayback capture of the challenge page",
+      ),
     ),
   ],
 });
