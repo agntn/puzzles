@@ -199,14 +199,14 @@ describe("lazy collection registry", () => {
         AR: 5550,
         ETH: 14.1337,
         DAI: 100,
-        BTC: 1058.06984913,
+        BTC: 1058.06919775,
         LTC: 230.8255,
         DCR: 460,
       },
       unsolved_prize: {
         AR: 1900,
         ETH: 1,
-        BTC: 907.88195631,
+        BTC: 907.88130493,
       },
     });
   });

@@ -7,7 +7,7 @@ export const zdenPuzzleLevel5 = bitcoinPuzzle({
   address: p2pkh("1cryptoGeCRiTzVgxBQcKFFjSVydN1GW7", "06c84797d2441393513e2169338e00cf2e755c8c"),
   sourceUrl: "https://crypto.haluska.sk/crypto5fix.png",
   startedAt: "2018-10-20 18:46:57",
-  prize: 0.00620688,
+  prize: 0.0055555,
   transactions: [
     funding(
       "3dde5372e50d314df6e0f46477b99e34a20fbe38721fa9519a2cdf6c51518c38",

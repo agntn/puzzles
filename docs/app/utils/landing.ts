@@ -464,7 +464,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "fa975f01ff5d",
+  dataVersion: "e8ed2d761f83",
   total: 333,
   solved: 131,
   unsolved: 93,
@@ -475,13 +475,13 @@ export const STATS_STATIC = {
   unsolvedPrize: {
     AR: 1900,
     ETH: 1,
-    BTC: 907.88195631,
+    BTC: 907.88130493,
   },
   totalPrize: {
     AR: 5550,
     ETH: 14.1337,
     DAI: 100,
-    BTC: 1058.06984913,
+    BTC: 1058.06919775,
     LTC: 230.8255,
     DCR: 460,
   },
@@ -725,13 +725,13 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     },
     chains: ["bitcoin", "ethereum", "litecoin", "decred"],
     prize: {
-      BTC: 0.34913937,
+      BTC: 0.34848799,
       ETH: 9.1337,
       LTC: 230.8255,
       DCR: 460,
     },
     unsolvedPrize: {
-      BTC: 0.00933188,
+      BTC: 0.0086805,
     },
     withPubkey: 13,
     withKey: 3,
