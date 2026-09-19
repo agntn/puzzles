@@ -87,25 +87,51 @@ describe.concurrent("puzzles CLI", () => {
       "b1000/71",
       "--json",
     );
-    const hints = await json<readonly unknown[]>("hints", "b1000/71", "--json");
+    const hints = await json<Record<string, unknown>>("hints", "b1000/71", "--json");
 
     expect(record.hints).toBeUndefined();
-    expect(hints).toEqual([
-      {
-        kind: "official",
-        date: "2017-04-27 06:41:08",
-        text: "There is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).",
-        source: "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941",
-        confirmation: {
-          url: "https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941",
-          description: "Wayback capture of the thread page",
+    expect(hints).toEqual({
+      hints: [
+        {
+          kind: "official",
+          date: "2017-04-27 06:41:08",
+          text: "There is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).",
+          source: "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941",
+          confirmation: {
+            url: "https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941",
+            description: "Wayback capture of the thread page",
+          },
         },
-      },
+      ],
+      hintAssets: [],
+    });
+  });
+
+  it("lists the hint files a record ships, in text and in JSON", async () => {
+    const output = await puzzles("hints", "gsmg");
+    const hints = await json<Record<string, unknown>>("hints", "gsmg", "--json");
+
+    expect(output.split("\n")).toEqual([
+      "gsmg: 1 hint asset",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
     ]);
+    expect(hints).toEqual({
+      hints: [],
+      hintAssets: [
+        {
+          kind: "hint",
+          file: "follow_the_white_rabbit.png",
+          path: "assets/gsmg/follow_the_white_rabbit.png",
+          url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
+        },
+      ],
+    });
   });
 
   it("says so when a puzzle has no hints and exits 0", async () => {
-    await expect(puzzles("hints", "gsmg")).resolves.toBe("gsmg: no hints recorded");
+    await expect(puzzles("hints", "arweave/weave1")).resolves.toBe(
+      "arweave/weave1: no hints recorded",
+    );
   });
 
   it("exits 1 on an unknown puzzle like show does", async () => {

@@ -16,7 +16,7 @@ import {
   type Shares,
   type Wif,
 } from "./parts.ts";
-import { type Puzzle, Status } from "./puzzle.ts";
+import { type AssetLink, type Puzzle, Status } from "./puzzle.ts";
 
 /**
  * Serializes a value as JSON, rendering `bigint` balances as decimal strings.
@@ -266,14 +266,35 @@ function formatAssets(puzzle: Puzzle): string[] {
   if (assets === undefined) {
     return [];
   }
-  const links = puzzle.assetLinks();
-  const hints = links.filter((link) => link.kind === "hint").map((link) => link.url);
   return [
     ...field("asset", puzzle.assetUrl()),
-    ...field("hint assets", hints.length === 0 ? undefined : hints, (list) => list.join(", ")),
-    ...field("solver asset", links.find((link) => link.kind === "solver")?.url),
+    ...formatHintAssets(hintAssets(puzzle)),
+    ...field("solver asset", puzzle.assetLinks().find((link) => link.kind === "solver")?.url),
     ...field("asset source", assets.source_url),
   ];
+}
+
+/**
+ * The hint files a record ships, the hints that came as a file rather than as a line of text.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {readonly AssetLink[]} The hint links, empty when the record ships none.
+ */
+export function hintAssets(puzzle: Puzzle): readonly AssetLink[] {
+  return puzzle.assetLinks().filter((link) => link.kind === "hint");
+}
+
+/**
+ * The `hint assets` line `puzzles_show` and `puzzles_hints` share: every hint file as a URL, or
+ * nothing when the record ships none.
+ *
+ * @param {readonly AssetLink[]} links - The hint links of the record.
+ * @returns {string[]} The line, or an empty list.
+ */
+function formatHintAssets(links: readonly AssetLink[]): string[] {
+  return field("hint assets", links.length === 0 ? undefined : links, (list) =>
+    list.map((link) => link.url).join(", "),
+  );
 }
 
 function formatConfirmation(confirmation: Confirmation): string {
@@ -316,23 +337,30 @@ function formatHintBlocks(inherited: readonly Hint[], own: readonly Hint[]): str
 }
 
 /**
- * The lines `puzzles hints` and `puzzles_hints` print: `id: N hints`, or `id: no hints recorded`,
- * then the blocks of `formatHintBlocks`.
+ * The lines `puzzles hints` and `puzzles_hints` print: `id: N hints`, `id: N hint assets`, both
+ * when the record has both, or `id: no hints recorded`, then the blocks of `formatHintBlocks`
+ * and the `hint assets` line `puzzles_show` prints.
  *
- * @param {string} id - Universal puzzle identifier.
+ * @param {Puzzle} puzzle - The puzzle.
  * @param {readonly Hint[]} inherited - The hints of the puzzle's collection.
- * @param {readonly Hint[]} own - The puzzle's own hints.
  * @returns {string[]} The header, then the hint lines.
  */
-export function formatHintReport(
-  id: string,
-  inherited: readonly Hint[],
-  own: readonly Hint[],
-): string[] {
-  const count = inherited.length + own.length;
-  const header =
-    count === 0 ? `${id}: no hints recorded` : `${id}: ${count} ${count === 1 ? "hint" : "hints"}`;
-  return [header, ...formatHintBlocks(inherited, own)];
+export function formatHintReport(puzzle: Puzzle, inherited: readonly Hint[]): string[] {
+  const own = puzzle.hints();
+  const assets = hintAssets(puzzle);
+  const counts = [
+    [inherited.length + own.length, "hint"],
+    [assets.length, "hint asset"],
+  ] as const;
+  const header = counts
+    .filter(([count]) => count > 0)
+    .map(([count, noun]) => `${count} ${noun}${count === 1 ? "" : "s"}`)
+    .join(", ");
+  return [
+    `${puzzle.id()}: ${header.length === 0 ? "no hints recorded" : header}`,
+    ...formatHintBlocks(inherited, own),
+    ...formatHintAssets(assets),
+  ];
 }
 
 /**
