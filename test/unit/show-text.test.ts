@@ -30,9 +30,19 @@ describe("puzzles_show text", () => {
     expect(text).toContain("wif: KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn");
     expect(text).toContain("solved: 2013-01-10 02:54:44 (14h 55m)");
     expect(text).toContain("transactions: 2");
-    expect(text.filter((line) => line.startsWith("\t"))).toHaveLength(2);
+    expect(text.filter((line) => /^\t(funding|claim)\t/u.test(line))).toHaveLength(2);
     expect(text.some((line) => line.startsWith("claim: https://blockstream.info/tx/"))).toBe(true);
     expect(text).toContain("key range: 1..1 (hex, 1 bit)");
+  });
+
+  it("prints the hint every b1000 record inherits from its author", async () => {
+    const text = await lines("b1000/71");
+
+    expect(text).toContain("collection hints: 1");
+    expect(text).toContain(
+      "\tofficial\t2017-04-27 06:41:08\tThere is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).\tsource: https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941\tconfirmation: https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941 (Wayback capture of the thread page)",
+    );
+    expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
   });
 
   it("says what it doesn't know and lists the assets", async () => {

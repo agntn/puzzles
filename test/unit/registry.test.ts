@@ -166,7 +166,10 @@ describe("registry consistency", () => {
     const entry = serialized.at(-1);
     expect(entry?.hints).toEqual([shared]);
     expect(entry?.puzzles[0]?.hints).toEqual([own]);
-    expect(serialized.filter((row) => "hints" in row)).toEqual([entry]);
+    expect(serialized.filter((row) => "hints" in row).map((row) => row.name)).toEqual([
+      "b1000",
+      "hinted",
+    ]);
     expect(JSON.stringify(serialized)).not.toContain("null");
 
     const text = (await showTool("hinted/one")).content[0]?.text.split("\n") ?? [];
