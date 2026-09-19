@@ -54,8 +54,7 @@ export const facts = {
     collections: {
       name: "puzzles_collections",
       title: "Puzzle Collections",
-      description:
-        "List every puzzle collection with its author and its solved and unsolved counts.",
+      description: "List every puzzle collection with its author and its puzzle count per status.",
       promptSnippet:
         "Use puzzles_collections to learn which collections exist before listing puzzles.",
       promptGuidelines: [

@@ -210,7 +210,7 @@ registerCollection(collection); // an instance, or { key, load } for a lazy one
 await getCollection(name); // Collection | undefined
 await requireCollection(name); // throws UnknownCollectionError
 await collections(); // every instance, registration order, shared array until the next registration
-await collectionSummaries(); // { key, author, total, solved, unsolved }[]
+await collectionSummaries(); // { key, author, total, claimed, expired, solved, swept, unsolved }[]
 await all(); // every puzzle instance
 await selectPuzzles({ collection?, status?, withPubkey? }); // filtered across the registry
 await get(id); // Puzzle | undefined, exact identifier only, loads one collection

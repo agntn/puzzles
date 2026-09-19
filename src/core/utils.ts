@@ -63,6 +63,26 @@ export function prizeTotals(puzzles: readonly Puzzle[]): Record<string, number> 
 }
 
 /**
+ * Counts the puzzles in each status, every status listed so a zero reads as a zero.
+ *
+ * @param {readonly Puzzle[]} puzzles - The puzzles to count.
+ * @returns {Readonly<Record<Status, number>>} One count per status.
+ */
+export function statusCounts(puzzles: readonly Puzzle[]): Readonly<Record<Status, number>> {
+  const counts: Record<Status, number> = {
+    claimed: 0,
+    expired: 0,
+    solved: 0,
+    swept: 0,
+    unsolved: 0,
+  };
+  for (const puzzle of puzzles) {
+    counts[puzzle.status()] += 1;
+  }
+  return counts;
+}
+
+/**
  * Formats per currency totals: `1008.52911 BTC` or `1000 AR, 1 ETH`, a dash when empty.
  *
  * @param {Readonly<Record<string, number>>} totals - Amounts per currency.
@@ -352,13 +372,30 @@ export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = 
 }
 
 /**
+ * The count labels of a collection row: solved and unsolved always, then claimed, swept and
+ * expired when the collection has any, so a reader can add them up to the total.
+ *
+ * @param {CollectionSummary} summary - The collection summary.
+ * @returns {string[]} `83 solved`, `77 unsolved`, `96 swept`.
+ */
+export function statusCountLabels(summary: CollectionSummary): string[] {
+  return [
+    `${summary.solved} solved`,
+    `${summary.unsolved} unsolved`,
+    ...[Status.Claimed, Status.Swept, Status.Expired]
+      .filter((status) => summary[status] > 0)
+      .map((status) => `${summary[status]} ${status}`),
+  ];
+}
+
+/**
  * Formats a collection summary as the one discovery row the CLI and the tools share.
  *
  * @param {CollectionSummary} summary - The collection summary.
- * @returns {string} `key: N puzzles, N solved, N unsolved, by author`.
+ * @returns {string} `key: N puzzles, N solved, N unsolved, N swept, by author`.
  */
 export function formatCollection(summary: CollectionSummary): string {
-  return `${summary.key}: ${summary.total} puzzles, ${summary.solved} solved, ${summary.unsolved} unsolved, by ${summary.author ?? "unknown"}`;
+  return `${summary.key}: ${summary.total} puzzles, ${statusCountLabels(summary).join(", ")}, by ${summary.author ?? "unknown"}`;
 }
 
 /**

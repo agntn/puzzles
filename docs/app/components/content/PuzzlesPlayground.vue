@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as library from "@agntn/puzzles";
-import { PuzzlesError, selectPuzzles, type Status } from "@agntn/puzzles";
+import { type CollectionSummary, PuzzlesError, selectPuzzles, type Status } from "@agntn/puzzles";
 import {
   collectionsTool,
   facts,
@@ -14,6 +14,7 @@ import { balanceApiPath, balanceText } from "../../composables/useBalance";
 import { COLLECTIONS, STATUSES } from "../../utils/puzzles";
 import { WALK } from "../../utils/landing";
 import { toPuzzleView, type PuzzleView } from "../../utils/puzzle-view";
+import { statusCountLabels } from "../../../../src/core/utils.ts";
 import { fetchErrorData, formatPrize, shellArg, shorten, verdictLabel } from "../../utils/format";
 
 type Operation = "show" | "list" | "verify" | "balance" | "collections" | "stats";
@@ -33,7 +34,7 @@ const NOTES: Readonly<Record<Operation, string>> = {
   balance: "",
   list: `A page holds ${facts.parameters.limit.maximum} puzzles at most. Ask for more and the tool says no, same as its schema.`,
   collections:
-    "The rows puzzles collections prints. One per collection, with the author and both counts.",
+    "The rows puzzles collections prints. One per collection, with the author and a count per status.",
   stats:
     "Totals over every collection. Loading them all is the one thing this call does that a show doesn't.",
 };
@@ -78,13 +79,7 @@ interface BalanceAnswerView {
 }
 interface CollectionsAnswer {
   kind: "collections";
-  rows: {
-    key: string;
-    author: string | undefined;
-    total: number;
-    solved: number;
-    unsolved: number;
-  }[];
+  rows: readonly CollectionSummary[];
   text: string;
 }
 interface StatsAnswer {
@@ -568,15 +563,15 @@ const shareLink = computed(() => {
             <li
               v-for="row in answer.rows"
               :key="row.key"
-              class="grid grid-cols-[7rem_3rem_1fr] gap-3 px-4 py-2.5 font-mono text-[12px] sm:grid-cols-[8rem_3rem_9rem_1fr]"
+              class="grid grid-cols-[7rem_3rem_1fr] gap-3 px-4 py-2.5 font-mono text-[12px] sm:grid-cols-[8rem_3rem_16rem_1fr]"
             >
               <NuxtLink :to="`/collections/${row.key}`" class="text-highlighted hover:underline">{{
                 row.key
               }}</NuxtLink>
               <span class="text-muted">{{ row.total }}</span>
-              <span class="hidden text-dimmed sm:block"
-                >{{ row.solved }} solved · {{ row.unsolved }} open</span
-              >
+              <span class="hidden text-dimmed sm:block">{{
+                statusCountLabels(row).join(" · ")
+              }}</span>
               <span class="truncate text-muted">{{ row.author ?? "unknown" }}</span>
             </li>
           </ol>

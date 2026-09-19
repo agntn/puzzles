@@ -47,11 +47,15 @@ describe("puzzles MCP server", () => {
 
   it("lists collections with the same rows as the CLI", async () => {
     const result = await client.callTool({ name: "puzzles_collections", arguments: {} });
+    const rows = firstText(result).split("\n");
 
-    expect(firstText(result)).toContain(
-      "b1000: 256 puzzles, 83 solved, 77 unsolved, by saatoshi_rising",
+    expect(rows).toHaveLength(11);
+    expect(rows).toContain("arweave: 12 puzzles, 0 solved, 4 unsolved, 8 claimed, by Tiamat");
+    expect(rows).toContain(
+      "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
     );
-    expect(firstText(result).split("\n")).toHaveLength(11);
+    expect(rows).toContain("warp: 6 puzzles, 4 solved, 0 unsolved, 2 expired, by Keybase");
+    expect(rows).toContain("zden: 15 puzzles, 13 solved, 2 unsolved, by Zden");
   });
 
   it("shows one puzzle", async () => {
