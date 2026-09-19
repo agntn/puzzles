@@ -51,6 +51,11 @@ export const zdenPuzzleLitecoinSegwit = litecoinPuzzle({
   ],
   assets: assets({
     puzzle: "litecoin_segwit/puzzle.png",
+    hints: [
+      "litecoin_segwit/hint_1.svg",
+      "litecoin_segwit/hint_2.svg",
+      "litecoin_segwit/hint_3.svg",
+    ],
     sourceUrl: "https://crypto.haluska.sk/LitecoinSegWit.png",
   }),
 });

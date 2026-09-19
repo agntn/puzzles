@@ -59,6 +59,15 @@ describe("puzzles_show text", () => {
     expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
   });
 
+  it("lists every hint file a record ships on one line", async () => {
+    const text = await lines("zden/litecoin_segwit");
+
+    expect(text).toContain(
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin_segwit/hint_1.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin_segwit/hint_2.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin_segwit/hint_3.svg",
+    );
+    expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
+  });
+
   it("prints every hint with its kind, its source and what confirms it", async () => {
     const text = await lines("warp/warp_challenge_2");
 

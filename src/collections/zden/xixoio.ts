@@ -1,5 +1,13 @@
 import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, funding, standard, uncompressed } from "../../core/parts.ts";
+import {
+  assets,
+  claim,
+  confirmation,
+  funding,
+  official,
+  standard,
+  uncompressed,
+} from "../../core/parts.ts";
 
 /** Puzzle `zden/xixoio`. */
 export const zdenPuzzleXixoio = ethereumPuzzle({
@@ -30,4 +38,15 @@ export const zdenPuzzleXixoio = ethereumPuzzle({
     puzzle: "xixoio/puzzle.png",
     sourceUrl: "https://crypto.haluska.sk/xixoio_puzzle.png",
   }),
+  hints: [
+    official(
+      "Byte 0x77 is part of the private key.",
+      "https://twitter.com/Zd3N/status/1077146640090316800",
+      confirmation(
+        "https://web.archive.org/web/20220129183939/https://twitter.com/Zd3N/status/1077146640090316800",
+        "Wayback capture of the tweet, the XIXOIO part of a hints bundle",
+      ),
+      { date: "2018-12-24 10:19:06" },
+    ),
+  ],
 });

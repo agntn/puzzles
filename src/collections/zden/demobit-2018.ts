@@ -1,5 +1,14 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, funding, increase, p2pkh, uncompressed } from "../../core/parts.ts";
+import {
+  assets,
+  claim,
+  confirmation,
+  funding,
+  increase,
+  official,
+  p2pkh,
+  uncompressed,
+} from "../../core/parts.ts";
 
 /** Puzzle `zden/demobit_2018`. */
 export const zdenPuzzleDemobit2018 = bitcoinPuzzle({
@@ -35,4 +44,15 @@ export const zdenPuzzleDemobit2018 = bitcoinPuzzle({
     puzzle: "demobit_2018/puzzle.png",
     sourceUrl: "https://crypto.haluska.sk/crypto_db18.png",
   }),
+  hints: [
+    official(
+      "Hint #1 for the unsolved Demobit puzzle is the hash of inner data block with lines overlap. It is not the hash of the private key! SHA-256: 1c10494cf872ac2b896f52b2c93f58c23049f5be9455fef3ed4f9d9bf84fe600",
+      "https://twitter.com/Zd3N/status/966275899757879298",
+      confirmation(
+        "https://web.archive.org/web/20180316114954/http://crypto.haluska.sk/",
+        "Wayback capture of the puzzle page, which links Hint #1 to this tweet",
+      ),
+      { date: "2018-02-21 11:38:21" },
+    ),
+  ],
 });

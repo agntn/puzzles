@@ -1,5 +1,5 @@
 import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { assets, funding, p2pkh } from "../../core/parts.ts";
+import { assets, confirmation, funding, official, p2pkh } from "../../core/parts.ts";
 
 /** Puzzle `zden/level_halv`. */
 export const zdenPuzzleLevelHalv = bitcoinPuzzle({
@@ -19,4 +19,14 @@ export const zdenPuzzleLevelHalv = bitcoinPuzzle({
     puzzle: "level_halv/puzzle.png",
     sourceUrl: "https://crypto.haluska.sk/cryptoHALV.png",
   }),
+  hints: [
+    official(
+      "Level HALV - my new crypto puzzle to celebrate the fourth Bitcoin Halving. This level is way easier than LVL 5. It shouldn't take long until it's solved.",
+      "https://crypto.haluska.sk/",
+      confirmation(
+        "https://web.archive.org/web/20240519071031/https://crypto.haluska.sk/",
+        "Wayback capture of the puzzle page",
+      ),
+    ),
+  ],
 });
