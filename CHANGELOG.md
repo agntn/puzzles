@@ -51,6 +51,7 @@
 
 ### Fixed
 
+- `get()` treats a non-string puzzle identifier as a miss instead of throwing from `String.prototype.split`. This matches collection lookups and keeps malformed JavaScript input on the documented `undefined` path.
 - `puzzles_show` prints the hints and the solver's notes as URLs. They used to print as bare file names, `hints: follow_the_white_rabbit.png` next to an `asset:` line with the full raw GitHub URL, so a model that only sees the text had nowhere to fetch them from. `assetLinks()` lists every file a record ships with its path and URL, the puzzle image in it as `assetPath()` and `assetUrl()` answer it.
 - `puzzles --help`, `-h` and an unknown command no longer load `@agntn/keys` and `@noble/curves`. citty resolves every subcommand to print the usage or to look for an alias, and the `verify` command imported the verification crypto at module scope. It imports it when it runs, the way `mcp` imports the SDK.
 - `NumericCollection` resolves a query only in the spelling its identifier uses. `Number()` used to read `b1000.get("0x47")`, `b1000.get(" 71 ")` and `b1000.get("71.0")` as puzzle 71 and `b1000.get("7e1")` as puzzle 70, so `require()`, `balance()` and `verify()` answered for a record the caller never named. A `NamedCollection` handed a non-string query answers `undefined` instead of throwing `TypeError: query.includes is not a function`.
