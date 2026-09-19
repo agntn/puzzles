@@ -1,5 +1,5 @@
 import { NumericCollection } from "../core/collection.ts";
-import { party, profile } from "../core/parts.ts";
+import { confirmation, official, party, profile } from "../core/parts.ts";
 import { b1000Puzzle1 } from "./b1000/1.ts";
 import { b1000Puzzle2 } from "./b1000/2.ts";
 import { b1000Puzzle3 } from "./b1000/3.ts";
@@ -268,6 +268,19 @@ export class B1000Collection extends NumericCollection {
     profiles: [profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=991321")],
   });
 
+  /** What the author said about the keys, in the one post the account ever made. */
+  static readonly hints = [
+    official(
+      "There is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).",
+      "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941",
+      confirmation(
+        "https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941",
+        "Wayback capture of the thread page",
+      ),
+      { date: "2017-04-27 06:41:08" },
+    ),
+  ];
+
   /** Every puzzle in this collection. */
   static readonly puzzles = [
     b1000Puzzle1,
@@ -530,7 +543,12 @@ export class B1000Collection extends NumericCollection {
 
   /** Builds the canonical collection. */
   constructor() {
-    super(B1000Collection.key, B1000Collection.author, B1000Collection.puzzles);
+    super(
+      B1000Collection.key,
+      B1000Collection.author,
+      B1000Collection.puzzles,
+      B1000Collection.hints,
+    );
   }
 }
 
