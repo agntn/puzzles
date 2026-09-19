@@ -93,6 +93,8 @@ describe("lazy collection registry", () => {
     expect((await getCollection("peter_todd"))?.key).toBe("hash_collision");
     expect((await getCollection("warpwallet"))?.key).toBe("warp");
     expect(await get("missing")).toBeUndefined();
+    const foreign = [undefined, null, true, 71n, {}] as never[];
+    expect(await Promise.all(foreign.map((id) => get(id)))).toEqual(foreign.map(() => undefined));
   });
 
   it("resolves a collection query only in the spelling its identifier uses", () => {

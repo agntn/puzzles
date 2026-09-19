@@ -128,6 +128,9 @@ export async function selectPuzzles(query: PuzzleQuery = {}): Promise<readonly P
  * @returns {Promise<Puzzle | undefined>} The puzzle, or `undefined` when no collection claims the identifier.
  */
 export async function get(id: string): Promise<Puzzle | undefined> {
+  if (typeof id !== "string") {
+    return undefined;
+  }
   const [prefix, ...rest] = id.split("/");
   const collection = await getCollection(prefix ?? id);
   if (collection === undefined) {
