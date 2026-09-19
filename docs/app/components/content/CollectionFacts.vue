@@ -62,5 +62,11 @@ const facts = computed(() => {
         open {{ entry.sample }} in the playground
       </NuxtLink>
     </div>
+    <div v-if="data.hints.length > 0" class="puzzles-frame mt-3 rounded-xl px-5 py-4">
+      <p class="puzzles-eyebrow mb-3">
+        collection hints · {{ data.hints.length }} · what every puzzle here inherits
+      </p>
+      <HintList :hints="data.hints" />
+    </div>
   </div>
 </template>

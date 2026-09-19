@@ -72,5 +72,14 @@ describe("docs landing fixtures", () => {
     expect(facts.total).toBe(6);
     expect(facts.chains).toEqual(["bitcoin"]);
     expect(facts.withKey).toBe(0);
+    expect(facts.hints).toEqual([]);
+  });
+
+  it("carry the hints every puzzle of the collection shares", () => {
+    const b1000 = FACTS_STATIC.find((row) => row.key === "b1000");
+
+    expect(b1000?.hints.map((hint) => [hint.kind, hint.source])).toEqual([
+      ["official", "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941"],
+    ]);
   });
 });
