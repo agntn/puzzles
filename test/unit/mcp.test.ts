@@ -76,7 +76,11 @@ describe("puzzles MCP server", () => {
       name: "puzzles_hints",
       arguments: { id: "zden/level_5" },
     });
-    const bare = await client.callTool({ name: "puzzles_hints", arguments: { id: "gsmg" } });
+    const image = await client.callTool({ name: "puzzles_hints", arguments: { id: "gsmg" } });
+    const bare = await client.callTool({
+      name: "puzzles_hints",
+      arguments: { id: "arweave/weave1" },
+    });
 
     expect(firstText(hinted).split("\n")).toEqual([
       "warp/challenge_1: 1 hint",
@@ -90,7 +94,11 @@ describe("puzzles MCP server", () => {
       "\tofficial\t-\tThe new corrected version including new hints! UNSOLVED for over 3 years because the original release was uncomplete! Relaunched on 12th of December 2021. My excuses to everyone!\tsource: https://crypto.haluska.sk/\tconfirmation: https://web.archive.org/web/20220124172559/https://crypto.haluska.sk/ (Wayback capture of the puzzle page)",
       "\tofficial\t-\t(clarity edit: sum of two ~~consecutive~~ following rectangles...)\tsource: https://crypto.haluska.sk/\tconfirmation: https://web.archive.org/web/20220124172559/https://crypto.haluska.sk/ (Wayback capture of the puzzle page, which strikes consecutive out of the 2018 hint)",
     ]);
-    expect(firstText(bare)).toBe("gsmg: no hints recorded");
+    expect(firstText(image).split("\n")).toEqual([
+      "gsmg: 1 hint asset",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
+    ]);
+    expect(firstText(bare)).toBe("arweave/weave1: no hints recorded");
   });
 
   it("limits list results and reports the match count", async () => {

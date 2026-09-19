@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  assets,
   BitcoinPuzzle,
   bitcoinPuzzle,
   community,
@@ -8,7 +9,7 @@ import {
   p2pkh,
   seed,
 } from "../../src/index.ts";
-import { formatPuzzleRecord } from "../../src/core/utils.ts";
+import { formatHintReport, formatPuzzleRecord } from "../../src/core/utils.ts";
 import { showTool } from "../../src/tool-operations.ts";
 
 /*
@@ -193,5 +194,38 @@ describe("puzzles_show text", () => {
     }
 
     expect(formatPuzzleRecord(new Ranged()).split("\n")).toContain("key range: a..14 (hex)");
+  });
+});
+
+describe("puzzles_hints text", () => {
+  it("counts the hints and the hint files apart and prints the files last", () => {
+    const shared = official(
+      "Start at the top.",
+      "https://example.com/puzzle",
+      confirmation("https://web.archive.org/web/2026/https://example.com/puzzle"),
+    );
+    const puzzle = bitcoinPuzzle({
+      id: "fixture/both",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      assets: assets({ puzzle: "both.png", hints: ["hint_1.png", "hint_2.svg"] }),
+      hints: [
+        community(
+          "The top is a decoy.",
+          "https://example.com/thread",
+          confirmation("https://archive.ph/thread"),
+        ),
+      ],
+    });
+
+    expect(formatHintReport(puzzle, [shared])).toEqual([
+      "fixture/both: 2 hints, 2 hint assets",
+      "collection hints: 1",
+      "\tofficial\t-\tStart at the top.\tsource: https://example.com/puzzle\tconfirmation: https://web.archive.org/web/2026/https://example.com/puzzle",
+      "hints: 1",
+      "\tcommunity\t-\tThe top is a decoy.\tsource: https://example.com/thread\tconfirmation: https://archive.ph/thread",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint_1.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint_2.svg",
+    ]);
   });
 });

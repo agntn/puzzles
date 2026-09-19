@@ -14,6 +14,7 @@ import {
   formatPrizeTotals,
   formatPuzzle,
   formatPuzzleRecord,
+  hintAssets,
   parseStatus,
 } from "./core/utils.ts";
 
@@ -74,7 +75,7 @@ export const facts = {
       name: "puzzles_hints",
       title: "Puzzle Hints",
       description:
-        "List the hints recorded for one puzzle, its collection's and its own, each with where it was said and what confirms that.",
+        "List the hints recorded for one puzzle, its collection's and its own, each with where it was said and what confirms that, then the hint files it ships.",
       promptSnippet:
         "Use puzzles_hints for what the author or the community said about a puzzle before searching for its key.",
       promptGuidelines: [
@@ -241,17 +242,18 @@ export async function showTool(id: string): Promise<ToolResult> {
 
 /**
  * Every hint that holds for one puzzle, the collection's and its own, in the blocks `puzzles_show`
- * prints them in.
+ * prints them in, then the hint files the record ships.
  *
  * @param {string} id - Universal puzzle identifier.
- * @returns {Promise<ToolResult>} The hints as text, with the joined list in `details`.
+ * @returns {Promise<ToolResult>} The hints as text, with the joined list and the hint links in `details`.
  */
 export async function hintsTool(id: string): Promise<ToolResult> {
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
-  return text(formatHintReport(puzzle.id(), collection.hints, puzzle.hints()).join("\n"), {
+  return text(formatHintReport(puzzle, collection.hints).join("\n"), {
     id: puzzle.id(),
     hints: collection.hintsById(puzzle.id()),
+    hintAssets: hintAssets(puzzle),
   });
 }
 
