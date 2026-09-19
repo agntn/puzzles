@@ -137,6 +137,50 @@ describe("registry consistency", () => {
     }
   });
 
+  it.each([false, true])(
+    "keeps an export on one snapshot when registration races it (cached version: %s)",
+    async (cachedVersion) => {
+      const lib = await freshLibrary();
+      const original = await lib.datasetCollections();
+      const expectedVersion = createHash("sha256")
+        .update(JSON.stringify(original))
+        .digest("hex")
+        .slice(0, 12);
+      if (cachedVersion) {
+        expect(await lib.dataVersion()).toBe(expectedVersion);
+      }
+
+      const pending = lib.dataset();
+      lib.registerCollection(new lib.NamedCollection("fixture", lib.party("Fixture"), []));
+      const exported = await pending;
+
+      expect(exported.collections).toBe(original);
+      expect(exported.data_version).toBe(expectedVersion);
+      const current = await lib.dataset();
+      expect(current.collections).not.toBe(original);
+      expect(current.collections.at(-1)?.name).toBe("fixture");
+      expect(current.data_version).toBe(
+        createHash("sha256").update(JSON.stringify(current.collections)).digest("hex").slice(0, 12),
+      );
+      expect(current.data_version).not.toBe(expectedVersion);
+    },
+  );
+
+  it("hashes the snapshot acquired before a concurrent registration", async () => {
+    const lib = await freshLibrary();
+    const original = await lib.datasetCollections();
+    const expectedVersion = createHash("sha256")
+      .update(JSON.stringify(original))
+      .digest("hex")
+      .slice(0, 12);
+
+    const pending = lib.dataVersion();
+    lib.registerCollection(new lib.NamedCollection("fixture", lib.party("Fixture"), []));
+
+    expect(await pending).toBe(expectedVersion);
+    expect(await lib.dataVersion()).not.toBe(expectedVersion);
+  });
+
   it("serializes a collection's hints once and prints them ahead of a puzzle's own", async () => {
     const lib = await freshLibrary();
     const { hintsTool, showTool } = await import("../../src/tool-operations.ts");

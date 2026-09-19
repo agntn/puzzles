@@ -178,7 +178,12 @@ export async function stats(): Promise<Stats> {
  */
 export async function datasetCollections(): Promise<readonly DatasetCollection[]> {
   const [snapshot, record] = await views();
-  record.serialized ??= frozen(
+  record.serialized ??= serializeSnapshot(snapshot);
+  return record.serialized;
+}
+
+function serializeSnapshot(snapshot: readonly AnyCollection[]): readonly DatasetCollection[] {
+  return frozen(
     snapshot.map((collection) =>
       defined<DatasetCollection>({
         name: collection.key,
@@ -188,7 +193,6 @@ export async function datasetCollections(): Promise<readonly DatasetCollection[]
       }),
     ),
   );
-  return record.serialized;
 }
 
 /**
@@ -198,11 +202,14 @@ export async function datasetCollections(): Promise<readonly DatasetCollection[]
  * @returns {Promise<string>} The first 12 hex characters of SHA-256 over the serialized collections.
  */
 export async function dataVersion(): Promise<string> {
-  const [, record] = await views();
-  record.dataVersion ??= bytesToHex(
-    sha256(utf8ToBytes(JSON.stringify(await datasetCollections()))),
-  ).slice(0, 12);
+  const [snapshot, record] = await views();
+  record.serialized ??= serializeSnapshot(snapshot);
+  record.dataVersion ??= serializedVersion(record.serialized);
   return record.dataVersion;
+}
+
+function serializedVersion(serialized: readonly DatasetCollection[]): string {
+  return bytesToHex(sha256(utf8ToBytes(JSON.stringify(serialized)))).slice(0, 12);
 }
 
 /**
@@ -211,9 +218,12 @@ export async function dataVersion(): Promise<string> {
  * @returns {Promise<Dataset>} `{ version, data_version, collections }`.
  */
 export async function dataset(): Promise<Dataset> {
+  const [snapshot, record] = await views();
+  record.serialized ??= serializeSnapshot(snapshot);
+  record.dataVersion ??= serializedVersion(record.serialized);
   return Object.freeze({
     version,
-    data_version: await dataVersion(),
-    collections: await datasetCollections(),
+    data_version: record.dataVersion,
+    collections: record.serialized,
   });
 }
