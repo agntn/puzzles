@@ -132,6 +132,17 @@ describe("puzzles_show text", () => {
     expect(text.some((line) => line.startsWith("asset:"))).toBe(false);
   });
 
+  it("links the solver image next to the puzzle image", async () => {
+    const text = await lines("zden/level_1");
+
+    expect(text).toContain(
+      "asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level_1/puzzle.png",
+    );
+    expect(text).toContain(
+      "solver asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level_1/solver.png",
+    );
+  });
+
   it("prints every key representation a record carries", async () => {
     const ballet = await lines("ballet/AA007448");
     const bitaps = await lines("bitaps");
