@@ -62,6 +62,14 @@ hashCollision.require("sha256");
 get("peter_todd/sha256");
 ```
 
+## ledger_donjon
+
+Ledger Donjon's Capture the Fortress CTF. Scissors Secret Sharing is solved, with the published BIP39 phrase and BIP44 path. It awarded 100 CTF points, not a BTC bounty, so the record leaves `prize` absent.
+
+```ts
+ledgerDonjon.require("scissors_secret_sharing");
+```
+
 ## movie_enigma
 
 Bitcoin Movie Enigma, one puzzle by klems: 34 film stills, each title turned into a BIP39 word, ten intruders to drop. Solved in 2026. The 24-word phrase fails the BIP39 checksum and still derives the address, and `verify()` confirms it.

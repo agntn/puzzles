@@ -8,7 +8,7 @@ metadata:
 
 # puzzles
 
-Eleven collections, 333 puzzles, six chains: Bitcoin, Ethereum, Litecoin, Monero, Decred, Arweave. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
+Twelve collections, 334 puzzles, six chains: Bitcoin, Ethereum, Litecoin, Monero, Decred, Arweave. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
 
 Reads are methods, not properties. `puzzle.address()`, not `puzzle.address`. A puzzle with no solver or prize simply leaves those fields out of its record, which is why nothing in the dataset is null.
 
@@ -34,10 +34,13 @@ IDs are `collection/identifier`. Three singletons have no slash, which trips peo
 | `bitimage`       | `bitimage/kitten`       | name                                              |
 | `gsmg`           | `gsmg`                  | singleton, no argument                            |
 | `hash_collision` | `hash_collision/sha256` | sha1, sha256, ripemd160, hash160, hash256, op_abs |
+| `ledger_donjon`  | `ledger_donjon/...`     | name "scissors_secret_sharing", full ID below     |
 | `movie_enigma`   | `movie_enigma`          | singleton, no argument                            |
 | `rushwallet`     | `rushwallet/9`          | name "1"-"30"                                     |
 | `warp`           | `warp/challenge_1`      | challenge_1-4, warp_challenge_1-2                 |
 | `zden`           | `zden/level_1`          | snake_case level name                             |
+
+`ledger_donjon/scissors_secret_sharing` is a named CTF challenge. Its published phrase verifies through BIP44; the 100 CTF points aren't a cryptocurrency prize.
 
 Old names still resolve: `peter_todd` gives you `hash_collision`, `warpwallet` gives you `warp`.
 

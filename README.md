@@ -5,7 +5,7 @@
 [![license](https://npmx.dev/api/registry/badge/license/@agntn/puzzles)](https://npmx.dev/package/@agntn/puzzles)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/agntn/puzzles)
 
-🧩 333 public crypto puzzles and bounties in eleven collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
+334 public crypto puzzles and bounties in twelve collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
 
 ## Why?
 
@@ -42,8 +42,8 @@ npx @agntn/puzzles stats
 ```
 
 ```text
-Total: 333
-Solved: 131
+Total: 334
+Solved: 132
 Unsolved: 93
 Claimed: 11
 Swept: 96
@@ -109,6 +109,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `bitaps`         |       1 | bitcoin                             | A 3 of 5 secret sharing scheme          |
 | `gsmg`           |       1 | bitcoin                             | A multi phase image puzzle              |
 | `movie_enigma`   |       1 | bitcoin                             | Film titles as seed words, solved 2026  |
+| `ledger_donjon`  |       1 | bitcoin                             | Scissors Secret Sharing from the CTF    |
 
 Identifiers are `collection/name`. The three singletons, `gsmg`, `bitaps` and `movie_enigma`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 

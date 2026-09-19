@@ -42,14 +42,14 @@ describe("puzzles MCP server", () => {
   it("reports dataset statistics", async () => {
     const result = await client.callTool({ name: "puzzles_stats", arguments: {} });
 
-    expect(firstText(result)).toContain("Total: 333 puzzles in 11 collections");
+    expect(firstText(result)).toContain("Total: 334 puzzles in 12 collections");
   });
 
   it("lists collections with the same rows as the CLI", async () => {
     const result = await client.callTool({ name: "puzzles_collections", arguments: {} });
     const rows = firstText(result).split("\n");
 
-    expect(rows).toHaveLength(11);
+    expect(rows).toHaveLength(12);
     expect(rows).toContain("arweave: 12 puzzles, 0 solved, 4 unsolved, 8 claimed, by Tiamat");
     expect(rows).toContain(
       "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",

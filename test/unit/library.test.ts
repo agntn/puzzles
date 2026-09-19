@@ -7,6 +7,7 @@ import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash_collision.ts";
+import { LedgerDonjonCollection } from "../../src/collections/ledger_donjon.ts";
 import { MovieEnigmaCollection } from "../../src/collections/movie_enigma.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
@@ -44,6 +45,7 @@ const concreteClasses = [
   BitimageCollection,
   GsmgCollection,
   HashCollisionCollection,
+  LedgerDonjonCollection,
   MovieEnigmaCollection,
   RushwalletCollection,
   WarpCollection,
@@ -194,12 +196,12 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(333);
+    expect(await all()).toHaveLength(334);
     expect(await stats()).toEqual({
-      total: 333,
+      total: 334,
       claimed: 11,
       expired: 2,
-      solved: 131,
+      solved: 132,
       swept: 96,
       unsolved: 93,
       with_pubkey: 237,
@@ -234,7 +236,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(333);
+    ).toBe(334);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -261,6 +263,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(131);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(132);
   });
 });
