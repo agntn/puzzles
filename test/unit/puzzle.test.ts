@@ -155,6 +155,43 @@ describe("puzzle record factories", () => {
     ]);
   });
 
+  it("follows an overridden assetPath() into assetUrl() and assetLinks()", () => {
+    class Mirrored extends BitcoinPuzzle {
+      override id(): string {
+        return "fixture/mirrored";
+      }
+
+      override address() {
+        return required.address;
+      }
+
+      override sourceUrl(): string {
+        return required.sourceUrl;
+      }
+
+      override startedAt(): string {
+        return required.startedAt;
+      }
+
+      override assets() {
+        return assets({ puzzle: "puzzle.png", hints: ["hint.png"] });
+      }
+
+      override assetPath(): string {
+        return "mirror/puzzle.png";
+      }
+    }
+    const puzzle = new Mirrored();
+
+    expect(puzzle.assetUrl()).toBe(
+      "https://raw.githubusercontent.com/agntn/puzzles/main/mirror/puzzle.png",
+    );
+    expect(puzzle.assetLinks().map((link) => [link.kind, link.path])).toEqual([
+      ["puzzle", "mirror/puzzle.png"],
+      ["hint", "assets/fixture/hint.png"],
+    ]);
+  });
+
   it("serializes every optional record field and retains derived behavior", () => {
     const spec = {
       ...required,
