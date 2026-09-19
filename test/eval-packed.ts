@@ -64,6 +64,7 @@ const expectedCollections = [
   "bitimage",
   "gsmg",
   "hash_collision",
+  "ledger_donjon",
   "movie_enigma",
   "rushwallet",
   "warp",

@@ -97,7 +97,7 @@ defineOgImage(
         }}</NuxtLink>
       </p>
       <h1
-        class="mt-4 font-mono text-3xl leading-[1.1] font-medium tracking-tight text-highlighted sm:text-4xl"
+        class="mt-4 font-mono text-3xl leading-[1.1] font-medium tracking-tight break-all text-highlighted sm:text-4xl"
       >
         {{ title }}
       </h1>

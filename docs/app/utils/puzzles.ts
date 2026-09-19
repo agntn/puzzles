@@ -66,6 +66,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Peter Todd's P2SH scripts that pay for a collision. SHA-1 fell in 2017.",
   },
+  ledger_donjon: {
+    icon: "i-lucide-scissors",
+    title: "Ledger Donjon CTF",
+    sample: "ledger_donjon/scissors_secret_sharing",
+    chains: ["bitcoin"],
+    blurb:
+      "Scissors Secret Sharing. Twelve BIP39 words, ten out of order. CTF points, not a BTC prize.",
+  },
   movie_enigma: {
     icon: "i-lucide-clapperboard",
     title: "Bitcoin Movie Enigma",

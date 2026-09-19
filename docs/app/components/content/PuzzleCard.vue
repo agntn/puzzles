@@ -7,6 +7,11 @@ const props = defineProps<{ view: PuzzleView; compact?: boolean }>();
 
 const entry = computed(() => collectionEntry(props.view.collection));
 const page = computed(() => `/collections/${props.view.id}`);
+const solvedDate = computed(() => {
+  const view = props.view;
+  if (view.solvedAt === undefined) return view.status === "unsolved" ? "not yet" : "unknown";
+  return `${view.solvedAt.slice(0, 10)} · ${view.solveTime ?? ""}`;
+});
 
 const facts = computed(() => {
   const view = props.view;
@@ -31,14 +36,7 @@ const facts = computed(() => {
       mono: true,
     },
     { label: "started", value: view.startedAt.slice(0, 10), mono: true },
-    {
-      label: "solved",
-      value:
-        view.solvedAt === undefined
-          ? "not yet"
-          : `${view.solvedAt.slice(0, 10)} · ${view.solveTime ?? ""}`,
-      mono: true,
-    },
+    { label: "solved", value: solvedDate.value, mono: true },
     {
       label: "verification",
       value:
@@ -68,7 +66,7 @@ const { copied, copy } = useCopied();
 <template>
   <div class="puzzles-frame not-prose overflow-hidden rounded-xl">
     <div class="flex flex-wrap items-center gap-3 border-b border-muted px-5 py-4">
-      <span class="font-mono text-lg text-highlighted">{{ view.id }}</span>
+      <span class="font-mono text-lg break-all text-highlighted">{{ view.id }}</span>
       <StatusPill :status="view.status" />
       <span class="puzzles-chip">
         <UIcon :name="CHAIN_ICONS[view.chain] ?? 'i-lucide-link'" class="size-3.5" />
