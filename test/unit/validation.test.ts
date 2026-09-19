@@ -11,7 +11,10 @@ import {
 import {
   AddressKind,
   assets,
+  confirmation,
+  type Hint,
   type KeyData,
+  official,
   p2pkh,
   PubkeyFormat,
   TransactionType,
@@ -127,6 +130,39 @@ function assetProblems(puzzle: Puzzle): string[] {
   });
 }
 
+/** A hint date is the record's `YYYY-MM-DD HH:MM:SS`, or the day alone when the source has no time. */
+const HINT_DATE = /^\d{4}-\d{2}-\d{2}(?: \d{2}:\d{2}:\d{2})?$/u;
+
+function isWebUrl(value: string): boolean {
+  return URL.canParse(value) && /^https?:$/u.test(new URL(value).protocol);
+}
+
+/**
+ * The problems of one hint: a text that is empty or spans lines, a source or a confirmation that
+ * is not a web URL, a confirmation that repeats the source and so confirms nothing, or a date in
+ * another format.
+ *
+ * @param {Hint} hint - The hint.
+ * @returns {string[]} One problem per failed check.
+ */
+function hintProblems(hint: Hint): string[] {
+  return [
+    ...(hint.text.trim() === "" || /[\n\r\t]/u.test(hint.text) ? ["text is not one line"] : []),
+    ...(isWebUrl(hint.source) ? [] : ["source is not a web URL"]),
+    ...(isWebUrl(hint.confirmation.url) ? [] : ["confirmation is not a web URL"]),
+    ...(hint.confirmation.url === hint.source ? ["confirmation repeats the source"] : []),
+    ...(hint.date === undefined || HINT_DATE.test(hint.date) ? [] : ["date is not a record date"]),
+  ];
+}
+
+function hintRecordProblems(puzzle: Puzzle): string[] {
+  return puzzle
+    .hints()
+    .flatMap((hint, index) =>
+      hintProblems(hint).map((problem) => `${puzzle.id()}: hint ${index + 1} ${problem}`),
+    );
+}
+
 function mutablePartProblem(puzzle: Puzzle): string | undefined {
   const seen = new WeakSet<object>();
   const walk = (value: unknown, path: string): string[] => {
@@ -142,6 +178,7 @@ function mutablePartProblem(puzzle: Puzzle): string | undefined {
   const parts = {
     address: puzzle.address(),
     assets: puzzle.assets(),
+    hints: puzzle.hints(),
     key: puzzle.keyData(),
     pubkey: puzzle.pubkey(),
     solver: puzzle.solver(),
@@ -224,6 +261,34 @@ describe("collection class data", () => {
 
     expect(assetProblems(escaped)).toEqual([
       "fixture/escaped: asset ../../README.md leaves assets/fixture/",
+    ]);
+  });
+
+  it("keeps every hint on one line with a source and a separate confirmation", () => {
+    expect(puzzles.flatMap((puzzle) => hintRecordProblems(puzzle))).toEqual([]);
+  });
+
+  it("names every way a hint can fail the data gate", () => {
+    const hinted = bitcoinPuzzle({
+      id: "fixture/hinted",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      hints: [
+        official("one\ntwo", "ftp://example.com/puzzle", confirmation("not a url")),
+        official(" ", "https://example.com/puzzle", confirmation("https://example.com/puzzle"), {
+          date: "2026-1-3",
+        }),
+      ],
+    });
+
+    expect(hintRecordProblems(hinted)).toEqual([
+      "fixture/hinted: hint 1 text is not one line",
+      "fixture/hinted: hint 1 source is not a web URL",
+      "fixture/hinted: hint 1 confirmation is not a web URL",
+      "fixture/hinted: hint 2 text is not one line",
+      "fixture/hinted: hint 2 confirmation repeats the source",
+      "fixture/hinted: hint 2 date is not a record date",
     ]);
   });
 

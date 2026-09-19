@@ -1,8 +1,10 @@
 import type { CollectionSummary } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
 import {
+  type Confirmation,
   type Entropy,
   type EntropySource,
+  type Hint,
   type KeyData,
   type Party,
   type Passphrase,
@@ -223,7 +225,8 @@ function formatTransactions(puzzle: Puzzle): string[] {
 }
 
 /**
- * Every asset as a URL, the hints and the solver's notes under the same root as the puzzle image.
+ * Every asset as a URL, the hint files and the solver's notes under the same root as the puzzle
+ * image.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @returns {string[]} The asset lines.
@@ -237,10 +240,37 @@ function formatAssets(puzzle: Puzzle): string[] {
   const hints = links.filter((link) => link.kind === "hint").map((link) => link.url);
   return [
     ...field("asset", puzzle.assetUrl()),
-    ...field("hints", hints.length === 0 ? undefined : hints, (list) => list.join(", ")),
+    ...field("hint assets", hints.length === 0 ? undefined : hints, (list) => list.join(", ")),
     ...field("solver asset", links.find((link) => link.kind === "solver")?.url),
     ...field("asset source", assets.source_url),
   ];
+}
+
+function formatConfirmation(confirmation: Confirmation): string {
+  const note = confirmation.description === undefined ? "" : ` (${confirmation.description})`;
+  return `${confirmation.url}${note}`;
+}
+
+/**
+ * One tab-separated line per hint: its kind, its date or a dash, the text, then the source and
+ * what confirms it as `label: value` pairs, so the two URLs stay apart.
+ *
+ * @param {Hint} hint - The hint.
+ * @returns {string} The line.
+ */
+function formatHint(hint: Hint): string {
+  return `\t${hint.kind}\t${hint.date ?? "-"}\t${hint.text}\tsource: ${hint.source}\tconfirmation: ${formatConfirmation(hint.confirmation)}`;
+}
+
+/**
+ * The hint count, then one line per hint in record order, or nothing for a record without any.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {string[]} The count line and the hint lines.
+ */
+function formatHints(puzzle: Puzzle): string[] {
+  const hints = puzzle.hints();
+  return hints.length === 0 ? [] : [`hints: ${hints.length}`, ...hints.map(formatHint)];
 }
 
 /**
@@ -270,6 +300,7 @@ export function formatPuzzleRecord(puzzle: Puzzle): string {
     ...formatTransactions(puzzle),
     ...field("claim", puzzle.claimExplorerUrl()),
     ...formatAssets(puzzle),
+    ...formatHints(puzzle),
     `explorer: ${puzzle.explorerUrl()}`,
     `source: ${puzzle.sourceUrl()}`,
     ...field("key range", puzzle.keyRange(), (range) => formatRange(range, bits)),

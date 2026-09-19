@@ -6,12 +6,15 @@ import {
   bitcoinPuzzle,
   Chain,
   claim,
+  community,
   compressed,
+  confirmation,
   decredPuzzle,
   ethereumPuzzle,
   hex,
   litecoinPuzzle,
   moneroPuzzle,
+  official,
   p2pkh,
   party,
   passphrase,
@@ -131,6 +134,8 @@ describe("puzzle record factories", () => {
     expect(Object.isFrozen(puzzle.transactions())).toBe(true);
     expect(puzzle.assetLinks()).toEqual([]);
     expect(Object.isFrozen(puzzle.assetLinks())).toBe(true);
+    expect(puzzle.hints()).toEqual([]);
+    expect(Object.isFrozen(puzzle.hints())).toBe(true);
     expect(puzzle.toJSON()).toEqual({
       id: required.id,
       address: required.address,
@@ -192,11 +197,44 @@ describe("puzzle record factories", () => {
     ]);
   });
 
+  it("builds a hint with its kind, its provenance and nothing it was not given", () => {
+    const proof = confirmation("https://web.archive.org/web/2026/https://example.com/puzzle");
+
+    expect(proof).toEqual({ url: "https://web.archive.org/web/2026/https://example.com/puzzle" });
+    expect(official("Start at the top.", "https://example.com/puzzle", proof)).toEqual({
+      kind: "official",
+      text: "Start at the top.",
+      source: "https://example.com/puzzle",
+      confirmation: proof,
+    });
+    expect(
+      community(
+        "The top is a decoy.",
+        "https://example.com/thread",
+        confirmation("https://archive.ph/thread", "capture of the thread"),
+        { date: "2026-01-03 12:00:00" },
+      ),
+    ).toEqual({
+      kind: "community",
+      text: "The top is a decoy.",
+      source: "https://example.com/thread",
+      confirmation: { url: "https://archive.ph/thread", description: "capture of the thread" },
+      date: "2026-01-03 12:00:00",
+    });
+  });
+
   it("serializes every optional record field and retains derived behavior", () => {
     const spec = {
       ...required,
       assets: assets({ puzzle: "puzzle.png", hints: ["hint.txt"] }),
       currency: "TEST",
+      hints: [
+        official(
+          "Start at the top.",
+          "https://example.com/puzzle",
+          confirmation("https://web.archive.org/web/2026/https://example.com/puzzle"),
+        ),
+      ],
       key: hex("1".padStart(64, "0"), 1),
       preGenesis: true,
       prize: 0,
@@ -217,6 +255,7 @@ describe("puzzle record factories", () => {
       start_date: spec.startedAt,
       assets: spec.assets,
       currency: spec.currency,
+      hints: spec.hints,
       key: spec.key.data(),
       pre_genesis: true,
       prize: 0,
@@ -246,6 +285,8 @@ describe("puzzle record factories", () => {
     ]);
     expect(Object.isFrozen(puzzle.assetLinks())).toBe(true);
     expect(Object.isFrozen(puzzle.assetLinks()[0])).toBe(true);
+    expect(puzzle.hints()).toBe(spec.hints);
+    expect(Object.isFrozen(puzzle.hints()[0]?.confirmation)).toBe(true);
     expect(puzzle.formattedSolveTime()).toBe("0s");
     expect(puzzle.prizeCurrency()).toBe("TEST");
   });

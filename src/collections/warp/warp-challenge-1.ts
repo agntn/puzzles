@@ -1,5 +1,13 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { claim, funding, hex, p2pkh, uncompressed } from "../../core/parts.ts";
+import {
+  claim,
+  confirmation,
+  funding,
+  hex,
+  official,
+  p2pkh,
+  uncompressed,
+} from "../../core/parts.ts";
 
 /** Puzzle `warp/warp_challenge_1`. */
 export const warpPuzzleWarpChallenge1 = bitcoinPuzzle({
@@ -26,6 +34,16 @@ export const warpPuzzleWarpChallenge1 = bitcoinPuzzle({
       "a96d09a4de56f144e95dd2184edd4e53a6beaec9887d14eb63a25aa8e1e456c9",
       "2016-01-31 01:19:41",
       10.001116,
+    ),
+  ],
+  hints: [
+    official(
+      "this passphrase is 8 characters long, only alphanumerics. For example, 'b234FEzz'.",
+      "https://keybase.io/warp",
+      confirmation(
+        "https://web.archive.org/web/20140328141542/https://keybase.io/warp",
+        "Wayback capture of the challenge page",
+      ),
     ),
   ],
 });

@@ -152,7 +152,7 @@ export const zdenPuzzleLevel6 = bitcoinPuzzle({
 });
 ```
 
-Then import it in `src/collections/zden.ts` and append it to `static readonly puzzles`. Leave out every field the puzzle does not have: an absent field is how "no data" is spelled. `pnpm test` re-checks identifiers, key derivation, assets, and the no nulls rule.
+Then import it in `src/collections/zden.ts` and append it to `static readonly puzzles`. Leave out every field the puzzle does not have: an absent field is how "no data" is spelled. A hint goes in as `official(text, source, confirmation(url))` or `community(…)`, with the URL it was published at and a second URL that shows the source said it, an archive capture for instance. `pnpm test` re-checks identifiers, key derivation, assets, hints, and the no nulls rule.
 
 ## References
 

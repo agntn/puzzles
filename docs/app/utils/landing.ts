@@ -110,7 +110,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn",
     source: "https://keybase.io/warp",
     transactions: 2,
-    tool: "warp/challenge_1\tsolved\t0.1 BTC\t1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn\nchain: bitcoin  address kind: p2pkh\nhash160: bdfe0236c752bbf8610b47c57b8c8592230dc575\npublic key: 045f751d820a69524eb71d48ddc6a231ba019b1461f58b0266cbbec617f9e80c6e573582b37014ce7ba7eaf9031265c5f022d8cb286f2194344f207eaa44bb51af (uncompressed)\nprivate key: 20f5df9cba8251e90a66d3aa1ca2849b12eaca135abb837671ac4a2bc2014e2b (hex)\nwif: 5J4oWdwA5mSCP4GVWF237zgYK4h1csD2PfrmK3uh3YcRFSWZ2H1\npassphrase: Je\nstarted: 2013-11-19 20:12:25\nsolved: 2013-11-20 03:52:13 (7h 39m)\ntransactions: 2\n\tfunding\t2013-11-19 20:12:25\t0.1 BTC\t66e4f6fdf399ce95804347fc4bdbd9e35de7d4044e2cfcb3b51d44db9522f00b\n\tclaim\t2013-11-20 03:52:13\t0.1 BTC\t1384234046c03e8dfcb868aa68b82df29078dcdda01e243fe006e4e0793b8cd8\nclaim: https://blockstream.info/tx/1384234046c03e8dfcb868aa68b82df29078dcdda01e243fe006e4e0793b8cd8\nexplorer: https://blockstream.info/address/1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn\nsource: https://keybase.io/warp",
+    tool: "warp/challenge_1\tsolved\t0.1 BTC\t1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn\nchain: bitcoin  address kind: p2pkh\nhash160: bdfe0236c752bbf8610b47c57b8c8592230dc575\npublic key: 045f751d820a69524eb71d48ddc6a231ba019b1461f58b0266cbbec617f9e80c6e573582b37014ce7ba7eaf9031265c5f022d8cb286f2194344f207eaa44bb51af (uncompressed)\nprivate key: 20f5df9cba8251e90a66d3aa1ca2849b12eaca135abb837671ac4a2bc2014e2b (hex)\nwif: 5J4oWdwA5mSCP4GVWF237zgYK4h1csD2PfrmK3uh3YcRFSWZ2H1\npassphrase: Je\nstarted: 2013-11-19 20:12:25\nsolved: 2013-11-20 03:52:13 (7h 39m)\ntransactions: 2\n\tfunding\t2013-11-19 20:12:25\t0.1 BTC\t66e4f6fdf399ce95804347fc4bdbd9e35de7d4044e2cfcb3b51d44db9522f00b\n\tclaim\t2013-11-20 03:52:13\t0.1 BTC\t1384234046c03e8dfcb868aa68b82df29078dcdda01e243fe006e4e0793b8cd8\nclaim: https://blockstream.info/tx/1384234046c03e8dfcb868aa68b82df29078dcdda01e243fe006e4e0793b8cd8\nhints: 1\n\tofficial\t-\tthis passphrase is 2 random alphanumeric characters, such as 'X9'.\tsource: https://keybase.io/warp\tconfirmation: https://web.archive.org/web/20140328141542/https://keybase.io/warp (Wayback capture of the challenge page)\nexplorer: https://blockstream.info/address/1JKb1617p68H5MPkoNaMtaJCqKDU3h8qSn\nsource: https://keybase.io/warp",
   },
   {
     id: "hash_collision/sha1",
@@ -284,7 +284,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
     source: "https://gsmg.io/puzzle",
     transactions: 3,
-    tool: "gsmg\tunsolved\t1.25364181 BTC\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe\nchain: bitcoin  address kind: p2pkh\nhash160: a9553269572a317e39f0f518cb87c1a0ee1dbae4\npublic key: 04f4d1bbd91e65e2a019566a17574e97dae908b784b388891848007e4f55d5a4649c73d25fc5ed8fd7227cab0be4e576c0c6404db5aa546286563e4be12bf33559 (uncompressed)\nprivate key: unknown\nstarted: 2019-04-13 16:32:40\ntransactions: 3\n\tfunding\t2019-04-13 16:32:40\t5 BTC\t73e48ff571a7e9a4387574a50cf2fcb7b21b6ea5702c777a035664df57cbce02\n\tdecrease\t2020-05-11 20:02:50\t2.5 BTC\t2aa9a4a90be819d5122d70c993280785a0508f163521e7b38cebb4db0b071b13\n\tdecrease\t2024-04-24 21:47:27\t1.25 BTC\t88cdb3cdca12b471551b1b26188508a14ca5fd8a415223ffb7c190381c9b9df3\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/puzzle.png\nhints: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png\nasset source: https://gsmg.io/puzzle\nexplorer: https://blockstream.info/address/1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe\nsource: https://gsmg.io/puzzle",
+    tool: "gsmg\tunsolved\t1.25364181 BTC\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe\nchain: bitcoin  address kind: p2pkh\nhash160: a9553269572a317e39f0f518cb87c1a0ee1dbae4\npublic key: 04f4d1bbd91e65e2a019566a17574e97dae908b784b388891848007e4f55d5a4649c73d25fc5ed8fd7227cab0be4e576c0c6404db5aa546286563e4be12bf33559 (uncompressed)\nprivate key: unknown\nstarted: 2019-04-13 16:32:40\ntransactions: 3\n\tfunding\t2019-04-13 16:32:40\t5 BTC\t73e48ff571a7e9a4387574a50cf2fcb7b21b6ea5702c777a035664df57cbce02\n\tdecrease\t2020-05-11 20:02:50\t2.5 BTC\t2aa9a4a90be819d5122d70c993280785a0508f163521e7b38cebb4db0b071b13\n\tdecrease\t2024-04-24 21:47:27\t1.25 BTC\t88cdb3cdca12b471551b1b26188508a14ca5fd8a415223ffb7c190381c9b9df3\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/puzzle.png\nhint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png\nasset source: https://gsmg.io/puzzle\nexplorer: https://blockstream.info/address/1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe\nsource: https://gsmg.io/puzzle",
   },
   {
     id: "movie_enigma",
@@ -464,7 +464,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "f3d44c8c8ffc",
+  dataVersion: "243718a6b923",
   total: 333,
   solved: 131,
   unsolved: 93,

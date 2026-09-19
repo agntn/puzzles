@@ -1,4 +1,4 @@
-import type { Assets, Chain, Entropy, KeyData, Puzzle } from "../../../src/index.ts";
+import type { Assets, Chain, Entropy, Hint, KeyData, Puzzle } from "../../../src/index.ts";
 import { formatPrize } from "./format.ts";
 import { toSample, type LandingSample, type SampleLibrary } from "./samples.ts";
 
@@ -24,6 +24,16 @@ export interface AssetLink {
   readonly image: boolean;
 }
 
+/** One hint as the page prints it: who gave it, what it says, and the two links behind it. */
+export interface HintRow {
+  readonly kind: string;
+  readonly text: string;
+  readonly date: string | undefined;
+  readonly source: string;
+  readonly confirmation: string;
+  readonly note: string | undefined;
+}
+
 /** Everything a puzzle page shows: the landing sample plus the parts the panels leave out. */
 export interface PuzzleView extends LandingSample {
   readonly name: string;
@@ -32,6 +42,7 @@ export interface PuzzleView extends LandingSample {
   readonly transactionRows: readonly TransactionRow[];
   readonly assets: readonly AssetLink[];
   readonly assetSource: string | undefined;
+  readonly hints: readonly HintRow[];
   readonly solverName: string | undefined;
   readonly solverUrl: string | undefined;
   readonly claimUrl: string | undefined;
@@ -161,6 +172,17 @@ function assetLinks(collection: string, assets: Assets | undefined): AssetLink[]
   );
 }
 
+function hintRow(hint: Hint): HintRow {
+  return {
+    kind: hint.kind,
+    text: hint.text,
+    date: hint.date,
+    source: hint.source,
+    confirmation: hint.confirmation.url,
+    note: hint.confirmation.description,
+  };
+}
+
 /**
  * Reads one puzzle into everything its page renders. Plain data, safe for the Nuxt payload.
  *
@@ -187,6 +209,7 @@ export function toPuzzleView(library: ViewLibrary, puzzle: Puzzle, tool: string)
     })),
     assets: assetLinks(puzzle.collection(), assets),
     assetSource: assets?.source_url,
+    hints: puzzle.hints().map(hintRow),
     solverName: solver?.name,
     solverUrl: solver?.profiles?.[0]?.url,
     claimUrl: puzzle.claimExplorerUrl(),

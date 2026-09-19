@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Added
+
+- `hints` on a puzzle record: `official(text, source, confirmation)` for what the author published and `community(…)` for what anyone else said, right or not. Every hint names the URL it was published at and a `confirmation(url, description?)` that shows the source said it, an archive capture, a reply or a transaction, and the data gate refuses a hint whose text spans lines, whose URLs are not web URLs, or whose confirmation repeats its source. `puzzle.hints()` answers the list, `toJSON()` carries it as `hints`, and `puzzles_show` prints `hints: N` with one tab-separated line per hint. The six WarpWallet records carry the hint Keybase printed next to each wallet, confirmed by Wayback captures. The hint files under `assets/` print as `hint assets:` now, so the two lines do not share a label.
+
 ### Changed
 
 - Derive addresses, decode WIFs and walk seed paths through `@agntn/keys` instead of local secp256k1, hash and Base58 code. `@scure/bip32` and `@scure/bip39` leave the dependencies, `@noble/curves` and `@scure/base` stay only for the BIP38 test helper. A WIF now decodes against the chain of its record, so a Litecoin WIF verifies instead of failing on the Bitcoin version byte, and an Ethereum `derivedAddress` carries the EIP-55 checksum. A Decred seed answers `unavailable`, because keys derives no Decred HD wallet.

@@ -65,7 +65,7 @@ export const facts = {
     show: {
       name: "puzzles_show",
       title: "Show Puzzle",
-      description: "Show one puzzle's address, status, key material, and explorer links.",
+      description: "Show one puzzle's address, status, key material, hints, and explorer links.",
       promptSnippet: "Use puzzles_show to inspect a single puzzle by identifier.",
       promptGuidelines: ["Identifiers are collection/name, for example b1000/90, or gsmg."],
       openWorld: false,
