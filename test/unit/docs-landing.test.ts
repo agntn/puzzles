@@ -75,11 +75,11 @@ describe("docs landing fixtures", () => {
     expect(facts.hints).toEqual([]);
   });
 
-  it("carry the hints every puzzle of the collection shares", async () => {
-    const library = await import("../../src/index.ts");
-    const b1000 = await library.requireCollection("b1000");
+  it("carry the hints every puzzle of the collection shares", () => {
+    const b1000 = FACTS_STATIC.find((row) => row.key === "b1000");
 
-    expect(b1000.hints).toHaveLength(1);
-    expect(collectionFacts(b1000).hints).toEqual(b1000.hints);
+    expect(b1000?.hints.map((hint) => [hint.kind, hint.source])).toEqual([
+      ["official", "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941"],
+    ]);
   });
 });
