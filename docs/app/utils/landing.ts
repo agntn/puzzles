@@ -494,7 +494,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "7b7a720a189d",
+  dataVersion: "782d41299baf",
   total: 334,
   solved: 132,
   unsolved: 93,
@@ -689,7 +689,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "ledger_donjon",
     author: "Ledger Donjon",
-    authorUrl: "https://www.ledger.com/blog/capture-the-fortress",
+    authorUrl: "https://www.ledger.com/blog/Capture-the-Fortress",
     total: 1,
     statuses: { solved: 1 },
     chains: ["bitcoin"],

@@ -113,6 +113,7 @@ export default defineNuxtConfig({
         "lucide:loader-circle",
         "lucide:plus",
         "lucide:rabbit",
+        "lucide:scissors",
         "lucide:search",
         "lucide:shield-alert",
         "lucide:split",

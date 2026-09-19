@@ -9,7 +9,7 @@ export class LedgerDonjonCollection extends NamedCollection {
 
   /** Who published the challenges. */
   static readonly author = party("Ledger Donjon", {
-    profiles: [profile("website", "https://www.ledger.com/blog/capture-the-fortress")],
+    profiles: [profile("website", "https://www.ledger.com/blog/Capture-the-Fortress")],
   });
 
   /** Every puzzle in this collection. */
