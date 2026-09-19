@@ -71,6 +71,16 @@ describe.concurrent("puzzles CLI", () => {
     ]);
   });
 
+  it("dates a hint the author tweeted and names the page that links it", async () => {
+    const output = await puzzles("hints", "zden/demobit_2018");
+
+    expect(output.split("\n")).toEqual([
+      "zden/demobit_2018: 1 hint",
+      "hints: 1",
+      "\tofficial\t2018-02-21 11:38:21\tHint #1 for the unsolved Demobit puzzle is the hash of inner data block with lines overlap. It is not the hash of the private key! SHA-256: 1c10494cf872ac2b896f52b2c93f58c23049f5be9455fef3ed4f9d9bf84fe600\tsource: https://twitter.com/Zd3N/status/966275899757879298\tconfirmation: https://web.archive.org/web/20180316114954/http://crypto.haluska.sk/ (Wayback capture of the puzzle page, which links Hint #1 to this tweet)",
+    ]);
+  });
+
   it("hands a script the collection's hint, which the record alone leaves out", async () => {
     const record = await json<{ readonly hints?: readonly unknown[] }>(
       "show",

@@ -28,6 +28,7 @@ export const zdenPuzzleCodexProtocol = ethereumPuzzle({
   ],
   assets: assets({
     puzzle: "codex_protocol/puzzle.png",
+    hints: ["codex_protocol/hint_1.png", "codex_protocol/hint_2.png"],
     sourceUrl: "https://crypto.haluska.sk/CodexPuzzle.png",
   }),
 });

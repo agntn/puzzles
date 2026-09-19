@@ -51,6 +51,7 @@ export const zdenPuzzleDecredJanus = decredPuzzle({
   ],
   assets: assets({
     puzzle: "decred_janus/puzzle.svg",
+    hints: ["decred_janus/hint.svg"],
     sourceUrl: "https://crypto.haluska.sk/decred_tree.svg",
   }),
 });
