@@ -14,6 +14,7 @@ import { balanceApiPath, balanceText } from "../../composables/useBalance";
 import { COLLECTIONS, STATUSES } from "../../utils/puzzles";
 import { WALK } from "../../utils/landing";
 import { toPuzzleView, type PuzzleView } from "../../utils/puzzle-view";
+import { statusCountLabels } from "../../../../src/core/utils.ts";
 import { fetchErrorData, formatPrize, shellArg, shorten, verdictLabel } from "../../utils/format";
 
 type Operation = "show" | "list" | "verify" | "balance" | "collections" | "stats";
@@ -116,22 +117,6 @@ function failure(error: unknown): ErrorAnswer {
 
 function firstText(result: { content: readonly { text: string }[] }): string {
   return result.content.map((part) => part.text).join("");
-}
-
-/**
- * `83 solved · 77 open · 96 swept`: the two poles always, the other statuses when the collection has any.
- *
- * @param {CollectionSummary} row - The collection summary.
- * @returns {string} The counts joined for the row.
- */
-function collectionCounts(row: CollectionSummary): string {
-  return [
-    `${row.solved} solved`,
-    `${row.unsolved} open`,
-    ...(["claimed", "swept", "expired"] as const)
-      .filter((status) => row[status] > 0)
-      .map((status) => `${row[status]} ${status}`),
-  ].join(" · ");
 }
 
 async function computeShow(trimmed: string): Promise<ShowAnswer> {
@@ -578,13 +563,15 @@ const shareLink = computed(() => {
             <li
               v-for="row in answer.rows"
               :key="row.key"
-              class="grid grid-cols-[7rem_3rem_1fr] gap-3 px-4 py-2.5 font-mono text-[12px] sm:grid-cols-[8rem_3rem_14rem_1fr]"
+              class="grid grid-cols-[7rem_3rem_1fr] gap-3 px-4 py-2.5 font-mono text-[12px] sm:grid-cols-[8rem_3rem_16rem_1fr]"
             >
               <NuxtLink :to="`/collections/${row.key}`" class="text-highlighted hover:underline">{{
                 row.key
               }}</NuxtLink>
               <span class="text-muted">{{ row.total }}</span>
-              <span class="hidden text-dimmed sm:block">{{ collectionCounts(row) }}</span>
+              <span class="hidden text-dimmed sm:block">{{
+                statusCountLabels(row).join(" · ")
+              }}</span>
               <span class="truncate text-muted">{{ row.author ?? "unknown" }}</span>
             </li>
           </ol>

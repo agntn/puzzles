@@ -372,21 +372,30 @@ export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = 
 }
 
 /**
- * Formats a collection summary as the one discovery row the CLI and the tools share: the solved
- * and unsolved counts always, then claimed, swept and expired when the collection has any.
+ * The count labels of a collection row: solved and unsolved always, then claimed, swept and
+ * expired when the collection has any, so a reader can add them up to the total.
  *
  * @param {CollectionSummary} summary - The collection summary.
- * @returns {string} `key: N puzzles, N solved, N unsolved, N swept, by author`.
+ * @returns {string[]} `83 solved`, `77 unsolved`, `96 swept`.
  */
-export function formatCollection(summary: CollectionSummary): string {
-  const counts = [
+export function statusCountLabels(summary: CollectionSummary): string[] {
+  return [
     `${summary.solved} solved`,
     `${summary.unsolved} unsolved`,
     ...[Status.Claimed, Status.Swept, Status.Expired]
       .filter((status) => summary[status] > 0)
       .map((status) => `${summary[status]} ${status}`),
   ];
-  return `${summary.key}: ${summary.total} puzzles, ${counts.join(", ")}, by ${summary.author ?? "unknown"}`;
+}
+
+/**
+ * Formats a collection summary as the one discovery row the CLI and the tools share.
+ *
+ * @param {CollectionSummary} summary - The collection summary.
+ * @returns {string} `key: N puzzles, N solved, N unsolved, N swept, by author`.
+ */
+export function formatCollection(summary: CollectionSummary): string {
+  return `${summary.key}: ${summary.total} puzzles, ${statusCountLabels(summary).join(", ")}, by ${summary.author ?? "unknown"}`;
 }
 
 /**
