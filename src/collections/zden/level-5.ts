@@ -1,5 +1,5 @@
 import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { assets, funding, increase, p2pkh } from "../../core/parts.ts";
+import { assets, confirmation, funding, increase, official, p2pkh } from "../../core/parts.ts";
 
 /** Puzzle `zden/level_5`. */
 export const zdenPuzzleLevel5 = bitcoinPuzzle({
@@ -34,4 +34,31 @@ export const zdenPuzzleLevel5 = bitcoinPuzzle({
     puzzle: "level_5/puzzle.png",
     sourceUrl: "https://crypto.haluska.sk/crypto5fix.png",
   }),
+  hints: [
+    official(
+      "Sum of two consecutive following rectangles areas creates one byte of the private key. Apply more operations to obtain the results in byte range.",
+      "https://twitter.com/Zd3N/status/1077146640090316800",
+      confirmation(
+        "https://web.archive.org/web/20220129183939/https://twitter.com/Zd3N/status/1077146640090316800",
+        "Wayback capture of the tweet, the BTCrypto L5 part of a hints bundle",
+      ),
+      { date: "2018-12-24 10:19:06" },
+    ),
+    official(
+      "The new corrected version including new hints! UNSOLVED for over 3 years because the original release was uncomplete! Relaunched on 12th of December 2021. My excuses to everyone!",
+      "https://crypto.haluska.sk/",
+      confirmation(
+        "https://web.archive.org/web/20220124172559/https://crypto.haluska.sk/",
+        "Wayback capture of the puzzle page",
+      ),
+    ),
+    official(
+      "(clarity edit: sum of two ~~consecutive~~ following rectangles...)",
+      "https://crypto.haluska.sk/",
+      confirmation(
+        "https://web.archive.org/web/20220124172559/https://crypto.haluska.sk/",
+        "Wayback capture of the puzzle page, which strikes consecutive out of the 2018 hint",
+      ),
+    ),
+  ],
 });
