@@ -1,3 +1,43 @@
+## v0.20.1
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.20.0...v0.20.1)
+
+### 🚀 Enhancements
+
+- **collections:** Add movie_enigma ([#178](https://github.com/agntn/puzzles/pull/178))
+- **puzzle:** Record hints and what confirms them ([#183](https://github.com/agntn/puzzles/pull/183))
+- **collections:** B1000 carries its author's hint ([#185](https://github.com/agntn/puzzles/pull/185))
+
+### 🩹 Fixes
+
+- **tools:** Show the whole record in puzzles_show ([#162](https://github.com/agntn/puzzles/pull/162))
+- **chains:** Check txids through @agntn/chains ([#163](https://github.com/agntn/puzzles/pull/163))
+- **cli:** Print domain errors as one line ([#164](https://github.com/agntn/puzzles/pull/164))
+- **parts:** Make the Key builder immutable ([#166](https://github.com/agntn/puzzles/pull/166))
+- **puzzle:** Freeze the record a factory builds ([#170](https://github.com/agntn/puzzles/pull/170))
+- **dataset:** Memoized views refuse a rewrite ([#173](https://github.com/agntn/puzzles/pull/173))
+- **collection:** Resolve only canonical queries ([#176](https://github.com/agntn/puzzles/pull/176))
+- **cli:** Keep the verify crypto out of --help ([#179](https://github.com/agntn/puzzles/pull/179))
+- **tools:** Link the hints and the solver asset ([#180](https://github.com/agntn/puzzles/pull/180))
+
+### 💅 Refactors
+
+- **verify:** Let @agntn/keys derive addresses ([#165](https://github.com/agntn/puzzles/pull/165))
+
+### 🏡 Chore
+
+- Add `renovate.json` ([9a47cd9](https://github.com/agntn/puzzles/commit/9a47cd9))
+- Remove `CLAUDE.md` ([da6bde5](https://github.com/agntn/puzzles/commit/da6bde5))
+
+### 🤖 CI
+
+- **publish:** Install the docs before pnpm test ([#161](https://github.com/agntn/puzzles/pull/161))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## [Unreleased]
 
 ### Added
