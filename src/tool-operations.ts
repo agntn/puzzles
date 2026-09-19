@@ -7,7 +7,7 @@ import {
 } from "./core/dataset.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/puzzle.ts";
-import { collectionKeys } from "./core/registry.ts";
+import { collectionKeys, requireCollection } from "./core/registry.ts";
 import {
   formatCollection,
   formatPrizeTotals,
@@ -219,7 +219,8 @@ export async function collectionsTool(): Promise<ToolResult> {
  */
 export async function showTool(id: string): Promise<ToolResult> {
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
-  return text(formatPuzzleRecord(puzzle), { puzzle });
+  const collection = await requireCollection(puzzle.collection());
+  return text(formatPuzzleRecord(puzzle, collection.hints), { puzzle });
 }
 
 /**

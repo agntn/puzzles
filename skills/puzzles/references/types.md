@@ -81,7 +81,13 @@ official(text, source, confirmation(url, description?), { date? }); // from the 
 community(text, source, confirmation(url, description?), { date? }); // from anyone else, right or not
 ```
 
-A hint's `source` is where it was published and `confirmation` is what shows the source said it, an archive capture, the author's reply or a transaction. Neither says the hint is right; `kind` says who gave it.
+A hint's `source` is where it was published and `confirmation` is what shows the source said it, an archive capture, the author's reply or a transaction. Neither says the hint is right; `kind` says who gave it. A hint shared by a whole collection sits on the collection once, `super(key, author, puzzles, hints)`, and a puzzle inherits it:
+
+```ts
+collection.hints; // readonly Hint[], the shared ones
+collection.hintsFor(query); // the collection's, then the puzzle's own
+collection.hintsById(id);
+```
 
 Key material chains from whichever starter fits, then adds what else is known:
 

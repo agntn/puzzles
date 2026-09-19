@@ -4,6 +4,7 @@ import {
   bitcoinPuzzle,
   community,
   confirmation,
+  official,
   p2pkh,
   seed,
 } from "../../src/index.ts";
@@ -77,6 +78,28 @@ describe("puzzles_show text", () => {
     expect(text).toContain("hints: 1");
     expect(text).toContain(
       "\tcommunity\t2026-01-03 12:00:00\tThe top is a decoy.\tsource: https://example.com/thread\tconfirmation: https://archive.ph/thread",
+    );
+    expect(text.some((line) => line.startsWith("collection hints:"))).toBe(false);
+  });
+
+  it("prints the hints a collection shares under their own label", () => {
+    const puzzle = bitcoinPuzzle({
+      id: "fixture/plain",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+    });
+    const shared = official(
+      "Start at the top.",
+      "https://example.com/puzzle",
+      confirmation("https://web.archive.org/web/2026/https://example.com/puzzle"),
+    );
+    const text = formatPuzzleRecord(puzzle, [shared]).split("\n");
+
+    expect(text).toContain("collection hints: 1");
+    expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
+    expect(text.indexOf("collection hints: 1")).toBeLessThan(
+      text.findIndex((line) => line.startsWith("explorer:")),
     );
   });
 

@@ -24,9 +24,13 @@ export interface AssetLink {
   readonly image: boolean;
 }
 
-/** One hint as the page prints it: who gave it, what it says, and the two links behind it. */
+/**
+ * One hint as the page prints it: who gave it, what it says, the two links behind it, and whether
+ * the whole collection shares it.
+ */
 export interface HintRow {
   readonly kind: string;
+  readonly shared: boolean;
   readonly text: string;
   readonly date: string | undefined;
   readonly source: string;
@@ -172,9 +176,10 @@ function assetLinks(collection: string, assets: Assets | undefined): AssetLink[]
   );
 }
 
-function hintRow(hint: Hint): HintRow {
+function hintRow(hint: Hint, shared: boolean): HintRow {
   return {
     kind: hint.kind,
+    shared,
     text: hint.text,
     date: hint.date,
     source: hint.source,
@@ -189,9 +194,15 @@ function hintRow(hint: Hint): HintRow {
  * @param {ViewLibrary} library - `secretOf`, `verifyPuzzle` and `transactionExplorerUrl`.
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
- * @returns {PuzzleView} The sample plus key rows, transactions, assets, solver and the JSON.
+ * @param {readonly Hint[]} [shared] - The hints of the puzzle's collection, listed ahead of its own.
+ * @returns {PuzzleView} The sample plus key rows, transactions, assets, hints, solver and the JSON.
  */
-export function toPuzzleView(library: ViewLibrary, puzzle: Puzzle, tool: string): PuzzleView {
+export function toPuzzleView(
+  library: ViewLibrary,
+  puzzle: Puzzle,
+  tool: string,
+  shared: readonly Hint[] = [],
+): PuzzleView {
   const sample = toSample(library, puzzle, tool);
   const assets = puzzle.assets();
   const solver = puzzle.solver();
@@ -209,7 +220,10 @@ export function toPuzzleView(library: ViewLibrary, puzzle: Puzzle, tool: string)
     })),
     assets: assetLinks(puzzle.collection(), assets),
     assetSource: assets?.source_url,
-    hints: puzzle.hints().map(hintRow),
+    hints: [
+      ...shared.map((hint) => hintRow(hint, true)),
+      ...puzzle.hints().map((hint) => hintRow(hint, false)),
+    ],
     solverName: solver?.name,
     solverUrl: solver?.profiles?.[0]?.url,
     claimUrl: puzzle.claimExplorerUrl(),

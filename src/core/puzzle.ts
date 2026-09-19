@@ -9,6 +9,7 @@ import {
   type Hint,
   type Key,
   type KeyData,
+  NO_HINTS,
   type Party,
   type Pubkey,
   secretOf,
@@ -62,9 +63,6 @@ const NO_TRANSACTIONS: readonly Transaction[] = Object.freeze([]);
 
 /** The asset list of a puzzle that ships no files. */
 const NO_ASSET_LINKS: readonly AssetLink[] = Object.freeze([]);
-
-/** The hint list of a puzzle that recorded none. */
-const NO_HINTS: readonly Hint[] = Object.freeze([]);
 
 const ASSET_ROOT = "https://raw.githubusercontent.com/agntn/puzzles/main";
 
@@ -239,8 +237,9 @@ export abstract class Puzzle {
   }
 
   /**
-   * Hints published about the puzzle, in record order: the author's as `official`, anyone else's
-   * as `community`, each with where it was said and what confirms that.
+   * Hints published about this puzzle alone, in record order: the author's as `official`, anyone
+   * else's as `community`, each with where it was said and what confirms that. The ones shared by
+   * the whole collection sit on `Collection.hints`, and `Collection.hintsById()` joins the two.
    *
    * @returns {readonly Hint[]} The hints, or an empty list when the record has none.
    */

@@ -108,6 +108,9 @@ export interface Hint {
   readonly text: string;
 }
 
+/** The hint list of a puzzle or a collection that recorded none, frozen like every other part. */
+export const NO_HINTS: readonly Hint[] = Object.freeze([]);
+
 /** Where external entropy came from. */
 export interface EntropySource {
   readonly description?: string;

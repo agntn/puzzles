@@ -266,6 +266,13 @@ describe("collection class data", () => {
 
   it("keeps every hint on one line with a source and a separate confirmation", () => {
     expect(puzzles.flatMap((puzzle) => hintRecordProblems(puzzle))).toEqual([]);
+    expect(
+      registered.flatMap((collection) =>
+        collection.hints.flatMap((hint, index) =>
+          hintProblems(hint).map((problem) => `${collection.key}: hint ${index + 1} ${problem}`),
+        ),
+      ),
+    ).toEqual([]);
   });
 
   it("names every way a hint can fail the data gate", () => {
@@ -295,6 +302,7 @@ describe("collection class data", () => {
   it("hands back every record frozen", () => {
     expect(collect(mutablePartProblem)).toEqual([]);
     expect(registered.filter((collection) => !Object.isFrozen(collection.author))).toEqual([]);
+    expect(registered.filter((collection) => !Object.isFrozen(collection.hints))).toEqual([]);
   });
 
   it("serializes without null placeholders", () => {

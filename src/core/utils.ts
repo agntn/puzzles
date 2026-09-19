@@ -6,6 +6,7 @@ import {
   type EntropySource,
   type Hint,
   type KeyData,
+  NO_HINTS,
   type Party,
   type Passphrase,
   type Pubkey,
@@ -263,24 +264,27 @@ function formatHint(hint: Hint): string {
 }
 
 /**
- * The hint count, then one line per hint in record order, or nothing for a record without any.
+ * The hint count under its label, then one line per hint in record order, or nothing for an
+ * empty list.
  *
- * @param {Puzzle} puzzle - The puzzle.
+ * @param {string} label - `collection hints` for the inherited ones, `hints` for the puzzle's own.
+ * @param {readonly Hint[]} hints - The hints.
  * @returns {string[]} The count line and the hint lines.
  */
-function formatHints(puzzle: Puzzle): string[] {
-  const hints = puzzle.hints();
-  return hints.length === 0 ? [] : [`hints: ${hints.length}`, ...hints.map(formatHint)];
+function formatHints(label: string, hints: readonly Hint[]): string[] {
+  return hints.length === 0 ? [] : [`${label}: ${hints.length}`, ...hints.map(formatHint)];
 }
 
 /**
  * Formats a puzzle as the lines `puzzles_show` prints: the summary row, then every field the
- * record has as `name: value`, so a client that only sees the text still has the record.
+ * record has as `name: value`, so a client that only sees the text still has the record. The
+ * hints the collection shares print as `collection hints` ahead of the puzzle's own.
  *
  * @param {Puzzle} puzzle - The puzzle.
+ * @param {readonly Hint[]} [inherited] - The hints of the puzzle's collection.
  * @returns {string} The record as lines.
  */
-export function formatPuzzleRecord(puzzle: Puzzle): string {
+export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = NO_HINTS): string {
   const address = puzzle.address();
   const key = puzzle.keyData();
   const bits = key?.bits;
@@ -300,7 +304,8 @@ export function formatPuzzleRecord(puzzle: Puzzle): string {
     ...formatTransactions(puzzle),
     ...field("claim", puzzle.claimExplorerUrl()),
     ...formatAssets(puzzle),
-    ...formatHints(puzzle),
+    ...formatHints("collection hints", inherited),
+    ...formatHints("hints", puzzle.hints()),
     `explorer: ${puzzle.explorerUrl()}`,
     `source: ${puzzle.sourceUrl()}`,
     ...field("key range", puzzle.keyRange(), (range) => formatRange(range, bits)),

@@ -228,6 +228,8 @@ const { copied, copy } = useCopied();
           <li v-for="(hint, index) in view.hints" :key="index">
             <p class="text-sm text-highlighted">
               <span class="puzzles-chip me-2 font-mono text-[11px]">{{ hint.kind }}</span
+              ><span v-if="hint.shared" class="puzzles-chip me-2 font-mono text-[11px]"
+                >whole collection</span
               >{{ hint.text }}
             </p>
             <p class="mt-1 font-mono text-[11px] text-dimmed">
