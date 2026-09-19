@@ -47,8 +47,35 @@ export interface PuzzleData {
   readonly transactions?: readonly Transaction[];
 }
 
+/** One file a puzzle ships: its role, its name under `assets/<collection>/`, and where it lives. */
+export interface AssetLink {
+  readonly file: string;
+  readonly kind: "puzzle" | "hint" | "solver";
+  readonly path: string;
+  readonly url: string;
+}
+
 /** The transaction list of a puzzle that recorded none, frozen like every other part. */
 const NO_TRANSACTIONS: readonly Transaction[] = Object.freeze([]);
+
+/** The asset list of a puzzle that ships no files. */
+const NO_ASSET_LINKS: readonly AssetLink[] = Object.freeze([]);
+
+const ASSET_ROOT = "https://raw.githubusercontent.com/agntn/puzzles/main";
+
+/**
+ * One asset link, with the path encoded segment by segment for the URL, so a file name that
+ * carries a `#` or a `?` still addresses the file rather than a fragment or a query.
+ *
+ * @param {AssetLink["kind"]} kind - The file's role on the record.
+ * @param {string} file - The file name under the collection's asset directory.
+ * @param {string} path - The path from the repository root.
+ * @returns {AssetLink} The link.
+ */
+function assetLink(kind: AssetLink["kind"], file: string, path: string): AssetLink {
+  const url = `${ASSET_ROOT}/${path.split("/").map(encodeURIComponent).join("/")}`;
+  return { kind, file, path, url };
+}
 
 const SOLVE_TIME_UNITS = [
   [365 * 24 * 60 * 60, "y"],
@@ -313,30 +340,45 @@ export abstract class Puzzle {
   }
 
   /**
-   * Path from the repository root of one of the record's files, the primary asset by default.
+   * Every file the record ships, the puzzle image first, then the hints, then the solver's notes,
+   * each with its path from the repository root and its canonical remote URL.
    *
-   * @param {string} [file] - A file name from `assets()`: the puzzle, a hint or the solver's notes.
-   * @returns {string | undefined} The path, or nothing when the record has no such file.
+   * @returns {readonly AssetLink[]} The files, or an empty list when the record ships none.
    */
-  assetPath(file: string): string;
-  assetPath(file?: string): string | undefined;
-  assetPath(file: string | undefined = this.assets()?.puzzle): string | undefined {
-    return file === undefined ? undefined : `assets/${this.collection()}/${file}`;
+  assetLinks(): readonly AssetLink[] {
+    const assets = this.assets();
+    if (assets === undefined) {
+      return NO_ASSET_LINKS;
+    }
+    const files: readonly (readonly [AssetLink["kind"], string | undefined])[] = [
+      ["puzzle", assets.puzzle],
+      ...(assets.hints ?? []).map((hint) => ["hint", hint] as const),
+      ["solver", assets.solver],
+    ];
+    const directory = `assets/${this.collection()}`;
+    return frozen(
+      files.flatMap(([kind, file]) =>
+        file === undefined ? [] : [assetLink(kind, file, `${directory}/${file}`)],
+      ),
+    );
   }
 
   /**
-   * Canonical remote URL of one of the record's files, the primary asset by default.
+   * Path from the repository root of the primary asset.
    *
-   * @param {string} [file] - A file name from `assets()`: the puzzle, a hint or the solver's notes.
-   * @returns {string | undefined} The URL, or nothing when the record has no such file.
+   * @returns {string | undefined} Path from the repository root of the primary asset.
    */
-  assetUrl(file: string): string;
-  assetUrl(file?: string): string | undefined;
-  assetUrl(file?: string): string | undefined {
-    const path = this.assetPath(file);
-    return path === undefined
-      ? undefined
-      : `https://raw.githubusercontent.com/agntn/puzzles/main/${path}`;
+  assetPath(): string | undefined {
+    return this.assetLinks().find((link) => link.kind === "puzzle")?.path;
+  }
+
+  /**
+   * Canonical remote URL of the primary asset.
+   *
+   * @returns {string | undefined} Canonical remote URL of the primary asset.
+   */
+  assetUrl(): string | undefined {
+    return this.assetLinks().find((link) => link.kind === "puzzle")?.url;
   }
 
   /**

@@ -14,7 +14,7 @@ import {
   type Shares,
   type Wif,
 } from "./parts.ts";
-import { type Puzzle, Status } from "./puzzle.ts";
+import { type AssetLink, type Puzzle, Status } from "./puzzle.ts";
 
 /**
  * Serializes a value as JSON, rendering `bigint` balances as decimal strings.
@@ -233,12 +233,14 @@ function formatAssets(puzzle: Puzzle): string[] {
   if (assets === undefined) {
     return [];
   }
+  const links = puzzle.assetLinks();
+  const url = (kind: AssetLink["kind"]): string | undefined =>
+    links.find((link) => link.kind === kind)?.url;
+  const hints = links.filter((link) => link.kind === "hint").map((link) => link.url);
   return [
-    ...field("asset", puzzle.assetUrl()),
-    ...field("hints", assets.hints, (hints) =>
-      hints.map((hint) => puzzle.assetUrl(hint)).join(", "),
-    ),
-    ...field("solver asset", assets.solver, (file) => puzzle.assetUrl(file)),
+    ...field("asset", url("puzzle")),
+    ...field("hints", hints.length === 0 ? undefined : hints, (list) => list.join(", ")),
+    ...field("solver asset", url("solver")),
     ...field("asset source", assets.source_url),
   ];
 }
