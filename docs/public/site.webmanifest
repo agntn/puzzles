@@ -1,7 +1,7 @@
 {
   "name": "@agntn/puzzles",
   "short_name": "puzzles",
-  "description": "Public crypto bounties and puzzles as typed records behind one library, a CLI and six agent tools",
+  "description": "Public crypto bounties and puzzles as typed records behind one library, a CLI and seven agent tools",
   "start_url": "/",
   "display": "browser",
   "background_color": "#0b0d10",
