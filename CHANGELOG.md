@@ -1,3 +1,27 @@
+## v0.20.2
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.20.1...v0.20.2)
+
+### 🚀 Enhancements
+
+- **docs:** Collection pages list their hints ([#186](https://github.com/agntn/puzzles/pull/186))
+- **collections:** Zden/level_5 hints ([#187](https://github.com/agntn/puzzles/pull/187))
+- **cli:** Add a hints command ([#188](https://github.com/agntn/puzzles/pull/188))
+- **collections:** Zden hints the author published ([#189](https://github.com/agntn/puzzles/pull/189))
+- **collections:** Zden solver images ([#192](https://github.com/agntn/puzzles/pull/192))
+- **collections:** Add ledger_donjon ([#193](https://github.com/agntn/puzzles/pull/193))
+
+### 🩹 Fixes
+
+- **dataset:** Collection rows count every status ([#190](https://github.com/agntn/puzzles/pull/190))
+- **tools:** Hints report the hint assets too ([#191](https://github.com/agntn/puzzles/pull/191))
+- **dataset:** Handle non-string puzzle ids ([#194](https://github.com/agntn/puzzles/pull/194))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.20.1
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.20.0...v0.20.1)
