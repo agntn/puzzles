@@ -28,6 +28,7 @@ export const zdenPuzzleNethemba = bitcoinPuzzle({
   ],
   assets: assets({
     puzzle: "nethemba/puzzle.png",
+    solver: "nethemba/solver.png",
     sourceUrl: "https://crypto.haluska.sk/crypto_nethemba.png",
   }),
 });

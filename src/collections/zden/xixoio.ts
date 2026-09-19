@@ -36,6 +36,7 @@ export const zdenPuzzleXixoio = ethereumPuzzle({
   ],
   assets: assets({
     puzzle: "xixoio/puzzle.png",
+    solver: "xixoio/solver.png",
     sourceUrl: "https://crypto.haluska.sk/xixoio_puzzle.png",
   }),
   hints: [
