@@ -34,8 +34,19 @@ describe("puzzles_show text", () => {
     expect(text).toContain(
       "asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/puzzle.png",
     );
-    expect(text).toContain("hints: follow_the_white_rabbit.png");
+    expect(text).toContain(
+      "hints: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
+    );
     expect(text.some((line) => line.startsWith("solved:"))).toBe(false);
+  });
+
+  it("links the solver's notes of a puzzle that ships no image", async () => {
+    const text = await lines("movie_enigma");
+
+    expect(text).toContain(
+      "solver asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/movie_enigma/solution.md",
+    );
+    expect(text.some((line) => line.startsWith("asset:"))).toBe(false);
   });
 
   it("prints every key representation a record carries", async () => {

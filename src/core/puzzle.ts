@@ -313,22 +313,27 @@ export abstract class Puzzle {
   }
 
   /**
-   * Path from the repository root of the primary asset.
+   * Path from the repository root of one of the record's files, the primary asset by default.
    *
-   * @returns {string | undefined} Path from the repository root of the primary asset.
+   * @param {string} [file] - A file name from `assets()`: the puzzle, a hint or the solver's notes.
+   * @returns {string | undefined} The path, or nothing when the record has no such file.
    */
-  assetPath(): string | undefined {
-    const path = this.assets()?.puzzle;
-    return path === undefined ? undefined : `assets/${this.collection()}/${path}`;
+  assetPath(file: string): string;
+  assetPath(file?: string): string | undefined;
+  assetPath(file: string | undefined = this.assets()?.puzzle): string | undefined {
+    return file === undefined ? undefined : `assets/${this.collection()}/${file}`;
   }
 
   /**
-   * Canonical remote URL of the primary asset.
+   * Canonical remote URL of one of the record's files, the primary asset by default.
    *
-   * @returns {string | undefined} Canonical remote URL of the primary asset.
+   * @param {string} [file] - A file name from `assets()`: the puzzle, a hint or the solver's notes.
+   * @returns {string | undefined} The URL, or nothing when the record has no such file.
    */
-  assetUrl(): string | undefined {
-    const path = this.assetPath();
+  assetUrl(file: string): string;
+  assetUrl(file?: string): string | undefined;
+  assetUrl(file?: string): string | undefined {
+    const path = this.assetPath(file);
     return path === undefined
       ? undefined
       : `https://raw.githubusercontent.com/agntn/puzzles/main/${path}`;

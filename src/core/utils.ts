@@ -222,6 +222,12 @@ function formatTransactions(puzzle: Puzzle): string[] {
   ];
 }
 
+/**
+ * Every asset as a URL, the hints and the solver's notes under the same root as the puzzle image.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {string[]} The asset lines.
+ */
 function formatAssets(puzzle: Puzzle): string[] {
   const assets = puzzle.assets();
   if (assets === undefined) {
@@ -229,8 +235,10 @@ function formatAssets(puzzle: Puzzle): string[] {
   }
   return [
     ...field("asset", puzzle.assetUrl()),
-    ...field("hints", assets.hints, (hints) => hints.join(", ")),
-    ...field("solver asset", assets.solver),
+    ...field("hints", assets.hints, (hints) =>
+      hints.map((hint) => puzzle.assetUrl(hint)).join(", "),
+    ),
+    ...field("solver asset", assets.solver, (file) => puzzle.assetUrl(file)),
     ...field("asset source", assets.source_url),
   ];
 }

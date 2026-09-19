@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- `puzzles_show` prints the hints and the solver's notes as URLs. They used to print as bare file names, `hints: follow_the_white_rabbit.png` next to an `asset:` line with the full raw GitHub URL, so a model that only sees the text had nowhere to fetch them from. `assetPath()` and `assetUrl()` take a file name from `assets()` and resolve it under the same root as the puzzle image.
 - `puzzles --help`, `-h` and an unknown command no longer load `@agntn/keys` and `@noble/curves`. citty resolves every subcommand to print the usage or to look for an alias, and the `verify` command imported the verification crypto at module scope. It imports it when it runs, the way `mcp` imports the SDK.
 - `NumericCollection` resolves a query only in the spelling its identifier uses. `Number()` used to read `b1000.get("0x47")`, `b1000.get(" 71 ")` and `b1000.get("71.0")` as puzzle 71 and `b1000.get("7e1")` as puzzle 70, so `require()`, `balance()` and `verify()` answered for a record the caller never named. A `NamedCollection` handed a non-string query answers `undefined` instead of throwing `TypeError: query.includes is not a function`.
 - `collectionSummaries()`, `datasetCollections()`, `dataset()` and `toJSON()` hand back frozen data. The memoized views used to freeze only the outer array, so an assignment to a summary row or a serialized record, or a push into a collection's `puzzles`, rewrote the export for every later reader while `dataVersion()` kept the old hash.

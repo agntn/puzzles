@@ -177,6 +177,10 @@ describe("puzzle record factories", () => {
     expect(puzzle.keyRange()).toEqual([1n, 1n]);
     expect(puzzle.claimTransaction()).toEqual(spec.transactions[0]);
     expect(puzzle.assetPath()).toBe("assets/fixture/puzzle.png");
+    expect(puzzle.assetPath("hint.txt")).toBe("assets/fixture/hint.txt");
+    expect(puzzle.assetUrl("hint.txt")).toBe(
+      "https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint.txt",
+    );
     expect(puzzle.formattedSolveTime()).toBe("0s");
     expect(puzzle.prizeCurrency()).toBe("TEST");
   });
