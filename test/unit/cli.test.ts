@@ -98,6 +98,14 @@ describe.concurrent("puzzles CLI", () => {
     await expect(puzzles("hints", "gsmg")).resolves.toBe("gsmg: no hints recorded");
   });
 
+  it("exits 1 on an unknown puzzle like show does", async () => {
+    await expect(failure("hints", "nope/1")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Puzzle not found: nope/1\n",
+    });
+  });
+
   it("lists a single collection filtered by status", async () => {
     const result = await json<readonly { readonly id: string; readonly status: string }[]>(
       "list",
