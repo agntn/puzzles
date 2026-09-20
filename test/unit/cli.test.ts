@@ -107,6 +107,39 @@ describe.concurrent("puzzles CLI", () => {
     });
   });
 
+  it("prints the comment in the Janus hint SVG, then the file", async () => {
+    const output = await puzzles("hints", "zden/decred_janus");
+    const hints = await json<Record<string, unknown>>("hints", "zden/decred_janus", "--json");
+
+    expect(output.split("\n")).toEqual([
+      "zden/decred_janus: 1 hint, 1 hint asset",
+      "hints: 1",
+      "\tofficial\t-\t33*bbb\tsource: https://crypto.haluska.sk/decred_tree_hint.svg\tconfirmation: https://web.archive.org/web/20181219152809/http://crypto.haluska.sk/decred_tree_hint.svg (Wayback capture of the hint SVG)",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred_janus/hint.svg",
+    ]);
+    expect(hints).toEqual({
+      hints: [
+        {
+          kind: "official",
+          text: "33*bbb",
+          source: "https://crypto.haluska.sk/decred_tree_hint.svg",
+          confirmation: {
+            url: "https://web.archive.org/web/20181219152809/http://crypto.haluska.sk/decred_tree_hint.svg",
+            description: "Wayback capture of the hint SVG",
+          },
+        },
+      ],
+      hintAssets: [
+        {
+          kind: "hint",
+          file: "decred_janus/hint.svg",
+          path: "assets/zden/decred_janus/hint.svg",
+          url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred_janus/hint.svg",
+        },
+      ],
+    });
+  });
+
   it("lists the hint files a record ships, in text and in JSON", async () => {
     const output = await puzzles("hints", "gsmg");
     const hints = await json<Record<string, unknown>>("hints", "gsmg", "--json");
