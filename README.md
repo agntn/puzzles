@@ -100,7 +100,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | ---------------- | ------: | ----------------------------------- | --------------------------------------- |
 | `b1000`          |     256 | bitcoin                             | Keys of 1 to 256 bits, one address each |
 | `rushwallet`     |      30 | bitcoin                             | Brainwallets from a 2014 contest        |
-| `zden`           |      15 | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                   |
+| `zden`           |      16 | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                   |
 | `arweave`        |      12 | arweave, ethereum                   | Tiamat's weave puzzles                  |
 | `warp`           |       6 | bitcoin                             | Keybase's scrypt brainwallet challenges |
 | `hash_collision` |       6 | bitcoin                             | Peter Todd's P2SH collision bounties    |
