@@ -67,7 +67,7 @@ pnpm test:packed # packs the tarball and runs every published entry without src/
 node src/cli.ts collections
 ```
 
-`node src/cli.ts collections` must list all fourteen collections. Node.js 24 or newer runs the TypeScript sources directly; no loader is required.
+`node src/cli.ts collections` must list all fifteen collections. Node.js 24 or newer runs the TypeScript sources directly; no loader is required.
 
 ## Known debt
 

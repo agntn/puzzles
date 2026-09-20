@@ -63,6 +63,7 @@ const expectedCollections = [
   "bitaps",
   "bitimage",
   "dug",
+  "genesis",
   "gsmg",
   "hash_collision",
   "ledger_donjon",
