@@ -88,7 +88,7 @@ puzzle?.address().value; // "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU"
 puzzle?.keyRange(); // [2n ** 70n, 2n ** 71n - 1n]
 
 verifyPuzzle(b1000.require(1)).verified; // true, key 1 derives its address
-(await stats()).unsolved; // 93
+(await stats()).unsolved; // 95
 (await b1000.require(71).balance()).totalUnits(); // 7.10190014 when I ran it, mempool.space decides
 ```
 

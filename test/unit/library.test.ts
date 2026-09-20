@@ -101,6 +101,8 @@ describe("lazy collection registry", () => {
       value: "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj",
     });
     expect(puzzle.startedAt()).toBe("2026-08-22 19:45:38");
+    expect(puzzle.preGenesis()).toBe(true);
+    expect(puzzle.toJSON().pre_genesis).toBe(true);
     expect(puzzle.status()).toBe(Status.Unsolved);
     expect(puzzle.prize()).toBeUndefined();
     expect(puzzle.key()).toBeUndefined();

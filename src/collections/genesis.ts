@@ -9,6 +9,7 @@ export const genesisBlock = bitcoinPuzzle({
   sourceUrl:
     "https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
   startedAt: "2026-08-22 19:45:38",
+  preGenesis: true,
   hints: [
     official(
       "I made a Bitcoin puzzle using information contained in the genesis block created by Satoshi to generate the wallet. The entropy is extremely low. I didn't even need to back anything up. Everything I needed was already in the genesis block. Good luck!",
