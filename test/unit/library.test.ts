@@ -8,6 +8,7 @@ import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash_collision.ts";
 import { LedgerDonjonCollection } from "../../src/collections/ledger_donjon.ts";
+import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MovieEnigmaCollection } from "../../src/collections/movie_enigma.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
@@ -47,6 +48,7 @@ const concreteClasses = [
   GsmgCollection,
   HashCollisionCollection,
   LedgerDonjonCollection,
+  LuckyLurkerCollection,
   MovieEnigmaCollection,
   RushwalletCollection,
   WarpCollection,
@@ -96,6 +98,57 @@ describe("lazy collection registry", () => {
     expect(await get("missing")).toBeUndefined();
     const foreign = [undefined, null, true, 71n, {}] as never[];
     expect(await Promise.all(foreign.map((id) => get(id)))).toEqual(foreign.map(() => undefined));
+  });
+
+  it("records the solved LuckyLurker Vault with its derived key and published answers", async () => {
+    const puzzle = await requirePuzzle("luckylurker/vault_1");
+
+    expect(puzzle.address().value).toBe("bc1q32e3dxcd0n2tlzdmchraf2057d0ax4xdwrk3jq");
+    expect(puzzle.status()).toBe(Status.Solved);
+    expect(puzzle.prize()).toBe(0.0008);
+    expect((await getCollection("luckylurker"))?.author.name).toBe("Paul Jones");
+    expect(puzzle.claimTransaction()).toEqual({
+      txid: "75e570a5ea243c492e2804916482f046b2392b463c51be15624e6e25a84119f7",
+      date: "2026-08-17 18:08:09",
+      amount: 0.00079638,
+      tx_type: "claim",
+    });
+    expect(puzzle.pubkey()?.value).toBe(
+      "024ad3b398bc9a95b4b8d44310e15a5355402dba3c784e60bf3b14821ca1622adb",
+    );
+    expect(puzzle.hints()).toHaveLength(12);
+    expect(puzzle.hints()[0]?.text).toBe("Word #1: Presence without permanence.");
+    expect(puzzle.hints()[0]?.answer).toEqual({
+      text: "visit",
+      source: "https://luckylurker.com/bitcoin-vault/",
+    });
+    expect(puzzle.hints()[11]?.date).toBe("2026-03-22 18:30:00");
+    expect(puzzle.key()?.data().hex).toBe(
+      "d82ce0eaffce690777d571b7943ca782a7c83f48a84269afd26148c3d5816a0a",
+    );
+    expect(puzzle.startedAt()).toBe("2026-03-16 17:54:03");
+    expect(puzzle.solver()).toBeUndefined();
+    expect(puzzle.solvedAt()).toBe("2026-08-17 18:08:09");
+  });
+
+  it("includes the funded second Vault without inventing key material", async () => {
+    const puzzle = await requirePuzzle("luckylurker/vault_2");
+
+    expect(puzzle.status()).toBe(Status.Unsolved);
+    expect(puzzle.address().value).toBe("bc1qnepv9pcnqvndux9h9mcaxvk6u993rc0lew9fpp");
+    expect(puzzle.startedAt()).toBe("2026-09-11 16:42:56");
+    expect(puzzle.prize()).toBe(1);
+    expect(puzzle.transactions()).toEqual([
+      {
+        txid: "2314d7f0b76c4f29ed1cfb949fd2882d648712f5c6cbaef9d7dff8ddee46f198",
+        date: "2026-08-12 14:19:56",
+        amount: 1,
+        tx_type: "funding",
+      },
+    ]);
+    expect(puzzle.pubkey()).toBeUndefined();
+    expect(puzzle.key()).toBeUndefined();
+    expect(puzzle.claimTransaction()).toBeUndefined();
   });
 
   it("includes Autonomy with its archived reward address and solution source", async () => {
@@ -219,27 +272,27 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(335);
+    expect(await all()).toHaveLength(337);
     expect(await stats()).toEqual({
-      total: 335,
+      total: 337,
       claimed: 11,
       expired: 2,
-      solved: 133,
+      solved: 134,
       swept: 96,
-      unsolved: 93,
-      with_pubkey: 237,
+      unsolved: 94,
+      with_pubkey: 238,
       total_prize: {
         AR: 5550,
         ETH: 14.1337,
         DAI: 100,
-        BTC: 1058.06919775,
+        BTC: 1059.06999775,
         LTC: 230.8255,
         DCR: 460,
       },
       unsolved_prize: {
         AR: 1900,
         ETH: 1,
-        BTC: 907.88130493,
+        BTC: 908.88130493,
       },
     });
   });
@@ -259,7 +312,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(335);
+    ).toBe(337);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -286,6 +339,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(133);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(134);
   });
 });

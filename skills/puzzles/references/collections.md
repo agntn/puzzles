@@ -70,6 +70,16 @@ Ledger Donjon's Capture the Fortress CTF. Scissors Secret Sharing is solved, wit
 ledgerDonjon.require("scissors_secret_sharing");
 ```
 
+## luckylurker
+
+Paul Jones's two Bitcoin Vaults. `vault_1` is solved with the published Electrum SegWit seed at `m/0'/0/1`; its record stores the derived private key and keeps the twelve clues separate from their published answers. `vault_2` has a 1 BTC funding transaction; public hints are scheduled from October 12, 2026.
+
+```ts
+import { luckyLurker } from "@agntn/puzzles/collections/luckylurker";
+
+luckyLurker.require("vault_2");
+```
+
 ## movie_enigma
 
 Bitcoin Movie Enigma, one puzzle by klems: 34 film stills, each title turned into a BIP39 word, ten intruders to drop. Solved in 2026. The 24-word phrase fails the BIP39 checksum and still derives the address, and `verify()` confirms it.

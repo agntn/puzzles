@@ -32,6 +32,7 @@ export {
 
 export {
   AddressKind,
+  answer,
   assets,
   bits,
   compressed,
@@ -68,11 +69,13 @@ export {
   uncompressed,
   wif,
   type Address,
+  type Answer,
   type Assets,
   type Confirmation,
   type Entropy,
   type EntropySource,
   type Hint,
+  type HintOptions,
   type KeyData,
   type Party,
   type Passphrase,

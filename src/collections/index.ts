@@ -14,6 +14,7 @@ export const builtins: readonly CollectionEntry[] = [
   { key: "gsmg", load: () => import("./gsmg.ts").then((m) => m.gsmg) },
   { key: "hash_collision", load: () => import("./hash_collision.ts").then((m) => m.hashCollision) },
   { key: "ledger_donjon", load: () => import("./ledger_donjon.ts").then((m) => m.ledgerDonjon) },
+  { key: "luckylurker", load: () => import("./luckylurker.ts").then((m) => m.luckyLurker) },
   { key: "movie_enigma", load: () => import("./movie_enigma.ts").then((m) => m.movieEnigma) },
   { key: "rushwallet", load: () => import("./rushwallet.ts").then((m) => m.rushwallet) },
   { key: "warp", load: () => import("./warp.ts").then((m) => m.warp) },

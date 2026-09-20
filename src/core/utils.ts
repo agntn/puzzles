@@ -309,7 +309,12 @@ function formatConfirmation(confirmation: Confirmation): string {
  * @returns {string} The line.
  */
 function formatHint(hint: Hint): string {
-  return `\t${hint.kind}\t${hint.date ?? "-"}\t${hint.text}\tsource: ${hint.source}\tconfirmation: ${formatConfirmation(hint.confirmation)}`;
+  const published = hint.answer;
+  const answer =
+    published === undefined
+      ? ""
+      : `\tanswer: ${published.text}\tanswer source: ${published.source}${published.date === undefined ? "" : `\tanswer date: ${published.date}`}`;
+  return `\t${hint.kind}\t${hint.date ?? "-"}\t${hint.text}\tsource: ${hint.source}\tconfirmation: ${formatConfirmation(hint.confirmation)}${answer}`;
 }
 
 /**

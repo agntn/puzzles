@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  answer,
   assets,
   BitcoinPuzzle,
   bitcoinPuzzle,
@@ -21,6 +22,35 @@ async function lines(id: string): Promise<string[]> {
 }
 
 describe("puzzles_show text", () => {
+  it("labels published answers separately in show and hints output", async () => {
+    const published = (await lines("luckylurker/vault_1")).join("\n");
+    expect(published).toContain("\tWord #1: Presence without permanence.\tsource:");
+    expect(published).toContain(
+      "\tanswer: visit\tanswer source: https://luckylurker.com/bitcoin-vault/",
+    );
+    expect(published).not.toContain("answer date:");
+    const hint = official(
+      "Original clue",
+      "https://example.com/clue",
+      confirmation("https://archive.ph/clue"),
+      {
+        answer: answer("Published answer", "https://example.com/answer", { date: "2026-04-01" }),
+      },
+    );
+    const puzzle = bitcoinPuzzle({
+      id: "fixture/answer",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/clue",
+      startedAt: "2026-01-01",
+      hints: [hint],
+    });
+    for (const text of [formatPuzzleRecord(puzzle), formatHintReport(puzzle, []).join("\n")]) {
+      expect(text).toContain("\tOriginal clue\tsource: https://example.com/clue");
+      expect(text).toContain(
+        "\tanswer: Published answer\tanswer source: https://example.com/answer\tanswer date: 2026-04-01",
+      );
+    }
+  });
   it("prints the key, the solve and every transaction of a solved puzzle", async () => {
     const text = await lines("b1000/1");
 

@@ -65,6 +65,7 @@ const expectedCollections = [
   "gsmg",
   "hash_collision",
   "ledger_donjon",
+  "luckylurker",
   "movie_enigma",
   "rushwallet",
   "warp",

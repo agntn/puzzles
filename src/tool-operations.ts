@@ -75,12 +75,13 @@ export const facts = {
       name: "puzzles_hints",
       title: "Puzzle Hints",
       description:
-        "List the hints recorded for one puzzle, its collection's and its own, each with where it was said and what confirms that, then the hint files it ships.",
+        "List a puzzle's own and inherited hints with sources, confirmations, separately labeled published answers, and hint files.",
       promptSnippet:
         "Use puzzles_hints for what the author or the community said about a puzzle before searching for its key.",
       promptGuidelines: [
         "An official hint comes from the puzzle's author; a community hint comes from anyone else and may be wrong.",
         "The confirmation link shows the source said it, an archive capture for example; it does not vouch for the hint.",
+        "An answer records a published response to one hint, not a verified puzzle solution or key.",
       ],
       openWorld: false,
     },

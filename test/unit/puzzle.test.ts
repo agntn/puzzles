@@ -15,6 +15,7 @@ import {
   litecoinPuzzle,
   moneroPuzzle,
   official,
+  answer,
   p2pkh,
   party,
   passphrase,
@@ -195,6 +196,28 @@ describe("puzzle record factories", () => {
       ["puzzle", "mirror/puzzle.png"],
       ["hint", "assets/fixture/hint.png"],
     ]);
+  });
+
+  it("keeps a published answer separate from the original hint and its date", () => {
+    const solution = answer("visit", "https://example.com/answers", { date: "2026-04-01" });
+    const proof = confirmation("https://archive.ph/puzzle");
+    for (const build of [official, community]) {
+      const hint = build("Presence without permanence.", "https://example.com/puzzle", proof, {
+        date: "2026-03-17",
+        answer: solution,
+      });
+      expect(hint.text).toBe("Presence without permanence.");
+      expect(hint.date).toBe("2026-03-17");
+      expect(hint.answer).toEqual({
+        text: "visit",
+        source: "https://example.com/answers",
+        date: "2026-04-01",
+      });
+      const puzzle = bitcoinPuzzle({ ...required, hints: [hint] });
+      expect(puzzle.toJSON().hints?.[0]?.answer).toEqual(solution);
+      expect(Object.isFrozen(puzzle.hints()[0]?.answer)).toBe(true);
+    }
+    expect(answer("visit", "https://example.com/answers")).not.toHaveProperty("date");
   });
 
   it("builds a hint with its kind, its provenance and nothing it was not given", () => {

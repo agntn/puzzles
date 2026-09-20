@@ -74,6 +74,13 @@ const PRESENTATION: Readonly<
     blurb:
       "Scissors Secret Sharing. Twelve BIP39 words, ten out of order. CTF points, not a BTC prize.",
   },
+  luckylurker: {
+    icon: "i-lucide-vault",
+    title: "LuckyLurker Bitcoin Vault puzzles",
+    sample: "luckylurker/vault_1",
+    chains: ["bitcoin"],
+    blurb: "Paul Jones’s two Bitcoin Vaults. The first solved, the second funded with 1 BTC.",
+  },
   movie_enigma: {
     icon: "i-lucide-clapperboard",
     title: "Bitcoin Movie Enigma",
