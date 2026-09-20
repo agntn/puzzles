@@ -59,6 +59,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Twelve lecture words, three Bitcoin prizes. A better reason to take notes.",
   },
+  genesis: {
+    icon: "i-lucide-blocks",
+    title: "Genesis Block Wallet Puzzle",
+    sample: "genesis/block",
+    chains: ["bitcoin"],
+    blurb:
+      "Two keys hidden in Genesis block data. Public clues, paid hints, still no verified solution.",
+  },
   gsmg: {
     icon: "i-lucide-rabbit",
     title: "GSMG.io puzzle",

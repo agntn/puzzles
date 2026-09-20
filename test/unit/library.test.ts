@@ -6,6 +6,7 @@ import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
+import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash_collision.ts";
 import { LedgerDonjonCollection } from "../../src/collections/ledger_donjon.ts";
@@ -48,6 +49,7 @@ const concreteClasses = [
   BitapsCollection,
   BitimageCollection,
   DugCollection,
+  GenesisCollection,
   GsmgCollection,
   HashCollisionCollection,
   LedgerDonjonCollection,
@@ -90,6 +92,44 @@ describe("lazy collection registry", () => {
     for (const entry of builtins) {
       expect((await entry.load()).key).toBe(entry.key);
     }
+  });
+
+  it("keeps the Genesis announcement without inventing a prize or key", async () => {
+    const puzzle = await requirePuzzle("genesis/block");
+    expect(puzzle.address()).toEqual({
+      kind: "p2wsh",
+      value: "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj",
+    });
+    expect(puzzle.startedAt()).toBe("2026-08-22 19:45:38");
+    expect(puzzle.preGenesis()).toBe(true);
+    expect(puzzle.toJSON().pre_genesis).toBe(true);
+    expect(puzzle.status()).toBe(Status.Unsolved);
+    expect(puzzle.prize()).toBeUndefined();
+    expect(puzzle.key()).toBeUndefined();
+    expect(puzzle.pubkey()).toBeUndefined();
+    expect(puzzle.transactions()).toEqual([
+      {
+        tx_type: "funding",
+        txid: "e2aaa928a965ee02b9c9a76227383113a62f350701a18d7792372712ce501ac7",
+        date: "2026-08-22 02:45:22",
+        amount: 0.0002,
+      },
+      {
+        tx_type: "increase",
+        txid: "b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
+        date: "2026-08-22 19:45:38",
+        amount: 0.00005,
+      },
+    ]);
+    expect(puzzle.hints()).toHaveLength(19);
+    expect(puzzle.hints()[0]?.source).toBe(puzzle.sourceUrl());
+    expect(puzzle.hints().at(-1)?.date).toBe("2026-09-19");
+    expect(puzzle.hints().at(-1)?.confirmation.description).toContain("same input address");
+    expect(puzzle.hints().some((hint) => hint.text === "It's a 128-bit digest.")).toBe(true);
+    expect(
+      puzzle.hints().some((hint) => hint.text.startsWith("BIP39: 12 words; Passphrase: Y;")),
+    ).toBe(true);
+    expect(puzzle.hints().some((hint) => hint.text.startsWith("How many keys,"))).toBe(false);
   });
 
   it("preserves universal and historical collection lookups", async () => {
@@ -345,14 +385,14 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(340);
+    expect(await all()).toHaveLength(341);
     expect(await stats()).toEqual({
-      total: 340,
+      total: 341,
       claimed: 11,
       expired: 2,
       solved: 137,
       swept: 96,
-      unsolved: 94,
+      unsolved: 95,
       with_pubkey: 241,
       total_prize: {
         AR: 5550,
@@ -385,7 +425,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(340);
+    ).toBe(341);
   });
 
   it("hands back the memoized views frozen through", async () => {

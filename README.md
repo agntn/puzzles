@@ -5,7 +5,7 @@
 [![license](https://npmx.dev/api/registry/badge/license/@agntn/puzzles)](https://npmx.dev/package/@agntn/puzzles)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/agntn/puzzles)
 
-340 public crypto puzzles and bounties in fourteen collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
+341 public crypto puzzles and bounties in fifteen collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
 
 ## Why?
 
@@ -42,9 +42,9 @@ npx @agntn/puzzles stats
 ```
 
 ```text
-Total: 340
+Total: 341
 Solved: 137
-Unsolved: 94
+Unsolved: 95
 Claimed: 11
 Swept: 96
 Expired: 2
@@ -88,7 +88,7 @@ puzzle?.address().value; // "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU"
 puzzle?.keyRange(); // [2n ** 70n, 2n ** 71n - 1n]
 
 verifyPuzzle(b1000.require(1)).verified; // true, key 1 derives its address
-(await stats()).unsolved; // 93
+(await stats()).unsolved; // 95
 (await b1000.require(71).balance()).totalUnits(); // 7.10190014 when I ran it, mempool.space decides
 ```
 
@@ -112,6 +112,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `gsmg`           |       1 | bitcoin                             | A multi phase image puzzle              |
 | `movie_enigma`   |       1 | bitcoin                             | Film titles as seed words, solved 2026  |
 | `ledger_donjon`  |       1 | bitcoin                             | Scissors Secret Sharing from the CTF    |
+| `genesis`        |       1 | bitcoin                             | Genesis block OP_RETURN puzzle          |
 
 Identifiers are `collection/name`. The three singletons, `gsmg`, `bitaps` and `movie_enigma`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 

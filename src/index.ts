@@ -52,6 +52,7 @@ export {
   p2pkh,
   p2sh,
   p2wpkh,
+  p2wsh,
   party,
   passphrase,
   profile,

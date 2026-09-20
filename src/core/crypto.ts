@@ -69,6 +69,7 @@ function addressType(chain: Chain, kind: AddressKind): string | undefined {
     case AddressKind.P2WPKH:
       return "segwit";
     case AddressKind.P2SH:
+    case AddressKind.P2WSH:
     case AddressKind.Standard:
       throw new UnsupportedAddressKindError(
         `Cannot derive a ${kind} address from a private key alone`,

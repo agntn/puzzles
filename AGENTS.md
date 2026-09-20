@@ -9,7 +9,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 ## Architecture
 
 - `src/core/puzzle.ts` holds the abstract `Puzzle`, the chain bases (`BitcoinPuzzle`, `EthereumPuzzle`, `LitecoinPuzzle`, `DecredPuzzle`, `ArweavePuzzle`, `MoneroPuzzle`), `Status`, `toJSON()`, and the `PuzzleSpec` record with its chain factories (`bitcoinPuzzle` … `moneroPuzzle`).
-- `src/core/parts.ts` holds the constructors a puzzle class calls: addresses (`p2pkh`, `p2sh`, `p2wpkh`, `standard`), pubkeys, transactions, assets, parties, hints (`official`, `community`, `confirmation`), and the chained `Key` builder.
+- `src/core/parts.ts` holds the constructors a puzzle class calls: addresses (`p2pkh`, `p2sh`, `p2wpkh`, `p2wsh`, `standard`), pubkeys, transactions, assets, parties, hints (`official`, `community`, `confirmation`), and the chained `Key` builder.
 - `src/core/collection.ts` freezes and indexes the puzzle list and implements lookup, filters, balances, and verification once.
 - `src/core/registry.ts` is a lazy manifest registry: a table seeded on first use from `builtins` in `src/collections/index.ts`, where each entry is a key plus a literal `import()` of the collection module. Keys, aliases, and `hasCollection()` answer synchronously; instances load on the first lookup for their key.
 - `src/core/dataset.ts` computes the asynchronous aggregate views `all()`, `selectPuzzles()`, `get()`, `collectionSummaries()`, `stats()`, `dataVersion()`, `dataset()`; the cached ones are memoized per loaded snapshot, so a registration invalidates them by identity.
@@ -67,7 +67,7 @@ pnpm test:packed # packs the tarball and runs every published entry without src/
 node src/cli.ts collections
 ```
 
-`node src/cli.ts collections` must list all fourteen collections. Node.js 24 or newer runs the TypeScript sources directly; no loader is required.
+`node src/cli.ts collections` must list all fifteen collections. Node.js 24 or newer runs the TypeScript sources directly; no loader is required.
 
 ## Known debt
 

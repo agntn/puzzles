@@ -62,6 +62,7 @@ Constructors from `parts.ts` keep optional fields absent instead of empty:
 ```ts
 p2pkh(value, hash160?);
 p2wpkh(value, hash160?);
+p2wsh(value);
 p2sh(value, hash160, redeemScript(hash, script)?);
 standard(value, hash160?); // Ethereum, Arweave
 
@@ -109,7 +110,7 @@ seed("…", "m/44'/0'/0'/0/0").entropy("1808d3…", source(url, "kitten tweet"),
 ```ts
 interface Address {
   value: string;
-  kind: "p2pkh" | "p2sh" | "p2wpkh" | "standard";
+  kind: "p2pkh" | "p2sh" | "p2wpkh" | "p2wsh" | "standard";
   hash160?: string;
   redeem_script?: RedeemScript;
 }

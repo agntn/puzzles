@@ -63,6 +63,7 @@ const expectedCollections = [
   "bitaps",
   "bitimage",
   "dug",
+  "genesis",
   "gsmg",
   "hash_collision",
   "ledger_donjon",
@@ -242,6 +243,13 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
 async function assertPackedLibrary(): Promise<void> {
   const library = await importPacked<Library>("dist/index.mjs");
   assert.deepEqual([...library.collectionKeys()].sort(), expectedCollections);
+  assert.deepEqual(
+    library.p2wsh("bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj"),
+    {
+      value: "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj",
+      kind: "p2wsh",
+    },
+  );
   assertNotLoaded(collectionModule, "importing the library must not load a collection");
   const puzzle = await library.get("b1000/1");
   assert.equal(puzzle?.id(), "b1000/1");
