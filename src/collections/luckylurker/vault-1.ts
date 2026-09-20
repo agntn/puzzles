@@ -49,7 +49,7 @@ export const luckyLurkerVault1 = bitcoinPuzzle({
       },
     ),
     official(
-      "Word #3: The word is hidden inside [this article](https://luckylurker.com/crypto-casinos-guide/). It’s marked visually, so you can't miss it if you look closely.",
+      "Word #3: The word is hidden inside this article (https://luckylurker.com/crypto-casinos-guide/). It’s marked visually, so you can't miss it if you look closely.",
       "https://luckylurker.com/bitcoin-vault/",
       confirmation(
         "https://github.com/floflo777/open-crypto-puzzles/blob/main/4-solved/luckylurker-seed-riddles-80ksats/data/hints.csv",
@@ -73,7 +73,7 @@ export const luckyLurkerVault1 = bitcoinPuzzle({
       },
     ),
     official(
-      "Word #5: Find it inside the [review of our #1 rated CS2 gambling site for 2026](https://luckylurker.com/casino/gamdom/).",
+      "Word #5: Find it inside the review of our #1 rated CS2 gambling site for 2026 (https://luckylurker.com/casino/gamdom/).",
       "https://luckylurker.com/bitcoin-vault/",
       confirmation(
         "https://github.com/floflo777/open-crypto-puzzles/blob/main/4-solved/luckylurker-seed-riddles-80ksats/data/hints.csv",
@@ -109,7 +109,7 @@ export const luckyLurkerVault1 = bitcoinPuzzle({
       },
     ),
     official(
-      "Word #8: Just read [N1 Casino review](https://luckylurker.com/casino/n1/). The word is already there.",
+      "Word #8: Just read N1 Casino review (https://luckylurker.com/casino/n1/). The word is already there.",
       "https://luckylurker.com/bitcoin-vault/",
       confirmation(
         "https://github.com/floflo777/open-crypto-puzzles/blob/main/4-solved/luckylurker-seed-riddles-80ksats/data/hints.csv",
@@ -121,7 +121,7 @@ export const luckyLurkerVault1 = bitcoinPuzzle({
       },
     ),
     official(
-      "Word #9: The quickest path still needs a second thought. Find the [article on the site](https://luckylurker.com/fastest-crypto-casino-withdrawals-2026/). The word is there.",
+      "Word #9: The quickest path still needs a second thought. Find the article on the site (https://luckylurker.com/fastest-crypto-casino-withdrawals-2026/). The word is there.",
       "https://luckylurker.com/bitcoin-vault/",
       confirmation(
         "https://github.com/floflo777/open-crypto-puzzles/blob/main/4-solved/luckylurker-seed-riddles-80ksats/data/hints.csv",

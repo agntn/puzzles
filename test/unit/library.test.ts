@@ -131,6 +131,19 @@ describe("lazy collection registry", () => {
     expect(puzzle.solvedAt()).toBe("2026-08-17 18:08:09");
   });
 
+  it("keeps the Vault's article URLs readable without a Markdown renderer", async () => {
+    const puzzle = await requirePuzzle("luckylurker/vault_1");
+    for (const [index, url] of [
+      [2, "https://luckylurker.com/crypto-casinos-guide/"],
+      [4, "https://luckylurker.com/casino/gamdom/"],
+      [7, "https://luckylurker.com/casino/n1/"],
+      [8, "https://luckylurker.com/fastest-crypto-casino-withdrawals-2026/"],
+    ] as const) {
+      expect(puzzle.hints()[index]?.text).toContain(`(${url})`);
+      expect(puzzle.hints()[index]?.text).not.toContain("](");
+    }
+  });
+
   it("includes the funded second Vault without inventing key material", async () => {
     const puzzle = await requirePuzzle("luckylurker/vault_2");
 
