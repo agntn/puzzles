@@ -106,9 +106,9 @@ describe("registry consistency", () => {
     expect(await lib.datasetCollections()).toHaveLength(originalData.length + 1);
     expect(await lib.dataVersion()).not.toBe(originalVersion);
     /* Snapshots handed out earlier stay intact. */
-    expect(originalPuzzles).toHaveLength(337);
-    expect(originalCollections).toHaveLength(13);
-    expect(originalData).toHaveLength(13);
+    expect(originalPuzzles).toHaveLength(340);
+    expect(originalCollections).toHaveLength(14);
+    expect(originalData).toHaveLength(14);
 
     const snapshot = await lib.dataset();
     expect(snapshot.data_version).toBe(
@@ -125,8 +125,8 @@ describe("registry consistency", () => {
     expect(await lib.get("fixture/first")).toBeUndefined();
     expect(await lib.get("fixture/second")).toBe(second);
     expect(await lib.getCollection("fixture")).toBe(replacement);
-    expect(await lib.collections()).toHaveLength(14);
-    expect(await lib.all()).toHaveLength(338);
+    expect(await lib.collections()).toHaveLength(15);
+    expect(await lib.all()).toHaveLength(341);
     expect(await lib.dataVersion()).not.toBe(snapshot.data_version);
     expect((await lib.dataset()).collections.at(-1)?.puzzles[0]?.id).toBe("fixture/second");
 
@@ -212,6 +212,7 @@ describe("registry consistency", () => {
     expect(entry?.puzzles[0]?.hints).toEqual([own]);
     expect(serialized.filter((row) => "hints" in row).map((row) => row.name)).toEqual([
       "b1000",
+      "dug",
       "hinted",
     ]);
     expect(JSON.stringify(serialized)).not.toContain("null");
