@@ -8,7 +8,7 @@ metadata:
 
 # puzzles
 
-Twelve collections, 335 puzzles, five chains: Bitcoin, Ethereum, Litecoin, Decred, Arweave. A sixth factory, `moneroPuzzle`, has no records yet. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
+Thirteen collections, 337 puzzles, five chains: Bitcoin, Ethereum, Litecoin, Decred, Arweave. A sixth factory, `moneroPuzzle`, has no records yet. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
 
 Reads are methods, not properties. `puzzle.address()`, not `puzzle.address`. A puzzle with no solver or prize simply leaves those fields out of its record, which is why nothing in the dataset is null.
 
@@ -35,6 +35,7 @@ IDs are `collection/identifier`. Three singletons have no slash, which trips peo
 | `gsmg`           | `gsmg`                  | singleton, no argument                            |
 | `hash_collision` | `hash_collision/sha256` | sha1, sha256, ripemd160, hash160, hash256, op_abs |
 | `ledger_donjon`  | `ledger_donjon/...`     | name "scissors_secret_sharing", full ID below     |
+| `luckylurker`    | `luckylurker/vault_1`   | vault_1 or vault_2                                |
 | `movie_enigma`   | `movie_enigma`          | singleton, no argument                            |
 | `rushwallet`     | `rushwallet/9`          | name "1"-"30"                                     |
 | `warp`           | `warp/challenge_1`      | challenge_1-4, warp_challenge_1-2                 |

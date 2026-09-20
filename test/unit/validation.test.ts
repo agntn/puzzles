@@ -10,6 +10,7 @@ import {
 } from "../../src/core/crypto.ts";
 import {
   AddressKind,
+  answer,
   assets,
   confirmation,
   type Hint,
@@ -185,6 +186,24 @@ function problemsOf(hint: Hint): string[] {
     ...(isWebUrl(hint.confirmation.url) ? [] : ["confirmation is not a web URL"]),
     ...(hint.confirmation.url === hint.source ? ["confirmation repeats the source"] : []),
     ...(hint.date === undefined || isRecordDate(hint.date) ? [] : ["date is not a record date"]),
+    ...answerProblems(hint.answer),
+  ];
+}
+
+/**
+ * Checks the separately published answer without borrowing the hint's date or source.
+ *
+ * @param {Hint["answer"]} value - The answer, if recorded.
+ * @returns {string[]} One problem per failed check.
+ */
+function answerProblems(value: Hint["answer"]): string[] {
+  if (value === undefined) return [];
+  return [
+    ...(isOneLine(value.text) ? [] : ["answer text is not one line"]),
+    ...(isWebUrl(value.source) ? [] : ["answer source is not a web URL"]),
+    ...(value.date === undefined || isRecordDate(value.date)
+      ? []
+      : ["answer date is not a record date"]),
   ];
 }
 
@@ -323,6 +342,7 @@ describe("collection class data", () => {
         ),
         official(" ", "https://example.com/puzzle", confirmation("https://example.com/puzzle"), {
           date: "2026-02-30",
+          answer: answer("one\ntwo", "ftp://example.com/answer", { date: "2026-02-30" }),
         }),
         official("Fine.", "https://example.com/puzzle", confirmation("https://archive.ph/x"), {
           date: "2026-01-01 25:00:00",
@@ -338,6 +358,9 @@ describe("collection class data", () => {
       "fixture/hinted: hint 2 text is not one line",
       "fixture/hinted: hint 2 confirmation repeats the source",
       "fixture/hinted: hint 2 date is not a record date",
+      "fixture/hinted: hint 2 answer text is not one line",
+      "fixture/hinted: hint 2 answer source is not a web URL",
+      "fixture/hinted: hint 2 answer date is not a record date",
       "fixture/hinted: hint 3 date is not a record date",
     ]);
     expect(

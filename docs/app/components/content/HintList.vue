@@ -32,6 +32,16 @@ defineProps<{ hints: readonly HintItem[] }>();
           ({{ hint.confirmation.description }})</template
         >
       </p>
+      <details v-if="hint.answer" class="mt-2 text-sm">
+        <summary class="cursor-pointer text-muted">Published answer</summary>
+        <p class="mt-1 text-highlighted">{{ hint.answer.text }}</p>
+        <p class="mt-1 font-mono text-[11px] text-dimmed">
+          <template v-if="hint.answer.date">{{ hint.answer.date }} · </template>source
+          <a :href="hint.answer.source" target="_blank" rel="noopener" class="hover:underline">{{
+            hostPath(hint.answer.source)
+          }}</a>
+        </p>
+      </details>
     </li>
   </ul>
 </template>

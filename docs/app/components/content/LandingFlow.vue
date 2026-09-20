@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { COLLECTIONS } from "../../utils/puzzles";
+import { collectionWindow } from "../../utils/flow";
 import { clip, shorten, verdictLabel } from "../../utils/format";
 import type { LandingSample } from "../../utils/samples";
 
@@ -11,15 +12,24 @@ const CALL = { x: 24, y: 120, w: 340, h: 160 };
 const NODE = { x: 510, w: 200, h: 30, gap: 7 };
 const RESULT = { x: 870, y: 20, w: 306, h: 360 };
 
-const nodes = computed(() =>
-  COLLECTIONS.map((entry, index) => ({
-    key: entry.key,
-    label: entry.key,
-    y: 15 + index * (NODE.h + NODE.gap),
-    active: entry.key === props.sample.collection,
-    loaded: props.loaded.includes(entry.key),
-  })),
+const visible = computed(() =>
+  collectionWindow(
+    COLLECTIONS.map((entry) => entry.key),
+    props.sample.collection,
+  ),
 );
+
+const nodes = computed(() => {
+  const keys = visible.value.keys;
+  const top = (H - (keys.length * NODE.h + Math.max(0, keys.length - 1) * NODE.gap)) / 2;
+  return keys.map((key, index) => ({
+    key,
+    label: key,
+    y: top + index * (NODE.h + NODE.gap),
+    active: key === props.sample.collection,
+    loaded: props.loaded.includes(key),
+  }));
+});
 
 function curvePath(x1: number, y1: number, x2: number, y2: number) {
   const mid = (x1 + x2) / 2;
@@ -130,6 +140,19 @@ const inputSize = computed(() => fit(props.sample.id, CALL.w - 36, 22));
         {{ loaded.length }} of {{ COLLECTIONS.length }} modules loaded by this page
       </text>
     </g>
+
+    <text :x="NODE.x + NODE.w / 2" y="48" text-anchor="middle" class="puzzles-flow-label">
+      {{ visible.start + 1 }} to {{ visible.start + nodes.length }} of {{ COLLECTIONS.length }}
+    </text>
+    <text
+      v-if="nodes.length < COLLECTIONS.length"
+      :x="NODE.x + NODE.w / 2"
+      y="365"
+      text-anchor="middle"
+      class="puzzles-flow-label"
+    >
+      + {{ COLLECTIONS.length - nodes.length }} other collections
+    </text>
 
     <g
       v-for="node in nodes"

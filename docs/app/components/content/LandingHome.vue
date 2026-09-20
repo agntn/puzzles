@@ -160,12 +160,11 @@ const customCode = [
         'registerCollection({ key, load }) adds yours, lazily too, and the aggregate views refresh',
       ]"
     >
-      Importing the package evaluates no puzzle records. The registry is twelve keys and twelve
-      <code class="font-mono text-[13px] text-highlighted">import()</code> calls. A bundler splits
-      each collection into its own chunk. Only ever ask about
-      <code class="font-mono text-[13px] text-highlighted">b1000</code>? You never download the
-      other eleven. This panel is that mechanism running: the walk pulls collections in one at a
-      time.
+      Importing the package evaluates no puzzle records. Each registry key has its own lazy
+      <code class="font-mono text-[13px] text-highlighted">import()</code>, so a bundler splits each
+      collection into its own chunk. Only ever ask about
+      <code class="font-mono text-[13px] text-highlighted">b1000</code>? The other collections stay
+      unloaded. This panel shows the walk loading one collection at a time.
       <template #visual>
         <div @mouseenter="paused = true" @mouseleave="paused = false">
           <LandingRegistry :sample="current" :loaded="loaded" />
@@ -177,7 +176,7 @@ const customCode = [
       <div class="mx-auto w-full max-w-[var(--ui-container)] px-8 py-20 sm:px-12 lg:px-16">
         <div class="max-w-2xl">
           <h2 class="text-2xl font-medium tracking-tight text-highlighted sm:text-[1.75rem]">
-            Twelve collections, five chains, one page per puzzle
+            Thirteen collections, five chains, one page per puzzle
           </h2>
           <p class="mt-4 text-sm leading-6 text-muted">
             Each collection is a class with an author and its puzzle list, published on its own

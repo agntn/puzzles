@@ -95,12 +95,26 @@ export interface Confirmation {
   readonly url: string;
 }
 
+/** A published answer to one hint, not a verified solution of the puzzle. */
+export interface Answer {
+  readonly text: string;
+  readonly source: string;
+  readonly date?: string;
+}
+
+/** Optional hint metadata; an answer has its own source and publication date. */
+export interface HintOptions {
+  readonly date?: string;
+  readonly answer?: Answer;
+}
+
 /**
  * One hint about a puzzle. `official` comes from the author, `community` from anyone else and
  * may be wrong; both say where they were published and what confirms that, never whether they
  * are right.
  */
 export interface Hint {
+  readonly answer?: Answer;
   readonly confirmation: Confirmation;
   readonly date?: string;
   readonly kind: HintKind;
@@ -751,14 +765,30 @@ export function confirmation(url: string, description?: string): Confirmation {
   return defined({ url, description });
 }
 
+/**
+ * Records a published answer without changing the original hint.
+ *
+ * @param {string} text - The published answer, on one line.
+ * @param {string} source - Where the answer was published.
+ * @param {Readonly<{ date?: string }>} [options] - Its publication date, when known.
+ * @returns {Answer} The answer with absent metadata omitted.
+ */
+export function answer(
+  text: string,
+  source: string,
+  options: Readonly<{ date?: string }> = {},
+): Answer {
+  return defined({ text, source, date: options.date });
+}
+
 function hint(
   kind: HintKind,
   text: string,
   source: string,
   confirmation: Confirmation,
-  options: Readonly<{ date?: string }>,
+  options: HintOptions,
 ): Hint {
-  return defined({ kind, text, source, confirmation, date: options.date });
+  return defined({ kind, text, source, confirmation, date: options.date, answer: options.answer });
 }
 
 /**
@@ -767,14 +797,14 @@ function hint(
  * @param {string} text - The hint as the source states it, on one line.
  * @param {string} source - Where the author published it.
  * @param {Confirmation} confirmation - What confirms the source said it.
- * @param {Readonly<{ date?: string }>} [options] - When it was published, `YYYY-MM-DD HH:MM:SS` or the day alone.
+ * @param {HintOptions} [options] - The hint's publication date and any separately published answer.
  * @returns {Hint} The hint.
  */
 export function official(
   text: string,
   source: string,
   confirmation: Confirmation,
-  options: Readonly<{ date?: string }> = {},
+  options: HintOptions = {},
 ): Hint {
   return hint(HintKind.Official, text, source, confirmation, options);
 }
@@ -785,14 +815,14 @@ export function official(
  * @param {string} text - The hint as the source states it, on one line.
  * @param {string} source - Where it was published.
  * @param {Confirmation} confirmation - What confirms the source said it.
- * @param {Readonly<{ date?: string }>} [options] - When it was published, `YYYY-MM-DD HH:MM:SS` or the day alone.
+ * @param {HintOptions} [options] - The hint's publication date and any separately published answer.
  * @returns {Hint} The hint.
  */
 export function community(
   text: string,
   source: string,
   confirmation: Confirmation,
-  options: Readonly<{ date?: string }> = {},
+  options: HintOptions = {},
 ): Hint {
   return hint(HintKind.Community, text, source, confirmation, options);
 }
