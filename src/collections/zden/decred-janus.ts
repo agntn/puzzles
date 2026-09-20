@@ -1,5 +1,14 @@
 import { decredPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, compressed, funding, increase, p2pkh } from "../../core/parts.ts";
+import {
+  assets,
+  claim,
+  compressed,
+  confirmation,
+  funding,
+  increase,
+  official,
+  p2pkh,
+} from "../../core/parts.ts";
 
 /** Puzzle `zden/decred_janus`. */
 export const zdenPuzzleDecredJanus = decredPuzzle({
@@ -54,4 +63,14 @@ export const zdenPuzzleDecredJanus = decredPuzzle({
     hints: ["decred_janus/hint.svg"],
     sourceUrl: "https://crypto.haluska.sk/decred_tree.svg",
   }),
+  hints: [
+    official(
+      "33*bbb",
+      "https://crypto.haluska.sk/decred_tree_hint.svg",
+      confirmation(
+        "https://web.archive.org/web/20181219152809/http://crypto.haluska.sk/decred_tree_hint.svg",
+        "Wayback capture of the hint SVG",
+      ),
+    ),
+  ],
 });
