@@ -153,23 +153,23 @@ describe("puzzles_show text", () => {
     );
   });
 
-  it("links the solver's notes of a puzzle that ships no image", async () => {
+  it("links the solution of a puzzle that ships no image", async () => {
     const text = await lines("movie_enigma");
 
     expect(text).toContain(
-      "solver asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/movie_enigma/solution.md",
+      "solution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/movie_enigma/solution.md",
     );
     expect(text.some((line) => line.startsWith("asset:"))).toBe(false);
   });
 
-  it("links the solver image next to the puzzle image", async () => {
+  it("links the solution image next to the puzzle image", async () => {
     const text = await lines("zden/level_1");
 
     expect(text).toContain(
       "asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level_1/puzzle.png",
     );
     expect(text).toContain(
-      "solver asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level_1/solver.png",
+      "solution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level_1/solver.png",
     );
   });
 

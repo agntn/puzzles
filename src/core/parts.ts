@@ -76,7 +76,7 @@ export interface Party {
 export interface Assets {
   readonly hints?: readonly string[];
   readonly puzzle?: string;
-  readonly solver?: string;
+  readonly solution?: string;
   readonly source_url?: string;
 }
 
@@ -735,20 +735,20 @@ export function party(
 /**
  * The asset record of a puzzle.
  *
- * @param {Readonly<{ hints?: readonly string[]; puzzle?: string; solver?: string; sourceUrl?: string }>} options - File names under the collection's asset directory and their source.
+ * @param {Readonly<{ hints?: readonly string[]; puzzle?: string; solution?: string; sourceUrl?: string }>} options - File names under the collection's asset directory and their source.
  * @returns {Assets} The asset record.
  */
 export function assets(
   options: Readonly<{
     hints?: readonly string[];
     puzzle?: string;
-    solver?: string;
+    solution?: string;
     sourceUrl?: string;
   }>,
 ): Assets {
   return defined({
     puzzle: options.puzzle,
-    solver: options.solver,
+    solution: options.solution,
     hints: options.hints,
     source_url: options.sourceUrl,
   });

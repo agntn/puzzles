@@ -144,14 +144,14 @@ function keyRows(key: KeyData | undefined): KeyRow[] {
  *
  * @param {string} collection - The collection key, the directory under `assets/`.
  * @param {Assets | undefined} assets - The record's asset block.
- * @returns {AssetLink[]} The puzzle image, the hints and the solver's notes, in that order.
+ * @returns {AssetLink[]} The puzzle image, the hints and the solution, in that order.
  */
 function assetLinks(collection: string, assets: Assets | undefined): AssetLink[] {
   if (assets === undefined) return [];
   const entries: [string, string | undefined][] = [
     ["puzzle", assets.puzzle],
     ...(assets.hints ?? []).map((hint, index): [string, string] => [`hint ${index + 1}`, hint]),
-    ["solver's notes", assets.solver],
+    ["solution", assets.solution],
   ];
   return entries.flatMap(([label, path]) =>
     path === undefined

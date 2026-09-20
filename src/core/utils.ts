@@ -255,7 +255,7 @@ function formatTransactions(puzzle: Puzzle): string[] {
 }
 
 /**
- * Every asset as a URL, the hint files and the solver's notes under the same root as the puzzle
+ * Every asset as a URL, the hint files and the solution under the same root as the puzzle
  * image.
  *
  * @param {Puzzle} puzzle - The puzzle.
@@ -269,7 +269,7 @@ function formatAssets(puzzle: Puzzle): string[] {
   return [
     ...field("asset", puzzle.assetUrl()),
     ...formatHintAssets(hintAssets(puzzle)),
-    ...field("solver asset", puzzle.assetLinks().find((link) => link.kind === "solver")?.url),
+    ...field("solution asset", puzzle.assetLinks().find((link) => link.kind === "solution")?.url),
     ...field("asset source", assets.source_url),
   ];
 }

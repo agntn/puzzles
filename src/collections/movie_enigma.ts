@@ -40,7 +40,7 @@ export const movieEnigmaPuzzle = bitcoinPuzzle({
     profiles: [profile("github", "https://github.com/rabbidbird")],
   }),
   assets: assets({
-    solver: "solution.md",
+    solution: "solution.md",
     sourceUrl: "https://github.com/floflo777/open-crypto-puzzles/issues/24",
   }),
 });

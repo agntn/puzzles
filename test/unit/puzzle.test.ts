@@ -147,13 +147,27 @@ describe("puzzle record factories", () => {
     });
   });
 
+  it("keeps the solver separate from the solution file in the serialized record", () => {
+    const puzzle = bitcoinPuzzle({
+      ...required,
+      solver: party("Fixture"),
+      assets: assets({ solution: "solution.md" }),
+    });
+
+    expect(puzzle.solver()).toEqual({ name: "Fixture" });
+    expect(puzzle.assets()).toEqual({ solution: "solution.md" });
+    expect(puzzle.toJSON().solver).toEqual({ name: "Fixture" });
+    expect(puzzle.toJSON().assets).toEqual({ solution: "solution.md" });
+    expect(assets({})).toEqual({});
+  });
+
   it("encodes an asset file name for the URL and leaves the path alone", () => {
-    const puzzle = bitcoinPuzzle({ ...required, assets: assets({ solver: "notes #1?.md" }) });
+    const puzzle = bitcoinPuzzle({ ...required, assets: assets({ solution: "notes #1?.md" }) });
 
     expect(puzzle.assetUrl()).toBeUndefined();
     expect(puzzle.assetLinks()).toEqual([
       {
-        kind: "solver",
+        kind: "solution",
         file: "notes #1?.md",
         path: "assets/fixture/notes #1?.md",
         url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/notes%20%231%3F.md",
