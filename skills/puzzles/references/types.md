@@ -109,7 +109,7 @@ seed("…", "m/44'/0'/0'/0/0").entropy("1808d3…", source(url, "kitten tweet"),
 ```ts
 interface Address {
   value: string;
-  kind: "p2pkh" | "p2sh" | "p2wpkh" | "standard";
+  kind: "p2pkh" | "p2sh" | "p2wpkh" | "p2wsh" | "standard";
   hash160?: string;
   redeem_script?: RedeemScript;
 }

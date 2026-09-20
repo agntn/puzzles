@@ -221,7 +221,7 @@ export function factoryName(chain: string): string {
  * The address builder that produced the record's address, by kind.
  *
  * @param {LandingSample} sample - The sample whose address to write out.
- * @returns {string} A `p2pkh(...)`, `p2sh(...)`, `p2wpkh(...)` or `standard(...)` call.
+ * @returns {string} A `p2pkh(...)`, `p2sh(...)`, `p2wpkh(...)`, `p2wsh(...)` or `standard(...)` call.
  */
 export function addressLiteral(sample: LandingSample): string {
   const args = [quote(sample.address)];

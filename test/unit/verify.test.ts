@@ -12,6 +12,7 @@ import {
   p2pkh,
   p2sh,
   p2wpkh,
+  p2wsh,
   seed,
   standard,
   verifyPuzzle,
@@ -174,6 +175,7 @@ describe("Collection.verify", () => {
   it.each([
     p2sh("3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy", "b472a266d0bd89c13706a4132ccfb16f7c3b9fcb"),
     standard("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+    p2wsh("bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj"),
   ])("marks unsupported $kind derivation as unavailable", (address) => {
     const result = verifyPuzzle(
       bitcoinPuzzle({

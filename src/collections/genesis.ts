@@ -1,15 +1,27 @@
 import { NamedCollection } from "../core/collection.ts";
-import { confirmation, official, party, standard } from "../core/parts.ts";
+import { confirmation, funding, increase, official, p2wsh, party } from "../core/parts.ts";
 import { bitcoinPuzzle } from "../core/puzzle.ts";
 
 /** The Genesis block puzzle announced through Bitcoin OP_RETURN messages. */
 export const genesisBlock = bitcoinPuzzle({
   id: "genesis/block",
-  address: standard("bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj"),
+  address: p2wsh("bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj"),
   sourceUrl:
     "https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
   startedAt: "2026-08-22 19:45:38",
   preGenesis: true,
+  transactions: [
+    funding(
+      "e2aaa928a965ee02b9c9a76227383113a62f350701a18d7792372712ce501ac7",
+      "2026-08-22 02:45:22",
+      0.0002,
+    ),
+    increase(
+      "b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
+      "2026-08-22 19:45:38",
+      0.00005,
+    ),
+  ],
   hints: [
     official(
       "I made a Bitcoin puzzle using information contained in the genesis block created by Satoshi to generate the wallet. The entropy is extremely low. I didn't even need to back anything up. Everything I needed was already in the genesis block. Good luck!",

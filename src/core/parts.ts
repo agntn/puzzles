@@ -3,6 +3,7 @@ export const AddressKind = {
   P2PKH: "p2pkh",
   P2SH: "p2sh",
   P2WPKH: "p2wpkh",
+  P2WSH: "p2wsh",
   Standard: "standard",
 } as const;
 
@@ -295,6 +296,16 @@ export function p2pkh(value: string, hash160?: string): Address {
  */
 export function p2wpkh(value: string, hash160?: string): Address {
   return address(AddressKind.P2WPKH, value, hash160);
+}
+
+/**
+ * Records a P2WSH address without assuming a witness script.
+ *
+ * @param {string} value - Encoded address.
+ * @returns {Address} The P2WSH address record.
+ */
+export function p2wsh(value: string): Address {
+  return address(AddressKind.P2WSH, value);
 }
 
 /**

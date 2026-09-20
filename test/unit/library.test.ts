@@ -97,7 +97,7 @@ describe("lazy collection registry", () => {
   it("keeps the Genesis announcement without inventing a prize or key", async () => {
     const puzzle = await requirePuzzle("genesis/block");
     expect(puzzle.address()).toEqual({
-      kind: "standard",
+      kind: "p2wsh",
       value: "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj",
     });
     expect(puzzle.startedAt()).toBe("2026-08-22 19:45:38");
@@ -107,7 +107,20 @@ describe("lazy collection registry", () => {
     expect(puzzle.prize()).toBeUndefined();
     expect(puzzle.key()).toBeUndefined();
     expect(puzzle.pubkey()).toBeUndefined();
-    expect(puzzle.transactions()).toEqual([]);
+    expect(puzzle.transactions()).toEqual([
+      {
+        tx_type: "funding",
+        txid: "e2aaa928a965ee02b9c9a76227383113a62f350701a18d7792372712ce501ac7",
+        date: "2026-08-22 02:45:22",
+        amount: 0.0002,
+      },
+      {
+        tx_type: "increase",
+        txid: "b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
+        date: "2026-08-22 19:45:38",
+        amount: 0.00005,
+      },
+    ]);
     expect(puzzle.hints()).toHaveLength(19);
     expect(puzzle.hints()[0]?.source).toBe(puzzle.sourceUrl());
     expect(puzzle.hints().at(-1)?.date).toBe("2026-09-19");
