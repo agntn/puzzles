@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { all, collectionKeys } from "../../src/index.ts";
+import { all, collectionKeys, collections } from "../../src/index.ts";
 import { chains } from "../../src/core/chains.ts";
 import { facts } from "../../src/tool-operations.ts";
 
@@ -108,6 +108,17 @@ const expected = {
 } as const;
 
 describe("the prose counts what the registry ships", () => {
+  it("lists every collection in the skill's ID table and the registry class tree", async () => {
+    const skill = readFileSync(path.join(root, "skills/puzzles/SKILL.md"), "utf8");
+    const table = skill.split("## Puzzle ID format")[1]?.split("## Library")[0] ?? "";
+    const guide = readFileSync(path.join(root, "docs/content/1.guide/03.registry.md"), "utf8");
+    const tree = guide.split("## Where the collections come from")[1] ?? "";
+    for (const collection of await collections()) {
+      expect(table).toContain(`| \`${collection.key}\``);
+      expect(tree).toContain(collection.constructor.name);
+    }
+  });
+
   it("finds the counts it checks", () => {
     expect(countsIn("Twelve collections on five chains, 12 collections", "collections")).toEqual([
       "twelve",
