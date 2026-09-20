@@ -140,6 +140,77 @@ describe.concurrent("puzzles CLI", () => {
     });
   });
 
+  it("does not treat the 1bitcoin 777 sat notarization as the claim", async () => {
+    const record = await json<{
+      readonly solve_date?: string;
+      readonly solve_time?: number;
+      readonly transactions?: readonly {
+        readonly tx_type: string;
+        readonly txid: string;
+        readonly date: string;
+        readonly amount: number;
+      }[];
+    }>("show", "zden/1bitcoin_white_paper", "--json");
+
+    expect(record.solve_date).toBe("2021-05-19 18:42:33");
+    expect(record.solve_time).toBe(3344162);
+    expect(record.transactions).toEqual([
+      {
+        tx_type: "funding",
+        txid: "063a1913256940e72237419cada939694f4f361d6a1bd2461c5b8387d1b77cb3",
+        date: "2021-04-11 01:46:31",
+        amount: 0.00117578,
+      },
+      {
+        tx_type: "decrease",
+        txid: "252f49ac38fd858d74baea65e98e44b882d98e794e91426dcc91e62f80d33b56",
+        date: "2021-05-15 05:35:18",
+        amount: 0.00000777,
+      },
+      {
+        tx_type: "increase",
+        txid: "40138a9fbdbd160df3538efc6a574b7dfc1a98426c3e6046cda0a5892bf17cf6",
+        date: "2021-05-15 23:54:05",
+        amount: 0.00661489,
+      },
+      {
+        tx_type: "claim",
+        txid: "40b500597aa1d6904db01d36945871a55c5b3a400c4218992d3fbe901cd414b3",
+        date: "2021-05-19 18:42:33",
+        amount: 0.00732196,
+      },
+    ]);
+  });
+
+  it("quotes the 1bitcoin notarization sentence the author published", async () => {
+    const output = await puzzles("hints", "zden/1bitcoin_white_paper");
+    const hints = await json<Record<string, unknown>>(
+      "hints",
+      "zden/1bitcoin_white_paper",
+      "--json",
+    );
+
+    expect(output.split("\n")).toEqual([
+      "zden/1bitcoin_white_paper: 1 hint",
+      "hints: 1",
+      "\tofficial\t-\tArtwork is also notarized on the Bitcoin blockchain by a transaction of 777 Satoshis from the puzzle's address. The SHA-256 fingerprint from this image creates the private key of the notarization wallet.\tsource: https://crypto.haluska.sk/\tconfirmation: https://web.archive.org/web/20210729030148/https://crypto.haluska.sk/ (Wayback capture of the puzzle page)",
+    ]);
+    expect(hints).toEqual({
+      hints: [
+        {
+          kind: "official",
+          text: "Artwork is also notarized on the Bitcoin blockchain by a transaction of 777 Satoshis from the puzzle's address. The SHA-256 fingerprint from this image creates the private key of the notarization wallet.",
+          source: "https://crypto.haluska.sk/",
+          confirmation: {
+            url: "https://web.archive.org/web/20210729030148/https://crypto.haluska.sk/",
+            description: "Wayback capture of the puzzle page",
+          },
+        },
+      ],
+      hintAssets: [],
+    });
+  });
+
   it("lists the hint files a record ships, in text and in JSON", async () => {
     const output = await puzzles("hints", "gsmg");
     const hints = await json<Record<string, unknown>>("hints", "gsmg", "--json");
