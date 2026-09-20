@@ -105,13 +105,13 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `warp`           |       6 | bitcoin                             | Keybase's scrypt brainwallet challenges |
 | `hash_collision` |       6 | bitcoin                             | Peter Todd's P2SH collision bounties    |
 | `ballet`         |       3 | bitcoin                             | BIP38 keys printed on physical wallets  |
+| `dug`            |       3 | bitcoin                             | 2025 student seed hunt                  |
 | `bitimage`       |       2 | bitcoin                             | Seeds hashed from photographs           |
+| `luckylurker`    |       2 | bitcoin                             | Two Bitcoin Vault seed challenges       |
 | `bitaps`         |       1 | bitcoin                             | A 3 of 5 secret sharing scheme          |
 | `gsmg`           |       1 | bitcoin                             | A multi phase image puzzle              |
 | `movie_enigma`   |       1 | bitcoin                             | Film titles as seed words, solved 2026  |
 | `ledger_donjon`  |       1 | bitcoin                             | Scissors Secret Sharing from the CTF    |
-| `dug`            |       3 | bitcoin                             | 2025 student seed hunt                  |
-| `luckylurker`    |       2 | bitcoin                             | Two Bitcoin Vault seed challenges       |
 
 Identifiers are `collection/name`. The three singletons, `gsmg`, `bitaps` and `movie_enigma`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 

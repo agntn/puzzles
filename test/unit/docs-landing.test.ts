@@ -101,6 +101,13 @@ describe("docs landing fixtures", () => {
     async (path) => {
       const library = await import("../../src/index.ts");
       const text = readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
+      const counts = text
+        .split("\n")
+        .filter((line) => line.startsWith("|"))
+        .map((line) => line.split("|").find((cell) => /^\s*\d+\s*$/u.test(cell)))
+        .filter((cell) => cell !== undefined)
+        .map(Number);
+      expect(counts).toEqual([...counts].sort((left, right) => right - left));
       for (const collection of await library.collections()) {
         const row = text.split("\n").find((line) => line.includes(`\`${collection.key}\``));
         const count = row?.split("|").find((cell) => /^\s*\d+\s*$/u.test(cell));
