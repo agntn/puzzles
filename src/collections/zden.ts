@@ -15,6 +15,7 @@ import { zdenPuzzleXixoio } from "./zden/xixoio.ts";
 import { zdenPuzzleCodexProtocol } from "./zden/codex-protocol.ts";
 import { zdenPuzzleLitecoinSegwit } from "./zden/litecoin-segwit.ts";
 import { zdenPuzzleDecredJanus } from "./zden/decred-janus.ts";
+import { zdenPuzzleDecredAutonomy } from "./zden/decred-autonomy.ts";
 
 /** Visual crypto puzzles by Zden. */
 export class ZdenCollection extends NamedCollection {
@@ -44,6 +45,7 @@ export class ZdenCollection extends NamedCollection {
     zdenPuzzleCodexProtocol,
     zdenPuzzleLitecoinSegwit,
     zdenPuzzleDecredJanus,
+    zdenPuzzleDecredAutonomy,
   ];
 
   /** Builds the canonical collection. */
