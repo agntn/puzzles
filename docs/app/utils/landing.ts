@@ -20,6 +20,7 @@ export const WALK: readonly string[] = [
   "b1000/135",
   "zden/litecoin_segwit",
   "arweave/weave11",
+  "dug/2025-1",
 ];
 
 /**
@@ -515,18 +516,48 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 1,
     tool: "arweave/weave11\tunsolved\t1 ETH\t0xff2142e98e09b5344994f9beb9c56c95506b9f17\nchain: ethereum  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2020-04-14 09:10:29\ntransactions: 1\n\tfunding\t2020-04-14 09:10:29\t1 ETH\t0x0d4738abf9d5c03c196eee4953feeb56ff06c385fa322bc9c76e105da38d7563\nexplorer: https://etherscan.io/address/0xff2142e98e09b5344994f9beb9c56c95506b9f17\nsource: https://arweave.net/CzITHnEIlkQw9SbaX5futCzFrKk1qe_NwvWnIBmP2fY",
   },
+  {
+    id: "dug/2025-1",
+    collection: "dug",
+    chain: "bitcoin",
+    status: "solved",
+    address: "bc1qphfklk568cf93267yetpngqsz0mthw4z4x2q69",
+    kind: "p2wpkh",
+    hash160: "0dd36fda9a3e1258ab5e265619a01013f6bbbaa2",
+    redeemScript: undefined,
+    prize: "0.00063216 BTC",
+    prizeAmount: 0.00063216,
+    currency: undefined,
+    startedAt: "2026-06-26 09:52:36",
+    solvedAt: "2026-08-02 12:12:29",
+    solveTime: undefined,
+    bits: undefined,
+    range: undefined,
+    pubkey: "030349e3498e3abcd935bacdc117533b9e3ce3ec05b2958b4ecadde7c68c9c8e45",
+    pubkeyFormat: "compressed",
+    secret: "seed",
+    keyLiteral:
+      'seed("profit general lava hover jar visa joy immense install first give kingdom", "m/84\'/0\'/0\'/0/1")',
+    verdict: "verified",
+    detail: "bc1qphfklk568cf93267yetpngqsz0mthw4z4x2q69",
+    explorer: "https://blockstream.info/address/bc1qphfklk568cf93267yetpngqsz0mthw4z4x2q69",
+    source:
+      "https://github.com/floflo777/open-crypto-puzzles/tree/main/4-solved/dug-student-treasure-hunt-63ksats",
+    transactions: 2,
+    tool: "dug/2025-1\tsolved\t0.00063216 BTC\tbc1qphfklk568cf93267yetpngqsz0mthw4z4x2q69\nchain: bitcoin  address kind: p2wpkh\nhash160: 0dd36fda9a3e1258ab5e265619a01013f6bbbaa2\npublic key: 030349e3498e3abcd935bacdc117533b9e3ce3ec05b2958b4ecadde7c68c9c8e45 (compressed)\nprivate key: profit general lava hover jar visa joy immense install first give kingdom (seed phrase)\nderivation path: m/84'/0'/0'/0/1\nstarted: 2026-06-26 09:52:36\nsolved: 2026-08-02 12:12:29\nsolver: floflo777, github https://github.com/floflo777, twitter https://twitter.com/0xFlorent_\ntransactions: 2\n\tfunding\t2026-06-26 09:52:36\t0.00063216 BTC\t35a1c6c2c7b01a1f9b83ce72f4bc6c748464e3b9f193375d3b80d2f350f48da6\n\tclaim\t2026-08-02 12:12:29\t0.00063216 BTC\tee70de514686588173b64fc31fc317ae15f1e903c742cc99140d2cf1bb2e8db1\nclaim: https://blockstream.info/tx/ee70de514686588173b64fc31fc317ae15f1e903c742cc99140d2cf1bb2e8db1\nsolution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/dug/2025-solution.md\nasset source: https://github.com/floflo777/open-crypto-puzzles/tree/main/4-solved/dug-student-treasure-hunt-63ksats\ncollection hints: 1\n\tofficial\t2025-10-07\tTwelfth and Final Treasure Hunt Word: 12. Kingdom\tsource: https://njump.me/note157473tjlhl8046c4uhxk6889nwgflwsjtlpwgzfuqp0lmq8vvzas0km4hc\tconfirmation: https://blossom.primal.net/394004c70b8907504a2424865e866b10fe5746c89122899a968f3dbcd18ad6b3.jpg (The lecture slide attached to Dug's signed Nostr event.)\nexplorer: https://blockstream.info/address/bc1qphfklk568cf93267yetpngqsz0mthw4z4x2q69\nsource: https://github.com/floflo777/open-crypto-puzzles/tree/main/4-solved/dug-student-treasure-hunt-63ksats",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "f647e7c7ce1f",
-  total: 337,
-  solved: 134,
+  dataVersion: "610822e7dbf5",
+  total: 340,
+  solved: 137,
   unsolved: 94,
   claimed: 11,
   swept: 96,
   expired: 2,
-  withPubkey: 238,
+  withPubkey: 241,
   unsolvedPrize: {
     AR: 1900,
     ETH: 1,
@@ -536,7 +567,7 @@ export const STATS_STATIC = {
     AR: 5550,
     ETH: 14.1337,
     DAI: 100,
-    BTC: 1059.06999775,
+    BTC: 1059.07158961,
     LTC: 230.8255,
     DCR: 460,
   },
@@ -667,6 +698,36 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     firstStarted: "2019-06-28 08:06:08",
     lastStarted: "2019-07-03 02:48:04",
     hints: [],
+  },
+  {
+    key: "dug",
+    author: "Dug",
+    authorUrl: "https://njump.me/npub1zrmu0amjmkynxlxgmdsyrjmp8vhxdz8ch5vja9vh9ym4natg8k5s8ge9wx",
+    total: 3,
+    statuses: {
+      solved: 3,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.00159186,
+    },
+    unsolvedPrize: {},
+    withPubkey: 3,
+    withKey: 3,
+    firstStarted: "2025-06-26 07:10:21",
+    lastStarted: "2026-06-26 10:31:49",
+    hints: [
+      {
+        kind: "official",
+        text: "Twelfth and Final Treasure Hunt Word: 12. Kingdom",
+        source: "https://njump.me/note157473tjlhl8046c4uhxk6889nwgflwsjtlpwgzfuqp0lmq8vvzas0km4hc",
+        confirmation: {
+          url: "https://blossom.primal.net/394004c70b8907504a2424865e866b10fe5746c89122899a968f3dbcd18ad6b3.jpg",
+          description: "The lecture slide attached to Dug's signed Nostr event.",
+        },
+        date: "2025-10-07",
+      },
+    ],
   },
   {
     key: "gsmg",

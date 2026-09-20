@@ -5,6 +5,7 @@ import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
+import { DugCollection } from "../../src/collections/dug.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash_collision.ts";
 import { LedgerDonjonCollection } from "../../src/collections/ledger_donjon.ts";
@@ -33,6 +34,7 @@ import {
   p2pkh,
   party,
   PuzzleNotFoundError,
+  requireCollection,
   requirePuzzle,
   SingletonCollection,
   stats,
@@ -45,6 +47,7 @@ const concreteClasses = [
   BalletCollection,
   BitapsCollection,
   BitimageCollection,
+  DugCollection,
   GsmgCollection,
   HashCollisionCollection,
   LedgerDonjonCollection,
@@ -98,6 +101,63 @@ describe("lazy collection registry", () => {
     expect(await get("missing")).toBeUndefined();
     const foreign = [undefined, null, true, 71n, {}] as never[];
     expect(await Promise.all(foreign.map((id) => get(id)))).toEqual(foreign.map(() => undefined));
+  });
+
+  it.each([
+    ["2025-0", "bc1qych2me6h85j38s3xmfwdkcvpqakpld3yr2y5ss", 0.00075082, "2026-07-08 14:43:50"],
+    ["2025-1", "bc1qphfklk568cf93267yetpngqsz0mthw4z4x2q69", 0.00063216, "2026-08-02 12:12:29"],
+    ["2025-2", "bc1qnclravnmv7vta9fhnp44hu3y85z3tfgz0n33wl", 0.00020888, "2026-07-08 14:43:50"],
+  ] as const)(
+    "verifies Dug's %s target and its own prize",
+    async (name, address, prize, solved) => {
+      const collection = await requireCollection("dug");
+      const puzzle = await requirePuzzle(`dug/${name}`);
+      expect(puzzle.status()).toBe(Status.Solved);
+      expect(puzzle.prize()).toBe(prize);
+      expect(puzzle.solvedAt()).toBe(solved);
+      expect(puzzle.claimTransaction()?.amount).toBe(prize);
+      expect(await collection.verifyById(puzzle.id())).toMatchObject({
+        verified: true,
+        derivedAddress: address,
+      });
+      expect(collection.hintsById(puzzle.id())[0]?.source).toBe(
+        "https://njump.me/note157473tjlhl8046c4uhxk6889nwgflwsjtlpwgzfuqp0lmq8vvzas0km4hc",
+      );
+      expect(puzzle.hints()).toHaveLength(0);
+    },
+  );
+
+  it("keeps all three Dug targets with their shared hint and separate claims", async () => {
+    const collection = await requireCollection("dug");
+    expect(collection.author.name).toBe("Dug");
+    expect(collection.all().map((puzzle) => puzzle.id())).toEqual([
+      "dug/2025-0",
+      "dug/2025-1",
+      "dug/2025-2",
+    ]);
+    expect(collection.all().map((puzzle) => puzzle.key()?.data().seed?.path)).toEqual([
+      "m/84'/0'/0'/0/0",
+      "m/84'/0'/0'/0/1",
+      "m/84'/0'/0'/0/2",
+    ]);
+    expect(collection.all().map((puzzle) => puzzle.claimTransaction()?.txid)).toEqual([
+      "bcc2154f4eb33c361973313b9fe81131568b2f4ee3ef5a2c3e98dc327afd8074",
+      "ee70de514686588173b64fc31fc317ae15f1e903c742cc99140d2cf1bb2e8db1",
+      "bcc2154f4eb33c361973313b9fe81131568b2f4ee3ef5a2c3e98dc327afd8074",
+    ]);
+    expect(collection.all().map((puzzle) => puzzle.solver()?.name)).toEqual([
+      undefined,
+      "floflo777",
+      undefined,
+    ]);
+    expect(collection.requireId("dug/2025-1").solver()?.profiles).toEqual([
+      { name: "github", url: "https://github.com/floflo777" },
+      { name: "twitter", url: "https://twitter.com/0xFlorent_" },
+    ]);
+    expect(collection.hints).toHaveLength(1);
+    expect(collection.hints[0]?.confirmation.url).toBe(
+      "https://blossom.primal.net/394004c70b8907504a2424865e866b10fe5746c89122899a968f3dbcd18ad6b3.jpg",
+    );
   });
 
   it("records the solved LuckyLurker Vault with its derived key and published answers", async () => {
@@ -285,20 +345,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(337);
+    expect(await all()).toHaveLength(340);
     expect(await stats()).toEqual({
-      total: 337,
+      total: 340,
       claimed: 11,
       expired: 2,
-      solved: 134,
+      solved: 137,
       swept: 96,
       unsolved: 94,
-      with_pubkey: 238,
+      with_pubkey: 241,
       total_prize: {
         AR: 5550,
         ETH: 14.1337,
         DAI: 100,
-        BTC: 1059.06999775,
+        BTC: 1059.07158961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -325,7 +385,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(337);
+    ).toBe(340);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -352,6 +412,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(134);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(137);
   });
 });

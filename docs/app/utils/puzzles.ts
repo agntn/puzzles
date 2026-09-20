@@ -52,6 +52,13 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Seeds hashed out of photographs. One solved, one waits on a passphrase.",
   },
+  dug: {
+    icon: "i-lucide-graduation-cap",
+    title: "Dug's Student Treasure Hunt",
+    sample: "dug/2025-1",
+    chains: ["bitcoin"],
+    blurb: "Three funded BIP84 addresses. One published seed. All three prizes claimed.",
+  },
   gsmg: {
     icon: "i-lucide-rabbit",
     title: "GSMG.io puzzle",
