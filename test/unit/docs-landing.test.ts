@@ -101,14 +101,20 @@ describe("docs landing fixtures", () => {
     async (path) => {
       const library = await import("../../src/index.ts");
       const text = readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
+      const collections = await library.collections();
+      const countsByKey = new Map(
+        collections.map((collection) => [`\`${collection.key}\``, collection.count()]),
+      );
       const counts = text
         .split("\n")
         .filter((line) => line.startsWith("|"))
-        .map((line) => line.split("|").find((cell) => /^\s*\d+\s*$/u.test(cell)))
-        .filter((cell) => cell !== undefined)
-        .map(Number);
+        .map((line) => line.split("|").map((cell) => cell.trim()))
+        .map((cells) => cells.find((cell) => countsByKey.has(cell)))
+        .filter((key) => key !== undefined)
+        .map((key) => countsByKey.get(key)!);
+      expect(counts).toHaveLength(collections.length);
       expect(counts).toEqual([...counts].sort((left, right) => right - left));
-      for (const collection of await library.collections()) {
+      for (const collection of collections) {
         const row = text.split("\n").find((line) => line.includes(`\`${collection.key}\``));
         const count = row?.split("|").find((cell) => /^\s*\d+\s*$/u.test(cell));
         expect(count?.trim()).toBe(String(collection.count()));
