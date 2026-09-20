@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { collectionFacts } from "../../docs/app/utils/collections.ts";
 import { FACTS_STATIC, LANDING_STATIC, STATS_STATIC, WALK } from "../../docs/app/utils/landing.ts";
@@ -62,6 +63,17 @@ describe("docs landing fixtures", () => {
     });
     expect(FACTS_STATIC).toEqual((await library.collections()).map(collectionFacts));
   });
+
+  it.each(["README.md", "docs/content/index.md", "docs/app/app.config.ts", "docs/nuxt.config.ts"])(
+    "keeps the advertised puzzle total current in %s",
+    async (path) => {
+      const library = await import("../../src/index.ts");
+      const text = readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
+      const advertised = text.match(/\b(\d+) (?:public crypto )?puzzles\b/u)?.[1];
+
+      expect(advertised).toBe(String((await library.stats()).total));
+    },
+  );
 
   it("read a collection's facts strip without loading another collection", async () => {
     const library = await import("../../src/index.ts");

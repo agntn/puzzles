@@ -114,6 +114,8 @@ describe("lazy collection registry", () => {
     expect(puzzle.assetPath()).toBe("assets/zden/decred_autonomy/puzzle.jpg");
     expect(puzzle.claimTransaction()).toBeUndefined();
     expect(puzzle.prize()).toBeUndefined();
+    expect(puzzle.toJSON()).not.toHaveProperty("solve_date");
+    expect(puzzle.toJSON()).not.toHaveProperty("solve_time");
   });
 
   it("resolves a collection query only in the spelling its identifier uses", () => {
