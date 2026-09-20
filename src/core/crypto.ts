@@ -17,6 +17,11 @@ const litecoin = new Litecoin();
 const decred = new Decred();
 const ethereum = new Ethereum();
 
+/** Address derivation needs information beyond the record's private key. */
+export class UnsupportedAddressKindError extends TypeError {
+  override readonly name = "UnsupportedAddressKindError";
+}
+
 function walletFor(chain: Chain): AbstractBlockchain | undefined {
   switch (chain) {
     case Chain.Bitcoin:
@@ -65,7 +70,9 @@ function addressType(chain: Chain, kind: AddressKind): string | undefined {
       return "segwit";
     case AddressKind.P2SH:
     case AddressKind.Standard:
-      throw new TypeError(`Cannot derive a ${kind} address from a private key alone`);
+      throw new UnsupportedAddressKindError(
+        `Cannot derive a ${kind} address from a private key alone`,
+      );
   }
 }
 

@@ -10,8 +10,10 @@ import {
   hex,
   litecoinPuzzle,
   p2pkh,
+  p2sh,
   p2wpkh,
   seed,
+  standard,
   verifyPuzzle,
   wif,
   type Address,
@@ -167,6 +169,46 @@ describe("Collection.verify", () => {
     const result = await ballet.verify("AA009926");
 
     expect(result).toMatchObject({ verified: false, unavailable: true, error: "WIF is encrypted" });
+  });
+
+  it.each([
+    p2sh("3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy", "b472a266d0bd89c13706a4132ccfb16f7c3b9fcb"),
+    standard("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+  ])("marks unsupported $kind derivation as unavailable", (address) => {
+    const result = verifyPuzzle(
+      bitcoinPuzzle({
+        ...synthetic,
+        address,
+        key: hex("0000000000000000000000000000000000000000000000000000000000000001"),
+      }),
+    );
+
+    expect(result).toEqual({
+      id: "test/synthetic",
+      verified: false,
+      privateKey: null,
+      expectedAddress: address.value,
+      derivedAddress: null,
+      unavailable: true,
+      error: `Cannot derive a ${address.kind} address from a private key alone`,
+    });
+  });
+
+  it("keeps invalid private keys as failures", () => {
+    const result = verifyPuzzle(
+      bitcoinPuzzle({
+        ...synthetic,
+        address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+        key: hex("0000000000000000000000000000000000000000000000000000000000000000"),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: false,
+      unavailable: false,
+      derivedAddress: null,
+      privateKey: null,
+    });
   });
 
   it("marks a derivation mismatch as a real failure", () => {
