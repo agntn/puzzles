@@ -57,7 +57,7 @@ const PRESENTATION: Readonly<
     title: "Dug's Student Treasure Hunt",
     sample: "dug/2025-1",
     chains: ["bitcoin"],
-    blurb: "Three funded BIP84 addresses. One published seed. All three prizes claimed.",
+    blurb: "Twelve lecture words, three Bitcoin prizes. A better reason to take notes.",
   },
   gsmg: {
     icon: "i-lucide-rabbit",
