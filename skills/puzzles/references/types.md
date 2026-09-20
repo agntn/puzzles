@@ -62,6 +62,7 @@ Constructors from `parts.ts` keep optional fields absent instead of empty:
 ```ts
 p2pkh(value, hash160?);
 p2wpkh(value, hash160?);
+p2wsh(value);
 p2sh(value, hash160, redeemScript(hash, script)?);
 standard(value, hash160?); // Ethereum, Arweave
 
