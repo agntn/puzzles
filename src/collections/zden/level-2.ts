@@ -31,7 +31,7 @@ export const zdenPuzzleLevel2 = bitcoinPuzzle({
   ],
   assets: assets({
     puzzle: "level_2/puzzle.png",
-    solver: "level_2/solver.png",
+    solution: "level_2/solver.png",
     sourceUrl: "https://crypto.haluska.sk/crypto2.png",
   }),
 });

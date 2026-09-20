@@ -106,7 +106,7 @@ warp.require("challenge_1");
 
 ## zden
 
-Visual crypto puzzles by Zden, 16 across Bitcoin, Ethereum, Litecoin, and Decred. Keys hide in images, animations, and visual patterns, so the asset matters as much as the record. Seven solved ones also ship the solver image from his page.
+Visual crypto puzzles by Zden, 16 across Bitcoin, Ethereum, Litecoin, and Decred. Keys hide in images, animations, and visual patterns, so the asset matters as much as the record. Seven solved ones also ship the solution image from his page.
 
 ```ts
 zden.require("level_4").assetUrl(); // raw asset URL

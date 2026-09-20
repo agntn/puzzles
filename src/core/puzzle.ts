@@ -52,7 +52,7 @@ export interface PuzzleData {
 /** One file a puzzle ships: its role, its name under `assets/<collection>/`, and where it lives. */
 export interface AssetLink {
   readonly file: string;
-  readonly kind: "puzzle" | "hint" | "solver";
+  readonly kind: "puzzle" | "hint" | "solution";
   readonly path: string;
   readonly url: string;
 }
@@ -80,7 +80,7 @@ function assetUrlOf(path: string): string {
 }
 
 /**
- * One hint or solver link under the collection's asset directory.
+ * One hint or solution link under the collection's asset directory.
  *
  * @param {AssetLink["kind"]} kind - The file's role on the record.
  * @param {string} file - The file name under the directory.
@@ -404,7 +404,7 @@ export abstract class Puzzle {
 
   /**
    * Every file the record ships, the puzzle image as `assetPath()` and `assetUrl()` answer it,
-   * then the hints, then the solver's notes, each with its path from the repository root and its
+   * then the hints, then the solution, each with its path from the repository root and its
    * canonical remote URL.
    *
    * @returns {readonly AssetLink[]} The files, or an empty list when the record ships none.
@@ -418,7 +418,7 @@ export abstract class Puzzle {
     return frozen([
       ...imageLink(assets.puzzle, this.assetPath(), this.assetUrl()),
       ...(assets.hints ?? []).map((hint) => assetLink("hint", hint, directory)),
-      ...(assets.solver === undefined ? [] : [assetLink("solver", assets.solver, directory)]),
+      ...(assets.solution === undefined ? [] : [assetLink("solution", assets.solution, directory)]),
     ]);
   }
 
