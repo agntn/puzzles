@@ -11,12 +11,25 @@ describe("hero collection window", () => {
         const visible = collectionWindow(keys, active);
         expect(visible.keys).toContain(active);
         expect(visible.keys).toHaveLength(Math.min(7, count));
-        expect(visible.keys).toEqual(
-          keys.slice(visible.start, visible.start + visible.keys.length),
-        );
       }
     },
   );
+
+  it.each([
+    [0, 0],
+    [1, 0],
+    [3, 0],
+    [4, 1],
+    [6, 3],
+    [9, 6],
+    [12, 6],
+  ])("places active row %i in the window starting at %i", (active, expectedStart) => {
+    const keys = Array.from({ length: 13 }, (_, index) => `collection_${index}`);
+    expect(collectionWindow(keys, keys[active]!)).toEqual({
+      start: expectedStart,
+      keys: keys.slice(expectedStart, expectedStart + 7),
+    });
+  });
 
   it("shows the current manifest through the last collection instead of truncating it", () => {
     const keys = collectionKeys();
