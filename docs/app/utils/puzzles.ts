@@ -61,10 +61,11 @@ const PRESENTATION: Readonly<
   },
   genesis: {
     icon: "i-lucide-blocks",
-    title: "Genesis Block",
+    title: "Genesis Block Wallet Puzzle",
     sample: "genesis/block",
     chains: ["bitcoin"],
-    blurb: "An anonymous OP_RETURN puzzle pointing back to Bitcoin's first block.",
+    blurb:
+      "Two keys hidden in Genesis block data. Public clues, paid hints, still no verified solution.",
   },
   gsmg: {
     icon: "i-lucide-rabbit",
