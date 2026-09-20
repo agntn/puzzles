@@ -1,3 +1,28 @@
+## v0.20.3
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.20.2...v0.20.3)
+
+### 🚀 Enhancements
+
+- **collections:** Decred Autonomy puzzle ([#197](https://github.com/agntn/puzzles/pull/197))
+- **collections:** Janus 33*bbb hint ([#199](https://github.com/agntn/puzzles/pull/199))
+- **collections:** LuckyLurker vaults and hints ([#202](https://github.com/agntn/puzzles/pull/202))
+
+### 🩹 Fixes
+
+- **dataset:** Keep export hashes consistent ([#195](https://github.com/agntn/puzzles/pull/195))
+- **verify:** Skip unsupported address kinds ([#196](https://github.com/agntn/puzzles/pull/196))
+- **collections:** 1bitcoin claim was 777 sats ([#201](https://github.com/agntn/puzzles/pull/201))
+
+### 📖 Documentation
+
+- Pin prose counts to the registry ([#200](https://github.com/agntn/puzzles/pull/200))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.20.2
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.20.1...v0.20.2)

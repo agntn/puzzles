@@ -1,6 +1,6 @@
 {
   "name": "@agntn/puzzles",
-  "version": "0.20.2",
+  "version": "0.20.3",
   "description": "Crypto bounties, puzzles and challenges as class-owned data for agents",
   "keywords": [
     "bitcoin",
