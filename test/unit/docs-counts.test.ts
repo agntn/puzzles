@@ -30,18 +30,25 @@ const ONES = [
   "eighteen",
   "nineteen",
 ];
+const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
 
 /**
  * A count as the prose writes it. Kept local so this file never imports `docs/app`.
  *
- * @param {number} count - A whole number below twenty.
+ * @param {number} count - A whole number from 0 through 99.
  * @returns {string} The English word, lowercase.
  */
 function spellOut(count: number): string {
-  return ONES[count] ?? String(count);
+  if (count < 0 || count >= 100) {
+    throw new RangeError(`prose count ${count} is outside 0-99`);
+  }
+  if (count < 20) return ONES[count]!;
+  const ones = count % 10;
+  const tens = TENS[(count - ones) / 10]!;
+  return ones === 0 ? tens : `${tens}-${ONES[ones]}`;
 }
 
-const numberWords = new Set(ONES);
+const numberWords = new Set(Array.from({ length: 100 }, (_, count) => spellOut(count)));
 
 /**
  * Every count in front of a noun, as a word or in digits: `twelve collections`, `7 tools`.
@@ -113,6 +120,10 @@ describe("the prose counts what the registry ships", () => {
     ]);
     expect(countsIn("Six factories, five chains", "factories")).toEqual(["six"]);
     expect(countsIn("Six factories, five chains", "chains")).toEqual(["five"]);
+    expect(countsIn("Twenty collections, 20 collections", "collections")).toEqual([
+      "twenty",
+      "twenty",
+    ]);
     expect(countsIn("the other eleven, 50 puzzles by default", "collections")).toHaveLength(0);
     const corpus = files.map((file) => readFileSync(path.join(root, file), "utf8"));
     for (const noun of ["collections", "tools", "factories", "chains"] as const) {
