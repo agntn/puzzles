@@ -5,7 +5,7 @@
 [![license](https://npmx.dev/api/registry/badge/license/@agntn/puzzles)](https://npmx.dev/package/@agntn/puzzles)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/agntn/puzzles)
 
-334 public crypto puzzles and bounties in twelve collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
+335 public crypto puzzles and bounties in twelve collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
 
 ## Why?
 
@@ -42,8 +42,8 @@ npx @agntn/puzzles stats
 ```
 
 ```text
-Total: 334
-Solved: 132
+Total: 335
+Solved: 133
 Unsolved: 93
 Claimed: 11
 Swept: 96
@@ -100,7 +100,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | ---------------- | ------: | ----------------------------------- | --------------------------------------- |
 | `b1000`          |     256 | bitcoin                             | Keys of 1 to 256 bits, one address each |
 | `rushwallet`     |      30 | bitcoin                             | Brainwallets from a 2014 contest        |
-| `zden`           |      15 | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                   |
+| `zden`           |      16 | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                   |
 | `arweave`        |      12 | arweave, ethereum                   | Tiamat's weave puzzles                  |
 | `warp`           |       6 | bitcoin                             | Keybase's scrypt brainwallet challenges |
 | `hash_collision` |       6 | bitcoin                             | Peter Todd's P2SH collision bounties    |

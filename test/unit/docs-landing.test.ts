@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { collectionFacts } from "../../docs/app/utils/collections.ts";
 import { FACTS_STATIC, LANDING_STATIC, STATS_STATIC, WALK } from "../../docs/app/utils/landing.ts";
@@ -62,6 +63,33 @@ describe("docs landing fixtures", () => {
     });
     expect(FACTS_STATIC).toEqual((await library.collections()).map(collectionFacts));
   });
+
+  it.each([
+    "README.md",
+    "docs/content/index.md",
+    "docs/app/app.config.ts",
+    "docs/nuxt.config.ts",
+    "skills/puzzles/SKILL.md",
+  ])("keeps the advertised puzzle total current in %s", async (path) => {
+    const library = await import("../../src/index.ts");
+    const text = readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
+    const advertised = text.match(/\b(\d+) (?:public crypto )?puzzles\b/u)?.[1];
+
+    expect(advertised).toBe(String((await library.stats()).total));
+  });
+
+  it.each(["README.md", "docs/content/2.collections/00.index.md"])(
+    "keeps collection table counts current in %s",
+    async (path) => {
+      const library = await import("../../src/index.ts");
+      const text = readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
+      for (const collection of await library.collections()) {
+        const row = text.split("\n").find((line) => line.includes(`\`${collection.key}\``));
+        const count = row?.split("|").find((cell) => /^\s*\d+\s*$/u.test(cell));
+        expect(count?.trim()).toBe(String(collection.count()));
+      }
+    },
+  );
 
   it("read a collection's facts strip without loading another collection", async () => {
     const library = await import("../../src/index.ts");

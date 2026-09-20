@@ -32,6 +32,7 @@ import {
   p2pkh,
   party,
   PuzzleNotFoundError,
+  requirePuzzle,
   SingletonCollection,
   stats,
   Status,
@@ -95,6 +96,26 @@ describe("lazy collection registry", () => {
     expect(await get("missing")).toBeUndefined();
     const foreign = [undefined, null, true, 71n, {}] as never[];
     expect(await Promise.all(foreign.map((id) => get(id)))).toEqual(foreign.map(() => undefined));
+  });
+
+  it("includes Autonomy with its archived reward address and solution source", async () => {
+    const puzzle = await requirePuzzle("zden/decred_autonomy");
+
+    expect(puzzle.chain()).toBe("decred");
+    expect(puzzle.address().value).toBe("DseEpHK49hHrTJhxwop3B86K1dryv4CYz8N");
+    expect(puzzle.status()).toBe(Status.Solved);
+    expect(puzzle.startedAt()).toBe("2017-04-25");
+    expect(puzzle.sourceUrl()).toBe(
+      "https://web.archive.org/web/20170430210807/https://decred.org/autonomy_puzzle/",
+    );
+    expect(puzzle.solver()?.profiles?.[0]?.url).toBe(
+      "https://medium.com/blockcrushr-labs/solving-decreds-autonomy-puzzle-aedac18f18f3",
+    );
+    expect(puzzle.assetPath()).toBe("assets/zden/decred_autonomy/puzzle.jpg");
+    expect(puzzle.claimTransaction()).toBeUndefined();
+    expect(puzzle.prize()).toBeUndefined();
+    expect(puzzle.toJSON()).not.toHaveProperty("solve_date");
+    expect(puzzle.toJSON()).not.toHaveProperty("solve_time");
   });
 
   it("resolves a collection query only in the spelling its identifier uses", () => {
@@ -198,12 +219,12 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(334);
+    expect(await all()).toHaveLength(335);
     expect(await stats()).toEqual({
-      total: 334,
+      total: 335,
       claimed: 11,
       expired: 2,
-      solved: 132,
+      solved: 133,
       swept: 96,
       unsolved: 93,
       with_pubkey: 237,
@@ -238,7 +259,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(334);
+    ).toBe(335);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -265,6 +286,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(132);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(133);
   });
 });
