@@ -298,18 +298,15 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
 }
 
 /**
- * Verifies that a puzzle's known key material derives its stored address. The signing crypto loads
- * on the first call, like `Collection.verifyById()`, so registering the tools costs no secp256k1.
+ * Derives the stored address, loading crypto only after the puzzle is found.
  *
  * @param {string} id - Universal puzzle identifier.
  * @returns {Promise<ToolResult>} The verification outcome for the puzzle.
  */
 export async function verifyTool(id: string): Promise<ToolResult> {
   const { requirePuzzle } = await import("./core/dataset.ts");
-  const [puzzle, { verifyPuzzle }] = await Promise.all([
-    requirePuzzle(assertLength("id", id, facts.parameters.id)),
-    import("./core/verify.ts"),
-  ]);
+  const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
+  const { verifyPuzzle } = await import("./core/verify.ts");
   const result = verifyPuzzle(puzzle);
   const summary = result.verified
     ? `${result.id}: verified, derives ${result.derivedAddress}`
