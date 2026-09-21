@@ -91,7 +91,7 @@
     "obuild": "0.4.40",
     "oxfmt": "0.63.0",
     "oxlint": "1.78.0",
-    "oxlint-tsgolint": "7.0.2001",
+    "oxlint-tsgolint": "7.0.2002",
     "typescript": "7.0.2",
     "vitest": "4.1.11"
   },
