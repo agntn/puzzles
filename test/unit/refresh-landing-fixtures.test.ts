@@ -75,6 +75,22 @@ describe("landing fixture refresh", () => {
     expect(readFileSync(targetPath, "utf8")).toBe(refreshed);
   });
 
+  it("refreshes CRLF fixtures without changing their line endings", async () => {
+    const source = readFileSync("docs/app/utils/landing.ts", "utf8")
+      .replaceAll(/\r?\n/gu, "\r\n")
+      .replace(/dataVersion: "[0-9a-f]{12}"/u, 'dataVersion: "stale"');
+    const directory = mkdtempSync(join(tmpdir(), "puzzles-landing-crlf-"));
+    temporaryDirectories.push(directory);
+    const targetPath = join(directory, "landing.ts");
+    writeFileSync(targetPath, source);
+
+    expect(await refreshLandingFixtures({ check: true, targetPath })).toBe("stale");
+    expect(await refreshLandingFixtures({ targetPath })).toBe("updated");
+    const refreshed = readFileSync(targetPath, "utf8");
+    expect(refreshed.replaceAll("\r\n", "")).not.toContain("\n");
+    expect(await refreshLandingFixtures({ check: true, targetPath })).toBe("current");
+  });
+
   it("exposes check and usage failures through the command entrypoint", async () => {
     const directory = mkdtempSync(join(tmpdir(), "puzzles-landing-command-"));
     temporaryDirectories.push(directory);

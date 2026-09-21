@@ -117,17 +117,31 @@ ${END}
   );
 }
 
+function lineEndingAfter(source: string, offset: number): "\r\n" | "\n" | undefined {
+  if (source.startsWith("\r\n", offset)) return "\r\n";
+  if (source.startsWith("\n", offset)) return "\n";
+  return undefined;
+}
+
 function replaceGeneratedRegion(source: string, generated: string, targetPath: string): string {
-  const startMarker = `${START}\n`;
-  const endMarker = `${END}\n`;
-  const start = source.indexOf(startMarker);
-  const end = source.indexOf(endMarker);
-  const duplicateStart = source.indexOf(startMarker, start + startMarker.length);
-  const duplicateEnd = source.indexOf(endMarker, end + endMarker.length);
-  if (start < 0 || end < start || duplicateStart >= 0 || duplicateEnd >= 0) {
+  const start = source.indexOf(START);
+  const end = source.indexOf(END, start + START.length);
+  const duplicateStart = source.indexOf(START, start + START.length);
+  const duplicateEnd = source.indexOf(END, end + END.length);
+  const lineEnding = lineEndingAfter(source, start + START.length);
+  const suffixStart = end + END.length + (lineEnding?.length ?? 0);
+  if (
+    start < 0 ||
+    end < start ||
+    duplicateStart >= 0 ||
+    duplicateEnd >= 0 ||
+    lineEnding === undefined ||
+    !source.startsWith(lineEnding, end + END.length)
+  ) {
     throw new Error(`Expected one generated landing fixture region in ${targetPath}`);
   }
-  return `${source.slice(0, start)}${generated}${source.slice(end + endMarker.length)}`;
+  const normalizedGenerated = generated.replaceAll(/\r?\n/gu, lineEnding);
+  return `${source.slice(0, start)}${normalizedGenerated}${source.slice(suffixStart)}`;
 }
 
 /**
