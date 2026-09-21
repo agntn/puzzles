@@ -12,7 +12,7 @@
     {
       "binding": "DB",
       "database_name": "agntn-puzzles",
-      "database_id": "b1ac3966-1335-4bf7-ab67-9f241377ed4c",
+      "database_id": "b1ac3966-1335-4bf7-ab67-9f241377ed4c"
     },
   ],
   "cache": {
@@ -25,4 +25,17 @@
       "invocation_logs": true,
     },
   },
+
+  // Previews
+  "previews": {
+    "vars": {
+      "NUXT_SITE_URL": "https://puzzles.agntn.dev"
+    },
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_id": "8936668d-76e2-4e30-bc88-a0ce748f51fb",
+      },
+    ],
+  }
 }
