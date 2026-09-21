@@ -20,10 +20,10 @@
     "nuxt": "4.5.2"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "1.2.133",
+    "@iconify-json/lucide": "1.2.134",
     "@iconify-json/simple-icons": "1.2.96",
     "@iconify-json/token": "1.2.41",
-    "@iconify-json/vscode-icons": "1.2.77",
+    "@iconify-json/vscode-icons": "1.2.78",
     "vue-tsc": "^3.3.11",
     "wrangler": "4.128.0"
   },
