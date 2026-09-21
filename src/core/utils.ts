@@ -297,13 +297,14 @@ function formatHintAssets(links: readonly AssetLink[]): string[] {
   );
 }
 
-function formatConfirmation(confirmation: Confirmation): string {
-  return withNote(confirmation.url, confirmation.description);
+function formatConfirmation(confirmation: Confirmation | undefined): string {
+  return confirmation === undefined
+    ? ""
+    : `\tconfirmation: ${withNote(confirmation.url, confirmation.description)}`;
 }
 
 /**
- * One tab-separated line per hint: its kind, its date or a dash, the text, then the source and
- * what confirms it as `label: value` pairs, so the two URLs stay apart.
+ * One tab-separated hint with its source and any optional confirmation or published answer.
  *
  * @param {Hint} hint - The hint.
  * @returns {string} The line.
@@ -314,7 +315,7 @@ function formatHint(hint: Hint): string {
     published === undefined
       ? ""
       : `\tanswer: ${published.text}\tanswer source: ${published.source}${published.date === undefined ? "" : `\tanswer date: ${published.date}`}`;
-  return `\t${hint.kind}\t${hint.date ?? "-"}\t${hint.text}\tsource: ${hint.source}\tconfirmation: ${formatConfirmation(hint.confirmation)}${answer}`;
+  return `\t${hint.kind}\t${hint.date ?? "-"}\t${hint.text}\tsource: ${hint.source}${formatConfirmation(hint.confirmation)}${answer}`;
 }
 
 /**

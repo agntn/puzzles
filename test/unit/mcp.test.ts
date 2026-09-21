@@ -114,6 +114,21 @@ describe("puzzles MCP server", () => {
     expect(firstText(bare)).toBe("arweave/weave1: no hints recorded");
   });
 
+  it("lists Movie Enigma's official hints without extra confirmation links", async () => {
+    const result = await client.callTool({
+      name: "puzzles_hints",
+      arguments: { id: "movie_enigma" },
+    });
+
+    expect(firstText(result).split("\n")).toEqual([
+      "movie_enigma: 3 hints",
+      "hints: 3",
+      "\tofficial\t-\tGuess all the 34 movie titles, from the provided movie frames\tsource: https://bitcoinmovieenigma.com/rules",
+      '\tofficial\t-\tTransform "somehow" each movie title into an English BIP-0039 seed word\tsource: https://bitcoinmovieenigma.com/rules',
+      '\tofficial\t-\tThe seedphrase you have is 34 words long, but we should have a 24 words seedphrase instead. Some movies should not be in the sequence, and should be considered intruders, but which ones ? You will need additional informations about each movie to detect those intruders "somehow". Every information you need can be found on IMBD, on each movie\'s page\tsource: https://bitcoinmovieenigma.com/rules',
+    ]);
+  });
+
   it("limits list results and reports the match count", async () => {
     const result = await client.callTool({
       name: "puzzles_list",

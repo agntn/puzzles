@@ -3,7 +3,6 @@ import {
   assets,
   claim,
   compressed,
-  confirmation,
   funding,
   official,
   p2wpkh,
@@ -35,27 +34,15 @@ export const movieEnigmaPuzzle = bitcoinPuzzle({
   hints: [
     official(
       "Guess all the 34 movie titles, from the provided movie frames",
-      "https://www.bitcoinmovieenigma.com/rules",
-      confirmation(
-        "https://njump.me/48fbbff9845680b463784d5ddfdc5907a953b3f4df9e0e49a97d6eb123d52145",
-        "The author's Nostr announcement also specifies 34 films and English BIP39 words.",
-      ),
+      "https://bitcoinmovieenigma.com/rules",
     ),
     official(
       'Transform "somehow" each movie title into an English BIP-0039 seed word',
-      "https://www.bitcoinmovieenigma.com/rules",
-      confirmation(
-        "https://njump.me/48fbbff9845680b463784d5ddfdc5907a953b3f4df9e0e49a97d6eb123d52145",
-        "The author's Nostr announcement also specifies 34 films and English BIP39 words.",
-      ),
+      "https://bitcoinmovieenigma.com/rules",
     ),
     official(
       'The seedphrase you have is 34 words long, but we should have a 24 words seedphrase instead. Some movies should not be in the sequence, and should be considered intruders, but which ones ? You will need additional informations about each movie to detect those intruders "somehow". Every information you need can be found on IMBD, on each movie\'s page',
-      "https://www.bitcoinmovieenigma.com/rules",
-      confirmation(
-        "https://njump.me/48fbbff9845680b463784d5ddfdc5907a953b3f4df9e0e49a97d6eb123d52145",
-        "The author's Nostr announcement specifies ten intruders and information from each film's IMDb page.",
-      ),
+      "https://bitcoinmovieenigma.com/rules",
     ),
   ],
   solvedAt: "2026-09-08 01:32:56",

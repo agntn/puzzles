@@ -108,6 +108,32 @@ describe("puzzles_show text", () => {
     );
   });
 
+  it("prints hints without confirmations and keeps their dates and answers", () => {
+    const shared = official("Start at the top.", "https://example.com/rules");
+    const puzzle = bitcoinPuzzle({
+      id: "fixture/hinted",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      hints: [
+        community("The top is a decoy.", "https://example.com/thread", undefined, {
+          date: "2026-01-03",
+          answer: answer("Start below.", "https://example.com/answer"),
+        }),
+      ],
+    });
+    const expected = [
+      "collection hints: 1",
+      "\tofficial\t-\tStart at the top.\tsource: https://example.com/rules",
+      "hints: 1",
+      "\tcommunity\t2026-01-03\tThe top is a decoy.\tsource: https://example.com/thread\tanswer: Start below.\tanswer source: https://example.com/answer",
+    ];
+    expect(formatHintReport(puzzle, [shared])).toEqual(["fixture/hinted: 2 hints", ...expected]);
+    const text = formatPuzzleRecord(puzzle, [shared]);
+    expect(text).toContain(expected.join("\n"));
+    expect(text).not.toContain("confirmation:");
+  });
+
   it("dates a hint and leaves out a confirmation note it does not have", () => {
     const puzzle = bitcoinPuzzle({
       id: "fixture/hinted",

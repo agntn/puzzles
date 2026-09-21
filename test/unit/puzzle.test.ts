@@ -234,6 +234,30 @@ describe("puzzle record factories", () => {
     expect(answer("visit", "https://example.com/answers")).not.toHaveProperty("date");
   });
 
+  it("omits absent confirmation while retaining optional hint metadata", () => {
+    for (const build of [official, community]) {
+      const plain = build("Start at the top.", "https://example.com/rules");
+      expect(plain).toEqual({
+        kind: build === official ? "official" : "community",
+        text: "Start at the top.",
+        source: "https://example.com/rules",
+      });
+      const dated = build("Start at the top.", "https://example.com/rules", undefined, {
+        date: "2026-01-01",
+        answer: answer("Top left.", "https://example.com/answer"),
+      });
+      expect(dated).toEqual({
+        ...plain,
+        date: "2026-01-01",
+        answer: { text: "Top left.", source: "https://example.com/answer" },
+      });
+      const puzzle = bitcoinPuzzle({ ...required, hints: [plain, dated] });
+      expect(puzzle.toJSON().hints).toEqual([plain, dated]);
+      expect(puzzle.hints().every((hint) => Object.isFrozen(hint))).toBe(true);
+      expect(JSON.stringify(puzzle.toJSON())).not.toContain('"confirmation"');
+    }
+  });
+
   it("builds a hint with its kind, its provenance and nothing it was not given", () => {
     const proof = confirmation("https://web.archive.org/web/2026/https://example.com/puzzle");
 
