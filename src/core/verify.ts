@@ -86,23 +86,39 @@ function resolveWifKey(wif: string, chain: Chain): ResolvedKey | UnresolvedKey {
   }
 }
 
-function preferredFormat(puzzle: Puzzle): PubkeyFormat {
-  return puzzle.pubkey()?.format ?? PubkeyFormat.Compressed;
+function hexFormat(puzzle: Puzzle, hex: string): PubkeyFormat {
+  const format = puzzle.pubkey()?.format;
+  if (format !== undefined) {
+    return format;
+  }
+  const wif = puzzle.keyData()?.wif?.decrypted;
+  if (wif !== undefined) {
+    const decoded = resolveWifKey(wif, puzzle.chain());
+    if ("hex" in decoded && decoded.hex === hex.toLowerCase()) {
+      return decoded.format;
+    }
+  }
+  return PubkeyFormat.Compressed;
 }
 
 function resolveKey(puzzle: Puzzle): ResolvedKey | UnresolvedKey {
   const secret = secretOf(puzzle.keyData());
-  switch (secret?.kind) {
-    case undefined:
-      return unavailable("Puzzle has no private key");
+  if (secret === undefined) {
+    return unavailable("Puzzle has no private key");
+  }
+  switch (secret.kind) {
     case "hex":
-      return { hex: secret.hex, format: preferredFormat(puzzle) };
+      return { hex: secret.hex, format: hexFormat(puzzle, secret.hex) };
     case "wif":
       return resolveWifKey(secret.wif, puzzle.chain());
     case "encrypted":
       return unavailable("WIF is encrypted");
     case "seed":
-      return resolveSeedKey(secret, puzzle.chain(), preferredFormat(puzzle));
+      return resolveSeedKey(
+        secret,
+        puzzle.chain(),
+        puzzle.pubkey()?.format ?? PubkeyFormat.Compressed,
+      );
     case "mini":
       return unavailable("Mini private keys are not verified");
   }
