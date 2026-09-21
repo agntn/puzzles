@@ -158,6 +158,47 @@ describe("lazy collection registry", () => {
     expect(puzzle.hints().some((hint) => hint.text.startsWith("How many keys,"))).toBe(false);
   });
 
+  it("keeps Movie Enigma's original rules separate from its solution", async () => {
+    const puzzle = await requirePuzzle("movie_enigma");
+    const hints = [
+      {
+        kind: "official",
+        text: "Guess all the 34 movie titles, from the provided movie frames",
+        source: "https://www.bitcoinmovieenigma.com/rules",
+        confirmation: {
+          url: "https://njump.me/48fbbff9845680b463784d5ddfdc5907a953b3f4df9e0e49a97d6eb123d52145",
+          description:
+            "The author's Nostr announcement also specifies 34 films and English BIP39 words.",
+        },
+      },
+      {
+        kind: "official",
+        text: 'Transform "somehow" each movie title into an English BIP-0039 seed word',
+        source: "https://www.bitcoinmovieenigma.com/rules",
+        confirmation: {
+          url: "https://njump.me/48fbbff9845680b463784d5ddfdc5907a953b3f4df9e0e49a97d6eb123d52145",
+          description:
+            "The author's Nostr announcement also specifies 34 films and English BIP39 words.",
+        },
+      },
+      {
+        kind: "official",
+        text: 'The seedphrase you have is 34 words long, but we should have a 24 words seedphrase instead. Some movies should not be in the sequence, and should be considered intruders, but which ones ? You will need additional informations about each movie to detect those intruders "somehow". Every information you need can be found on IMBD, on each movie\'s page',
+        source: "https://www.bitcoinmovieenigma.com/rules",
+        confirmation: {
+          url: "https://njump.me/48fbbff9845680b463784d5ddfdc5907a953b3f4df9e0e49a97d6eb123d52145",
+          description:
+            "The author's Nostr announcement specifies ten intruders and information from each film's IMDb page.",
+        },
+      },
+    ];
+    expect(puzzle.hints()).toEqual(hints);
+    expect(puzzle.toJSON().hints).toEqual(hints);
+    const collection = await requireCollection("movie_enigma");
+    expect(collection.hintsById("movie_enigma")).toEqual(hints);
+    expect(puzzle.status()).toBe(Status.Solved);
+  });
+
   it("preserves universal and historical collection lookups", async () => {
     expect((await get("b1000/90"))?.id()).toBe("b1000/90");
     expect((await get("gsmg"))?.id()).toBe("gsmg");
