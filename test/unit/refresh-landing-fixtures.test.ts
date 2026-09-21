@@ -91,6 +91,19 @@ describe("landing fixture refresh", () => {
     expect(await refreshLandingFixtures({ check: true, targetPath })).toBe("current");
   });
 
+  it("rejects an end marker before the generated region", async () => {
+    const source = `/* generated:landing-fixtures:end */\n${readFileSync("docs/app/utils/landing.ts", "utf8")}`;
+    const directory = mkdtempSync(join(tmpdir(), "puzzles-landing-malformed-"));
+    temporaryDirectories.push(directory);
+    const targetPath = join(directory, "landing.ts");
+    writeFileSync(targetPath, source);
+
+    await expect(refreshLandingFixtures({ targetPath })).rejects.toThrow(
+      `Expected one generated landing fixture region in ${targetPath}`,
+    );
+    expect(readFileSync(targetPath, "utf8")).toBe(source);
+  });
+
   it("exposes check and usage failures through the command entrypoint", async () => {
     const directory = mkdtempSync(join(tmpdir(), "puzzles-landing-command-"));
     temporaryDirectories.push(directory);

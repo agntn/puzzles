@@ -125,7 +125,7 @@ function lineEndingAfter(source: string, offset: number): "\r\n" | "\n" | undefi
 
 function replaceGeneratedRegion(source: string, generated: string, targetPath: string): string {
   const start = source.indexOf(START);
-  const end = source.indexOf(END, start + START.length);
+  const end = source.indexOf(END);
   const duplicateStart = source.indexOf(START, start + START.length);
   const duplicateEnd = source.indexOf(END, end + END.length);
   const lineEnding = lineEndingAfter(source, start + START.length);
