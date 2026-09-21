@@ -1,3 +1,30 @@
+## v0.21.1
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.21.0...v0.21.1)
+
+### 🚀 Enhancements
+
+- **collections:** TORCHED H34R7S painting ([#215](https://github.com/agntn/puzzles/pull/215))
+- **docs:** Give tool results a compact panel ([#216](https://github.com/agntn/puzzles/pull/216))
+- **collections:** White paper wallet key ([#219](https://github.com/agntn/puzzles/pull/219))
+- **collections:** Movie Enigma's original rules ([#222](https://github.com/agntn/puzzles/pull/222))
+
+### 🩹 Fixes
+
+- **tools:** Say what each list status means ([#217](https://github.com/agntn/puzzles/pull/217))
+- **tools:** A missing id was loading keys ([#218](https://github.com/agntn/puzzles/pull/218))
+- **registry:** Retain loader registrations ([#220](https://github.com/agntn/puzzles/pull/220))
+- **verify:** Hex must not change a WIF verdict ([#221](https://github.com/agntn/puzzles/pull/221))
+
+### 🏡 Chore
+
+- Apply automated updates ([2369ec1](https://github.com/agntn/puzzles/commit/2369ec1))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.21.0
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.20.3...v0.21.0)
