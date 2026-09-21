@@ -75,7 +75,12 @@ try {
   const modules = loaded.length;
   if (!process.argv.includes("--benchmark")) {
     assert.deepEqual(
-      loaded.filter((url) => /@agntn[+/]chains|\/core\/(dataset|registry|puzzle)\.ts/u.test(url)),
+      loaded.filter(
+        (url) =>
+          /\/node_modules\/@agntn\/chains\//u.test(url) ||
+          (url.startsWith(`${entry(".")}/`) &&
+            /\/(?:core|_chunks)\/(?:dataset|registry|puzzle)\d*\.(?:ts|mjs)(?:[?#]|$)/u.test(url)),
+      ),
       [],
       "tool discovery must not load the dataset or chain implementations",
     );
