@@ -15,11 +15,11 @@
 
 ### 💅 Refactors
 
-- **puzzle:** ⚠️  Reserve solver for people ([#203](https://github.com/agntn/puzzles/pull/203))
+- **puzzle:** ⚠️ Reserve solver for people ([#203](https://github.com/agntn/puzzles/pull/203))
 
 #### ⚠️ Breaking Changes
 
-- **puzzle:** ⚠️  Reserve solver for people ([#203](https://github.com/agntn/puzzles/pull/203))
+- **puzzle:** ⚠️ Reserve solver for people ([#203](https://github.com/agntn/puzzles/pull/203))
 
 ### ❤️ Contributors
 
