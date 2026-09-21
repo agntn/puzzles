@@ -72,6 +72,51 @@ describe("registry consistency", () => {
     expect((await lib.getCollection("selffixture"))?.author.name).toBe("second");
   });
 
+  it("invalidates the aggregate when a loader registers another collection", async () => {
+    const lib = await freshLibrary();
+    const added = new lib.NamedCollection("addedfixture", lib.party("Added"), []);
+    const loader = new lib.NamedCollection("loaderfixture", lib.party("Loader"), []);
+    lib.registerCollection({
+      key: loader.key,
+      load: () => {
+        lib.registerCollection(added);
+        return Promise.resolve(loader);
+      },
+    });
+
+    const first = await lib.collections();
+    expect(first).toContain(loader);
+    expect(first).not.toContain(added);
+    expect(await lib.getCollection(added.key)).toBe(added);
+
+    const second = await lib.collections();
+    expect(second).toContain(added);
+    expect(second).not.toBe(first);
+    expect(await lib.collections()).toBe(second);
+    expect((await lib.dataset()).collections.map((collection) => collection.name)).toContain(
+      "addedfixture",
+    );
+  });
+
+  it("refreshes the aggregate when a loader replaces its own collection", async () => {
+    const lib = await freshLibrary();
+    const first = new lib.NamedCollection("selffixture", lib.party("First"), []);
+    const second = new lib.NamedCollection("selffixture", lib.party("Second"), []);
+    lib.registerCollection({
+      key: first.key,
+      load: () => {
+        lib.registerCollection(second);
+        return Promise.resolve(first);
+      },
+    });
+
+    expect(await lib.collections()).toContain(first);
+    const refreshed = await lib.collections();
+    expect(refreshed).toContain(second);
+    expect(refreshed).not.toContain(first);
+    expect(await lib.getCollection("selffixture")).toBe(second);
+  });
+
   it("resolves a historical alias in the collection segment of an identifier", async () => {
     const lib = await freshLibrary();
 

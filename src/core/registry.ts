@@ -64,7 +64,7 @@ function load(entry: TableEntry): Promise<AnyCollection> {
   if (cached !== undefined) {
     return cached;
   }
-  const promise = entry.load();
+  const promise = Promise.resolve().then(() => entry.load());
   if (table().get(entry.key) === entry) {
     pending.set(entry.key, promise);
     promise.catch(() => {
