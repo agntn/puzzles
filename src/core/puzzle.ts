@@ -15,18 +15,9 @@ import {
   type Transaction,
   TransactionType,
 } from "./parts.ts";
+import { Status } from "./status.ts";
 
-/** Puzzle lifecycle states. */
-export const Status = {
-  Claimed: "claimed",
-  Expired: "expired",
-  Solved: "solved",
-  Swept: "swept",
-  Unsolved: "unsolved",
-} as const;
-
-/** A puzzle lifecycle state. */
-export type Status = (typeof Status)[keyof typeof Status];
+export { Status } from "./status.ts";
 
 /** Serialized puzzle record. Absent fields are omitted, never null. */
 export interface PuzzleData {

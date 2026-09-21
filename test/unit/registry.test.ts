@@ -86,6 +86,11 @@ describe("registry consistency", () => {
     const originalCollections = await lib.collections();
     const originalData = await lib.datasetCollections();
     const originalVersion = await lib.dataVersion();
+    const originalStats = await lib.stats();
+    expect(await lib.stats()).toBe(originalStats);
+    expect(Object.isFrozen(originalStats)).toBe(true);
+    expect(Object.isFrozen(originalStats.total_prize)).toBe(true);
+    expect(Object.isFrozen(originalStats.unsolved_prize)).toBe(true);
     const makePuzzle = (name: string): Library.Puzzle =>
       lib.bitcoinPuzzle({
         id: `fixture/${name}`,
@@ -101,7 +106,10 @@ describe("registry consistency", () => {
     expect(await lib.getCollection("fixture")).toBe(added);
     expect(await lib.get("fixture/first")).toBe(first);
     expect(await lib.all()).toHaveLength(originalPuzzles.length + 1);
-    expect((await lib.stats()).total).toBe((await lib.all()).length);
+    const addedStats = await lib.stats();
+    expect(addedStats).not.toBe(originalStats);
+    expect(addedStats.total).toBe(originalStats.total + 1);
+    expect(addedStats.unsolved).toBe(originalStats.unsolved + 1);
     expect(await lib.collections()).toHaveLength(originalCollections.length + 1);
     expect(await lib.datasetCollections()).toHaveLength(originalData.length + 1);
     expect(await lib.dataVersion()).not.toBe(originalVersion);
@@ -117,6 +125,7 @@ describe("registry consistency", () => {
     const cachedPuzzles = await lib.all();
     lib.registerCollection(added); // Registering the same instance is a no-op.
     expect(await lib.all()).toBe(cachedPuzzles);
+    expect(await lib.stats()).toBe(addedStats);
     expect(await lib.datasetCollections()).toBe(snapshot.collections);
 
     const second = makePuzzle("second");
@@ -127,6 +136,9 @@ describe("registry consistency", () => {
     expect(await lib.getCollection("fixture")).toBe(replacement);
     expect(await lib.collections()).toHaveLength(16);
     expect(await lib.all()).toHaveLength(342);
+    expect(await lib.stats()).not.toBe(addedStats);
+    expect(await lib.stats()).toEqual(addedStats);
+    expect(originalStats.total).toBe(341);
     expect(await lib.dataVersion()).not.toBe(snapshot.data_version);
     expect((await lib.dataset()).collections.at(-1)?.puzzles[0]?.id).toBe("fixture/second");
 
@@ -165,6 +177,25 @@ describe("registry consistency", () => {
       expect(current.data_version).not.toBe(expectedVersion);
     },
   );
+
+  it("keeps pending statistics on their acquired snapshot", async () => {
+    const lib = await freshLibrary();
+    const original = await lib.stats();
+    const pending = lib.stats();
+    const puzzle = lib.bitcoinPuzzle({
+      id: "fixture/prize",
+      address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      prize: 2,
+    });
+    lib.registerCollection(new lib.NamedCollection("fixture", lib.party("Fixture"), [puzzle]));
+    expect(await pending).toBe(original);
+    const current = await lib.stats();
+    expect(current.total).toBe(original.total + 1);
+    expect(current.total_prize["BTC"]).toBe((original.total_prize["BTC"] ?? 0) + 2);
+    expect(current.unsolved_prize["BTC"]).toBe((original.unsolved_prize["BTC"] ?? 0) + 2);
+  });
 
   it("hashes the snapshot acquired before a concurrent registration", async () => {
     const lib = await freshLibrary();

@@ -432,6 +432,9 @@ try {
     await readFile(path.join(packageRoot, "package.json"), "utf8"),
   ) as Manifest;
 
+  for (const surface of ["pi", "omp", "mcp"]) {
+    run(process.execPath, ["test/probe-tools.ts", packageRoot, surface, "dist"]);
+  }
   await assertPackedLayout(manifest);
   await assertPackedLibrary();
   await assertPackedMcpServer();
