@@ -1,22 +1,5 @@
-import {
-  collectionSummaries,
-  dataVersion,
-  requirePuzzle,
-  selectPuzzles,
-  stats,
-} from "./core/dataset.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
-import { Status } from "./core/puzzle.ts";
-import { collectionKeys, requireCollection } from "./core/registry.ts";
-import {
-  formatCollection,
-  formatHintReport,
-  formatPrizeTotals,
-  formatPuzzle,
-  formatPuzzleRecord,
-  hintAssets,
-  parseStatus,
-} from "./core/utils.ts";
+import { Status } from "./core/status.ts";
 
 /** Result shape shared by the MCP server and the Pi/OMP extensions. */
 export interface ToolResult {
@@ -204,6 +187,11 @@ function assertLimit(value: number | undefined): number {
  * @returns {Promise<ToolResult>} The totals as text, with the stats and the data version in `details`.
  */
 export async function statsTool(): Promise<ToolResult> {
+  const [{ stats, dataVersion }, { collectionKeys }, { formatPrizeTotals }] = await Promise.all([
+    import("./core/dataset.ts"),
+    import("./core/registry.ts"),
+    import("./core/utils.ts"),
+  ]);
   const [result, version] = await Promise.all([stats(), dataVersion()]);
   const lines = [
     `Total: ${result.total} puzzles in ${collectionKeys().length} collections`,
@@ -222,6 +210,10 @@ export async function statsTool(): Promise<ToolResult> {
  * @returns {Promise<ToolResult>} One line per collection with its counts and author.
  */
 export async function collectionsTool(): Promise<ToolResult> {
+  const [{ collectionSummaries }, { formatCollection }] = await Promise.all([
+    import("./core/dataset.ts"),
+    import("./core/utils.ts"),
+  ]);
   const summaries = await collectionSummaries();
   return text(summaries.map(formatCollection).join("\n"), { collections: summaries });
 }
@@ -233,6 +225,11 @@ export async function collectionsTool(): Promise<ToolResult> {
  * @returns {Promise<ToolResult>} The record as text, with the puzzle and every hint that holds for it in `details`.
  */
 export async function showTool(id: string): Promise<ToolResult> {
+  const [{ requirePuzzle }, { requireCollection }, { formatPuzzleRecord }] = await Promise.all([
+    import("./core/dataset.ts"),
+    import("./core/registry.ts"),
+    import("./core/utils.ts"),
+  ]);
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
   return text(formatPuzzleRecord(puzzle, collection.hints), {
@@ -249,6 +246,12 @@ export async function showTool(id: string): Promise<ToolResult> {
  * @returns {Promise<ToolResult>} The hints as text, with the joined list and the hint links in `details`.
  */
 export async function hintsTool(id: string): Promise<ToolResult> {
+  const [{ requirePuzzle }, { requireCollection }, { formatHintReport, hintAssets }] =
+    await Promise.all([
+      import("./core/dataset.ts"),
+      import("./core/registry.ts"),
+      import("./core/utils.ts"),
+    ]);
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
   return text(formatHintReport(puzzle, collection.hints).join("\n"), {
@@ -265,6 +268,10 @@ export async function hintsTool(id: string): Promise<ToolResult> {
  * @returns {Promise<ToolResult>} The matching puzzles, up to the requested limit.
  */
 export async function listTool(params: ListParams): Promise<ToolResult> {
+  const [{ selectPuzzles }, { parseStatus, formatPuzzle }] = await Promise.all([
+    import("./core/dataset.ts"),
+    import("./core/utils.ts"),
+  ]);
   const limit = assertLimit(params.limit);
   const filtered = await selectPuzzles({
     collection:
@@ -295,6 +302,7 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
  * @returns {Promise<ToolResult>} The verification outcome for the puzzle.
  */
 export async function verifyTool(id: string): Promise<ToolResult> {
+  const { requirePuzzle } = await import("./core/dataset.ts");
   const [puzzle, { verifyPuzzle }] = await Promise.all([
     requirePuzzle(assertLength("id", id, facts.parameters.id)),
     import("./core/verify.ts"),
@@ -316,6 +324,7 @@ export async function verifyTool(id: string): Promise<ToolResult> {
  * @returns {Promise<ToolResult>} The puzzle address balance.
  */
 export async function balanceTool(id: string, apiKey?: string): Promise<ToolResult> {
+  const { requirePuzzle } = await import("./core/dataset.ts");
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const key =
     apiKey === undefined ? undefined : assertLength("apiKey", apiKey, facts.parameters.apiKey);
