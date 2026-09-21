@@ -6,6 +6,7 @@ import { bitimage } from "../../src/collections/bitimage.ts";
 import {
   BitcoinPuzzle,
   bitcoinPuzzle,
+  compressed,
   decredPuzzle,
   hex,
   litecoinPuzzle,
@@ -74,6 +75,62 @@ describe("Collection.verify", () => {
       privateKey: "e9873d79c6d87dc0fb6a5778633389f4453213303da61f20bd67fc233aa33262",
     });
   });
+
+  it("keeps WIF compression when the same key is also recorded as hex", () => {
+    const key = wif("5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF");
+    const spec = { ...synthetic, address: p2pkh("1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj") };
+    const original = verifyPuzzle(bitcoinPuzzle({ ...spec, key }));
+    const enriched = verifyPuzzle(
+      bitcoinPuzzle({
+        ...spec,
+        key: key.hex("E9873D79C6D87DC0FB6A5778633389F4453213303DA61F20BD67FC233AA33262"),
+      }),
+    );
+
+    expect(original.verified).toBe(true);
+    expect(enriched).toMatchObject({
+      verified: true,
+      derivedAddress: "1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj",
+      privateKey: "E9873D79C6D87DC0FB6A5778633389F4453213303DA61F20BD67FC233AA33262",
+    });
+  });
+
+  it("prefers the declared public key format over a matching WIF for hex", () => {
+    const result = verifyPuzzle(
+      bitcoinPuzzle({
+        ...synthetic,
+        address: p2pkh("19GuvDvMMUZ8vq84wT79fvnvhMd5MnfTkR"),
+        pubkey: compressed("02588d202afcc1ee4ab5254c7847ec25b9a135bbda0f2bc69ee1a714749fd77dc9"),
+        key: hex("e9873d79c6d87dc0fb6a5778633389f4453213303da61f20bd67fc233aa33262").wif(
+          "5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF",
+        ),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: true,
+      derivedAddress: "19GuvDvMMUZ8vq84wT79fvnvhMd5MnfTkR",
+    });
+  });
+
+  it.each(["invalid WIF", "5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF"])(
+    "ignores a WIF that cannot describe the hex key: %s",
+    (encoded) => {
+      const result = verifyPuzzle(
+        bitcoinPuzzle({
+          ...synthetic,
+          address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+          key: hex("0000000000000000000000000000000000000000000000000000000000000001").wif(encoded),
+        }),
+      );
+
+      expect(result).toMatchObject({
+        verified: true,
+        derivedAddress: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+        privateKey: "0000000000000000000000000000000000000000000000000000000000000001",
+      });
+    },
+  );
 
   it("decodes a Litecoin WIF against Litecoin, not Bitcoin", () => {
     const result = verifyPuzzle(
