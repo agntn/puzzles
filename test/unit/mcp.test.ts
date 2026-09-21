@@ -39,6 +39,19 @@ describe("puzzles MCP server", () => {
     );
   });
 
+  it("advertises list status as one enum", async () => {
+    const { tools } = await client.listTools();
+    const status = tools.find((tool) => tool.name === "puzzles_list")?.inputSchema.properties?.[
+      "status"
+    ];
+
+    expect(status).toMatchObject({
+      enum: [...facts.statuses],
+      description: facts.parameters.status.description,
+    });
+    expect(status).not.toHaveProperty("anyOf");
+  });
+
   it("reports dataset statistics", async () => {
     const result = await client.callTool({ name: "puzzles_stats", arguments: {} });
 

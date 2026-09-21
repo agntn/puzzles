@@ -22,6 +22,19 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(Value.Check(schemas.list, { status: "" })).toBe(false);
   });
 
+  it("publishes list status as one enum that says what each value means", () => {
+    const status = schemas.list.properties.status;
+
+    expect(status).toMatchObject({
+      enum: [...facts.statuses],
+      description: facts.parameters.status.description,
+    });
+    expect(status).not.toHaveProperty("anyOf");
+    expect(facts.parameters.status.description).toBe(
+      "Lifecycle status: unsolved, solved, claimed (prize taken, key unpublished), swept (taken after the public key leaked), or expired (the author took it back)",
+    );
+  });
+
   it("bounds identifiers and keys the same way on every tool", () => {
     const { id, collection, apiKey } = facts.parameters;
 

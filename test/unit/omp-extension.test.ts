@@ -11,6 +11,15 @@ interface RegisteredTool {
   readonly approval: string;
   readonly parameters: {
     readonly safeParse: (input: unknown) => { readonly success: boolean };
+    toJsonSchema(): {
+      readonly properties?: {
+        readonly status?: {
+          readonly anyOf?: unknown;
+          readonly description?: string;
+          readonly enum?: readonly string[];
+        };
+      };
+    };
   };
   readonly renderCall?: (
     args: Readonly<Record<string, unknown>>,
@@ -81,6 +90,11 @@ describe("OMP extension", () => {
     for (const status of facts.statuses) {
       expect(list.parameters.safeParse({ status }).success).toBe(true);
     }
+    expect(list.parameters.toJsonSchema().properties?.status).toMatchObject({
+      enum: [...facts.statuses],
+      description: facts.parameters.status.description,
+    });
+    expect(list.parameters.toJsonSchema().properties?.status).not.toHaveProperty("anyOf");
     expect(show.parameters.safeParse({ id: "" }).success).toBe(false);
     expect(
       show.parameters.safeParse({ id: "x".repeat(facts.parameters.id.maxLength + 1) }).success,

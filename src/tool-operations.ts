@@ -106,7 +106,10 @@ export const facts = {
       description: "Universal puzzle identifier, for example b1000/90 or gsmg",
     },
     collection: { maxLength: 50, description: "Collection key, for example b1000" },
-    status: { description: "Puzzle lifecycle status" },
+    status: {
+      description:
+        "Lifecycle status: unsolved, solved, claimed (prize taken, key unpublished), swept (taken after the public key leaked), or expired (the author took it back)",
+    },
     withPubkey: { description: "Only puzzles with a known public key" },
     limit: {
       minimum: 1,
