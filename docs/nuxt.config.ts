@@ -181,14 +181,6 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: "2026-09-03",
-  /** Fonts live in public/fonts and app/assets/fonts.css, where nuxt-og-image reads them from. */
-  css: ["~/assets/fonts.css"],
-  fonts: {
-    families: [
-      { name: "Space Grotesk", provider: "local", weights: [400, 500, 600] },
-      { name: "Space Mono", provider: "local", weights: [400, 700] },
-    ],
-  },
   content: {
     database: {
       type: "d1",

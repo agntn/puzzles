@@ -2,6 +2,10 @@
 
 Docus site for `@agntn/puzzles`. Markdown lives in `content/`. The playground and the puzzle pages are Vue pages that import the library into the browser. The one server route, `/api/balance/:id`, exists because balances need an explorer and the Etherscan key has to stay on the worker.
 
+## Design
+
+For changes to panel geometry, icons, typography, motion or the response viewer, use [DESIGN.md](DESIGN.md). It records the accepted component anatomy, SVG layers, responsive dimensions and browser checks. Keep shared tokens in `app/app.css` and panel details in `LandingToolCall.vue`; the reference images are not a second source of record data.
+
 ## Layout
 
 ```
@@ -12,14 +16,13 @@ docs/
 ├── app/components/                # Docus overrides: AppHeaderLogo, AppHeaderCTA (nav), AppFooterLeft, DocsAsideLeftBody
 ├── app/components/content/        # MDC components and page parts: landing panels, PuzzleCard, PuzzlePage, CollectionFacts, CollectionPuzzles, PuzzlesPlayground, StatusPill, BalanceLine
 ├── app/components/OgImage/        # Docs.takumi and Landing.takumi override the Docus OG templates
-├── app/assets/fonts.css           # @font-face for the TTFs served from public/fonts (site and OG images)
 ├── app/composables/               # useLandingPuzzle (one clock for every live panel), useBalance (the worker route), useSubNavigation
 ├── app/utils/                     # puzzles (collection presentation, tool names), samples (toSample, builders), puzzle-view (the page's data), landing (static fixtures), collections (facts strip), format
 ├── app/pages/playground.vue       # playground, own route outside the docs layout, its own useSeo and OG image
 ├── app/pages/collections/[collection]/[puzzle].vue   # one page per puzzle, prerendered through the links on the collection pages
 ├── server/api/balance/[...id].ts  # puzzle.balance() on the worker, cached five minutes per puzzle
 ├── server/routes/sitemap.xml.ts   # Docus sitemap plus the playground and every puzzle page
-├── public/                        # fonts, favicon.svg and the icons and manifest cut from it
+├── public/                        # favicon.svg and the icons and manifest cut from it
 ├── content/index.md               # landing
 ├── content/1.guide/               # getting started, records, registry, lookups, verification, balances, cli, agents, custom, playground
 └── content/2.collections/         # one page per collection, each with the facts strip and the puzzle list; the three singletons embed their puzzle page
@@ -70,7 +73,7 @@ Two resolution traps, both because the repo root is its own pnpm workspace:
 ## OG images
 
 - `app/components/OgImage/Docs.takumi.vue` and `Landing.takumi.vue` override the Docus templates of the same name and are rendered by Takumi at build time. Takumi has no CSS variables, so the theme colours from `app.css` are repeated there as literals. A collection page's card looks the collection up by title in `app/utils/puzzles.ts` and shows its blurb and chips; a puzzle page passes its own description, written without commas because the OG pipeline strips them.
-- nuxt-og-image doesn't see the faces `@nuxt/fonts` generates on this Nuxt version, but it does parse `@font-face` rules from the files in `css`. That's why `app/assets/fonts.css` declares the five TTFs in `public/fonts` and `fonts.families` uses the `local` provider. Site and OG images share the same files.
+- Font families live in the `@theme` tokens in `app/app.css`. Nuxt UI uses `@nuxt/fonts` to resolve and bundle them; do not maintain font binaries or manual `@font-face` declarations. The OG templates name the same families explicitly because Takumi does not read CSS variables. Check the generated OG images when changing either family.
 - The landing OG file is named from the SEO description. Nitro refuses to write a prerender path containing `..`, so a description ending in a period is silently skipped and the landing ships with a dead `og:image`. Keep the description in `content/index.md` without a trailing period.
 
 ## Constraints
@@ -79,4 +82,4 @@ Two resolution traps, both because the repo root is its own pnpm workspace:
 - Every record quoted in `content/` is a record from `src/collections/`, shortened with an ellipsis where a hash would otherwise run off the page. Check a new one against the file before writing it down, and write the frontmatter `description` without `: ` and without commas: the first is a YAML mapping that takes the page out of the prerender with a silent 500, the second gets stripped by the OG pipeline.
 - The site's only network calls are the balance route on the worker and the browser's requests to it. The footer says so.
 - Docs helpers take the library instance as an argument and import its types relatively; the two pure formatters `formatPrize` and `formatPrizeTotals` and the accumulator `prizeTotals` are imported relatively from `src/core/utils.ts` as values, so the site prints the same rounded prize the CLI and the tools print.
-- Surfaces are flat by decision, with one exception. The amber halo at the top of the page and behind a hero (`html`, `html.dark body`, `.puzzles-hero::before`, the OG images) is the agntn family's signature and stays. Everything else is flat: a frame is one 1px edge (`--puzzles-frame`), never an edge plus a soft shadow, nothing else glows, and no element fades in on load. Section headings stand on their own without a kicker label above them; the uppercase mono labels stay inside data cards, where they name fields. Lists of collections are rows in a frame (`puzzles-row`), not a grid of icon and blurb tiles, and status tags are small rectangles in the palette's amber, red and neutrals, with no blue or cyan on the dark theme. Space Grotesk and Space Mono stay because the agntn sites share them.
+- Surfaces are flat by decision, with one exception. The amber halo at the top of the page and behind a hero (`html`, `html.dark body`, `.puzzles-hero::before`, the OG images) is the agntn family's signature and stays. Everything else is flat: a frame is one 1px edge (`--puzzles-frame`), never an edge plus a soft shadow, nothing else glows, and no element fades in on load. Section headings stand on their own without a kicker label above them; the uppercase mono labels stay inside data cards, where they name fields. Lists of collections are rows in a frame (`puzzles-row`), not a grid of icon and blurb tiles, and status tags are small rectangles in the palette's amber, red and neutrals, with no blue or cyan on the dark theme. Figtree is the global text and heading face; Fira Code is the code and console face. Keep code ligatures disabled.
