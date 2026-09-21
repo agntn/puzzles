@@ -5,6 +5,7 @@ import {
   confirmation,
   decrease,
   funding,
+  hex,
   increase,
   official,
   p2pkh,
@@ -20,6 +21,9 @@ export const zdenPuzzle1bitcoinWhitePaper = bitcoinPuzzle({
   status: Status.Solved,
   pubkey: uncompressed(
     "04bb16b0a88389b89e0b900f1509589fa7f03e18a4482967b87421c3ab5b6d44d2be549abdb95861b64430b3d6b4ee389d0bf7e5ad554442c5bd12ed1651cf4540",
+  ),
+  key: hex("261f71e7602c5b7802b5ec9b28c1a0a96283a4d3d345d56a95861b469dfec298").wif(
+    "5J75Nt7nGQfMWBsoQF74hou2yFc7mK2tHrEA1q3wn3Ls82sHhzA",
   ),
   prize: 0.00117578,
   solvedAt: "2021-05-19 18:42:33",
