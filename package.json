@@ -60,6 +60,7 @@
     "build": "obuild",
     "dev": "obuild --stub",
     "docs": "pnpm --dir docs dev",
+    "fixtures": "node scripts/refresh-landing-fixtures.ts",
     "lint": "pnpm build && oxlint . && oxfmt --check .",
     "lint:fix": "pnpm build && oxlint . --fix && oxfmt .",
     "typecheck": "tsc --noEmit --skipLibCheck && pnpm build && tsc -p tsconfig.extensions.json",
