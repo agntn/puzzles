@@ -11,7 +11,7 @@ const START = "/* generated:landing-fixtures:start */";
 const END = "/* generated:landing-fixtures:end */";
 const UNDEFINED = "__AGNTN_PUZZLES_LANDING_UNDEFINED_8A77E2B5__";
 const TARGET = fileURLToPath(new URL("../docs/app/utils/landing.ts", import.meta.url));
-const FORMATTER = fileURLToPath(new URL("../node_modules/.bin/oxfmt", import.meta.url));
+const FORMATTER = fileURLToPath(new URL("../node_modules/oxfmt/bin/oxfmt", import.meta.url));
 const FORMATTER_CONFIG = fileURLToPath(new URL("../oxfmt.config.ts", import.meta.url));
 
 type StaticStats = {
@@ -111,8 +111,8 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = ${literal(fixtures.f
 ${END}
 `;
   return execFileSync(
-    FORMATTER,
-    ["--config", FORMATTER_CONFIG, "--stdin-filepath", targetPath, "--threads=1"],
+    process.execPath,
+    [FORMATTER, "--config", FORMATTER_CONFIG, "--stdin-filepath", targetPath, "--threads=1"],
     { encoding: "utf8", input: source },
   );
 }

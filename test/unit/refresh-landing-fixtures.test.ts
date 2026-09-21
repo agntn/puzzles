@@ -1,10 +1,51 @@
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { execFile } from "node:child_process";
+import {
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { promisify } from "node:util";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { refreshLandingFixtures } from "../../scripts/refresh-landing-fixtures.ts";
 
 const temporaryDirectories: string[] = [];
+const execute = promisify(execFile);
+
+interface CommandFailure {
+  readonly code: number;
+  readonly stderr: string;
+  readonly stdout: string;
+}
+
+async function commandFailure(cwd: string, ...args: readonly string[]): Promise<CommandFailure> {
+  try {
+    await execute(process.execPath, ["scripts/refresh-landing-fixtures.ts", ...args], { cwd });
+  } catch (error) {
+    const { code, stderr, stdout } = error as CommandFailure;
+    return { code, stderr, stdout };
+  }
+  throw new Error(`fixtures ${args.join(" ")} exited 0`);
+}
+
+function copyFixtureCheckout(directory: string): void {
+  mkdirSync(join(directory, "scripts"), { recursive: true });
+  mkdirSync(join(directory, "docs", "app"), { recursive: true });
+  cpSync(
+    "scripts/refresh-landing-fixtures.ts",
+    join(directory, "scripts", "refresh-landing-fixtures.ts"),
+  );
+  cpSync("docs/app/utils", join(directory, "docs", "app", "utils"), { recursive: true });
+  cpSync("src", join(directory, "src"), { recursive: true });
+  cpSync("oxfmt.config.ts", join(directory, "oxfmt.config.ts"));
+  cpSync("package.json", join(directory, "package.json"));
+  symlinkSync(resolve("node_modules"), join(directory, "node_modules"), "junction");
+}
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -32,6 +73,43 @@ describe("landing fixture refresh", () => {
     const refreshed = readFileSync(targetPath, "utf8");
     expect(await refreshLandingFixtures({ targetPath })).toBe("current");
     expect(readFileSync(targetPath, "utf8")).toBe(refreshed);
+  });
+
+  it("exposes check and usage failures through the command entrypoint", async () => {
+    const directory = mkdtempSync(join(tmpdir(), "puzzles-landing-command-"));
+    temporaryDirectories.push(directory);
+    copyFixtureCheckout(directory);
+    const targetPath = join(directory, "docs", "app", "utils", "landing.ts");
+    const source = readFileSync(targetPath, "utf8");
+    const stale = source.replace(/dataVersion: "[0-9a-f]{12}"/u, 'dataVersion: "stale"');
+    writeFileSync(targetPath, stale);
+
+    await expect(commandFailure(directory, "--check")).resolves.toEqual({
+      code: 1,
+      stderr: "Landing fixtures are stale. Run `pnpm fixtures`.\n",
+      stdout: "",
+    });
+    const updated = await execute(process.execPath, ["scripts/refresh-landing-fixtures.ts"], {
+      cwd: directory,
+    });
+    expect(updated).toEqual({
+      stderr: "",
+      stdout: "Updated docs/app/utils/landing.ts.\n",
+    });
+    const current = await execute(
+      process.execPath,
+      ["scripts/refresh-landing-fixtures.ts", "--check"],
+      { cwd: directory },
+    );
+    expect(current).toEqual({
+      stderr: "",
+      stdout: "Landing fixtures are current.\n",
+    });
+    await expect(commandFailure(directory, "--unknown")).resolves.toEqual({
+      code: 1,
+      stderr: "Usage: pnpm fixtures [--check]\n",
+      stdout: "",
+    });
   });
 
   it("updates the sample and dataset version from a synthetic registry record", async () => {
