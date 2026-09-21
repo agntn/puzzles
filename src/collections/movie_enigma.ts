@@ -1,5 +1,15 @@
 import { SingletonCollection } from "../core/collection.ts";
-import { assets, claim, compressed, funding, p2wpkh, party, profile, seed } from "../core/parts.ts";
+import {
+  assets,
+  claim,
+  compressed,
+  funding,
+  official,
+  p2wpkh,
+  party,
+  profile,
+  seed,
+} from "../core/parts.ts";
 import { bitcoinPuzzle, Status } from "../core/puzzle.ts";
 
 /**
@@ -21,6 +31,20 @@ export const movieEnigmaPuzzle = bitcoinPuzzle({
     "m/84'/0'/0'/0/0",
   ),
   prize: 0.001,
+  hints: [
+    official(
+      "Guess all the 34 movie titles, from the provided movie frames",
+      "https://bitcoinmovieenigma.com/rules",
+    ),
+    official(
+      'Transform "somehow" each movie title into an English BIP-0039 seed word',
+      "https://bitcoinmovieenigma.com/rules",
+    ),
+    official(
+      'The seedphrase you have is 34 words long, but we should have a 24 words seedphrase instead. Some movies should not be in the sequence, and should be considered intruders, but which ones ? You will need additional informations about each movie to detect those intruders "somehow". Every information you need can be found on IMBD, on each movie\'s page',
+      "https://bitcoinmovieenigma.com/rules",
+    ),
+  ],
   solvedAt: "2026-09-08 01:32:56",
   solveTime: 139396652,
   transactions: [

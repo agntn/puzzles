@@ -90,7 +90,7 @@ export const HintKind = {
 /** A hint's origin. */
 export type HintKind = (typeof HintKind)[keyof typeof HintKind];
 
-/** What confirms where a hint came from: an archive capture, the author's reply, a transaction. */
+/** An archive capture or another publication of the same hint by its author. */
 export interface Confirmation {
   readonly description?: string;
   readonly url: string;
@@ -110,13 +110,11 @@ export interface HintOptions {
 }
 
 /**
- * One hint about a puzzle. `official` comes from the author, `community` from anyone else and
- * may be wrong; both say where they were published and what confirms that, never whether they
- * are right.
+ * A hint with its publication source and optional corroborating link, not a verdict on its truth.
  */
 export interface Hint {
   readonly answer?: Answer;
-  readonly confirmation: Confirmation;
+  readonly confirmation?: Confirmation;
   readonly date?: string;
   readonly kind: HintKind;
   readonly source: string;
@@ -768,7 +766,7 @@ export function assets(
 /**
  * What confirms where a hint came from.
  *
- * @param {string} url - An archive capture of the source, the author's reply, a transaction.
+ * @param {string} url - An archive or another page where the author published the same hint.
  * @param {string} [description] - What the link shows.
  * @returns {Confirmation} The confirmation.
  */
@@ -796,7 +794,7 @@ function hint(
   kind: HintKind,
   text: string,
   source: string,
-  confirmation: Confirmation,
+  confirmation: Confirmation | undefined,
   options: HintOptions,
 ): Hint {
   return defined({ kind, text, source, confirmation, date: options.date, answer: options.answer });
@@ -807,14 +805,14 @@ function hint(
  *
  * @param {string} text - The hint as the source states it, on one line.
  * @param {string} source - Where the author published it.
- * @param {Confirmation} confirmation - What confirms the source said it.
+ * @param {Confirmation} [confirmation] - An optional archive or republication of this hint.
  * @param {HintOptions} [options] - The hint's publication date and any separately published answer.
  * @returns {Hint} The hint.
  */
 export function official(
   text: string,
   source: string,
-  confirmation: Confirmation,
+  confirmation?: Confirmation,
   options: HintOptions = {},
 ): Hint {
   return hint(HintKind.Official, text, source, confirmation, options);
@@ -825,14 +823,14 @@ export function official(
  *
  * @param {string} text - The hint as the source states it, on one line.
  * @param {string} source - Where it was published.
- * @param {Confirmation} confirmation - What confirms the source said it.
+ * @param {Confirmation} [confirmation] - An optional archive or republication of this hint.
  * @param {HintOptions} [options] - The hint's publication date and any separately published answer.
  * @returns {Hint} The hint.
  */
 export function community(
   text: string,
   source: string,
-  confirmation: Confirmation,
+  confirmation?: Confirmation,
   options: HintOptions = {},
 ): Hint {
   return hint(HintKind.Community, text, source, confirmation, options);

@@ -24,13 +24,15 @@ defineProps<{ hints: readonly HintItem[] }>();
         <a :href="hint.source" target="_blank" rel="noopener" class="hover:underline">{{
           hostPath(hint.source)
         }}</a>
-        · confirmation
-        <a :href="hint.confirmation.url" target="_blank" rel="noopener" class="hover:underline">{{
-          hostPath(hint.confirmation.url)
-        }}</a>
-        <template v-if="hint.confirmation.description">
-          ({{ hint.confirmation.description }})</template
-        >
+        <template v-if="hint.confirmation">
+          · confirmation
+          <a :href="hint.confirmation.url" target="_blank" rel="noopener" class="hover:underline">{{
+            hostPath(hint.confirmation.url)
+          }}</a>
+          <template v-if="hint.confirmation.description">
+            ({{ hint.confirmation.description }})</template
+          >
+        </template>
       </p>
       <details v-if="hint.answer" class="mt-2 text-sm">
         <summary class="cursor-pointer text-muted">Published answer</summary>

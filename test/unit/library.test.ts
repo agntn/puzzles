@@ -150,12 +150,38 @@ describe("lazy collection registry", () => {
     expect(puzzle.hints()).toHaveLength(19);
     expect(puzzle.hints()[0]?.source).toBe(puzzle.sourceUrl());
     expect(puzzle.hints().at(-1)?.date).toBe("2026-09-19");
-    expect(puzzle.hints().at(-1)?.confirmation.description).toContain("same input address");
+    expect(puzzle.hints().at(-1)?.confirmation?.description).toContain("same input address");
     expect(puzzle.hints().some((hint) => hint.text === "It's a 128-bit digest.")).toBe(true);
     expect(
       puzzle.hints().some((hint) => hint.text.startsWith("BIP39: 12 words; Passphrase: Y;")),
     ).toBe(true);
     expect(puzzle.hints().some((hint) => hint.text.startsWith("How many keys,"))).toBe(false);
+  });
+
+  it("keeps Movie Enigma's original rules separate from its solution", async () => {
+    const puzzle = await requirePuzzle("movie_enigma");
+    const hints = [
+      {
+        kind: "official",
+        text: "Guess all the 34 movie titles, from the provided movie frames",
+        source: "https://bitcoinmovieenigma.com/rules",
+      },
+      {
+        kind: "official",
+        text: 'Transform "somehow" each movie title into an English BIP-0039 seed word',
+        source: "https://bitcoinmovieenigma.com/rules",
+      },
+      {
+        kind: "official",
+        text: 'The seedphrase you have is 34 words long, but we should have a 24 words seedphrase instead. Some movies should not be in the sequence, and should be considered intruders, but which ones ? You will need additional informations about each movie to detect those intruders "somehow". Every information you need can be found on IMBD, on each movie\'s page',
+        source: "https://bitcoinmovieenigma.com/rules",
+      },
+    ];
+    expect(puzzle.hints()).toEqual(hints);
+    expect(puzzle.toJSON().hints).toEqual(hints);
+    const collection = await requireCollection("movie_enigma");
+    expect(collection.hintsById("movie_enigma")).toEqual(hints);
+    expect(puzzle.status()).toBe(Status.Solved);
   });
 
   it("preserves universal and historical collection lookups", async () => {
@@ -221,7 +247,7 @@ describe("lazy collection registry", () => {
       { name: "twitter", url: "https://twitter.com/0xFlorent_" },
     ]);
     expect(collection.hints).toHaveLength(1);
-    expect(collection.hints[0]?.confirmation.url).toBe(
+    expect(collection.hints[0]?.confirmation?.url).toBe(
       "https://blossom.primal.net/394004c70b8907504a2424865e866b10fe5746c89122899a968f3dbcd18ad6b3.jpg",
     );
   });

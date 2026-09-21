@@ -171,9 +171,7 @@ function isOneLine(value: string | undefined): boolean {
 }
 
 /**
- * The problems of one hint: a field that is empty or spans lines, a source or a confirmation that
- * is not a web URL, a confirmation that repeats the source and so confirms nothing, or a date
- * that is not on the calendar.
+ * Checks hint text, its source, optional corroboration and dates.
  *
  * @param {Hint} hint - The hint.
  * @returns {string[]} One problem per failed check.
@@ -181,10 +179,11 @@ function isOneLine(value: string | undefined): boolean {
 function problemsOf(hint: Hint): string[] {
   return [
     ...(isOneLine(hint.text) ? [] : ["text is not one line"]),
-    ...(isOneLine(hint.confirmation.description) ? [] : ["description is not one line"]),
+    ...(isOneLine(hint.confirmation?.description) ? [] : ["description is not one line"]),
     ...(isWebUrl(hint.source) ? [] : ["source is not a web URL"]),
-    ...(isWebUrl(hint.confirmation.url) ? [] : ["confirmation is not a web URL"]),
-    ...(hint.confirmation.url === hint.source ? ["confirmation repeats the source"] : []),
+    ...(hint.confirmation === undefined || isWebUrl(hint.confirmation.url)
+      ? []
+      : ["confirmation is not a web URL"]),
     ...(hint.date === undefined || isRecordDate(hint.date) ? [] : ["date is not a record date"]),
     ...answerProblems(hint.answer),
   ];
@@ -321,10 +320,30 @@ describe("collection class data", () => {
     ]);
   });
 
-  it("keeps every hint on one line with a source and a separate confirmation", () => {
+  it("keeps every hint on one line with valid source and optional confirmation URLs", () => {
     expect(puzzles.flatMap((puzzle) => hintProblems(puzzle.id(), puzzle.hints()))).toEqual([]);
     expect(
       registered.flatMap((collection) => hintProblems(collection.key, collection.hints)),
+    ).toEqual([]);
+  });
+
+  it("accepts a hint with only its publication source", () => {
+    expect(
+      hintProblems("fixture", [
+        official("Use the English word list.", "https://example.com/rules"),
+      ]),
+    ).toEqual([]);
+  });
+
+  it("accepts the source page as confirmation of the hint it contains", () => {
+    expect(
+      hintProblems("fixture", [
+        official(
+          "Use the English word list.",
+          "https://example.com/rules",
+          confirmation("https://example.com/rules", "The Word list section states this rule."),
+        ),
+      ]),
     ).toEqual([]);
   });
 
@@ -356,7 +375,6 @@ describe("collection class data", () => {
       "fixture/hinted: hint 1 source is not a web URL",
       "fixture/hinted: hint 1 confirmation is not a web URL",
       "fixture/hinted: hint 2 text is not one line",
-      "fixture/hinted: hint 2 confirmation repeats the source",
       "fixture/hinted: hint 2 date is not a record date",
       "fixture/hinted: hint 2 answer text is not one line",
       "fixture/hinted: hint 2 answer source is not a web URL",
