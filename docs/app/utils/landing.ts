@@ -435,7 +435,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1NKUXbr2URfQyzREPUzoj4MR4ytF5mEm8u",
     source: "https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
     transactions: 2,
-    tool: "rushwallet/1\tsolved\t-\t1NKUXbr2URfQyzREPUzoj4MR4ytF5mEm8u\nchain: bitcoin  address kind: p2pkh\nhash160: e9d91b8f3f402170262431718fbb0ba9611e10a0\npublic key: 040f5492295b3374ac3d746beb5b1e3629f19e4b7caa228e7d02a1862430e237a7c406b11d339dea846001feb79410a4bd61212f2022538c13cb24b5ad0cb44d52 (uncompressed)\nprivate key: af9a17713338d255ca023b7014c2c9dfcbef656d61a3370156bb804269b74a0d (hex)\nwif: 5K9d6a9ivmDKRe77hnzrSrg2iGkwFuvg1cCGDGBpsgyk6is9U7g\npassphrase: 5784623964023 578462396402\nstarted: 2014-09-22 20:17:14\nsolved: 2018-01-10 19:55:58 (3y 3mo 20d 23h 38m)\ntransactions: 2\n\tfunding\t2014-09-22 20:17:14\t0.025 BTC\t202f1b15595f3821578fe73bc65a9ce4bcc46011e9481d60a518d471b453a995\n\tclaim\t2018-01-10 19:55:58\t0.025 BTC\ta904300bbadf6fde7ee6ef273aaa6536899aee5f6f1f27aefa1c56962bd4da14\nclaim: https://blockstream.info/tx/a904300bbadf6fde7ee6ef273aaa6536899aee5f6f1f27aefa1c56962bd4da14\nexplorer: https://blockstream.info/address/1NKUXbr2URfQyzREPUzoj4MR4ytF5mEm8u\nsource: https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
+    tool: "rushwallet/1\tsolved\t-\t1NKUXbr2URfQyzREPUzoj4MR4ytF5mEm8u\nchain: bitcoin  address kind: p2pkh\nhash160: e9d91b8f3f402170262431718fbb0ba9611e10a0\npublic key: 040f5492295b3374ac3d746beb5b1e3629f19e4b7caa228e7d02a1862430e237a7c406b11d339dea846001feb79410a4bd61212f2022538c13cb24b5ad0cb44d52 (uncompressed)\nprivate key: af9a17713338d255ca023b7014c2c9dfcbef656d61a3370156bb804269b74a0d (hex)\nwif: 5K9d6a9ivmDKRe77hnzrSrg2iGkwFuvg1cCGDGBpsgyk6is9U7g\npassphrase: 5784623964023 578462396402\nstarted: 2014-09-22 20:17:14\nsolved: 2018-01-10 19:55:58 (3y 3mo 20d 23h 38m)\ntransactions: 2\n\tfunding\t2014-09-22 20:17:14\t0.025 BTC\t202f1b15595f3821578fe73bc65a9ce4bcc46011e9481d60a518d471b453a995\n\tclaim\t2018-01-10 19:55:58\t0.025 BTC\ta904300bbadf6fde7ee6ef273aaa6536899aee5f6f1f27aefa1c56962bd4da14\nclaim: https://blockstream.info/tx/a904300bbadf6fde7ee6ef273aaa6536899aee5f6f1f27aefa1c56962bd4da14\ncollection hints: 1\n\tofficial\t-\tSearch for clues in the RushWallet Fundraiser video to unlock each wallet and claim the bitcoins.\tsource: https://rushwallet.com/contest\tconfirmation: https://web.archive.org/web/20150208172337/https://rushwallet.com/contest (The contest page gives this instruction and embeds the Fundraiser video (https://www.youtube.com/watch?v=sr8lBrtd9U4).)\nexplorer: https://blockstream.info/address/1NKUXbr2URfQyzREPUzoj4MR4ytF5mEm8u\nsource: https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
   },
   {
     id: "b1000/135",
@@ -586,7 +586,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "565862c8e5ae",
+  dataVersion: "a692e4c64ba8",
   total: 341,
   solved: 137,
   unsolved: 95,
@@ -900,7 +900,18 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 28,
     firstStarted: "2014-09-22 17:36:08",
     lastStarted: "2014-09-22 21:24:40",
-    hints: [],
+    hints: [
+      {
+        kind: "official",
+        text: "Search for clues in the RushWallet Fundraiser video to unlock each wallet and claim the bitcoins.",
+        source: "https://rushwallet.com/contest",
+        confirmation: {
+          url: "https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
+          description:
+            "The contest page gives this instruction and embeds the Fundraiser video (https://www.youtube.com/watch?v=sr8lBrtd9U4).",
+        },
+      },
+    ],
   },
   {
     key: "warp",

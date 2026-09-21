@@ -1,5 +1,5 @@
 import { NamedCollection } from "../core/collection.ts";
-import { party, profile } from "../core/parts.ts";
+import { confirmation, official, party, profile } from "../core/parts.ts";
 import { rushwalletPuzzle1 } from "./rushwallet/1.ts";
 import { rushwalletPuzzle2 } from "./rushwallet/2.ts";
 import { rushwalletPuzzle3 } from "./rushwallet/3.ts";
@@ -79,9 +79,26 @@ export class RushwalletCollection extends NamedCollection {
     rushwalletPuzzle30,
   ];
 
+  /** The contest's shared starting clue. */
+  static readonly hints = [
+    official(
+      "Search for clues in the RushWallet Fundraiser video to unlock each wallet and claim the bitcoins.",
+      "https://rushwallet.com/contest",
+      confirmation(
+        "https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
+        "The contest page gives this instruction and embeds the Fundraiser video (https://www.youtube.com/watch?v=sr8lBrtd9U4).",
+      ),
+    ),
+  ];
+
   /** Builds the canonical collection. */
   constructor() {
-    super(RushwalletCollection.key, RushwalletCollection.author, RushwalletCollection.puzzles);
+    super(
+      RushwalletCollection.key,
+      RushwalletCollection.author,
+      RushwalletCollection.puzzles,
+      RushwalletCollection.hints,
+    );
   }
 }
 
