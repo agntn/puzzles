@@ -306,6 +306,27 @@ describe("lazy collection registry", () => {
     expect(() => rushwallet.require(9 as never)).toThrow(PuzzleNotFoundError);
   });
 
+  it("shares the archived RushWallet video clue with all 30 wallets", () => {
+    const hints = [
+      {
+        kind: "official",
+        text: "Search for clues in the RushWallet Fundraiser video to unlock each wallet and claim the bitcoins.",
+        source: "https://rushwallet.com/contest",
+        confirmation: {
+          url: "https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
+          description:
+            "The contest page gives this instruction and embeds the Fundraiser video (https://www.youtube.com/watch?v=sr8lBrtd9U4).",
+        },
+      },
+    ];
+    expect(rushwallet.hints).toEqual(hints);
+    expect(rushwallet.all()).toHaveLength(30);
+    for (const puzzle of rushwallet.all()) {
+      expect(puzzle.hints()).toEqual([]);
+      expect(rushwallet.hintsById(puzzle.id())).toEqual(hints);
+    }
+  });
+
   it("hands a puzzle the collection's hints ahead of its own", () => {
     const shared = official(
       "Every key is a consecutive one from a deterministic wallet.",

@@ -244,6 +244,7 @@ describe("registry consistency", () => {
     expect(serialized.filter((row) => "hints" in row).map((row) => row.name)).toEqual([
       "b1000",
       "dug",
+      "rushwallet",
       "hinted",
     ]);
     expect(JSON.stringify(serialized)).not.toContain("null");
