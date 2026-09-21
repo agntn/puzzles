@@ -1,3 +1,30 @@
+## v0.21.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.20.3...v0.21.0)
+
+### 🚀 Enhancements
+
+- **collections:** Dug's student treasure hunt ([#204](https://github.com/agntn/puzzles/pull/204))
+- **collections:** Genesis wallet and its hints ([#206](https://github.com/agntn/puzzles/pull/206))
+- **docs:** Refresh landing fixtures ([#211](https://github.com/agntn/puzzles/pull/211))
+- **collections:** RushWallet's missing video hint ([#214](https://github.com/agntn/puzzles/pull/214))
+
+### 🔥 Performance
+
+- **tools:** Speed up discovery and stats ([#213](https://github.com/agntn/puzzles/pull/213))
+
+### 💅 Refactors
+
+- **puzzle:** ⚠️  Reserve solver for people ([#203](https://github.com/agntn/puzzles/pull/203))
+
+#### ⚠️ Breaking Changes
+
+- **puzzle:** ⚠️  Reserve solver for people ([#203](https://github.com/agntn/puzzles/pull/203))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.20.3
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.20.2...v0.20.3)
