@@ -62,6 +62,7 @@ interface DerivedViews {
   dataVersion?: string;
   puzzles?: readonly Puzzle[];
   serialized?: readonly DatasetCollection[];
+  stats?: Stats;
   summaries?: readonly CollectionSummary[];
 }
 
@@ -156,19 +157,25 @@ export async function requirePuzzle(id: string): Promise<Puzzle> {
 }
 
 /**
- * Aggregate statistics over every registered collection.
+ * Frozen aggregate statistics, cached for each registry snapshot.
  *
  * @returns {Promise<Stats>} Counts per status, the pubkey count and prize totals.
  */
 export async function stats(): Promise<Stats> {
-  const puzzles = await all();
-  return {
+  const [snapshot, record] = await views();
+  if (record.stats !== undefined) {
+    return record.stats;
+  }
+  record.puzzles ??= Object.freeze(snapshot.flatMap((collection) => collection.all()));
+  const puzzles = record.puzzles;
+  record.stats = frozen({
     total: puzzles.length,
     ...statusCounts(puzzles),
     with_pubkey: puzzles.filter((puzzle) => puzzle.hasPubkey()).length,
     total_prize: prizeTotals(puzzles),
     unsolved_prize: prizeTotals(filterPuzzles(puzzles, { status: Status.Unsolved })),
-  };
+  });
+  return record.stats;
 }
 
 /**
