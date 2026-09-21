@@ -56,12 +56,7 @@ export function puzzleToolSchemas(facts: PuzzleToolFacts) {
     hints: Type.Object({ id: puzzleId }),
     list: Type.Object({
       collection: Type.Optional(Type.String(parameters.collection)),
-      status: Type.Optional(
-        Type.Union(
-          statuses.map((status) => Type.Literal(status)),
-          parameters.status,
-        ),
-      ),
+      status: Type.Optional(Type.Enum(statuses, parameters.status)),
       withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
       limit: Type.Optional(Type.Integer(parameters.limit)),
     }),

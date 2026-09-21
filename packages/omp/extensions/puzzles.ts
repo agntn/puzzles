@@ -117,12 +117,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     ...registration(tools.facts.tools.list),
     parameters: Type.Object({
       collection: Type.Optional(Type.String(parameters.collection)),
-      status: Type.Optional(
-        Type.Union(
-          statuses.map((status) => Type.Literal(status)),
-          parameters.status,
-        ),
-      ),
+      status: Type.Optional(Type.Enum(statuses, parameters.status)),
       withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
       limit: Type.Optional(Type.Integer(parameters.limit)),
     }),
