@@ -18,7 +18,7 @@ export const torchedH34r7s = bitcoinPuzzle({
     claim(
       "cb0156faa1716186b96f7e668a59204061a3419a746810ce151052d2860ac7cf",
       "2018-02-01 15:09:42",
-      4.99676152,
+      5.001337,
     ),
   ],
   assets: assets({

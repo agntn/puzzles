@@ -610,13 +610,13 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd",
     source: "https://bitcointalk.org/index.php?topic=766000.msg8633825#msg8633825",
     transactions: 1,
-    tool: "coin_artist/torched-h34r7s\tsolved\t4.87 BTC\t1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd\nchain: bitcoin  address kind: p2pkh\nhash160: 9d3177de11e79cdfdc2f0c55aa4824d24a0c9184\npublic key: 04af0f6203b43276804c2cbbda0d10c797e61805b56e7abb5dd0cd90f69113dc1bbbaa4bae9c7eee1fde4cab190d54a0da60bca489702a8f7daa895fcaebd2b136 (uncompressed)\nprivate key: ac928bf050d1292b8a3a1ef1139fd1e74cefc50005f29720d6bf309169537452 (hex)\nstarted: 2015-04-03\nsolved: 2018-02-01 15:09:42\ntransactions: 1\n\tclaim\t2018-02-01 15:09:42\t4.99676152 BTC\tcb0156faa1716186b96f7e668a59204061a3419a746810ce151052d2860ac7cf\nclaim: https://blockstream.info/tx/cb0156faa1716186b96f7e668a59204061a3419a746810ce151052d2860ac7cf\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/coin_artist/torched-h34r7s/puzzle.jpg\nsolution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/coin_artist/torched-h34r7s/solution.md\nasset source: https://raw.githubusercontent.com/ynohtna92/1FLAMEN6/64f6eff0cb6541f7a4209fc567a37dce33cb9039/The%20Legend%20of%20Satoshi%20Nakamoto.jpg\nexplorer: https://blockstream.info/address/1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd\nsource: https://bitcointalk.org/index.php?topic=766000.msg8633825#msg8633825",
+    tool: "coin_artist/torched-h34r7s\tsolved\t4.87 BTC\t1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd\nchain: bitcoin  address kind: p2pkh\nhash160: 9d3177de11e79cdfdc2f0c55aa4824d24a0c9184\npublic key: 04af0f6203b43276804c2cbbda0d10c797e61805b56e7abb5dd0cd90f69113dc1bbbaa4bae9c7eee1fde4cab190d54a0da60bca489702a8f7daa895fcaebd2b136 (uncompressed)\nprivate key: ac928bf050d1292b8a3a1ef1139fd1e74cefc50005f29720d6bf309169537452 (hex)\nstarted: 2015-04-03\nsolved: 2018-02-01 15:09:42\ntransactions: 1\n\tclaim\t2018-02-01 15:09:42\t5.001337 BTC\tcb0156faa1716186b96f7e668a59204061a3419a746810ce151052d2860ac7cf\nclaim: https://blockstream.info/tx/cb0156faa1716186b96f7e668a59204061a3419a746810ce151052d2860ac7cf\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/coin_artist/torched-h34r7s/puzzle.jpg\nsolution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/coin_artist/torched-h34r7s/solution.md\nasset source: https://raw.githubusercontent.com/ynohtna92/1FLAMEN6/64f6eff0cb6541f7a4209fc567a37dce33cb9039/The%20Legend%20of%20Satoshi%20Nakamoto.jpg\nexplorer: https://blockstream.info/address/1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd\nsource: https://bitcointalk.org/index.php?topic=766000.msg8633825#msg8633825",
   },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "91e8e66cbda4",
+  dataVersion: "a61253366666",
   total: 342,
   solved: 138,
   unsolved: 95,

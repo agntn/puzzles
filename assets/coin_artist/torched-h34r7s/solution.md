@@ -22,6 +22,6 @@ It derives the target with an **uncompressed** public key. Compressed serializat
 
 [Transaction cb0156fa](https://blockstream.info/tx/cb0156faa1716186b96f7e668a59204061a3419a746810ce151052d2860ac7cf) was confirmed in block 507114 on February 1, 2018 at 15:09:42 UTC. Its ten inputs spend 5.001337 BTC from the puzzle address. The single output sends 4.99676152 BTC to `15x25pXex9ZFUr4kAkTL9ayPCap7VLW8Vx`, with a 0.00457548 BTC fee.
 
-The record keeps the announcement's 4.87 BTC prize separate from that payout. Later deposits and sweeps aren't part of the original claim. `solvedAt` records the claim's block time, not the moment the solver decoded the painting. No precise solve duration is recorded because the release date is only known to the day here.
+The record keeps the announcement's 4.87 BTC prize separate from the claim amount: 5.001337 BTC spent from the target before fees, not the 4.99676152 BTC payout. Later deposits and sweeps aren't part of the original claim. `solvedAt` records the claim's block time, not the moment the solver decoded the painting. No precise solve duration is recorded because the release date is only known to the day here.
 
 The solver is called "Isaac" in the article, explicitly a pseudonym chosen by the publication. The record leaves solver identity unset.

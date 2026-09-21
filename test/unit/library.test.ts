@@ -109,7 +109,7 @@ describe("lazy collection registry", () => {
         tx_type: "claim",
         txid: "cb0156faa1716186b96f7e668a59204061a3419a746810ce151052d2860ac7cf",
         date: "2018-02-01 15:09:42",
-        amount: 4.99676152,
+        amount: 5.001337,
       },
     ]);
     expect(puzzle.solver()).toBeUndefined();
