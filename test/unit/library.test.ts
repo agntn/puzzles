@@ -5,6 +5,7 @@ import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
+import { CoinArtistCollection } from "../../src/collections/coin_artist.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
@@ -48,6 +49,7 @@ const concreteClasses = [
   BalletCollection,
   BitapsCollection,
   BitimageCollection,
+  CoinArtistCollection,
   DugCollection,
   GenesisCollection,
   GsmgCollection,
@@ -92,6 +94,30 @@ describe("lazy collection registry", () => {
     for (const entry of builtins) {
       expect((await entry.load()).key).toBe(entry.key);
     }
+  });
+
+  it("keeps TORCHED H34R7S's advertised prize separate from its claim", async () => {
+    const puzzle = await requirePuzzle("coin_artist/torched-h34r7s");
+    expect(puzzle.address().value).toBe("1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd");
+    expect(puzzle.pubkey()?.format).toBe("uncompressed");
+    expect(puzzle.status()).toBe(Status.Solved);
+    expect(puzzle.startedAt()).toBe("2015-04-03");
+    expect(puzzle.prize()).toBe(4.87);
+    expect(puzzle.solvedAt()).toBe("2018-02-01 15:09:42");
+    expect(puzzle.transactions()).toEqual([
+      {
+        tx_type: "claim",
+        txid: "cb0156faa1716186b96f7e668a59204061a3419a746810ce151052d2860ac7cf",
+        date: "2018-02-01 15:09:42",
+        amount: 4.99676152,
+      },
+    ]);
+    expect(puzzle.solver()).toBeUndefined();
+    expect(puzzle.assetPath()).toBe("assets/coin_artist/torched-h34r7s/puzzle.jpg");
+    expect(puzzle.assetLinks().map((asset) => asset.path)).toEqual([
+      "assets/coin_artist/torched-h34r7s/puzzle.jpg",
+      "assets/coin_artist/torched-h34r7s/solution.md",
+    ]);
   });
 
   it("keeps the Genesis announcement without inventing a prize or key", async () => {
@@ -406,20 +432,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(341);
+    expect(await all()).toHaveLength(342);
     expect(await stats()).toEqual({
-      total: 341,
+      total: 342,
       claimed: 11,
       expired: 2,
-      solved: 137,
+      solved: 138,
       swept: 96,
       unsolved: 95,
-      with_pubkey: 241,
+      with_pubkey: 242,
       total_prize: {
         AR: 5550,
         ETH: 14.1337,
         DAI: 100,
-        BTC: 1059.07158961,
+        BTC: 1063.94158961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -446,7 +472,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(341);
+    ).toBe(342);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -473,6 +499,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(137);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(138);
   });
 });

@@ -11,6 +11,7 @@ export const builtins: readonly CollectionEntry[] = [
   { key: "ballet", load: () => import("./ballet.ts").then((m) => m.ballet) },
   { key: "bitaps", load: () => import("./bitaps.ts").then((m) => m.bitaps) },
   { key: "bitimage", load: () => import("./bitimage.ts").then((m) => m.bitimage) },
+  { key: "coin_artist", load: () => import("./coin_artist.ts").then((m) => m.coinArtist) },
   { key: "dug", load: () => import("./dug.ts").then((m) => m.dug) },
   { key: "genesis", load: () => import("./genesis.ts").then((m) => m.genesis) },
   { key: "gsmg", load: () => import("./gsmg.ts").then((m) => m.gsmg) },
