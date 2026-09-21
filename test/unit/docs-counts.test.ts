@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { WALK } from "../../docs/app/utils/landing.ts";
 import { all, collectionKeys, collections } from "../../src/index.ts";
 import { chains } from "../../src/core/chains.ts";
 import { facts } from "../../src/tool-operations.ts";
@@ -33,7 +34,7 @@ const ONES = [
 const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
 
 /**
- * A count as the prose writes it. Kept local so this file never imports `docs/app`.
+ * A count as the prose writes it.
  *
  * @param {number} count - A whole number from 0 through 99.
  * @returns {string} The English word, lowercase.
@@ -117,6 +118,13 @@ describe("the prose counts what the registry ships", () => {
       expect(table).toContain(`| \`${collection.key}\``);
       expect(tree).toContain(collection.constructor.name);
     }
+  });
+
+  it("keeps the playground's sample counts aligned with the landing walk", () => {
+    const guide = readFileSync(path.join(root, "docs/content/1.guide/10.playground.md"), "utf8");
+    const paragraphs = guide.split("\n").filter((line) => line.includes("walk"));
+    const counts = paragraphs.flatMap((line) => countsIn(line, "puzzles"));
+    expect(counts).toEqual([spellOut(WALK.length), spellOut(WALK.length)]);
   });
 
   it("finds the counts it checks", () => {
