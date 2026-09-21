@@ -1,6 +1,6 @@
 @theme {
-  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Space Mono", ui-monospace, "SFMono-Regular", menlo, monospace;
+  --font-sans: "Figtree", sans-serif;
+  --font-mono: "Fira Code", monospace;
   --color-amber-50: #fffbeb;
   --color-amber-100: #fef3c7;
   --color-amber-200: #fde68a;

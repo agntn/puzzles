@@ -279,8 +279,13 @@ const customCode = [
       <code class="font-mono text-[13px] text-highlighted">puzzles_balance</code> reaches out to a
       block explorer, and it says so in its annotations.
       <template #visual>
-        <div @mouseenter="paused = true" @mouseleave="paused = false">
-          <LandingToolCall :sample="current" />
+        <div
+          @mouseenter="paused = true"
+          @mouseleave="paused = false"
+          @focusin="paused = true"
+          @focusout="paused = false"
+        >
+          <LandingToolCall :sample="current" @previous="step(-1)" @next="step(1)" />
         </div>
       </template>
     </LandingFeature>

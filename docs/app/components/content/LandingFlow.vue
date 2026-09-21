@@ -79,7 +79,7 @@ const verdict = computed(() =>
 );
 
 /**
- * Space Mono is about 0.62 em wide per glyph; shrink the text until it fits the box.
+ * Fira Code advances 0.6 em per glyph; budget 0.62 em to leave room inside the box.
  *
  * @param {string} text - The text to fit.
  * @param {number} width - Available width in SVG units.

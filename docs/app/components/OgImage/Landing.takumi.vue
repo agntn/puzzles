@@ -15,7 +15,7 @@ const COLLECTIONS = ALL.slice(0, 5).map((entry) => entry.key);
 <template>
   <div
     class="w-full h-full flex flex-col justify-between px-[72px] py-[56px]"
-    style="background-color: #0b0d10; font-family: &quot;Space Grotesk&quot;; color: #d5e4ee"
+    style="background-color: #0b0d10; font-family: &quot;Figtree&quot;; color: #d5e4ee"
   >
     <div
       class="absolute top-0 left-[150px] w-[900px] h-[560px]"
@@ -30,13 +30,13 @@ const COLLECTIONS = ALL.slice(0, 5).map((entry) => entry.key);
     />
 
     <div class="flex items-center justify-between w-full">
-      <p class="m-0 text-[22px]" style="font-family: &quot;Space Mono&quot;; color: #f0f4f8">
+      <p class="m-0 text-[22px]" style="font-family: &quot;Fira Code&quot;; color: #f0f4f8">
         {{ siteName }}
       </p>
       <div
         class="flex items-center px-[16px] h-[38px] rounded-[8px] text-[18px] leading-none"
         style="
-          font-family: &quot;Space Mono&quot;;
+          font-family: &quot;Fira Code&quot;;
           color: #a5b0bc;
           background-color: #11141a;
           border: 1px solid #262c35;
@@ -77,7 +77,7 @@ const COLLECTIONS = ALL.slice(0, 5).map((entry) => entry.key);
           :key="collection"
           class="flex items-center mr-[10px] px-[12px] h-[36px] rounded-[8px] text-[16px] leading-none"
           :style="{
-            fontFamily: 'Space Mono',
+            fontFamily: 'Fira Code',
             color: index === 0 ? '#fcd34d' : '#a5b0bc',
             backgroundColor: '#11141a',
             border: index === 0 ? '1px solid rgba(252, 211, 77, 0.5)' : '1px solid #262c35',
@@ -89,7 +89,7 @@ const COLLECTIONS = ALL.slice(0, 5).map((entry) => entry.key);
       </div>
       <p
         class="m-0 ml-[24px] text-[16px]"
-        style="font-family: &quot;Space Mono&quot;; color: #6d7884"
+        style="font-family: &quot;Fira Code&quot;; color: #6d7884"
       >
         puzzles.agntn.dev
       </p>
