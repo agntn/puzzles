@@ -52,6 +52,13 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Seeds hashed out of photographs. One solved, one waits on a passphrase.",
   },
+  coin_artist: {
+    icon: "i-lucide-flame",
+    title: "TORCHED H34R7S Bitcoin Puzzle",
+    sample: "coin_artist/torched-h34r7s",
+    chains: ["bitcoin"],
+    blurb: "TORCHED H34R7S. A Bitcoin key painted into flames and decoded in 2018.",
+  },
   dug: {
     icon: "i-lucide-graduation-cap",
     title: "Dug's Student Treasure Hunt",
