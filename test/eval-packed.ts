@@ -33,6 +33,8 @@ interface Manifest {
   readonly bin: Readonly<Record<string, string>>;
   readonly exports: Readonly<Record<string, { readonly import: string }>>;
   readonly name: string;
+  readonly omp: { readonly skills?: readonly string[] };
+  readonly pi: { readonly skills?: readonly string[] };
   readonly version: string;
 }
 
@@ -244,6 +246,36 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
     "packages/omp/extensions/puzzles.ts",
   ]) {
     assert.ok(files.includes(file), `${file} is missing from the packed package`);
+  }
+  await assertPackedSkills(manifest, files);
+}
+
+/**
+ * The skills ship in the tarball, and the Pi and OMP manifests point at them.
+ *
+ * @param {Manifest} manifest - The packed package.json.
+ * @param {readonly string[]} files - Every packed file, relative to the package root.
+ */
+async function assertPackedSkills(manifest: Manifest, files: readonly string[]): Promise<void> {
+  const skills = (await walk(path.join(root, "skills"))).map((file) => `skills/${file}`);
+  assert.deepEqual(
+    files.filter((file) => file.startsWith("skills/")).sort(),
+    skills.sort(),
+    "the packed package carries every skill file",
+  );
+  for (const harness of ["pi", "omp"] as const) {
+    const dirs = manifest[harness].skills ?? [];
+    assert.deepEqual(dirs, ["./skills"], `the ${harness} manifest points at the skills`);
+    for (const dir of dirs) {
+      const names = await readdir(path.join(packageRoot, dir));
+      assert.ok(names.length > 0, `${harness} skills in ${dir} are empty`);
+      for (const name of names) {
+        assert.ok(
+          files.includes(path.posix.join(dir.replace(/^\.\//u, ""), name, "SKILL.md")),
+          `${harness} skill ${name} has no SKILL.md in the packed package`,
+        );
+      }
+    }
   }
 }
 
