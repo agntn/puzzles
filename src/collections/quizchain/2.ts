@@ -6,6 +6,7 @@ import {
   funding,
   official,
   p2pkh,
+  source,
   wif,
 } from "../../core/parts.ts";
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
@@ -22,7 +23,8 @@ const CAPTURE =
  * Quizchain block 2: a sentence with one letter of an author's family name capitalized, the
  * rest of that name capitalized the same way, and the last three characters of the block 1 key
  * appended, hashed with SHA-256 into BIP39 entropy. The post names the funding transaction, not
- * the address, and the author edited the solution and the private key into it.
+ * the address, and the author edited the solution and the private key into it. The entropy hash
+ * is not printed; it is the post's recipe run on the published solution, and it derives that key.
  */
 export const quizchainBlock2 = bitcoinPuzzle({
   id: "quizchain/2",
@@ -31,7 +33,13 @@ export const quizchainBlock2 = bitcoinPuzzle({
   startedAt: "2019-04-07 06:57:24",
   status: Status.Solved,
   pubkey: compressed("031c4dc0e046216624b8b932ece5c6eadd13f746f0a549c48b329fb150a0e1269e"),
-  key: wif("Kz6upYXvTYY7r8uYZsRuuyyhbcRvXe6tKDFusRKco31Vw2TLihBF"),
+  key: wif("Kz6upYXvTYY7r8uYZsRuuyyhbcRvXe6tKDFusRKco31Vw2TLihBF").entropy(
+    "e743564b041b97e4d61897cb41f90b83b38105298ccbd36899786b0c742e600d",
+    source(
+      THREAD,
+      "SHA-256 of the solution with the last three characters of the block 1 key appended",
+    ),
+  ),
   prize: 0.007,
   hints: [
     official(
