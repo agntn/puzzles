@@ -10,7 +10,12 @@ import {
   p2pkh,
   seed,
 } from "../../src/index.ts";
-import { formatHintReport, formatPuzzleRecord } from "../../src/core/utils.ts";
+import {
+  formatHintReport,
+  formatPrize,
+  formatPrizeTotals,
+  formatPuzzleRecord,
+} from "../../src/core/utils.ts";
 import { showTool } from "../../src/tool-operations.ts";
 
 /*
@@ -64,6 +69,17 @@ describe("puzzles_show text", () => {
     expect(text.filter((line) => /^\t(funding|claim)\t/u.test(line))).toHaveLength(2);
     expect(text.some((line) => line.startsWith("claim: https://blockstream.info/tx/"))).toBe(true);
     expect(text).toContain("key range: 1..1 (hex, 1 bit)");
+  });
+
+  it("prints a dust amount as a decimal, not an exponent", async () => {
+    const text = (await lines("b1000/71")).join("\n");
+
+    expect(text).toContain("\tincrease\t2025-05-19 18:56:09\t0.00000001 BTC\t076d820e");
+    expect(text).not.toMatch(/\de-\d/u);
+    expect(formatPrize(2e-7, "BTC")).toBe("0.0000002 BTC");
+    expect(formatPrizeTotals({ ETH: 1.5e-18, BTC: 1064.08158961 })).toBe(
+      "0.0000000000000000015 ETH, 1064.08158961 BTC",
+    );
   });
 
   it("prints the hint every b1000 record inherits from its author", async () => {
