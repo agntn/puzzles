@@ -134,6 +134,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Thirty brainwallets from 2014. Almost all cracked since.",
   },
+  quizchain: {
+    icon: "i-lucide-link",
+    title: "Quizchain",
+    sample: "quizchain/1",
+    chains: ["bitcoin"],
+    blurb:
+      "One quiz answer plus the tail of the author's favorite address, hashed into a wallet. The key went public in the comments.",
+  },
   satoshi_birthday_quiz: {
     icon: "i-lucide-cake",
     title: "Satoshi birthday 7 million quiz",

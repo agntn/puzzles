@@ -27,6 +27,7 @@ export const WALK: readonly string[] = [
   "mineshop",
   "satoshi_birthday_quiz",
   "book_quiz",
+  "quizchain/1",
 ];
 
 /* generated:landing-fixtures:start */
@@ -703,18 +704,48 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 2,
     tool: "book_quiz\texpired\t0.07 BTC\t1PLa3c2xjtoP6YE1FvaLhsf4akSxvdv3Ta\nchain: bitcoin  address kind: p2pkh\nhash160: f5064148351fc664b483e20a58b0742312c0e03d\npublic key: 02c879abfb2a6b24940ded09bbf421ace2f328a012244960a9d8ef407d73f3d7b4 (compressed)\nprivate key: have piano caution aim endless action evolve already park fetch business wrestle aim copper screen buzz around explain kick gift erupt unhappy brother job (seed phrase)\nderivation path: m/44'/0'/0'/0/0\nentropy: 69b4809282a49a05138839a04aa87c7f20545ff060fc0c2a11e8b0e4cfda873b from https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/ (SHA-256 of the seven answer sentences, joined by single spaces)\nstarted: 2019-04-06 02:58:10\ntransactions: 2\n\tfunding\t2019-04-06 02:58:10\t0.07 BTC\t9777359a8bdeb17691a35e80dc6ed549c736bbe82a236f7ceaeb2567f3737fb2\n\tdecrease\t2019-04-06 04:53:28\t0.06978813 BTC\t48d8205e4a86bcf0d5299b3114ef881ad4f245436b08e6edb8c9f00d72bf4874\nhints: 6\n\tofficial\t-\tTo claim the funds, paste together all correct answers (omitting the leading a) b) etc) with exactly one space between characters. Take a SHA 256 hash of that, then feed it as entropy in a brain wallet generating tool. This will show you the address I sent 7 million satoshis to as well as the private key needed to sweep it.\tsource: https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/\tconfirmation: https://web.archive.org/web/20230611183532/https://old.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/ (Wayback capture of the thread, post and comments)\tanswer: He is unable to predict what happens after the superintelligence explosion. American policy needs to think of all of humanity first, not only American citizens. What discussion? The book ignores the Green New Deal. The Democrats in the Senate blocked the legislation. Introducing a value added tax, shifting taxation from income to spending. Buy the book in bulk and distribute to friends, to help with the bestseller ranking and with spreading the message. Challenge Fucking Accepted.\tanswer source: https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/\n\tofficial\t-\tI give 7 multiple choice questions, some of which are factual questions about the book and some of which will require voicing an opinion. The latter category will have no objective correct answer; the correct answer will just be whatever I personally feel is the best.\tsource: https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/\n\tofficial\t-\tIf someone finds the private key and sweeps the address in less than 60 minutes after I post the questions, we have a winner. Else I take back the funds. Either way I explain what I designated as the correct answers.\tsource: https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/\n\tofficial\t-\tI will not explain more about the format and how to sweep the funds after you found the correct answer beyond what I said above in this original post. Navigating this is part of the challenge.\tsource: https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/\n\tofficial\t-\tI have claimed the funds back just now. Failed to get a winner this time, sorry.\tsource: https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/\n\tofficial\t-\tQuestions 1 and 2 were without objective answer. Questions 3 to 5 were easy for anyone who read the book. Question 6 was without objective answer. As was question 7, but that one was easier.\tsource: https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/\nexplorer: https://blockstream.info/address/1PLa3c2xjtoP6YE1FvaLhsf4akSxvdv3Ta\nsource: https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
   },
+  {
+    id: "quizchain/1",
+    collection: "quizchain",
+    chain: "bitcoin",
+    status: "solved",
+    address: "16NLaozWwi4JSTRMnMfi3oCkBjXBWVFgYR",
+    kind: "p2pkh",
+    hash160: "3ae1b60c6a83290db2e9c228413750d96be80116",
+    redeemScript: undefined,
+    prize: "0.007 BTC",
+    prizeAmount: 0.007,
+    currency: undefined,
+    startedAt: "2019-04-07 03:31:37",
+    solvedAt: "2019-04-07 05:39:30",
+    solveTime: "2h 7m",
+    bits: undefined,
+    range: undefined,
+    pubkey: "028a941c0effd36b57654b9bf871817384f5bd06286cebe73096191bc3584acef3",
+    pubkeyFormat: "compressed",
+    secret: "wif",
+    keyLiteral:
+      'wif("L58cp8Ex3RsTsiKaaeodmu7SetzDzqQkzfX3bAtjdtmu4KbTpUzp").entropy("50611e63a52089bc14e38becb1ad8880be6ba8f4aff0e64223f3dbd740adc1b7", source("https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/comment/ekaqb0l/"))',
+    verdict: "verified",
+    detail: "16NLaozWwi4JSTRMnMfi3oCkBjXBWVFgYR",
+    explorer: "https://blockstream.info/address/16NLaozWwi4JSTRMnMfi3oCkBjXBWVFgYR",
+    source:
+      "https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/",
+    transactions: 2,
+    tool: 'quizchain/1\tsolved\t0.007 BTC\t16NLaozWwi4JSTRMnMfi3oCkBjXBWVFgYR\nchain: bitcoin  address kind: p2pkh\nhash160: 3ae1b60c6a83290db2e9c228413750d96be80116\npublic key: 028a941c0effd36b57654b9bf871817384f5bd06286cebe73096191bc3584acef3 (compressed)\nprivate key: L58cp8Ex3RsTsiKaaeodmu7SetzDzqQkzfX3bAtjdtmu4KbTpUzp (wif)\nentropy: 50611e63a52089bc14e38becb1ad8880be6ba8f4aff0e64223f3dbd740adc1b7 from https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/comment/ekaqb0l/ (SHA-256 of answer b) with the last three characters of the address appended)\nstarted: 2019-04-07 03:31:37\nsolved: 2019-04-07 05:39:30 (2h 7m)\ntransactions: 2\n\tfunding\t2019-04-07 03:31:37\t0.007 BTC\t808aaa64d0028a6033b2c11a8ab59bc67df2758f4560f15158879a61270da7bb\n\tclaim\t2019-04-07 05:39:30\t0.00672314 BTC\t5a99de28f54d3eee464878ddae0f12c865d4226a4572659cdba080fb568fa779\nclaim: https://blockstream.info/tx/5a99de28f54d3eee464878ddae0f12c865d4226a4572659cdba080fb568fa779\nhints: 6\n\tofficial\t-\tSolve this multiple choice question: a) Satoshi is CEO of Bitcoin and holds the Bitcoin patent. b) Satoshi is an anonymous cypherpunk and the first one to succed building private Internet cash.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\tconfirmation: https://web.archive.org/web/20230611083439/https://old.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/ (Wayback capture of the thread, post and comments)\n\tofficial\t-\tHint: The correct answer is b).\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\n\tofficial\t-\tAdd the last 3 digits of my favorite Bitcoin address to the text of alternative b). For example, if that address ends in "abc" take the string "Satoshi is an anonymous cypherpunk and the first one to succed building private Internet cash.abc".\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\tanswer: Satoshi is an anonymous cypherpunk and the first one to succed building private Internet cash.Pzd\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/comment/ekaqb0l/\n\tofficial\t-\tTake a SHA 256 hash of that and use it as entropy in the Ian Coleman BIP 39 tool. Find the private key in the first address of that wallet at the bottom.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\n\tofficial\t-\tGood luck finding my favorite Bitcoin address.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\tanswer: 1AndrewYangForPresident2o2o6zmPzd\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/comment/ekaqb0l/\n\tofficial\t-\tEdit: I messed up. This quiz as posted was not valid. Edited slightly to reflect correct wording of answer b).\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\nexplorer: https://blockstream.info/address/16NLaozWwi4JSTRMnMfi3oCkBjXBWVFgYR\nsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/',
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "ceff45d3aa3d",
-  total: 345,
-  solved: 139,
+  dataVersion: "de754b16ad78",
+  total: 346,
+  solved: 140,
   unsolved: 96,
   claimed: 11,
   swept: 96,
   expired: 3,
-  withPubkey: 244,
+  withPubkey: 245,
   unsolvedPrize: {
     AR: 1900,
     ETH: 9.61254155,
@@ -724,7 +755,7 @@ export const STATS_STATIC = {
     AR: 5550,
     ETH: 22.74624155,
     DAI: 100,
-    BTC: 1064.08158961,
+    BTC: 1064.08858961,
     LTC: 230.8255,
     DCR: 460,
   },
@@ -1079,6 +1110,26 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "quizchain",
+    author: "AoiNakamoto",
+    authorKey: "aoi-nakamoto",
+    authorUrl: "https://www.reddit.com/user/AoiNakamoto/",
+    total: 1,
+    statuses: {
+      solved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.007,
+    },
+    unsolvedPrize: {},
+    withPubkey: 1,
+    withKey: 1,
+    firstStarted: "2019-04-07 03:31:37",
+    lastStarted: "2019-04-07 03:31:37",
+    hints: [],
+  },
+  {
     key: "rushwallet",
     author: "Dmitri Kryptokov",
     authorKey: "dmitri-kryptokov",
@@ -1237,8 +1288,8 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     kind: "person",
     about:
       "Pseudonymous author of the 2019 Quizchain puzzle series on Reddit, who shut it all down in August 2019 and called it a failed experiment.",
-    collections: ["book_quiz", "satoshi_birthday_quiz"],
-    puzzles: 2,
+    collections: ["book_quiz", "quizchain", "satoshi_birthday_quiz"],
+    puzzles: 3,
   },
   {
     key: "coin-artist",

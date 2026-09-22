@@ -65,6 +65,17 @@ const sources = [
     },
   },
   {
+    file: "quizchain/aoinakamoto-2019-04-07",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-07",
+    archive: {
+      url: "https://web.archive.org/web/20230611083439/https://old.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/",
+      date: "2023-06-11T08:34:39Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "satoshi_birthday_quiz/aoinakamoto-2019-04-05",
     url: "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/",
     author: "u/AoiNakamoto",
