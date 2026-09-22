@@ -82,12 +82,10 @@ export class BitapsCollection extends SingletonCollection {
       fact(
         "Published two of the five Shamir shares of a 12 word mnemonic and pays 1 BTC for breaking the scheme or the implementation.",
         "https://bitaps.com/mnemonic/challenge",
-        { date: "2020-06-19" },
       ),
       fact(
         "Turned the puzzle into a bug bounty in 2021: 1 BTC more for the published attack, 0.1 BTC for a bug that loses access to a correct set of shares, 0.05 BTC and up for other implementation bugs.",
         "https://bitaps.com/mnemonic/challenge",
-        { date: "2021-08-25" },
       ),
     ],
   });
