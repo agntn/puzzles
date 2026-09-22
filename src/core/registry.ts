@@ -157,7 +157,7 @@ export function knownCollections(): string {
  * The loads are serial on purpose. Every collection module imports the same core modules, and a
  * host loader that re-evaluates a module per importer, such as the jiti loader Pi runs extensions
  * under, re-enters those shared modules when the imports overlap and hands the second importer a
- * half-initialized namespace. Seventeen local modules cost nothing to load in order.
+ * half-initialized namespace. Eighteen local modules cost nothing to load in order.
  *
  * @returns {Promise<readonly AnyCollection[]>} Every collection, loaded once and frozen.
  */

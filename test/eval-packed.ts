@@ -72,6 +72,7 @@ const expectedCollections = [
   "mineshop",
   "movie_enigma",
   "rushwallet",
+  "satoshi_birthday_quiz",
   "warp",
   "zden",
 ];

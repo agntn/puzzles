@@ -15,6 +15,7 @@ import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MineshopCollection } from "../../src/collections/mineshop.ts";
 import { MovieEnigmaCollection } from "../../src/collections/movie_enigma.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
+import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi_birthday_quiz.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
 import {
@@ -60,6 +61,7 @@ const concreteClasses = [
   MineshopCollection,
   MovieEnigmaCollection,
   RushwalletCollection,
+  SatoshiBirthdayQuizCollection,
   WarpCollection,
   ZdenCollection,
 ] as const;
@@ -483,20 +485,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(343);
+    expect(await all()).toHaveLength(344);
     expect(await stats()).toEqual({
-      total: 343,
+      total: 344,
       claimed: 11,
       expired: 2,
-      solved: 138,
+      solved: 139,
       swept: 96,
       unsolved: 96,
-      with_pubkey: 242,
+      with_pubkey: 243,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
         DAI: 100,
-        BTC: 1063.94158961,
+        BTC: 1064.01158961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -523,7 +525,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(343);
+    ).toBe(344);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -550,6 +552,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(138);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(139);
   });
 });

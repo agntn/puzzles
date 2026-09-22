@@ -8,7 +8,7 @@ metadata:
 
 # puzzles
 
-Seventeen collections, 343 puzzles, five chains: Bitcoin, Ethereum, Litecoin, Decred, Arweave. A sixth factory, `moneroPuzzle`, has no records yet. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
+Eighteen collections, 344 puzzles, five chains: Bitcoin, Ethereum, Litecoin, Decred, Arweave. A sixth factory, `moneroPuzzle`, has no records yet. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
 
 Reads are methods, not properties. `puzzle.address()`, not `puzzle.address`. A puzzle with no solver or prize simply leaves those fields out of its record, which is why nothing in the dataset is null.
 
@@ -25,25 +25,26 @@ Node.js 24 or newer. The library builds as neutral ESM, so browsers and edge wor
 
 IDs are `collection/identifier`. Four singletons have no slash, which trips people up more than anything else here.
 
-| Collection       | ID example              | Query type                                        |
-| ---------------- | ----------------------- | ------------------------------------------------- |
-| `b1000`          | `b1000/66`              | number 1-256 or string                            |
-| `arweave`        | `arweave/weave1`        | name                                              |
-| `ballet`         | `ballet/AA007448`       | serial number                                     |
-| `bitaps`         | `bitaps`                | singleton, no argument                            |
-| `bitimage`       | `bitimage/kitten`       | name                                              |
-| `coin_artist`    | `coin_artist/...`       | name "torched-h34r7s"                             |
-| `dug`            | `dug/2025-0`            | 2025-0, 2025-1 or 2025-2                          |
-| `genesis`        | `genesis/block`         | block                                             |
-| `gsmg`           | `gsmg`                  | singleton, no argument                            |
-| `hash_collision` | `hash_collision/sha256` | sha1, sha256, ripemd160, hash160, hash256, op_abs |
-| `ledger_donjon`  | `ledger_donjon/...`     | name "scissors_secret_sharing", full ID below     |
-| `luckylurker`    | `luckylurker/vault_1`   | vault_1 or vault_2                                |
-| `mineshop`       | `mineshop`              | singleton, no argument                            |
-| `movie_enigma`   | `movie_enigma`          | singleton, no argument                            |
-| `rushwallet`     | `rushwallet/9`          | name "1"-"30"                                     |
-| `warp`           | `warp/challenge_1`      | challenge_1-4, warp_challenge_1-2                 |
-| `zden`           | `zden/level_1`          | snake_case level name                             |
+| Collection              | ID example              | Query type                                        |
+| ----------------------- | ----------------------- | ------------------------------------------------- |
+| `b1000`                 | `b1000/66`              | number 1-256 or string                            |
+| `arweave`               | `arweave/weave1`        | name                                              |
+| `ballet`                | `ballet/AA007448`       | serial number                                     |
+| `bitaps`                | `bitaps`                | singleton, no argument                            |
+| `bitimage`              | `bitimage/kitten`       | name                                              |
+| `coin_artist`           | `coin_artist/...`       | name "torched-h34r7s"                             |
+| `dug`                   | `dug/2025-0`            | 2025-0, 2025-1 or 2025-2                          |
+| `genesis`               | `genesis/block`         | block                                             |
+| `gsmg`                  | `gsmg`                  | singleton, no argument                            |
+| `hash_collision`        | `hash_collision/sha256` | sha1, sha256, ripemd160, hash160, hash256, op_abs |
+| `ledger_donjon`         | `ledger_donjon/...`     | name "scissors_secret_sharing", full ID below     |
+| `luckylurker`           | `luckylurker/vault_1`   | vault_1 or vault_2                                |
+| `mineshop`              | `mineshop`              | singleton, no argument                            |
+| `movie_enigma`          | `movie_enigma`          | singleton, no argument                            |
+| `rushwallet`            | `rushwallet/9`          | name "1"-"30"                                     |
+| `satoshi_birthday_quiz` | `satoshi_birthday_quiz` | singleton, no argument                            |
+| `warp`                  | `warp/challenge_1`      | challenge_1-4, warp_challenge_1-2                 |
+| `zden`                  | `zden/level_1`          | snake_case level name                             |
 
 `ledger_donjon/scissors_secret_sharing` is a named CTF challenge. Its published phrase verifies through BIP44; the 100 CTF points aren't a cryptocurrency prize.
 

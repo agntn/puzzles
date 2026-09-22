@@ -126,6 +126,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Thirty brainwallets from 2014. Almost all cracked since.",
   },
+  satoshi_birthday_quiz: {
+    icon: "i-lucide-cake",
+    title: "Satoshi birthday 7 million quiz",
+    sample: "satoshi_birthday_quiz",
+    chains: ["bitcoin"],
+    blurb:
+      "Seven questions about Bitcoin history, hashed into a brainwallet. Swept five hours after it was funded.",
+  },
   warp: {
     icon: "i-lucide-key-round",
     title: "WarpWallet challenges",
