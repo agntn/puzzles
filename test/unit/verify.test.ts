@@ -3,6 +3,7 @@ import { b1000 } from "../../src/collections/b1000.ts";
 import { ballet } from "../../src/collections/ballet.ts";
 import { bitaps } from "../../src/collections/bitaps.ts";
 import { bitimage } from "../../src/collections/bitimage.ts";
+import { zden } from "../../src/collections/zden.ts";
 import {
   BitcoinPuzzle,
   bitcoinPuzzle,
@@ -42,6 +43,31 @@ describe("Collection.verify", () => {
 
     expect(result.verified).toBe(true);
     expect(result.derivedAddress).toBe(ballet.require("AA007448").address().value);
+  });
+
+  it("verifies Codex Protocol's key published by Zden", async () => {
+    const puzzle = zden.require("codex_protocol");
+    expect(puzzle.keyData()).toEqual({
+      hex: "5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbfcf3ec",
+    });
+    expect(puzzle.toJSON().key).toEqual({
+      hex: "5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbfcf3ec",
+    });
+    expect(puzzle.hasPrivateKey()).toBe(true);
+    expect(puzzle.assets()).toEqual({
+      puzzle: "codex_protocol/puzzle.png",
+      solution: "codex_protocol/solution.md",
+      hints: ["codex_protocol/hint_1.png", "codex_protocol/hint_2.png"],
+      source_url: "https://crypto.haluska.sk/CodexPuzzle.png",
+    });
+    expect(await zden.verify("codex_protocol")).toEqual({
+      id: "zden/codex_protocol",
+      verified: true,
+      privateKey: "5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbfcf3ec",
+      expectedAddress: "0x6b2560b34c7469c561a8fce581c88bfb8cce73b2",
+      derivedAddress: "0x6b2560b34C7469c561a8FCe581C88BFb8CcE73B2",
+      error: null,
+    });
   });
 
   it("returns an expected failure for unavailable secret material", async () => {
