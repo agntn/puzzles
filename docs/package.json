@@ -25,7 +25,7 @@
     "@iconify-json/token": "1.2.41",
     "@iconify-json/vscode-icons": "1.2.78",
     "vue-tsc": "^3.3.11",
-    "wrangler": "4.128.0"
+    "wrangler": "4.135.0"
   },
   "packageManager": "pnpm@11.22.0"
 }
