@@ -28,7 +28,7 @@ Each puzzle is a `PuzzleSpec` record in `src/collections/<collection>/<name>.ts`
 6. Run `pnpm test`. The data gate checks unique identifiers, collection ownership, address and txid formats, private key derivation, WIF and BIP38 consistency, claimed public keys, asset paths, and that nothing serializes as null.
 7. Run `pnpm fixtures` after a record or shared view helper changes the landing samples, statistics, or collection facts. `pnpm fixtures --check` reports stale output without writing.
 
-Fragile sources have [local reading copies with screenshots](assets/sources/README.md): every tweet a record cites, and a thread whose comments carry the answer key. When adding one, archive the page too and extend `test/unit/source-archives.test.ts`. Include an older web archive URL when one exists, with its capture date and whether its content was confirmed. Keep the original URL in the record.
+Fragile sources have [local reading copies with screenshots](assets/sources/README.md): every tweet a record cites, and every thread whose comments carry an answer key. When adding one, archive the page too and extend `test/unit/source-archives.test.ts`. Include an older web archive URL when one exists, with its capture date and whether its content was confirmed. Keep the original URL in the record.
 
 ## Pull requests
 
