@@ -1,184 +1,45 @@
 ---
 name: puzzles
-description: Use @agntn/puzzles for crypto puzzle and bounty data, either as a TypeScript library, the `puzzles` CLI, or the puzzles_* agent tools. Trigger when code imports `@agntn/puzzles`, when running `puzzles` commands, or when looking up Bitcoin puzzle transactions, hash-collision bounties, brainwallet contests, or other public crypto challenges.
+description: Look up public crypto puzzles, bounties and challenges in the @agntn/puzzles dataset through its puzzles_* agent tools or the `puzzles` CLI. Use when a task asks what puzzles exist, which address belongs to which puzzle, what the author hinted, whether a recorded key checks out, or how much is still on a prize address. For code that imports the package use puzzles-library; for adding or fixing a record use puzzles-records.
 metadata:
   author: oritwoen
-  version: "0.20.0"
+  version: "0.21.2"
 ---
 
 # puzzles
 
-Twenty collections, 346 puzzles, five chains: Bitcoin, Ethereum, Litecoin, Decred, Arweave. A sixth factory, `moneroPuzzle`, has no records yet. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
+The dataset grows, so this skill does not list what is in it. Ask the tools. They read the same registry as the library and answer from the installed version, which is the only list that is never stale.
 
-Reads are methods, not properties. `puzzle.address()`, not `puzzle.address`. A puzzle with no solver or prize simply leaves those fields out of its record, which is why nothing in the dataset is null.
+## Find your way in
 
-## Install
+1. **What exists.** `puzzles_collections` gives every collection with its author and status counts. `puzzles_stats` gives dataset totals. Both are local and cheap.
+2. **Which puzzles.** `puzzles_list` with a `collection`, `chain`, `status` or `withPubkey` filter. Holding an address, pass it as `address` instead of paging. An empty result means no puzzle pays there.
+3. **One puzzle.** `puzzles_show` with an identifier taken from a list row. Then `puzzles_hints` for what the author and the community said, with sources.
+4. **Checks.** `puzzles_verify` derives the address from the recorded key material, locally. `puzzles_balance` is the only call that reaches the network.
+5. **Who.** `puzzles_authors` and `puzzles_author` for who published a collection and what public pages say about them.
 
-```bash
-pnpm add @agntn/puzzles          # library
-pnpm dlx @agntn/puzzles stats    # CLI without installing
-```
+No tools in this harness? The CLI prints the same answers: `puzzles collections`, `puzzles list`, `puzzles show <id> --json`, `puzzles hints <id>`, `puzzles verify <id>`, `puzzles balance <id>`, `puzzles authors [key]`. Run it without installing through `pnpm dlx @agntn/puzzles <command>`, or expose the tools with `puzzles mcp`.
 
-Node.js 24 or newer. The library builds as neutral ESM, so browsers and edge workers run it too.
+## Identifiers
 
-## Puzzle ID format
+An identifier is `collection/name`, for example `b1000/90`. A collection with a single puzzle uses its key alone, like `gsmg`, with no slash. Do not build identifiers from a pattern you expect. Copy them from a `puzzles_list` row. A miss is cheap anyway: it names the known collections, or how many puzzles the collection holds with one real identifier.
 
-IDs are `collection/identifier`. Six singletons have no slash, which trips people up more than anything else here.
+## Reading the answers
 
-| Collection              | ID example              | Query type                                        |
-| ----------------------- | ----------------------- | ------------------------------------------------- |
-| `b1000`                 | `b1000/66`              | number 1-256 or string                            |
-| `arweave`               | `arweave/weave1`        | name                                              |
-| `ballet`                | `ballet/AA007448`       | serial number                                     |
-| `bitaps`                | `bitaps`                | singleton, no argument                            |
-| `bitimage`              | `bitimage/kitten`       | name                                              |
-| `book_quiz`             | `book_quiz`             | singleton, no argument                            |
-| `coin_artist`           | `coin_artist/...`       | name "torched-h34r7s"                             |
-| `dug`                   | `dug/2025-0`            | 2025-0, 2025-1 or 2025-2                          |
-| `genesis`               | `genesis/block`         | block                                             |
-| `gsmg`                  | `gsmg`                  | singleton, no argument                            |
-| `hash_collision`        | `hash_collision/sha256` | sha1, sha256, ripemd160, hash160, hash256, op_abs |
-| `ledger_donjon`         | `ledger_donjon/...`     | name "scissors_secret_sharing", full ID below     |
-| `luckylurker`           | `luckylurker/vault_1`   | vault_1 or vault_2                                |
-| `mineshop`              | `mineshop`              | singleton, no argument                            |
-| `movie_enigma`          | `movie_enigma`          | singleton, no argument                            |
-| `quizchain`             | `quizchain/1`           | block number                                      |
-| `rushwallet`            | `rushwallet/9`          | name "1"-"30"                                     |
-| `satoshi_birthday_quiz` | `satoshi_birthday_quiz` | singleton, no argument                            |
-| `warp`                  | `warp/challenge_1`      | challenge_1-4, warp_challenge_1-2                 |
-| `zden`                  | `zden/level_1`          | snake_case level name                             |
+- **Status** is recorded, never guessed from the chain. `solved` means the solution is public. `claimed` means the prize is gone and the key is not published. `swept` means someone took it after the public key leaked. `expired` means the author took it back. Everything else is `unsolved`.
+- **Absent means unknown.** A record leaves out what nobody published: no key, no solver, no prize. Nothing is null, and a missing field is not a zero.
+- **A hint is not a fact.** `official` comes from the puzzle's author, `community` from anyone else, and neither says the hint is right. The `source` is where it was published. A published `answer` responds to one hint and is not a verified key.
+- **An unverifiable puzzle is an answer.** `puzzles_verify` reports `unverifiable` when the record holds no key material. That is a result, not a tool error. `not verified` is the one to worry about: the recorded key does not derive the address.
+- **Balances are live.** Ethereum needs an Etherscan key through `apiKey` or `ETHERSCAN_API_KEY`. There is no retry or rate limiting, so don't loop the call over hundreds of addresses.
 
-`ledger_donjon/scissors_secret_sharing` is a named CTF challenge. Its published phrase verifies through BIP44; the 100 CTF points aren't a cryptocurrency prize.
+## Pitfalls
 
-Old names still resolve: `peter_todd` gives you `hash_collision`, `warpwallet` gives you `warp`.
+- Listing the whole dataset to find one address or one collection. Use the filter the tool already takes.
+- Raising `limit` to see more rows. Follow the returned next offset with the same filters instead.
+- Treating a status count or a balance from an earlier call as current after the dataset or the chain moved.
+- Reading `unsolved` as "nobody knows anything". Check `puzzles_hints` first, since part of the answer may already be public.
 
-## Library
+## Related
 
-```ts
-import { all, collectionKeys, collections, get, stats } from "@agntn/puzzles";
-import { b1000 } from "@agntn/puzzles/collections/b1000";
-import { hashCollision } from "@agntn/puzzles/collections/hash_collision";
-
-const puzzle = b1000.require(66); // collection query, throws when missing, synchronous
-const same = await get("b1000/66"); // universal ID, loads b1000 only
-const missing = await get("nope"); // undefined, no throw
-
-console.log(puzzle.address().value, puzzle.status(), puzzle.prize());
-
-const targets = b1000.unsolved().filter((p) => p.hasPubkey());
-const range = b1000.require(90).keyRange(); // [2n ** 89n, 2n ** 90n - 1n]
-
-console.log(collectionKeys().length); // from the manifest, nothing loaded
-console.log((await stats()).unsolved, (await all()).length, (await collections()).length); // loads everything
-console.log(hashCollision.require("sha256").explorerUrl());
-```
-
-The aggregate views (`all`, `get`, `requirePuzzle`, `selectPuzzles`, `stats`, `collections`, `collectionSummaries`, `dataVersion`, `dataset`) are asynchronous because they load collections on demand. `collectionKeys()` and `hasCollection()` read the manifest synchronously.
-
-Every collection inherits the same methods from the abstract `Collection`: `get()`, `require()`, `requireId()`, `all()`, `solved()`, `unsolved()`, `withPubkey()`, `count()`, `solvedCount()`, `unsolvedCount()`, `balance()`, `balanceById()`, `verify()`, `verifyById()`. Pick `get()` when a miss is normal and `require()` when it is a bug.
-
-### Balances
-
-```ts
-const balance = await b1000.require(71).balance();
-console.log(balance.confirmed, balance.totalUnits()); // bigint base units, then a float
-```
-
-`balance()` sits on the puzzle and goes through `@agntn/explorers`: Mempool for Bitcoin and Litecoin, Etherscan V2 for Ethereum, Dcrdata for Decred, the Arweave gateway for Arweave. `collection.balance(query)` forwards to the selected puzzle. Ethereum needs a key. Monero has no provider at all, so that call rejects instead of guessing. The providers load on the first call, not at import.
-
-```ts
-await b1000.balance(71, { apiKey: "etherscan-key", baseUrl: "https://…", timeout: 5000 });
-```
-
-There is no retry and no rate limiting. Loop over 300 addresses and the provider will start refusing you.
-
-### Verification
-
-```ts
-const result = await b1000.verify(1);
-result.verified ? result.derivedAddress : result.error;
-```
-
-Direct hex keys, decrypted WIFs, and complete BIP39 seed records all verify through the same call. Collection verification is asynchronous because the signing crypto loads on first use; `verifyPuzzle(puzzle)` is synchronous. A puzzle with no key material is a normal failure result, not an exception, so `--all` runs stay quiet. `hasPrivateKey()` answers from the same `secretOf()` resolver, so a seed with only a derivation path or an xpub counts as no key in both places.
-
-### Dataset snapshot
-
-```ts
-import { dataset, dataVersion } from "@agntn/puzzles";
-
-await dataVersion(); // 12-char hash of the class data, stable across runtimes
-await dataset(); // { version, data_version, collections }
-```
-
-`dataVersion()` serializes the whole dataset the first time you call it, then caches. Fine once, wasteful in a loop.
-
-## CLI
-
-```bash
-puzzles stats [--json]
-puzzles collections [--json]
-puzzles authors [key] [--json]
-puzzles show b1000/90 [--json]
-puzzles hints b1000/71 [--json]
-puzzles list [collection] [--address <addr>] [--chain bitcoin] [--status unsolved] [--with-pubkey] [--limit 50] [--offset 50] [--json]
-puzzles balance b1000/71 [--api-key KEY] [--json]
-puzzles verify b1000/1 | puzzles verify --all [--quiet] [--json]
-puzzles export [--compact]
-puzzles mcp
-```
-
-Plain output is tab-separated as `id  status  prize  address`, so `cut` and `awk` work. `verify` exits non-zero when a puzzle that has key material fails to derive its address, which makes it usable as a CI gate. Ethereum balances read `ETHERSCAN_API_KEY` unless you pass `--api-key`.
-
-## Agent tools
-
-MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same nine operations:
-
-| Tool                  | Arguments                                                                   | Reaches the network |
-| --------------------- | --------------------------------------------------------------------------- | ------------------- |
-| `puzzles_stats`       | none                                                                        | no                  |
-| `puzzles_collections` | none                                                                        | no                  |
-| `puzzles_authors`     | none                                                                        | no                  |
-| `puzzles_author`      | `key` (author key or collection key)                                        | no                  |
-| `puzzles_show`        | `id`                                                                        | no                  |
-| `puzzles_hints`       | `id`                                                                        | no                  |
-| `puzzles_list`        | `address`, `collection`, `chain`, `status`, `withPubkey`, `limit`, `offset` | no                  |
-| `puzzles_verify`      | `id`                                                                        | no                  |
-| `puzzles_balance`     | `id`, `apiKey`                                                              | yes                 |
-
-`puzzles_collections` prints the same rows as `puzzles collections` on the CLI, so an agent can discover keys without loading anything else first. `puzzles_authors` and `puzzles_author` do the same for `puzzles authors [key]`: who published a collection, under which handle, and what public pages say about them with the page as source.
-
-Hold an address and want the record? Pass it as `address` to `puzzles_list` instead of paging the dataset. It matches in the case each chain fixes, so a checksummed Ethereum address works, and an empty result means no puzzle pays there.
-
-`puzzles_list` returns 50 puzzles by default, 500 at most, and the header tells you how many actually matched. Follow the returned next offset with the same filters to read the next page without repeating earlier rows. No next offset means the end. Offsets count matches from zero in dataset order. Restart at zero if the dataset or filters change.
-
-## Adding a puzzle
-
-One file per puzzle, listed in its collection:
-
-```ts
-// src/collections/zden/level-6.ts
-import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { funding, p2pkh } from "../../core/parts.ts";
-
-/** Puzzle `zden/level_6`. */
-export const zdenLevel6 = bitcoinPuzzle({
-  id: "zden/level_6",
-  address: p2pkh("1…", "hash160…"),
-  sourceUrl: "https://crypto.haluska.sk/",
-  startedAt: "2026-01-01 00:00:00",
-  transactions: [funding("txid…", "2026-01-01 00:00:00", 0.5)],
-});
-```
-
-Then import it in `src/collections/zden.ts` and append it to `static readonly puzzles`. Leave out every field the puzzle does not have: an absent field is how "no data" is spelled. New exports skip the `Puzzle` segment the older records still carry. A hint goes in as `official(text, source)` or `community(text, source)`, where `source` is the URL it was published at. That's all a hint needs. `confirmation(url)` is optional: an archive capture of that page, or another place the author published the same hint. A solver's reconstruction doesn't count. When someone published the answer later, it goes in the options as `{ answer: answer(text, source) }` and the hint text stays as written. A hint that holds for the whole collection goes to the collection constructor once, not into every record. `pnpm test` re-checks identifiers, key derivation, assets, hints, and the no nulls rule.
-
-## References
-
-- [collections.md](references/collections.md) for what sits in each collection.
-- [types.md](references/types.md) for the read contract, the part constructors, and serialized shapes.
-
-## Limitations
-
-- Records are frozen, nothing edits a puzzle in place. `registerCollection()` can add a collection or replace the one under the same key, built-ins included.
-- Monero puzzles have neither balances nor verification. Arweave has balances but no key derivation.
-- `keyRange()` needs `key.bits`, which only b1000 sets.
+- [puzzles-library](../puzzles-library/SKILL.md) for the TypeScript API behind the tools.
+- [puzzles-records](../puzzles-records/SKILL.md) for adding or fixing a record in the repository.
