@@ -1,7 +1,7 @@
 import type { AnyCollection, Hint } from "../../../src/index.ts";
 import { prizeTotals } from "../../../src/core/utils.ts";
 
-/** The facts strip of a collection page: numbers, strings and the hint records, safe for the Nuxt payload. */
+/** The dossier of a collection page: numbers, strings and the hint records, safe for the Nuxt payload. */
 export interface CollectionFactsData {
   readonly key: string;
   readonly author: string | undefined;
@@ -21,7 +21,7 @@ export interface CollectionFactsData {
 }
 
 /**
- * Reads the facts strip off a loaded collection.
+ * Reads the collection dossier off a loaded collection.
  *
  * @param {AnyCollection} collection - The collection instance.
  * @returns {CollectionFactsData} Counts, chains, prize sums, the date range and the shared hints.
@@ -49,16 +49,4 @@ export function collectionFacts(collection: AnyCollection): CollectionFactsData 
     lastStarted: started.at(-1) ?? "",
     hints: collection.hints,
   };
-}
-
-/**
- * `83 solved · 77 unsolved · 96 swept`, in the order the statuses appear.
- *
- * @param {Readonly<Record<string, number>>} statuses - Counts per status.
- * @returns {string} The counts joined for display.
- */
-export function statusList(statuses: Readonly<Record<string, number>>): string {
-  return Object.entries(statuses)
-    .map(([status, count]) => `${count} ${status}`)
-    .join(" · ");
 }

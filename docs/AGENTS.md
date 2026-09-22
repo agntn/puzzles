@@ -4,7 +4,7 @@ Docus site for `@agntn/puzzles`. Markdown lives in `content/`. The playground an
 
 ## Design
 
-For changes to panel geometry, icons, typography, motion or the response viewer, use [DESIGN.md](DESIGN.md). It records the accepted component anatomy, SVG layers, responsive dimensions and browser checks. Keep shared tokens and the grammar every instrument shares (the clipped shell, `console-*` labels, bars, readouts, leads, gauges) in `app/app.css`, the reticle in `ConsoleReticle.vue`, the full-response dialog in `ConsoleResponse.vue`, the landing console's own parts in `LandingToolCall.vue`, the author dossier's in `AuthorFacts.vue` and the playground's in `PuzzlesPlayground.vue`; the reference images are not a second source of record data.
+For changes to panel geometry, icons, typography, motion or the response viewer, use [DESIGN.md](DESIGN.md). It records the accepted component anatomy, SVG layers, responsive dimensions and browser checks. Keep shared tokens and the grammar every instrument shares (the clipped shell, `console-*` labels, bars, readouts, leads, gauges) in `app/app.css`, the reticle in `ConsoleReticle.vue`, the full-response dialog in `ConsoleResponse.vue`, the landing console's own parts in `LandingToolCall.vue`, the author dossier's in `AuthorFacts.vue`, the collection dossier's in `CollectionFacts.vue` and the playground's in `PuzzlesPlayground.vue`; the reference images are not a second source of record data.
 
 ## Layout
 
@@ -17,7 +17,7 @@ docs/
 ├── app/components/content/        # MDC components and page parts: landing panels (LandingAuthor follows the walk with the author's card), ConsoleReticle and ConsoleResponse (shared by every instrument), PuzzleCard, PuzzlePage, CollectionFacts, CollectionPuzzles, AuthorFacts, AuthorList, PuzzlesPlayground, StatusPill, BalanceLine
 ├── app/components/OgImage/        # Docs.takumi and Landing.takumi override the Docus OG templates
 ├── app/composables/               # useLandingPuzzle (one clock for every live panel), useBalance (the worker route), useSubNavigation
-├── app/utils/                     # puzzles (collection presentation, tool names), samples (toSample, builders), puzzle-view (the page's data), landing (static fixtures), collections (facts strip), authors (author page and index rows), format
+├── app/utils/                     # puzzles (collection presentation, tool names), samples (toSample, builders), puzzle-view (the page's data), landing (static fixtures), collections (collection dossier data), authors (author page and index rows), format
 ├── app/pages/playground.vue       # playground, own route outside the docs layout, its own useSeo and OG image
 ├── app/pages/collections/[collection]/[puzzle].vue   # one page per puzzle, prerendered through the links on the collection pages
 ├── server/api/balance/[...id].ts  # puzzle.balance() on the worker, cached five minutes per puzzle
@@ -25,7 +25,7 @@ docs/
 ├── public/                        # favicon.svg and the icons and manifest cut from it
 ├── content/index.md               # landing
 ├── content/1.guide/               # getting started, records, registry, lookups, verification, balances, cli, agents, custom, playground
-├── content/2.collections/         # one page per collection, each with the facts strip and the puzzle list; the six singletons embed their puzzle page
+├── content/2.collections/         # one page per collection, each with the collection dossier and the puzzle list; the six singletons embed their puzzle page
 └── content/3.authors/             # one page per author key, each with `::author-facts` read off `getAuthor()`; the overview lists them through `::author-list`
 ```
 
@@ -60,7 +60,7 @@ Two resolution traps, both because the repo root is its own pnpm workspace:
 
 - The landing walks twenty puzzles, `WALK` in `app/utils/landing.ts`, one per collection at least. `LANDING_STATIC`, `STATS_STATIC`, `FACTS_STATIC` and `AUTHORS_STATIC` are what the library computes for them, written down so the page renders the same values before the collections load in the browser. `test/unit/docs-landing.test.ts` in the repository root recomputes every fixture from `src/` and fails when a record changes. Run `pnpm fixtures` after records or view helpers change; `pnpm fixtures --check` reports drift without writing.
 - After mount each step calls `get(id)`, which imports that one collection module, and the registry panel marks the collection loaded. The set of loaded collections is the page's own record of what the walk pulled in, not a claim about the library's cache. The stats strip and the collection tiles read the static fixtures, pinned by the same test, because computing them live would load every collection and defeat the panel.
-- An author page is `content/3.authors/<n>.<key>.md`, where the key is the author record's `key` in `src/collections/<collection>.ts`. `::author-facts{author="<key>"}` throws a 404 for a key no collection names, so a renamed key takes its page with it. The facts strip of a collection page links its author to `/authors/<key>`; `test/unit/docs-landing.test.ts` pins `authorKey` with the rest of `FACTS_STATIC`.
+- An author page is `content/3.authors/<n>.<key>.md`, where the key is the author record's `key` in `src/collections/<collection>.ts`. `::author-facts{author="<key>"}` throws a 404 for a key no collection names, so a renamed key takes its page with it. The dossier of a collection page links its author to `/authors/<key>`; `test/unit/docs-landing.test.ts` pins `authorKey` with the rest of `FACTS_STATIC`.
 - `app/utils/puzzles.ts` is the one place with a collection's icon, display title, sample id, chain list and blurb. The sidebar, the collection rows, the OG chips and the playground read from it, and the collection pages repeat the icon in their frontmatter. Counts, authors, prizes and statuses come from the library: `::collection-facts` and `::collection-puzzles` load the collection through `useAsyncData` and serialize plain numbers and strings into the payload.
 - `keyLiteral` in `app/utils/samples.ts` mirrors the builders in `src/core/parts.ts` for the rotating record panel, and `balanceText` in `app/composables/useBalance.ts` mirrors the `puzzles_balance` line in `src/tool-operations.ts`, because the browser can't run that executor without a key. A builder or a line the library changes needs the same change here, and there's no test that catches either drift, so read both when touching one.
 - Balances load in the browser after mount through `useBalance`, never during the prerender, so no page bakes a number in. `BalanceLine` shows the amount with the explorer's host, or the worker's error message. `PuzzlesPlayground` calls `showTool`, `listTool`, `verifyTool`, `collectionsTool`, `authorsTool`, `authorTool` and `statsTool` from the aliased executors and the worker route for a balance. A `PuzzlesError` is shown with its class name and message, a worker error with its status text. Anything else is a bug in the library and belongs there, not in a try/catch here.
