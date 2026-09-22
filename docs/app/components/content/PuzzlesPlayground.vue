@@ -21,6 +21,7 @@ import {
   formatPrize,
   host,
   hostPath,
+  listCommandLine,
   shellArg,
   shorten,
   verdictLabel,
@@ -305,11 +306,12 @@ const locality = computed(() =>
 const cliLine = computed(() => {
   if (needsId.value) return `puzzles ${operation.value} ${shellArg(id.value.trim())}`;
   if (!isList.value) return `puzzles ${operation.value}`;
-  const parts = ["puzzles list"];
-  if (collection.value) parts.push(shellArg(collection.value));
-  if (status.value) parts.push(`--status ${status.value}`);
-  if (withPubkey.value) parts.push("--with-pubkey");
-  return parts.join(" ");
+  return listCommandLine({
+    collection: collection.value,
+    status: status.value,
+    withPubkey: withPubkey.value,
+    limit: limit.value,
+  });
 });
 
 /** The same call as a tool invocation, the JSON an MCP client sends. */

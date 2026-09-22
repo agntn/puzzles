@@ -92,3 +92,23 @@ export function verdictLabel(verified: boolean, unavailable: boolean): string {
   if (verified) return "verified";
   return unavailable ? "unverifiable" : "not verified";
 }
+
+/**
+ * The playground's list form as one CLI line, carrying every argument its tool call carries.
+ *
+ * @param {{ readonly collection: string; readonly status: string; readonly withPubkey: boolean; readonly limit: string }} form - The form's list fields.
+ * @returns {string} The `puzzles list` line to copy.
+ */
+export function listCommandLine(form: {
+  readonly collection: string;
+  readonly status: string;
+  readonly withPubkey: boolean;
+  readonly limit: string;
+}): string {
+  const parts = ["puzzles list"];
+  if (form.collection) parts.push(shellArg(form.collection));
+  if (form.status) parts.push(`--status ${form.status}`);
+  if (form.withPubkey) parts.push("--with-pubkey");
+  if (form.limit.trim() !== "") parts.push(`--limit ${form.limit.trim()}`);
+  return parts.join(" ");
+}

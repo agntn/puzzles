@@ -324,6 +324,43 @@ describe.concurrent("puzzles CLI", () => {
     expect(checksummed.map((puzzle) => puzzle.id)).toEqual(["zden/xixoio"]);
   });
 
+  it("pages a long collection the way the list tool pages it", async () => {
+    const page = await puzzles("list", "b1000", "--limit", "2", "--offset", "70");
+    const records = await json<readonly { readonly id: string }[]>(
+      "list",
+      "b1000",
+      "--limit",
+      "2",
+      "--offset",
+      "70",
+      "--json",
+    );
+
+    expect(page.split("\n").map((line) => line.split("\t")[0])).toEqual(["b1000/71", "b1000/72"]);
+    expect(records.map((puzzle) => puzzle.id)).toEqual(["b1000/71", "b1000/72"]);
+  });
+
+  it("keeps every match when neither flag is given, and ends cleanly past the last one", async () => {
+    const all = await puzzles("list", "b1000");
+    const past = await puzzles("list", "gsmg", "--offset", "9999");
+
+    expect(all.split("\n")).toHaveLength(256);
+    expect(past).toBe("");
+  });
+
+  it.each([
+    ["--limit", "0", "Invalid limit: expected an integer of 1 or more"],
+    ["--limit", "two", "Invalid limit: expected an integer of 1 or more"],
+    ["--limit", "1.5", "Invalid limit: expected an integer of 1 or more"],
+    ["--offset", "-1", "Invalid offset: expected an integer of 0 or more"],
+  ])("refuses %s %s instead of paging by NaN", async (flag, value, message) => {
+    await expect(failure("list", "b1000", flag, value)).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: `${message}\n`,
+    });
+  });
+
   it("prints nothing for an address outside the dataset", async () => {
     const result = await puzzles("list", "--address", "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
 
