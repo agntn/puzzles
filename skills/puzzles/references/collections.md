@@ -104,6 +104,14 @@ Dmitri Kryptokov and KryptoKit's RushWallet brainwallet contest from September 2
 rushwallet.require("9").key()?.data().wif?.passphrase;
 ```
 
+## satoshi_birthday_quiz
+
+AoiNakamoto's giveaway for Satoshi's birthday, April 5, 2019. Seven multiple-choice questions about Bitcoin history; the correct answer sentences joined by single spaces, hashed with SHA-256, and fed to iancoleman.io/bip39 as entropy. The prize sat at the first address of that wallet, `m/44'/0'/0'/0/0`, and was swept five hours later. The author published the answer key in the thread, so `verify()` derives the address from the record's seed.
+
+```ts
+satoshiBirthdayQuiz.require().key()?.data().seed?.entropy?.hash;
+```
+
 ## warp
 
 Keybase WarpWallet challenges, 6 puzzles. Four solved, two expired and later reclaimed by Keybase.

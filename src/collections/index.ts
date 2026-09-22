@@ -21,6 +21,10 @@ export const builtins: readonly CollectionEntry[] = [
   { key: "mineshop", load: () => import("./mineshop.ts").then((m) => m.mineshop) },
   { key: "movie_enigma", load: () => import("./movie_enigma.ts").then((m) => m.movieEnigma) },
   { key: "rushwallet", load: () => import("./rushwallet.ts").then((m) => m.rushwallet) },
+  {
+    key: "satoshi_birthday_quiz",
+    load: () => import("./satoshi_birthday_quiz.ts").then((m) => m.satoshiBirthdayQuiz),
+  },
   { key: "warp", load: () => import("./warp.ts").then((m) => m.warp) },
   { key: "zden", load: () => import("./zden.ts").then((m) => m.zden) },
 ];
