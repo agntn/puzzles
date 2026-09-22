@@ -1,13 +1,13 @@
 # Collections
 
-Counts come from the class data. Run `puzzles collections` after a data change instead of trusting the numbers below.
+Counts come from the records. Run `puzzles collections` after a data change instead of trusting the numbers below.
 
 ## b1000
 
 [Bitcoin Puzzle Transaction](https://privatekeys.pw/puzzles/bitcoin-puzzle-tx), 256 puzzles. Puzzle N holds its private key in `[2^(N-1), 2^N - 1]`, which is the entire reason anyone brute-forces this collection. Unsolved puzzles above 130 expose public keys at every fifth index, so they are the interesting targets.
 
 ```ts
-import { b1000 } from "@agntn/puzzles";
+import { b1000 } from "@agntn/puzzles/collections/b1000";
 
 const puzzle = b1000.require(66); // number or string
 const [low, high] = puzzle.keyRange() ?? [];
@@ -53,6 +53,30 @@ AoiNakamoto's follow-up to the birthday quiz, posted to r/YangForPresidentHQ the
 bookQuiz.require().key()?.data().seed?.entropy?.hash;
 ```
 
+## coin_artist
+
+TORCHED H34R7S, the last painting of coin_artist's _The Legend of Satoshi Nakamoto_, made with Rhea Myers. The key to `1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd` was drawn into the flames as binary and XORed with the ribbon mask. Solved, and the wallet was emptied in February 2018. The published key only matches the address with an uncompressed public key, which the record stores.
+
+```ts
+coinArtist.require("torched-h34r7s").pubkey()?.format; // "uncompressed"
+```
+
+## dug
+
+Dug's 2025 Student Treasure Hunt, three Bitcoin prizes on one seed. Twelve words sat in lecture slides, and a Nostr post by the author gave away the last one, `kingdom`. The published BIP39 phrase has an empty passphrase and derives all three at `m/84'/0'/0'/0/0` through `/2`, so stopping at index 0 leaves two unchecked. All three are solved and verify.
+
+```ts
+dug.require("2025-1").key()?.data().seed?.path; // "m/84'/0'/0'/0/1"
+```
+
+## genesis
+
+The Genesis Block Wallet Puzzle, announced in an `OP_RETURN` in August 2026 and still unsolved. The target is a P2WSH address, 2-of-2 multisig by the author's replies, both keys from the same field of Bitcoin's first block. The record holds nineteen `OP_RETURN` messages as hints. They are the author's claims, not a verified recipe, and the record has no witness script or pubkeys.
+
+```ts
+genesis.hintsFor("block"); // the nineteen messages, oldest first
+```
+
 ## gsmg
 
 GSMG.IO multi-phase challenge, one puzzle. The prize halves at every Bitcoin halving, so it shrinks while you think.
@@ -67,7 +91,7 @@ Peter Todd's P2SH hash-collision bounties: `sha1`, `sha256`, `ripemd160`, `hash1
 
 ```ts
 hashCollision.require("sha256");
-get("peter_todd/sha256");
+await get("peter_todd/sha256"); // the registry lookup is async
 ```
 
 ## ledger_donjon

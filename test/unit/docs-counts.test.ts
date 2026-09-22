@@ -120,6 +120,15 @@ describe("the prose counts what the registry ships", () => {
     }
   });
 
+  it("gives every collection a section in the skill's collection reference", () => {
+    const reference = readFileSync(
+      path.join(root, "skills/puzzles/references/collections.md"),
+      "utf8",
+    );
+    const sections = [...reference.matchAll(/^## (\S+)$/gm)].map((match) => match[1]);
+    expect(sections.toSorted()).toEqual(collectionKeys().toSorted());
+  });
+
   it("keeps the playground's sample counts aligned with the landing walk", () => {
     const guide = readFileSync(path.join(root, "docs/content/1.guide/10.playground.md"), "utf8");
     const paragraphs = guide.split("\n").filter((line) => line.includes("walk"));
