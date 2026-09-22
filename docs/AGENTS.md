@@ -4,7 +4,7 @@ Docus site for `@agntn/puzzles`. Markdown lives in `content/`. The playground an
 
 ## Design
 
-For changes to panel geometry, icons, typography, motion or the response viewer, use [DESIGN.md](DESIGN.md). It records the accepted component anatomy, SVG layers, responsive dimensions and browser checks. Keep shared tokens and the panel grammar every instrument shares (the clipped shell, `console-*` labels, the reticle) in `app/app.css`, the tool console's own parts in `LandingToolCall.vue` and the author dossier's in `AuthorFacts.vue`; the reference images are not a second source of record data.
+For changes to panel geometry, icons, typography, motion or the response viewer, use [DESIGN.md](DESIGN.md). It records the accepted component anatomy, SVG layers, responsive dimensions and browser checks. Keep shared tokens and the grammar every instrument shares (the clipped shell, `console-*` labels, bars, readouts, leads, gauges) in `app/app.css`, the reticle in `ConsoleReticle.vue`, the full-response dialog in `ConsoleResponse.vue`, the landing console's own parts in `LandingToolCall.vue`, the author dossier's in `AuthorFacts.vue` and the playground's in `PuzzlesPlayground.vue`; the reference images are not a second source of record data.
 
 ## Layout
 
@@ -14,7 +14,7 @@ docs/
 ├── app/app.config.ts              # title, github, theme
 ├── app/app.css                    # theme tokens (light + .dark), shared `puzzles-*` classes: frames, tags, rows, cells, code cards
 ├── app/components/                # Docus overrides: AppHeaderLogo, AppHeaderCTA (nav), AppFooterLeft, DocsAsideLeftBody
-├── app/components/content/        # MDC components and page parts: landing panels (LandingAuthor follows the walk with the author's card), PuzzleCard, PuzzlePage, CollectionFacts, CollectionPuzzles, AuthorFacts, AuthorList, PuzzlesPlayground, StatusPill, BalanceLine
+├── app/components/content/        # MDC components and page parts: landing panels (LandingAuthor follows the walk with the author's card), ConsoleReticle and ConsoleResponse (shared by every instrument), PuzzleCard, PuzzlePage, CollectionFacts, CollectionPuzzles, AuthorFacts, AuthorList, PuzzlesPlayground, StatusPill, BalanceLine
 ├── app/components/OgImage/        # Docs.takumi and Landing.takumi override the Docus OG templates
 ├── app/composables/               # useLandingPuzzle (one clock for every live panel), useBalance (the worker route), useSubNavigation
 ├── app/utils/                     # puzzles (collection presentation, tool names), samples (toSample, builders), puzzle-view (the page's data), landing (static fixtures), collections (facts strip), authors (author page and index rows), format
