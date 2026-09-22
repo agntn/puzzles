@@ -1,5 +1,5 @@
 import { NamedCollection } from "../core/collection.ts";
-import { confirmation, funding, increase, official, p2wsh, party } from "../core/parts.ts";
+import { confirmation, fact, funding, increase, official, p2wsh, party } from "../core/parts.ts";
 import { bitcoinPuzzle } from "../core/puzzle.ts";
 
 /** The Genesis block puzzle announced through Bitcoin OP_RETURN messages. */
@@ -204,7 +204,32 @@ export class GenesisCollection extends NamedCollection {
 
   /** No public identity is established for the announcer. */
   static readonly author = party("Anonymous", {
+    key: "genesis-author",
+    about:
+      "Whoever funded the Genesis Block Wallet Puzzle and answers questions in OP_RETURN. No name, no profile, just transactions and one X account that spoke first.",
     addresses: ["bc1qyas2lnfgzjh3lyl4vfhc68daedc890zn8yetaj"],
+    facts: [
+      fact(
+        "Announced the puzzle in an OP_RETURN output in block 963629 on 2026-08-22.",
+        "https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
+        { date: "2026-08-22" },
+      ),
+      fact(
+        "The X account caesrcd posted the announcement text, the target address and a hexdump of the Genesis block 16 hours before the on-chain announcement, then answered questions under it.",
+        "https://x.com/caesrcd/status/2090997418800095526",
+        { date: "2026-08-22" },
+      ),
+      fact(
+        "Sells hints for sats. The message offering paid hints promises better answers for larger payments.",
+        "https://mempool.space/tx/248f690de194372564baa14e1bebf08154e2f2042ed205baa6157fdc0e3f22ea",
+        { date: "2026-08-23" },
+      ),
+      fact(
+        "Answered a paid question in September: BIP39, 12 words, a passphrase, and entropy from data that is public in the genesis block.",
+        "https://mempool.space/tx/f8f04fc04e2c4f34dc2264f85ff7944c6aa822446bc4cc082e95a52aed5c2a4c",
+        { date: "2026-09-11" },
+      ),
+    ],
   });
 
   /** The address receiving the announcement and subsequent hint messages. */

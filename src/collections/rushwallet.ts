@@ -1,5 +1,5 @@
 import { NamedCollection } from "../core/collection.ts";
-import { confirmation, official, party, profile } from "../core/parts.ts";
+import { confirmation, fact, official, party, profile } from "../core/parts.ts";
 import { rushwalletPuzzle1 } from "./rushwallet/1.ts";
 import { rushwalletPuzzle2 } from "./rushwallet/2.ts";
 import { rushwalletPuzzle3 } from "./rushwallet/3.ts";
@@ -38,10 +38,35 @@ export class RushwalletCollection extends NamedCollection {
 
   /** Who published the puzzles. */
   static readonly author = party("Dmitri Kryptokov", {
+    key: "dmitri-kryptokov",
+    aliases: ["thisisarushwalletbrainwalletnooot", "DMTRI"],
+    about:
+      "The office worker from the RushWallet contest video, reused as the author persona of the puzzle by KryptoKit, the Toronto company behind the wallet.",
     addresses: ["1GShq18eb4V6uBtqgwxkmuPTUHCtyBcNYA"],
     profiles: [
       profile("soundcloud", "https://soundcloud.com/thisisarushwalletbrainwalletnooot"),
       profile("codepen", "https://codepen.io/dmitrikryptokov"),
+    ],
+    facts: [
+      fact(
+        "KryptoKit's press release names Dmitri as the character in the contest video, an office worker raising money for a quieter keyboard, and KryptoKit as a Toronto company founded in 2013 by Steven Dakh and Anthony Di Iorio.",
+        "https://bitcoinmagazine.com/press-releases/kryptokit-releases-video-based-contest-showcase-power-bitcoin-brainwallets-1411503632",
+        { date: "2014-09-23" },
+      ),
+      fact(
+        "Two of the thirty contest passphrases carry the name: Dmitri Nancy Enrique on wallet 17 and Dmitri Enrique Nancy on wallet 28.",
+        "https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
+      ),
+      fact(
+        "The SoundCloud account was created and used once, on 2014-10-23, for a remix of YT Cracker's Bitcoin Baron with a Morse code message in the bridge.",
+        "https://soundcloud.com/thisisarushwalletbrainwalletnooot",
+        { date: "2014-10-23" },
+      ),
+      fact(
+        "The CodePen account has exactly one pen, Hidden Wallet, published the same day 27 minutes before the track.",
+        "https://codepen.io/dmitrikryptokov/pen/qBGLJZ",
+        { date: "2014-10-23" },
+      ),
     ],
   });
 

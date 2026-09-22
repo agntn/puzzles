@@ -40,12 +40,14 @@ const sources = [
     "2022-01-29T18:39:39Z",
     "confirmed",
   ],
+  ["genesis/caesrcd-2026-08-22", "2090997418800095526", "caesrcd", "2026-08-22"],
+  ["movie_enigma/cryptop1r4t3-2022-03-21", "1505915271118262286", "cryptop1r4t3", "2022-03-21"],
 ] as const;
 
 describe("archived source tweets", () => {
   it.each(sources)(
     "keeps provenance and the screenshot for %s",
-    (file, id, author, date, archiveDate, archiveContent) => {
+    (file, id, author, date, archiveDate?, archiveContent?) => {
       const markdown = readFileSync(path.join(root, `${file}.md`), "utf8");
       const screenshot = readFileSync(path.join(root, `${file}.png`));
       const digest = createHash("sha256").update(screenshot).digest("hex");
@@ -55,12 +57,18 @@ describe("archived source tweets", () => {
       expect(markdown).toContain(`author: "@${author}"\n`);
       expect(markdown).toContain(`date: "${date}"\n`);
       expect(markdown).toMatch(/^archived: "\d{4}-\d{2}-\d{2}"$/m);
-      const timestamp = archiveDate.replaceAll(/\D/g, "");
-      const archiveUrl = `https://web.archive.org/web/${timestamp}/https://twitter.com/${author}/status/${id}`;
-      expect(markdown).toContain(`archive_url: ${archiveUrl}\n`);
-      expect(markdown).toContain(`archive_date: "${archiveDate}"\n`);
-      expect(markdown).toContain(`archive_content: ${archiveContent}\n`);
-      expect(markdown).toContain(`](${archiveUrl})`);
+      if (archiveDate === undefined) {
+        /* No capture exists: the entry names the archives it searched instead of inventing one. */
+        expect(markdown).not.toContain("archive_");
+        expect(markdown).toContain("No capture found.");
+      } else {
+        const timestamp = archiveDate.replaceAll(/\D/g, "");
+        const archiveUrl = `https://web.archive.org/web/${timestamp}/https://twitter.com/${author}/status/${id}`;
+        expect(markdown).toContain(`archive_url: ${archiveUrl}\n`);
+        expect(markdown).toContain(`archive_date: "${archiveDate}"\n`);
+        expect(markdown).toContain(`archive_content: ${archiveContent}\n`);
+        expect(markdown).toContain(`](${archiveUrl})`);
+      }
       expect(markdown).toContain(`screenshot_sha256: ${digest}\n`);
       expect(markdown).toContain(`](${path.basename(file)}.png)`);
       expect(markdown).toMatch(/## Transcript\n\n> /);

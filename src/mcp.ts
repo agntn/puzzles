@@ -9,6 +9,8 @@ import { type TSchema } from "typebox";
 import { Value } from "typebox/value";
 import { puzzleToolSchemas } from "../packages/shared/puzzles-tool-schemas.ts";
 import {
+  authorsTool,
+  authorTool,
   balanceTool,
   collectionsTool,
   facts,
@@ -36,6 +38,12 @@ const tools: readonly ToolDefinition[] = [
     ...facts.tools.collections,
     inputSchema: schemas.collections,
     execute: () => collectionsTool(),
+  },
+  { ...facts.tools.authors, inputSchema: schemas.authors, execute: () => authorsTool() },
+  {
+    ...facts.tools.author,
+    inputSchema: schemas.author,
+    execute: (args) => authorTool(args["key"] as string),
   },
   {
     ...facts.tools.show,

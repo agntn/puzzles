@@ -1,5 +1,5 @@
 import { NamedCollection } from "../core/collection.ts";
-import { party, profile } from "../core/parts.ts";
+import { fact, party, PartyKind, profile } from "../core/parts.ts";
 import { zdenPuzzleLevel1 } from "./zden/level-1.ts";
 import { zdenPuzzleLevel2 } from "./zden/level-2.ts";
 import { zdenPuzzleLevel3 } from "./zden/level-3.ts";
@@ -24,8 +24,37 @@ export class ZdenCollection extends NamedCollection {
 
   /** Who published the puzzles. */
   static readonly author = party("Zden", {
+    key: "zden",
+    kind: PartyKind.Person,
+    aliases: ["Zden Hlinka", "zd3n"],
+    about:
+      "Slovak digital artist and demoscener from the Satori group who hides private keys in generative images.",
     addresses: ["1ZDEN78bAWtHqeRBJX7CT4QFEBA37r2N7", "1BTC4ARTieV3qDbxZK51it8KJ5mGQBYpXD"],
-    profiles: [profile("twitter", "https://twitter.com/zd3n")],
+    profiles: [
+      profile("website", "https://crypto.haluska.sk/"),
+      profile("website", "https://zd3n.com/"),
+      profile("twitter", "https://twitter.com/zd3n"),
+      profile("steemit", "https://steemit.com/@zden"),
+    ],
+    facts: [
+      fact(
+        "zd3n.com introduces him as codært, visual engineering, digital alchemy, Satori / SK, experimental coder, live visuals performer, digital painter, demoscener.",
+        "https://zd3n.com/",
+      ),
+      fact(
+        "Signed the Codex Protocol puzzle write-up on Steemit as Zden Hlinka of Satori, s.r.o.",
+        "https://steemit.com/cryptopuzzle/@zden/codex-puzzle-1-codexokryphodron",
+        { date: "2018-06-20" },
+      ),
+      fact(
+        "The catalog runs from Level 1 in June 2016 to Level HALV for the fourth halving in April 2024, with a support address for the free art.",
+        "https://crypto.haluska.sk/",
+      ),
+      fact(
+        "Made the Autonomy and Janus puzzles for decred.org and the XIXOIO puzzle for xixoio.com. Both sites are gone and the catalog keeps the carriers.",
+        "https://crypto.haluska.sk/",
+      ),
+    ],
   });
 
   /** Every puzzle in this collection. */

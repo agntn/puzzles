@@ -4,6 +4,7 @@ const route = useRoute();
 const links = [
   { label: "Guide", to: "/guide" },
   { label: "Collections", to: "/collections" },
+  { label: "Authors", to: "/authors" },
   { label: "Playground", to: "/playground" },
 ] as const;
 

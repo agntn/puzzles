@@ -1,5 +1,15 @@
 import { SingletonCollection } from "../core/collection.ts";
-import { assets, decrease, funding, p2pkh, party, profile, uncompressed } from "../core/parts.ts";
+import {
+  assets,
+  decrease,
+  fact,
+  funding,
+  p2pkh,
+  party,
+  PartyKind,
+  profile,
+  uncompressed,
+} from "../core/parts.ts";
 import { bitcoinPuzzle } from "../core/puzzle.ts";
 
 /** GSMG.IO multi-phase cryptographic challenge. */
@@ -43,8 +53,31 @@ export class GsmgCollection extends SingletonCollection {
 
   /** Who published the puzzles. */
   static readonly author = party("GSMG.io", {
+    key: "gsmg",
+    kind: PartyKind.Organization,
+    about:
+      "A crypto trading bot platform that ran from 2017 to 2026 and left a multi phase puzzle behind. The site now shows the lights off and one mystery left.",
     addresses: ["1EtbTvVB8QTGN4mduSdy7n4cZQm4iYTpQ1", "17ucy1K9ZUAaoY6JVtM932W9jUp5LXfyHa"],
-    profiles: [profile("website", "https://gsmg.io/puzzle")],
+    profiles: [
+      profile("website", "https://gsmg.io/puzzle"),
+      profile("website", "https://gsmg.io/"),
+    ],
+    facts: [
+      fact(
+        "The front page says: A fully automated crypto trading bot. 2017 to 2026. The lights are off. Nine years of chaos ended. One mystery remains. Follow the white rabbit.",
+        "https://gsmg.io/",
+      ),
+      fact(
+        "Funded the puzzle address with 5 BTC on 2019-04-13.",
+        "https://blockstream.info/tx/73e48ff571a7e9a4387574a50cf2fcb7b21b6ea5702c777a035664df57cbce02",
+        { date: "2019-04-13" },
+      ),
+      fact(
+        "Halved the prize at the 2020 halving and again in April 2024, moving 2.5 BTC and then 1.25 BTC to 17ucy1K9ZUAaoY6JVtM932W9jUp5LXfyHa.",
+        "https://blockstream.info/tx/88cdb3cdca12b471551b1b26188508a14ca5fd8a415223ffb7c190381c9b9df3",
+        { date: "2024-04-24" },
+      ),
+    ],
   });
 
   /** Every puzzle in this collection. */

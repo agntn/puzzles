@@ -51,6 +51,7 @@ const main = defineCommand({
     description: "Crypto bounties, puzzles and challenges as typed records",
   },
   subCommands: {
+    authors: () => command(() => import("./commands/authors.ts")),
     balance: () => command(() => import("./commands/balance.ts")),
     collections: () => command(() => import("./commands/collections.ts")),
     export: () => command(() => import("./commands/export.ts")),

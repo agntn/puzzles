@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import * as library from "../src/index.ts";
 import { showTool } from "../src/tool-operations.ts";
+import { authorRows, type AuthorRow } from "../docs/app/utils/authors.ts";
 import { collectionFacts, type CollectionFactsData } from "../docs/app/utils/collections.ts";
 import { WALK } from "../docs/app/utils/landing.ts";
 import { toSample, type LandingSample } from "../docs/app/utils/samples.ts";
@@ -31,6 +32,7 @@ type LandingFixtures = {
   readonly samples: readonly LandingSample[];
   readonly stats: StaticStats;
   readonly facts: readonly CollectionFactsData[];
+  readonly authors: readonly AuthorRow[];
 };
 
 type RefreshOptions = {
@@ -74,6 +76,7 @@ export async function buildLandingFixtures(
       totalPrize: stats.total_prize,
     },
     facts: (await library.collections()).map(collectionFacts),
+    authors: authorRows(await library.authors()),
   };
 }
 
@@ -108,6 +111,9 @@ export const STATS_STATIC = ${literal(fixtures.stats)} as const;
 
 /** collectionFacts() for every collection: the numbers in the landing rows and the registry panel. */
 export const FACTS_STATIC: readonly CollectionFactsData[] = ${literal(fixtures.facts)};
+
+/** authorRows() for every author: the dossier card on the landing before the collections load. */
+export const AUTHORS_STATIC: readonly AuthorRow[] = ${literal(fixtures.authors)};
 ${END}
 `;
   return execFileSync(

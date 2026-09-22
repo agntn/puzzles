@@ -77,8 +77,9 @@ claim(txid, date, amount);
 sweep(txid, date, amount);
 
 assets({ puzzle, solution, hints, sourceUrl });
-party(name, { addresses, profiles });
+party(name, { key, kind, aliases, about, addresses, profiles, facts }); // an author; a solver takes name, addresses, profiles
 profile(name, url);
+fact(text, source, { date? }); // one sentence a public page states about a party
 official(text, source, confirmation(url, description?), { date? }); // from the author
 community(text, source, confirmation(url, description?), { date? }); // from anyone else, right or not
 ```

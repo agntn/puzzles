@@ -71,6 +71,39 @@ describe("puzzles MCP server", () => {
     expect(rows).toContain("zden: 16 puzzles, 14 solved, 2 unsolved, by Zden");
   });
 
+  it("lists authors and shows one by author or collection key", async () => {
+    const rows = firstText(await client.callTool({ name: "puzzles_authors", arguments: {} })).split(
+      "\n",
+    );
+    expect(rows).toHaveLength(18);
+    expect(rows).toContain(
+      "peter-todd: Peter Todd (person), 1 collection: hash_collision, 6 puzzles",
+    );
+    expect(rows).toContain("keybase: Keybase (organization), 1 collection: warp, 6 puzzles");
+
+    const byKey = firstText(
+      await client.callTool({ name: "puzzles_author", arguments: { key: "zden" } }),
+    ).split("\n");
+    expect(byKey[0]).toBe("zden\tZden\tperson");
+    expect(byKey).toContain("aliases: Zden Hlinka, zd3n");
+    expect(byKey).toContain("\tsteemit\thttps://steemit.com/@zden");
+    expect(byKey.some((line) => line.startsWith("\t2018-06-20\tSigned the Codex Protocol"))).toBe(
+      true,
+    );
+    expect(byKey.at(-1)).toMatch(/\tsource: https:\/\/crypto\.haluska\.sk\/$/u);
+
+    const byCollection = firstText(
+      await client.callTool({ name: "puzzles_author", arguments: { key: "hash_collision" } }),
+    );
+    expect(byCollection.split("\n")[0]).toBe("peter-todd\tPeter Todd\tperson");
+
+    const missing = await client.callTool({ name: "puzzles_author", arguments: { key: "nobody" } });
+    expect(missing.isError).toBe(true);
+    expect(firstText(missing)).toMatch(
+      /^puzzles_author failed: Unknown author: nobody\. Known authors: tiamat, /u,
+    );
+  });
+
   it("shows one puzzle", async () => {
     const result = await client.callTool({
       name: "puzzles_show",

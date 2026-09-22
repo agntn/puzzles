@@ -2,10 +2,12 @@ import { SingletonCollection } from "../core/collection.ts";
 import {
   compressed,
   derivation,
+  fact,
   funding,
   increase,
   p2wpkh,
   party,
+  PartyKind,
   profile,
   share,
 } from "../core/parts.ts";
@@ -64,7 +66,28 @@ export class BitapsCollection extends SingletonCollection {
 
   /** Who published the puzzles. */
   static readonly author = party("Bitaps", {
-    profiles: [profile("website", "https://bitaps.com")],
+    key: "bitaps",
+    kind: PartyKind.Organization,
+    about:
+      "The team behind the bitaps.com block explorer and the pybtc and jsbtc libraries whose Shamir secret sharing the challenge dares you to break.",
+    profiles: [
+      profile("website", "https://bitaps.com"),
+      profile("github", "https://github.com/bitaps-com"),
+    ],
+    facts: [
+      fact(
+        "Maintains pybtc and jsbtc, Bitcoin libraries in Python and JavaScript under GPL-3.0, next to btcapiserver and a mnemonic tool for offline use.",
+        "https://github.com/bitaps-com",
+      ),
+      fact(
+        "Published two of the five Shamir shares of a 12 word mnemonic and pays 1 BTC for breaking the scheme or the implementation.",
+        "https://bitaps.com/mnemonic/challenge",
+      ),
+      fact(
+        "Turned the puzzle into a bug bounty in 2021: 1 BTC more for the published attack, 0.1 BTC for a bug that loses access to a correct set of shares, 0.05 BTC and up for other implementation bugs.",
+        "https://bitaps.com/mnemonic/challenge",
+      ),
+    ],
   });
 
   /** Every puzzle in this collection. */

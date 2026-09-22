@@ -47,6 +47,30 @@ export const facts = {
       ],
       openWorld: false,
     },
+    authors: {
+      name: "puzzles_authors",
+      title: "Puzzle Authors",
+      description:
+        "List every puzzle author with its kind, the collections it published and its puzzle count.",
+      promptSnippet: "Use puzzles_authors to learn who published which collections.",
+      promptGuidelines: [
+        "An author key is kebab-case, for example peter-todd; a collection key also resolves to its author.",
+      ],
+      openWorld: false,
+    },
+    author: {
+      name: "puzzles_author",
+      title: "Show Author",
+      description:
+        "Show one author's record: name, kind, aliases, collections, profiles, addresses and the sourced facts public pages state about them.",
+      promptSnippet:
+        "Use puzzles_author for who is behind a collection and what public sources say about them, with the page that says it.",
+      promptGuidelines: [
+        "A fact is one sentence a public page states, with that page as its source; it is not a verified biography.",
+        "A pseudonymous author is recorded under the handle; the record does not name the person behind it.",
+      ],
+      openWorld: false,
+    },
     show: {
       name: "puzzles_show",
       title: "Show Puzzle",
@@ -118,6 +142,11 @@ export const facts = {
     },
     chain: { description: "Only puzzles on one blockchain" },
     collection: { maxLength: 50, description: "Collection key, for example b1000" },
+    author: {
+      minLength: 1,
+      maxLength: 50,
+      description: "Author key, for example peter-todd, or a collection key such as hash_collision",
+    },
     status: {
       description:
         "Lifecycle status: unsolved, solved, claimed (prize taken, key unpublished), swept (taken after the public key leaked), or expired (the author took it back)",
@@ -287,6 +316,39 @@ export async function collectionsTool(): Promise<ToolResult> {
   } = await loadCore();
   const summaries = await collectionSummaries();
   return text(summaries.map(formatCollection).join("\n"), { collections: summaries });
+}
+
+/**
+ * Lists every author with its collections, the same rows the CLI prints.
+ *
+ * @returns {Promise<ToolResult>} One line per author, with the entries in `details`.
+ */
+export async function authorsTool(): Promise<ToolResult> {
+  const {
+    dataset: { authors },
+    utils: { formatAuthor },
+  } = await loadCore();
+  const entries = await authors();
+  return text(entries.map(formatAuthor).join("\n"), { authors: entries });
+}
+
+/**
+ * One author's complete record for a model.
+ *
+ * @param {string} key - Author key, or a collection key.
+ * @returns {Promise<ToolResult>} The record as text, with the author entry in `details`.
+ */
+export async function authorTool(key: string): Promise<ToolResult> {
+  const {
+    dataset: { getAuthor, requireAuthor },
+    registry: { getCollection },
+    utils: { formatAuthorRecord },
+  } = await loadCore();
+  const wanted = assertLength("key", key, facts.parameters.author);
+  const byCollection =
+    (await getAuthor(wanted)) === undefined ? await getCollection(wanted) : undefined;
+  const entry = await requireAuthor(byCollection?.author.key ?? wanted);
+  return text(formatAuthorRecord(entry), { author: entry });
 }
 
 /**

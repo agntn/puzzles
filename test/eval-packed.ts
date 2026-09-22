@@ -78,6 +78,8 @@ const expectedCollections = [
 ];
 
 const expectedToolNames = [
+  "puzzles_author",
+  "puzzles_authors",
   "puzzles_balance",
   "puzzles_collections",
   "puzzles_hints",

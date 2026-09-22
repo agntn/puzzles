@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { puzzleToolSchemas } from "../../packages/shared/puzzles-tool-schemas.ts";
 import { chains } from "../../src/core/chains.ts";
 import { InvalidArgumentError } from "../../src/core/errors.ts";
-import { facts, hintsTool, listTool, showTool } from "../../src/tool-operations.ts";
+import { authorTool, facts, hintsTool, listTool, showTool } from "../../src/tool-operations.ts";
 
 const schemas = puzzleToolSchemas(facts);
 
@@ -85,6 +85,19 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(
       Value.Check(schemas.balance, { id: "b1000/1", apiKey: "x".repeat(apiKey.maxLength + 1) }),
     ).toBe(false);
+  });
+
+  it("bounds the author key like the executor does", async () => {
+    const { author } = facts.parameters;
+
+    expect(Value.Check(schemas.author, { key: "" })).toBe(false);
+    expect(Value.Check(schemas.author, { key: "x".repeat(author.maxLength + 1) })).toBe(false);
+    expect(Value.Check(schemas.author, { key: "peter-todd" })).toBe(true);
+    expect(Value.Check(schemas.authors, {})).toBe(true);
+    await expect(authorTool("")).rejects.toBeInstanceOf(InvalidArgumentError);
+    await expect(authorTool("x".repeat(author.maxLength + 1))).rejects.toBeInstanceOf(
+      InvalidArgumentError,
+    );
   });
 
   it("tracks the facts, so a changed limit shows up in the schema", () => {

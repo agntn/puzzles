@@ -25,7 +25,7 @@ const facts = computed(() => {
       label: "author",
       value: current.author ?? "unknown",
       mono: false,
-      href: current.authorUrl,
+      to: `/authors/${current.authorKey}`,
     },
     { label: "puzzles", value: `${current.total} · ${statusList(current.statuses)}`, mono: false },
     { label: "prize recorded", value: formatPrizeTotals(current.prize), mono: true },

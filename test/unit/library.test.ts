@@ -1,5 +1,5 @@
 import { readdirSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
@@ -20,6 +20,7 @@ import { WarpCollection } from "../../src/collections/warp.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
 import {
   all,
+  authors,
   bitcoinPuzzle,
   builtins,
   Collection,
@@ -31,6 +32,7 @@ import {
   dataset,
   dataVersion,
   get,
+  getAuthor,
   getCollection,
   hasCollection,
   NamedCollection,
@@ -482,6 +484,46 @@ describe("lazy collection registry", () => {
         entry.total,
       );
     }
+  });
+
+  it("lists one author per key with the collections it published", async () => {
+    const entries = await authors();
+
+    expect(entries).toHaveLength(concreteClasses.length);
+    expect(entries.map((entry) => entry.key)).toEqual(
+      concreteClasses.map((CollectionClass) => CollectionClass.author.key),
+    );
+    expect(entries.every((entry) => Object.isFrozen(entry))).toBe(true);
+
+    const zden = await getAuthor("zden");
+    expect(zden?.collections).toEqual(["zden"]);
+    expect(zden?.puzzles).toBe(16);
+    expect(zden?.author.kind).toBe("person");
+    expect(zden?.author.aliases).toContain("Zden Hlinka");
+    expect(zden?.author.facts?.every((entry) => entry.source.startsWith("https://"))).toBe(true);
+    expect(await getAuthor("nobody")).toBeUndefined();
+    expect(await getAuthor(7 as never)).toBeUndefined();
+  });
+
+  it("files a keyless author under its collection key", async () => {
+    vi.resetModules();
+    const lib = await import("../../src/index.ts");
+    const puzzle = lib.bitcoinPuzzle({
+      id: "keyless/one",
+      address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+    });
+    lib.registerCollection(new lib.NamedCollection("keyless", lib.party("Keyless"), [puzzle]));
+
+    const entry = await lib.getAuthor("keyless");
+    expect(entry).toEqual({
+      key: "keyless",
+      author: { name: "Keyless" },
+      collections: ["keyless"],
+      puzzles: 1,
+    });
+    vi.resetModules();
   });
 
   it("preserves the dataset statistics", async () => {

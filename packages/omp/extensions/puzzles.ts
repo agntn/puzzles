@@ -92,6 +92,28 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
   });
 
   pi.registerTool({
+    ...registration(tools.facts.tools.authors),
+    parameters: Type.Object({}),
+    renderCall() {
+      return line("Puzzle authors");
+    },
+    async execute() {
+      return tools.authorsTool();
+    },
+  });
+
+  pi.registerTool({
+    ...registration(tools.facts.tools.author),
+    parameters: Type.Object({ key: Type.String(parameters.author) }),
+    renderCall(args) {
+      return line(`Show author ${args.key}`);
+    },
+    async execute(_toolCallId, params) {
+      return tools.authorTool(params.key);
+    },
+  });
+
+  pi.registerTool({
     ...registration(tools.facts.tools.show),
     parameters: Type.Object({ id: puzzleId }),
     renderCall(args) {
