@@ -2,6 +2,7 @@ import { SingletonCollection } from "../core/collection.ts";
 import {
   answer,
   compressed,
+  confirmation,
   decrease,
   funding,
   official,
@@ -15,6 +16,10 @@ import { SatoshiBirthdayQuizCollection } from "./satoshi_birthday_quiz.ts";
 /** Where the rules, the questions, the deadline and the answer key were published. */
 const THREAD =
   "https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/";
+
+/** The one Wayback capture whose HTML still carries the post, the updates and every comment. */
+const CAPTURE =
+  "https://web.archive.org/web/20230611183532/https://old.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/";
 
 /**
  * 7 million book quiz: seven multiple-choice questions about a campaign book, four of them
@@ -40,7 +45,7 @@ export const bookQuizPuzzle = bitcoinPuzzle({
     official(
       "To claim the funds, paste together all correct answers (omitting the leading a) b) etc) with exactly one space between characters. Take a SHA 256 hash of that, then feed it as entropy in a brain wallet generating tool. This will show you the address I sent 7 million satoshis to as well as the private key needed to sweep it.",
       THREAD,
-      undefined,
+      confirmation(CAPTURE, "Wayback capture of the thread, post and comments"),
       {
         answer: answer(
           "He is unable to predict what happens after the superintelligence explosion. American policy needs to think of all of humanity first, not only American citizens. What discussion? The book ignores the Green New Deal. The Democrats in the Senate blocked the legislation. Introducing a value added tax, shifting taxation from income to spending. Buy the book in bulk and distribute to friends, to help with the bestseller ranking and with spreading the message. Challenge Fucking Accepted.",
