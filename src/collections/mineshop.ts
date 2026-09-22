@@ -2,10 +2,12 @@ import { SingletonCollection } from "../core/collection.ts";
 import {
   confirmation,
   decrease,
+  fact,
   funding,
   increase,
   official,
   party,
+  PartyKind,
   profile,
   standard,
 } from "../core/parts.ts";
@@ -104,9 +106,29 @@ export class MineshopCollection extends SingletonCollection {
 
   /** Who published the puzzles. */
   static readonly author = party("Guntis Vitolins", {
+    key: "guntis-vitolins",
+    kind: PartyKind.Person,
+    about:
+      "Founder and managing director of Mineshop.eu, an ASIC miner shop in Ireland, and the YouTuber who buried a 10 ETH seed in a video.",
     profiles: [
       profile("website", "https://mineshop.eu"),
       profile("youtube", "https://www.youtube.com/@GuntisVitolins"),
+      profile("twitter", "https://x.com/GuntisVitolins"),
+    ],
+    facts: [
+      fact(
+        "Mineshop.eu lists him as Managing Director and says it was founded in 2016 with headquarters in Ireland.",
+        "https://mineshop.eu/about-us",
+      ),
+      fact(
+        "The shop says it has sold more than 90,000 miners to customers in 67 countries since 2016.",
+        "https://mineshop.eu/about-us",
+      ),
+      fact(
+        "Video descriptions on the channel keep repeating the rules: six seed words in the challenge video, six in the original post, word 12 is a tropical bird, word 1 is Netherlands.",
+        "https://www.youtube.com/watch?v=EOBMmJ8tY0E",
+        { date: "2024-11-24" },
+      ),
     ],
   });
 

@@ -13,15 +13,22 @@ import {
   answer,
   assets,
   confirmation,
+  fact,
   type Hint,
   type KeyData,
   official,
   p2pkh,
+  party,
+  type Party,
+  PartyKind,
+  profile,
   PubkeyFormat,
   TransactionType,
 } from "../../src/core/parts.ts";
 import { bitcoinPuzzle, type Puzzle, Status } from "../../src/core/puzzle.ts";
+import type { AnyCollection } from "../../src/core/registry.ts";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
+import { NamedCollection } from "../../src/core/collection.ts";
 import { all, collections } from "../../src/index.ts";
 import { decryptBip38, isBip38 } from "../support/bip38.ts";
 
@@ -219,6 +226,72 @@ function hintProblems(owner: string, hints: readonly Hint[]): string[] {
   );
 }
 
+/**
+ * Checks the prose of a party record: one-line name, about and aliases, an alias never the name.
+ *
+ * @param {Party} author - The record.
+ * @returns {string[]} One problem per failed check.
+ */
+function partyProseProblems(author: Party): string[] {
+  return [
+    ...(isOneLine(author.name) ? [] : ["name is not one line"]),
+    ...(isOneLine(author.about) ? [] : ["about is not one line"]),
+    ...(author.aliases ?? []).flatMap((alias, index) =>
+      isOneLine(alias) && alias !== author.name
+        ? []
+        : [`alias ${index + 1} is not a distinct line`],
+    ),
+  ];
+}
+
+/**
+ * Checks what a party record points at: profile URLs, addresses in the collection's chains, facts.
+ *
+ * @param {Party} author - The record.
+ * @param {readonly Puzzle[]} puzzles - The puzzles the party published, for their chains.
+ * @returns {string[]} One problem per failed check.
+ */
+function partyLinkProblems(author: Party, puzzles: readonly Puzzle[]): string[] {
+  return [
+    ...(author.profiles ?? []).flatMap((link, index) =>
+      isOneLine(link.name) && isWebUrl(link.url) ? [] : [`profile ${index + 1} is not a web URL`],
+    ),
+    ...(author.addresses ?? []).flatMap((address, index) =>
+      puzzles.some((puzzle) => isValidAddress(puzzle.chain(), address))
+        ? []
+        : [`address ${index + 1} is not in a chain of the collection`],
+    ),
+    ...(author.facts ?? []).flatMap((entry, index) => [
+      ...(isOneLine(entry.text) ? [] : [`fact ${index + 1} text is not one line`]),
+      ...(isWebUrl(entry.source) ? [] : [`fact ${index + 1} source is not a web URL`]),
+      ...(entry.date === undefined || isRecordDate(entry.date)
+        ? []
+        : [`fact ${index + 1} date is not a record date`]),
+    ]),
+  ];
+}
+
+/**
+ * Checks an author record: a page key, a known kind, one-line prose, web sources and record dates.
+ *
+ * @param {AnyCollection} collection - The collection whose author to check.
+ * @returns {string[]} One line per failed check, named after the collection.
+ */
+function authorProblems(collection: AnyCollection): string[] {
+  const author: Party = collection.author;
+  const problems = [
+    ...(author.key !== undefined && /^[a-z0-9]+(-[a-z0-9]+)*$/u.test(author.key)
+      ? []
+      : ["key is not kebab-case"]),
+    ...(author.kind === undefined || Object.values(PartyKind).includes(author.kind)
+      ? []
+      : ["kind is unknown"]),
+    ...partyProseProblems(author),
+    ...partyLinkProblems(author, collection.all()),
+  ];
+  return problems.map((problem) => `${collection.key}: author ${problem}`);
+}
+
 function mutablePartProblem(puzzle: Puzzle): string | undefined {
   const seen = new WeakSet<object>();
   const walk = (value: unknown, path: string): string[] => {
@@ -388,6 +461,51 @@ describe("collection class data", () => {
         }),
       ]),
     ).toEqual([]);
+  });
+
+  it("gives every author a page key, a kind and sourced facts", () => {
+    expect(registered.flatMap(authorProblems)).toEqual([]);
+    const keys = registered.map((collection) => collection.author.key);
+    expect(new Set(keys).size).toBe(registered.length);
+    expect(registered.filter((collection) => (collection.author.facts?.length ?? 0) < 2)).toEqual(
+      [],
+    );
+  });
+
+  it("names every way an author can fail the data gate", () => {
+    const collection = new NamedCollection(
+      "fixture",
+      party("Fixture", {
+        key: "Fixture Key",
+        kind: "team" as never,
+        about: "one\ntwo",
+        aliases: ["Fixture\nTwo", "Fixture"],
+        addresses: ["not-an-address"],
+        profiles: [profile("site", "ftp://example.com")],
+        facts: [fact("one\ntwo", "ftp://example.com", { date: "2026-02-30" })],
+      }),
+      [
+        bitcoinPuzzle({
+          id: "fixture/one",
+          address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+          sourceUrl: "https://example.com/puzzle",
+          startedAt: "2026-01-01",
+        }),
+      ],
+    );
+
+    expect(authorProblems(collection)).toEqual([
+      "fixture: author key is not kebab-case",
+      "fixture: author kind is unknown",
+      "fixture: author about is not one line",
+      "fixture: author alias 1 is not a distinct line",
+      "fixture: author alias 2 is not a distinct line",
+      "fixture: author profile 1 is not a web URL",
+      "fixture: author address 1 is not in a chain of the collection",
+      "fixture: author fact 1 text is not one line",
+      "fixture: author fact 1 source is not a web URL",
+      "fixture: author fact 1 date is not a record date",
+    ]);
   });
 
   it("hands back every record frozen", () => {

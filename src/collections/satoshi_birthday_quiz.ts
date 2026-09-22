@@ -3,10 +3,12 @@ import {
   answer,
   claim,
   compressed,
+  fact,
   funding,
   official,
   p2pkh,
   party,
+  PartyKind,
   profile,
   seed,
   source,
@@ -82,7 +84,28 @@ export class SatoshiBirthdayQuizCollection extends SingletonCollection {
 
   /** Who published the puzzle. */
   static readonly author = party("AoiNakamoto", {
+    key: "aoi-nakamoto",
+    kind: PartyKind.Person,
+    about:
+      "Pseudonymous author of the 2019 Quizchain puzzle series on Reddit, who shut it all down in August 2019 and called it a failed experiment.",
     profiles: [profile("reddit", "https://www.reddit.com/user/AoiNakamoto/")],
+    facts: [
+      fact(
+        "Asked r/bitcoinpuzzles on 2019-04-05 whether a quiz giveaway would be welcome, hours before posting the birthday quiz.",
+        "https://www.reddit.com/r/bitcoinpuzzles/comments/b9l37o/",
+        { date: "2019-04-05" },
+      ),
+      fact(
+        "Ran the Quizchain blocks on r/bitcoinpuzzles and r/Grycoin from April to August 2019, a few mBTC each for a text puzzle hashed into a wallet.",
+        "https://www.reddit.com/r/Grycoin/comments/c012gd/",
+        { date: "2019-06-13" },
+      ),
+      fact(
+        "Announced the shutdown on 2019-08-04 as time to reflect on the whole failed experiment.",
+        "https://www.reddit.com/r/Grycoin/comments/clpqlv/",
+        { date: "2019-08-04" },
+      ),
+    ],
   });
 
   /** Every puzzle in this collection. */

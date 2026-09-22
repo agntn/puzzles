@@ -675,7 +675,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "d4b5190985a4",
+  dataVersion: "fb7a38780125",
   total: 344,
   solved: 139,
   unsolved: 96,
@@ -703,6 +703,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "arweave",
     author: "Tiamat",
+    authorKey: "tiamat",
     authorUrl: "https://chronobot.io/",
     total: 12,
     statuses: {
@@ -728,6 +729,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "b1000",
     author: "saatoshi_rising",
+    authorKey: "saatoshi-rising",
     authorUrl: "https://bitcointalk.org/index.php?action=profile;u=991321",
     total: 256,
     statuses: {
@@ -762,6 +764,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "ballet",
     author: "Bobby Lee",
+    authorKey: "bobby-lee",
     authorUrl: "https://x.com/bobbyclee",
     total: 3,
     statuses: {
@@ -784,6 +787,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "bitaps",
     author: "Bitaps",
+    authorKey: "bitaps",
     authorUrl: "https://bitaps.com",
     total: 1,
     statuses: {
@@ -805,6 +809,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "bitimage",
     author: "Corey Phillips",
+    authorKey: "corey-phillips",
     authorUrl: "https://github.com/coreyphillips",
     total: 2,
     statuses: {
@@ -827,6 +832,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "coin_artist",
     author: "coin_artist",
+    authorKey: "coin-artist",
     authorUrl: "https://x.com/coin_artist",
     total: 1,
     statuses: {
@@ -846,6 +852,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "dug",
     author: "Dug",
+    authorKey: "dug",
     authorUrl: "https://njump.me/npub1zrmu0amjmkynxlxgmdsyrjmp8vhxdz8ch5vja9vh9ym4natg8k5s8ge9wx",
     total: 3,
     statuses: {
@@ -876,6 +883,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "genesis",
     author: "Anonymous",
+    authorKey: "genesis-author",
     authorUrl: undefined,
     total: 1,
     statuses: {
@@ -893,6 +901,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "gsmg",
     author: "GSMG.io",
+    authorKey: "gsmg",
     authorUrl: "https://gsmg.io/puzzle",
     total: 1,
     statuses: {
@@ -914,7 +923,8 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "hash_collision",
     author: "Peter Todd",
-    authorUrl: "https://bitcointalk.org/index.php?topic=293382.0",
+    authorKey: "peter-todd",
+    authorUrl: "https://petertodd.org/",
     total: 6,
     statuses: {
       claimed: 2,
@@ -936,7 +946,8 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "ledger_donjon",
     author: "Ledger Donjon",
-    authorUrl: "https://www.ledger.com/blog/Capture-the-Fortress",
+    authorKey: "ledger-donjon",
+    authorUrl: "https://donjon.ledger.com/",
     total: 1,
     statuses: {
       solved: 1,
@@ -953,6 +964,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "luckylurker",
     author: "Paul Jones",
+    authorKey: "paul-jones",
     authorUrl: "https://luckylurker.com/author/paul-jones/",
     total: 2,
     statuses: {
@@ -975,6 +987,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "mineshop",
     author: "Guntis Vitolins",
+    authorKey: "guntis-vitolins",
     authorUrl: "https://mineshop.eu",
     total: 1,
     statuses: {
@@ -996,6 +1009,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "movie_enigma",
     author: "klems",
+    authorKey: "klems",
     authorUrl: "https://bitcoinmovieenigma.com",
     total: 1,
     statuses: {
@@ -1015,6 +1029,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "rushwallet",
     author: "Dmitri Kryptokov",
+    authorKey: "dmitri-kryptokov",
     authorUrl: "https://soundcloud.com/thisisarushwalletbrainwalletnooot",
     total: 30,
     statuses: {
@@ -1045,6 +1060,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "satoshi_birthday_quiz",
     author: "AoiNakamoto",
+    authorKey: "aoi-nakamoto",
     authorUrl: "https://www.reddit.com/user/AoiNakamoto/",
     total: 1,
     statuses: {
@@ -1064,7 +1080,8 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "warp",
     author: "Keybase",
-    authorUrl: "https://github.com/keybase/warpwallet",
+    authorKey: "keybase",
+    authorUrl: "https://keybase.io/warp",
     total: 6,
     statuses: {
       solved: 4,
@@ -1084,7 +1101,8 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "zden",
     author: "Zden",
-    authorUrl: "https://twitter.com/zd3n",
+    authorKey: "zden",
+    authorUrl: "https://crypto.haluska.sk/",
     total: 16,
     statuses: {
       solved: 14,

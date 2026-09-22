@@ -3,10 +3,12 @@ import {
   assets,
   claim,
   compressed,
+  fact,
   funding,
   official,
   p2wpkh,
   party,
+  PartyKind,
   profile,
   seed,
 } from "../core/parts.ts";
@@ -76,12 +78,37 @@ export class MovieEnigmaCollection extends SingletonCollection {
 
   /** Who published the puzzles. */
   static readonly author = party("klems", {
+    key: "klems",
+    kind: PartyKind.Person,
+    aliases: ["cryptop1r4t3"],
+    about:
+      "Pseudonymous puzzle maker who signs the movie frames as @cryptop1r4t3 and keeps a Nostr key as the only contact.",
     profiles: [
       profile("website", "https://bitcoinmovieenigma.com"),
       profile("twitter", "https://x.com/cryptop1r4t3"),
       profile(
         "nostr",
         "https://njump.me/npub10q5dpm5p05a0g3vtgcl76wv0pc4t820f5fj8qmpfaa4umv6404xqvwzvp0",
+      ),
+    ],
+    facts: [
+      fact(
+        "Announced the puzzle on X on 2022-03-21 as 80% movie quiz and 20% reflexion.",
+        "https://x.com/cryptop1r4t3/status/1505915271118262286",
+        { date: "2022-03-21" },
+      ),
+      fact(
+        "The about page says the enigma went out first on Twitter, Instagram and Nostr, and the website came after those platforms compressed the frames badly.",
+        "https://bitcoinmovieenigma.com/about",
+      ),
+      fact(
+        "Every one of the 34 frames carries @cryptop1r4t3 in its EXIF Artist and XMP creator fields, next to an ImageDescription that reads nope.",
+        "https://www.bitcoinmovieenigma.com/alternative",
+      ),
+      fact(
+        "Funded the prize alone, 100,000 sats on 2022-04-08, and the donor list on the wallet page never grew past that one entry.",
+        "https://bitcoinmovieenigma.com/wallet",
+        { date: "2022-04-08" },
       ),
     ],
   });

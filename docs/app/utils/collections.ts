@@ -5,6 +5,7 @@ import { prizeTotals } from "../../../src/core/utils.ts";
 export interface CollectionFactsData {
   readonly key: string;
   readonly author: string | undefined;
+  readonly authorKey: string;
   readonly authorUrl: string | undefined;
   readonly total: number;
   readonly statuses: Readonly<Record<string, number>>;
@@ -35,6 +36,7 @@ export function collectionFacts(collection: AnyCollection): CollectionFactsData 
   return {
     key: collection.key,
     author: collection.author.name,
+    authorKey: collection.author.key ?? collection.key,
     authorUrl: collection.author.profiles?.[0]?.url,
     total: collection.count(),
     statuses,

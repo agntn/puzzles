@@ -1,5 +1,5 @@
 import { NumericCollection } from "../core/collection.ts";
-import { confirmation, official, party, profile } from "../core/parts.ts";
+import { confirmation, fact, official, party, PartyKind, profile } from "../core/parts.ts";
 import { b1000Puzzle1 } from "./b1000/1.ts";
 import { b1000Puzzle2 } from "./b1000/2.ts";
 import { b1000Puzzle3 } from "./b1000/3.ts";
@@ -264,8 +264,38 @@ export class B1000Collection extends NumericCollection {
 
   /** Who published the puzzles. */
   static readonly author = party("saatoshi_rising", {
-    addresses: ["1Czoy8xtddvcGrEhUUCZDQ9QqdRfKh697F", "bc1quksn4yxlxp80tn929gqnh8xpnngqj0fqr99q4z"],
+    key: "saatoshi-rising",
+    kind: PartyKind.Person,
+    about:
+      "A bitcointalk account that spoke for the puzzle transaction once, in 2017, and never said who was behind it. The rest is on the chain.",
+    addresses: [
+      "1Czoy8xtddvcGrEhUUCZDQ9QqdRfKh697F",
+      "1CENDvi6tmKGrR8RxqwURpX9WHbbKip1db",
+      "bc1quksn4yxlxp80tn929gqnh8xpnngqj0fqr99q4z",
+    ],
     profiles: [profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=991321")],
+    facts: [
+      fact(
+        "The bitcointalk account was registered on 2017-04-27 at 05:43 UTC and posted once, 58 minutes later. Its last activity is dated 2019-06-09.",
+        "https://bitcointalk.org/index.php?action=profile;u=991321",
+        { date: "2017-04-27" },
+      ),
+      fact(
+        "The one post says the keys are consecutive keys from a deterministic wallet, masked with leading zeros to set difficulty, and calls the puzzle a crude measuring instrument of the cracking strength of the community.",
+        "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941",
+        { date: "2017-04-27" },
+      ),
+      fact(
+        "The 2015 funding came from 1Czoy8xtddvcGrEhUUCZDQ9QqdRfKh697F, which received 32.9 BTC earlier the same day and has not been spent from since.",
+        "https://blockstream.info/tx/08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",
+        { date: "2015-01-15" },
+      ),
+      fact(
+        "The 2017-07-11 sweep spent puzzles 161 to 256 together with 1CENDvi6tmKGrR8RxqwURpX9WHbbKip1db, a wallet funded on the morning of the post, and raised puzzles 51 to 160 tenfold.",
+        "https://blockstream.info/tx/5d45587cfd1d5b0fb826805541da7d94c61fe432259e68ee26f4a04544384164",
+        { date: "2017-07-11" },
+      ),
+    ],
   });
 
   /** What the author said about the keys, in the one post the account ever made. */

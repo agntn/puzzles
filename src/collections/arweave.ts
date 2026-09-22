@@ -1,5 +1,5 @@
 import { NamedCollection } from "../core/collection.ts";
-import { party, profile } from "../core/parts.ts";
+import { fact, party, PartyKind, profile } from "../core/parts.ts";
 import { arweavePuzzleWeave1 } from "./arweave/weave1.ts";
 import { arweavePuzzleWeave2 } from "./arweave/weave2.ts";
 import { arweavePuzzleWeave3 } from "./arweave/weave3.ts";
@@ -20,9 +20,36 @@ export class ArweaveCollection extends NamedCollection {
 
   /** Who published the puzzles. */
   static readonly author = party("Tiamat", {
+    key: "tiamat",
+    kind: PartyKind.Person,
+    aliases: ["ArweaveP"],
+    about:
+      "Pseudonymous programmer behind the Arweave Puzzle Weave series and the Chronobot.io node monitor. Self-described as based in France. No other name known.",
     profiles: [
       profile("website", "https://chronobot.io/"),
       profile("twitter", "https://twitter.com/ArweaveP"),
+    ],
+    facts: [
+      fact(
+        "Told Arweave's Community Spotlight interview: country France, occupation programmer, watching the Arweave project since early 2018.",
+        "https://arweave.medium.com/community-spotlight-meeting-tiamat-e484655b25e0",
+        { date: "2019-10-10" },
+      ),
+      fact(
+        "Built chronobot.io alone, because nothing public showed how Arweave nodes were doing at the time.",
+        "https://arweave.medium.com/community-spotlight-meeting-tiamat-e484655b25e0",
+        { date: "2019-10-10" },
+      ),
+      fact(
+        "Names tangible puzzles like Hanayama's and a Bitcoin puzzle on Reddit as the inspiration for the weaves, and hosts them on the permaweb for its immutability.",
+        "https://arweave.medium.com/community-spotlight-meeting-tiamat-e484655b25e0",
+        { date: "2019-10-10" },
+      ),
+      fact(
+        "Answered whether more puzzles would come with: Maybe, if I get ideas.",
+        "https://arweave.medium.com/community-spotlight-meeting-tiamat-e484655b25e0",
+        { date: "2019-10-10" },
+      ),
     ],
   });
 

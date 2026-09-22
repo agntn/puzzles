@@ -66,10 +66,42 @@ export interface Profile {
   readonly url: string;
 }
 
-/** A puzzle author or solver. */
+/** What a party is: one person, or a company or team publishing under its name. */
+export const PartyKind = {
+  Organization: "organization",
+  Person: "person",
+} as const;
+
+/** A party's kind. */
+export type PartyKind = (typeof PartyKind)[keyof typeof PartyKind];
+
+/** One thing a public source states about a party, with where it was published. */
+export interface Fact {
+  readonly date?: string;
+  readonly source: string;
+  readonly text: string;
+}
+
+/** A puzzle author or solver. An author with a `key` has a page of its own. */
 export interface Party {
+  readonly about?: string;
   readonly addresses?: readonly string[];
+  readonly aliases?: readonly string[];
+  readonly facts?: readonly Fact[];
+  readonly key?: string;
+  readonly kind?: PartyKind;
   readonly name?: string;
+  readonly profiles?: readonly Profile[];
+}
+
+/** Everything a party record takes beside its display name. */
+export interface PartyOptions {
+  readonly about?: string;
+  readonly addresses?: readonly string[];
+  readonly aliases?: readonly string[];
+  readonly facts?: readonly Fact[];
+  readonly key?: string;
+  readonly kind?: PartyKind;
   readonly profiles?: readonly Profile[];
 }
 
@@ -728,17 +760,40 @@ export function profile(name: string, url: string): Profile {
 }
 
 /**
- * Builds an author or solver record.
+ * Records one thing a public source states about a party. It is the source's claim, not a verdict.
+ *
+ * @param {string} text - The statement, on one line.
+ * @param {string} source - Where it was published.
+ * @param {Readonly<{ date?: string }>} [options] - The publication date, when known.
+ * @returns {Fact} The fact with absent metadata omitted.
+ */
+export function fact(
+  text: string,
+  source: string,
+  options: Readonly<{ date?: string }> = {},
+): Fact {
+  return defined({ text, source, date: options.date });
+}
+
+/**
+ * Builds an author or solver record. An author gets a `key` and a `kind`; what research found
+ * goes in `facts`, each with the page that states it.
  *
  * @param {string} [name] - Display name, when known.
- * @param {Readonly<{ addresses?: readonly string[]; profiles?: readonly Profile[] }>} [options] - Known addresses and profile links.
+ * @param {PartyOptions} [options] - Key, kind, aliases, addresses, profile links and sourced facts.
  * @returns {Party} The author or solver record.
  */
-export function party(
-  name?: string,
-  options: Readonly<{ addresses?: readonly string[]; profiles?: readonly Profile[] }> = {},
-): Party {
-  return defined({ name, ...options });
+export function party(name?: string, options: PartyOptions = {}): Party {
+  return defined({
+    key: options.key,
+    kind: options.kind,
+    name,
+    aliases: options.aliases,
+    about: options.about,
+    addresses: options.addresses,
+    profiles: options.profiles,
+    facts: options.facts,
+  });
 }
 
 /**

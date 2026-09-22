@@ -800,3 +800,350 @@ select.puzzles-field {
     text-indent: 0;
   }
 }
+
+/* Operational panel: the instrument grammar shared by the landing console and the author page. */
+.tool-console {
+  --console-line: color-mix(in srgb, var(--ui-border) 75%, transparent);
+  --console-corner: color-mix(in srgb, var(--ui-text-muted) 55%, var(--ui-bg));
+  --console-accent: color-mix(in srgb, var(--ui-primary) 65%, var(--ui-text-highlighted));
+  position: relative;
+  width: 100%;
+  max-width: 35rem;
+  margin-inline: auto;
+  padding: 1px;
+  isolation: isolate;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.tool-console::before,
+.tool-console::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 16px) 0,
+    100% 16px,
+    100% 100%,
+    16px 100%,
+    0 calc(100% - 16px)
+  );
+}
+.tool-console::before {
+  inset: 0;
+  z-index: -2;
+  background: var(--console-line);
+}
+.tool-console::after {
+  inset: 1px;
+  z-index: -1;
+  background: var(--ui-bg);
+}
+.console-bar,
+.console-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 9px 20px;
+  color: var(--ui-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+}
+.console-bar {
+  align-items: center;
+  padding: 12px 28px 12px 20px;
+  border-bottom: 1px solid var(--console-line);
+  background: color-mix(in srgb, var(--ui-text-muted) 5%, var(--ui-bg));
+  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%);
+}
+.console-title {
+  color: var(--ui-text-highlighted);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.console-hosts {
+  color: var(--ui-text-dimmed);
+  text-transform: none;
+  white-space: nowrap;
+}
+.console-request {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 7px 20px;
+  border-bottom: 1px solid var(--console-line);
+}
+.console-request code {
+  flex: 1;
+  overflow-wrap: anywhere;
+  color: var(--ui-text-highlighted);
+}
+.console-request > span:last-child {
+  color: var(--ui-text-dimmed);
+  font-size: 18px;
+}
+.console-label {
+  color: var(--ui-text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.console-result {
+  position: relative;
+  padding: 14px 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M16 18h4m-2-2v4' fill='none' stroke='%23818a94' stroke-opacity='.1'/%3E%3C/svg%3E");
+  background-size: 36px 36px;
+  background-position: 24px 20px;
+}
+.console-result > :not(.console-scan) {
+  position: relative;
+}
+.console-scan {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.console-scan::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-bottom: 1px solid var(--console-corner);
+  animation: console-scan 700ms ease-out both;
+}
+@keyframes console-scan {
+  from {
+    transform: translateY(-100%);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+.console-result-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.console-index {
+  display: inline-block;
+  margin-right: 10px;
+  color: var(--ui-text-dimmed);
+  font-size: 11px;
+}
+.console-subject {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  margin: 14px 0;
+}
+.console-identity {
+  min-width: 0;
+}
+.console-identity h3 {
+  font-family: var(--font-mono);
+  color: var(--ui-text-highlighted);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+  margin: 6px 0;
+}
+.console-identity > span {
+  color: var(--ui-text-muted);
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.console-metrics {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  margin: 0;
+  border-block: 1px solid var(--console-line);
+}
+.console-metrics > div {
+  padding: 9px 0;
+  background: var(--ui-bg);
+}
+.console-metrics > div + div {
+  border-left: 1px solid var(--console-line);
+  padding-left: 20px;
+}
+.console-metrics dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ui-text-muted);
+}
+.console-metrics dd {
+  margin: 7px 0 0;
+  font-size: 18px;
+  overflow-wrap: anywhere;
+  color: var(--ui-text-highlighted);
+}
+.console-metrics > div:first-child dd {
+  color: var(--console-accent);
+}
+.console-address {
+  position: relative;
+  margin: 12px 0 0;
+  padding: 9px 12px;
+  border-inline: 1px solid var(--console-line);
+  background: var(--ui-bg);
+}
+.console-address::before,
+.console-address::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 6px;
+  border-color: var(--ui-primary);
+  pointer-events: none;
+}
+.console-address::before {
+  top: 0;
+  left: -1px;
+  border-top: 1px solid var(--console-corner);
+  border-left: 1px solid var(--console-corner);
+}
+.console-address::after {
+  bottom: 0;
+  right: -1px;
+  border-bottom: 1px solid var(--console-corner);
+  border-right: 1px solid var(--console-corner);
+}
+.console-address dt {
+  display: flex;
+  justify-content: space-between;
+}
+.console-address dt > span {
+  color: var(--ui-text-dimmed);
+}
+.console-address dd {
+  margin: 7px 0 0;
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+  color: var(--ui-text-highlighted);
+}
+.console-key {
+  display: grid;
+  gap: 6px;
+  color: var(--ui-text-muted);
+  margin: 10px 0 0;
+}
+.console-key > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.console-key dd {
+  margin: 0;
+  text-align: right;
+  font-size: 11px;
+}
+.console-footer {
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding-left: 20px;
+  background: transparent;
+}
+.console-reticle {
+  position: relative;
+  aspect-ratio: 1;
+  color: var(--ui-text-muted);
+}
+.console-reticle svg {
+  display: block;
+  width: 100%;
+  stroke: currentColor;
+  stroke-width: 1;
+}
+.reticle-frame {
+  opacity: 0.5;
+}
+.reticle-sectors {
+  stroke-width: 1;
+  opacity: 0.45;
+}
+.reticle-ticks {
+  stroke-dasharray: 1 7.55;
+  stroke-width: 2;
+  opacity: 0.3;
+}
+.reticle-lock {
+  stroke: var(--console-accent);
+  stroke-width: 1;
+  opacity: 0.65;
+  transform-origin: 60px 60px;
+  animation: console-lock 800ms ease-out;
+}
+.reticle-axis {
+  opacity: 0.7;
+}
+.reticle-diamond {
+  stroke: var(--console-line);
+}
+.console-chain-icon {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@keyframes console-lock {
+  from {
+    transform: rotate(-85deg);
+  }
+  to {
+    transform: rotate(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reticle-lock {
+    animation: none;
+  }
+  .console-scan {
+    display: none;
+  }
+}
+@media (width < 640px) {
+  .console-subject {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .console-chain-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+@media (width < 400px) {
+  .console-subject {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .console-result {
+    padding: 12px 14px;
+  }
+  .console-request,
+  .console-output {
+    padding-inline: 14px;
+  }
+  .console-bar,
+  .console-footer {
+    padding-inline: 14px;
+  }
+  .console-metrics > div + div {
+    padding-left: 12px;
+  }
+}

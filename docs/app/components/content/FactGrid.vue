@@ -6,6 +6,7 @@ export interface Fact {
   readonly value: string;
   readonly mono?: boolean;
   readonly href?: string;
+  readonly to?: string;
 }
 
 const props = withDefaults(defineProps<{ facts: readonly Fact[]; columns?: 3 | 4 }>(), {
@@ -45,7 +46,16 @@ function cellClass(index: number): Record<string, boolean> {
         class="mt-1 text-sm text-highlighted"
         :class="{ 'font-mono text-[13px] break-words': fact.mono }"
       >
-        <a v-if="fact.href" :href="fact.href" target="_blank" rel="noopener" class="hover:underline"
+        <NuxtLink v-if="fact.to" :to="fact.to" class="hover:underline"
+          >{{ fact.value
+          }}<span class="ms-1 font-mono text-[11px] text-dimmed">{{ fact.to }}</span></NuxtLink
+        >
+        <a
+          v-else-if="fact.href"
+          :href="fact.href"
+          target="_blank"
+          rel="noopener"
+          class="hover:underline"
           >{{ fact.value
           }}<span class="ms-1 font-mono text-[11px] text-dimmed">{{ host(fact.href) }}</span></a
         >

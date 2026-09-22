@@ -4,7 +4,7 @@ The site presents records and tools, not a simulated terminal. Use real identifi
 
 ## Scope and source of truth
 
-This document records the accepted visual direction. [app/app.css](app/app.css) owns shared tokens. [LandingToolCall.vue](app/components/content/LandingToolCall.vue) owns the operational panel and its local tokens. Change those sources rather than adding a second theme file. Other panels share the typography, palette and flat surfaces, but do not all need clipped corners or targeting marks.
+This document records the accepted visual direction. [app/app.css](app/app.css) owns shared tokens and the panel grammar two instruments share: the clipped shell, the `console-*` labels and rules, the scan line and the reticle. [LandingToolCall.vue](app/components/content/LandingToolCall.vue) owns the tool console's response viewer and controls. [AuthorFacts.vue](app/components/content/AuthorFacts.vue) owns the author dossier: the ID bar with its ruler, the identification band with the dashed readout, the channels and addresses band, the log on `UTimeline`, and the corner crosses. Change those sources rather than adding a second theme file. Other panels share the typography, palette and flat surfaces, but do not all need clipped corners or targeting marks.
 
 Reference views:
 

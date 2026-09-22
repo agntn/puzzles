@@ -54,6 +54,14 @@ export interface CollectionSummary {
   readonly unsolved: number;
 }
 
+/** One author as the registry sees it: the record and the collections it published. */
+export interface AuthorEntry {
+  readonly author: Party;
+  readonly collections: readonly string[];
+  readonly key: string;
+  readonly puzzles: number;
+}
+
 /** Optional constraints for selecting puzzles across the registry. */
 export interface PuzzleQuery {
   readonly address?: string | undefined;
@@ -68,6 +76,7 @@ export interface PuzzleQuery {
  * view is shared by every later caller, so it is frozen before it is kept.
  */
 interface DerivedViews {
+  authors?: readonly AuthorEntry[];
   dataVersion?: string;
   puzzles?: readonly Puzzle[];
   serialized?: readonly DatasetCollection[];
@@ -114,6 +123,41 @@ export async function collectionSummaries(): Promise<readonly CollectionSummary[
     })),
   );
   return record.summaries;
+}
+
+/**
+ * Every author in registration order, one entry per author key. A collection whose author has no
+ * key of its own is listed under the collection's key, so every collection has an author page.
+ *
+ * @returns {Promise<readonly AuthorEntry[]>} One entry per author.
+ */
+export async function authors(): Promise<readonly AuthorEntry[]> {
+  const [snapshot, record] = await views();
+  if (record.authors === undefined) {
+    const entries = new Map<string, { author: Party; collections: string[]; puzzles: number }>();
+    for (const collection of snapshot) {
+      const key = collection.author.key ?? collection.key;
+      const entry = entries.get(key) ?? { author: collection.author, collections: [], puzzles: 0 };
+      entry.collections.push(collection.key);
+      entry.puzzles += collection.count();
+      entries.set(key, entry);
+    }
+    record.authors = frozen([...entries].map(([key, entry]) => ({ key, ...entry })));
+  }
+  return record.authors;
+}
+
+/**
+ * Looks an author up by key, loading every collection.
+ *
+ * @param {string} key - The author key, or a collection key for an author without one.
+ * @returns {Promise<AuthorEntry | undefined>} The author, or `undefined` when no collection names it.
+ */
+export async function getAuthor(key: string): Promise<AuthorEntry | undefined> {
+  if (typeof key !== "string") {
+    return undefined;
+  }
+  return (await authors()).find((entry) => entry.key === key);
 }
 
 /**
