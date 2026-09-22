@@ -5,6 +5,7 @@ import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
+import { BookQuizCollection } from "../../src/collections/book_quiz.ts";
 import { CoinArtistCollection } from "../../src/collections/coin_artist.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
@@ -53,6 +54,7 @@ const concreteClasses = [
   BalletCollection,
   BitapsCollection,
   BitimageCollection,
+  BookQuizCollection,
   CoinArtistCollection,
   DugCollection,
   GenesisCollection,
@@ -488,11 +490,10 @@ describe("lazy collection registry", () => {
 
   it("lists one author per key with the collections it published", async () => {
     const entries = await authors();
+    const keys = [...new Set(concreteClasses.map((CollectionClass) => CollectionClass.author.key))];
 
-    expect(entries).toHaveLength(concreteClasses.length);
-    expect(entries.map((entry) => entry.key)).toEqual(
-      concreteClasses.map((CollectionClass) => CollectionClass.author.key),
-    );
+    expect(entries).toHaveLength(keys.length);
+    expect(entries.map((entry) => entry.key)).toEqual(keys);
     expect(entries.every((entry) => Object.isFrozen(entry))).toBe(true);
 
     const zden = await getAuthor("zden");
@@ -501,6 +502,9 @@ describe("lazy collection registry", () => {
     expect(zden?.author.kind).toBe("person");
     expect(zden?.author.aliases).toContain("Zden Hlinka");
     expect(zden?.author.facts?.every((entry) => entry.source.startsWith("https://"))).toBe(true);
+    const aoi = await getAuthor("aoi-nakamoto");
+    expect(aoi?.collections).toEqual(["book_quiz", "satoshi_birthday_quiz"]);
+    expect(aoi?.puzzles).toBe(2);
     expect(await getAuthor("nobody")).toBeUndefined();
     expect(await getAuthor(7 as never)).toBeUndefined();
   });
@@ -527,20 +531,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(344);
+    expect(await all()).toHaveLength(345);
     expect(await stats()).toEqual({
-      total: 344,
+      total: 345,
       claimed: 11,
-      expired: 2,
+      expired: 3,
       solved: 139,
       swept: 96,
       unsolved: 96,
-      with_pubkey: 243,
+      with_pubkey: 244,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
         DAI: 100,
-        BTC: 1064.01158961,
+        BTC: 1064.08158961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -567,7 +571,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(344);
+    ).toBe(345);
   });
 
   it("hands back the memoized views frozen through", async () => {

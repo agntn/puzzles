@@ -465,8 +465,13 @@ describe("collection class data", () => {
 
   it("gives every author a page key, a kind and sourced facts", () => {
     expect(registered.flatMap(authorProblems)).toEqual([]);
-    const keys = registered.map((collection) => collection.author.key);
-    expect(new Set(keys).size).toBe(registered.length);
+    const parties = new Map<string, unknown>();
+    for (const collection of registered) {
+      const key = collection.author.key ?? collection.key;
+      /* One author, one record: a second collection by the same person reuses that party. */
+      expect(parties.get(key) ?? collection.author).toBe(collection.author);
+      parties.set(key, collection.author);
+    }
     expect(registered.filter((collection) => (collection.author.facts?.length ?? 0) < 2)).toEqual(
       [],
     );

@@ -62,7 +62,7 @@ export default defineNuxtConfig({
     domain: "https://puzzles.agntn.dev",
     title: "@agntn/puzzles",
     description:
-      "Public crypto bounties, puzzles and challenges as typed records: 344 puzzles in eighteen collections, as a library, a CLI, an MCP server and Pi and OMP extensions.",
+      "Public crypto bounties, puzzles and challenges as typed records: 345 puzzles in nineteen collections, as a library, a CLI, an MCP server and Pi and OMP extensions.",
     sections: [
       {
         title: "Playground",
