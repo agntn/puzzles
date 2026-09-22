@@ -28,6 +28,7 @@ interface IntegerLimits extends Described {
 export interface PuzzleToolFacts {
   readonly chains: readonly string[];
   readonly parameters: {
+    readonly address: TextLimits;
     readonly apiKey: TextLimits;
     readonly chain: Described;
     readonly collection: TextLimits;
@@ -58,6 +59,7 @@ export function puzzleToolSchemas(facts: PuzzleToolFacts) {
     show: Type.Object({ id: puzzleId }),
     hints: Type.Object({ id: puzzleId }),
     list: Type.Object({
+      address: Type.Optional(Type.String(parameters.address)),
       collection: Type.Optional(Type.String(parameters.collection)),
       chain: Type.Optional(Type.Enum(chains, parameters.chain)),
       status: Type.Optional(Type.Enum(statuses, parameters.status)),

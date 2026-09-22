@@ -129,6 +129,7 @@ export {
   isValidAddress,
   isValidTransactionId,
   parseChain,
+  sameAddress,
   transactionExplorerUrl,
 } from "./core/chains.ts";
 

@@ -116,6 +116,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
   pi.registerTool({
     ...registration(tools.facts.tools.list),
     parameters: Type.Object({
+      address: Type.Optional(Type.String(parameters.address)),
       collection: Type.Optional(Type.String(parameters.collection)),
       chain: Type.Optional(Type.Enum(chains, parameters.chain)),
       status: Type.Optional(Type.Enum(statuses, parameters.status)),
@@ -125,7 +126,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     }),
     renderCall(args) {
       return line(
-        `List puzzles ${args.collection ?? args.chain ?? "all"}${args.status === undefined ? "" : ` ${args.status}`}`,
+        `List puzzles ${args.address ?? args.collection ?? args.chain ?? "all"}${args.status === undefined ? "" : ` ${args.status}`}`,
       );
     },
     async execute(_toolCallId, params) {

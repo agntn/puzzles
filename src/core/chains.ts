@@ -152,3 +152,50 @@ export function isValidTransactionId(chain: Chain, txid: string): boolean {
     throw error;
   }
 }
+
+/**
+ * Bech32 human-readable parts the supported chains spend to. A bech32 address is defined in
+ * either case, so only its prefix says whether the case carries meaning.
+ */
+const bech32Prefixes: Readonly<Partial<Record<Chain, readonly string[]>>> = Object.freeze({
+  bitcoin: ["bc1"],
+  litecoin: ["ltc1"],
+});
+
+/**
+ * Whether a chain writes this address in a case that carries no meaning. Ethereum hex is one
+ * such case: EIP-55 spends letter case on a checksum, so the same address travels lowercased,
+ * uppercased and mixed. Bech32 is defined in either case too. Base58 and base64url are not:
+ * there a different case is a different string, and the checksum would reject it anyway.
+ *
+ * @param {Chain} chain - Chain the address lives on.
+ * @param {string} address - The address to weigh.
+ * @returns {boolean} `true` when letter case does not distinguish two addresses.
+ */
+function caseFolds(chain: Chain, address: string): boolean {
+  if (chain === Chain.Ethereum) {
+    return true;
+  }
+  const prefixes = bech32Prefixes[chain];
+  const lowered = address.toLowerCase();
+  return prefixes !== undefined && prefixes.some((prefix) => lowered.startsWith(prefix));
+}
+
+/**
+ * Whether two strings name the same address on one chain. Use it instead of `===` whenever one
+ * side came from a person or a model: an Ethereum address pasted from a block explorer carries an
+ * EIP-55 checksum the records do not, and a bech32 address is just as valid shouted in capitals.
+ *
+ * @param {Chain} chain - Chain both addresses live on.
+ * @param {string} left - One address.
+ * @param {string} right - The other address.
+ * @returns {boolean} `true` when both name the same address.
+ */
+export function sameAddress(chain: Chain, left: string, right: string): boolean {
+  return (
+    left === right ||
+    (caseFolds(chain, left) &&
+      caseFolds(chain, right) &&
+      left.toLowerCase() === right.toLowerCase())
+  );
+}

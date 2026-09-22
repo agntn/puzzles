@@ -50,6 +50,7 @@ export interface CollectionSummary {
 
 /** Optional constraints for selecting puzzles across the registry. */
 export interface PuzzleQuery {
+  readonly address?: string | undefined;
   readonly chain?: Chain | undefined;
   readonly collection?: string | undefined;
   readonly status?: Status | undefined;
@@ -110,7 +111,8 @@ export async function collectionSummaries(): Promise<readonly CollectionSummary[
 }
 
 /**
- * Selects puzzles, optionally narrowed to one collection, a chain, a status, or a known public key.
+ * Selects puzzles, optionally narrowed to one collection, a target address, a chain, a status,
+ * or a known public key.
  *
  * @param {PuzzleQuery} [query] - Query in the collection's own terms.
  * @returns {Promise<readonly Puzzle[]>} The puzzles that satisfy the query.

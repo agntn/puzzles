@@ -304,6 +304,30 @@ describe.concurrent("puzzles CLI", () => {
     });
   });
 
+  it("names the puzzle an address belongs to, in the case the chain fixes", async () => {
+    const base58 = await json<readonly { readonly id: string }[]>(
+      "list",
+      "--address",
+      "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+      "--json",
+    );
+    const checksummed = await json<readonly { readonly id: string }[]>(
+      "list",
+      "--address",
+      "0x5D663791E869Ca70C71E0A5F4cfD707f596265aa",
+      "--json",
+    );
+
+    expect(base58.map((puzzle) => puzzle.id)).toEqual(["b1000/1"]);
+    expect(checksummed.map((puzzle) => puzzle.id)).toEqual(["zden/xixoio"]);
+  });
+
+  it("prints nothing for an address outside the dataset", async () => {
+    const result = await puzzles("list", "--address", "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+
+    expect(result).toBe("");
+  });
+
   it("lists every registered collection", async () => {
     const result = await json<readonly { readonly key: string; readonly total: number }[]>(
       "collections",

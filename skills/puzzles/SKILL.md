@@ -115,7 +115,7 @@ puzzles stats [--json]
 puzzles collections [--json]
 puzzles show b1000/90 [--json]
 puzzles hints b1000/71 [--json]
-puzzles list [collection] [--chain bitcoin] [--status unsolved] [--with-pubkey] [--json]
+puzzles list [collection] [--address <addr>] [--chain bitcoin] [--status unsolved] [--with-pubkey] [--json]
 puzzles balance b1000/71 [--api-key KEY] [--json]
 puzzles verify b1000/1 | puzzles verify --all [--quiet] [--json]
 puzzles export [--compact]
@@ -128,17 +128,19 @@ Plain output is tab-separated as `id  status  prize  address`, so `cut` and `awk
 
 MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same seven operations:
 
-| Tool                  | Arguments                                                        | Reaches the network |
-| --------------------- | ---------------------------------------------------------------- | ------------------- |
-| `puzzles_stats`       | none                                                             | no                  |
-| `puzzles_collections` | none                                                             | no                  |
-| `puzzles_show`        | `id`                                                             | no                  |
-| `puzzles_hints`       | `id`                                                             | no                  |
-| `puzzles_list`        | `collection`, `chain`, `status`, `withPubkey`, `limit`, `offset` | no                  |
-| `puzzles_verify`      | `id`                                                             | no                  |
-| `puzzles_balance`     | `id`, `apiKey`                                                   | yes                 |
+| Tool                  | Arguments                                                                   | Reaches the network |
+| --------------------- | --------------------------------------------------------------------------- | ------------------- |
+| `puzzles_stats`       | none                                                                        | no                  |
+| `puzzles_collections` | none                                                                        | no                  |
+| `puzzles_show`        | `id`                                                                        | no                  |
+| `puzzles_hints`       | `id`                                                                        | no                  |
+| `puzzles_list`        | `address`, `collection`, `chain`, `status`, `withPubkey`, `limit`, `offset` | no                  |
+| `puzzles_verify`      | `id`                                                                        | no                  |
+| `puzzles_balance`     | `id`, `apiKey`                                                              | yes                 |
 
 `puzzles_collections` prints the same rows as `puzzles collections` on the CLI, so an agent can discover keys without loading anything else first.
+
+Hold an address and want the record? Pass it as `address` to `puzzles_list` instead of paging the dataset. It matches in the case each chain fixes, so a checksummed Ethereum address works, and an empty result means no puzzle pays there.
 
 `puzzles_list` returns 50 puzzles by default, 500 at most, and the header tells you how many actually matched. Follow the returned next offset with the same filters to read the next page without repeating earlier rows. No next offset means the end. Offsets count matches from zero in dataset order. Restart at zero if the dataset or filters change.
 
