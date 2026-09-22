@@ -58,11 +58,24 @@ describe("Pi extension", () => {
     });
   });
 
-  it("executes the list tool with filters", async () => {
+  it("advertises and executes list pagination", async () => {
     const tool = (await registerTools()).get("puzzles_list");
-    const result = await tool?.execute("call-2", { collection: "warp", limit: 2 });
+    const result = await tool?.execute("call-2", { collection: "b1000", offset: 1, limit: 1 });
 
-    expect(result?.content[0]?.text).toMatch(/matching puzzles:/);
+    expect(tool?.parameters).toMatchObject({ properties: { offset: facts.parameters.offset } });
+    expect(tool?.description).toBe(facts.tools.list.description);
+    expect(result?.content[0]?.text.split("\n")).toEqual([
+      "1 of 256 matching puzzles (offset 1):",
+      "b1000/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "Next page: offset=2. Keep the same filters.",
+    ]);
+    expect(result?.details).toEqual({
+      matched: 256,
+      returned: 1,
+      offset: 1,
+      nextOffset: 2,
+      ids: ["b1000/2"],
+    });
   });
 
   it("lists collections through the shared executor", async () => {

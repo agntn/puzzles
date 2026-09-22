@@ -120,6 +120,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
       status: Type.Optional(Type.Enum(statuses, parameters.status)),
       withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
       limit: Type.Optional(Type.Integer(parameters.limit)),
+      offset: Type.Optional(Type.Integer(parameters.offset)),
     }),
     renderCall(args) {
       return line(

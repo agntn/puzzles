@@ -14,6 +14,16 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(Value.Check(schemas.list, { limit: 1.5 })).toBe(false);
   });
 
+  it("accepts only nonnegative safe integer offsets", () => {
+    for (const offset of [0, 50, Number.MAX_SAFE_INTEGER]) {
+      expect(Value.Check(schemas.list, { offset })).toBe(true);
+    }
+    for (const offset of [-1, 0.5, Infinity, NaN, Number.MAX_SAFE_INTEGER + 1, "50", null]) {
+      expect(Value.Check(schemas.list, { offset })).toBe(false);
+    }
+    expect(schemas.list.properties.offset).toMatchObject(facts.parameters.offset);
+  });
+
   it("accepts exactly the statuses the library defines", () => {
     for (const status of facts.statuses) {
       expect(Value.Check(schemas.list, { status })).toBe(true);

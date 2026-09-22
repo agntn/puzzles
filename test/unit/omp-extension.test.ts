@@ -29,7 +29,10 @@ interface RegisteredTool {
   readonly execute: (
     toolCallId: string,
     params: Readonly<Record<string, unknown>>,
-  ) => Promise<{ readonly content: readonly { readonly type: string; readonly text: string }[] }>;
+  ) => Promise<{
+    readonly content: readonly { readonly type: string; readonly text: string }[];
+    readonly details: Readonly<Record<string, unknown>>;
+  }>;
 }
 
 class FakeText {
@@ -86,6 +89,12 @@ describe("OMP extension", () => {
       false,
     );
     expect(list.parameters.safeParse({ limit: 1.5 }).success).toBe(false);
+    for (const offset of [0, 50, Number.MAX_SAFE_INTEGER]) {
+      expect(list.parameters.safeParse({ offset }).success).toBe(true);
+    }
+    for (const offset of [-1, 0.5, Infinity, NaN, Number.MAX_SAFE_INTEGER + 1, "50", null]) {
+      expect(list.parameters.safeParse({ offset }).success).toBe(false);
+    }
     expect(list.parameters.safeParse({ status: "bogus" }).success).toBe(false);
     for (const status of facts.statuses) {
       expect(list.parameters.safeParse({ status }).success).toBe(true);
@@ -100,6 +109,26 @@ describe("OMP extension", () => {
       show.parameters.safeParse({ id: "x".repeat(facts.parameters.id.maxLength + 1) }).success,
     ).toBe(false);
     expect(show.parameters.safeParse({ id: "b1000/1" }).success).toBe(true);
+  });
+
+  it("executes list pagination through the shared executor", async () => {
+    const { tools } = await registerTools();
+    const tool = tools.get("puzzles_list");
+    const result = await tool?.execute("call-page", { collection: "b1000", offset: 1, limit: 1 });
+
+    expect(tool?.description).toBe(facts.tools.list.description);
+    expect(result?.content[0]?.text.split("\n")).toEqual([
+      "1 of 256 matching puzzles (offset 1):",
+      "b1000/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "Next page: offset=2. Keep the same filters.",
+    ]);
+    expect(result?.details).toEqual({
+      matched: 256,
+      returned: 1,
+      offset: 1,
+      nextOffset: 2,
+      ids: ["b1000/2"],
+    });
   });
 
   it("renders a call line without terminal control bytes", async () => {
