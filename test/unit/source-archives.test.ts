@@ -32,7 +32,6 @@ const sources = [
     tweet: "966275899757879298",
     author: "Zd3N",
     date: "2018-02-21",
-    archive: { date: "2025-08-18T09:49:58Z", content: "unverified" },
   },
   {
     file: "zden/zd3n-2018-12-24",
