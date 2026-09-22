@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import * as library from "@agntn/puzzles";
-import { type CollectionSummary, PuzzlesError, selectPuzzles, type Status } from "@agntn/puzzles";
 import {
+  type AuthorEntry,
+  type CollectionSummary,
+  PuzzlesError,
+  selectPuzzles,
+  type Status,
+} from "@agntn/puzzles";
+import {
+  authorTool,
+  authorsTool,
   collectionsTool,
   facts,
   listTool,
@@ -11,8 +19,9 @@ import {
 } from "@agntn/puzzles/tools";
 import type { BalanceAnswer } from "../../../server/api/balance/[...id]";
 import { balanceApiPath, balanceText } from "../../composables/useBalance";
+import { authorIcon, authorRows, type AuthorRow } from "../../utils/authors";
 import { CHAIN_ICONS, COLLECTIONS, STATUSES } from "../../utils/puzzles";
-import { WALK } from "../../utils/landing";
+import { AUTHORS_STATIC, WALK } from "../../utils/landing";
 import { toPuzzleView, type PuzzleView } from "../../utils/puzzle-view";
 import { addressLiteral, factoryName, statusLiteral } from "../../utils/samples";
 import { statusCountLabels } from "../../../../src/core/utils.ts";
@@ -27,7 +36,15 @@ import {
   verdictLabel,
 } from "../../utils/format";
 
-type Operation = "show" | "list" | "verify" | "balance" | "collections" | "stats";
+type Operation =
+  | "show"
+  | "list"
+  | "verify"
+  | "balance"
+  | "collections"
+  | "authors"
+  | "author"
+  | "stats";
 
 const OPERATIONS: ReadonlyArray<{
   key: Operation;
@@ -66,6 +83,18 @@ const OPERATIONS: ReadonlyArray<{
     description: facts.tools.collections.description,
   },
   {
+    key: "authors",
+    label: "Authors",
+    tool: facts.tools.authors.name,
+    description: facts.tools.authors.description,
+  },
+  {
+    key: "author",
+    label: "Author",
+    tool: facts.tools.author.name,
+    description: facts.tools.author.description,
+  },
+  {
     key: "stats",
     label: "Stats",
     tool: facts.tools.stats.name,
@@ -81,6 +110,10 @@ const NOTES: Readonly<Record<Operation, string>> = {
   list: `A page holds ${facts.parameters.limit.maximum} puzzles at most. Ask for more and the tool says no, same as its schema.`,
   collections:
     "The rows puzzles collections prints. One per collection, with the author and a count per status.",
+  authors:
+    "The rows puzzles authors prints. One per author key, with the collections it published and its puzzle count.",
+  author:
+    "A collection key resolves to its author too, so hash_collision answers with peter-todd. A pseudonymous author stays under the handle.",
   stats:
     "Totals over every collection. Loading them all is the one thing this call does that a show doesn't.",
 };
@@ -90,6 +123,7 @@ const router = useRouter();
 
 const operation = ref<Operation>("show");
 const id = ref("b1000/71");
+const key = ref("peter-todd");
 const collection = ref("");
 const status = ref("");
 const withPubkey = ref(false);
@@ -98,7 +132,13 @@ const limit = ref("50");
 const needsId = computed(
   () => operation.value === "show" || operation.value === "verify" || operation.value === "balance",
 );
+const needsKey = computed(() => operation.value === "author");
 const isList = computed(() => operation.value === "list");
+
+/** The one argument of the call when it takes one: a puzzle id or an author key. */
+const argument = computed(() =>
+  needsId.value ? id.value.trim() : needsKey.value ? key.value.trim() : undefined,
+);
 
 interface ShowAnswer {
   kind: "show";
@@ -128,6 +168,16 @@ interface CollectionsAnswer {
   rows: readonly CollectionSummary[];
   text: string;
 }
+interface AuthorsAnswer {
+  kind: "authors";
+  rows: readonly AuthorRow[];
+  text: string;
+}
+interface AuthorAnswer {
+  kind: "author";
+  entry: AuthorEntry;
+  text: string;
+}
 interface StatsAnswer {
   kind: "stats";
   cells: { label: string; value: string }[];
@@ -144,6 +194,8 @@ type Answer =
   | VerifyAnswer
   | BalanceAnswerView
   | CollectionsAnswer
+  | AuthorsAnswer
+  | AuthorAnswer
   | StatsAnswer
   | ErrorAnswer;
 
@@ -233,6 +285,18 @@ async function computeCollections(): Promise<CollectionsAnswer> {
   return { kind: "collections", rows: details.collections, text: firstText(result) };
 }
 
+async function computeAuthors(): Promise<AuthorsAnswer> {
+  const result = await authorsTool();
+  const details = result.details as { authors: readonly AuthorEntry[] };
+  return { kind: "authors", rows: authorRows(details.authors), text: firstText(result) };
+}
+
+async function computeAuthor(trimmed: string): Promise<AuthorAnswer> {
+  const result = await authorTool(trimmed);
+  const details = result.details as { author: AuthorEntry };
+  return { kind: "author", entry: details.author, text: firstText(result) };
+}
+
 async function computeStats(): Promise<StatsAnswer> {
   const result = await statsTool();
   const details = result.details as Record<string, unknown>;
@@ -266,6 +330,10 @@ function compute(): Promise<Answer> {
       return computeBalance(trimmed);
     case "collections":
       return computeCollections();
+    case "authors":
+      return computeAuthors();
+    case "author":
+      return computeAuthor(key.value.trim());
     default:
       return computeStats();
   }
@@ -294,7 +362,9 @@ const current = computed(() => OPERATIONS.find((row) => row.key === operation.va
 
 /** The header line of the response instrument: the tool and its argument as one call. */
 const call = computed(() =>
-  needsId.value ? `${current.value.tool}("${id.value.trim()}")` : `${current.value.tool}()`,
+  argument.value === undefined
+    ? `${current.value.tool}()`
+    : `${current.value.tool}("${argument.value}")`,
 );
 
 /** Where the answer came from, for the footer. Only a balance leaves the page. */
@@ -305,6 +375,7 @@ const locality = computed(() =>
 /** The same call as one CLI line. */
 const cliLine = computed(() => {
   if (needsId.value) return `puzzles ${operation.value} ${shellArg(id.value.trim())}`;
+  if (needsKey.value) return `puzzles authors ${shellArg(key.value.trim())}`;
   if (!isList.value) return `puzzles ${operation.value}`;
   return listCommandLine({
     collection: collection.value,
@@ -318,6 +389,7 @@ const cliLine = computed(() => {
 const toolCall = computed(() => {
   const args: Record<string, string | number | boolean> = {};
   if (needsId.value) args.id = id.value.trim();
+  if (needsKey.value) args.key = key.value.trim();
   if (isList.value) {
     if (collection.value) args.collection = collection.value;
     if (status.value) args.status = status.value;
@@ -330,6 +402,11 @@ const toolCall = computed(() => {
 function loadSample(sampleId: string) {
   id.value = sampleId;
   if (!needsId.value) operation.value = "show";
+}
+
+function loadAuthor(authorKey: string) {
+  key.value = authorKey;
+  operation.value = "author";
 }
 
 const { copied: copiedKey, copy } = useCopied();
@@ -363,12 +440,14 @@ function readQuery(query: Readonly<Record<string, unknown>>) {
     operation.value = op as Operation;
   }
   if (typeof query.id === "string") id.value = query.id;
+  if (typeof query.key === "string") key.value = query.key;
   readListQuery(query);
 }
 
 const shareQuery = computed(() => {
   const query: Record<string, string> = { op: operation.value };
   if (needsId.value) query.id = id.value.trim();
+  if (needsKey.value) query.key = key.value.trim();
   if (isList.value) {
     if (collection.value) query.collection = collection.value;
     if (status.value) query.status = status.value;
@@ -541,14 +620,16 @@ function literalTokens(literal: string): LiteralToken[] {
   return tokens;
 }
 
-/** The position of the operation among the six, for the file number on the bar. */
+/** The position of the operation among the eight, for the file number on the bar. */
 const position = computed(() => OPERATIONS.findIndex((row) => row.key === operation.value) + 1);
 
 /** The response dialog's title: the call the text came from. */
 const responseTitle = computed(() => {
   const value = answer.value;
   if (value === undefined || value.kind === "error") return "";
-  return needsId.value ? `${current.value.tool} · ${id.value.trim()}` : current.value.tool;
+  return argument.value === undefined
+    ? current.value.tool
+    : `${current.value.tool} · ${argument.value}`;
 });
 </script>
 
@@ -603,15 +684,25 @@ const responseTitle = computed(() => {
         <div class="playground-column">
           <p class="console-label console-rule-title">
             <span
-              >{{ needsId ? "Input" : isList ? "Filters" : "Input" }}
+              >{{ isList ? "Filters" : "Input" }}
               <span aria-hidden="true"
-                >[ {{ needsId ? "id" : isList ? "collection · status · limit" : "none" }} ]</span
+                >[
+                {{
+                  needsId
+                    ? "id"
+                    : needsKey
+                      ? "key"
+                      : isList
+                        ? "collection · status · limit"
+                        : "none"
+                }}
+                ]</span
               ></span
             >
             <span class="console-mark" aria-hidden="true" />
           </p>
 
-          <div v-if="needsId || isList" class="console-readout">
+          <div v-if="needsId || needsKey || isList" class="console-readout">
             <dl class="console-readout-rows">
               <div v-if="needsId">
                 <dt><label for="playground-id">id</label></dt>
@@ -627,6 +718,23 @@ const responseTitle = computed(() => {
                   />
                   <datalist id="puzzles-ids">
                     <option v-for="sampleId in WALK" :key="sampleId" :value="sampleId" />
+                  </datalist>
+                </dd>
+              </div>
+              <div v-else-if="needsKey">
+                <dt><label for="playground-key">key</label></dt>
+                <dd>
+                  <input
+                    id="playground-key"
+                    v-model="key"
+                    type="text"
+                    placeholder="peter-todd, keybase, hash_collision"
+                    spellcheck="false"
+                    autocomplete="off"
+                    list="puzzles-authors"
+                  />
+                  <datalist id="puzzles-authors">
+                    <option v-for="row in AUTHORS_STATIC" :key="row.key" :value="row.key" />
                   </datalist>
                 </dd>
               </div>
@@ -688,6 +796,17 @@ const responseTitle = computed(() => {
               @click="loadSample(sampleId)"
             >
               {{ sampleId }}
+            </button>
+          </div>
+          <div v-if="needsKey" class="console-chips" role="group" aria-label="Author keys">
+            <button
+              v-for="row in AUTHORS_STATIC"
+              :key="row.key"
+              type="button"
+              :aria-pressed="key.trim() === row.key"
+              @click="loadAuthor(row.key)"
+            >
+              {{ row.key }}
             </button>
           </div>
 
@@ -784,6 +903,13 @@ const responseTitle = computed(() => {
               :key="row.key"
               :class="row.unsolved > 0 ? 'console-tick-open' : 'console-tick-closed'" /></span
           >{{ answer.rows.length }} collections</span
+        >
+        <span v-else-if="answer?.kind === 'authors'" class="console-meta"
+          >{{ answer.rows.length }} authors</span
+        >
+        <span v-else-if="answer?.kind === 'author'" class="console-meta"
+          >{{ answer.entry.author.kind ?? "kind unknown" }} · {{ answer.entry.puzzles }}
+          {{ answer.entry.puzzles === 1 ? "puzzle" : "puzzles" }}</span
         >
         <span v-else-if="answer?.kind === 'show'" class="console-meta"
           >{{ answer.view.status }} · {{ answer.view.prize }}</span
@@ -996,6 +1122,68 @@ const responseTitle = computed(() => {
         </ol>
       </template>
 
+      <template v-else-if="answer?.kind === 'authors'">
+        <ol :key="scan" class="console-rows console-animate playground-authors">
+          <li
+            v-for="(row, index) in answer.rows"
+            :key="row.key"
+            :style="{ animationDelay: `${Math.min(index * 30, 600)}ms` }"
+          >
+            <button type="button" @click="loadAuthor(row.key)">{{ row.key }}</button>
+            <span class="playground-author">{{ row.name }}</span>
+            <span class="playground-author-collections">{{ row.collections.join(", ") }}</span>
+            <span class="playground-count"
+              ><span class="console-leader" aria-hidden="true" />{{ row.puzzles }}</span
+            >
+          </li>
+        </ol>
+      </template>
+
+      <div v-else-if="answer?.kind === 'author'" class="console-band console-subject-band">
+        <div :key="scan" class="console-scan" aria-hidden="true" />
+        <div class="console-identity-block">
+          <ConsoleReticle :key="answer.entry.key" :icon="authorIcon(answer.entry.author.kind)" />
+          <div class="console-name">
+            <span class="console-label">Subject / {{ answer.entry.key }}</span>
+            <h3>{{ answer.entry.author.name ?? answer.entry.key }}</h3>
+            <p v-if="(answer.entry.author.aliases ?? []).length > 0" class="console-aliases">
+              <span v-for="alias in answer.entry.author.aliases" :key="alias">{{ alias }}</span>
+            </p>
+            <p v-if="answer.entry.author.about !== undefined" class="console-about">
+              {{ answer.entry.author.about }}
+            </p>
+          </div>
+        </div>
+        <div class="console-readout">
+          <svg class="console-link" viewBox="0 0 32 40" fill="none" aria-hidden="true">
+            <circle cx="3" cy="12" r="2.5" />
+            <path d="M5.5 12H14L22 20H32" />
+          </svg>
+          <dl :key="scan" class="console-readout-rows console-animate">
+            <div :style="{ animationDelay: '0ms' }">
+              <dt>Puzzles</dt>
+              <dd class="console-accent">{{ answer.entry.puzzles }}</dd>
+            </div>
+            <div :style="{ animationDelay: '45ms' }">
+              <dt>Collections</dt>
+              <dd>{{ answer.entry.collections.join(", ") }}</dd>
+            </div>
+            <div :style="{ animationDelay: '90ms' }">
+              <dt>Kind</dt>
+              <dd>{{ answer.entry.author.kind ?? "unknown" }}</dd>
+            </div>
+            <div :style="{ animationDelay: '135ms' }">
+              <dt>Profiles</dt>
+              <dd>{{ answer.entry.author.profiles?.length ?? 0 }}</dd>
+            </div>
+            <div :style="{ animationDelay: '180ms' }">
+              <dt>Sourced facts</dt>
+              <dd>{{ answer.entry.author.facts?.length ?? 0 }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
       <div v-else-if="answer?.kind === 'verify'" class="console-band console-subject-band">
         <div :key="scan" class="console-scan" aria-hidden="true" />
         <div class="console-identity-block">
@@ -1141,7 +1329,7 @@ const responseTitle = computed(() => {
             <span class="console-label">Error / {{ current.tool }}</span>
             <h3 class="console-name-mono">{{ answer.name }}</h3>
             <p class="console-about">{{ answer.message }}</p>
-            <p class="console-note">
+            <p v-if="operation !== 'author'" class="console-note">
               Known collections: {{ COLLECTIONS.map((entry) => entry.key).join(", ") }}
             </p>
           </div>
@@ -1166,6 +1354,11 @@ const responseTitle = computed(() => {
           <li v-if="answer?.kind === 'show'">
             <NuxtLink :to="`/collections/${answer.view.id}`"
               ><span aria-hidden="true">→ </span>puzzle page</NuxtLink
+            >
+          </li>
+          <li v-if="answer?.kind === 'author'">
+            <NuxtLink :to="`/authors/${answer.entry.key}`"
+              ><span aria-hidden="true">→ </span>author page</NuxtLink
             >
           </li>
           <li v-if="answer?.kind === 'show' || answer?.kind === 'balance'">
@@ -1348,8 +1541,13 @@ const responseTitle = computed(() => {
   gap: 10px;
   min-width: 0;
 }
-.playground-collections li {
+.playground-collections li,
+.playground-authors li {
   grid-template-columns: 8rem minmax(0, 1fr) auto;
+}
+.playground-authors button {
+  justify-self: start;
+  color: var(--ui-text-highlighted);
 }
 .playground-author {
   color: var(--ui-text-muted);
@@ -1357,7 +1555,8 @@ const responseTitle = computed(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.playground-statuses {
+.playground-statuses,
+.playground-author-collections {
   display: none;
   color: var(--ui-text-dimmed);
 }
@@ -1381,7 +1580,11 @@ const responseTitle = computed(() => {
   .playground-collections li {
     grid-template-columns: 8rem 10rem minmax(0, 1fr) 6rem;
   }
-  .playground-statuses {
+  .playground-authors li {
+    grid-template-columns: 11rem 10rem minmax(0, 1fr) 6rem;
+  }
+  .playground-statuses,
+  .playground-author-collections {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;

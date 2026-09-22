@@ -19,7 +19,7 @@ defineOgImage(
   "Docs",
   { headline: "Playground", title, description: cardDescription },
   {
-    alt: "The @agntn/puzzles playground: show, list, verify, collections and stats in the browser",
+    alt: "The @agntn/puzzles playground: show, list, verify, collections, authors and stats in the browser",
   },
 );
 </script>
