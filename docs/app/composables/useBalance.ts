@@ -8,13 +8,13 @@ export type BalanceState =
   | { readonly status: "failed"; readonly error: string };
 
 /**
- * Mirrors the `puzzles_balance` text in `src/tool-operations.ts`: `<id>: <units> on <chain>`.
+ * Mirrors the `puzzles_balance` text in `src/tool-operations.ts`: `<id>: <amount> on <chain>`.
  *
  * @param {BalanceAnswer} balance - The worker's answer.
  * @returns {string} The line the tool would print.
  */
 export function balanceText(balance: BalanceAnswer): string {
-  return `${balance.id}: ${balance.units} on ${balance.chain}`;
+  return `${balance.id}: ${balance.amount} on ${balance.chain}`;
 }
 
 /**

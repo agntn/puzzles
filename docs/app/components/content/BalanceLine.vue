@@ -22,7 +22,7 @@ const EMPTY: Readonly<Partial<Record<Status, string>>> = {
 };
 
 const note = computed(() => {
-  if (state.value.status !== "ready" || state.value.balance.units !== 0) return undefined;
+  if (state.value.status !== "ready" || state.value.balance.amount !== "0") return undefined;
   return props.status === undefined ? undefined : EMPTY[props.status];
 });
 </script>
@@ -31,7 +31,7 @@ const note = computed(() => {
   <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
     <template v-if="state.status === 'ready'">
       <span class="font-mono text-lg text-highlighted"
-        >{{ state.balance.units }} {{ state.balance.symbol }}</span
+        >{{ state.balance.amount }} {{ state.balance.symbol }}</span
       >
       <span class="font-mono text-[11px] text-dimmed"
         ><template v-if="note">{{ note }} · </template

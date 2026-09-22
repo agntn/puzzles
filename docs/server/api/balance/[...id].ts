@@ -6,7 +6,7 @@ import {
   UnsupportedChainError,
 } from "@agntn/puzzles";
 
-/** What the pages render: base units as strings, the whole-unit amount as a number. */
+/** What the pages render: base units as strings, the whole-unit amount as a decimal string. */
 export interface BalanceAnswer {
   readonly id: string;
   readonly chain: string;
@@ -14,7 +14,7 @@ export interface BalanceAnswer {
   readonly confirmed: string;
   readonly unconfirmed: string;
   readonly decimals: number;
-  readonly units: number;
+  readonly amount: string;
   readonly fetchedAt: string;
 }
 
@@ -69,7 +69,7 @@ export default defineCachedEventHandler(
         confirmed: balance.confirmed.toString(),
         unconfirmed: balance.unconfirmed.toString(),
         decimals: balance.decimals,
-        units: balance.totalUnits(),
+        amount: balance.totalAmount(),
         fetchedAt: new Date().toISOString(),
       };
     } catch (error) {
