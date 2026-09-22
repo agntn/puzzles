@@ -5,7 +5,7 @@
 [![license](https://npmx.dev/api/registry/badge/license/@agntn/puzzles)](https://npmx.dev/package/@agntn/puzzles)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/agntn/puzzles)
 
-347 public crypto puzzles and bounties in twenty collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
+348 public crypto puzzles and bounties in twenty collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
 
 ## Why?
 
@@ -42,13 +42,13 @@ npx @agntn/puzzles stats
 ```
 
 ```text
-Total: 347
-Solved: 141
+Total: 348
+Solved: 142
 Unsolved: 96
 Claimed: 11
 Swept: 96
 Expired: 3
-With pubkey: 246
+With pubkey: 247
 ```
 
 No key, no config, no network. The records ship inside the package. The bare `puzzles` below is `pnpm exec puzzles` after a local `pnpm add`, or just `puzzles` after `pnpm add -g @agntn/puzzles`.
@@ -107,9 +107,9 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `hash_collision`        |       6 | bitcoin                             | Peter Todd's P2SH collision bounties    |
 | `ballet`                |       3 | bitcoin                             | BIP38 keys printed on physical wallets  |
 | `dug`                   |       3 | bitcoin                             | 2025 student seed hunt                  |
+| `quizchain`             |       3 | bitcoin                             | Quiz blocks chained by their keys       |
 | `bitimage`              |       2 | bitcoin                             | Seeds hashed from photographs           |
 | `luckylurker`           |       2 | bitcoin                             | Two Bitcoin Vault seed challenges       |
-| `quizchain`             |       2 | bitcoin                             | Quiz blocks chained by their keys       |
 | `bitaps`                |       1 | bitcoin                             | A 3 of 5 secret sharing scheme          |
 | `gsmg`                  |       1 | bitcoin                             | A multi phase image puzzle              |
 | `movie_enigma`          |       1 | bitcoin                             | Film titles as seed words, solved 2026  |

@@ -392,6 +392,7 @@ describe("lazy collection registry", () => {
     ]);
     expect(quizchain.get("block-1")).toBeUndefined();
     expect(quizchain.get(2)?.id()).toBe("quizchain/2");
+    expect(quizchain.get(3)?.id()).toBe("quizchain/3");
 
     expect(rushwallet.get("9")?.id()).toBe("rushwallet/9");
     expect(rushwallet.get("rushwallet/9")?.id()).toBe("rushwallet/9");
@@ -514,7 +515,7 @@ describe("lazy collection registry", () => {
     expect(zden?.author.facts?.every((entry) => entry.source.startsWith("https://"))).toBe(true);
     const aoi = await getAuthor("aoi-nakamoto");
     expect(aoi?.collections).toEqual(["book_quiz", "quizchain", "satoshi_birthday_quiz"]);
-    expect(aoi?.puzzles).toBe(4);
+    expect(aoi?.puzzles).toBe(5);
     expect(await getAuthor("nobody")).toBeUndefined();
     expect(await getAuthor(7 as never)).toBeUndefined();
   });
@@ -541,20 +542,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(347);
+    expect(await all()).toHaveLength(348);
     expect(await stats()).toEqual({
-      total: 347,
+      total: 348,
       claimed: 11,
       expired: 3,
-      solved: 141,
+      solved: 142,
       swept: 96,
       unsolved: 96,
-      with_pubkey: 246,
+      with_pubkey: 247,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
         DAI: 100,
-        BTC: 1064.09558961,
+        BTC: 1064.10258961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -581,7 +582,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(347);
+    ).toBe(348);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -608,6 +609,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(141);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(142);
   });
 });
