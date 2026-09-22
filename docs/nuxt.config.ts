@@ -72,7 +72,7 @@ export default defineNuxtConfig({
             title: "Playground",
             href: "https://puzzles.agntn.dev/playground",
             description:
-              "The library running in the page: show, list, verify, collections and stats.",
+              "The library running in the page: show, list, verify, collections, authors and stats.",
           },
         ],
       },
