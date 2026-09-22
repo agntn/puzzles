@@ -64,6 +64,17 @@ const sources = [
       content: "confirmed",
     },
   },
+  {
+    file: "satoshi_birthday_quiz/aoinakamoto-2019-04-05",
+    url: "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-05",
+    archive: {
+      url: "https://web.archive.org/web/20230611180546/https://old.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/",
+      date: "2023-06-11T18:05:46Z",
+      content: "confirmed",
+    },
+  },
 ] as const;
 
 type Source = (typeof sources)[number];

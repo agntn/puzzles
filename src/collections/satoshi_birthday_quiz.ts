@@ -3,6 +3,7 @@ import {
   answer,
   claim,
   compressed,
+  confirmation,
   fact,
   funding,
   official,
@@ -17,6 +18,10 @@ import { bitcoinPuzzle, Status } from "../core/puzzle.ts";
 
 /** Where every question, hint and answer of this puzzle was published. */
 const THREAD = "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/";
+
+/** The one Wayback capture whose HTML still carries the post and every comment. */
+const CAPTURE =
+  "https://web.archive.org/web/20230611180546/https://old.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/";
 
 /**
  * Satoshi birthday 7 million quiz: seven multiple-choice questions about Bitcoin history, the
@@ -42,7 +47,7 @@ export const satoshiBirthdayQuizPuzzle = bitcoinPuzzle({
     official(
       "To find the seed, answer the following 7 quiz questions (multiple choice). The SHA 256 hash of all correct answers combined is the wallet seed. Insert one space between answers.",
       THREAD,
-      undefined,
+      confirmation(CAPTURE, "Wayback capture of the thread, post and comments"),
       {
         answer: answer("1 c) 2 a) 3 d) 4 a) 5 b) 6 d) and 7 a)", THREAD),
       },
