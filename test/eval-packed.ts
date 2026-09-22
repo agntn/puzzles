@@ -72,6 +72,7 @@ const expectedCollections = [
   "luckylurker",
   "mineshop",
   "movie_enigma",
+  "quizchain",
   "rushwallet",
   "satoshi_birthday_quiz",
   "warp",

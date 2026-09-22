@@ -176,7 +176,7 @@ const customCode = [
       <div class="mx-auto w-full max-w-[var(--ui-container)] px-8 py-20 sm:px-12 lg:px-16">
         <div class="max-w-2xl">
           <h2 class="text-2xl font-medium tracking-tight text-highlighted sm:text-[1.75rem]">
-            Nineteen collections, five chains, one page per puzzle
+            Twenty collections, five chains, one page per puzzle
           </h2>
           <p class="mt-4 text-sm leading-6 text-muted">
             Each collection is a class with an author and its puzzle list, published on its own

@@ -8,7 +8,7 @@ metadata:
 
 # puzzles
 
-Nineteen collections, 345 puzzles, five chains: Bitcoin, Ethereum, Litecoin, Decred, Arweave. A sixth factory, `moneroPuzzle`, has no records yet. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
+Twenty collections, 346 puzzles, five chains: Bitcoin, Ethereum, Litecoin, Decred, Arweave. A sixth factory, `moneroPuzzle`, has no records yet. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
 
 Reads are methods, not properties. `puzzle.address()`, not `puzzle.address`. A puzzle with no solver or prize simply leaves those fields out of its record, which is why nothing in the dataset is null.
 
@@ -42,6 +42,7 @@ IDs are `collection/identifier`. Six singletons have no slash, which trips peopl
 | `luckylurker`           | `luckylurker/vault_1`   | vault_1 or vault_2                                |
 | `mineshop`              | `mineshop`              | singleton, no argument                            |
 | `movie_enigma`          | `movie_enigma`          | singleton, no argument                            |
+| `quizchain`             | `quizchain/1`           | block number                                      |
 | `rushwallet`            | `rushwallet/9`          | name "1"-"30"                                     |
 | `satoshi_birthday_quiz` | `satoshi_birthday_quiz` | singleton, no argument                            |
 | `warp`                  | `warp/challenge_1`      | challenge_1-4, warp_challenge_1-2                 |

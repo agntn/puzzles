@@ -104,6 +104,14 @@ Bitcoin Movie Enigma, one puzzle by klems: 34 film stills, each title turned int
 movieEnigma.require();
 ```
 
+## quizchain
+
+AoiNakamoto's numbered quiz blocks on r/bitcoinpuzzles, addressed by block number like `b1000`. Block 1 hashed one multiple-choice answer plus the last three characters of the author's favorite address into BIP39 entropy. The post gave the funding txid, not the address, and the author published the SHA-256 and the WIF in the comments, so the key is a WIF with the entropy hash beside it and no seed phrase.
+
+```ts
+quizchain.require(1).key()?.data().seed?.entropy?.hash;
+```
+
 ## rushwallet
 
 Dmitri Kryptokov and KryptoKit's RushWallet brainwallet contest from September 2014. 30 P2PKH targets derived as `sha256(passphrase)` into an uncompressed key. 28 passphrases came back out of contest videos, OCR, morse audio, and social clue carriers. #26 is claimed on-chain with the passphrase still unknown, #30 is untouched. All 30 contest UTXOs were funded by `1GShq18eb4V6uBtqgwxkmuPTUHCtyBcNYA`.

@@ -5,7 +5,7 @@
 [![license](https://npmx.dev/api/registry/badge/license/@agntn/puzzles)](https://npmx.dev/package/@agntn/puzzles)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/agntn/puzzles)
 
-345 public crypto puzzles and bounties in nineteen collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
+346 public crypto puzzles and bounties in twenty collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
 
 ## Why?
 
@@ -42,13 +42,13 @@ npx @agntn/puzzles stats
 ```
 
 ```text
-Total: 345
-Solved: 139
+Total: 346
+Solved: 140
 Unsolved: 96
 Claimed: 11
 Swept: 96
 Expired: 3
-With pubkey: 244
+With pubkey: 245
 ```
 
 No key, no config, no network. The records ship inside the package. The bare `puzzles` below is `pnpm exec puzzles` after a local `pnpm add`, or just `puzzles` after `pnpm add -g @agntn/puzzles`.
@@ -118,6 +118,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `mineshop`              |       1 | ethereum                            | A seed split between a video and a post |
 | `satoshi_birthday_quiz` |       1 | bitcoin                             | Seven quiz answers hashed into a wallet |
 | `book_quiz`             |       1 | bitcoin                             | A book quiz nobody won in time          |
+| `quizchain`             |       1 | bitcoin                             | One quiz answer and a favorite address  |
 
 Identifiers are `collection/name`. The six singletons, `gsmg`, `bitaps`, `mineshop`, `movie_enigma`, `satoshi_birthday_quiz` and `book_quiz`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
