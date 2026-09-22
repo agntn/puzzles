@@ -1,3 +1,4 @@
+import { type Chain, chains, parseChain } from "./chains.ts";
 import type { CollectionSummary } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
 import {
@@ -450,18 +451,43 @@ export function parseStatus(value: string | undefined): Status | undefined {
 }
 
 /**
- * Filters puzzles by optional status and public key constraints.
+ * Parses a chain filter, throwing on a value no supported chain answers to. A key, a display
+ * name, a symbol and a `@agntn/chains` alias all resolve, so `bitcoin`, `Bitcoin` and `BTC` name
+ * the same chain. Anything that is not a string is a rejected filter, not a `TypeError`, because
+ * a host may hand the executors whatever a model wrote.
+ *
+ * @param {string | undefined} value - Chain text from a caller, when given.
+ * @returns {Chain | undefined} The chain filter.
+ */
+export function requireChain(value: string | undefined): Chain | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  const chain = typeof value === "string" ? parseChain(value) : undefined;
+  if (chain === undefined) {
+    throw new InvalidArgumentError("chain", `expected one of ${chains.join(", ")}`);
+  }
+  return chain;
+}
+
+/**
+ * Filters puzzles by optional chain, status and public key constraints.
  *
  * @param {readonly Puzzle[]} puzzles - Puzzles to work on.
- * @param {{ readonly status?: Status | undefined; readonly withPubkey?: boolean | undefined }} options - Lookup options.
+ * @param {{ readonly chain?: Chain | undefined; readonly status?: Status | undefined; readonly withPubkey?: boolean | undefined }} options - Lookup options.
  * @returns {readonly Puzzle[]} The puzzles that pass every given constraint.
  */
 export function filterPuzzles(
   puzzles: readonly Puzzle[],
-  options: { readonly status?: Status | undefined; readonly withPubkey?: boolean | undefined },
+  options: {
+    readonly chain?: Chain | undefined;
+    readonly status?: Status | undefined;
+    readonly withPubkey?: boolean | undefined;
+  },
 ): readonly Puzzle[] {
   return puzzles.filter(
     (puzzle) =>
+      (options.chain === undefined || puzzle.chain() === options.chain) &&
       (options.status === undefined || puzzle.status() === options.status) &&
       (options.withPubkey !== true || puzzle.hasPubkey()),
   );

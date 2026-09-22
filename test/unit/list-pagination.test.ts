@@ -67,6 +67,27 @@ describe("puzzle list pagination", () => {
     expect(complete.content[0]?.text).not.toContain("Next page:");
   });
 
+  it("narrows to one chain, across collections and together with the other filters", async () => {
+    const chain = await listTool({ chain: "ethereum" });
+    const narrowed = await listTool({ chain: "ethereum", status: "solved" });
+    const crossed = await listTool({ chain: "ethereum", collection: "b1000" });
+
+    expect(chain.details).toMatchObject({
+      matched: 6,
+      returned: 6,
+      ids: [
+        "arweave/weave7",
+        "arweave/weave9",
+        "arweave/weave11",
+        "arweave/weave13",
+        "zden/xixoio",
+        "zden/codex_protocol",
+      ],
+    });
+    expect(narrowed.details["ids"]).toEqual(["zden/xixoio", "zden/codex_protocol"]);
+    expect(crossed.details).toMatchObject({ matched: 0, returned: 0, ids: [] });
+  });
+
   it.each([-1, 0.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1])(
     "rejects invalid offset %s even without host validation",
     async (offset) => {

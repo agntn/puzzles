@@ -260,6 +260,50 @@ describe.concurrent("puzzles CLI", () => {
     expect(result.every((puzzle) => puzzle.id.startsWith("zden/"))).toBe(true);
   });
 
+  it("lists the puzzles of one chain, wherever their collection puts them", async () => {
+    const result = await json<readonly { readonly id: string; readonly chain: string }[]>(
+      "list",
+      "--chain",
+      "ethereum",
+      "--json",
+    );
+
+    expect(result.every((puzzle) => puzzle.chain === "ethereum")).toBe(true);
+    expect(result.map((puzzle) => puzzle.id)).toEqual([
+      "arweave/weave7",
+      "arweave/weave9",
+      "arweave/weave11",
+      "arweave/weave13",
+      "zden/xixoio",
+      "zden/codex_protocol",
+    ]);
+  });
+
+  it("takes a chain by symbol and narrows it further by status", async () => {
+    const result = await json<readonly { readonly id: string; readonly status: string }[]>(
+      "list",
+      "--chain",
+      "BTC",
+      "--status",
+      "expired",
+      "--json",
+    );
+
+    expect(result.map((puzzle) => puzzle.id)).toEqual([
+      "warp/warp_challenge_1",
+      "warp/warp_challenge_2",
+    ]);
+  });
+
+  it("names the supported chains when the filter is not one", async () => {
+    await expect(failure("list", "--chain", "solana")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr:
+        "Invalid chain: expected one of arweave, bitcoin, decred, ethereum, litecoin, monero\n",
+    });
+  });
+
   it("lists every registered collection", async () => {
     const result = await json<readonly { readonly key: string; readonly total: number }[]>(
       "collections",

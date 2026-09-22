@@ -65,7 +65,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
   pi.setLabel("Puzzles");
 
   const tools = await loadTools();
-  const { parameters, statuses } = tools.facts;
+  const { chains, parameters, statuses } = tools.facts;
   const puzzleId = Type.String(parameters.id);
   const line = (text: string) => new Text(sanitizeTerminalText(text), 0, 0);
 
@@ -117,6 +117,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     ...registration(tools.facts.tools.list),
     parameters: Type.Object({
       collection: Type.Optional(Type.String(parameters.collection)),
+      chain: Type.Optional(Type.Enum(chains, parameters.chain)),
       status: Type.Optional(Type.Enum(statuses, parameters.status)),
       withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
       limit: Type.Optional(Type.Integer(parameters.limit)),
@@ -124,7 +125,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     }),
     renderCall(args) {
       return line(
-        `List puzzles ${args.collection ?? "all"}${args.status === undefined ? "" : ` ${args.status}`}`,
+        `List puzzles ${args.collection ?? args.chain ?? "all"}${args.status === undefined ? "" : ` ${args.status}`}`,
       );
     },
     async execute(_toolCallId, params) {
