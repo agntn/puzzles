@@ -1,3 +1,33 @@
+## v0.21.2
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.21.1...v0.21.2)
+
+### 🚀 Enhancements
+
+- **collections:** Credit Level 4's winner ([#224](https://github.com/agntn/puzzles/pull/224))
+- **collections:** Codex key from Zden ([#225](https://github.com/agntn/puzzles/pull/225))
+- **tools:** Browse puzzles without repeats ([#227](https://github.com/agntn/puzzles/pull/227))
+- **dataset:** List the puzzles of one chain ([#228](https://github.com/agntn/puzzles/pull/228))
+- **dataset:** Look a puzzle up by its address ([#230](https://github.com/agntn/puzzles/pull/230))
+- **collections:** Add mineshop ([#231](https://github.com/agntn/puzzles/pull/231))
+- **collections:** Add satoshi_birthday_quiz ([#236](https://github.com/agntn/puzzles/pull/236))
+- **authors:** Sourced records, one page each ([#237](https://github.com/agntn/puzzles/pull/237))
+
+### 🩹 Fixes
+
+- **balance:** 18 decimals outrun a double ([#229](https://github.com/agntn/puzzles/pull/229))
+- **errors:** A miss names what does exist ([#232](https://github.com/agntn/puzzles/pull/232))
+- **tools:** Overlapping imports lose the dataset ([#234](https://github.com/agntn/puzzles/pull/234))
+
+### 📖 Documentation
+
+- Preserve the cited source tweets ([#226](https://github.com/agntn/puzzles/pull/226))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.21.1
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.21.0...v0.21.1)
