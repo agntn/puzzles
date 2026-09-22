@@ -7,67 +7,121 @@ import { datasetCollections } from "../../src/core/dataset.ts";
 const root = path.resolve(import.meta.dirname, "../../assets/sources");
 const tweetPattern = /https:\/\/(?:x\.com|twitter\.com)\/[A-Za-z0-9_]+\/status\/(\d+)/g;
 
+/**
+ * One archived source per entry. A tweet gives its ID and the handle, and the URL, the publication
+ * date and the Wayback URL all follow from those. Anything else gives its own URL and, when a
+ * capture exists, that capture's URL, because no other page's archive address is derivable.
+ */
 const sources = [
-  [
-    "ballet/bobbyclee-2020-07-31",
-    "1289004702122643456",
-    "bobbyclee",
-    "2020-07-31",
-    "2020-07-31T01:33:27Z",
-    "confirmed",
-  ],
-  [
-    "bitimage/aantonop-2015-05-27",
-    "603701870482300928",
-    "aantonop",
-    "2015-05-27",
-    "2017-09-28T12:09:11Z",
-    "confirmed",
-  ],
-  [
-    "zden/zd3n-2018-02-21",
-    "966275899757879298",
-    "Zd3N",
-    "2018-02-21",
-    "2025-08-18T09:49:58Z",
-    "unverified",
-  ],
-  [
-    "zden/zd3n-2018-12-24",
-    "1077146640090316800",
-    "Zd3N",
-    "2018-12-24",
-    "2022-01-29T18:39:39Z",
-    "confirmed",
-  ],
-  ["genesis/caesrcd-2026-08-22", "2090997418800095526", "caesrcd", "2026-08-22"],
-  ["movie_enigma/cryptop1r4t3-2022-03-21", "1505915271118262286", "cryptop1r4t3", "2022-03-21"],
+  {
+    file: "ballet/bobbyclee-2020-07-31",
+    tweet: "1289004702122643456",
+    author: "bobbyclee",
+    date: "2020-07-31",
+    archive: { date: "2020-07-31T01:33:27Z", content: "confirmed" },
+  },
+  {
+    file: "bitimage/aantonop-2015-05-27",
+    tweet: "603701870482300928",
+    author: "aantonop",
+    date: "2015-05-27",
+    archive: { date: "2017-09-28T12:09:11Z", content: "confirmed" },
+  },
+  {
+    file: "zden/zd3n-2018-02-21",
+    tweet: "966275899757879298",
+    author: "Zd3N",
+    date: "2018-02-21",
+    archive: { date: "2025-08-18T09:49:58Z", content: "unverified" },
+  },
+  {
+    file: "zden/zd3n-2018-12-24",
+    tweet: "1077146640090316800",
+    author: "Zd3N",
+    date: "2018-12-24",
+    archive: { date: "2022-01-29T18:39:39Z", content: "confirmed" },
+  },
+  {
+    file: "genesis/caesrcd-2026-08-22",
+    tweet: "2090997418800095526",
+    author: "caesrcd",
+    date: "2026-08-22",
+  },
+  {
+    file: "movie_enigma/cryptop1r4t3-2022-03-21",
+    tweet: "1505915271118262286",
+    author: "cryptop1r4t3",
+    date: "2022-03-21",
+  },
+  {
+    file: "book_quiz/aoinakamoto-2019-04-06",
+    url: "https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-06",
+    archive: {
+      url: "https://web.archive.org/web/20230611183532/https://old.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
+      date: "2023-06-11T18:35:32Z",
+      content: "confirmed",
+    },
+  },
 ] as const;
 
-describe("archived source tweets", () => {
-  it.each(sources)(
+type Source = (typeof sources)[number];
+type ArchivedSource = Extract<Source, { archive: { date: string } }>;
+
+/**
+ * The URL the entry archives: a tweet's `x.com` address, or the URL the entry carries itself.
+ *
+ * @param {Source} source - The archived source.
+ * @returns {string} The original URL.
+ */
+function sourceUrl(source: Source): string {
+  return "tweet" in source ? `https://x.com/${source.author}/status/${source.tweet}` : source.url;
+}
+
+/**
+ * The capture the entry links. A tweet's Wayback address follows from its ID and the capture
+ * timestamp; any other page carries the capture URL on the entry.
+ *
+ * @param {ArchivedSource} source - A source with a capture.
+ * @returns {string} The capture URL.
+ */
+function archiveUrl(source: ArchivedSource): string {
+  const timestamp = source.archive.date.replaceAll(/\D/g, "");
+  return "tweet" in source
+    ? `https://web.archive.org/web/${timestamp}/https://twitter.com/${source.author}/status/${source.tweet}`
+    : source.archive.url;
+}
+
+describe("archived sources", () => {
+  it.each(sources.map((source) => [source.file, source] as const))(
     "keeps provenance and the screenshot for %s",
-    (file, id, author, date, archiveDate?, archiveContent?) => {
+    (file, source) => {
       const markdown = readFileSync(path.join(root, `${file}.md`), "utf8");
       const screenshot = readFileSync(path.join(root, `${file}.png`));
       const digest = createHash("sha256").update(screenshot).digest("hex");
-      const published = new Date(Number((BigInt(id) >> 22n) + 1288834974657n));
-      expect(published.toISOString().slice(0, 10)).toBe(date);
-      expect(markdown).toContain(`url: https://x.com/${author}/status/${id}\n`);
-      expect(markdown).toContain(`author: "@${author}"\n`);
-      expect(markdown).toContain(`date: "${date}"\n`);
+      if ("tweet" in source) {
+        /* A tweet dates itself: the ID carries the publication time. */
+        const published = new Date(Number((BigInt(source.tweet) >> 22n) + 1288834974657n));
+        expect(published.toISOString().slice(0, 10)).toBe(source.date);
+      }
+      expect(markdown).toContain(`url: ${sourceUrl(source)}\n`);
+      expect(markdown).toContain(
+        `author: "${"tweet" in source ? `@${source.author}` : source.author}"\n`,
+      );
+      expect(markdown).toContain(`date: "${source.date}"\n`);
       expect(markdown).toMatch(/^archived: "\d{4}-\d{2}-\d{2}"$/m);
-      if (archiveDate === undefined) {
+      if (!("archive" in source)) {
         /* No capture exists: the entry names the archives it searched instead of inventing one. */
         expect(markdown).not.toContain("archive_");
         expect(markdown).toContain("No capture found.");
       } else {
-        const timestamp = archiveDate.replaceAll(/\D/g, "");
-        const archiveUrl = `https://web.archive.org/web/${timestamp}/https://twitter.com/${author}/status/${id}`;
-        expect(markdown).toContain(`archive_url: ${archiveUrl}\n`);
-        expect(markdown).toContain(`archive_date: "${archiveDate}"\n`);
-        expect(markdown).toContain(`archive_content: ${archiveContent}\n`);
-        expect(markdown).toContain(`](${archiveUrl})`);
+        const capture = archiveUrl(source);
+        expect(capture).toContain(`/web/${source.archive.date.replaceAll(/\D/g, "")}/`);
+        expect(markdown).toContain(`archive_url: ${capture}\n`);
+        expect(markdown).toContain(`archive_date: "${source.archive.date}"\n`);
+        expect(markdown).toContain(`archive_content: ${source.archive.content}\n`);
+        expect(markdown).toContain(`](${capture})`);
       }
       expect(markdown).toContain(`screenshot_sha256: ${digest}\n`);
       expect(markdown).toContain(`](${path.basename(file)}.png)`);
@@ -84,13 +138,21 @@ describe("archived source tweets", () => {
     const files = globSync("*/*.md", { cwd: root });
     const archived = files.map((file) => {
       const markdown = readFileSync(path.join(root, file), "utf8");
-      return markdown.match(/^url: https:\/\/x\.com\/\w+\/status\/(\d+)$/m)?.[1];
+      return markdown.match(/^url: (\S+)$/m)?.[1];
     });
     expect(files).toHaveLength(sources.length);
     expect(archived).not.toContain(undefined);
     expect(new Set(archived).size).toBe(files.length);
+    const tweets = archived.map((url) => url?.match(/^https:\/\/x\.com\/\w+\/status\/(\d+)$/)?.[1]);
     for (const id of referenced) {
-      expect(archived).toContain(id);
+      expect(tweets).toContain(id);
+    }
+  });
+
+  it("archives a source the records actually cite", async () => {
+    const records = JSON.stringify(await datasetCollections());
+    for (const source of sources.filter((entry) => !("tweet" in entry))) {
+      expect(records).toContain(sourceUrl(source));
     }
   });
 });

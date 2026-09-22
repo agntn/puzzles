@@ -52,6 +52,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Seeds hashed out of photographs. One solved, one waits on a passphrase.",
   },
+  book_quiz: {
+    icon: "i-lucide-book-open",
+    title: "7 million book quiz",
+    sample: "book_quiz",
+    chains: ["bitcoin"],
+    blurb:
+      "Seven questions about a campaign book, one hour to sweep it. The deadline won and the author took the prize back.",
+  },
   coin_artist: {
     icon: "i-lucide-flame",
     title: "TORCHED H34R7S Bitcoin Puzzle",

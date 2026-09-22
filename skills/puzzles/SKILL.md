@@ -8,7 +8,7 @@ metadata:
 
 # puzzles
 
-Eighteen collections, 344 puzzles, five chains: Bitcoin, Ethereum, Litecoin, Decred, Arweave. A sixth factory, `moneroPuzzle`, has no records yet. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
+Nineteen collections, 345 puzzles, five chains: Bitcoin, Ethereum, Litecoin, Decred, Arweave. A sixth factory, `moneroPuzzle`, has no records yet. Every puzzle is a typed record built by a factory for its chain (`bitcoinPuzzle({...})`), and a collection is a list of those puzzles. Importing the package loads no records: the registry is a manifest of keys, a collection module is imported on the first lookup for its key, and `@agntn/puzzles/collections/<key>` serves one collection directly. No JSON file, no fetch, no init.
 
 Reads are methods, not properties. `puzzle.address()`, not `puzzle.address`. A puzzle with no solver or prize simply leaves those fields out of its record, which is why nothing in the dataset is null.
 
@@ -23,7 +23,7 @@ Node.js 24 or newer. The library builds as neutral ESM, so browsers and edge wor
 
 ## Puzzle ID format
 
-IDs are `collection/identifier`. Four singletons have no slash, which trips people up more than anything else here.
+IDs are `collection/identifier`. Six singletons have no slash, which trips people up more than anything else here.
 
 | Collection              | ID example              | Query type                                        |
 | ----------------------- | ----------------------- | ------------------------------------------------- |
@@ -32,6 +32,7 @@ IDs are `collection/identifier`. Four singletons have no slash, which trips peop
 | `ballet`                | `ballet/AA007448`       | serial number                                     |
 | `bitaps`                | `bitaps`                | singleton, no argument                            |
 | `bitimage`              | `bitimage/kitten`       | name                                              |
+| `book_quiz`             | `book_quiz`             | singleton, no argument                            |
 | `coin_artist`           | `coin_artist/...`       | name "torched-h34r7s"                             |
 | `dug`                   | `dug/2025-0`            | 2025-0, 2025-1 or 2025-2                          |
 | `genesis`               | `genesis/block`         | block                                             |

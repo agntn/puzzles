@@ -45,6 +45,14 @@ Keys derived from files with `SHA256(Base64(file))` as BIP39 entropy. Two puzzle
 bitimage.require("kitten");
 ```
 
+## book_quiz
+
+AoiNakamoto's follow-up to the birthday quiz, posted to r/YangForPresidentHQ the next day. Same recipe, seven answer sentences hashed into BIP39 entropy, but four of the seven questions had no objective answer and the window was one hour. Nobody made it, and the author moved the 7,000,000 satoshis back out. Status `expired`, and the answer key published afterwards is on the first hint.
+
+```ts
+bookQuiz.require().key()?.data().seed?.entropy?.hash;
+```
+
 ## gsmg
 
 GSMG.IO multi-phase challenge, one puzzle. The prize halves at every Bitcoin halving, so it shrinks while you think.

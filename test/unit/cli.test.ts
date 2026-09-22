@@ -48,7 +48,7 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(344);
+    expect(result.total).toBe(345);
     expect(result.unsolved).toBe(96);
   });
 
@@ -292,6 +292,7 @@ describe.concurrent("puzzles CLI", () => {
     );
 
     expect(result.map((puzzle) => puzzle.id)).toEqual([
+      "book_quiz",
       "warp/warp_challenge_1",
       "warp/warp_challenge_2",
     ]);
@@ -373,7 +374,7 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result).toHaveLength(18);
+    expect(result).toHaveLength(19);
     expect(result.map((entry) => entry.key)).toContain("hash_collision");
   });
 
@@ -416,7 +417,7 @@ describe.concurrent("puzzles CLI", () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(18);
+    expect(result.collections).toHaveLength(19);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 

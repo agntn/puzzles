@@ -62,6 +62,7 @@ const expectedCollections = [
   "ballet",
   "bitaps",
   "bitimage",
+  "book_quiz",
   "coin_artist",
   "dug",
   "genesis",
