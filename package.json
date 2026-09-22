@@ -26,7 +26,8 @@
     "dist",
     "packages/shared",
     "packages/omp/extensions",
-    "packages/pi/extensions"
+    "packages/pi/extensions",
+    "skills"
   ],
   "type": "module",
   "sideEffects": [
@@ -117,11 +118,17 @@
   "omp": {
     "extensions": [
       "./packages/omp/extensions/puzzles.ts"
+    ],
+    "skills": [
+      "./skills"
     ]
   },
   "pi": {
     "extensions": [
       "./packages/pi/extensions/puzzles.ts"
+    ],
+    "skills": [
+      "./skills"
     ]
   }
 }

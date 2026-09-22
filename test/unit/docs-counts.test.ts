@@ -74,7 +74,7 @@ function countsIn(text: string, noun: string): string[] {
 }
 
 /**
- * README, the skill, the landing copy, and the guide pages that speak for the whole dataset.
+ * README, the landing copy, and the guide pages that speak for the whole dataset.
  *
  * @returns {string[]} Paths relative to the repository root.
  */
@@ -93,7 +93,6 @@ function proseFiles(): string[] {
     "docs/app/app.config.ts",
     "docs/nuxt.config.ts",
     "docs/app/components/content/LandingHome.vue",
-    "skills/puzzles/SKILL.md",
     ...guide.sort(),
   ];
 }
@@ -109,15 +108,24 @@ const expected = {
 } as const;
 
 describe("the prose counts what the registry ships", () => {
-  it("lists every collection in the skill's ID table and the registry class tree", async () => {
-    const skill = readFileSync(path.join(root, "skills/puzzles/SKILL.md"), "utf8");
-    const table = skill.split("## Puzzle ID format")[1]?.split("## Library")[0] ?? "";
+  it("lists every collection in the registry class tree", async () => {
     const guide = readFileSync(path.join(root, "docs/content/1.guide/03.registry.md"), "utf8");
     const tree = guide.split("## Where the collections come from")[1] ?? "";
     for (const collection of await collections()) {
-      expect(table).toContain(`| \`${collection.key}\``);
       expect(tree).toContain(collection.constructor.name);
     }
+  });
+
+  it("keeps the skills general instead of listing the collections", () => {
+    const skills = readdirSync(path.join(root, "skills"), { recursive: true, encoding: "utf8" })
+      .filter((name) => name.endsWith(".md"))
+      .map((name) => readFileSync(path.join(root, "skills", name), "utf8"))
+      .join("\n");
+    const named = collectionKeys().filter((key) =>
+      new RegExp(String.raw`[\x60"]${key}[\x60"/]|\b${key}/`).test(skills),
+    );
+    // A few collections serve as examples. The tools list the rest, so the skills do not grow with the dataset.
+    expect(named.length, named.join(", ")).toBeLessThanOrEqual(5);
   });
 
   it("keeps the playground's sample counts aligned with the landing walk", () => {
