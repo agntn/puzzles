@@ -5,7 +5,7 @@
 [![license](https://npmx.dev/api/registry/badge/license/@agntn/puzzles)](https://npmx.dev/package/@agntn/puzzles)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/agntn/puzzles)
 
-342 public crypto puzzles and bounties in sixteen collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
+343 public crypto puzzles and bounties in seventeen collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
 
 ## Why?
 
@@ -42,9 +42,9 @@ npx @agntn/puzzles stats
 ```
 
 ```text
-Total: 342
+Total: 343
 Solved: 138
-Unsolved: 95
+Unsolved: 96
 Claimed: 11
 Swept: 96
 Expired: 2
@@ -88,7 +88,7 @@ puzzle?.address().value; // "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU"
 puzzle?.keyRange(); // [2n ** 70n, 2n ** 71n - 1n]
 
 verifyPuzzle(b1000.require(1)).verified; // true, key 1 derives its address
-(await stats()).unsolved; // 95
+(await stats()).unsolved; // 96
 (await b1000.require(71).balance()).totalUnits(); // 7.10190014 when I ran it, mempool.space decides
 ```
 
@@ -114,8 +114,9 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `ledger_donjon`  |       1 | bitcoin                             | Scissors Secret Sharing from the CTF    |
 | `coin_artist`    |       1 | bitcoin                             | TORCHED H34R7S painting                 |
 | `genesis`        |       1 | bitcoin                             | Genesis block OP_RETURN puzzle          |
+| `mineshop`       |       1 | ethereum                            | A seed split between a video and a post |
 
-Identifiers are `collection/name`. The three singletons, `gsmg`, `bitaps` and `movie_enigma`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
+Identifiers are `collection/name`. The four singletons, `gsmg`, `bitaps`, `mineshop` and `movie_enigma`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
 ## 🤖 Agents
 

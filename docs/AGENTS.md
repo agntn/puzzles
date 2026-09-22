@@ -25,7 +25,7 @@ docs/
 ├── public/                        # favicon.svg and the icons and manifest cut from it
 ├── content/index.md               # landing
 ├── content/1.guide/               # getting started, records, registry, lookups, verification, balances, cli, agents, custom, playground
-└── content/2.collections/         # one page per collection, each with the facts strip and the puzzle list; the three singletons embed their puzzle page
+└── content/2.collections/         # one page per collection, each with the facts strip and the puzzle list; the four singletons embed their puzzle page
 ```
 
 ## Commands
@@ -53,7 +53,7 @@ Two resolution traps, both because the repo root is its own pnpm workspace:
 
 ## Pages per puzzle
 
-`app/pages/collections/[collection]/[puzzle].vue` renders any `collection/name` id through `PuzzlePage`, which reads the record with `toPuzzleView` inside `useAsyncData`, so the prerender and the browser agree and the payload carries plain data. An unknown id throws a 404. The three singletons, `gsmg`, `bitaps` and `movie_enigma`, have no `name` segment: their collection pages embed `::puzzle-page{puzzle="gsmg"}` instead, and that's why the prop is called `puzzle`, MDC keeps `id` for the element. The prerender finds the 339 puzzle routes by crawling the lists `::collection-puzzles` renders on the collection pages; nothing enumerates them in `nuxt.config.ts`, because that file runs under jiti from `docs/` and can't import the library on Workers Builds. The sitemap route can, through the Nitro alias, and lists them all.
+`app/pages/collections/[collection]/[puzzle].vue` renders any `collection/name` id through `PuzzlePage`, which reads the record with `toPuzzleView` inside `useAsyncData`, so the prerender and the browser agree and the payload carries plain data. An unknown id throws a 404. The four singletons, `gsmg`, `bitaps`, `mineshop` and `movie_enigma`, have no `name` segment: their collection pages embed `::puzzle-page{puzzle="gsmg"}` instead, and that's why the prop is called `puzzle`, MDC keeps `id` for the element. The prerender finds the 339 puzzle routes by crawling the lists `::collection-puzzles` renders on the collection pages; nothing enumerates them in `nuxt.config.ts`, because that file runs under jiti from `docs/` and can't import the library on Workers Builds. The sitemap route can, through the Nitro alias, and lists them all.
 
 ## Live values
 

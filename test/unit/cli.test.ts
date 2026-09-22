@@ -47,8 +47,8 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(342);
-    expect(result.unsolved).toBe(95);
+    expect(result.total).toBe(343);
+    expect(result.unsolved).toBe(96);
   });
 
   it("shows a puzzle by universal identifier", async () => {
@@ -274,6 +274,7 @@ describe.concurrent("puzzles CLI", () => {
       "arweave/weave9",
       "arweave/weave11",
       "arweave/weave13",
+      "mineshop",
       "zden/xixoio",
       "zden/codex_protocol",
     ]);
@@ -334,7 +335,7 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result).toHaveLength(16);
+    expect(result).toHaveLength(17);
     expect(result.map((entry) => entry.key)).toContain("hash_collision");
   });
 
@@ -356,7 +357,7 @@ describe.concurrent("puzzles CLI", () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(16);
+    expect(result.collections).toHaveLength(17);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 

@@ -80,6 +80,14 @@ import { luckyLurker } from "@agntn/puzzles/collections/luckylurker";
 luckyLurker.require("vault_2");
 ```
 
+## mineshop
+
+Guntis Vitolins's 10 ETH challenge from February 2020. Six of the twelve seed words hide in a YouTube video, six in the blog post it links to. The author still spends from the wallet, so the balance falls without anyone solving it: 8.61 ETH left of the original 10.
+
+```ts
+mineshop.require();
+```
+
 ## movie_enigma
 
 Bitcoin Movie Enigma, one puzzle by klems: 34 film stills, each title turned into a BIP39 word, ten intruders to drop. Solved in 2026. The 24-word phrase fails the BIP39 checksum and still derives the address, and `verify()` confirms it.
