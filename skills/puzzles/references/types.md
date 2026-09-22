@@ -80,11 +80,13 @@ assets({ puzzle, solution, hints, sourceUrl });
 party(name, { key, kind, aliases, about, addresses, profiles, facts }); // an author; a solver takes name, addresses, profiles
 profile(name, url);
 fact(text, source, { date? }); // one sentence a public page states about a party
-official(text, source, confirmation(url, description?), { date? }); // from the author
-community(text, source, confirmation(url, description?), { date? }); // from anyone else, right or not
+official(text, source, confirmation?, { date?, answer? }); // from the author
+community(text, source, confirmation?, { date?, answer? }); // from anyone else, right or not
+confirmation(url, description?); // optional, an archive or the author's republication of the same hint
+answer(text, source, { date? }); // a published answer to that one hint
 ```
 
-A hint's `source` is where it was published and `confirmation` is what shows the source said it, an archive capture, the author's reply or a transaction. Neither says the hint is right; `kind` says who gave it. A hint shared by a whole collection sits on the collection once, `super(key, author, puzzles, hints)`, and a puzzle inherits it:
+A hint's `source` is where it was published. The optional `confirmation` links to an archive of that page or to another place the author published the same hint, not to a solver's reconstruction or general context about the puzzle. An `answer` is a published response to that hint with its own source, not a verified solution, and it never goes into the hint text. None of them says the hint is right; `kind` says who gave it. A hint shared by a whole collection sits on the collection once, `super(key, author, puzzles, hints)`, and a puzzle inherits it:
 
 ```ts
 collection.hints; // readonly Hint[], the shared ones
@@ -136,8 +138,9 @@ interface Hint {
   kind: "official" | "community";
   text: string; // one line, as the source states it
   source: string; // URL
-  confirmation: { url: string; description?: string };
+  confirmation?: { url: string; description?: string };
   date?: string;
+  answer?: { text: string; source: string; date?: string };
 }
 ```
 
