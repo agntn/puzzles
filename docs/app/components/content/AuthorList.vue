@@ -10,8 +10,8 @@ const rows = computed(() => data.value ?? []);
 
 <template>
   <section v-if="rows.length > 0" class="roster not-prose my-6" aria-label="Authors">
-    <span class="roster-cross roster-cross-tl" aria-hidden="true">+</span>
-    <span class="roster-cross roster-cross-br" aria-hidden="true">+</span>
+    <span class="console-cross console-cross-tl" aria-hidden="true">+</span>
+    <span class="console-cross console-cross-br" aria-hidden="true">+</span>
     <header class="roster-bar">
       <span class="roster-title">authors()</span>
       <span class="roster-meta">{{ rows.length }} subjects · every name is a page</span>
@@ -72,24 +72,6 @@ const rows = computed(() => data.value ?? []);
   inset: 1px;
   z-index: -1;
   background: var(--ui-bg);
-}
-.roster-cross {
-  position: absolute;
-  z-index: 1;
-  width: 12px;
-  line-height: 12px;
-  text-align: center;
-  font-size: 13px;
-  color: var(--console-corner);
-  pointer-events: none;
-}
-.roster-cross-tl {
-  top: -7px;
-  left: -7px;
-}
-.roster-cross-br {
-  right: -7px;
-  bottom: -7px;
 }
 .roster-bar {
   display: flex;

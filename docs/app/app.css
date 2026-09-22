@@ -159,36 +159,6 @@ button:not(:disabled),
   cursor: pointer;
 }
 
-.puzzles-field {
-  height: 2.25rem;
-  width: 100%;
-  border: 0;
-  border-radius: 0.5rem;
-  background: var(--ui-bg);
-  padding: 0 0.75rem;
-  color: inherit;
-  font-size: 0.875rem;
-  box-shadow: var(--puzzles-frame);
-}
-
-.puzzles-field:focus {
-  outline: 2px solid color-mix(in oklch, var(--ui-primary) 55%, transparent);
-  outline-offset: 2px;
-}
-
-select.puzzles-field {
-  appearance: none;
-  padding-right: 2rem;
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--ui-text-dimmed) 50%),
-    linear-gradient(135deg, var(--ui-text-dimmed) 50%, transparent 50%);
-  background-position:
-    calc(100% - 0.95rem) 55%,
-    calc(100% - 0.7rem) 55%;
-  background-size: 0.25rem 0.25rem;
-  background-repeat: no-repeat;
-}
-
 .puzzles-copy {
   display: inline-flex;
   align-items: center;
@@ -579,41 +549,6 @@ select.puzzles-field {
 .puzzles-chip-ok {
   color: var(--ui-text-highlighted);
   box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--ui-primary) 45%, transparent);
-}
-
-.puzzles-output {
-  margin: 0;
-  padding: 0.75rem 1rem;
-  font-family: var(--font-mono);
-  line-height: 1.6;
-  color: var(--ui-text-highlighted);
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.puzzles-seg {
-  display: inline-flex;
-  padding: 0.125rem;
-  border-radius: 0.5rem;
-  background: var(--ui-bg-muted);
-  box-shadow: var(--puzzles-frame);
-}
-
-.puzzles-seg button {
-  height: 2rem;
-  padding: 0 0.75rem;
-  border: 0;
-  border-radius: 0.375rem;
-  background: transparent;
-  color: var(--ui-text-muted);
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-
-.puzzles-seg button[aria-pressed="true"] {
-  background: var(--ui-bg-elevated);
-  color: var(--ui-text-highlighted);
-  box-shadow: 0 0 0 1px var(--ui-border);
 }
 
 /* Status pills, rows and code cards */
@@ -1145,5 +1080,767 @@ select.puzzles-field {
   }
   .console-metrics > div + div {
     padding-left: 12px;
+  }
+}
+
+/* Instrument parts the dossier, the roster and the playground share on top of the console shell. */
+.console-wide {
+  max-width: none;
+}
+.console-cross {
+  position: absolute;
+  z-index: 1;
+  width: 12px;
+  line-height: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--console-corner);
+  pointer-events: none;
+}
+.console-cross-tl {
+  top: -7px;
+  left: -7px;
+}
+.console-cross-br {
+  right: -7px;
+  bottom: -7px;
+}
+.console-tag {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 5px;
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
+.console-file {
+  margin-left: 14px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ui-text-dimmed);
+}
+.console-meta {
+  color: var(--ui-text-dimmed);
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+/* The hatched block: 36 by 7 px, one per bar or rule title. */
+.console-mark {
+  display: inline-block;
+  flex: none;
+  width: 36px;
+  height: 7px;
+  background: repeating-linear-gradient(135deg, var(--console-corner) 0 1px, transparent 1px 4px);
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
+.console-bar:has(> .console-mark) {
+  position: relative;
+  padding-right: 76px;
+}
+.console-bar > .console-mark {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.console-ruler {
+  position: relative;
+  height: 5px;
+  overflow: hidden;
+  border-top: 1px solid var(--console-line);
+  background-image:
+    repeating-linear-gradient(90deg, var(--console-corner) 0 1px, transparent 1px 12px),
+    repeating-linear-gradient(90deg, var(--console-corner) 0 6px, transparent 6px 132px);
+  background-size:
+    12px 3px,
+    132px 2px;
+  background-repeat: repeat-x;
+  background-position:
+    20px 0,
+    44px 0;
+}
+.console-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--console-accent));
+  animation: console-sweep 1600ms ease-in-out 200ms both;
+}
+@keyframes console-sweep {
+  from {
+    transform: translateX(-48px);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+}
+.console-band {
+  padding: 16px 20px;
+  border-top: 1px solid var(--console-line);
+}
+/* The subject band: crosses behind it and nothing else, identity left, readout right. */
+.console-subject-band {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 20px 32px;
+  border-top: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M16 18h4m-2-2v4' fill='none' stroke='%23818a94' stroke-opacity='.1'/%3E%3C/svg%3E");
+  background-size: 36px 36px;
+  background-position: 24px 20px;
+}
+.console-subject-band > :not(.console-scan) {
+  position: relative;
+}
+.console-subject-band-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+.console-identity-block {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  min-width: 0;
+}
+.console-name {
+  min-width: 0;
+}
+.console-name h3 {
+  margin: 4px 0 6px;
+  font-family: var(--font-sans);
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ui-text-highlighted);
+  overflow-wrap: anywhere;
+}
+.console-name h3.console-name-mono {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.console-aliases {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin: 0 0 10px;
+  color: var(--ui-text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.console-aliases .console-chain {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ui-text-dimmed);
+}
+.console-about {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ui-text-muted);
+}
+/* The readout: a dashed frame with corner brackets, joined to the subject by a small circuit. */
+.console-readout {
+  position: relative;
+  z-index: 2;
+  align-self: start;
+  min-width: 0;
+  background: var(--ui-bg);
+  outline: 1px dashed var(--console-line);
+  outline-offset: -1px;
+}
+.console-readout::before,
+.console-readout::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+.console-readout::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid var(--console-corner);
+  border-left: 1px solid var(--console-corner);
+}
+.console-readout::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1px solid var(--console-corner);
+  border-bottom: 1px solid var(--console-corner);
+}
+.console-link {
+  position: absolute;
+  top: 10px;
+  left: -32px;
+  width: 32px;
+  height: 40px;
+  stroke: var(--console-corner);
+  stroke-width: 1;
+  pointer-events: none;
+}
+.console-readout-rows {
+  display: grid;
+  margin: 0;
+}
+.console-readout-rows > div {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 9px 14px;
+}
+.console-readout-rows > div + div {
+  border-top: 1px solid var(--console-line);
+}
+.console-readout-rows dt {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+}
+.console-readout-rows dd {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  color: var(--ui-text-highlighted);
+}
+.console-readout-rows dd.console-accent {
+  color: var(--console-accent);
+}
+.console-readout-rows input,
+.console-readout-rows select {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ui-text-highlighted);
+  font: inherit;
+  line-height: 1.5;
+}
+.console-readout-rows input::placeholder {
+  color: var(--ui-text-dimmed);
+}
+.console-readout-rows select {
+  appearance: none;
+  padding-right: 18px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--ui-text-dimmed) 50%),
+    linear-gradient(135deg, var(--ui-text-dimmed) 50%, transparent 50%);
+  background-position:
+    calc(100% - 8px) 55%,
+    calc(100% - 4px) 55%;
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+}
+.console-readout-rows select option {
+  background: var(--ui-bg);
+  color: var(--ui-text-highlighted);
+}
+.console-readout-rows input,
+.console-readout-rows select {
+  caret-color: var(--console-accent);
+}
+.console-readout-rows input:focus-visible,
+.console-readout-rows select:focus-visible {
+  outline: none;
+}
+/* A focused row is marked the way the panel marks anything live: an accent edge, no box. */
+.console-readout-rows > div:focus-within {
+  background: color-mix(in srgb, var(--ui-primary) 5%, var(--ui-bg));
+  box-shadow: inset 2px 0 0 var(--console-accent);
+}
+.console-readout-rows > div:focus-within dt {
+  color: var(--ui-text-highlighted);
+}
+.console-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.console-check input {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  appearance: none;
+  box-shadow: inset 0 0 0 1px var(--console-corner);
+}
+.console-check input:checked {
+  background: var(--console-accent);
+  box-shadow: inset 0 0 0 1px var(--console-accent);
+}
+/* The gauge under a readout: one tick per element, closed hatched, open in the accent. */
+.console-gauge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px 10px;
+  border-top: 1px solid var(--console-line);
+}
+.console-ticks {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: flex-end;
+  min-width: 0;
+}
+.console-ticks > span {
+  width: 3px;
+  height: 10px;
+  box-shadow: inset 0 0 0 1px var(--console-corner);
+  transform-origin: bottom;
+  animation: console-tick 320ms ease-out both;
+}
+.console-ticks > .console-tick-closed {
+  background: repeating-linear-gradient(180deg, var(--console-corner) 0 2px, transparent 2px 3px);
+}
+.console-ticks > .console-tick-open {
+  height: 6px;
+  box-shadow: inset 0 0 0 1px var(--console-accent);
+}
+.console-ticks-dense {
+  gap: 1px;
+}
+.console-ticks-dense > span {
+  width: 2px;
+}
+@keyframes console-tick {
+  from {
+    transform: scaleY(0.2);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.console-gauge-read {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ui-text-dimmed);
+  white-space: nowrap;
+}
+/* A lead: tag, text and a dotted leader that ends in a thick segment and a square node. */
+.console-lead {
+  display: flex;
+  align-items: baseline;
+  gap: 0 10px;
+  margin: 8px 0 0;
+}
+.console-lead > .console-tag {
+  flex: none;
+  min-width: 5.5rem;
+  text-align: center;
+}
+.console-lead > a,
+.console-lead > span:not(.console-tag, .console-leader) {
+  overflow-wrap: anywhere;
+  color: var(--ui-text-highlighted);
+}
+.console-lead > a:hover {
+  color: var(--console-accent);
+}
+.console-leader {
+  flex: 1;
+  align-self: center;
+  min-width: 24px;
+  height: 5px;
+  border-bottom: 1px dotted var(--console-line);
+  position: relative;
+  transform: translateY(-2px);
+}
+.console-leader::before {
+  content: "";
+  position: absolute;
+  right: 9px;
+  bottom: -1px;
+  width: 10px;
+  height: 2px;
+  background: var(--console-corner);
+}
+.console-leader::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -3px;
+  width: 5px;
+  height: 5px;
+  box-shadow: inset 0 0 0 1px var(--console-corner);
+}
+.console-lead:hover .console-leader::after,
+.console-lead[aria-pressed="true"] .console-leader::after {
+  background: var(--console-accent);
+  box-shadow: none;
+}
+button.console-lead {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+}
+button.console-lead[aria-pressed="true"] > .console-tag {
+  color: var(--ui-text-highlighted);
+  box-shadow: inset 0 0 0 1px var(--console-accent);
+}
+button.console-lead:focus-visible {
+  outline: 1px solid var(--ui-primary);
+  outline-offset: 3px;
+}
+.console-empty {
+  margin: 8px 0 0;
+  color: var(--ui-text-dimmed);
+}
+/* A concentric node before an address or any other item the panel points at. */
+.console-node {
+  position: relative;
+  padding-left: 16px;
+}
+.console-node::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 1px var(--console-corner),
+    inset 0 0 0 3px var(--ui-bg),
+    inset 0 0 0 4px var(--console-corner);
+}
+/* A section title: label, a rule that starts at a dot, and a hatched block at the end. */
+.console-rule-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+}
+.console-rule-title::before {
+  content: "";
+  flex: 1;
+  order: 1;
+  height: 7px;
+  background:
+    radial-gradient(circle at 3px 3.5px, var(--console-corner) 0 1.5px, transparent 2px) no-repeat,
+    linear-gradient(var(--console-line), var(--console-line)) 6px 3px / calc(100% - 6px) 1px
+      no-repeat;
+}
+.console-rule-title > .console-mark {
+  order: 2;
+  width: 28px;
+}
+.console-rule-title > span:first-child {
+  order: 0;
+}
+.console-rule-title > span:first-child > span {
+  color: var(--ui-text-dimmed);
+}
+.console-rule-title > .console-button {
+  order: 3;
+}
+.console-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 7px;
+  border: 0;
+  background: transparent;
+  color: var(--ui-text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
+.console-button:hover {
+  color: var(--console-accent);
+  box-shadow: inset 0 0 0 1px var(--console-corner);
+}
+.console-button[data-copied="true"] {
+  color: var(--console-accent);
+}
+.console-button:focus-visible {
+  outline: 1px solid var(--ui-primary);
+  outline-offset: 2px;
+}
+.console-snippet {
+  margin: 0;
+  padding: 8px 12px;
+  color: var(--ui-text-highlighted);
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  tab-size: 2;
+  background: var(--ui-bg);
+  outline: 1px dashed var(--console-line);
+  outline-offset: -1px;
+}
+.console-snippet {
+  position: relative;
+}
+.console-snippet::before,
+.console-snippet::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+.console-snippet::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid var(--console-corner);
+  border-left: 1px solid var(--console-corner);
+}
+.console-snippet::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1px solid var(--console-corner);
+  border-bottom: 1px solid var(--console-corner);
+}
+.console-snippet > span {
+  color: var(--ui-text-dimmed);
+}
+.console-snippet + .console-rule-title {
+  margin-top: 16px;
+}
+.console-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.console-chips button {
+  padding: 2px 7px;
+  border: 0;
+  background: transparent;
+  color: var(--ui-text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
+.console-chips button:hover {
+  color: var(--ui-text-highlighted);
+  box-shadow: inset 0 0 0 1px var(--console-corner);
+}
+.console-chips button[aria-pressed="true"] {
+  color: var(--ui-text-highlighted);
+  box-shadow: inset 0 0 0 1px var(--console-accent);
+}
+.console-chips button:focus-visible {
+  outline: 1px solid var(--ui-primary);
+  outline-offset: 2px;
+}
+.console-note {
+  margin: 10px 0 0;
+  color: var(--ui-text-dimmed);
+  font-size: 11px;
+  line-height: 1.7;
+}
+.console-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.console-rows li {
+  display: grid;
+  gap: 4px 16px;
+  align-items: baseline;
+  padding: 9px 20px;
+  border-top: 1px solid var(--console-line);
+}
+.console-rows li:hover {
+  background: color-mix(in srgb, var(--ui-text-muted) 4%, var(--ui-bg));
+}
+.console-rows a {
+  color: var(--ui-text-highlighted);
+}
+.console-rows a:hover {
+  color: var(--console-accent);
+}
+.console-rows button {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--ui-text-muted);
+  font: inherit;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.console-rows button:hover {
+  color: var(--console-accent);
+}
+.console-rows .console-leader {
+  min-width: 16px;
+  height: 4px;
+  transform: none;
+}
+.console-rows .console-leader::before,
+.console-rows .console-leader::after {
+  content: none;
+}
+.console-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.console-links a,
+.console-links button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--ui-text-highlighted);
+}
+.console-links a > span,
+.console-links button > span {
+  color: var(--ui-text-dimmed);
+}
+.console-links a:hover,
+.console-links button:hover {
+  color: var(--console-accent);
+}
+.console-footer-plain {
+  border-top: 1px solid var(--console-line);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.console-footer-plain > .console-meta {
+  margin-left: auto;
+}
+/* While a call is in flight the cursor keeps sweeping; it stops with the answer. */
+.console-cursor-busy {
+  animation: console-busy 1400ms linear infinite;
+}
+@keyframes console-busy {
+  from {
+    transform: translateX(-48px);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateX(100vw);
+    opacity: 0.6;
+  }
+}
+/* One-shot motion on a data change: leaders draw from the left, rows slide in. Transform only. */
+.console-draw .console-leader {
+  animation: console-draw 480ms ease-out both;
+}
+@keyframes console-draw {
+  from {
+    transform: translateY(-2px) scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: translateY(-2px) scaleX(1);
+    transform-origin: left;
+  }
+}
+.console-animate > * {
+  animation: console-entry 360ms ease-out both;
+}
+@keyframes console-entry {
+  from {
+    transform: translateX(-8px);
+  }
+  to {
+    transform: none;
+  }
+}
+/* A short row of ticks inside a bar: one per row of the answer, the open ones in the accent. */
+.console-ticks-bar {
+  display: inline-flex;
+  gap: 2px;
+  align-items: flex-end;
+  margin-right: 14px;
+  vertical-align: -1px;
+}
+.console-ticks-bar > span {
+  width: 2px;
+  height: 8px;
+  box-shadow: inset 0 0 0 1px var(--console-corner);
+}
+.console-ticks-bar > .console-tick-closed {
+  background: repeating-linear-gradient(180deg, var(--console-corner) 0 2px, transparent 2px 3px);
+}
+.console-ticks-bar > .console-tick-open {
+  height: 5px;
+  box-shadow: inset 0 0 0 1px var(--console-accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .console-cursor {
+    display: none;
+  }
+  .console-ticks > span,
+  .console-draw .console-leader,
+  .console-animate > * {
+    animation: none;
+  }
+}
+@media (width < 900px) {
+  .console-subject-band {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .console-link {
+    display: none;
+  }
+}
+@media (width < 640px) {
+  .console-identity-block {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .console-readout-rows > div {
+    grid-template-columns: 7rem minmax(0, 1fr);
+  }
+  .console-bar:has(> .console-mark) {
+    padding-right: 28px;
+  }
+  .console-bar > .console-mark {
+    display: none;
+  }
+}
+@media (width < 400px) {
+  .console-band,
+  .console-rows li {
+    padding-inline: 14px;
+  }
+  .console-identity-block {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .console-lead {
+    flex-wrap: wrap;
+    gap: 2px 0;
   }
 }

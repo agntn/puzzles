@@ -11,27 +11,72 @@ import {
 } from "@agntn/puzzles/tools";
 import type { BalanceAnswer } from "../../../server/api/balance/[...id]";
 import { balanceApiPath, balanceText } from "../../composables/useBalance";
-import { COLLECTIONS, STATUSES } from "../../utils/puzzles";
+import { CHAIN_ICONS, COLLECTIONS, STATUSES } from "../../utils/puzzles";
 import { WALK } from "../../utils/landing";
 import { toPuzzleView, type PuzzleView } from "../../utils/puzzle-view";
+import { addressLiteral, factoryName, statusLiteral } from "../../utils/samples";
 import { statusCountLabels } from "../../../../src/core/utils.ts";
-import { fetchErrorData, formatPrize, shellArg, shorten, verdictLabel } from "../../utils/format";
+import {
+  fetchErrorData,
+  formatPrize,
+  host,
+  hostPath,
+  shellArg,
+  shorten,
+  verdictLabel,
+} from "../../utils/format";
 
 type Operation = "show" | "list" | "verify" | "balance" | "collections" | "stats";
 
-const OPERATIONS: ReadonlyArray<{ key: Operation; label: string; tool: string }> = [
-  { key: "show", label: "Show", tool: facts.tools.show.name },
-  { key: "list", label: "List", tool: facts.tools.list.name },
-  { key: "verify", label: "Verify", tool: facts.tools.verify.name },
-  { key: "balance", label: "Balance", tool: facts.tools.balance.name },
-  { key: "collections", label: "Collections", tool: facts.tools.collections.name },
-  { key: "stats", label: "Stats", tool: facts.tools.stats.name },
+const OPERATIONS: ReadonlyArray<{
+  key: Operation;
+  label: string;
+  tool: string;
+  description: string;
+}> = [
+  {
+    key: "show",
+    label: "Show",
+    tool: facts.tools.show.name,
+    description: facts.tools.show.description,
+  },
+  {
+    key: "list",
+    label: "List",
+    tool: facts.tools.list.name,
+    description: facts.tools.list.description,
+  },
+  {
+    key: "verify",
+    label: "Verify",
+    tool: facts.tools.verify.name,
+    description: facts.tools.verify.description,
+  },
+  {
+    key: "balance",
+    label: "Balance",
+    tool: facts.tools.balance.name,
+    description: facts.tools.balance.description,
+  },
+  {
+    key: "collections",
+    label: "Collections",
+    tool: facts.tools.collections.name,
+    description: facts.tools.collections.description,
+  },
+  {
+    key: "stats",
+    label: "Stats",
+    tool: facts.tools.stats.name,
+    description: facts.tools.stats.description,
+  },
 ];
 
 const NOTES: Readonly<Record<Operation, string>> = {
   show: "",
   verify: "",
-  balance: "",
+  balance:
+    "The worker asks the chain's explorer and caches the answer for five minutes. Ethereum needs the Etherscan key the worker holds. The CLI reads yours from ETHERSCAN_API_KEY.",
   list: `A page holds ${facts.parameters.limit.maximum} puzzles at most. Ask for more and the tool says no, same as its schema.`,
   collections:
     "The rows puzzles collections prints. One per collection, with the author and a count per status.",
@@ -103,6 +148,10 @@ type Answer =
 
 const answer = ref<Answer | undefined>();
 const running = ref(false);
+/** Wall-clock milliseconds of the call that produced `answer`, measured in this page. */
+const elapsed = ref(0);
+/** Counts answers so the scan line runs once per new one. */
+const scan = ref(0);
 let sequence = 0;
 
 function failure(error: unknown): ErrorAnswer {
@@ -225,6 +274,7 @@ function compute(): Promise<Answer> {
 async function run() {
   const mine = ++sequence;
   running.value = true;
+  const started = performance.now();
   let next: Answer;
   try {
     next = await compute();
@@ -232,12 +282,24 @@ async function run() {
     next = failure(error);
   }
   if (mine === sequence) {
+    elapsed.value = Math.round(performance.now() - started);
     answer.value = next;
     running.value = false;
+    scan.value += 1;
   }
 }
 
 const current = computed(() => OPERATIONS.find((row) => row.key === operation.value)!);
+
+/** The header line of the response instrument: the tool and its argument as one call. */
+const call = computed(() =>
+  needsId.value ? `${current.value.tool}("${id.value.trim()}")` : `${current.value.tool}()`,
+);
+
+/** Where the answer came from, for the footer. Only a balance leaves the page. */
+const locality = computed(() =>
+  operation.value === "balance" ? "Docs worker / chain explorer" : "Local dataset / no network",
+);
 
 /** The same call as one CLI line. */
 const cliLine = computed(() => {
@@ -361,310 +423,972 @@ const shareLink = computed(() => {
   url.search = new URLSearchParams(shareQuery.value).toString();
   return url.toString();
 });
+
+/** What the response header shows on the right: the state of the call, never a decoration. */
+const verdict = computed(() => {
+  const value = answer.value;
+  if (value?.kind !== "verify") return undefined;
+  return {
+    label: verdictLabel(value.verified, value.unavailable),
+    klass: value.verified ? "puzzles-state-ok" : value.unavailable ? "" : "puzzles-state-failed",
+  };
+});
+
+/**
+ * The subject glyph of a verdict: the shield the outcome earns.
+ *
+ * @param {boolean} verified - Whether the key derived the address.
+ * @param {boolean} unavailable - Whether there was nothing to derive.
+ * @returns {string} The Lucide icon name.
+ */
+function verdictIcon(verified: boolean, unavailable: boolean): string {
+  if (verified) return "i-lucide-shield-check";
+  return unavailable ? "i-lucide-shield-question" : "i-lucide-shield-x";
+}
+
+/**
+ * One tick per transaction: money in stays hatched, money out opens in the accent.
+ *
+ * @param {PuzzleView} view - The record on screen.
+ * @returns {("closed" | "open")[]} One entry per transaction, in record order.
+ */
+function transactionTicks(view: PuzzleView): ("closed" | "open")[] {
+  return view.transactionRows.map((row) =>
+    /sweep|claim|decrease/u.test(row.type) ? "open" : "closed",
+  );
+}
+
+/**
+ * One tick per puzzle in the dataset, the unsolved ones open.
+ *
+ * @param {StatsAnswer["cells"]} cells - The totals as the panel lists them.
+ * @returns {("closed" | "open")[]} Closed puzzles first, then the open ones.
+ */
+function statsTicks(cells: StatsAnswer["cells"]): ("closed" | "open")[] {
+  const count = (label: string) => Number(cells.find((cell) => cell.label === label)?.value ?? 0);
+  const unsolved = count("unsolved");
+  const closed = Math.max(count("total") - unsolved, 0);
+  return [
+    ...Array.from({ length: closed }, (): "closed" => "closed"),
+    ...Array.from({ length: unsolved }, (): "open" => "open"),
+  ];
+}
+
+/**
+ * One line under the record's name: what it is called, when it started and, when it did, when it
+ * was solved, plus how many transactions the record carries.
+ *
+ * @param {PuzzleView} view - The record on screen.
+ * @returns {string} The sentence.
+ */
+function recordSentence(view: PuzzleView): string {
+  const dates = [`started ${view.startedAt.slice(0, 10)}`];
+  if (view.solvedAt !== undefined) dates.push(`solved ${view.solvedAt.slice(0, 10)}`);
+  const count = `${view.transactions} ${view.transactions === 1 ? "transaction" : "transactions"}`;
+  return `${view.name} · ${dates.join(", ")}. ${count} on record.`;
+}
+
+/**
+ * The record as its module writes it, in one line: the factory, the address builder, the status
+ * when it is not the default and the key builder chain when the record has one.
+ *
+ * @param {PuzzleView} view - The record on screen.
+ * @returns {string} The literal, shortened to what identifies the record.
+ */
+function recordLiteral(view: PuzzleView): string {
+  const fields = [`address: ${addressLiteral(view)}`];
+  if (view.status !== "unsolved") fields.push(`status: ${statusLiteral(view.status)}`);
+  if (view.keyLiteral !== undefined) fields.push(`key: ${view.keyLiteral}`);
+  return `${factoryName(view.chain)}({\n${fields.map((field) => `  ${field},`).join("\n")}\n})`;
+}
+
+interface LiteralToken {
+  readonly text: string;
+  readonly cls: string;
+}
+
+/**
+ * Colors a record literal the way the landing colors its record file: builders and factories as
+ * functions, quoted values as strings, field names as keys, numbers as constants. The tokens
+ * concatenate back to the input; long quoted values are shortened for the screen only.
+ *
+ * @param {string} literal - The record literal.
+ * @returns {LiteralToken[]} The literal in order, each piece with its class.
+ */
+function literalTokens(literal: string): LiteralToken[] {
+  const pattern = /"[^"]*"|\b[A-Za-z_]\w*(?=\()|\b[a-z]\w*(?=:)|\bStatus\.\w+|\b\d+\b/gu;
+  const tokens: LiteralToken[] = [];
+  let last = 0;
+  for (const match of literal.matchAll(pattern)) {
+    const text = match[0];
+    if (match.index > last) tokens.push({ text: literal.slice(last, match.index), cls: "" });
+    const cls = text.startsWith('"')
+      ? "tok-str"
+      : /^\d/u.test(text)
+        ? "tok-const"
+        : literal[match.index + text.length] === ":"
+          ? "tok-key"
+          : "tok-fn";
+    tokens.push({
+      text: text.startsWith('"') ? `"${shorten(text.slice(1, -1), 12, 8)}"` : text,
+      cls,
+    });
+    last = match.index + text.length;
+  }
+  if (last < literal.length) tokens.push({ text: literal.slice(last), cls: "" });
+  return tokens;
+}
+
+/** The position of the operation among the six, for the file number on the bar. */
+const position = computed(() => OPERATIONS.findIndex((row) => row.key === operation.value) + 1);
+
+/** The response dialog's title: the call the text came from. */
+const responseTitle = computed(() => {
+  const value = answer.value;
+  if (value === undefined || value.kind === "error") return "";
+  return needsId.value ? `${current.value.tool} · ${id.value.trim()}` : current.value.tool;
+});
 </script>
 
 <template>
-  <div class="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-    <form class="puzzles-frame flex flex-col gap-5 self-start rounded-xl p-5" @submit.prevent>
-      <div class="puzzles-seg flex-wrap" role="group" aria-label="Operation">
-        <button
-          v-for="row in OPERATIONS"
-          :key="row.key"
-          type="button"
-          :aria-pressed="operation === row.key"
-          @click="operation = row.key"
-        >
-          {{ row.label }}
-        </button>
-      </div>
-
-      <label v-if="needsId" class="flex flex-col gap-1.5">
-        <span class="puzzles-eyebrow"
-          >id<span class="normal-case tracking-normal text-dimmed">
-            · collection/name, or the key of a singleton</span
+  <div class="playground">
+    <form class="tool-console console-wide" @submit.prevent>
+      <span class="console-cross console-cross-tl" aria-hidden="true">+</span>
+      <span class="console-cross console-cross-br" aria-hidden="true">+</span>
+      <header class="console-bar">
+        <span class="console-title"
+          ><span class="console-tag">Call</span>{{ current.tool
+          }}<span class="console-file"
+            >{{ String(position).padStart(2, "0") }} / {{ OPERATIONS.length }}</span
           ></span
         >
-        <input
-          v-model="id"
-          class="puzzles-field"
-          type="text"
-          placeholder="b1000/71, gsmg, zden/decred_janus"
-          spellcheck="false"
-          autocomplete="off"
-          list="puzzles-ids"
-        />
-        <datalist id="puzzles-ids">
-          <option v-for="sampleId in WALK" :key="sampleId" :value="sampleId" />
-        </datalist>
-      </label>
+        <span class="console-meta" aria-label="Supported hosts: MCP, Pi and OMP"
+          >MCP · Pi · OMP</span
+        >
+        <span class="console-mark" aria-hidden="true" />
+      </header>
+      <div class="console-ruler" aria-hidden="true"><span class="console-cursor" /></div>
 
-      <template v-if="isList">
-        <label class="flex flex-col gap-1.5">
-          <span class="puzzles-eyebrow">collection</span>
-          <select v-model="collection" class="puzzles-field">
-            <option value="">every collection</option>
-            <option v-for="row in COLLECTIONS" :key="row.key" :value="row.key">
-              {{ row.key }} · {{ row.title }}
-            </option>
-          </select>
-        </label>
-        <label class="flex flex-col gap-1.5">
-          <span class="puzzles-eyebrow">status</span>
-          <select v-model="status" class="puzzles-field">
-            <option value="">any status</option>
-            <option v-for="row in STATUSES" :key="row" :value="row">{{ row }}</option>
-          </select>
-        </label>
-        <div class="grid grid-cols-2 gap-3">
-          <label class="flex flex-col gap-1.5">
-            <span class="puzzles-eyebrow">limit</span>
-            <input
-              v-model="limit"
-              class="puzzles-field"
-              type="text"
-              inputmode="numeric"
-              spellcheck="false"
-            />
-          </label>
-          <label class="flex items-end gap-2 pb-2 text-sm text-muted">
-            <input
-              v-model="withPubkey"
-              type="checkbox"
-              class="size-4 accent-[var(--puzzles-fill)]"
-            />
-            <span>only with a public key</span>
-          </label>
-        </div>
-      </template>
-
-      <div v-if="needsId">
-        <p class="puzzles-eyebrow mb-2">samples · one per collection at least</p>
-        <div class="flex flex-wrap gap-1.5">
-          <button
-            v-for="sampleId in WALK"
-            :key="sampleId"
-            type="button"
-            class="puzzles-chip"
-            :class="{ 'puzzles-chip-ok': id.trim() === sampleId }"
-            @click="loadSample(sampleId)"
-          >
-            {{ sampleId }}
-          </button>
-        </div>
-      </div>
-      <p v-if="NOTES[operation] !== ''" class="text-[12px] leading-5 text-dimmed">
-        {{ NOTES[operation] }}
-      </p>
-      <p v-if="operation === 'balance'" class="text-[12px] leading-5 text-dimmed">
-        The worker asks the chain's explorer and caches the answer for five minutes. Ethereum needs
-        the Etherscan key the worker holds. The CLI reads yours from ETHERSCAN_API_KEY.
-      </p>
-    </form>
-
-    <div class="flex min-w-0 flex-col gap-4">
-      <div class="puzzles-frame overflow-hidden rounded-xl">
-        <div class="flex items-center justify-between gap-3 border-b border-muted px-4 py-3">
-          <p class="min-w-0 truncate font-mono text-xs text-muted">
-            <span class="text-dimmed">{{ current.tool }}</span>
-            <span class="ms-2 text-highlighted">{{ needsId ? `("${id.trim()}")` : "()" }}</span>
-          </p>
-          <span v-if="running" class="puzzles-state shrink-0">
-            <UIcon name="i-lucide-loader-circle" class="size-3 animate-spin" />
-            running
-          </span>
-          <span
-            v-else-if="answer?.kind === 'verify'"
-            class="puzzles-state shrink-0"
-            :class="
-              answer.verified
-                ? 'puzzles-state-ok'
-                : answer.unavailable
-                  ? ''
-                  : 'puzzles-state-failed'
-            "
-          >
-            {{ verdictLabel(answer.verified, answer.unavailable) }}
-          </span>
-          <span
-            v-else-if="answer?.kind === 'error'"
-            class="puzzles-state puzzles-state-failed shrink-0"
-          >
-            {{ answer.name }}
-          </span>
-        </div>
-
-        <div v-if="answer?.kind === 'show'" class="p-3">
-          <PuzzleCard :view="answer.view" compact />
-          <pre class="puzzles-tool mt-3 rounded-lg bg-muted! p-4! text-sm">{{ answer.text }}</pre>
-        </div>
-
-        <template v-else-if="answer?.kind === 'list'">
-          <ol class="divide-y divide-muted">
-            <li
-              v-for="row in answer.rows"
-              :key="row.id"
-              class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 px-4 py-2.5 font-mono text-[12px] sm:grid-cols-[10rem_6rem_7rem_minmax(0,1fr)]"
+      <div class="console-band playground-band-first playground-columns">
+        <div class="playground-column">
+          <p class="console-label console-rule-title">
+            <span
+              >Operation <span aria-hidden="true">[ {{ OPERATIONS.length }} ]</span></span
             >
-              <NuxtLink
-                :to="`/collections/${row.id}`"
-                class="truncate text-highlighted hover:underline"
-                >{{ row.id }}</NuxtLink
-              >
-              <StatusPill :status="row.status" />
-              <span class="hidden text-dimmed sm:block">{{ row.prize }}</span>
-              <button
-                type="button"
-                class="hidden truncate text-left text-muted hover:text-highlighted sm:block"
-                :title="row.address"
-                @click="loadSample(row.id)"
-              >
-                {{ shorten(row.address, 14, 8) }}
-              </button>
-            </li>
-          </ol>
-          <p class="border-t border-muted px-4 py-3 font-mono text-[11px] text-dimmed">
-            {{ answer.rows.length }} of {{ answer.matched }} matching puzzles · an id opens its
-            page, an address shows it here
+            <span class="console-mark" aria-hidden="true" />
           </p>
-        </template>
-
-        <div v-else-if="answer?.kind === 'verify'" class="px-4 py-4">
-          <p class="text-sm leading-6" :class="answer.verified ? 'text-highlighted' : 'text-muted'">
-            <template v-if="answer.verified">
-              The published key derives the stored address. This page just ran the derivation
-              itself.
-            </template>
-            <template v-else-if="answer.unavailable">
-              Nothing to derive: {{ answer.detail }}. A verdict, not an error, so the tool leaves
-              isError unset.
-            </template>
-            <template v-else>
-              The key on record doesn't derive the stored address: {{ answer.detail }}. The data
-              gate would've stopped this on main.
-            </template>
-          </p>
-          <pre class="puzzles-output mt-3 rounded-lg bg-muted text-sm">{{ answer.text }}</pre>
-        </div>
-
-        <div v-else-if="answer?.kind === 'balance'" class="px-4 py-4">
-          <p class="font-mono text-2xl text-highlighted">
-            {{ answer.balance.amount }} {{ answer.balance.symbol }}
-          </p>
-          <p class="mt-1 font-mono text-[11px] text-dimmed">
-            {{ answer.balance.confirmed }} confirmed · {{ answer.balance.unconfirmed }} unconfirmed
-            base units · {{ answer.balance.decimals }} decimals · fetched
-            {{ answer.balance.fetchedAt.slice(11, 19) }} UTC
-          </p>
-          <pre class="puzzles-output mt-3 rounded-lg bg-muted text-sm">{{ answer.text }}</pre>
-        </div>
-
-        <template v-else-if="answer?.kind === 'collections'">
-          <ol class="divide-y divide-muted">
-            <li
-              v-for="row in answer.rows"
+          <div role="group" aria-label="Operation" class="playground-ops console-draw">
+            <button
+              v-for="(row, index) in OPERATIONS"
               :key="row.key"
-              class="grid grid-cols-[7rem_3rem_1fr] gap-3 px-4 py-2.5 font-mono text-[12px] sm:grid-cols-[8rem_3rem_16rem_1fr]"
+              type="button"
+              class="console-lead"
+              :aria-pressed="operation === row.key"
+              @click="operation = row.key"
             >
-              <NuxtLink :to="`/collections/${row.key}`" class="text-highlighted hover:underline">{{
-                row.key
-              }}</NuxtLink>
-              <span class="text-muted">{{ row.total }}</span>
-              <span class="hidden text-dimmed sm:block">{{
-                statusCountLabels(row).join(" · ")
-              }}</span>
-              <span class="truncate text-muted">{{ row.author ?? "unknown" }}</span>
-            </li>
-          </ol>
-          <pre class="puzzles-output border-t border-muted text-sm">{{ answer.text }}</pre>
-        </template>
-
-        <template v-else-if="answer?.kind === 'stats'">
-          <FactGrid :facts="answer.cells.map((cell) => ({ ...cell, mono: true }))" :columns="4" />
-          <pre class="puzzles-output border-t border-muted text-sm">{{ answer.text }}</pre>
-        </template>
-
-        <div v-else-if="answer?.kind === 'error'" class="px-4 py-5">
-          <p class="text-sm leading-6 text-muted">{{ answer.message }}</p>
-          <p class="mt-2 font-mono text-[11px] text-dimmed">
-            Known collections: {{ COLLECTIONS.map((entry) => entry.key).join(", ") }}
-          </p>
+              <span class="console-tag">{{ row.label }}</span>
+              <span>{{ row.tool }}</span>
+              <span
+                class="console-leader"
+                aria-hidden="true"
+                :style="{ animationDelay: `${index * 60}ms` }"
+              />
+            </button>
+          </div>
+          <p class="console-about playground-tool-about">{{ current.description }}</p>
         </div>
 
-        <div v-else class="px-4 py-5">
-          <p class="inline-flex items-center gap-2 text-sm leading-6 text-dimmed">
-            <UIcon name="i-lucide-loader-circle" class="size-4 animate-spin" />
-            Loading the library and the first collection.
+        <div class="playground-column">
+          <p class="console-label console-rule-title">
+            <span
+              >{{ needsId ? "Input" : isList ? "Filters" : "Input" }}
+              <span aria-hidden="true"
+                >[ {{ needsId ? "id" : isList ? "collection · status · limit" : "none" }} ]</span
+              ></span
+            >
+            <span class="console-mark" aria-hidden="true" />
           </p>
+
+          <div v-if="needsId || isList" class="console-readout">
+            <dl class="console-readout-rows">
+              <div v-if="needsId">
+                <dt><label for="playground-id">id</label></dt>
+                <dd>
+                  <input
+                    id="playground-id"
+                    v-model="id"
+                    type="text"
+                    placeholder="b1000/71, gsmg, zden/decred_janus"
+                    spellcheck="false"
+                    autocomplete="off"
+                    list="puzzles-ids"
+                  />
+                  <datalist id="puzzles-ids">
+                    <option v-for="sampleId in WALK" :key="sampleId" :value="sampleId" />
+                  </datalist>
+                </dd>
+              </div>
+              <template v-else>
+                <div>
+                  <dt><label for="playground-collection">collection</label></dt>
+                  <dd>
+                    <select id="playground-collection" v-model="collection">
+                      <option value="">every collection</option>
+                      <option v-for="row in COLLECTIONS" :key="row.key" :value="row.key">
+                        {{ row.key }} · {{ row.title }}
+                      </option>
+                    </select>
+                  </dd>
+                </div>
+                <div>
+                  <dt><label for="playground-status">status</label></dt>
+                  <dd>
+                    <select id="playground-status" v-model="status">
+                      <option value="">any status</option>
+                      <option v-for="row in STATUSES" :key="row" :value="row">{{ row }}</option>
+                    </select>
+                  </dd>
+                </div>
+                <div>
+                  <dt><label for="playground-limit">limit</label></dt>
+                  <dd>
+                    <input
+                      id="playground-limit"
+                      v-model="limit"
+                      type="text"
+                      inputmode="numeric"
+                      spellcheck="false"
+                    />
+                  </dd>
+                </div>
+                <div>
+                  <dt><label for="playground-pubkey">public key</label></dt>
+                  <dd>
+                    <label class="console-check">
+                      <input id="playground-pubkey" v-model="withPubkey" type="checkbox" />
+                      <span>{{ withPubkey ? "only records with one" : "any record" }}</span>
+                    </label>
+                  </dd>
+                </div>
+              </template>
+            </dl>
+          </div>
+          <p v-else class="console-empty">
+            {{ current.tool }} takes no arguments. The call runs on the whole dataset.
+          </p>
+
+          <div v-if="needsId" class="console-chips" role="group" aria-label="Sample identifiers">
+            <button
+              v-for="sampleId in WALK"
+              :key="sampleId"
+              type="button"
+              :aria-pressed="id.trim() === sampleId"
+              @click="loadSample(sampleId)"
+            >
+              {{ sampleId }}
+            </button>
+          </div>
+
+          <p v-if="NOTES[operation] !== ''" class="console-note">{{ NOTES[operation] }}</p>
         </div>
       </div>
 
-      <div class="grid gap-4 md:grid-cols-2">
-        <div class="puzzles-frame overflow-hidden rounded-xl">
-          <div class="flex items-center justify-between gap-3 border-b border-muted px-4 py-3">
-            <p class="font-mono text-xs text-muted">
-              <UIcon
-                name="i-vscode-icons-file-type-shell"
-                class="me-1 inline size-3.5 align-[-2px]"
-              />
-              <span class="text-highlighted">CLI</span>
-            </p>
+      <div class="console-band playground-columns">
+        <div class="playground-column">
+          <p class="console-label console-rule-title">
+            <span>CLI <span aria-hidden="true">[ same call ]</span></span>
+            <span class="console-mark" aria-hidden="true" />
             <button
               type="button"
-              class="puzzles-copy"
+              class="console-button"
               :data-copied="copiedKey === 'cli'"
               @click="copy('cli', cliLine)"
             >
               <UIcon
                 :name="copiedKey === 'cli' ? 'i-lucide-check' : 'i-lucide-copy'"
-                class="size-3.5"
+                class="size-3"
+                aria-hidden="true"
               />
               {{ copiedKey === "cli" ? "copied" : "copy" }}
             </button>
-          </div>
-          <pre
-            class="puzzles-rotating"
-          ><code><span class="text-dimmed">$ </span>{{ cliLine }}</code></pre>
+          </p>
+          <pre class="console-snippet"><span>$ </span>{{ cliLine }}</pre>
         </div>
-
-        <div class="puzzles-frame overflow-hidden rounded-xl">
-          <div class="flex items-center justify-between gap-3 border-b border-muted px-4 py-3">
-            <p class="min-w-0 truncate font-mono text-xs text-muted">
+        <div class="playground-column">
+          <p class="console-label console-rule-title">
+            <span>Tool <span aria-hidden="true">[ what an MCP client sends ]</span></span>
+            <span class="console-mark" aria-hidden="true" />
+            <button
+              type="button"
+              class="console-button"
+              :data-copied="copiedKey === 'tool'"
+              @click="copy('tool', toolCall)"
+            >
               <UIcon
-                name="i-vscode-icons-file-type-json"
-                class="me-1 inline size-3.5 align-[-2px]"
+                :name="copiedKey === 'tool' ? 'i-lucide-check' : 'i-lucide-copy'"
+                class="size-3"
+                aria-hidden="true"
               />
-              <span class="text-highlighted">{{ current.tool }}</span>
-            </p>
-            <div class="flex shrink-0 items-center gap-1">
-              <button
-                type="button"
-                class="puzzles-copy"
-                :data-copied="copiedKey === 'link'"
-                @click="copy('link', shareLink)"
-              >
-                <UIcon
-                  :name="copiedKey === 'link' ? 'i-lucide-check' : 'i-lucide-arrow-up-right'"
-                  class="size-3.5"
-                />
-                {{ copiedKey === "link" ? "copied" : "permalink" }}
-              </button>
-              <button
-                type="button"
-                class="puzzles-copy"
-                :data-copied="copiedKey === 'tool'"
-                @click="copy('tool', toolCall)"
-              >
-                <UIcon
-                  :name="copiedKey === 'tool' ? 'i-lucide-check' : 'i-lucide-copy'"
-                  class="size-3.5"
-                />
-                {{ copiedKey === "tool" ? "copied" : "copy" }}
-              </button>
-            </div>
-          </div>
-          <pre class="puzzles-rotating"><code>{{ toolCall }}</code></pre>
+              {{ copiedKey === "tool" ? "copied" : "copy" }}
+            </button>
+          </p>
+          <pre class="console-snippet">{{ toolCall }}</pre>
         </div>
       </div>
-    </div>
+
+      <footer class="console-footer console-footer-plain">
+        <ul class="console-links">
+          <li>
+            <button
+              type="button"
+              :data-copied="copiedKey === 'link'"
+              @click="copy('link', shareLink)"
+            >
+              <span aria-hidden="true">→ </span
+              >{{ copiedKey === "link" ? "permalink copied" : "copy the permalink" }}
+            </button>
+          </li>
+        </ul>
+        <span class="console-meta">every state is a link</span>
+      </footer>
+    </form>
+
+    <section class="tool-console console-wide" aria-live="polite">
+      <span class="console-cross console-cross-tl" aria-hidden="true">+</span>
+      <span class="console-cross console-cross-br" aria-hidden="true">+</span>
+      <header class="console-bar">
+        <span class="console-title playground-call"
+          ><span class="console-tag">{{ current.label }}</span
+          >{{ call }}</span
+        >
+        <span v-if="running" class="console-meta playground-running">
+          <UIcon name="i-lucide-loader-circle" class="size-3 animate-spin" aria-hidden="true" />
+          running
+        </span>
+        <span v-else-if="answer?.kind === 'list'" class="console-meta"
+          ><span class="console-ticks-bar" aria-hidden="true"
+            ><span
+              v-for="row in answer.rows"
+              :key="row.id"
+              :class="
+                row.status === 'unsolved' ? 'console-tick-open' : 'console-tick-closed'
+              " /></span
+          >{{ answer.rows.length }} of {{ answer.matched }} matching</span
+        >
+        <span v-else-if="answer?.kind === 'collections'" class="console-meta"
+          ><span class="console-ticks-bar" aria-hidden="true"
+            ><span
+              v-for="row in answer.rows"
+              :key="row.key"
+              :class="row.unsolved > 0 ? 'console-tick-open' : 'console-tick-closed'" /></span
+          >{{ answer.rows.length }} collections</span
+        >
+        <span v-else-if="answer?.kind === 'show'" class="console-meta"
+          >{{ answer.view.status }} · {{ answer.view.prize }}</span
+        >
+        <span v-else-if="answer?.kind === 'error'" class="console-meta">{{ answer.name }}</span>
+        <span class="console-mark" aria-hidden="true" />
+      </header>
+      <div class="console-ruler" aria-hidden="true">
+        <span v-if="running" class="console-cursor console-cursor-busy" />
+        <span v-else-if="scan > 0" :key="scan" class="console-cursor" />
+      </div>
+
+      <template v-if="answer?.kind === 'show'">
+        <div class="console-band console-subject-band">
+          <div :key="scan" class="console-scan" aria-hidden="true" />
+          <div class="console-identity-block">
+            <ConsoleReticle
+              :key="answer.view.id"
+              :icon="CHAIN_ICONS[answer.view.chain] ?? 'i-lucide-link'"
+            />
+            <div class="console-name">
+              <span class="console-label">Record / {{ answer.view.collection }}</span>
+              <h3 class="console-name-mono">{{ answer.view.id }}</h3>
+              <p class="console-aliases">
+                <span class="console-chain"
+                  ><UIcon
+                    :name="CHAIN_ICONS[answer.view.chain] ?? 'i-lucide-link'"
+                    class="size-3.5"
+                  />{{ answer.view.chain }}</span
+                >
+                <span>{{ answer.view.kind }}</span>
+                <StatusPill :status="answer.view.status" />
+              </p>
+              <p class="console-about">{{ recordSentence(answer.view) }}</p>
+              <p class="console-label console-rule-title playground-literal-title">
+                <span>Record <span aria-hidden="true">[ as written ]</span></span>
+                <span class="console-mark" aria-hidden="true" />
+                <button
+                  type="button"
+                  class="console-button"
+                  :data-copied="copiedKey === 'record'"
+                  @click="copy('record', recordLiteral(answer.view))"
+                >
+                  <UIcon
+                    :name="copiedKey === 'record' ? 'i-lucide-check' : 'i-lucide-copy'"
+                    class="size-3"
+                    aria-hidden="true"
+                  />
+                  {{ copiedKey === "record" ? "copied" : "copy" }}
+                </button>
+              </p>
+              <pre
+                class="console-snippet playground-literal"
+              ><code><span v-for="(token, index) in literalTokens(recordLiteral(answer.view))" :key="index" :class="token.cls">{{ token.text }}</span></code></pre>
+            </div>
+          </div>
+          <div class="console-readout">
+            <svg class="console-link" viewBox="0 0 32 40" fill="none" aria-hidden="true">
+              <circle cx="3" cy="12" r="2.5" />
+              <path d="M5.5 12H14L22 20H32" />
+            </svg>
+            <dl :key="scan" class="console-readout-rows console-animate">
+              <div :style="{ animationDelay: '0ms' }">
+                <dt>Prize</dt>
+                <dd class="console-accent">{{ answer.view.prize }}</dd>
+              </div>
+              <div :style="{ animationDelay: '45ms' }">
+                <dt>Public key</dt>
+                <dd>{{ answer.view.pubkey ? "published" : "unknown" }}</dd>
+              </div>
+              <div :style="{ animationDelay: '90ms' }">
+                <dt>Key material</dt>
+                <dd>
+                  {{
+                    answer.view.secret === "none"
+                      ? answer.view.bits === undefined
+                        ? "none published"
+                        : `${answer.view.bits}-bit search width`
+                      : answer.view.secret
+                  }}
+                </dd>
+              </div>
+              <div :style="{ animationDelay: '135ms' }">
+                <dt>Verification</dt>
+                <dd>
+                  {{
+                    verdictLabel(
+                      answer.view.verdict === "verified",
+                      answer.view.verdict === "unavailable",
+                    )
+                  }}
+                </dd>
+              </div>
+              <div :style="{ animationDelay: '180ms' }">
+                <dt>Solved</dt>
+                <dd>
+                  {{
+                    answer.view.solvedAt === undefined
+                      ? answer.view.status === "unsolved"
+                        ? "not yet"
+                        : "unknown"
+                      : `${answer.view.solvedAt.slice(0, 10)} · ${answer.view.solveTime ?? ""}`
+                  }}
+                </dd>
+              </div>
+            </dl>
+            <div
+              v-if="answer.view.transactions > 0"
+              class="console-gauge"
+              :aria-label="`${answer.view.transactions} transactions on record`"
+            >
+              <span
+                class="console-ticks"
+                :class="{ 'console-ticks-dense': answer.view.transactions > 64 }"
+                aria-hidden="true"
+              >
+                <span
+                  v-for="(tick, index) in transactionTicks(answer.view)"
+                  :key="index"
+                  :class="tick === 'open' ? 'console-tick-open' : 'console-tick-closed'"
+                  :style="{ animationDelay: `${Math.min(index * 12, 720)}ms` }"
+                />
+              </span>
+              <span class="console-gauge-read">tx {{ answer.view.transactions }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="console-band playground-trail">
+          <dl class="playground-channels">
+            <dt class="console-label">Links <span aria-hidden="true">[ 3 ]</span></dt>
+            <dd class="console-lead">
+              <span class="console-tag">page</span>
+              <NuxtLink :to="`/collections/${answer.view.id}`"
+                >/collections/{{ answer.view.id }}</NuxtLink
+              >
+              <span class="console-leader" aria-hidden="true" />
+            </dd>
+            <dd class="console-lead">
+              <span class="console-tag">explorer</span>
+              <a :href="answer.view.explorer" target="_blank" rel="noopener">{{
+                host(answer.view.explorer)
+              }}</a>
+              <span class="console-leader" aria-hidden="true" />
+            </dd>
+            <dd class="console-lead">
+              <span class="console-tag">source</span>
+              <a :href="answer.view.source" target="_blank" rel="noopener">{{
+                hostPath(answer.view.source)
+              }}</a>
+              <span class="console-leader" aria-hidden="true" />
+            </dd>
+          </dl>
+          <div class="playground-target">
+            <dl class="console-address">
+              <dt class="console-label">
+                Address <span aria-hidden="true">[ {{ answer.view.kind }} ]</span>
+              </dt>
+              <dd class="console-node">{{ answer.view.address }}</dd>
+            </dl>
+            <div class="playground-balance">
+              <span class="console-label"
+                >Balance <span aria-hidden="true">[ explorer ]</span></span
+              >
+              <BalanceLine :id="answer.view.id" :status="answer.view.status" />
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template v-else-if="answer?.kind === 'list'">
+        <ol
+          v-if="answer.rows.length > 0"
+          :key="scan"
+          class="console-rows console-animate playground-list"
+        >
+          <li
+            v-for="(row, index) in answer.rows"
+            :key="row.id"
+            :style="{ animationDelay: `${Math.min(index * 30, 600)}ms` }"
+          >
+            <NuxtLink :to="`/collections/${row.id}`">{{ row.id }}</NuxtLink>
+            <StatusPill :status="row.status" />
+            <span class="playground-prize">{{ row.prize }}</span>
+            <span class="playground-address">
+              <span class="console-leader" aria-hidden="true" />
+              <button type="button" :title="row.address" @click="loadSample(row.id)">
+                {{ shorten(row.address, 14, 8) }}
+              </button>
+            </span>
+          </li>
+        </ol>
+        <p v-else class="console-band console-empty playground-band-empty">No record matches.</p>
+      </template>
+
+      <template v-else-if="answer?.kind === 'collections'">
+        <ol :key="scan" class="console-rows console-animate playground-collections">
+          <li
+            v-for="(row, index) in answer.rows"
+            :key="row.key"
+            :style="{ animationDelay: `${Math.min(index * 30, 600)}ms` }"
+          >
+            <NuxtLink :to="`/collections/${row.key}`">{{ row.key }}</NuxtLink>
+            <span class="playground-author">{{ row.author ?? "unknown" }}</span>
+            <span class="playground-statuses">{{ statusCountLabels(row).join(" · ") }}</span>
+            <span class="playground-count"
+              ><span class="console-leader" aria-hidden="true" />{{ row.total }}</span
+            >
+          </li>
+        </ol>
+      </template>
+
+      <div v-else-if="answer?.kind === 'verify'" class="console-band console-subject-band">
+        <div :key="scan" class="console-scan" aria-hidden="true" />
+        <div class="console-identity-block">
+          <ConsoleReticle
+            :key="`${id}-${answer.verified}`"
+            :icon="verdictIcon(answer.verified, answer.unavailable)"
+          />
+          <div class="console-name">
+            <span class="console-label">Verdict / {{ id.trim() }}</span>
+            <h3>{{ verdictLabel(answer.verified, answer.unavailable) }}</h3>
+            <p class="console-about">
+              <template v-if="answer.verified">
+                The published key derives the stored address. This page just ran the derivation
+                itself.
+              </template>
+              <template v-else-if="answer.unavailable">
+                Nothing to derive: {{ answer.detail }}. A verdict, not an error, so the tool leaves
+                isError unset.
+              </template>
+              <template v-else>
+                The key on record doesn't derive the stored address: {{ answer.detail }}. The data
+                gate would've stopped this on main.
+              </template>
+            </p>
+          </div>
+        </div>
+        <div v-if="answer.verified" class="console-readout">
+          <svg class="console-link" viewBox="0 0 32 40" fill="none" aria-hidden="true">
+            <circle cx="3" cy="12" r="2.5" />
+            <path d="M5.5 12H14L22 20H32" />
+          </svg>
+          <dl :key="scan" class="console-readout-rows console-animate">
+            <div :style="{ animationDelay: '0ms' }">
+              <dt>Derived</dt>
+              <dd class="console-accent">{{ answer.detail }}</dd>
+            </div>
+            <div :style="{ animationDelay: '45ms' }">
+              <dt>Matches</dt>
+              <dd>the stored address</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <div v-else-if="answer?.kind === 'balance'" class="console-band console-subject-band">
+        <div :key="scan" class="console-scan" aria-hidden="true" />
+        <div class="console-identity-block">
+          <ConsoleReticle
+            :key="answer.balance.id"
+            :icon="CHAIN_ICONS[answer.balance.chain] ?? 'i-lucide-link'"
+          />
+          <div class="console-name">
+            <span class="console-label">Balance / {{ answer.balance.chain }}</span>
+            <h3 class="console-name-mono">
+              {{ answer.balance.amount }} {{ answer.balance.symbol }}
+            </h3>
+            <p class="console-about">
+              What the explorer said for {{ answer.balance.id }} at
+              {{ answer.balance.fetchedAt.slice(11, 19) }} UTC. The worker keeps it for five
+              minutes.
+            </p>
+          </div>
+        </div>
+        <div class="console-readout">
+          <svg class="console-link" viewBox="0 0 32 40" fill="none" aria-hidden="true">
+            <circle cx="3" cy="12" r="2.5" />
+            <path d="M5.5 12H14L22 20H32" />
+          </svg>
+          <dl :key="scan" class="console-readout-rows console-animate">
+            <div :style="{ animationDelay: '0ms' }">
+              <dt>Confirmed</dt>
+              <dd class="console-accent">{{ answer.balance.confirmed }}</dd>
+            </div>
+            <div :style="{ animationDelay: '45ms' }">
+              <dt>Unconfirmed</dt>
+              <dd>{{ answer.balance.unconfirmed }}</dd>
+            </div>
+            <div :style="{ animationDelay: '90ms' }">
+              <dt>Decimals</dt>
+              <dd>{{ answer.balance.decimals }}</dd>
+            </div>
+            <div :style="{ animationDelay: '135ms' }">
+              <dt>Fetched</dt>
+              <dd>{{ answer.balance.fetchedAt }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <div v-else-if="answer?.kind === 'stats'" class="console-band console-subject-band">
+        <div :key="scan" class="console-scan" aria-hidden="true" />
+        <div class="console-identity-block">
+          <ConsoleReticle key="stats" icon="i-lucide-sigma" />
+          <div class="console-name">
+            <span class="console-label">Totals / every collection</span>
+            <h3 class="console-name-mono">{{ answer.cells[0]?.value }} puzzles</h3>
+            <p class="console-about">
+              Every collection loaded and counted. The data version is the hash of all of them, so a
+              changed record changes it.
+            </p>
+          </div>
+        </div>
+        <div class="console-readout">
+          <svg class="console-link" viewBox="0 0 32 40" fill="none" aria-hidden="true">
+            <circle cx="3" cy="12" r="2.5" />
+            <path d="M5.5 12H14L22 20H32" />
+          </svg>
+          <dl :key="scan" class="console-readout-rows console-animate">
+            <div
+              v-for="(cell, index) in answer.cells"
+              :key="cell.label"
+              :style="{ animationDelay: `${index * 45}ms` }"
+            >
+              <dt>{{ cell.label }}</dt>
+              <dd :class="{ 'console-accent': index === 0 }">{{ cell.value }}</dd>
+            </div>
+          </dl>
+          <div class="console-gauge" aria-label="One tick per puzzle, the unsolved ones open">
+            <span class="console-ticks console-ticks-dense" aria-hidden="true">
+              <span
+                v-for="(tick, index) in statsTicks(answer.cells)"
+                :key="index"
+                :class="tick === 'open' ? 'console-tick-open' : 'console-tick-closed'"
+                :style="{ animationDelay: `${Math.min(index * 3, 720)}ms` }"
+              />
+            </span>
+            <span class="console-gauge-read"
+              >open {{ answer.cells.find((cell) => cell.label === "unsolved")?.value }} /
+              {{ answer.cells[0]?.value }}</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        v-else-if="answer?.kind === 'error'"
+        class="console-band console-subject-band console-subject-band-single"
+      >
+        <div :key="scan" class="console-scan" aria-hidden="true" />
+        <div class="console-identity-block">
+          <ConsoleReticle :key="answer.message" icon="i-lucide-circle-alert" />
+          <div class="console-name">
+            <span class="console-label">Error / {{ current.tool }}</span>
+            <h3 class="console-name-mono">{{ answer.name }}</h3>
+            <p class="console-about">{{ answer.message }}</p>
+            <p class="console-note">
+              Known collections: {{ COLLECTIONS.map((entry) => entry.key).join(", ") }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div v-else class="console-band console-subject-band console-subject-band-single">
+        <p class="console-empty playground-loading">
+          <UIcon name="i-lucide-loader-circle" class="size-3.5 animate-spin" aria-hidden="true" />
+          Loading the library and the first collection.
+        </p>
+      </div>
+
+      <ConsoleResponse
+        v-if="answer !== undefined && answer.kind !== 'error'"
+        :title="responseTitle"
+        :text="answer.text"
+      />
+
+      <footer class="console-footer console-footer-plain">
+        <ul class="console-links">
+          <li v-if="answer?.kind === 'show'">
+            <NuxtLink :to="`/collections/${answer.view.id}`"
+              ><span aria-hidden="true">→ </span>puzzle page</NuxtLink
+            >
+          </li>
+          <li v-if="answer?.kind === 'show' || answer?.kind === 'balance'">
+            <button type="button" @click="operation = operation === 'show' ? 'verify' : 'show'">
+              <span aria-hidden="true">→ </span
+              >{{ operation === "show" ? "verify this record" : "show this record" }}
+            </button>
+          </li>
+        </ul>
+        <span class="console-meta"
+          >{{ locality.toLowerCase()
+          }}<template v-if="answer !== undefined">
+            · {{ running ? "running" : `${elapsed} ms` }}</template
+          ></span
+        >
+      </footer>
+    </section>
   </div>
 </template>
+
+<style scoped>
+.playground {
+  display: grid;
+  gap: 40px;
+}
+.playground-columns {
+  display: grid;
+  gap: 24px 48px;
+}
+.playground-column {
+  min-width: 0;
+}
+@media (width >= 56rem) {
+  .playground-columns {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+@media (width >= 80rem) {
+  .playground-ops {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* The playground carries more rows than a dossier, so its bands breathe a little wider. */
+.playground .console-bar {
+  padding-block: 12px;
+}
+.playground .console-band {
+  padding: 22px 24px 24px;
+}
+.playground .console-rule-title {
+  margin-bottom: 18px;
+}
+.playground .console-readout-rows > div {
+  padding: 12px 16px;
+}
+.playground .console-chips {
+  gap: 8px;
+  margin-top: 18px;
+}
+.playground .console-chips button {
+  padding: 3px 9px;
+}
+.playground .console-note {
+  margin-top: 16px;
+  line-height: 1.8;
+}
+.playground .console-snippet {
+  padding: 12px 16px;
+  line-height: 1.8;
+}
+.playground .console-footer {
+  padding: 14px 24px;
+}
+.playground .console-rows li {
+  padding: 12px 24px;
+}
+.playground .console-lead {
+  margin-top: 12px;
+}
+.playground-band-first {
+  border-top: 0;
+}
+.playground-tool-about {
+  margin-top: 20px;
+  font-size: 14px;
+}
+.playground-literal-title {
+  margin: 18px 0 10px;
+}
+.playground-literal {
+  font-size: 11.5px;
+  overflow: visible;
+}
+.playground-ops {
+  display: grid;
+  gap: 0 40px;
+  margin-top: -12px;
+}
+.playground-ops .console-lead {
+  padding: 2px 0;
+}
+.playground-ops .console-lead > span:not(.console-tag, .console-leader) {
+  white-space: nowrap;
+}
+.playground-trail {
+  gap: 24px 36px;
+}
+.playground-balance {
+  margin-top: 16px;
+}
+@media (width < 400px) {
+  .playground .console-band,
+  .playground .console-footer,
+  .playground .console-rows li {
+    padding-inline: 14px;
+  }
+}
+.playground-ops .console-lead > span:not(.console-tag, .console-leader) {
+  color: var(--ui-text-muted);
+}
+.playground-ops .console-lead[aria-pressed="true"] > span:not(.console-tag, .console-leader),
+.playground-ops .console-lead:hover > span:not(.console-tag, .console-leader) {
+  color: var(--ui-text-highlighted);
+}
+.playground-call {
+  overflow-wrap: anywhere;
+}
+.playground-running {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.playground-trail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.playground-channels {
+  margin: 0;
+  min-width: 0;
+}
+.playground-channels dt > span,
+.playground-target dt > span,
+.playground-balance > .console-label > span {
+  color: var(--ui-text-dimmed);
+}
+.playground-target {
+  min-width: 0;
+}
+.playground-target .console-address {
+  margin: 0;
+}
+.playground-balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+.playground-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.playground-band-empty {
+  margin: 0;
+}
+.playground-list li {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.playground-prize,
+.playground-address {
+  display: none;
+}
+.playground-prize {
+  color: var(--ui-text-dimmed);
+}
+.playground-address {
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.playground-collections li {
+  grid-template-columns: 8rem minmax(0, 1fr) auto;
+}
+.playground-author {
+  color: var(--ui-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.playground-statuses {
+  display: none;
+  color: var(--ui-text-dimmed);
+}
+.playground-count {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 4rem;
+  color: var(--ui-text-highlighted);
+}
+@media (width >= 40rem) {
+  .playground-list li {
+    grid-template-columns: 12rem 6rem 7rem minmax(0, 1fr);
+  }
+  .playground-prize {
+    display: block;
+  }
+  .playground-address {
+    display: flex;
+  }
+  .playground-collections li {
+    grid-template-columns: 8rem 10rem minmax(0, 1fr) 6rem;
+  }
+  .playground-statuses {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+@media (width < 900px) {
+  .playground-trail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+</style>
