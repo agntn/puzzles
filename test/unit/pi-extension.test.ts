@@ -1,7 +1,7 @@
 import { fileURLToPath } from "node:url";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { createJiti } from "jiti/static";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import puzzlesExtension from "../../packages/pi/extensions/puzzles.ts";
 import { facts } from "../../src/tool-operations.ts";
 

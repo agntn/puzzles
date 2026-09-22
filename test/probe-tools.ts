@@ -16,6 +16,9 @@ registerHooks({
     return nextLoad(url, context);
   },
 });
+/* The packed build puts `Puzzle` in the collection chunk, so both names count as the dataset. */
+const datasetModule =
+  /\/(?:core|_chunks)\/(?:dataset|registry|puzzle|collection)\d*\.(?:ts|mjs)(?:[?#]|$)/u;
 const entry = (relative: string): string => pathToFileURL(path.join(root, relative)).href;
 const started = performance.now();
 let call: (name: string, args: Readonly<Record<string, unknown>>) => Promise<unknown>;
@@ -78,8 +81,7 @@ try {
       loaded.filter(
         (url) =>
           /\/node_modules\/@agntn\/chains\//u.test(url) ||
-          (url.startsWith(`${entry(".")}/`) &&
-            /\/(?:core|_chunks)\/(?:dataset|registry|puzzle)\d*\.(?:ts|mjs)(?:[?#]|$)/u.test(url)),
+          (url.startsWith(`${entry(".")}/`) && datasetModule.test(url)),
       ),
       [],
       "tool discovery must not load the dataset or chain implementations",

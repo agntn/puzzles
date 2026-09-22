@@ -1,5 +1,5 @@
 import { Value } from "typebox/value";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import { puzzleToolSchemas } from "../../packages/shared/puzzles-tool-schemas.ts";
 import { chains } from "../../src/core/chains.ts";
 import { InvalidArgumentError } from "../../src/core/errors.ts";

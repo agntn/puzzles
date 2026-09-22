@@ -58,19 +58,19 @@
     "access": "public"
   },
   "scripts": {
-    "build": "obuild",
-    "dev": "obuild --stub",
+    "build": "vp pack",
+    "dev": "vp pack --watch",
     "docs": "pnpm --dir docs dev",
     "fixtures": "node scripts/refresh-landing-fixtures.ts",
-    "lint": "pnpm build && oxlint . && oxfmt --check .",
-    "lint:fix": "pnpm build && oxlint . --fix && oxfmt .",
-    "typecheck": "tsc --noEmit --skipLibCheck && pnpm build && tsc -p tsconfig.extensions.json",
-    "test": "vitest --run",
-    "test:live": "PUZZLES_LIVE=1 vitest --run",
+    "lint": "vp pack && vp lint && vp fmt --check",
+    "lint:fix": "vp pack && vp lint --fix && vp fmt",
+    "typecheck": "vp pack && vp check --no-fmt --no-lint && tsc -p tsconfig.extensions.json",
+    "test": "vp test",
+    "test:live": "PUZZLES_LIVE=1 vp test",
     "test:packed": "node test/eval-packed.ts",
-    "test:watch": "vitest",
-    "prepack": "pnpm run build",
-    "release": "pnpm test && pnpm build && changelogen --release --push"
+    "test:watch": "vp test watch",
+    "prepack": "vp pack",
+    "release": "vp test && vp pack && changelogen --release --push"
   },
   "dependencies": {
     "@agntn/chains": "0.3.8",
@@ -91,12 +91,9 @@
     "@types/node": "26.2.0",
     "changelogen": "0.6.2",
     "jiti": "2.7.0",
-    "obuild": "0.4.40",
-    "oxfmt": "0.63.0",
-    "oxlint": "1.78.0",
-    "oxlint-tsgolint": "7.0.2002",
     "typescript": "7.0.2",
-    "vitest": "4.1.11"
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": ">=0.84.2 <1",

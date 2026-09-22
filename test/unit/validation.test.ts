@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { resolve, sep } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import { isValidAddress, isValidTransactionId } from "../../src/core/chains.ts";
 import {
   addressesEqual,

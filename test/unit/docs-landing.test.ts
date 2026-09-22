@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import { authorRows } from "../../docs/app/utils/authors.ts";
 import { collectionFacts } from "../../docs/app/utils/collections.ts";
 import {

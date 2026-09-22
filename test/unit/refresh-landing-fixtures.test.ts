@@ -11,7 +11,7 @@ import {
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { promisify } from "node:util";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 import { refreshLandingFixtures } from "../../scripts/refresh-landing-fixtures.ts";
 
 const temporaryDirectories: string[] = [];
@@ -42,7 +42,7 @@ function copyFixtureCheckout(directory: string): void {
   );
   cpSync("docs/app/utils", join(directory, "docs", "app", "utils"), { recursive: true });
   cpSync("src", join(directory, "src"), { recursive: true });
-  cpSync("oxfmt.config.ts", join(directory, "oxfmt.config.ts"));
+  cpSync("vite.config.ts", join(directory, "vite.config.ts"));
   cpSync("package.json", join(directory, "package.json"));
   symlinkSync(resolve("node_modules"), join(directory, "node_modules"), "junction");
 }

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 import { b1000 } from "../../src/collections/b1000.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {

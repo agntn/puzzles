@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import { listTool } from "../../src/tool-operations.ts";
 
 const nextPage = "Next page: offset=50. Keep the same filters.";
