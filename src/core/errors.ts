@@ -3,6 +3,17 @@ export class PuzzlesError extends Error {
   override readonly name: string = "PuzzlesError";
 }
 
+/**
+ * Appends what a lookup knows about the miss, so the message ends in a full stop either way.
+ *
+ * @param {string} message - The miss itself.
+ * @param {string | undefined} detail - What does exist, when the caller knows.
+ * @returns {string} The message, with the detail behind it.
+ */
+function withDetail(message: string, detail: string | undefined): string {
+  return detail === undefined ? message : `${message}. ${detail}`;
+}
+
 /** Raised when a puzzle identifier can't be resolved. */
 export class PuzzleNotFoundError extends PuzzlesError {
   override readonly name = "PuzzleNotFoundError";
@@ -10,9 +21,12 @@ export class PuzzleNotFoundError extends PuzzlesError {
   /** The unresolved puzzle identifier. */
   readonly puzzleId: string;
 
-  /** Constructs a not found error for a puzzle identifier. */
-  constructor(puzzleId: string) {
-    super(`Puzzle not found: ${puzzleId}`);
+  /**
+   * Constructs a not found error for a puzzle identifier. The optional detail says what the
+   * caller could have asked for instead, so a miss does not cost a second lookup.
+   */
+  constructor(puzzleId: string, detail?: string) {
+    super(withDetail(`Puzzle not found: ${puzzleId}`, detail));
     this.puzzleId = puzzleId;
   }
 }
@@ -38,9 +52,9 @@ export class UnknownCollectionError extends PuzzlesError {
   /** The unresolved collection name. */
   readonly collection: string;
 
-  /** Constructs an unknown collection error. */
-  constructor(collection: string) {
-    super(`Unknown collection: ${collection}`);
+  /** Constructs an unknown collection error, with the keys that do resolve when known. */
+  constructor(collection: string, detail?: string) {
+    super(withDetail(`Unknown collection: ${collection}`, detail));
     this.collection = collection;
   }
 }

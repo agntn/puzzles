@@ -85,9 +85,25 @@ export abstract class Collection<Query> {
   requireId(id: string): Puzzle {
     const puzzle = this.#byId.get(id);
     if (puzzle === undefined) {
-      throw new PuzzleNotFoundError(id);
+      throw new PuzzleNotFoundError(id, this.#shape());
     }
     return puzzle;
+  }
+
+  /**
+   * What the collection does answer to, so a caller that guessed the identifier wrong can fix it
+   * from the error instead of listing the collection first.
+   *
+   * @returns {string} How many puzzles it holds and one identifier it resolves.
+   */
+  #shape(): string {
+    const example = this.#puzzles[0];
+    if (example === undefined) {
+      return `Collection ${this.key} holds no puzzles`;
+    }
+    const count = this.#puzzles.length;
+    const held = count === 1 ? "1 puzzle" : `${count} puzzles`;
+    return `Collection ${this.key} holds ${held}, for example ${example.id()}`;
   }
 
   /**

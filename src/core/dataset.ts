@@ -5,7 +5,13 @@ import type { Chain } from "./chains.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
 import { defined, frozen, type Hint, type Party } from "./parts.ts";
 import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
-import { type AnyCollection, collections, getCollection, requireCollection } from "./registry.ts";
+import {
+  type AnyCollection,
+  collections,
+  getCollection,
+  knownCollections,
+  requireCollection,
+} from "./registry.ts";
 import { filterPuzzles, prizeTotals, statusCounts } from "./utils.ts";
 
 /** Aggregate puzzle statistics. */
@@ -147,17 +153,25 @@ export async function get(id: string): Promise<Puzzle | undefined> {
 }
 
 /**
- * Looks up a puzzle or throws a typed not found error.
+ * Looks up a puzzle or throws a typed not found error. The error says what the identifier's
+ * collection does hold, or which collections exist when the identifier named none, so a caller
+ * that guessed wrong recovers without a second lookup.
  *
  * @param {string} id - Universal puzzle identifier.
  * @returns {Promise<Puzzle>} The puzzle.
  */
 export async function requirePuzzle(id: string): Promise<Puzzle> {
   const puzzle = await get(id);
-  if (puzzle === undefined) {
-    throw new PuzzleNotFoundError(id);
+  if (puzzle !== undefined) {
+    return puzzle;
   }
-  return puzzle;
+  const collection =
+    typeof id === "string" ? await getCollection(id.split("/")[0] ?? id) : undefined;
+  if (collection !== undefined) {
+    /* The collection exists and the identifier is not one of its own, so this throws its shape. */
+    return collection.requireId(id);
+  }
+  throw new PuzzleNotFoundError(id, knownCollections());
 }
 
 /**

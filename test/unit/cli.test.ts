@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { describe, expect, it } from "vitest";
+import { collectionKeys } from "../../src/core/registry.ts";
 
 const execute = promisify(execFile);
 
@@ -239,11 +240,11 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("exits 1 on an unknown puzzle like show does", async () => {
-    await expect(failure("hints", "nope/1")).resolves.toEqual({
-      code: 1,
-      stdout: "",
-      stderr: "Puzzle not found: nope/1\n",
-    });
+    const result = await failure("hints", "nope/1");
+
+    expect(result.code).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toMatch(/^Puzzle not found: nope\/1\. Known collections: arweave, /u);
   });
 
   it("lists a single collection filtered by status", async () => {
@@ -373,11 +374,39 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("prints an unknown puzzle as one line and exits 1", async () => {
-    await expect(failure("show", "nope/1")).resolves.toEqual({
-      code: 1,
-      stdout: "",
-      stderr: "Puzzle not found: nope/1\n",
-    });
+    const result = await failure("show", "nope/1");
+
+    expect(result.code).toBe(1);
+    expect(result.stdout).toBe("");
+    expect(result.stderr.split("\n")).toHaveLength(2);
+    expect(result.stderr).toContain("Puzzle not found: nope/1.");
+  });
+
+  it("names the collections a caller could have asked for instead", async () => {
+    const result = await failure("show", "135");
+
+    expect(result.code).toBe(1);
+    expect(result.stderr.trim()).toBe(
+      `Puzzle not found: 135. Known collections: ${collectionKeys().join(", ")}`,
+    );
+  });
+
+  it("says what the collection holds when only the puzzle is wrong", async () => {
+    const result = await failure("show", "b1000/99999");
+
+    expect(result.code).toBe(1);
+    expect(result.stderr.trim()).toMatch(
+      /^Puzzle not found: b1000\/99999\. Collection b1000 holds \d+ puzzles, for example b1000\/1$/u,
+    );
+  });
+
+  it("names the known collections when a filter is not one", async () => {
+    const result = await failure("list", "--collection", "bitcoin");
+
+    expect(result.code).toBe(1);
+    expect(result.stderr.trim()).toBe(
+      `Unknown collection: bitcoin. Known collections: ${collectionKeys().join(", ")}`,
+    );
   });
 
   it("names the accepted statuses when the filter is not one", async () => {
@@ -408,7 +437,7 @@ describe.concurrent("puzzles CLI", () => {
     await expect(failure("show", "nope\n\u001B[31mx")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: "Puzzle not found: nope  [31mx\n",
+      stderr: `Puzzle not found: nope  [31mx. Known collections: ${collectionKeys().join(", ")}\n`,
     });
   });
 });
