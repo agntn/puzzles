@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@agntn/chains':
-        specifier: 0.3.7
-        version: 0.3.7(supports-color@10.2.2)(typebox@1.3.32)(zod@4.6.5)
+        specifier: 0.3.8
+        version: 0.3.8(supports-color@10.2.2)(typebox@1.3.32)(zod@4.6.5)
       '@agntn/explorers':
         specifier: 0.5.4
         version: 0.5.4(supports-color@10.2.2)(typebox@1.3.32)
       '@agntn/keys':
-        specifier: 0.3.0
-        version: 0.3.0(supports-color@10.2.2)(zod@4.6.5)
+        specifier: 0.3.2
+        version: 0.3.2(supports-color@10.2.2)(zod@4.6.5)
       '@noble/hashes':
         specifier: 2.4.0
         version: 2.4.0
@@ -51,8 +51,8 @@ importers:
 
 packages:
 
-  '@agntn/chains@0.3.7':
-    resolution: {integrity: sha512-fOn41suUaXtar+xk6civmzlgKon8Hu2ZjGTMiti5X5TBANRlwuGV19BUR5X/aNO9+UWp0mClKX8ftIWbMj0aKw==}
+  '@agntn/chains@0.3.8':
+    resolution: {integrity: sha512-O2MVJAg18jcsi+6WISopbKL4LYReKrv5ncLLQ6jeOeQnsp5bWyQ6+wYOzPnAfKLG4mSiqPLXfN6TNLCl6h4Phg==}
     engines: {node: '>=24'}
     hasBin: true
     peerDependencies:
@@ -81,8 +81,8 @@ packages:
       typebox:
         optional: true
 
-  '@agntn/keys@0.3.0':
-    resolution: {integrity: sha512-7pcCHNTgevJ+dZvK7B8+AU4aC9C7nSIT65Q5h7q/fibS6kuwPxxR88GDAms1pZFlZ6J91ygNojloaI1vtuvAMg==}
+  '@agntn/keys@0.3.2':
+    resolution: {integrity: sha512-bB6X6Ss2ep0vNUF7kpK4mhIMnyx3y07UaYwyJ81EqFH6OFX0Pqh7gG5el1g97GThKVesRAKI+bKBttY0ig7fqw==}
     engines: {node: '>=24'}
     hasBin: true
 
@@ -7410,7 +7410,7 @@ packages:
 
 snapshots:
 
-  '@agntn/chains@0.3.7(supports-color@10.2.2)(typebox@1.3.32)(zod@4.6.5)':
+  '@agntn/chains@0.3.8(supports-color@10.2.2)(typebox@1.3.32)(zod@4.6.5)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.30.0(supports-color@10.2.2)(zod@4.6.5)
       citty: 0.2.2
@@ -7423,7 +7423,7 @@ snapshots:
 
   '@agntn/explorers@0.5.4(supports-color@10.2.2)(typebox@1.3.32)':
     dependencies:
-      '@agntn/chains': 0.3.7(supports-color@10.2.2)(typebox@1.3.32)(zod@4.6.5)
+      '@agntn/chains': 0.3.8(supports-color@10.2.2)(typebox@1.3.32)(zod@4.6.5)
       '@modelcontextprotocol/sdk': 1.30.0(supports-color@10.2.2)(zod@4.6.5)
       citty: 0.2.2
       consola: 3.4.2
@@ -7435,7 +7435,7 @@ snapshots:
       - '@cfworker/json-schema'
       - supports-color
 
-  '@agntn/keys@0.3.0(supports-color@10.2.2)(zod@4.6.5)':
+  '@agntn/keys@0.3.2(supports-color@10.2.2)(zod@4.6.5)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.30.0(supports-color@10.2.2)(zod@4.6.5)
       '@noble/curves': 2.4.0
