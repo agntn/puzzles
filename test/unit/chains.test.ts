@@ -9,6 +9,7 @@ import {
   isValidAddress,
   isValidTransactionId,
   parseChain,
+  sameAddress,
   transactionExplorerUrl,
 } from "../../src/index.ts";
 
@@ -57,6 +58,41 @@ describe("chain metadata", () => {
     expect(isValidAddress(Chain.Bitcoin, "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")).toBe(false);
     expect(isValidAddress(Chain.Ethereum, "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")).toBe(true);
     expect(isValidAddress(Chain.Arweave, "not base64url!")).toBe(false);
+  });
+
+  it("compares addresses in the case each chain actually fixes", () => {
+    /* EIP-55 spends letter case on a checksum, so the explorer's spelling is the record's. */
+    expect(
+      sameAddress(
+        Chain.Ethereum,
+        "0x5d663791e869ca70c71e0a5f4cfd707f596265aa",
+        "0x5D663791E869Ca70C71E0A5F4cfD707f596265aa",
+      ),
+    ).toBe(true);
+    /* Bech32 is defined in either case, and never in both at once. */
+    expect(
+      sameAddress(
+        Chain.Bitcoin,
+        "bc1q94ecsn0qk8lap2gefrycnms3ruepy889z969a6",
+        "BC1Q94ECSN0QK8LAP2GEFRYCNMS3RUEPY889Z969A6",
+      ),
+    ).toBe(true);
+    /* Base58 is not: a recased string is a different address, and fails its own checksum. */
+    expect(
+      sameAddress(
+        Chain.Bitcoin,
+        "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+        "1bggz9tcn4rm9kbzdn7kprqz87sz26samh",
+      ),
+    ).toBe(false);
+    expect(
+      sameAddress(
+        Chain.Ethereum,
+        "0x5d663791e869ca70c71e0a5f4cfd707f596265aa",
+        "0x6b2560b34c7469c561a8fce581c88bfb8cce73b2",
+      ),
+    ).toBe(false);
+    expect(sameAddress(Chain.Bitcoin, "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH", "")).toBe(false);
   });
 
   it("checks transaction identifiers through @agntn/chains", () => {

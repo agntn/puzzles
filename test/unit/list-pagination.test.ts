@@ -88,6 +88,42 @@ describe("puzzle list pagination", () => {
     expect(crossed.details).toMatchObject({ matched: 0, returned: 0, ids: [] });
   });
 
+  it("finds the puzzle behind an address, whatever case it arrives in", async () => {
+    const base58 = await listTool({ address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH" });
+    const checksummed = await listTool({ address: "0x5D663791E869Ca70C71E0A5F4cfD707f596265aa" });
+    const shouted = await listTool({ address: "BC1Q94ECSN0QK8LAP2GEFRYCNMS3RUEPY889Z969A6" });
+
+    expect(base58.details).toMatchObject({ matched: 1, returned: 1, ids: ["b1000/1"] });
+    expect(checksummed.details["ids"]).toEqual(["zden/xixoio"]);
+    expect(shouted.details["ids"]).toEqual(["movie_enigma"]);
+    expect(base58.content[0]?.text).toContain("1 matching puzzles");
+  });
+
+  it("answers an address no puzzle pays to with an empty page, not an error", async () => {
+    const stranger = await listTool({
+      address: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+    });
+    const recased = await listTool({ address: "1bggz9tcn4rm9kbzdn7kprqz87sz26samh" });
+
+    expect(stranger.details).toMatchObject({ matched: 0, returned: 0, ids: [] });
+    expect(stranger.content[0]?.text).toContain("(none)");
+    expect(recased.details["ids"]).toEqual([]);
+  });
+
+  it("combines the address with the other filters instead of overriding them", async () => {
+    const wrongChain = await listTool({
+      address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+      chain: "ethereum",
+    });
+    const rightCollection = await listTool({
+      address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+      collection: "b1000",
+    });
+
+    expect(wrongChain.details).toMatchObject({ matched: 0, ids: [] });
+    expect(rightCollection.details["ids"]).toEqual(["b1000/1"]);
+  });
+
   it.each([-1, 0.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1])(
     "rejects invalid offset %s even without host validation",
     async (offset) => {

@@ -73,11 +73,13 @@ export const facts = {
       name: "puzzles_list",
       title: "List Puzzles",
       description:
-        "List puzzles filtered by collection, chain, status, and public key availability, in dataset order. When a next offset is returned, pass it as offset with the same filters to continue.",
-      promptSnippet: "Use puzzles_list to browse puzzles by collection, chain or status.",
+        "List puzzles filtered by target address, collection, chain, status, and public key availability, in dataset order. When a next offset is returned, pass it as offset with the same filters to continue.",
+      promptSnippet:
+        "Use puzzles_list to browse puzzles by collection, chain or status, or to find the puzzle an address belongs to.",
       promptGuidelines: [
         "Prefer a collection, chain or status filter over listing everything.",
         "Almost every puzzle is on Bitcoin, so a chain filter is the way to find the few that are not.",
+        "Given an address, pass it as address instead of listing the dataset and reading every row; an empty result means no puzzle pays to it.",
         "Follow the next offset with the same filters instead of raising limit and repeating earlier rows.",
       ],
       openWorld: false,
@@ -107,6 +109,12 @@ export const facts = {
       minLength: 1,
       maxLength: 100,
       description: "Universal puzzle identifier, for example b1000/90 or gsmg",
+    },
+    address: {
+      minLength: 1,
+      maxLength: 128,
+      description:
+        "The puzzle paying to this address. Case only matters where the chain says it does, so an EIP-55 Ethereum address and an uppercased bech32 one both resolve",
     },
     chain: { description: "Only puzzles on one blockchain" },
     collection: { maxLength: 50, description: "Collection key, for example b1000" },
@@ -145,6 +153,7 @@ export const facts = {
 
 /** Parameters accepted by the list tool. */
 export interface ListParams {
+  readonly address?: string;
   readonly chain?: string;
   readonly collection?: string;
   readonly limit?: number;
@@ -158,8 +167,9 @@ function text(value: string, details: Readonly<Record<string, unknown>>): ToolRe
 }
 
 /**
- * Enforces a text argument's length contract in the executor, so a host that skips
- * schema validation still hits the same limits as one that honors it.
+ * Enforces a text argument's type and length contract in the executor, so a host that skips
+ * schema validation still hits the same limits as one that honors it. A caller that sends
+ * something other than text gets the same rejection, not whatever `.length` does to it.
  *
  * @param {string} argument - Name of the argument that failed.
  * @param {string} value - Text the caller passed.
@@ -173,6 +183,7 @@ function assertLength(
 ): string {
   const minimum = limits.minLength ?? 0;
   if (
+    typeof value !== "string" ||
     value.length < minimum ||
     (limits.maxLength !== undefined && value.length > limits.maxLength)
   ) {
@@ -306,6 +317,10 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
   const limit = assertLimit(params.limit);
   const offset = assertOffset(params.offset);
   const filtered = await selectPuzzles({
+    address:
+      params.address === undefined
+        ? undefined
+        : assertLength("address", params.address, facts.parameters.address),
     chain: requireChain(params.chain),
     collection:
       params.collection === undefined

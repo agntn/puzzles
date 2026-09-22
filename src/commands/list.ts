@@ -8,13 +8,17 @@ import { formatPuzzle, parseStatus, requireChain, toJson } from "../core/utils.t
 export default defineCommand({
   meta: {
     name: "list",
-    description: "List puzzles, optionally filtered by collection, chain and status",
+    description: "List puzzles, optionally filtered by collection, address, chain and status",
   },
   args: {
     collection: {
       type: "positional",
       required: false,
       description: "Collection key, for example b1000",
+    },
+    address: {
+      type: "string",
+      description: "The puzzle paying to this address, in any case the chain accepts",
     },
     chain: {
       type: "string",
@@ -29,6 +33,7 @@ export default defineCommand({
   },
   async run({ args }) {
     const puzzles = await selectPuzzles({
+      address: args.address,
       chain: requireChain(args.chain),
       collection: args.collection,
       status: parseStatus(args.status),

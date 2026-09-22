@@ -61,6 +61,16 @@ describe("tool schemas and executors share one argument contract", () => {
     });
   });
 
+  it("takes an address as free text the executor bounds, not an enum", () => {
+    const { address } = facts.parameters;
+
+    expect(Value.Check(schemas.list, { address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH" })).toBe(true);
+    expect(Value.Check(schemas.list, { address: "" })).toBe(false);
+    expect(Value.Check(schemas.list, { address: "x".repeat(address.maxLength + 1) })).toBe(false);
+    expect(Value.Check(schemas.list, { address: 42 })).toBe(false);
+    expect(schemas.list.properties.address).toMatchObject(address);
+  });
+
   it("bounds identifiers and keys the same way on every tool", () => {
     const { id, collection, apiKey } = facts.parameters;
 
@@ -100,6 +110,13 @@ describe("tool schemas and executors share one argument contract", () => {
     await expect(
       listTool({ collection: "x".repeat(facts.parameters.collection.maxLength + 1) }),
     ).rejects.toThrow(/collection/);
+    await expect(listTool({ address: "" })).rejects.toThrow(/address/);
+    await expect(
+      listTool({ address: "x".repeat(facts.parameters.address.maxLength + 1) }),
+    ).rejects.toThrow(/address/);
+    for (const address of [42, null, {}, ["1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"]]) {
+      await expect(listTool({ address } as never)).rejects.toThrow(InvalidArgumentError);
+    }
     await expect(showTool("")).rejects.toThrow(/id/);
     await expect(showTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
     await expect(hintsTool("")).rejects.toThrow(/id/);
