@@ -37,7 +37,10 @@ try {
   await verifyTool(miss);
   assert.fail(`${miss} resolved to a puzzle`);
 } catch (error) {
-  assert.equal(error instanceof Error ? error.message : String(error), `Puzzle not found: ${miss}`);
+  assert.match(
+    error instanceof Error ? error.message : String(error),
+    new RegExp(`^Puzzle not found: ${miss}\\. Collection b1000 holds `, "u"),
+  );
 }
 
 assert.deepEqual([...roots].sort(), [], "a missing puzzle resolved the verification crypto");

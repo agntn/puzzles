@@ -134,9 +134,20 @@ export async function getCollection(name: string): Promise<AnyCollection | undef
 export async function requireCollection(name: string): Promise<AnyCollection> {
   const collection = await getCollection(name);
   if (collection === undefined) {
-    throw new UnknownCollectionError(name);
+    throw new UnknownCollectionError(name, knownCollections());
   }
   return collection;
+}
+
+/**
+ * The keys a caller could have named, listed for the error a miss carries. Nothing loads, so the
+ * sentence costs the caller a string rather than the whole dataset. Internal to the package: the
+ * root entry does not re-export it.
+ *
+ * @returns {string} `Known collections: arweave, b1000, ...`.
+ */
+export function knownCollections(): string {
+  return `Known collections: ${collectionKeys().join(", ")}`;
 }
 
 /**
