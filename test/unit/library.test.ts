@@ -120,6 +120,29 @@ describe("lazy collection registry", () => {
     ]);
   });
 
+  it("credits Level 4's published solution without adopting its example WIF", async () => {
+    const puzzle = await requirePuzzle("zden/level_4");
+    expect(puzzle.solver()).toEqual({
+      name: "mmorsl",
+      profiles: [{ name: "steemit", url: "https://steemit.com/@mmorsl" }],
+    });
+    expect(puzzle.assets()).toEqual({
+      puzzle: "level_4/puzzle.png",
+      solution: "level_4/solution.md",
+      source_url: "https://crypto.haluska.sk/crypto4.png",
+    });
+    expect(puzzle.assetLinks().map((asset) => asset.path)).toEqual([
+      "assets/zden/level_4/puzzle.png",
+      "assets/zden/level_4/solution.md",
+    ]);
+    expect(puzzle.toJSON().solver).toEqual({
+      name: "mmorsl",
+      profiles: [{ name: "steemit", url: "https://steemit.com/@mmorsl" }],
+    });
+    expect(puzzle.key()).toBeUndefined();
+    expect(puzzle.hasPrivateKey()).toBe(false);
+  });
+
   it("keeps the Genesis announcement without inventing a prize or key", async () => {
     const puzzle = await requirePuzzle("genesis/block");
     expect(puzzle.address()).toEqual({
