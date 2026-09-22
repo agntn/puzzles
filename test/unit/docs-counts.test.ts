@@ -127,6 +127,17 @@ describe("the prose counts what the registry ships", () => {
     expect(counts).toEqual([spellOut(WALK.length), spellOut(WALK.length)]);
   });
 
+  it("keeps Zden's documented key counts aligned with its records", () => {
+    const guide = readFileSync(path.join(root, "docs/content/2.collections/03.zden.md"), "utf8");
+    const zden = puzzles.filter((puzzle) => puzzle.collection() === "zden");
+    expect(countsIn(guide, "carry the public key")).toEqual([
+      spellOut(zden.filter((puzzle) => puzzle.hasPubkey()).length),
+    ]);
+    expect(countsIn(guide, "carry the private key")).toEqual([
+      spellOut(zden.filter((puzzle) => puzzle.hasPrivateKey()).length),
+    ]);
+  });
+
   it("finds the counts it checks", () => {
     expect(countsIn("Twelve collections on five chains, 12 collections", "collections")).toEqual([
       "twelve",
