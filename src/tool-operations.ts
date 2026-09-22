@@ -71,11 +71,12 @@ export const facts = {
     list: {
       name: "puzzles_list",
       title: "List Puzzles",
-      description: "List puzzles filtered by collection, status, and public key availability.",
+      description:
+        "List puzzles filtered by collection, status, and public key availability, in dataset order. When a next offset is returned, pass it as offset with the same filters to continue.",
       promptSnippet: "Use puzzles_list to browse puzzles by collection or status.",
       promptGuidelines: [
         "Prefer a collection or status filter over listing everything.",
-        "Raise limit only when the summary shows more matches than were returned.",
+        "Follow the next offset with the same filters instead of raising limit and repeating earlier rows.",
       ],
       openWorld: false,
     },
@@ -116,6 +117,11 @@ export const facts = {
       maximum: MAX_LIST_LIMIT,
       description: `Maximum puzzles to return (default ${DEFAULT_LIST_LIMIT})`,
     },
+    offset: {
+      minimum: 0,
+      maximum: Number.MAX_SAFE_INTEGER,
+      description: "Number of matching puzzles to skip (default 0). Use the returned next offset.",
+    },
     apiKey: {
       maxLength: 200,
       description: "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY",
@@ -132,6 +138,7 @@ export const facts = {
 export interface ListParams {
   readonly collection?: string;
   readonly limit?: number;
+  readonly offset?: number;
   readonly status?: string;
   readonly withPubkey?: boolean;
 }
@@ -180,6 +187,17 @@ function assertLimit(value: number | undefined): number {
   const { minimum, maximum } = facts.parameters.limit;
   if (!Number.isSafeInteger(value) || value < minimum || value > maximum) {
     throw new InvalidArgumentError("limit", `expected an integer from ${minimum} to ${maximum}`);
+  }
+  return value;
+}
+
+function assertOffset(value: number | undefined): number {
+  if (value === undefined) {
+    return 0;
+  }
+  const { minimum, maximum } = facts.parameters.offset;
+  if (!Number.isSafeInteger(value) || value < minimum || value > maximum) {
+    throw new InvalidArgumentError("offset", `expected an integer from ${minimum} to ${maximum}`);
   }
   return value;
 }
@@ -268,7 +286,7 @@ export async function hintsTool(id: string): Promise<ToolResult> {
  * Lists puzzles filtered by collection, status, and public key availability.
  *
  * @param {ListParams} params - Validated tool parameters.
- * @returns {Promise<ToolResult>} The matching puzzles, up to the requested limit.
+ * @returns {Promise<ToolResult>} One page, with a next offset only when more matches remain.
  */
 export async function listTool(params: ListParams): Promise<ToolResult> {
   const [{ selectPuzzles }, { parseStatus, formatPuzzle }] = await Promise.all([
@@ -276,6 +294,7 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
     import("./core/utils.ts"),
   ]);
   const limit = assertLimit(params.limit);
+  const offset = assertOffset(params.offset);
   const filtered = await selectPuzzles({
     collection:
       params.collection === undefined
@@ -284,15 +303,22 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
     status: parseStatus(params.status),
     withPubkey: params.withPubkey,
   });
-  const page = filtered.slice(0, limit);
-  const header =
-    filtered.length > page.length
-      ? `${page.length} of ${filtered.length} matching puzzles:`
-      : `${filtered.length} matching puzzles:`;
+  const page = filtered.slice(offset, offset + limit);
+  const end = offset + page.length;
+  const count =
+    filtered.length > page.length ? `${page.length} of ${filtered.length}` : `${filtered.length}`;
+  const position = offset === 0 ? "" : ` (offset ${offset})`;
   const body = page.length === 0 ? "(none)" : page.map((puzzle) => formatPuzzle(puzzle)).join("\n");
-  return text(`${header}\n${body}`, {
+  const lines = [`${count} matching puzzles${position}:`, body];
+  const more = end < filtered.length;
+  if (more) {
+    lines.push(`Next page: offset=${end}. Keep the same filters.`);
+  }
+  return text(lines.join("\n"), {
     matched: filtered.length,
     returned: page.length,
+    offset,
+    ...(more ? { nextOffset: end } : {}),
     ids: page.map((puzzle) => puzzle.id()),
   });
 }

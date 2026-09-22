@@ -31,6 +31,7 @@ export interface PuzzleToolFacts {
     readonly collection: TextLimits;
     readonly id: TextLimits;
     readonly limit: IntegerLimits;
+    readonly offset: IntegerLimits;
     readonly status: Described;
     readonly withPubkey: Described;
   };
@@ -59,6 +60,7 @@ export function puzzleToolSchemas(facts: PuzzleToolFacts) {
       status: Type.Optional(Type.Enum(statuses, parameters.status)),
       withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
       limit: Type.Optional(Type.Integer(parameters.limit)),
+      offset: Type.Optional(Type.Integer(parameters.offset)),
     }),
     verify: Type.Object({ id: puzzleId }),
     balance: Type.Object({

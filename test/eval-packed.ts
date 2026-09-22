@@ -286,6 +286,16 @@ async function assertPackedMcpServer(): Promise<void> {
     assert.match(firstText(shown), /b1000\/1/u);
     assertNotLoaded(otherCollections("b1000"), "showing a puzzle must not load other collections");
 
+    const page = await client.callTool({
+      name: "puzzles_list",
+      arguments: { collection: "b1000", offset: 1, limit: 1 },
+    });
+    assert.deepEqual(firstText(page).split("\n"), [
+      "1 of 256 matching puzzles (offset 1):",
+      "b1000/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "Next page: offset=2. Keep the same filters.",
+    ]);
+
     const listed = await client.callTool({ name: "puzzles_collections", arguments: {} });
     assert.equal(firstText(listed).trim().split("\n").length, expectedCollections.length);
   } finally {
@@ -306,6 +316,15 @@ async function assertPackedExtensions(): Promise<void> {
   assert.equal(ompShow.renderCall({ id: "b1000/1" }, {}, {}).text, "Show puzzle b1000/1");
   const result = await piShow.execute("packed-test", { id: "b1000/1" });
   assert.match(firstText(result), /b1000\/1/u);
+  for (const tools of [piTools, ompTools]) {
+    const page = await requireTool(tools, "puzzles_list").execute("packed-page", {
+      collection: "b1000",
+      offset: 255,
+      limit: 1,
+    });
+    assert.match(firstText(page), /^1 of 256 matching puzzles \(offset 255\):\nb1000\/256\t/u);
+    assert.doesNotMatch(firstText(page), /Next page:/u);
+  }
   assert.equal(
     ompShow.parameters?.safeParse?.({ id: "" }).success,
     false,

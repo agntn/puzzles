@@ -128,19 +128,19 @@ Plain output is tab-separated as `id  status  prize  address`, so `cut` and `awk
 
 MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same seven operations:
 
-| Tool                  | Arguments                                     | Reaches the network |
-| --------------------- | --------------------------------------------- | ------------------- |
-| `puzzles_stats`       | none                                          | no                  |
-| `puzzles_collections` | none                                          | no                  |
-| `puzzles_show`        | `id`                                          | no                  |
-| `puzzles_hints`       | `id`                                          | no                  |
-| `puzzles_list`        | `collection`, `status`, `withPubkey`, `limit` | no                  |
-| `puzzles_verify`      | `id`                                          | no                  |
-| `puzzles_balance`     | `id`, `apiKey`                                | yes                 |
+| Tool                  | Arguments                                               | Reaches the network |
+| --------------------- | ------------------------------------------------------- | ------------------- |
+| `puzzles_stats`       | none                                                    | no                  |
+| `puzzles_collections` | none                                                    | no                  |
+| `puzzles_show`        | `id`                                                    | no                  |
+| `puzzles_hints`       | `id`                                                    | no                  |
+| `puzzles_list`        | `collection`, `status`, `withPubkey`, `limit`, `offset` | no                  |
+| `puzzles_verify`      | `id`                                                    | no                  |
+| `puzzles_balance`     | `id`, `apiKey`                                          | yes                 |
 
 `puzzles_collections` prints the same rows as `puzzles collections` on the CLI, so an agent can discover keys without loading anything else first.
 
-`puzzles_list` returns 50 puzzles by default, 500 at most, and the header tells you how many actually matched. Filter by collection or status before raising the limit.
+`puzzles_list` returns 50 puzzles by default, 500 at most, and the header tells you how many actually matched. Follow the returned next offset with the same filters to read the next page without repeating earlier rows. No next offset means the end. Offsets count matches from zero in dataset order. Restart at zero if the dataset or filters change.
 
 ## Adding a puzzle
 

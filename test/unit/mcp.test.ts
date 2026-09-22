@@ -138,6 +138,26 @@ describe("puzzles MCP server", () => {
     expect(firstText(result)).toMatch(/^3 of \d+ matching puzzles:/);
   });
 
+  it("advertises and follows list offsets through the MCP transport", async () => {
+    const { tools } = await client.listTools();
+    const list = tools.find((tool) => tool.name === "puzzles_list");
+    expect(list?.inputSchema.properties?.["offset"]).toMatchObject(facts.parameters.offset);
+    expect(list?.description).toBe(facts.tools.list.description);
+
+    const result = await client.callTool({
+      name: "puzzles_list",
+      arguments: { collection: "b1000", offset: 1, limit: 1 },
+    });
+    expect(firstText(result).split("\n")).toEqual([
+      "1 of 256 matching puzzles (offset 1):",
+      "b1000/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "Next page: offset=2. Keep the same filters.",
+    ]);
+    const rejected = await client.callTool({ name: "puzzles_list", arguments: { offset: -1 } });
+    expect(rejected.isError).toBe(true);
+    expect(firstText(rejected)).toContain("Invalid arguments");
+  });
+
   it("rejects invalid arguments without throwing", async () => {
     const result = await client.callTool({ name: "puzzles_show", arguments: { id: "" } });
 
