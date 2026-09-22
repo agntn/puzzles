@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { b1000 } from "../../src/collections/b1000.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
+  Balance,
   BalanceProviderError,
   ethereumPuzzle,
   InvalidAddressError,
@@ -89,6 +90,45 @@ describe("Puzzle.balance", () => {
     expect(urls[0]).toContain("address=0x0000000000000000000000000000000000000000");
     expect(balance.confirmed).toBe(123n);
     expect(balance.unconfirmed).toBe(0n);
+  });
+
+  it("reports a wei precise Ethereum balance without rounding it", async () => {
+    stubFetch(() => json({ status: "1", message: "OK", result: "1234567890123456789" }));
+
+    const balance = await ethereum.balance({ apiKey: "top-secret" });
+
+    expect(balance.totalAmount()).toBe("1.234567890123456789");
+    expect(balance.confirmedAmount()).toBe("1.234567890123456789");
+    /* The double drops the last digits, which is why the amount methods exist. */
+    expect(String(balance.totalUnits())).toBe("1.2345678901234567");
+  });
+
+  it("writes a dust Ethereum balance in full instead of an exponent", async () => {
+    stubFetch(() => json({ status: "1", message: "OK", result: "1" }));
+
+    const balance = await ethereum.balance({ apiKey: "top-secret" });
+
+    expect(balance.totalAmount()).toBe("0.000000000000000001");
+    expect(String(balance.totalUnits())).toBe("1e-18");
+  });
+
+  it("trims a Bitcoin amount to its significant places and keeps a whole one whole", async () => {
+    stubFetch(() =>
+      json({
+        chain_stats: { funded_txo_sum: 1500, spent_txo_sum: 400 },
+        mempool_stats: { funded_txo_sum: 25, spent_txo_sum: 5 },
+      }),
+    );
+
+    const balance = await b1000.balance(1, { baseUrl: "https://example.test" });
+
+    expect(balance.totalAmount()).toBe("0.0000112");
+    expect(balance.confirmedAmount()).toBe("0.000011");
+    expect(new Balance("bitcoin", 200_000_000n, 0n).totalAmount()).toBe("2");
+  });
+
+  it("signs a total a mempool delta pushes below zero", () => {
+    expect(new Balance("decred", 0n, -50n).totalAmount()).toBe("-0.0000005");
   });
 
   it("rejects malformed provider data as a provider error", async () => {

@@ -548,7 +548,7 @@ const shareLink = computed(() => {
 
         <div v-else-if="answer?.kind === 'balance'" class="px-4 py-4">
           <p class="font-mono text-2xl text-highlighted">
-            {{ answer.balance.units }} {{ answer.balance.symbol }}
+            {{ answer.balance.amount }} {{ answer.balance.symbol }}
           </p>
           <p class="mt-1 font-mono text-[11px] text-dimmed">
             {{ answer.balance.confirmed }} confirmed · {{ answer.balance.unconfirmed }} unconfirmed

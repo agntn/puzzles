@@ -368,7 +368,7 @@ export async function balanceTool(id: string, apiKey?: string): Promise<ToolResu
   const balance = await puzzle.balance({
     apiKey: key ?? globalThis.process?.env["ETHERSCAN_API_KEY"],
   });
-  return text(`${puzzle.id()}: ${balance.totalUnits()} on ${balance.chain}`, {
+  return text(`${puzzle.id()}: ${balance.totalAmount()} on ${balance.chain}`, {
     id: puzzle.id(),
     chain: balance.chain,
     confirmed: balance.confirmed.toString(),

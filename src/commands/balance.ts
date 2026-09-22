@@ -25,7 +25,7 @@ export default defineCommand({
     printLine(
       args.json
         ? toJson(balance)
-        : `${puzzle.id()}: ${balance.totalUnits()} ${chainSymbol(balance.chain)}`,
+        : `${puzzle.id()}: ${balance.totalAmount()} ${chainSymbol(balance.chain)}`,
     );
   },
 });
