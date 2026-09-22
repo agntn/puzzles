@@ -105,8 +105,8 @@ Direct hex keys, decrypted WIFs, and complete BIP39 seed records all verify thro
 ```ts
 import { dataset, dataVersion } from "@agntn/puzzles";
 
-dataVersion(); // 12-char hash of the class data, stable across runtimes
-dataset(); // { version, data_version, collections }
+await dataVersion(); // 12-char hash of the class data, stable across runtimes
+await dataset(); // { version, data_version, collections }
 ```
 
 `dataVersion()` serializes the whole dataset the first time you call it, then caches. Fine once, wasteful in a loop.
@@ -116,9 +116,10 @@ dataset(); // { version, data_version, collections }
 ```bash
 puzzles stats [--json]
 puzzles collections [--json]
+puzzles authors [key] [--json]
 puzzles show b1000/90 [--json]
 puzzles hints b1000/71 [--json]
-puzzles list [collection] [--address <addr>] [--chain bitcoin] [--status unsolved] [--with-pubkey] [--json]
+puzzles list [collection] [--address <addr>] [--chain bitcoin] [--status unsolved] [--with-pubkey] [--limit 50] [--offset 50] [--json]
 puzzles balance b1000/71 [--api-key KEY] [--json]
 puzzles verify b1000/1 | puzzles verify --all [--quiet] [--json]
 puzzles export [--compact]
@@ -159,7 +160,7 @@ import { bitcoinPuzzle } from "../../core/puzzle.ts";
 import { funding, p2pkh } from "../../core/parts.ts";
 
 /** Puzzle `zden/level_6`. */
-export const zdenPuzzleLevel6 = bitcoinPuzzle({
+export const zdenLevel6 = bitcoinPuzzle({
   id: "zden/level_6",
   address: p2pkh("1…", "hash160…"),
   sourceUrl: "https://crypto.haluska.sk/",
@@ -168,7 +169,7 @@ export const zdenPuzzleLevel6 = bitcoinPuzzle({
 });
 ```
 
-Then import it in `src/collections/zden.ts` and append it to `static readonly puzzles`. Leave out every field the puzzle does not have: an absent field is how "no data" is spelled. A hint goes in as `official(text, source, confirmation(url))` or `community(…)`, with the URL it was published at and a second URL that shows the source said it, an archive capture for instance; one that holds for the whole collection goes to the collection constructor once, not into every record. `pnpm test` re-checks identifiers, key derivation, assets, hints, and the no nulls rule.
+Then import it in `src/collections/zden.ts` and append it to `static readonly puzzles`. Leave out every field the puzzle does not have: an absent field is how "no data" is spelled. New exports skip the `Puzzle` segment the older records still carry. A hint goes in as `official(text, source)` or `community(text, source)`, where `source` is the URL it was published at. That's all a hint needs. `confirmation(url)` is optional: an archive capture of that page, or another place the author published the same hint. A solver's reconstruction doesn't count. When someone published the answer later, it goes in the options as `{ answer: answer(text, source) }` and the hint text stays as written. A hint that holds for the whole collection goes to the collection constructor once, not into every record. `pnpm test` re-checks identifiers, key derivation, assets, hints, and the no nulls rule.
 
 ## References
 
@@ -177,6 +178,6 @@ Then import it in `src/collections/zden.ts` and append it to `static readonly pu
 
 ## Limitations
 
-- Puzzle data is frozen inside the collection modules. Nothing loads it, nothing overrides it.
+- Records are frozen, nothing edits a puzzle in place. `registerCollection()` can add a collection or replace the one under the same key, built-ins included.
 - Monero puzzles have neither balances nor verification. Arweave has balances but no key derivation.
 - `keyRange()` needs `key.bits`, which only b1000 sets.
