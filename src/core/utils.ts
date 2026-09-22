@@ -35,6 +35,9 @@ export function toJson(value: unknown, compact = false): string {
   );
 }
 
+/** Writes an amount as a plain decimal, since `String(1e-8)` is `1e-8`. */
+const amounts = new Intl.NumberFormat("en-US", { maximumFractionDigits: 20, useGrouping: false });
+
 /**
  * Formats a prize for display: `0.001 BTC`, or a dash when none is recorded.
  *
@@ -43,7 +46,7 @@ export function toJson(value: unknown, compact = false): string {
  * @returns {string} The amount and currency, or `-`.
  */
 export function formatPrize(prize: number | undefined, currency: string): string {
-  return prize === undefined ? "-" : `${prize} ${currency}`;
+  return prize === undefined ? "-" : `${amounts.format(prize)} ${currency}`;
 }
 
 /**
@@ -94,7 +97,7 @@ export function formatPrizeTotals(totals: Readonly<Record<string, number>>): str
   const entries = Object.entries(totals);
   return entries.length === 0
     ? "-"
-    : entries.map(([currency, amount]) => `${amount} ${currency}`).join(", ");
+    : entries.map(([currency, amount]) => `${amounts.format(amount)} ${currency}`).join(", ");
 }
 
 /**
@@ -251,7 +254,8 @@ function formatTransactions(puzzle: Puzzle): string[] {
   return [
     `transactions: ${transactions.length}`,
     ...transactions.map(
-      (item) => `\t${item.tx_type}\t${item.date}\t${item.amount} ${currency}\t${item.txid}`,
+      (item) =>
+        `\t${item.tx_type}\t${item.date}\t${amounts.format(item.amount)} ${currency}\t${item.txid}`,
     ),
   ];
 }
