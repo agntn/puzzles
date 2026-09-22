@@ -1,3 +1,4 @@
+import type { Chain } from "./core/chains.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/status.ts";
 
@@ -72,10 +73,11 @@ export const facts = {
       name: "puzzles_list",
       title: "List Puzzles",
       description:
-        "List puzzles filtered by collection, status, and public key availability, in dataset order. When a next offset is returned, pass it as offset with the same filters to continue.",
-      promptSnippet: "Use puzzles_list to browse puzzles by collection or status.",
+        "List puzzles filtered by collection, chain, status, and public key availability, in dataset order. When a next offset is returned, pass it as offset with the same filters to continue.",
+      promptSnippet: "Use puzzles_list to browse puzzles by collection, chain or status.",
       promptGuidelines: [
-        "Prefer a collection or status filter over listing everything.",
+        "Prefer a collection, chain or status filter over listing everything.",
+        "Almost every puzzle is on Bitcoin, so a chain filter is the way to find the few that are not.",
         "Follow the next offset with the same filters instead of raising limit and repeating earlier rows.",
       ],
       openWorld: false,
@@ -106,6 +108,7 @@ export const facts = {
       maxLength: 100,
       description: "Universal puzzle identifier, for example b1000/90 or gsmg",
     },
+    chain: { description: "Only puzzles on one blockchain" },
     collection: { maxLength: 50, description: "Collection key, for example b1000" },
     status: {
       description:
@@ -127,15 +130,22 @@ export const facts = {
       description: "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY",
     },
   },
+  /**
+   * Spelled out rather than imported, because `core/chains.ts` pulls in `@agntn/chains` and tool
+   * discovery loads this table. `test/unit/tool-schemas.test.ts` pins the list to the library's.
+   */
+  chains: ["arweave", "bitcoin", "decred", "ethereum", "litecoin", "monero"],
   statuses: Object.values(Status),
 } as const satisfies {
   tools: Record<string, ToolFacts>;
   parameters: Record<string, object>;
+  chains: readonly Chain[];
   statuses: readonly Status[];
 };
 
 /** Parameters accepted by the list tool. */
 export interface ListParams {
+  readonly chain?: string;
   readonly collection?: string;
   readonly limit?: number;
   readonly offset?: number;
@@ -289,13 +299,14 @@ export async function hintsTool(id: string): Promise<ToolResult> {
  * @returns {Promise<ToolResult>} One page, with a next offset only when more matches remain.
  */
 export async function listTool(params: ListParams): Promise<ToolResult> {
-  const [{ selectPuzzles }, { parseStatus, formatPuzzle }] = await Promise.all([
+  const [{ selectPuzzles }, { parseStatus, requireChain, formatPuzzle }] = await Promise.all([
     import("./core/dataset.ts"),
     import("./core/utils.ts"),
   ]);
   const limit = assertLimit(params.limit);
   const offset = assertOffset(params.offset);
   const filtered = await selectPuzzles({
+    chain: requireChain(params.chain),
     collection:
       params.collection === undefined
         ? undefined

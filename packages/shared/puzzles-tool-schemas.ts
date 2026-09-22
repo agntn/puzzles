@@ -24,10 +24,12 @@ interface IntegerLimits extends Described {
   readonly maximum: number;
 }
 
-/** The slice of `facts` the schemas read: parameter constraints and the status list. */
+/** The slice of `facts` the schemas read: parameter constraints, the chains and the statuses. */
 export interface PuzzleToolFacts {
+  readonly chains: readonly string[];
   readonly parameters: {
     readonly apiKey: TextLimits;
+    readonly chain: Described;
     readonly collection: TextLimits;
     readonly id: TextLimits;
     readonly limit: IntegerLimits;
@@ -48,7 +50,7 @@ export type PuzzleToolSchemas = ReturnType<typeof puzzleToolSchemas>;
  * @returns {PuzzleToolSchemas} TypeBox schemas that mirror the executors' limits.
  */
 export function puzzleToolSchemas(facts: PuzzleToolFacts) {
-  const { parameters, statuses } = facts;
+  const { chains, parameters, statuses } = facts;
   const puzzleId = Type.String(parameters.id);
   return {
     stats: Type.Object({}),
@@ -57,6 +59,7 @@ export function puzzleToolSchemas(facts: PuzzleToolFacts) {
     hints: Type.Object({ id: puzzleId }),
     list: Type.Object({
       collection: Type.Optional(Type.String(parameters.collection)),
+      chain: Type.Optional(Type.Enum(chains, parameters.chain)),
       status: Type.Optional(Type.Enum(statuses, parameters.status)),
       withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
       limit: Type.Optional(Type.Integer(parameters.limit)),

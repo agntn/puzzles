@@ -1,6 +1,7 @@
 import { sha256 } from "@noble/hashes/sha2.js";
 import { bytesToHex, utf8ToBytes } from "@noble/hashes/utils.js";
 import { version } from "../version.ts";
+import type { Chain } from "./chains.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
 import { defined, frozen, type Hint, type Party } from "./parts.ts";
 import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
@@ -49,6 +50,7 @@ export interface CollectionSummary {
 
 /** Optional constraints for selecting puzzles across the registry. */
 export interface PuzzleQuery {
+  readonly chain?: Chain | undefined;
   readonly collection?: string | undefined;
   readonly status?: Status | undefined;
   readonly withPubkey?: boolean | undefined;
@@ -108,7 +110,7 @@ export async function collectionSummaries(): Promise<readonly CollectionSummary[
 }
 
 /**
- * Selects puzzles, optionally narrowed to one collection, a status, or a known public key.
+ * Selects puzzles, optionally narrowed to one collection, a chain, a status, or a known public key.
  *
  * @param {PuzzleQuery} [query] - Query in the collection's own terms.
  * @returns {Promise<readonly Puzzle[]>} The puzzles that satisfy the query.

@@ -69,7 +69,7 @@ b1000/71	unsolved	7.100226 BTC	1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU
 | `puzzles collections`       | One row per collection: key, counts, author                                         |
 | `puzzles show <id>`         | One puzzle. `--json` for the whole record                                           |
 | `puzzles hints <id>`        | The collection's hints, the puzzle's own, then its hint files. `--json` for both    |
-| `puzzles list [collection]` | One puzzle per line. `--status` and `--with-pubkey` narrow it                       |
+| `puzzles list [collection]` | One puzzle per line. `--chain`, `--status` and `--with-pubkey` narrow it            |
 | `puzzles verify [id]`       | A published key against its address. `--all` for every puzzle, exit 1 on a mismatch |
 | `puzzles balance <id>`      | The live balance. `--api-key` or `ETHERSCAN_API_KEY` for Ethereum                   |
 | `puzzles export`            | The whole dataset with its `data_version`                                           |

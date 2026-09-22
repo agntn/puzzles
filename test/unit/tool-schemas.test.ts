@@ -1,6 +1,8 @@
 import { Value } from "typebox/value";
 import { describe, expect, it } from "vitest";
 import { puzzleToolSchemas } from "../../packages/shared/puzzles-tool-schemas.ts";
+import { chains } from "../../src/core/chains.ts";
+import { InvalidArgumentError } from "../../src/core/errors.ts";
 import { facts, hintsTool, listTool, showTool } from "../../src/tool-operations.ts";
 
 const schemas = puzzleToolSchemas(facts);
@@ -45,6 +47,20 @@ describe("tool schemas and executors share one argument contract", () => {
     );
   });
 
+  it("accepts exactly the chains the library supports", () => {
+    /* The facts spell the list out so tool discovery skips @agntn/chains; this is the pin. */
+    expect(facts.chains).toEqual(chains);
+    for (const chain of chains) {
+      expect(Value.Check(schemas.list, { chain })).toBe(true);
+    }
+    expect(Value.Check(schemas.list, { chain: "solana" })).toBe(false);
+    expect(Value.Check(schemas.list, { chain: "" })).toBe(false);
+    expect(schemas.list.properties.chain).toMatchObject({
+      enum: [...facts.chains],
+      description: facts.parameters.chain.description,
+    });
+  });
+
   it("bounds identifiers and keys the same way on every tool", () => {
     const { id, collection, apiKey } = facts.parameters;
 
@@ -77,6 +93,10 @@ describe("tool schemas and executors share one argument contract", () => {
     await expect(listTool({ limit: 1.5 })).rejects.toThrow(/limit/);
     await expect(listTool({ limit: facts.parameters.limit.maximum + 1 })).rejects.toThrow(/limit/);
     await expect(listTool({ status: "bogus" })).rejects.toThrow(/status/);
+    await expect(listTool({ chain: "solana" })).rejects.toThrow(/chain/);
+    for (const chain of [42, null, {}, ["bitcoin"]]) {
+      await expect(listTool({ chain } as never)).rejects.toThrow(InvalidArgumentError);
+    }
     await expect(
       listTool({ collection: "x".repeat(facts.parameters.collection.maxLength + 1) }),
     ).rejects.toThrow(/collection/);

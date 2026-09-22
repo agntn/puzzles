@@ -115,7 +115,7 @@ puzzles stats [--json]
 puzzles collections [--json]
 puzzles show b1000/90 [--json]
 puzzles hints b1000/71 [--json]
-puzzles list [collection] [--status unsolved] [--with-pubkey] [--json]
+puzzles list [collection] [--chain bitcoin] [--status unsolved] [--with-pubkey] [--json]
 puzzles balance b1000/71 [--api-key KEY] [--json]
 puzzles verify b1000/1 | puzzles verify --all [--quiet] [--json]
 puzzles export [--compact]
@@ -128,15 +128,15 @@ Plain output is tab-separated as `id  status  prize  address`, so `cut` and `awk
 
 MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same seven operations:
 
-| Tool                  | Arguments                                               | Reaches the network |
-| --------------------- | ------------------------------------------------------- | ------------------- |
-| `puzzles_stats`       | none                                                    | no                  |
-| `puzzles_collections` | none                                                    | no                  |
-| `puzzles_show`        | `id`                                                    | no                  |
-| `puzzles_hints`       | `id`                                                    | no                  |
-| `puzzles_list`        | `collection`, `status`, `withPubkey`, `limit`, `offset` | no                  |
-| `puzzles_verify`      | `id`                                                    | no                  |
-| `puzzles_balance`     | `id`, `apiKey`                                          | yes                 |
+| Tool                  | Arguments                                                        | Reaches the network |
+| --------------------- | ---------------------------------------------------------------- | ------------------- |
+| `puzzles_stats`       | none                                                             | no                  |
+| `puzzles_collections` | none                                                             | no                  |
+| `puzzles_show`        | `id`                                                             | no                  |
+| `puzzles_hints`       | `id`                                                             | no                  |
+| `puzzles_list`        | `collection`, `chain`, `status`, `withPubkey`, `limit`, `offset` | no                  |
+| `puzzles_verify`      | `id`                                                             | no                  |
+| `puzzles_balance`     | `id`, `apiKey`                                                   | yes                 |
 
 `puzzles_collections` prints the same rows as `puzzles collections` on the CLI, so an agent can discover keys without loading anything else first.
 

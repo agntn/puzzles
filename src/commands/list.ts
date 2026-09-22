@@ -1,19 +1,24 @@
 import { defineCommand } from "citty";
 import { jsonArg, printLine } from "./output.ts";
+import { chains } from "../core/chains.ts";
 import { selectPuzzles } from "../core/dataset.ts";
 import { Status } from "../core/puzzle.ts";
-import { formatPuzzle, parseStatus, toJson } from "../core/utils.ts";
+import { formatPuzzle, parseStatus, requireChain, toJson } from "../core/utils.ts";
 
 export default defineCommand({
   meta: {
     name: "list",
-    description: "List puzzles, optionally filtered by collection and status",
+    description: "List puzzles, optionally filtered by collection, chain and status",
   },
   args: {
     collection: {
       type: "positional",
       required: false,
       description: "Collection key, for example b1000",
+    },
+    chain: {
+      type: "string",
+      description: `Filter by chain: ${chains.join(", ")}`,
     },
     status: {
       type: "string",
@@ -24,6 +29,7 @@ export default defineCommand({
   },
   async run({ args }) {
     const puzzles = await selectPuzzles({
+      chain: requireChain(args.chain),
       collection: args.collection,
       status: parseStatus(args.status),
       withPubkey: args["with-pubkey"],
