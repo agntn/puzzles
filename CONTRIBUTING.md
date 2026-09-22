@@ -28,6 +28,8 @@ Each puzzle is a `PuzzleSpec` record in `src/collections/<collection>/<name>.ts`
 6. Run `pnpm test`. The data gate checks unique identifiers, collection ownership, address and txid formats, private key derivation, WIF and BIP38 consistency, claimed public keys, asset paths, and that nothing serializes as null.
 7. Run `pnpm fixtures` after a record or shared view helper changes the landing samples, statistics, or collection facts. `pnpm fixtures --check` reports stale output without writing.
 
+Tweet sources have [local reading copies with screenshots](assets/sources/README.md). When adding a tweet URL to a record, archive that post too and extend `test/unit/source-archives.test.ts`. Include an older web archive URL when one exists, with its capture date and whether its content was confirmed. Keep the original URL in the record.
+
 ## Pull requests
 
 Create a focused branch, push it to your fork, and open a pull request against `main`. Keep unrelated formatting and data changes out of the same patch.
