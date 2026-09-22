@@ -69,6 +69,7 @@ const expectedCollections = [
   "hash_collision",
   "ledger_donjon",
   "luckylurker",
+  "mineshop",
   "movie_enigma",
   "rushwallet",
   "warp",

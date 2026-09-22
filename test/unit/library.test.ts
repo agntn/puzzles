@@ -12,6 +12,7 @@ import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash_collision.ts";
 import { LedgerDonjonCollection } from "../../src/collections/ledger_donjon.ts";
 import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
+import { MineshopCollection } from "../../src/collections/mineshop.ts";
 import { MovieEnigmaCollection } from "../../src/collections/movie_enigma.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
@@ -56,6 +57,7 @@ const concreteClasses = [
   HashCollisionCollection,
   LedgerDonjonCollection,
   LuckyLurkerCollection,
+  MineshopCollection,
   MovieEnigmaCollection,
   RushwalletCollection,
   WarpCollection,
@@ -481,18 +483,18 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(342);
+    expect(await all()).toHaveLength(343);
     expect(await stats()).toEqual({
-      total: 342,
+      total: 343,
       claimed: 11,
       expired: 2,
       solved: 138,
       swept: 96,
-      unsolved: 95,
+      unsolved: 96,
       with_pubkey: 242,
       total_prize: {
         AR: 5550,
-        ETH: 14.1337,
+        ETH: 22.74624155,
         DAI: 100,
         BTC: 1063.94158961,
         LTC: 230.8255,
@@ -500,7 +502,7 @@ describe("lazy collection registry", () => {
       },
       unsolved_prize: {
         AR: 1900,
-        ETH: 1,
+        ETH: 9.61254155,
         BTC: 908.88130493,
       },
     });
@@ -521,7 +523,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(342);
+    ).toBe(343);
   });
 
   it("hands back the memoized views frozen through", async () => {

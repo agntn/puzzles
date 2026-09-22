@@ -103,6 +103,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Paul Jones’s two Bitcoin Vaults. The first solved, the second funded with 1 BTC.",
   },
+  mineshop: {
+    icon: "i-lucide-youtube",
+    title: "The 10 ETH challenge",
+    sample: "mineshop",
+    chains: ["ethereum"],
+    blurb:
+      "Six seed words in a video, six in the blog post it links to. The author still spends from the wallet.",
+  },
   movie_enigma: {
     icon: "i-lucide-clapperboard",
     title: "Bitcoin Movie Enigma",
