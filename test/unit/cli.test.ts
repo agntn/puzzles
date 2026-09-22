@@ -340,6 +340,27 @@ describe.concurrent("puzzles CLI", () => {
     expect(result.map((entry) => entry.key)).toContain("hash_collision");
   });
 
+  it("lists authors and shows one, by author key or collection key", async () => {
+    const rows = (await puzzles("authors")).split("\n");
+    expect(rows).toHaveLength(18);
+    expect(rows).toContain("zden: Zden (person), 1 collection: zden, 16 puzzles");
+
+    const record = (await puzzles("authors", "warp")).split("\n");
+    expect(record[0]).toBe("keybase\tKeybase\torganization");
+    expect(record).toContain("collections: warp (6 puzzles)");
+
+    const entry = await json<{ readonly key: string; readonly puzzles: number }>(
+      "authors",
+      "peter-todd",
+      "--json",
+    );
+    expect(entry).toMatchObject({ key: "peter-todd", puzzles: 6 });
+
+    const missing = await failure("authors", "nobody");
+    expect(missing.code).toBe(1);
+    expect(missing.stderr).toMatch(/^Unknown author: nobody\. Known authors: tiamat, /u);
+  });
+
   it("prints every status a collection has puzzles in", async () => {
     const rows = (await puzzles("collections")).split("\n");
 

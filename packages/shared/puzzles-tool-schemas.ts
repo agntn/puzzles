@@ -30,6 +30,7 @@ export interface PuzzleToolFacts {
   readonly parameters: {
     readonly address: TextLimits;
     readonly apiKey: TextLimits;
+    readonly author: TextLimits;
     readonly chain: Described;
     readonly collection: TextLimits;
     readonly id: TextLimits;
@@ -56,6 +57,8 @@ export function puzzleToolSchemas(facts: PuzzleToolFacts) {
   return {
     stats: Type.Object({}),
     collections: Type.Object({}),
+    authors: Type.Object({}),
+    author: Type.Object({ key: Type.String(parameters.author) }),
     show: Type.Object({ id: puzzleId }),
     hints: Type.Object({ id: puzzleId }),
     list: Type.Object({

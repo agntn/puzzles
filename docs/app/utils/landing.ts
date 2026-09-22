@@ -1,3 +1,4 @@
+import type { AuthorRow } from "./authors.ts";
 import type { CollectionFactsData } from "./collections.ts";
 import type { LandingSample } from "./samples.ts";
 
@@ -1123,6 +1124,189 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     firstStarted: "2016-06-07 21:05:42",
     lastStarted: "2024-04-18 10:59:41",
     hints: [],
+  },
+];
+
+/** authorRows() for every author: the dossier card on the landing before the collections load. */
+export const AUTHORS_STATIC: readonly AuthorRow[] = [
+  {
+    key: "tiamat",
+    to: "/authors/tiamat",
+    name: "Tiamat",
+    kind: "person",
+    about:
+      "Pseudonymous programmer behind the Arweave Puzzle Weave series and the Chronobot.io node monitor. Self-described as based in France. No other name known.",
+    collections: ["arweave"],
+    puzzles: 12,
+  },
+  {
+    key: "saatoshi-rising",
+    to: "/authors/saatoshi-rising",
+    name: "saatoshi_rising",
+    kind: "person",
+    about:
+      "A bitcointalk account that spoke for the puzzle transaction once, in 2017, and never said who was behind it. The rest is on the chain.",
+    collections: ["b1000"],
+    puzzles: 256,
+  },
+  {
+    key: "bobby-lee",
+    to: "/authors/bobby-lee",
+    name: "Bobby Lee",
+    kind: "person",
+    about:
+      "Founder and CEO of Ballet, the physical wallet company, and before that co-founder and CEO of BTCC, the first Bitcoin exchange in China.",
+    collections: ["ballet"],
+    puzzles: 3,
+  },
+  {
+    key: "bitaps",
+    to: "/authors/bitaps",
+    name: "Bitaps",
+    kind: "organization",
+    about:
+      "The team behind the bitaps.com block explorer and the pybtc and jsbtc libraries whose Shamir secret sharing the challenge dares you to break.",
+    collections: ["bitaps"],
+    puzzles: 1,
+  },
+  {
+    key: "corey-phillips",
+    to: "/authors/corey-phillips",
+    name: "Corey Phillips",
+    kind: "person",
+    about:
+      "Bitcoin mobile developer who turned photographs into BIP39 seeds with BitImage and funded two of them.",
+    collections: ["bitimage"],
+    puzzles: 2,
+  },
+  {
+    key: "coin-artist",
+    to: "/authors/coin-artist",
+    name: "coin_artist",
+    kind: "person",
+    about:
+      "Crypto artist and game designer who painted TORCHED H34R7S with a wallet key inside, and later founded Blockade Games.",
+    collections: ["coin_artist"],
+    puzzles: 1,
+  },
+  {
+    key: "dug",
+    to: "/authors/dug",
+    name: "Dug",
+    kind: "person",
+    about:
+      "Hides a BIP39 word in each lecture slide and funds a wallet for whoever collects them all. Publishes the public clues on Nostr.",
+    collections: ["dug"],
+    puzzles: 3,
+  },
+  {
+    key: "genesis-author",
+    to: "/authors/genesis-author",
+    name: "Anonymous",
+    kind: undefined,
+    about:
+      "Whoever funded the Genesis Block Wallet Puzzle and answers questions in OP_RETURN. No name, no profile, just transactions and one X account that spoke first.",
+    collections: ["genesis"],
+    puzzles: 1,
+  },
+  {
+    key: "gsmg",
+    to: "/authors/gsmg",
+    name: "GSMG.io",
+    kind: "organization",
+    about:
+      "A crypto trading bot platform that ran from 2017 to 2026 and left a multi phase puzzle behind. The site now shows the lights off and one mystery left.",
+    collections: ["gsmg"],
+    puzzles: 1,
+  },
+  {
+    key: "peter-todd",
+    to: "/authors/peter-todd",
+    name: "Peter Todd",
+    kind: "person",
+    about:
+      "Bitcoin Core contributor and applied cryptography consultant, creator of OpenTimestamps, who paid for hash collisions with Bitcoin script in 2013.",
+    collections: ["hash_collision"],
+    puzzles: 6,
+  },
+  {
+    key: "ledger-donjon",
+    to: "/authors/ledger-donjon",
+    name: "Ledger Donjon",
+    kind: "organization",
+    about: "Ledger's security research team, which ran the Capture the Fortress CTF in 2020.",
+    collections: ["ledger_donjon"],
+    puzzles: 1,
+  },
+  {
+    key: "paul-jones",
+    to: "/authors/paul-jones",
+    name: "Paul Jones",
+    kind: "person",
+    about:
+      "Byline on luckylurker.com, a casino review site, where the Bitcoin Vaults run as promotions between the reviews.",
+    collections: ["luckylurker"],
+    puzzles: 2,
+  },
+  {
+    key: "guntis-vitolins",
+    to: "/authors/guntis-vitolins",
+    name: "Guntis Vitolins",
+    kind: "person",
+    about:
+      "Founder and managing director of Mineshop.eu, an ASIC miner shop in Ireland, and the YouTuber who buried a 10 ETH seed in a video.",
+    collections: ["mineshop"],
+    puzzles: 1,
+  },
+  {
+    key: "klems",
+    to: "/authors/klems",
+    name: "klems",
+    kind: "person",
+    about:
+      "Pseudonymous puzzle maker who signs the movie frames as @cryptop1r4t3 and keeps a Nostr key as the only contact.",
+    collections: ["movie_enigma"],
+    puzzles: 1,
+  },
+  {
+    key: "dmitri-kryptokov",
+    to: "/authors/dmitri-kryptokov",
+    name: "Dmitri Kryptokov",
+    kind: undefined,
+    about:
+      "The office worker from the RushWallet contest video, reused as the author persona of the puzzle by KryptoKit, the Toronto company behind the wallet.",
+    collections: ["rushwallet"],
+    puzzles: 30,
+  },
+  {
+    key: "aoi-nakamoto",
+    to: "/authors/aoi-nakamoto",
+    name: "AoiNakamoto",
+    kind: "person",
+    about:
+      "Pseudonymous author of the 2019 Quizchain puzzle series on Reddit, who shut it all down in August 2019 and called it a failed experiment.",
+    collections: ["satoshi_birthday_quiz"],
+    puzzles: 1,
+  },
+  {
+    key: "keybase",
+    to: "/authors/keybase",
+    name: "Keybase",
+    kind: "organization",
+    about:
+      "The identity and encryption company that published WarpWallet in 2013 and paid to have its own brainwallets cracked. Part of Zoom since 2020.",
+    collections: ["warp"],
+    puzzles: 6,
+  },
+  {
+    key: "zden",
+    to: "/authors/zden",
+    name: "Zden",
+    kind: "person",
+    about:
+      "Slovak digital artist and demoscener from the Satori group who hides private keys in generative images.",
+    collections: ["zden"],
+    puzzles: 16,
   },
 ];
 /* generated:landing-fixtures:end */

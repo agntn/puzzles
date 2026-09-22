@@ -45,6 +45,20 @@ export class InvalidArgumentError extends PuzzlesError {
   }
 }
 
+/** Raised when an author key can't be resolved. */
+export class UnknownAuthorError extends PuzzlesError {
+  override readonly name = "UnknownAuthorError";
+
+  /** The unresolved author key. */
+  readonly author: string;
+
+  /** Constructs an unknown author error, with the keys that do resolve when known. */
+  constructor(author: string, detail?: string) {
+    super(withDetail(`Unknown author: ${author}`, detail));
+    this.author = author;
+  }
+}
+
 /** Raised when a collection name can't be resolved. */
 export class UnknownCollectionError extends PuzzlesError {
   override readonly name = "UnknownCollectionError";

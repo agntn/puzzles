@@ -128,19 +128,21 @@ Plain output is tab-separated as `id  status  prize  address`, so `cut` and `awk
 
 ## Agent tools
 
-MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same seven operations:
+MCP (`puzzles mcp`) and the Pi/OMP extensions expose the same nine operations:
 
 | Tool                  | Arguments                                                                   | Reaches the network |
 | --------------------- | --------------------------------------------------------------------------- | ------------------- |
 | `puzzles_stats`       | none                                                                        | no                  |
 | `puzzles_collections` | none                                                                        | no                  |
+| `puzzles_authors`     | none                                                                        | no                  |
+| `puzzles_author`      | `key` (author key or collection key)                                        | no                  |
 | `puzzles_show`        | `id`                                                                        | no                  |
 | `puzzles_hints`       | `id`                                                                        | no                  |
 | `puzzles_list`        | `address`, `collection`, `chain`, `status`, `withPubkey`, `limit`, `offset` | no                  |
 | `puzzles_verify`      | `id`                                                                        | no                  |
 | `puzzles_balance`     | `id`, `apiKey`                                                              | yes                 |
 
-`puzzles_collections` prints the same rows as `puzzles collections` on the CLI, so an agent can discover keys without loading anything else first.
+`puzzles_collections` prints the same rows as `puzzles collections` on the CLI, so an agent can discover keys without loading anything else first. `puzzles_authors` and `puzzles_author` do the same for `puzzles authors [key]`: who published a collection, under which handle, and what public pages say about them with the page as source.
 
 Hold an address and want the record? Pass it as `address` to `puzzles_list` instead of paging the dataset. It matches in the case each chain fixes, so a checksummed Ethereum address works, and an empty result means no puzzle pays there.
 

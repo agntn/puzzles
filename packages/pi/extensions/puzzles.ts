@@ -70,6 +70,22 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
   });
 
   pi.registerTool({
+    ...registration(tools.facts.tools.authors),
+    parameters: schemas.authors,
+    async execute(): Promise<Result> {
+      return agentResult(await tools.authorsTool());
+    },
+  });
+
+  pi.registerTool({
+    ...registration(tools.facts.tools.author),
+    parameters: schemas.author,
+    async execute(_toolCallId, params): Promise<Result> {
+      return agentResult(await tools.authorTool(params.key));
+    },
+  });
+
+  pi.registerTool({
     ...registration(tools.facts.tools.show),
     parameters: schemas.show,
     async execute(_toolCallId, params): Promise<Result> {

@@ -80,6 +80,16 @@ describe("Pi extension", () => {
     });
   });
 
+  it("shows an author through the shared executor with the entry as details", async () => {
+    const tool = (await registerTools()).get("puzzles_author");
+    const result = await tool?.execute("call-4", { key: "dug" });
+
+    expect(result?.content[0]?.text.split("\n")[0]).toBe("dug\tDug\tperson");
+    expect(result?.details).toMatchObject({
+      author: { key: "dug", collections: ["dug"], puzzles: 3 },
+    });
+  });
+
   it("lists collections through the shared executor", async () => {
     const tool = (await registerTools()).get("puzzles_collections");
     const result = await tool?.execute("call-3", {});

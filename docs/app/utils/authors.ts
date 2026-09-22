@@ -1,6 +1,5 @@
 import type { AnyCollection, AuthorEntry, Fact, Profile } from "../../../src/index.ts";
 import { prizeTotals } from "../../../src/core/utils.ts";
-import { collectionEntry } from "./puzzles";
 
 /** One collection row on an author page. */
 export interface AuthorCollectionRow {
@@ -44,12 +43,14 @@ export interface AuthorFactsData {
  * @param {AuthorEntry} entry - The author as the registry lists it.
  * @param {readonly AnyCollection[]} collections - The instances of `entry.collections`, in that order.
  * @param {readonly AuthorEntry[]} [roster] - Every author, for the position of this one.
+ * @param {(key: string) => string} [title] - The display title of a collection key.
  * @returns {AuthorFactsData} The record, one row per collection and the totals across them.
  */
 export function authorFacts(
   entry: AuthorEntry,
   collections: readonly AnyCollection[],
   roster: readonly AuthorEntry[] = [entry],
+  title: (key: string) => string = (key) => key,
 ): AuthorFactsData {
   const puzzles = collections.flatMap((collection) => collection.all());
   const unsolved = collections.flatMap((collection) => collection.unsolved());
@@ -71,7 +72,7 @@ export function authorFacts(
       return {
         key: collection.key,
         to: `/collections/${collection.key}`,
-        title: collectionEntry(collection.key)?.title ?? collection.key,
+        title: title(collection.key),
         total: collection.count(),
         unsolved: collection.unsolved().length,
         chains: [...new Set(collection.all().map((puzzle) => puzzle.chain()))],

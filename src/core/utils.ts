@@ -1,3 +1,4 @@
+import type { AuthorEntry } from "./dataset.ts";
 import { type Chain, chains, parseChain, sameAddress } from "./chains.ts";
 import type { CollectionSummary } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
@@ -421,6 +422,60 @@ export function statusCountLabels(summary: CollectionSummary): string[] {
       .filter((status) => summary[status] > 0)
       .map((status) => `${summary[status]} ${status}`),
   ];
+}
+
+/**
+ * Formats an author as the one discovery row the CLI and the tools share.
+ *
+ * @param {AuthorEntry} entry - The author with its collections.
+ * @returns {string} `key: name (kind), N collections: a, b, N puzzles`.
+ */
+export function formatAuthor(entry: AuthorEntry): string {
+  const { author } = entry;
+  const kind = author.kind === undefined ? "" : ` (${author.kind})`;
+  const collections =
+    entry.collections.length === 1 ? "1 collection" : `${entry.collections.length} collections`;
+  return `${entry.key}: ${author.name ?? "unknown"}${kind}, ${collections}: ${entry.collections.join(", ")}, ${entry.puzzles} puzzles`;
+}
+
+/**
+ * The lines of one author record block: a count line, then one indented line per item.
+ *
+ * @param {string} label - The block name.
+ * @param {readonly T[]} items - The block's items.
+ * @param {(item: T) => string} line - How one item prints.
+ * @returns {string[]} `label: N` followed by the items, tab indented.
+ */
+function authorBlock<T>(
+  label: string,
+  items: readonly T[] | undefined,
+  line: (item: T) => string,
+): string[] {
+  return [`${label}: ${items?.length ?? 0}`, ...(items ?? []).map((item) => `\t${line(item)}`)];
+}
+
+/**
+ * One author's complete record for a model: identity, collections, channels, addresses and the
+ * sourced facts, one per line with its date and source.
+ *
+ * @param {AuthorEntry} entry - The author with its collections.
+ * @returns {string} The record as lines.
+ */
+export function formatAuthorRecord(entry: AuthorEntry): string {
+  const { author } = entry;
+  return [
+    `${entry.key}\t${author.name ?? "unknown"}\t${author.kind ?? "kind unknown"}`,
+    `collections: ${entry.collections.join(", ")} (${entry.puzzles} puzzles)`,
+    ...field("aliases", author.aliases, (aliases) => aliases.join(", ")),
+    ...field("about", author.about),
+    ...authorBlock("profiles", author.profiles, (link) => `${link.name}\t${link.url}`),
+    ...authorBlock("addresses", author.addresses, (address) => address),
+    ...authorBlock(
+      "facts",
+      author.facts,
+      (item) => `${item.date ?? "-"}\t${item.text}\tsource: ${item.source}`,
+    ),
+  ].join("\n");
 }
 
 /**

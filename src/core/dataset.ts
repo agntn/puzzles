@@ -2,7 +2,7 @@ import { sha256 } from "@noble/hashes/sha2.js";
 import { bytesToHex, utf8ToBytes } from "@noble/hashes/utils.js";
 import { version } from "../version.ts";
 import type { Chain } from "./chains.ts";
-import { PuzzleNotFoundError } from "./errors.ts";
+import { PuzzleNotFoundError, UnknownAuthorError } from "./errors.ts";
 import { defined, frozen, type Hint, type Party } from "./parts.ts";
 import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
 import {
@@ -158,6 +158,21 @@ export async function getAuthor(key: string): Promise<AuthorEntry | undefined> {
     return undefined;
   }
   return (await authors()).find((entry) => entry.key === key);
+}
+
+/**
+ * Looks an author up or throws, naming the keys that do resolve.
+ *
+ * @param {string} key - The author key.
+ * @returns {Promise<AuthorEntry>} The author.
+ */
+export async function requireAuthor(key: string): Promise<AuthorEntry> {
+  const entry = await getAuthor(key);
+  if (entry !== undefined) {
+    return entry;
+  }
+  const known = (await authors()).map((row) => row.key).join(", ");
+  throw new UnknownAuthorError(String(key), `Known authors: ${known}`);
 }
 
 /**

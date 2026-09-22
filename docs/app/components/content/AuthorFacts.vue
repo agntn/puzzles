@@ -2,7 +2,7 @@
 import { authors, dataVersion, getAuthor, requireCollection } from "@agntn/puzzles";
 import { authorFacts, authorIcon } from "../../utils/authors";
 import { formatPrizeTotals, hostPath } from "../../utils/format";
-import { CHAIN_ICONS } from "../../utils/puzzles";
+import { CHAIN_ICONS, collectionEntry } from "../../utils/puzzles";
 
 const props = defineProps<{ author: string }>();
 
@@ -16,7 +16,12 @@ const { data } = await useAsyncData(
     }
     const collections = await Promise.all(entry.collections.map((key) => requireCollection(key)));
     return {
-      ...authorFacts(entry, collections, await authors()),
+      ...authorFacts(
+        entry,
+        collections,
+        await authors(),
+        (key) => collectionEntry(key)?.title ?? key,
+      ),
       dataVersion: await dataVersion(),
     };
   },
@@ -359,11 +364,9 @@ const log = computed(() =>
 @keyframes dossier-tick {
   from {
     transform: scaleY(0.2);
-    opacity: 0;
   }
   to {
     transform: scaleY(1);
-    opacity: 1;
   }
 }
 .dossier-ticks > span {
@@ -374,12 +377,10 @@ const log = computed(() =>
 }
 @keyframes dossier-entry {
   from {
-    transform: translateX(-6px);
-    opacity: 0;
+    transform: translateX(-8px);
   }
   to {
     transform: none;
-    opacity: 1;
   }
 }
 .dossier-channels dd:hover .dossier-leader::after {

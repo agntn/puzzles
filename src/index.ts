@@ -115,6 +115,7 @@ export {
   dataVersion,
   get,
   getAuthor,
+  requireAuthor,
   requirePuzzle,
   selectPuzzles,
   stats,
@@ -154,6 +155,7 @@ export {
   InvalidArgumentError,
   PuzzleNotFoundError,
   PuzzlesError,
+  UnknownAuthorError,
   UnknownCollectionError,
 } from "./core/errors.ts";
 

@@ -264,11 +264,33 @@ const customCode = [
     </section>
 
     <LandingFeature
-      title="Seven tools, three hosts, one executor each"
+      title="Eighteen authors, every fact with its page"
+      to="/authors"
+      link="Author dossiers"
+      :checks="[
+        'A key, a kind, aliases, the channels they publish through and the addresses they fund from',
+        'facts are sentences a public page states, with that page as source and a date where it has one',
+        'Pseudonyms stay pseudonyms: klems and Tiamat are the handle and what they signed with it',
+      ]"
+      reverse
+    >
+      Who funded a puzzle says something about how it was built. So every collection's author is a
+      record, not a name and a link, and
+      <code class="font-mono text-[13px] text-highlighted">getAuthor(key)</code> answers with it.
+      The card follows the walk: it shows whoever published the puzzle on screen.
+      <template #visual>
+        <div @mouseenter="paused = true" @mouseleave="paused = false">
+          <LandingAuthor :sample="current" />
+        </div>
+      </template>
+    </LandingFeature>
+
+    <LandingFeature
+      title="Nine tools, three hosts, one executor each"
       to="/guide/agents"
       link="MCP, Pi and OMP"
       :checks="[
-        'puzzles_stats, puzzles_collections, puzzles_show, puzzles_hints, puzzles_list, puzzles_verify, puzzles_balance',
+        'puzzles_stats, puzzles_collections, puzzles_authors, puzzles_author, puzzles_show, puzzles_hints, puzzles_list, puzzles_verify, puzzles_balance',
         'The text carries the whole record: address, status, prize, key material, transactions, explorer links',
         'Limits live in one facts table and the executors enforce them, so a host that skips schema validation hits the same wall',
       ]"
