@@ -1,3 +1,33 @@
+## v0.21.3
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.21.2...v0.21.3)
+
+### 🚀 Enhancements
+
+- **docs:** Playground on the dossier instruments ([#238](https://github.com/agntn/puzzles/pull/238))
+- **cli:** Page a long list ([#239](https://github.com/agntn/puzzles/pull/239))
+- **collections:** Add book_quiz ([#241](https://github.com/agntn/puzzles/pull/241))
+- **docs:** The playground runs the author tools ([#242](https://github.com/agntn/puzzles/pull/242))
+- **collections:** Archive the satoshi_birthday_quiz thread ([#243](https://github.com/agntn/puzzles/pull/243))
+- **collections:** Add quizchain ([#246](https://github.com/agntn/puzzles/pull/246))
+- **docs:** Collection pages open on a dossier ([#247](https://github.com/agntn/puzzles/pull/247))
+- **collections:** Add quizchain/2 ([#250](https://github.com/agntn/puzzles/pull/250))
+- **collections:** Add quizchain/3 ([#251](https://github.com/agntn/puzzles/pull/251))
+
+### 🩹 Fixes
+
+- **tools:** Dust prints as 1e-8 ([#244](https://github.com/agntn/puzzles/pull/244))
+
+### 📖 Documentation
+
+- The skill follows the hint contract ([#245](https://github.com/agntn/puzzles/pull/245))
+- Skills ask the tools and ship with the package ([#248](https://github.com/agntn/puzzles/pull/248))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.21.2
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.21.1...v0.21.2)
