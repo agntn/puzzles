@@ -72,7 +72,7 @@
     "release": "pnpm test && pnpm build && changelogen --release --push"
   },
   "dependencies": {
-    "@agntn/chains": "0.3.6",
+    "@agntn/chains": "0.3.7",
     "@agntn/explorers": "0.5.4",
     "@agntn/keys": "0.3.0",
     "@modelcontextprotocol/sdk": "1.30.0",

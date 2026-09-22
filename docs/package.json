@@ -11,7 +11,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@agntn/chains": "0.3.6",
+    "@agntn/chains": "0.3.7",
     "@agntn/explorers": "0.5.4",
     "@agntn/keys": "0.3.0",
     "@noble/hashes": "2.4.0",
