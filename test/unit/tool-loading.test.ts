@@ -3,10 +3,10 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 
 describe("tool discovery in a fresh process", () => {
-  it.each(["registry.mjs", "registry2.mjs", "dataset2.mjs", "puzzle.mjs"])(
+  it.each(["registry.mjs", "registry2.mjs", "dataset2.mjs", "puzzle.mjs", "collection.mjs"])(
     "rejects an eagerly loaded packed %s without chain dependencies",
     (chunk) => {
       const root = mkdtempSync(path.join(tmpdir(), "puzzles-eager-"));

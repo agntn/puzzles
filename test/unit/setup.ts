@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, vi } from "vitest";
+import { afterEach, beforeEach, vi } from "vite-plus/test";
 
 /* Unit tests never reach the network. A provider call without a stub fails here. Live roundtrips live in test/live. */
 beforeEach(() => {

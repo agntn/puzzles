@@ -1,5 +1,5 @@
 import { readdirSync } from "node:fs";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vite-plus/test";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";

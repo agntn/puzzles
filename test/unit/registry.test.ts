@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { afterAll, describe, expect, it, vi } from "vitest";
+import { afterAll, describe, expect, it, vi } from "vite-plus/test";
 import type * as Library from "../../src/index.ts";
 import { getCollection, hasCollection } from "../../src/index.ts";
 

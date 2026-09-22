@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import { LANDING_STATIC } from "../../docs/app/utils/landing.ts";
 import { tokenizeToolResponse } from "../../docs/app/utils/tool-response.ts";
 

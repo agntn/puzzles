@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import { collectionWindow } from "../../docs/app/utils/flow.ts";
 import { listCommandLine } from "../../docs/app/utils/format.ts";
 import { collectionKeys } from "../../src/index.ts";

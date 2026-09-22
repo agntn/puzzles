@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 
 describe("verify tool module loading", () => {
   it("leaves the signing crypto unresolved when the puzzle is missing", () => {

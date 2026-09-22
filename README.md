@@ -152,7 +152,7 @@ One record file under `src/collections/<key>/` and one line in the collection mo
 ```bash
 pnpm install
 pnpm --dir docs install   # the docs site; lint and test read the Nuxt types it generates
-pnpm lint         # oxfmt and oxlint, docs included
+pnpm lint         # vp lint and vp fmt, docs included
 pnpm typecheck    # builds first, then checks src, Pi and OMP
 pnpm test         # unit tests and the data gate
 pnpm test:packed  # packs the tarball and runs every published entry without src/

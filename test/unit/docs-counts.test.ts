@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import { WALK } from "../../docs/app/utils/landing.ts";
 import { all, collectionKeys, collections } from "../../src/index.ts";
 import { chains } from "../../src/core/chains.ts";

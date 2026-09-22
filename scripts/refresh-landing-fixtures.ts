@@ -12,8 +12,8 @@ const START = "/* generated:landing-fixtures:start */";
 const END = "/* generated:landing-fixtures:end */";
 const UNDEFINED = "__AGNTN_PUZZLES_LANDING_UNDEFINED_8A77E2B5__";
 const TARGET = fileURLToPath(new URL("../docs/app/utils/landing.ts", import.meta.url));
-const FORMATTER = fileURLToPath(new URL("../node_modules/oxfmt/bin/oxfmt", import.meta.url));
-const FORMATTER_CONFIG = fileURLToPath(new URL("../oxfmt.config.ts", import.meta.url));
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
+const FORMATTER = fileURLToPath(new URL("../node_modules/vite-plus/bin/vp", import.meta.url));
 
 type StaticStats = {
   readonly dataVersion: string;
@@ -118,8 +118,9 @@ ${END}
 `;
   return execFileSync(
     process.execPath,
-    [FORMATTER, "--config", FORMATTER_CONFIG, "--stdin-filepath", targetPath, "--threads=1"],
-    { encoding: "utf8", input: source },
+    [FORMATTER, "fmt", "--stdin-filepath", targetPath, "--threads=1"],
+    /* vp fmt reads the fmt block of the vite.config.ts at the root it runs from. */
+    { cwd: ROOT, encoding: "utf8", input: source },
   );
 }
 

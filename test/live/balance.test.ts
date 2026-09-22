@@ -1,5 +1,5 @@
 /** Live provider roundtrips for `Puzzle.balance()`. Run with `pnpm test:live`. */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import { Balance, requirePuzzle } from "../../src/index.ts";
 
 const etherscanKey = process.env["ETHERSCAN_API_KEY"];

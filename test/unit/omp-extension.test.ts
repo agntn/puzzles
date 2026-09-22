@@ -1,6 +1,6 @@
 import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
 import * as OmpTypeBox from "@oh-my-pi/omptype/typebox";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import puzzlesExtension from "../../packages/omp/extensions/puzzles.ts";
 import { facts } from "../../src/tool-operations.ts";
 
