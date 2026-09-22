@@ -151,15 +151,25 @@ export function knownCollections(): string {
 }
 
 /**
- * Loads every registered collection, in registration order. The frozen array is shared until the
- * next registration, so callers can memoize on it.
+ * Loads every registered collection, in registration order, one module after another. The frozen
+ * array is shared until the next registration, so callers can memoize on it.
+ *
+ * The loads are serial on purpose. Every collection module imports the same core modules, and a
+ * host loader that re-evaluates a module per importer, such as the jiti loader Pi runs extensions
+ * under, re-enters those shared modules when the imports overlap and hands the second importer a
+ * half-initialized namespace. Seventeen local modules cost nothing to load in order.
  *
  * @returns {Promise<readonly AnyCollection[]>} Every collection, loaded once and frozen.
  */
 export async function collections(): Promise<readonly AnyCollection[]> {
-  const pending = (snapshot ??= Promise.all([...table().values()].map(load)).then((loaded) =>
-    Object.freeze(loaded),
-  ));
+  const pending = (snapshot ??= (async (): Promise<readonly AnyCollection[]> => {
+    const queued = [...table().values()];
+    const loaded: AnyCollection[] = [];
+    for (const entry of queued) {
+      loaded.push(await load(entry));
+    }
+    return Object.freeze(loaded);
+  })());
   try {
     return await pending;
   } catch (error) {

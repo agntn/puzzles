@@ -1,4 +1,6 @@
+import { fileURLToPath } from "node:url";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { createJiti } from "jiti/static";
 import { describe, expect, it } from "vitest";
 import puzzlesExtension from "../../packages/pi/extensions/puzzles.ts";
 import { facts } from "../../src/tool-operations.ts";
@@ -84,4 +86,47 @@ describe("Pi extension", () => {
 
     expect(result?.content[0]?.text).toContain("gsmg: 1 puzzles, 0 solved, 1 unsolved, by GSMG.io");
   });
+});
+
+/**
+ * Registers the tools the way the Pi host does: through jiti, with the module cache off, so every
+ * module is evaluated once per importer. Two imports of a shared module that overlap re-enter it
+ * there, and the second importer reads a half-initialized namespace.
+ *
+ * @returns {Promise<Map<string, RegisteredTool>>} The tools the extension registered.
+ */
+async function registerThroughHostLoader(): Promise<Map<string, RegisteredTool>> {
+  const jiti = createJiti(import.meta.url, { moduleCache: false });
+  const extension = (await jiti.import(
+    fileURLToPath(new URL("../../packages/pi/extensions/puzzles.ts", import.meta.url)),
+    { default: true },
+  )) as typeof puzzlesExtension;
+  const tools = new Map<string, RegisteredTool>();
+  await extension({
+    registerTool(tool: RegisteredTool) {
+      tools.set(tool.name, tool);
+    },
+  } as unknown as ExtensionAPI);
+  return tools;
+}
+
+describe("Pi host loader", () => {
+  it("answers every tool with the dataset the in-process run sees", async () => {
+    const hosted = await registerThroughHostLoader();
+    const direct = await registerTools();
+    expect([...hosted.keys()].sort()).toEqual(toolNames);
+
+    for (const [name, params] of [
+      ["puzzles_collections", {}],
+      ["puzzles_stats", {}],
+      ["puzzles_show", { id: "gsmg" }],
+      ["puzzles_hints", { id: "gsmg" }],
+      ["puzzles_list", { collection: "b1000", limit: 1 }],
+    ] as const) {
+      const result = await hosted.get(name)?.execute("call-1", params);
+      expect(result?.content[0]?.text, name).toEqual(
+        (await direct.get(name)?.execute("call-1", params))?.content[0]?.text,
+      );
+    }
+  }, 30_000);
 });

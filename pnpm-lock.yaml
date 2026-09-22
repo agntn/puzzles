@@ -54,6 +54,9 @@ importers:
       changelogen:
         specifier: 0.6.2
         version: 0.6.2
+      jiti:
+        specifier: 2.7.0
+        version: 2.7.0
       obuild:
         specifier: 0.4.40
         version: 0.4.40(chokidar@5.0.0)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(typescript@7.0.2)
