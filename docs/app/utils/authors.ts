@@ -33,6 +33,9 @@ export interface AuthorFactsData {
   readonly ticks: readonly string[];
   readonly firstStarted: string;
   readonly lastStarted: string;
+  /** Position among every author, one based, for the file number on the page. */
+  readonly position: number;
+  readonly total: number;
 }
 
 /**
@@ -40,11 +43,13 @@ export interface AuthorFactsData {
  *
  * @param {AuthorEntry} entry - The author as the registry lists it.
  * @param {readonly AnyCollection[]} collections - The instances of `entry.collections`, in that order.
+ * @param {readonly AuthorEntry[]} [roster] - Every author, for the position of this one.
  * @returns {AuthorFactsData} The record, one row per collection and the totals across them.
  */
 export function authorFacts(
   entry: AuthorEntry,
   collections: readonly AnyCollection[],
+  roster: readonly AuthorEntry[] = [entry],
 ): AuthorFactsData {
   const puzzles = collections.flatMap((collection) => collection.all());
   const unsolved = collections.flatMap((collection) => collection.unsolved());
@@ -81,6 +86,12 @@ export function authorFacts(
     ticks: puzzles.map((puzzle) => puzzle.status()),
     firstStarted: started[0] ?? "",
     lastStarted: started.at(-1) ?? "",
+    position:
+      Math.max(
+        0,
+        roster.findIndex((row) => row.key === entry.key),
+      ) + 1,
+    total: roster.length,
   };
 }
 

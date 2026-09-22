@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getAuthor, requireCollection } from "@agntn/puzzles";
+import { authors, dataVersion, getAuthor, requireCollection } from "@agntn/puzzles";
 import { authorFacts, authorIcon } from "../../utils/authors";
 import { formatPrizeTotals, hostPath } from "../../utils/format";
 import { CHAIN_ICONS } from "../../utils/puzzles";
@@ -15,17 +15,22 @@ const { data } = await useAsyncData(
       throw createError({ statusCode: 404, statusMessage: `Unknown author ${props.author}` });
     }
     const collections = await Promise.all(entry.collections.map((key) => requireCollection(key)));
-    return authorFacts(entry, collections);
+    return {
+      ...authorFacts(entry, collections, await authors()),
+      dataVersion: await dataVersion(),
+    };
   },
 );
 
 /** The facts as timeline items; the source link renders through the description slot. */
 const log = computed(() =>
-  (data.value?.facts ?? []).map((entry) => ({
+  (data.value?.facts ?? []).map((entry, order) => ({
+    order,
     date: entry.date ?? "undated",
     title: entry.text,
     description: entry.source,
     source: entry.source,
+    ui: { indicator: entry.date === undefined ? "dossier-log-mark-open" : "" },
   })),
 );
 </script>
@@ -36,7 +41,12 @@ const log = computed(() =>
     <span class="dossier-cross dossier-cross-br" aria-hidden="true">+</span>
 
     <header class="dossier-bar">
-      <span class="dossier-id"><span class="dossier-tag">ID</span>{{ data.key }}</span>
+      <span class="dossier-id"
+        ><span class="dossier-tag">ID</span>{{ data.key
+        }}<span class="dossier-file"
+          >{{ String(data.position).padStart(2, "0") }} / {{ data.total }}</span
+        ></span
+      >
       <span class="dossier-meta"
         >{{ data.kind ?? "kind unknown" }} · {{ data.collections.length }}
         {{ data.collections.length === 1 ? "collection" : "collections" }} ·
@@ -46,9 +56,10 @@ const log = computed(() =>
         ></span
       >
     </header>
-    <div class="dossier-ruler" aria-hidden="true" />
+    <div class="dossier-ruler" aria-hidden="true"><span class="dossier-cursor" /></div>
 
     <div class="dossier-band dossier-subject">
+      <div class="dossier-scan" aria-hidden="true" />
       <div class="dossier-identity">
         <div class="console-reticle dossier-reticle" aria-hidden="true">
           <svg viewBox="0 0 120 120" fill="none">
@@ -83,6 +94,10 @@ const log = computed(() =>
       </div>
 
       <div class="dossier-readout">
+        <svg class="dossier-link" viewBox="0 0 32 40" fill="none" aria-hidden="true">
+          <circle cx="3" cy="12" r="2.5" />
+          <path d="M5.5 12H14L22 20H32" />
+        </svg>
         <dl class="dossier-metrics">
           <div>
             <dt>Puzzles</dt>
@@ -112,6 +127,7 @@ const log = computed(() =>
               v-for="(status, index) in data.ticks"
               :key="index"
               :class="status === 'unsolved' ? 'dossier-tick-open' : 'dossier-tick-closed'"
+              :style="{ animationDelay: `${Math.min(index * 12, 720)}ms` }"
             />
           </span>
           <span class="dossier-gauge-read"
@@ -132,6 +148,7 @@ const log = computed(() =>
         <dd v-for="link in data.profiles" :key="link.url">
           <span class="dossier-tag">{{ link.name }}</span>
           <a :href="link.url" target="_blank" rel="noopener">{{ hostPath(link.url) }}</a>
+          <span class="dossier-leader" aria-hidden="true" />
         </dd>
       </dl>
       <dl v-if="data.addresses.length > 0" class="console-address dossier-addresses">
@@ -161,7 +178,7 @@ const log = computed(() =>
         }"
       >
         <template #wrapper="{ item }">
-          <div class="dossier-entry">
+          <div class="dossier-entry" :style="{ animationDelay: `${item.order * 90}ms` }">
             <span class="dossier-entry-date">{{ item.date }}</span>
             <div class="dossier-entry-body">
               <p>{{ item.title }}</p>
@@ -175,14 +192,17 @@ const log = computed(() =>
     <footer class="dossier-footer">
       <ul class="dossier-collections">
         <li v-for="row in data.collections" :key="row.key">
-          <NuxtLink :to="row.to">{{ row.title }} <span aria-hidden="true">→</span></NuxtLink>
+          <NuxtLink :to="row.to"><span aria-hidden="true">→ </span>{{ row.title }}</NuxtLink>
           <span
             >{{ row.total }} puzzles · {{ row.unsolved }} open · since
             {{ row.firstStarted.slice(0, 10) }}</span
           >
         </li>
       </ul>
-      <span class="dossier-meta">local dataset / no network</span>
+      <span class="dossier-meta"
+        >local dataset / no network · data {{ data.dataVersion.slice(0, 4) }}
+        {{ data.dataVersion.slice(4, 8) }} {{ data.dataVersion.slice(8, 12) }}</span
+      >
     </footer>
   </section>
 </template>
@@ -265,21 +285,125 @@ const log = computed(() =>
   color: var(--ui-text-muted);
 }
 .dossier-bar {
-  padding-right: 28px;
+  position: relative;
+  padding-right: 76px;
   background: color-mix(in srgb, var(--ui-text-muted) 5%, var(--ui-bg));
   clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%);
 }
+.dossier-bar::after {
+  content: "";
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  width: 36px;
+  height: 7px;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(135deg, var(--console-corner) 0 1px, transparent 1px 4px);
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
 .dossier-ruler {
+  position: relative;
   height: 5px;
+  overflow: hidden;
   border-top: 1px solid var(--console-line);
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--console-corner) 0 1px,
-    transparent 1px 12px
-  );
-  background-size: 12px 3px;
+  background-image:
+    repeating-linear-gradient(90deg, var(--console-corner) 0 1px, transparent 1px 12px),
+    repeating-linear-gradient(90deg, var(--console-corner) 0 6px, transparent 6px 132px);
+  background-size:
+    12px 3px,
+    132px 2px;
   background-repeat: repeat-x;
-  background-position: 20px 0;
+  background-position:
+    20px 0,
+    44px 0;
+}
+.dossier-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--console-accent));
+  animation: dossier-sweep 1600ms ease-in-out 200ms both;
+}
+@keyframes dossier-sweep {
+  from {
+    transform: translateX(-48px);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateX(100vw);
+    opacity: 0;
+  }
+}
+.dossier-scan {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.dossier-scan::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-bottom: 1px solid var(--console-corner);
+  animation: console-scan 700ms ease-out 100ms both;
+}
+.dossier-subject > :not(.dossier-scan) {
+  position: relative;
+}
+.dossier-ticks > span {
+  animation: dossier-tick 320ms ease-out both;
+}
+@keyframes dossier-tick {
+  from {
+    transform: scaleY(0.2);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+.dossier-ticks > span {
+  transform-origin: bottom;
+}
+.dossier-entry {
+  animation: dossier-entry 360ms ease-out both;
+}
+@keyframes dossier-entry {
+  from {
+    transform: translateX(-6px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.dossier-channels dd:hover .dossier-leader::after {
+  background: var(--console-accent);
+  box-shadow: none;
+}
+.dossier-leader::before {
+  content: "";
+  position: absolute;
+  right: 9px;
+  bottom: -1px;
+  width: 10px;
+  height: 2px;
+  background: var(--console-corner);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dossier-cursor,
+  .dossier-scan {
+    display: none;
+  }
+  .dossier-ticks > span,
+  .dossier-entry {
+    animation: none;
+  }
 }
 .dossier-id {
   color: var(--ui-text-highlighted);
@@ -292,14 +416,21 @@ const log = computed(() =>
   text-transform: none;
   letter-spacing: 0.04em;
 }
+.dossier-file {
+  margin-left: 14px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ui-text-dimmed);
+}
 .dossier-band {
   padding: 16px 20px;
   border-top: 1px solid var(--console-line);
 }
 .dossier-subject {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: 20px 28px;
+  gap: 20px 32px;
   border-top: 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M16 18h4m-2-2v4' fill='none' stroke='%23818a94' stroke-opacity='.1'/%3E%3C/svg%3E");
   background-size: 36px 36px;
@@ -318,7 +449,7 @@ const log = computed(() =>
 .dossier-name h3 {
   margin: 4px 0 6px;
   font-family: var(--font-sans);
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -344,12 +475,24 @@ const log = computed(() =>
 .dossier-about {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
   color: var(--ui-text-muted);
 }
+.dossier-link {
+  position: absolute;
+  top: 10px;
+  left: -32px;
+  width: 32px;
+  height: 40px;
+  stroke: var(--console-corner);
+  stroke-width: 1;
+  pointer-events: none;
+}
 .dossier-readout {
   position: relative;
+  z-index: 2;
+  align-self: start;
   min-width: 0;
   background: var(--ui-bg);
   outline: 1px dashed var(--console-line);
@@ -377,14 +520,17 @@ const log = computed(() =>
 }
 .dossier-metrics {
   display: grid;
-  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.5fr) minmax(0, 1fr);
   margin: 0;
 }
 .dossier-metrics > div {
-  padding: 10px 14px 8px;
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 9px 14px;
 }
 .dossier-metrics > div + div {
-  border-left: 1px solid var(--console-line);
+  border-top: 1px solid var(--console-line);
 }
 .dossier-metrics dt {
   font-size: 10px;
@@ -393,9 +539,9 @@ const log = computed(() =>
   color: var(--ui-text-muted);
 }
 .dossier-metrics dd {
-  margin: 6px 0 0;
-  font-size: 14px;
-  line-height: 1.45;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
   overflow-wrap: anywhere;
   color: var(--ui-text-highlighted);
 }
@@ -459,7 +605,26 @@ const log = computed(() =>
 .dossier-channels dd {
   display: flex;
   align-items: baseline;
+  gap: 0 10px;
   margin: 8px 0 0;
+}
+.dossier-leader {
+  flex: 1;
+  align-self: center;
+  min-width: 24px;
+  height: 5px;
+  border-bottom: 1px dotted var(--console-line);
+  position: relative;
+  transform: translateY(-2px);
+}
+.dossier-leader::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -3px;
+  width: 5px;
+  height: 5px;
+  box-shadow: inset 0 0 0 1px var(--console-corner);
 }
 .dossier-channels dd .dossier-tag {
   flex: none;
@@ -483,6 +648,23 @@ const log = computed(() =>
   margin: 0;
   align-self: start;
 }
+.dossier-addresses dd {
+  position: relative;
+  padding-left: 16px;
+}
+.dossier-addresses dd::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 1px var(--console-corner),
+    inset 0 0 0 3px var(--ui-bg),
+    inset 0 0 0 4px var(--console-corner);
+}
 .dossier-addresses dd + dd {
   margin-top: 2px;
 }
@@ -496,8 +678,11 @@ const log = computed(() =>
   content: "";
   flex: 1;
   order: 1;
-  height: 1px;
-  background: var(--console-line);
+  height: 7px;
+  background:
+    radial-gradient(circle at 3px 3.5px, var(--console-corner) 0 1.5px, transparent 2px) no-repeat,
+    linear-gradient(var(--console-line), var(--console-line)) 6px 3px / calc(100% - 6px) 1px
+      no-repeat;
 }
 .dossier-log-title::after {
   content: "";
@@ -521,6 +706,9 @@ const log = computed(() =>
 }
 .dossier-log :deep(.dossier-log-mark > *) {
   display: none;
+}
+.dossier-log :deep(.dossier-log-mark:not(.dossier-log-mark-open)) {
+  background: var(--console-corner);
 }
 .dossier-log :deep(.dossier-log-rule) {
   width: 1px;
@@ -554,10 +742,20 @@ const log = computed(() =>
   color: var(--ui-text-muted);
   overflow-wrap: anywhere;
 }
+.dossier-entry a::before {
+  content: "↗ ";
+  color: var(--ui-text-dimmed);
+}
+.dossier-entry:hover .dossier-entry-date {
+  color: var(--console-accent);
+}
 .dossier-footer {
   border-top: 1px solid var(--console-line);
   text-transform: none;
   letter-spacing: 0;
+}
+.dossier-footer > .dossier-meta {
+  margin-left: auto;
 }
 .dossier-collections {
   display: flex;
@@ -573,15 +771,19 @@ const log = computed(() =>
 .dossier-collections a > span {
   color: var(--ui-text-dimmed);
 }
-.dossier-collections span {
+.dossier-collections li > span {
   margin-left: 10px;
   color: var(--ui-text-dimmed);
   font-size: 11px;
+  white-space: nowrap;
 }
 @media (width < 900px) {
   .dossier-subject,
   .dossier-trail {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .dossier-link {
+    display: none;
   }
 }
 @media (width < 640px) {
@@ -589,16 +791,20 @@ const log = computed(() =>
     grid-template-columns: 76px minmax(0, 1fr);
     gap: 14px;
   }
-  .dossier-metrics {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .dossier-metrics > div + div {
-    border-left: 0;
-    border-top: 1px solid var(--console-line);
+  .dossier-metrics > div {
+    grid-template-columns: 7rem minmax(0, 1fr);
   }
   .dossier-entry {
     grid-template-columns: minmax(0, 1fr);
     gap: 2px;
+  }
+}
+@media (width < 640px) {
+  .dossier-bar {
+    padding-right: 28px;
+  }
+  .dossier-bar::after {
+    display: none;
   }
 }
 @media (width < 400px) {

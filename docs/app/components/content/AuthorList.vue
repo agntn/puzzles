@@ -25,7 +25,10 @@ const rows = computed(() => data.value ?? []);
         </NuxtLink>
         <span class="roster-id">{{ row.key }}</span>
         <span class="roster-about">{{ row.about }}</span>
-        <span class="roster-count">{{ row.collections.join(", ") }} · {{ row.puzzles }}</span>
+        <span class="roster-count"
+          ><span class="roster-leader" aria-hidden="true" />{{ row.collections.join(", ") }} ·
+          {{ row.puzzles }}</span
+        >
       </li>
     </ol>
     <footer class="roster-bar roster-footer">
@@ -189,10 +192,18 @@ const rows = computed(() => data.value ?? []);
   color: var(--ui-text-muted);
 }
 .roster-count {
-  text-align: right;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
   font-size: 11px;
   color: var(--ui-text-dimmed);
   overflow-wrap: anywhere;
+}
+.roster-leader {
+  flex: 1;
+  min-width: 16px;
+  height: 4px;
+  border-bottom: 1px dotted var(--console-line);
 }
 @media (width < 900px) {
   .roster-rows li {
@@ -206,7 +217,9 @@ const rows = computed(() => data.value ?? []);
   }
   .roster-count {
     grid-column: 1 / -1;
-    text-align: left;
+  }
+  .roster-leader {
+    display: none;
   }
 }
 @media (width < 400px) {
