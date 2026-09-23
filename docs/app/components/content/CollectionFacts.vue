@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { collectionKeys, dataVersion, requireCollection } from "@agntn/puzzles";
 import { collectionFacts } from "../../utils/collections";
-import { formatPrizeTotals, hostPath } from "../../utils/format";
+import { formatPrizeTotals } from "../../utils/format";
 import { CHAIN_ICONS, collectionEntry } from "../../utils/puzzles";
 
 const props = defineProps<{ collection: string }>();
@@ -34,35 +34,6 @@ const entry = computed(() => collectionEntry(props.collection));
  */
 function count(value: number, noun: string): string {
   return `${value} ${noun}${value === 1 ? "" : "s"}`;
-}
-
-/**
- * Host, path and query of a link, the query kept because forum threads live in it.
- *
- * @param {string} url - The link.
- * @returns {string} The link without its scheme.
- */
-function linkText(url: string): string {
-  try {
-    const parsed = new URL(url);
-    return `${hostPath(url)}${parsed.search}`;
-  } catch {
-    return url;
-  }
-}
-
-/**
- * The bare host, printed after a link's own description.
- *
- * @param {string} url - The link.
- * @returns {string} The host without `www.`, or nothing for an unparsable link.
- */
-function host(url: string): string {
-  try {
-    return new URL(url).hostname.replace(/^www\./u, "");
-  } catch {
-    return "";
-  }
 }
 
 /**
@@ -266,56 +237,7 @@ const census = computed(() => {
         >
         <span class="console-mark" aria-hidden="true" />
       </p>
-      <ol class="collection-hints">
-        <li v-for="(hint, index) in data.hints" :key="index" class="collection-hint">
-          <span class="collection-hint-date"
-            ><span>{{ hint.date?.slice(0, 10) ?? "undated" }}</span
-            ><span v-if="hint.date && hint.date.length > 10">{{ hint.date.slice(11) }}</span></span
-          >
-          <div class="collection-hint-body">
-            <p>
-              <span class="console-tag">{{ hint.kind }}</span
-              >{{ hint.text }}
-            </p>
-            <p class="console-lead">
-              <span class="console-tag">Source</span>
-              <a :href="hint.source" :title="hint.source" target="_blank" rel="noopener">{{
-                linkText(hint.source)
-              }}</a>
-              <span class="console-leader" aria-hidden="true" />
-            </p>
-            <p v-if="hint.confirmation" class="console-lead">
-              <span class="console-tag">Confirm</span>
-              <a
-                :href="hint.confirmation.url"
-                :title="hint.confirmation.url"
-                target="_blank"
-                rel="noopener"
-                >{{ hint.confirmation.description ?? linkText(hint.confirmation.url)
-                }}<span v-if="hint.confirmation.description" class="collection-hint-host">
-                  {{ host(hint.confirmation.url) }}</span
-                ></a
-              >
-              <span class="console-leader" aria-hidden="true" />
-            </p>
-            <details v-if="hint.answer" class="collection-hint-answer">
-              <summary>Published answer</summary>
-              <p>{{ hint.answer.text }}</p>
-              <p class="console-lead">
-                <span class="console-tag">{{ hint.answer.date?.slice(0, 10) ?? "Source" }}</span>
-                <a
-                  :href="hint.answer.source"
-                  :title="hint.answer.source"
-                  target="_blank"
-                  rel="noopener"
-                  >{{ linkText(hint.answer.source) }}</a
-                >
-                <span class="console-leader" aria-hidden="true" />
-              </p>
-            </details>
-          </div>
-        </li>
-      </ol>
+      <HintLog :hints="data.hints" />
     </div>
 
     <footer class="console-footer console-footer-plain">
@@ -432,98 +354,6 @@ const census = computed(() => {
 @media (prefers-reduced-motion: reduce) {
   .collection-census-bar > span {
     animation: none;
-  }
-}
-.collection-hints {
-  display: grid;
-  gap: 18px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.collection-hint {
-  display: grid;
-  grid-template-columns: 6.5rem minmax(0, 1fr);
-  gap: 16px;
-}
-.collection-hint-date {
-  display: grid;
-  align-content: start;
-  padding-top: 3px;
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--ui-text-dimmed);
-}
-.collection-hint-date > span:first-child {
-  color: var(--ui-text-muted);
-}
-.collection-hint:hover .collection-hint-date > span:first-child {
-  color: var(--console-accent);
-}
-.collection-hint-body {
-  min-width: 0;
-}
-.collection-hint-body > p:first-child {
-  margin: 0 0 6px;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--ui-text-highlighted);
-}
-.collection-hint-body > p:first-child > .console-tag {
-  font-family: var(--font-mono);
-  vertical-align: 1px;
-}
-.collection-hint .console-lead {
-  flex-wrap: nowrap;
-  gap: 0 10px;
-  margin-top: 4px;
-}
-.collection-hint .console-lead > a {
-  overflow: hidden;
-  min-width: 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow-wrap: normal;
-  color: var(--ui-text-muted);
-}
-.collection-hint .console-lead > a:hover {
-  color: var(--console-accent);
-}
-.collection-hint-host {
-  margin-left: 8px;
-  color: var(--ui-text-dimmed);
-}
-.collection-hint-answer {
-  margin-top: 8px;
-}
-.collection-hint-answer summary {
-  cursor: pointer;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ui-text-muted);
-}
-.collection-hint-answer > p:first-of-type {
-  margin: 6px 0 0;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--ui-text-highlighted);
-}
-@media (width < 640px) {
-  .collection-hint {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
-  }
-  .collection-hint-date {
-    display: flex;
-    gap: 8px;
-  }
-  .collection-hint .console-lead > .console-tag {
-    min-width: 4.5rem;
-  }
-  .collection-hint .console-leader {
-    display: none;
   }
 }
 </style>

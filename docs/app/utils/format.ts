@@ -66,6 +66,20 @@ export function hostPath(url: string): string {
   }
 }
 
+/**
+ * Host, path and query of a link, the query kept because forum threads live in it.
+ *
+ * @param {string} url - The link.
+ * @returns {string} The link without its scheme, or the input when it doesn't parse.
+ */
+export function linkText(url: string): string {
+  try {
+    return `${hostPath(url)}${new URL(url).search}`;
+  } catch {
+    return url;
+  }
+}
+
 export { formatPrize, formatPrizeTotals } from "../../../src/core/utils.ts";
 
 /**

@@ -111,7 +111,7 @@ defineOgImage(
       >
         {{ title }}
       </h1>
-      <p v-if="data" class="mt-4 max-w-2xl text-base leading-7 text-muted">
+      <p v-if="data" class="mt-4 max-w-2xl text-base leading-7 break-words text-muted">
         {{ description }}
       </p>
     </header>
