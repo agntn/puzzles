@@ -4,8 +4,24 @@ import { tokenizeToolResponse } from "../../utils/tool-response";
 /**
  * The `03 Full tool response` row of an instrument and the dialog it opens. The dialog reads the
  * title and text captured when it opened, so a record change under it never swaps the response.
+ * A second row on the same instrument names its own number, label and where the text comes from.
  */
-const props = defineProps<{ title: string; text: string }>();
+const props = withDefaults(
+  defineProps<{
+    title: string;
+    text: string;
+    index?: string;
+    label?: string;
+    source?: string;
+    description?: string;
+  }>(),
+  {
+    index: "03",
+    label: "Full tool response",
+    source: "content[0].text",
+    description: "The complete text the tool returned.",
+  },
+);
 
 const captured = shallowRef({ title: props.title, text: props.text });
 const tokens = computed(() => tokenizeToolResponse(captured.value.text));
@@ -19,7 +35,7 @@ function capture(open: boolean) {
 <template>
   <UModal
     :title="captured.title"
-    description="The complete text the tool returned."
+    :description="description"
     :transition="false"
     :ui="{
       content: 'max-w-5xl rounded-sm shadow-none',
@@ -30,12 +46,14 @@ function capture(open: boolean) {
     @update:open="capture"
   >
     <button type="button" class="console-output">
-      <span><span class="console-index">03</span> Full tool response</span>
+      <span
+        ><span class="console-index">{{ index }}</span> {{ label }}</span
+      >
       <UIcon name="i-lucide-expand" class="size-3.5" aria-hidden="true" />
     </button>
     <template #body>
       <div class="response-toolbar">
-        <span>content[0].text</span>
+        <span>{{ source }}</span>
         <UButton
           color="neutral"
           variant="ghost"
@@ -47,7 +65,7 @@ function capture(open: boolean) {
       <pre
         class="response-text"
         tabindex="0"
-        aria-label="Full tool response"
+        :aria-label="label"
       ><code><span v-for="(token, index) in tokens" :key="index" :class="`response-${token.kind}`">{{ token.text }}</span></code></pre>
     </template>
   </UModal>
@@ -65,6 +83,9 @@ function capture(open: boolean) {
   cursor: pointer;
   color: var(--ui-text-muted);
   text-align: left;
+}
+.console-output + .console-output {
+  border-top: 0;
 }
 .console-output:hover {
   color: var(--ui-text-highlighted);
