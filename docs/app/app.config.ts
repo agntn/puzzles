@@ -55,6 +55,14 @@ export default defineAppConfig({
         },
       ],
     },
+    /** A tooltip is a console label: flat, clipped corner, mono, and it wraps, because it carries full addresses. */
+    tooltip: {
+      slots: {
+        content:
+          "puzzles-tooltip h-auto max-w-[min(32rem,calc(100vw-2rem))] rounded-none bg-transparent shadow-none ring-0 px-3 py-1.5 data-[state=delayed-open]:animate-none data-[state=closed]:animate-none",
+        text: "whitespace-normal text-highlighted [overflow-wrap:anywhere]",
+      },
+    },
     pageHeader: {
       slots: {
         root: "py-8 border-b border-muted",

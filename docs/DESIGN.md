@@ -135,6 +135,18 @@ A collection page opens with a dossier on the shared console shell (`tool-consol
 5. **Hints:** only when the collection carries shared hints. Each entry is the dossier log's grid: date and time on the left, the kind tag and text in Figtree 14 px, then `Source` and `Confirm` leads. A lead shows host, path and query on one line with an ellipsis and the full URL in `title`; a confirmation with a description shows the description and its host. Below 640 px the date goes above the text and the leads stay on one line.
 6. **Footer:** arrow links to the author and to all collections, the locality meta and the data version in three blocks.
 
+## Puzzle list
+
+`::collection-puzzles` in [CollectionPuzzles.vue](app/components/content/CollectionPuzzles.vue) closes a collection page on the same shell (`tool-console console-wide`).
+
+1. **Bar:** `List` tag and `<key>.all()`; the meta carries one 2 px tick per puzzle for a named collection, the puzzle count and the status counts in record order, the unsolved count in the accent; the hatched mark.
+2. **Ruler** with one cursor sweep.
+3. **Named collection:** `console-rows`, one per puzzle: name as the page link, `StatusPill`, prize, a dotted leader into the shortened address, then the public key and private key glyphs, the key in the accent. Rows slide in once, 30 ms apart. Below 640 px the prize goes under the name and the address is dropped.
+4. **Numbered collection:** a grid of square cells, `auto-fill` from 2.5 rem. A closed cell stands on a 3 px hatched strip, red hatching for `swept`; an open cell has no strip and a half accent edge, the full accent on hover. A 3 px square in the top right corner marks a published private key.
+5. **Footer:** what a name or a cell opens and what the marks mean, the locality meta.
+
+Every value a row shortens or a cell hides is in a `UTooltip`, never a `title`. The tooltip is themed once in `app.config.ts` (`ui.tooltip`) with `.puzzles-tooltip` in `app.css`: one quiet 1 px edge with a 14 px amber segment at the top left, the top right corner cut by 7 px, mono 11 px, no shadow, radius or scale animation, and it wraps so a full address fits. A structured tooltip uses the `#content` slot with `puzzles-tooltip-value`, `puzzles-tooltip-sep` and `puzzles-tooltip-open`.
+
 ## Full-response viewer
 
 The complete response belongs in `UModal`, not an expanding inline dump. Opening it must not lengthen the page or resize the card.
