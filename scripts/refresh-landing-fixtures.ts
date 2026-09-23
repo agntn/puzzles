@@ -57,7 +57,7 @@ export async function buildLandingFixtures(
     walk.map(async (id) => {
       const puzzle = await library.requirePuzzle(id);
       const tool = (await showTool(id)).content[0]?.text ?? "";
-      return toSample(library, puzzle, tool);
+      return await toSample(library, puzzle, tool);
     }),
   );
   const stats = await library.stats();

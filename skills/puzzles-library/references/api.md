@@ -141,8 +141,8 @@ interface BalanceOptions {
 ## Verification
 
 ```ts
-verifyPuzzle(puzzle); // VerifyResult, synchronous
-await collection.verify(query); // Promise<VerifyResult>, loads the crypto on first use
+await verifyPuzzle(puzzle); // VerifyResult, loads the crypto on first use
+await collection.verify(query); // VerifyResult, the same through the collection's lookup
 secretOf(puzzle.keyData()); // Secret | undefined: hex, wif, encrypted, seed (with a phrase), or mini
 
 type VerifyResult = VerifySuccess | VerifyFailure;
