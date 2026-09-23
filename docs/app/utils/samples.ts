@@ -4,7 +4,7 @@ import { formatPrize } from "./format.ts";
 /** The slice of the library a sample needs, passed in so this module never imports it by name. */
 export interface SampleLibrary {
   readonly secretOf: (key: KeyData | undefined) => { readonly kind: string } | undefined;
-  readonly verifyPuzzle: (puzzle: Puzzle) => VerifyResult;
+  readonly verifyPuzzle: (puzzle: Puzzle) => Promise<VerifyResult>;
 }
 
 /** What the landing shows about one puzzle: plain data, so a static copy renders before the library loads. */
@@ -171,12 +171,16 @@ function verdictOf(result: VerifyResult): LandingSample["verdict"] {
  * @param {SampleLibrary} library - `secretOf` and `verifyPuzzle`, from `src/` or the alias.
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
- * @returns {LandingSample} Plain data for the panels.
+ * @returns {Promise<LandingSample>} Plain data for the panels.
  */
-export function toSample(library: SampleLibrary, puzzle: Puzzle, tool: string): LandingSample {
+export async function toSample(
+  library: SampleLibrary,
+  puzzle: Puzzle,
+  tool: string,
+): Promise<LandingSample> {
   const address = puzzle.address();
   const range = puzzle.keyRange();
-  const result = library.verifyPuzzle(puzzle);
+  const result = await library.verifyPuzzle(puzzle);
   return {
     id: puzzle.id(),
     collection: puzzle.collection(),

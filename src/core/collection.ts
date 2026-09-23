@@ -4,8 +4,7 @@ import { frozen, type Hint, type Party } from "./parts.ts";
 import { Puzzle, Status } from "./puzzle.ts";
 import { type Balance } from "./types.ts";
 import { filterPuzzles } from "./utils.ts";
-/** A type-only import keeps the verification crypto out of the collection load path. */
-import type { VerifyResult } from "./verify.ts";
+import { verifyPuzzle, type VerifyResult } from "./verify.ts";
 
 /**
  * A named set of puzzles. The subclass supplies identity, author, the list and the hints every
@@ -139,15 +138,13 @@ export abstract class Collection<Query> {
   }
 
   /**
-   * Checks key material through the universal identifier, loading the crypto on first use.
+   * Checks key material through the universal identifier.
    *
    * @param {string} id - Universal puzzle identifier.
    * @returns {Promise<VerifyResult>} The verification outcome.
    */
   async verifyById(id: string): Promise<VerifyResult> {
-    const puzzle = this.requireId(id);
-    const { verifyPuzzle } = await import("./verify.ts");
-    return verifyPuzzle(puzzle);
+    return verifyPuzzle(this.requireId(id));
   }
 
   /**

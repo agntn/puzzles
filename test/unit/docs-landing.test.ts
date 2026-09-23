@@ -26,14 +26,14 @@ describe("docs landing fixtures", () => {
     for (const [position, id] of WALK.entries()) {
       const puzzle = await library.requirePuzzle(id);
       const tool = (await showTool(id)).content[0]?.text ?? "";
-      expect(toSample(library, puzzle, tool)).toEqual(LANDING_STATIC[position]);
+      expect(await toSample(library, puzzle, tool)).toEqual(LANDING_STATIC[position]);
     }
   });
 
   it("labels the solution file separately from its solver on the puzzle page", async () => {
     const library = await import("../../src/index.ts");
     const puzzle = await library.requirePuzzle("movie_enigma");
-    const view = toPuzzleView(library, puzzle, "", []);
+    const view = await toPuzzleView(library, puzzle, "", []);
 
     expect(view.solverName).toBe("rabbidbird");
     expect(view.solverUrl).toBe("https://github.com/rabbidbird");

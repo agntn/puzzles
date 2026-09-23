@@ -50,7 +50,7 @@ Every collection has the same methods from `Collection`: `get`, `require`, `all`
 ## Network and crypto load late
 
 - `puzzle.balance(options)` goes through `@agntn/explorers` and loads the provider on the first call. Amounts are `bigint` base units. Ethereum needs an Etherscan key. There is no retry or rate limiting.
-- `collection.verify(query)` loads the key derivation on the first call. An expected failure is a `VerifyResult` with `verified: false`, not an exception. `verifyPuzzle(puzzle)` is the synchronous form.
+- `collection.verify(query)` loads the key derivation on the first call. An expected failure is a `VerifyResult` with `verified: false`, not an exception. `verifyPuzzle(puzzle)` does the same for a puzzle already in hand.
 - `dataVersion()` serializes the whole dataset once, then caches. Fine at startup, wasteful in a loop.
 
 ## Own collections

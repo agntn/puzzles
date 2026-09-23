@@ -174,15 +174,15 @@ function assetLinks(collection: string, assets: Assets | undefined): AssetLink[]
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
  * @param {readonly Hint[]} shared - The hints of the puzzle's collection, listed ahead of its own.
- * @returns {PuzzleView} The sample plus key rows, transactions, assets, hints, solver and the JSON.
+ * @returns {Promise<PuzzleView>} The sample plus key rows, transactions, assets, hints, solver and the JSON.
  */
-export function toPuzzleView(
+export async function toPuzzleView(
   library: ViewLibrary,
   puzzle: Puzzle,
   tool: string,
   shared: readonly Hint[],
-): PuzzleView {
-  const sample = toSample(library, puzzle, tool);
+): Promise<PuzzleView> {
+  const sample = await toSample(library, puzzle, tool);
   const assets = puzzle.assets();
   const solver = puzzle.solver();
   return {

@@ -43,7 +43,7 @@ export function useLandingPuzzle() {
     const text = (await showTool(id)).content[0]?.text ?? "";
     const position = WALK.indexOf(id);
     if (position !== -1) {
-      samples.value[position] = toSample(library, puzzle, text);
+      samples.value[position] = await toSample(library, puzzle, text);
     }
     const collection = puzzle.collection();
     if (!loaded.value.includes(collection)) {

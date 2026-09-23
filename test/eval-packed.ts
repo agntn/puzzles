@@ -163,6 +163,9 @@ const otherCollections =
     collectionModule(module) && !collectionNamed(file)(module);
 const executors: ModuleMatcher = (module) =>
   module.url === `${packageRootUrl}dist/tool-operations.mjs`;
+/* Dependencies resolve from the checkout's node_modules, outside the packed root. */
+const verificationCryptoUrl = /\/node_modules\/(?:@agntn\/keys|@noble\/curves)\//u;
+const verificationCrypto: ModuleMatcher = (module) => verificationCryptoUrl.test(module.url);
 
 /**
  * Imports a packed entry under a unique URL, so every step evaluates its own copy
@@ -295,6 +298,14 @@ async function assertPackedLibrary(): Promise<void> {
   assertLoaded(collectionNamed("b1000"), "a lookup loads its collection");
   assertNotLoaded(otherCollections("b1000"), "a lookup must not load the other collections");
   assert.equal(library.hasCollection("peter_todd"), true, "the historical alias survives packing");
+  assert.deepEqual(
+    loaded.filter(verificationCrypto).map((module) => module.url),
+    [],
+    "importing the library and looking up a puzzle must not load the verification crypto",
+  );
+  assert.ok(puzzle !== undefined);
+  assert.equal((await library.verifyPuzzle(puzzle)).verified, true, "b1000/1 verifies once packed");
+  assert.ok(loaded.some(verificationCrypto), "the first verification loads the crypto");
 }
 
 /**
@@ -458,7 +469,7 @@ async function assertHelpStaysLight(binPath: string): Promise<void> {
       `${label} must not load a collection`,
     );
     assert.deepEqual(
-      strings.filter((url) => /\/node_modules\/(?:@agntn\/keys|@noble\/curves)\//u.test(url)),
+      strings.filter((url) => verificationCryptoUrl.test(url)),
       [],
       `${label} must not load the verification crypto`,
     );

@@ -11,9 +11,7 @@ const roots = new Set<string>();
  * @returns {void}
  */
 function note(url: string): void {
-  if (/\/core\/verify\.(?:ts|mjs)(?:[?#]|$)/u.test(url)) {
-    roots.add("verify");
-  } else if (/\/core\/crypto\.(?:ts|mjs)(?:[?#]|$)/u.test(url)) {
+  if (/\/core\/crypto\.(?:ts|mjs)(?:[?#]|$)/u.test(url)) {
     roots.add("crypto");
   } else if (url.includes("/node_modules/@agntn/keys/")) {
     roots.add("keys");
