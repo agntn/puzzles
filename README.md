@@ -44,11 +44,11 @@ npx @agntn/puzzles stats
 ```text
 Total: 348
 Solved: 142
-Unsolved: 96
-Claimed: 11
+Unsolved: 95
+Claimed: 12
 Swept: 96
 Expired: 3
-With pubkey: 247
+With pubkey: 248
 ```
 
 No key, no config, no network. The records ship inside the package. The bare `puzzles` below is `pnpm exec puzzles` after a local `pnpm add`, or just `puzzles` after `pnpm add -g @agntn/puzzles`.

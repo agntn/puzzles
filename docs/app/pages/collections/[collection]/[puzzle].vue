@@ -24,6 +24,15 @@ const entry = computed(() => collectionEntry(collection.value));
 const title = computed(() => id.value);
 
 /**
+ * The document title: the collection and the puzzle in the words a search uses, with the id after them.
+ * `zden/level_5` becomes `Zden's puzzles level 5 (zden/level_5)`.
+ */
+const seoTitle = computed(() => {
+  const name = String(route.params.puzzle ?? "").replaceAll("_", " ");
+  return `${entry.value?.title ?? collection.value} ${name} (${id.value})`;
+});
+
+/**
  * A clause for the search width of an open puzzle, empty when the record has none.
  *
  * @param {number | undefined} bits - The key width in bits.
@@ -48,7 +57,8 @@ const OUTCOME: Readonly<Record<Status, (view: PuzzleView, when: string) => strin
   unsolved: (view) => `Open since ${view.startedAt.slice(0, 10)}${bitsClause(view.bits)}.`,
   solved: (view, when) =>
     `Solved on ${when}${afterClause(view.solveTime)}${view.secret === "none" ? "" : ", key published"}.`,
-  claimed: (_, when) => `Claimed on ${when}, without a published key.`,
+  claimed: (view, when) =>
+    `Claimed on ${when}${afterClause(view.solveTime)}, without a published key.`,
   swept: (_, when) => `Swept on ${when} by someone other than a solver.`,
   expired: (_, when) => `Expired on ${when}, the prize went back to the author.`,
 };
@@ -63,7 +73,7 @@ const description = computed(() => {
 });
 
 useSeo({
-  title: title.value,
+  title: seoTitle.value,
   description: description.value,
   type: "article",
   breadcrumbs: [
