@@ -12,7 +12,7 @@
 
 ### 🔥 Performance
 
-- **verify:** ⚠️  Load keys on the first verification ([#259](https://github.com/agntn/puzzles/pull/259))
+- **verify:** ⚠️ Load keys on the first verification ([#259](https://github.com/agntn/puzzles/pull/259))
 
 ### 🩹 Fixes
 
@@ -29,7 +29,7 @@
 
 #### ⚠️ Breaking Changes
 
-- **verify:** ⚠️  Load keys on the first verification ([#259](https://github.com/agntn/puzzles/pull/259))
+- **verify:** ⚠️ Load keys on the first verification ([#259](https://github.com/agntn/puzzles/pull/259))
 
 ### ❤️ Contributors
 
