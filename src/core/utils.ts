@@ -1,6 +1,6 @@
 import type { AuthorEntry } from "./dataset.ts";
 import { type Chain, chains, parseChain, sameAddress } from "./chains.ts";
-import type { CollectionSummary } from "./dataset.ts";
+import type { CollectionSummary, Stats } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
 import {
   type Confirmation,
@@ -490,6 +490,24 @@ export function formatAuthorRecord(entry: AuthorEntry): string {
  */
 export function formatCollection(summary: CollectionSummary): string {
   return `${summary.key}: ${summary.total} puzzles, ${statusCountLabels(summary).join(", ")}, by ${summary.author ?? "unknown"}`;
+}
+
+/**
+ * Formats the aggregate statistics as the lines `puzzles stats` prints.
+ *
+ * @param {Stats} result - The statistics from `stats()`.
+ * @returns {string[]} `Total: N`, one line per status, then `With pubkey: N`.
+ */
+export function formatStats(result: Stats): string[] {
+  return [
+    `Total: ${result.total}`,
+    `Solved: ${result.solved}`,
+    `Unsolved: ${result.unsolved}`,
+    `Claimed: ${result.claimed}`,
+    `Swept: ${result.swept}`,
+    `Expired: ${result.expired}`,
+    `With pubkey: ${result.with_pubkey}`,
+  ];
 }
 
 /**

@@ -7,6 +7,9 @@ const { samples, loaded, tick, paused, current, step } = useLandingPuzzle();
 
 const unsolvedBtc = STATS_STATIC.unsolvedPrize.BTC.toFixed(2);
 
+/** Chains that hold at least one puzzle, read off the same fixtures as the rows. */
+const chainCount = new Set(FACTS_STATIC.flatMap((row) => row.chains)).size;
+
 const { copied, copy } = useCopied();
 
 /** The collection list highlights whichever collection the panels are showing. */
@@ -176,7 +179,7 @@ const customCode = [
       <div class="mx-auto w-full max-w-[var(--ui-container)] px-8 py-20 sm:px-12 lg:px-16">
         <div class="max-w-2xl">
           <h2 class="text-2xl font-medium tracking-tight text-highlighted sm:text-[1.75rem]">
-            Twenty collections, five chains, one page per puzzle
+            {{ COLLECTIONS.length }} collections, {{ chainCount }} chains, one page per puzzle
           </h2>
           <p class="mt-4 text-sm leading-6 text-muted">
             Each collection is a class with an author and its puzzle list, published on its own

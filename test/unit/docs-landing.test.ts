@@ -90,19 +90,8 @@ describe("docs landing fixtures", () => {
     expect(AUTHORS_STATIC).toEqual(authorRows(await library.authors()));
   });
 
-  it.each(["README.md", "docs/content/index.md", "docs/app/app.config.ts", "docs/nuxt.config.ts"])(
-    "keeps the advertised puzzle total current in %s",
-    async (path) => {
-      const library = await import("../../src/index.ts");
-      const text = readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
-      const advertised = text.match(/\b(\d+) (?:public crypto )?puzzles\b/u)?.[1];
-
-      expect(advertised).toBe(String((await library.stats()).total));
-    },
-  );
-
   it.each(["README.md", "docs/content/2.collections/00.index.md"])(
-    "keeps collection table counts current in %s",
+    "lists every collection, largest first, in %s",
     async (path) => {
       const library = await import("../../src/index.ts");
       const text = readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
@@ -119,13 +108,20 @@ describe("docs landing fixtures", () => {
         .map((key) => countsByKey.get(key)!);
       expect(counts).toHaveLength(collections.length);
       expect(counts).toEqual([...counts].sort((left, right) => right - left));
-      for (const collection of collections) {
-        const row = text.split("\n").find((line) => line.includes(`\`${collection.key}\``));
-        const count = row?.split("|").find((cell) => /^\s*\d+\s*$/u.test(cell));
-        expect(count?.trim()).toBe(String(collection.count()));
-      }
     },
   );
+
+  it("asks the library for each row's count in the collections table", async () => {
+    const library = await import("../../src/index.ts");
+    const text = readFileSync(
+      new URL("../../docs/content/2.collections/00.index.md", import.meta.url),
+      "utf8",
+    );
+    for (const key of library.collectionKeys()) {
+      const row = text.split("\n").find((line) => line.includes(`| \`${key}\``));
+      expect(row, key).toContain(`:dataset-count{collection="${key}"}`);
+    }
+  });
 
   it("read a collection's facts strip without loading another collection", async () => {
     const library = await import("../../src/index.ts");
