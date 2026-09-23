@@ -5,7 +5,7 @@
 [![license](https://npmx.dev/api/registry/badge/license/@agntn/puzzles)](https://npmx.dev/package/@agntn/puzzles)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/agntn/puzzles)
 
-349 public crypto puzzles and bounties in twenty collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
+350 public crypto puzzles and bounties in twenty collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
 
 ## Why?
 
@@ -42,13 +42,13 @@ npx @agntn/puzzles stats
 ```
 
 ```text
-Total: 349
-Solved: 143
+Total: 350
+Solved: 144
 Unsolved: 95
 Claimed: 12
 Swept: 96
 Expired: 3
-With pubkey: 249
+With pubkey: 250
 ```
 
 No key, no config, no network. The records ship inside the package. The bare `puzzles` below is `pnpm exec puzzles` after a local `pnpm add`, or just `puzzles` after `pnpm add -g @agntn/puzzles`.
@@ -105,7 +105,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `arweave`               |      12 | arweave, ethereum                   | Tiamat's weave puzzles                  |
 | `warp`                  |       6 | bitcoin                             | Keybase's scrypt brainwallet challenges |
 | `hash_collision`        |       6 | bitcoin                             | Peter Todd's P2SH collision bounties    |
-| `quizchain`             |       4 | bitcoin                             | Quiz blocks chained by their keys       |
+| `quizchain`             |       5 | bitcoin                             | Quiz blocks chained by their keys       |
 | `ballet`                |       3 | bitcoin                             | BIP38 keys printed on physical wallets  |
 | `dug`                   |       3 | bitcoin                             | 2025 student seed hunt                  |
 | `bitimage`              |       2 | bitcoin                             | Seeds hashed from photographs           |
