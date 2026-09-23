@@ -1,7 +1,7 @@
 ---
 seo:
   title: "Every puzzle, one record"
-  description: 349 public crypto puzzles and bounties as typed records. One library behind a CLI and nine agent tools
+  description: 350 public crypto puzzles and bounties as typed records. One library behind a CLI and nine agent tools
 ---
 
 ::landing-home

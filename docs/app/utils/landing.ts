@@ -738,14 +738,14 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "e7d3ef1dc7e4",
-  total: 349,
-  solved: 143,
+  dataVersion: "43561dd4fefd",
+  total: 350,
+  solved: 144,
   unsolved: 95,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 249,
+  withPubkey: 250,
   unsolvedPrize: {
     AR: 1900,
     ETH: 9.61254155,
@@ -755,7 +755,7 @@ export const STATS_STATIC = {
     AR: 5550,
     ETH: 22.74624155,
     DAI: 100,
-    BTC: 1064.10958961,
+    BTC: 1064.11658961,
     LTC: 230.8255,
     DCR: 460,
   },
@@ -1114,19 +1114,19 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     author: "AoiNakamoto",
     authorKey: "aoi-nakamoto",
     authorUrl: "https://www.reddit.com/user/AoiNakamoto/",
-    total: 4,
+    total: 5,
     statuses: {
-      solved: 4,
+      solved: 5,
     },
     chains: ["bitcoin"],
     prize: {
-      BTC: 0.028,
+      BTC: 0.035,
     },
     unsolvedPrize: {},
-    withPubkey: 4,
-    withKey: 4,
+    withPubkey: 5,
+    withKey: 5,
     firstStarted: "2019-04-07 03:31:37",
-    lastStarted: "2019-04-07 09:15:55",
+    lastStarted: "2019-04-07 11:08:39",
     hints: [],
   },
   {
@@ -1290,7 +1290,7 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     about:
       "Pseudonymous author of the 2019 Quizchain puzzle series on Reddit, who shut it all down in August 2019 and called it a failed experiment.",
     collections: ["book_quiz", "quizchain", "satoshi_birthday_quiz"],
-    puzzles: 6,
+    puzzles: 7,
   },
   {
     key: "coin-artist",
