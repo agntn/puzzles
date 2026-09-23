@@ -68,7 +68,7 @@ describe("puzzles MCP server", () => {
       "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
     );
     expect(rows).toContain("warp: 6 puzzles, 4 solved, 0 unsolved, 2 expired, by Keybase");
-    expect(rows).toContain("zden: 16 puzzles, 14 solved, 2 unsolved, by Zden");
+    expect(rows).toContain("zden: 16 puzzles, 14 solved, 1 unsolved, 1 claimed, by Zden");
   });
 
   it("lists authors and shows one by author or collection key", async () => {

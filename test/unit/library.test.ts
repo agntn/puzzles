@@ -545,12 +545,12 @@ describe("lazy collection registry", () => {
     expect(await all()).toHaveLength(348);
     expect(await stats()).toEqual({
       total: 348,
-      claimed: 11,
+      claimed: 12,
       expired: 3,
       solved: 142,
       swept: 96,
-      unsolved: 96,
-      with_pubkey: 247,
+      unsolved: 95,
+      with_pubkey: 248,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
@@ -562,7 +562,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1900,
         ETH: 9.61254155,
-        BTC: 908.88130493,
+        BTC: 908.87574943,
       },
     });
   });

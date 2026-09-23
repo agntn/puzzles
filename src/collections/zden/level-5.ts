@@ -1,5 +1,14 @@
-import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { assets, confirmation, funding, increase, official, p2pkh } from "../../core/parts.ts";
+import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import {
+  assets,
+  claim,
+  confirmation,
+  funding,
+  increase,
+  official,
+  p2pkh,
+  uncompressed,
+} from "../../core/parts.ts";
 
 /** Puzzle `zden/level_5`. */
 export const zdenPuzzleLevel5 = bitcoinPuzzle({
@@ -7,7 +16,13 @@ export const zdenPuzzleLevel5 = bitcoinPuzzle({
   address: p2pkh("1cryptoGeCRiTzVgxBQcKFFjSVydN1GW7", "06c84797d2441393513e2169338e00cf2e755c8c"),
   sourceUrl: "https://crypto.haluska.sk/crypto5fix.png",
   startedAt: "2018-10-20 18:46:57",
+  status: Status.Claimed,
+  pubkey: uncompressed(
+    "0488d3d2481ceee8be4372fc4d1ef8451e5b5e1c092728566f5b1bd1a5849ffa870681b60b5e97983e4d027156273b3f81da778005e1104cf3fbc9446e66ccbb9a",
+  ),
   prize: 0.0055555,
+  solvedAt: "2026-09-22 18:34:35",
+  solveTime: 250040858,
   transactions: [
     funding(
       "3dde5372e50d314df6e0f46477b99e34a20fbe38721fa9519a2cdf6c51518c38",
@@ -28,6 +43,11 @@ export const zdenPuzzleLevel5 = bitcoinPuzzle({
       "33d0b16e4f4c9e9e0e0d6fe450d108a90629f199e14835bb94d4376388a944a1",
       "2021-12-03 08:55:29",
       0.0020555,
+    ),
+    claim(
+      "e2544433184d0fe4157ca10a8e1ce753bb52a7b0bbcf833740d7448ed25e8e8e",
+      "2026-09-22 18:34:35",
+      0.00551745,
     ),
   ],
   assets: assets({
