@@ -3,7 +3,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vite-plus/test";
 import { WALK } from "../../docs/app/utils/landing.ts";
-import { all, collectionKeys, collections } from "../../src/index.ts";
+import {
+  all,
+  authors,
+  Chain,
+  collectionKeys,
+  collections,
+  selectPuzzles,
+  stats,
+  Status,
+} from "../../src/index.ts";
 import { chains } from "../../src/core/chains.ts";
 import { facts } from "../../src/tool-operations.ts";
 
@@ -178,6 +187,135 @@ describe("the prose counts what the registry ships", () => {
       for (const count of countsIn(text, noun)) {
         expect(count, `${noun} in ${file}`).toBe(expected[noun]);
       }
+    }
+  });
+});
+
+const totals = await stats();
+const b1000 = puzzles.filter((puzzle) => puzzle.collection() === "b1000");
+
+/**
+ * Example lines whose trailing comment states what the dataset answers. Each row names the file,
+ * the code in front of the comment, and the answer the comment opens with. A record change that
+ * moves the answer fails here instead of leaving the example behind.
+ */
+const results: readonly (readonly [file: string, code: string, answer: number | string])[] = [
+  ["README.md", "(await stats()).unsolved;", totals.unsolved],
+  ["docs/content/1.guide/01.index.md", "(await all()).length;", puzzles.length],
+  ["docs/content/1.guide/01.index.md", "(await stats()).unsolved;", totals.unsolved],
+  ["docs/content/1.guide/01.index.md", "b1000.count();", b1000.length],
+  [
+    "docs/content/1.guide/01.index.md",
+    "b1000.unsolved().length;",
+    b1000.filter((puzzle) => puzzle.status() === Status.Unsolved).length,
+  ],
+  ["docs/content/1.guide/04.lookups.md", "b1000.count();", b1000.length],
+  [
+    "docs/content/1.guide/04.lookups.md",
+    "b1000.solvedCount();",
+    b1000.filter((puzzle) => puzzle.status() === Status.Solved).length,
+  ],
+  [
+    "docs/content/1.guide/04.lookups.md",
+    "b1000.unsolvedCount();",
+    b1000.filter((puzzle) => puzzle.status() === Status.Unsolved).length,
+  ],
+  ["docs/content/1.guide/04.lookups.md", "await all();", puzzles.length],
+  [
+    "docs/content/1.guide/04.lookups.md",
+    'await selectPuzzles({ collection: "b1000", status: Status.Unsolved });',
+    (await selectPuzzles({ collection: "b1000", status: Status.Unsolved })).length,
+  ],
+  [
+    "docs/content/1.guide/04.lookups.md",
+    "await selectPuzzles({ chain: Chain.Ethereum });",
+    (await selectPuzzles({ chain: Chain.Ethereum })).length,
+  ],
+  [
+    "docs/content/1.guide/07.cli.md",
+    "puzzles list b1000 --status unsolved",
+    b1000.filter((puzzle) => puzzle.status() === Status.Unsolved).length,
+  ],
+  [
+    "docs/content/1.guide/07.cli.md",
+    "puzzles list --chain ethereum",
+    (await selectPuzzles({ chain: Chain.Ethereum })).length,
+  ],
+  [
+    "docs/content/1.guide/07.cli.md",
+    "puzzles stats --json | jq -c .unsolved_prize",
+    JSON.stringify(totals.unsolved_prize),
+  ],
+  [
+    "docs/content/2.collections/01.b1000.md",
+    "b1000.solved().length;",
+    b1000.filter((puzzle) => puzzle.status() === Status.Solved).length,
+  ],
+  [
+    "docs/content/2.collections/01.b1000.md",
+    "b1000.unsolved().length;",
+    b1000.filter((puzzle) => puzzle.status() === Status.Unsolved).length,
+  ],
+  [
+    "docs/content/2.collections/01.b1000.md",
+    '(await selectPuzzles({ collection: "b1000", status: Status.Swept })).length;',
+    b1000.filter((puzzle) => puzzle.status() === Status.Swept).length,
+  ],
+  ["docs/content/3.authors/00.index.md", "(await authors()).length;", (await authors()).length],
+];
+
+/**
+ * The comment behind every line of a file that starts with the given code.
+ *
+ * @param {string} text - File contents.
+ * @param {string} code - The code in front of the comment.
+ * @returns {string[]} Each comment without its `//` or `#` marker.
+ */
+function commentsAfter(text: string, code: string): string[] {
+  return text
+    .split("\n")
+    .filter((line) => line.startsWith(`${code} `))
+    .map((line) => line.slice(code.length).replace(/^\s+(?:\/\/|#)\s*/, ""));
+}
+
+/**
+ * The first count a comment gives, in digits or as a word.
+ *
+ * @param {string} comment - A comment from `commentsAfter`.
+ * @returns {string | undefined} The count as `spellOut` writes it.
+ */
+function firstCount(comment: string): string | undefined {
+  for (const match of comment.matchAll(/\b[a-z]+(?:-[a-z]+)?\b|\b\d+\b/gi)) {
+    const token = match[0];
+    if (/^\d+$/.test(token)) return token;
+    if (numberWords.has(token.toLowerCase())) return token.toLowerCase();
+  }
+  return undefined;
+}
+
+describe("the examples answer what the registry ships", () => {
+  it("reads the count a comment opens with", () => {
+    expect(firstCount("7, four of them in the collection called arweave")).toBe("7");
+    expect(firstCount("the seven Ethereum records, wherever they live")).toBe("seven");
+    expect(firstCount("348 puzzles in manifest order, then list order")).toBe("348");
+    expect(commentsAfter("b1000.count(); // 256\nb1000.count();", "b1000.count();")).toEqual([
+      "256",
+    ]);
+  });
+
+  it.each(results)("%s: %s", (file, code, answer) => {
+    const comments = commentsAfter(readFileSync(path.join(root, file), "utf8"), code);
+    expect(comments, `${code} in ${file}`).not.toHaveLength(0);
+    for (const comment of comments) {
+      if (typeof answer === "string") {
+        expect(comment).toBe(answer);
+        continue;
+      }
+      const count = firstCount(comment);
+      expect(
+        count === String(answer) || (answer < 100 && count === spellOut(answer)),
+        `${comment} should give ${answer}`,
+      ).toBe(true);
     }
   });
 });
