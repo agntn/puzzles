@@ -5,7 +5,7 @@
 [![license](https://npmx.dev/api/registry/badge/license/@agntn/puzzles)](https://npmx.dev/package/@agntn/puzzles)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/agntn/puzzles)
 
-350 public crypto puzzles and bounties in twenty collections, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
+Public crypto puzzles and bounties, as typed records. You ask for a puzzle, you get its address, its key material and what happened on chain.
 
 ## Why?
 
@@ -41,17 +41,7 @@ Node.js 24 or newer for the CLI.
 npx @agntn/puzzles stats
 ```
 
-```text
-Total: 350
-Solved: 144
-Unsolved: 95
-Claimed: 12
-Swept: 96
-Expired: 3
-With pubkey: 250
-```
-
-No key, no config, no network. The records ship inside the package. The bare `puzzles` below is `pnpm exec puzzles` after a local `pnpm add`, or just `puzzles` after `pnpm add -g @agntn/puzzles`.
+That prints the total, one count per status and how many puzzles have a known public key. No key, no config, no network. The records ship inside the package. The bare `puzzles` below is `pnpm exec puzzles` after a local `pnpm add`, or just `puzzles` after `pnpm add -g @agntn/puzzles`.
 
 ```bash
 puzzles show b1000/71
@@ -89,7 +79,7 @@ puzzle?.address().value; // "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU"
 puzzle?.keyRange(); // [2n ** 70n, 2n ** 71n - 1n]
 
 (await verifyPuzzle(b1000.require(1))).verified; // true, key 1 derives its address
-(await stats()).unsolved; // 95
+(await stats()).unsolved; // how many are still waiting for a key
 (await b1000.require(71).balance()).totalUnits(); // 7.10190014 when I ran it, mempool.space decides
 ```
 
@@ -97,28 +87,28 @@ That's most of it, really. A collection is its own entry and everything on it is
 
 ## 🗺️ Collections
 
-| Key                     | Puzzles | Chains                              | What it is                              |
-| ----------------------- | ------: | ----------------------------------- | --------------------------------------- |
-| `b1000`                 |     256 | bitcoin                             | Keys of 1 to 256 bits, one address each |
-| `rushwallet`            |      30 | bitcoin                             | Brainwallets from a 2014 contest        |
-| `zden`                  |      16 | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                   |
-| `arweave`               |      12 | arweave, ethereum                   | Tiamat's weave puzzles                  |
-| `warp`                  |       6 | bitcoin                             | Keybase's scrypt brainwallet challenges |
-| `hash_collision`        |       6 | bitcoin                             | Peter Todd's P2SH collision bounties    |
-| `quizchain`             |       5 | bitcoin                             | Quiz blocks chained by their keys       |
-| `ballet`                |       3 | bitcoin                             | BIP38 keys printed on physical wallets  |
-| `dug`                   |       3 | bitcoin                             | 2025 student seed hunt                  |
-| `bitimage`              |       2 | bitcoin                             | Seeds hashed from photographs           |
-| `luckylurker`           |       2 | bitcoin                             | Two Bitcoin Vault seed challenges       |
-| `bitaps`                |       1 | bitcoin                             | A 3 of 5 secret sharing scheme          |
-| `gsmg`                  |       1 | bitcoin                             | A multi phase image puzzle              |
-| `movie_enigma`          |       1 | bitcoin                             | Film titles as seed words, solved 2026  |
-| `ledger_donjon`         |       1 | bitcoin                             | Scissors Secret Sharing from the CTF    |
-| `coin_artist`           |       1 | bitcoin                             | TORCHED H34R7S painting                 |
-| `genesis`               |       1 | bitcoin                             | Genesis block OP_RETURN puzzle          |
-| `mineshop`              |       1 | ethereum                            | A seed split between a video and a post |
-| `satoshi_birthday_quiz` |       1 | bitcoin                             | Seven quiz answers hashed into a wallet |
-| `book_quiz`             |       1 | bitcoin                             | A book quiz nobody won in time          |
+| Key                     | Chains                              | What it is                              |
+| ----------------------- | ----------------------------------- | --------------------------------------- |
+| `b1000`                 | bitcoin                             | Keys of 1 to 256 bits, one address each |
+| `rushwallet`            | bitcoin                             | Brainwallets from a 2014 contest        |
+| `zden`                  | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                   |
+| `arweave`               | arweave, ethereum                   | Tiamat's weave puzzles                  |
+| `warp`                  | bitcoin                             | Keybase's scrypt brainwallet challenges |
+| `hash_collision`        | bitcoin                             | Peter Todd's P2SH collision bounties    |
+| `quizchain`             | bitcoin                             | Quiz blocks chained by their keys       |
+| `ballet`                | bitcoin                             | BIP38 keys printed on physical wallets  |
+| `dug`                   | bitcoin                             | 2025 student seed hunt                  |
+| `bitimage`              | bitcoin                             | Seeds hashed from photographs           |
+| `luckylurker`           | bitcoin                             | Two Bitcoin Vault seed challenges       |
+| `bitaps`                | bitcoin                             | A 3 of 5 secret sharing scheme          |
+| `gsmg`                  | bitcoin                             | A multi phase image puzzle              |
+| `movie_enigma`          | bitcoin                             | Film titles as seed words, solved 2026  |
+| `ledger_donjon`         | bitcoin                             | Scissors Secret Sharing from the CTF    |
+| `coin_artist`           | bitcoin                             | TORCHED H34R7S painting                 |
+| `genesis`               | bitcoin                             | Genesis block OP_RETURN puzzle          |
+| `mineshop`              | ethereum                            | A seed split between a video and a post |
+| `satoshi_birthday_quiz` | bitcoin                             | Seven quiz answers hashed into a wallet |
+| `book_quiz`             | bitcoin                             | A book quiz nobody won in time          |
 
 Identifiers are `collection/name`. The six singletons, `gsmg`, `bitaps`, `mineshop`, `movie_enigma`, `satoshi_birthday_quiz` and `book_quiz`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
