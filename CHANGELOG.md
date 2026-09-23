@@ -1,3 +1,41 @@
+## v0.22.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.21.3...v0.22.0)
+
+### 🚀 Enhancements
+
+- **collections:** Zden/level_5 claimed ([#254](https://github.com/agntn/puzzles/pull/254))
+- **docs:** Puzzle lists join the instruments ([#255](https://github.com/agntn/puzzles/pull/255))
+- **collections:** Add quizchain/4 ([#258](https://github.com/agntn/puzzles/pull/258))
+- **collections:** Add quizchain/5 ([#260](https://github.com/agntn/puzzles/pull/260))
+- **docs:** One dossier per puzzle page ([#262](https://github.com/agntn/puzzles/pull/262))
+
+### 🔥 Performance
+
+- **verify:** ⚠️  Load keys on the first verification ([#259](https://github.com/agntn/puzzles/pull/259))
+
+### 🩹 Fixes
+
+- **collections:** Zden/demobit_2018 has no capture ([#253](https://github.com/agntn/puzzles/pull/253))
+
+### 📖 Documentation
+
+- Pin example results to the dataset ([#256](https://github.com/agntn/puzzles/pull/256))
+- Counts come from the library ([#261](https://github.com/agntn/puzzles/pull/261))
+
+### 📦 Build
+
+- Lint, test and pack through Vite+ ([#252](https://github.com/agntn/puzzles/pull/252))
+
+#### ⚠️ Breaking Changes
+
+- **verify:** ⚠️  Load keys on the first verification ([#259](https://github.com/agntn/puzzles/pull/259))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.21.3
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.21.2...v0.21.3)
