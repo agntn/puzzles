@@ -22,6 +22,7 @@ import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi_birthday_quiz.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
+import { wickex, WickexCollection } from "../../src/collections/wickex.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
 import {
   all,
@@ -76,6 +77,7 @@ const concreteClasses = [
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
   WarpCollection,
+  WickexCollection,
   ZdenCollection,
 ] as const;
 
@@ -414,6 +416,11 @@ describe("lazy collection registry", () => {
       "iamabananaamaa/gif",
     ]);
 
+    expect(["youtube", "wickex/youtube"].map((query) => wickex.get(query)?.id())).toEqual([
+      "wickex/youtube",
+      "wickex/youtube",
+    ]);
+
     expect(rushwallet.get("9")?.id()).toBe("rushwallet/9");
     expect(rushwallet.get("rushwallet/9")?.id()).toBe("rushwallet/9");
     expect(rushwallet.get(9 as never)).toBeUndefined();
@@ -605,20 +612,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(352);
+    expect(await all()).toHaveLength(353);
     expect(await stats()).toEqual({
-      total: 352,
+      total: 353,
       claimed: 12,
       expired: 3,
-      solved: 146,
+      solved: 147,
       swept: 96,
       unsolved: 95,
-      with_pubkey: 252,
+      with_pubkey: 253,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
         DAI: 100,
-        BTC: 1064.12258961,
+        BTC: 1064.12358961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -651,7 +658,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(352);
+    ).toBe(353);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -678,6 +685,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(146);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(147);
   });
 });

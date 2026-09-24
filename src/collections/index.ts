@@ -33,5 +33,6 @@ export const builtins: readonly CollectionEntry[] = [
     load: () => import("./satoshi_birthday_quiz.ts").then((m) => m.satoshiBirthdayQuiz),
   },
   { key: "warp", load: () => import("./warp.ts").then((m) => m.warp) },
+  { key: "wickex", load: () => import("./wickex.ts").then((m) => m.wickex) },
   { key: "zden", load: () => import("./zden.ts").then((m) => m.zden) },
 ];
