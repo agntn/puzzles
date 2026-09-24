@@ -108,6 +108,18 @@ export function verdictLabel(verified: boolean, unavailable: boolean): string {
 }
 
 /**
+ * The subject glyph of a verdict: the shield the outcome earns.
+ *
+ * @param {boolean} verified - Whether the key derived the address.
+ * @param {boolean} unavailable - Whether there was nothing to derive.
+ * @returns {string} The Lucide icon name.
+ */
+export function verdictIcon(verified: boolean, unavailable: boolean): string {
+  if (verified) return "i-lucide-shield-check";
+  return unavailable ? "i-lucide-shield-question" : "i-lucide-shield-x";
+}
+
+/**
  * The playground's list form as one CLI line, carrying every argument its tool call carries.
  *
  * @param {{ readonly collection: string; readonly status: string; readonly withPubkey: boolean; readonly limit: string }} form - The form's list fields.
