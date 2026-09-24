@@ -88,7 +88,7 @@
     "@oh-my-pi/omptype": "18.2.6",
     "@oh-my-pi/pi-coding-agent": "18.2.6",
     "@scure/base": "2.4.0",
-    "@types/node": "26.2.0",
+    "@types/node": "26.6.2",
     "changelogen": "0.6.2",
     "jiti": "2.7.0",
     "typescript": "7.0.2",
