@@ -56,7 +56,11 @@ afterEach(() => {
   temporaryDirectories.length = 0;
 });
 
-describe("landing fixture refresh", () => {
+/*
+ * Every test here builds the dataset and formats through a `vp fmt` process, some of them three
+ * times. A full parallel run takes them past the default 5 s, so they get the live tests' 30 s.
+ */
+describe("landing fixture refresh", { timeout: 30_000 }, () => {
   it("reports stale output without writing and refreshes idempotently", async () => {
     const source = readFileSync("docs/app/utils/landing.ts", "utf8");
     const stale = source.replace(/dataVersion: "[0-9a-f]{12}"/u, 'dataVersion: "stale"');
