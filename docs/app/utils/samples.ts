@@ -4,7 +4,7 @@ import { formatPrize } from "./format.ts";
 /** The slice of the library a sample needs, passed in so this module never imports it by name. */
 export interface SampleLibrary {
   readonly secretOf: (key: KeyData | undefined) => { readonly kind: string } | undefined;
-  readonly verifyPuzzle: (puzzle: Puzzle) => Promise<VerifyResult>;
+  readonly verify: (puzzle: Puzzle) => Promise<VerifyResult>;
 }
 
 /** What the landing shows about one puzzle: plain data, so a static copy renders before the library loads. */
@@ -168,7 +168,7 @@ function verdictOf(result: VerifyResult): LandingSample["verdict"] {
  * Reads one puzzle into the shape the landing renders. The tool text is passed in because
  * `showTool` is asynchronous, and the library because this file is shared with the root test.
  *
- * @param {SampleLibrary} library - `secretOf` and `verifyPuzzle`, from `src/` or the alias.
+ * @param {SampleLibrary} library - `secretOf` and `verify`, from `src/` or the alias.
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
  * @returns {Promise<LandingSample>} Plain data for the panels.
@@ -180,7 +180,7 @@ export async function toSample(
 ): Promise<LandingSample> {
   const address = puzzle.address();
   const range = puzzle.keyRange();
-  const result = await library.verifyPuzzle(puzzle);
+  const result = await library.verify(puzzle);
   return {
     id: puzzle.id(),
     collection: puzzle.collection(),

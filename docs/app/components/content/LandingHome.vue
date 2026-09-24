@@ -103,7 +103,7 @@ const customCode = [
       to="/guide/verification"
       link="How verification works"
       :checks="[
-        'verifyPuzzle reads the one secret a record exposes: hex, WIF, BIP38 payload, seed phrase or mini key',
+        'verify() reads the one secret a record exposes: hex, WIF, BIP38 payload, seed phrase or mini key',
         'A solved puzzle with its key published derives the stored address, in your browser, secp256k1 and all',
         'No key, an encrypted key, a mini key: unavailable is a verdict, not an exception',
       ]"

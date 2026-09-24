@@ -185,7 +185,7 @@ const inputSize = computed(() => fit(props.sample.id, CALL.w - 36, 22));
         :y2="RESULT.y + 44"
         class="puzzles-flow-rule"
       />
-      <text :x="RESULT.x + 18" :y="RESULT.y + 68" class="puzzles-flow-label">verifyPuzzle</text>
+      <text :x="RESULT.x + 18" :y="RESULT.y + 68" class="puzzles-flow-label">verify</text>
       <text :x="RESULT.x + 18" :y="RESULT.y + 96" class="puzzles-flow-domain puzzles-flow-accent">
         <tspan :key="sample.id" class="puzzles-derive">{{ verdict }}</tspan>
       </text>

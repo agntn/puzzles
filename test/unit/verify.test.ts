@@ -17,7 +17,7 @@ import {
   p2wsh,
   seed,
   standard,
-  verifyPuzzle,
+  verify,
   wif,
   type Address,
   type Key,
@@ -88,7 +88,7 @@ describe("Collection.verify", () => {
   });
 
   it("derives the address from a WIF alone", async () => {
-    const result = await verifyPuzzle(
+    const result = await verify(
       bitcoinPuzzle({
         ...synthetic,
         address: p2pkh("1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj"),
@@ -105,8 +105,8 @@ describe("Collection.verify", () => {
   it("keeps WIF compression when the same key is also recorded as hex", async () => {
     const key = wif("5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF");
     const spec = { ...synthetic, address: p2pkh("1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj") };
-    const original = await verifyPuzzle(bitcoinPuzzle({ ...spec, key }));
-    const enriched = await verifyPuzzle(
+    const original = await verify(bitcoinPuzzle({ ...spec, key }));
+    const enriched = await verify(
       bitcoinPuzzle({
         ...spec,
         key: key.hex("E9873D79C6D87DC0FB6A5778633389F4453213303DA61F20BD67FC233AA33262"),
@@ -122,7 +122,7 @@ describe("Collection.verify", () => {
   });
 
   it("prefers the declared public key format over a matching WIF for hex", async () => {
-    const result = await verifyPuzzle(
+    const result = await verify(
       bitcoinPuzzle({
         ...synthetic,
         address: p2pkh("19GuvDvMMUZ8vq84wT79fvnvhMd5MnfTkR"),
@@ -142,7 +142,7 @@ describe("Collection.verify", () => {
   it.each(["invalid WIF", "5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF"])(
     "ignores a WIF that cannot describe the hex key: %s",
     async (encoded) => {
-      const result = await verifyPuzzle(
+      const result = await verify(
         bitcoinPuzzle({
           ...synthetic,
           address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
@@ -159,7 +159,7 @@ describe("Collection.verify", () => {
   );
 
   it("decodes a Litecoin WIF against Litecoin, not Bitcoin", async () => {
-    const result = await verifyPuzzle(
+    const result = await verify(
       litecoinPuzzle({
         ...synthetic,
         address: p2pkh("LTVsBSEBS8oCBdpE7b6SwwrguZzMUnjsWr"),
@@ -174,7 +174,7 @@ describe("Collection.verify", () => {
   });
 
   it("derives the address at a seed's path", async () => {
-    const result = await verifyPuzzle(
+    const result = await verify(
       bitcoinPuzzle({
         ...synthetic,
         address: p2pkh("1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7"),
@@ -193,7 +193,7 @@ describe("Collection.verify", () => {
 
   it("derives a seed whose BIP39 checksum fails, the way the Bitcoin Movie Enigma phrase does", async () => {
     /* The phrase, the address and the compressed key it spent with are all on chain. */
-    const result = await verifyPuzzle(
+    const result = await verify(
       bitcoinPuzzle({
         ...synthetic,
         address: p2wpkh("bc1q94ecsn0qk8lap2gefrycnms3ruepy889z969a6"),
@@ -212,7 +212,7 @@ describe("Collection.verify", () => {
   });
 
   it("fails a seed with a word outside the BIP39 list", async () => {
-    const result = await verifyPuzzle(
+    const result = await verify(
       bitcoinPuzzle({
         ...synthetic,
         address: p2pkh("1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7"),
@@ -231,7 +231,7 @@ describe("Collection.verify", () => {
   });
 
   it("marks a Decred seed as unavailable, because keys derives no Decred HD wallet", async () => {
-    const result = await verifyPuzzle(
+    const result = await verify(
       decredPuzzle({
         ...synthetic,
         address: p2pkh("DsmcYVbP1Nmag2H4AS17UTvmWXmGeA7nLDx"),
@@ -260,7 +260,7 @@ describe("Collection.verify", () => {
     standard("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
     p2wsh("bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj"),
   ])("marks unsupported $kind derivation as unavailable", async (address) => {
-    const result = await verifyPuzzle(
+    const result = await verify(
       bitcoinPuzzle({
         ...synthetic,
         address,
@@ -280,7 +280,7 @@ describe("Collection.verify", () => {
   });
 
   it("keeps invalid private keys as failures", async () => {
-    const result = await verifyPuzzle(
+    const result = await verify(
       bitcoinPuzzle({
         ...synthetic,
         address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
@@ -319,7 +319,7 @@ describe("Collection.verify", () => {
       }
     }
 
-    const result = await verifyPuzzle(new MismatchPuzzle());
+    const result = await verify(new MismatchPuzzle());
 
     expect(result).toMatchObject({ verified: false, unavailable: false });
     expect(result.error).toContain("Verification mismatch");

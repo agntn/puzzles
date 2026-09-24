@@ -67,7 +67,7 @@ const VERDICTS: Readonly<
 };
 
 function verifyRow(sample: LandingSample): Row {
-  return { key: "verify", call: "await verifyPuzzle(puzzle)", ...VERDICTS[sample.verdict](sample) };
+  return { key: "verify", call: "await verify(puzzle)", ...VERDICTS[sample.verdict](sample) };
 }
 
 const rows = computed(() => [
@@ -90,7 +90,7 @@ watch(
 <template>
   <div class="tool-console">
     <header class="console-bar">
-      <span class="console-title">verifyPuzzle</span>
+      <span class="console-title">verify</span>
       <span class="console-hosts">secp256k1 · in your browser</span>
     </header>
 

@@ -5,7 +5,7 @@ import { Puzzle, Status } from "./puzzle.ts";
 import { closestPuzzle } from "./suggest.ts";
 import { type Balance } from "./types.ts";
 import { filterPuzzles } from "./utils.ts";
-import { verifyPuzzle, type VerifyResult } from "./verify.ts";
+import { verify, type VerifyResult } from "./verify.ts";
 
 /**
  * A named set of puzzles. The subclass supplies identity, author, the list and the hints every
@@ -150,7 +150,7 @@ export abstract class Collection<Query> {
    * @returns {Promise<VerifyResult>} The verification outcome.
    */
   async verifyById(id: string): Promise<VerifyResult> {
-    return verifyPuzzle(this.requireId(id));
+    return verify(this.requireId(id));
   }
 
   /**
