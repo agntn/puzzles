@@ -5,6 +5,7 @@ import { quizchainBlock3 } from "./quizchain/3.ts";
 import { quizchainBlock4 } from "./quizchain/4.ts";
 import { quizchainBlock5 } from "./quizchain/5.ts";
 import { quizchainBlock6 } from "./quizchain/6.ts";
+import { quizchainBlock7 } from "./quizchain/7.ts";
 import { SatoshiBirthdayQuizCollection } from "./satoshi_birthday_quiz.ts";
 
 /** Quizchain, AoiNakamoto's numbered blocks on r/bitcoinpuzzles, addressed by block number. */
@@ -23,6 +24,7 @@ export class QuizchainCollection extends NumericCollection {
     quizchainBlock4,
     quizchainBlock5,
     quizchainBlock6,
+    quizchainBlock7,
   ];
 
   /** Builds the canonical collection. */
