@@ -26,7 +26,7 @@ importers:
         version: 0.3.8(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(typebox@1.3.34)(zod@4.6.5)
       '@agntn/explorers':
         specifier: 0.5.4
-        version: 0.5.4(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@earendil-works/pi-tui@0.85.1)(@oh-my-pi/pi-coding-agent@18.2.4)(typebox@1.3.34)
+        version: 0.5.4(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@earendil-works/pi-tui@0.85.1)(@oh-my-pi/pi-coding-agent@18.2.6)(typebox@1.3.34)
       '@agntn/keys':
         specifier: 0.3.2
         version: 0.3.2(zod@4.6.5)
@@ -53,11 +53,11 @@ importers:
         specifier: 2.4.0
         version: 2.4.0
       '@oh-my-pi/omptype':
-        specifier: 18.2.4
-        version: 18.2.4
+        specifier: 18.2.6
+        version: 18.2.6
       '@oh-my-pi/pi-coding-agent':
-        specifier: 18.2.4
-        version: 18.2.4
+        specifier: 18.2.6
+        version: 18.2.6
       '@scure/base':
         specifier: 2.4.0
         version: 2.4.0
@@ -887,34 +887,34 @@ packages:
     resolution: {integrity: sha512-X5XaVWZIBCT7HHZGm5I7ZQXDwLG+bGXuSrMQAW+7Zvl87h1kmc1ZB1VSRJcpUfoUrGQp4Fkoxm5kZ+Ms+aW+eA==}
     engines: {node: '>= 20.19.0'}
 
-  '@oh-my-pi/omp-stats@18.2.4':
-    resolution: {integrity: sha512-5XSeANYubITl3xJxjN0xXf9wJmWqVWtmwgBsq9dFC93qJaqxTcTICxVAD9dAX/KNyA8FULwTfS7Cn+jcAX9ytw==}
+  '@oh-my-pi/omp-stats@18.2.6':
+    resolution: {integrity: sha512-5jh/b4hDF2rK67gSpMKR7qBCTMQyI7FLU0jtDScBY6ILdCMQnrHIs6BsP09j984lR/HnnrLBGFOWZqMMkXZsvA==}
     engines: {bun: '>=1.3.14'}
     hasBin: true
 
-  '@oh-my-pi/omptype@18.2.4':
-    resolution: {integrity: sha512-DSWv0UdavKUlAC2JqLtQahfV2dm6m8x5Sq4spQLFBkj7wINrC/DaqkVIxwEa4pYdO2JgaVhJ/yOTN4OSie1iOw==}
+  '@oh-my-pi/omptype@18.2.6':
+    resolution: {integrity: sha512-4VUGOSr791W1lXNpU1hQXrKd4BqaEQlz2OHXYecZ6MTENb6Hx9JC00Sf7Db4dxPjkEzyibD1YjVUXqK3DQeO+g==}
     engines: {bun: '>=1.3.14', node: '>=20'}
 
-  '@oh-my-pi/pi-agent-core@18.2.4':
-    resolution: {integrity: sha512-pdt1rD0rxBvtqbNcZQcKMLf9ofu+ALX8Gset1YXSmMJdOErbn9PMZaQXYpQ95Fm570j7MoZs05Jth8ajIpGwjQ==}
+  '@oh-my-pi/pi-agent-core@18.2.6':
+    resolution: {integrity: sha512-BeakwQjJaF/w+8ISIQSbPRJJy+hSMM4XVB5kgx+qUKpykyrKXbw4zgG+tOF9+3VyCnDZZemv92FQ0Wdnmabchg==}
     engines: {bun: '>=1.3.14'}
 
-  '@oh-my-pi/pi-ai@18.2.4':
-    resolution: {integrity: sha512-Q5AEZHf1xQzjsXhjYX770+/Nvhwvt/HfYfEthi6ZxtgKqrEA2CXnHFjzroReKPzIuL6Qdi52SwJbiWFIJugLqA==}
+  '@oh-my-pi/pi-ai@18.2.6':
+    resolution: {integrity: sha512-SkQ5Uc5ABS5WiKPVdPAmxawhZf1kDSH53CrXrjlgshpCT6r6jDs/CI+VvwdhQHoEQcokM8pmWDGPzGfKTa7K4w==}
     engines: {bun: '>=1.3.14'}
 
-  '@oh-my-pi/pi-catalog@18.2.4':
-    resolution: {integrity: sha512-6JHzQEDCvxEErl/eYinFgEleFnsljrqk3iFyKQYBPZSo1gdfRFysKoVAs5yXAdHeHrt1Rd2o8ONMP4m5X51YRQ==}
+  '@oh-my-pi/pi-catalog@18.2.6':
+    resolution: {integrity: sha512-jYg/cqztVXPWa3soLvjGxKs/4oIm8vDwuvue0tfPv/qiEWzxPy+PsI+9zbKZZEipfVlQUAyD+8LnkQdGlbqIDg==}
     engines: {bun: '>=1.3.14'}
 
-  '@oh-my-pi/pi-coding-agent@18.2.4':
-    resolution: {integrity: sha512-R2QWg3my1rwdg42KqpRMrUo56mL28xcRmuZTW2sP/Q5e+NgXVDIW/cDL5tOWzI5aSv1aXZhcDMTzuAdyuO1tTg==}
+  '@oh-my-pi/pi-coding-agent@18.2.6':
+    resolution: {integrity: sha512-dk298PZNnD1QigR4lKvQpWVAAbIo2bCfdNOlZwGFZsxHbP+XYrUS+AxYxfWkfqSnFRliP9Ho+h94DHV3o6lxRg==}
     engines: {bun: '>=1.3.14'}
     hasBin: true
 
-  '@oh-my-pi/pi-mnemopi@18.2.4':
-    resolution: {integrity: sha512-mJStvPEArXVz0UxMQuxT0h6s/e6uB2P9afzyMRWFvepJp/pT91knEp3hKvUcLxc9f+2mBpY/eJQzwstIELYnNg==}
+  '@oh-my-pi/pi-mnemopi@18.2.6':
+    resolution: {integrity: sha512-JD4iVlqUVnoSsMJn7Fy+Hn3zUMKH8i6qpWImoTTnyuEJ0iqL1n6H1W96GqVnhfEDoBf98/mPwoZM2mDHNKEfYg==}
     engines: {bun: '>=1.3.14'}
     hasBin: true
     peerDependencies:
@@ -926,60 +926,60 @@ packages:
       onnxruntime-node:
         optional: true
 
-  '@oh-my-pi/pi-natives-darwin-arm64@18.2.4':
-    resolution: {integrity: sha512-TeBKH4oAhDOU7kDwuRh5NRbsPFAoOj23U/FLEL5USdYI1/CzQBIRmz8bPPd0UhwA/r1hi6TBsSjdR9Z8jSsqUA==}
+  '@oh-my-pi/pi-natives-darwin-arm64@18.2.6':
+    resolution: {integrity: sha512-PVrTHpeVc8n3kOCNUd5Qq5bUyo1y8BtFRcm1UKL8LGF8OzHOrob280iz6K0LIiv8ovbfSjZSvCjYI/KSaM3YMQ==}
     engines: {bun: '>=1.3.14'}
     cpu: [arm64]
     os: [darwin]
 
-  '@oh-my-pi/pi-natives-darwin-x64@18.2.4':
-    resolution: {integrity: sha512-LqYl9fcvhaGOVaVT0IVAP0Se+YnosM/gAIwdIlxPkzTR1+wvi20MisUS7WGzCmRdNFh7OZe6E4ZwNNAJknz4yA==}
+  '@oh-my-pi/pi-natives-darwin-x64@18.2.6':
+    resolution: {integrity: sha512-qfZeZ0Xz9aONtp6x7eiWUQMlm2blEqauth2SntLplV9cdYTKailWHjpGBoyvfs/yptddA9Pbj6iN9GlzmpbgOQ==}
     engines: {bun: '>=1.3.14'}
     cpu: [x64]
     os: [darwin]
 
-  '@oh-my-pi/pi-natives-linux-arm64@18.2.4':
-    resolution: {integrity: sha512-aMRCTirbaBA4yP9n/Ele4Bgo3X9dIhJRX7nC4iXobXUFkwVNM2Aa2gSabjY3tUsmNMzvr0paBMpLo2YfaeT5Ug==}
+  '@oh-my-pi/pi-natives-linux-arm64@18.2.6':
+    resolution: {integrity: sha512-hHdJnF0pw3GlgTpscPCeRT9fcf/yXbrwcvdFgVg482y6xDq8KBT5rzG+V/ntUbcjj/qfBQQiH1do2XlrbL6nFw==}
     engines: {bun: '>=1.3.14'}
     cpu: [arm64]
     os: [linux]
 
-  '@oh-my-pi/pi-natives-linux-x64@18.2.4':
-    resolution: {integrity: sha512-R8KCyIUwvIStgVYhSFNgMtKNjSgh3s88iUqKGqiNiQo82hTDNngb2j2HCxlxBIHYxgSbKVa4NUw5AcVzEAWj/A==}
+  '@oh-my-pi/pi-natives-linux-x64@18.2.6':
+    resolution: {integrity: sha512-mV2DTOE1Hn96iXNIbrzYHzLy9CbeAbjLCGPtc5tzFzzuD7UJ3TMfP4pieSo0WtgZnPNxisT6ncR8c/BqNbkXdg==}
     engines: {bun: '>=1.3.14'}
     cpu: [x64]
     os: [linux]
 
-  '@oh-my-pi/pi-natives-win32-arm64@18.2.4':
-    resolution: {integrity: sha512-0f2Zj2qvU9xxdxW6aVp0u06Js7xsktVHWMm9y/GV1hivOTh+HAzqUgjeiOMg8PYd+ISxxIj+vTZ0SviZn1+Fkg==}
+  '@oh-my-pi/pi-natives-win32-arm64@18.2.6':
+    resolution: {integrity: sha512-nk1ZUvF27HZJNwL8TwUMLUdmFuf8vsv1StAMsHQ9zdgLuRJ1NwWESol6wXzRntvDzsmpDQbnf3R8HcY5CzUf9w==}
     engines: {bun: '>=1.3.14'}
     cpu: [arm64]
     os: [win32]
 
-  '@oh-my-pi/pi-natives-win32-x64@18.2.4':
-    resolution: {integrity: sha512-B4p5bkGDkBxWJO+5UVAMF/tVhacDmpHCwGtFAB6gegcNHXc1OYVNEdupDDzrIfIbpX5kBC0brG4TPNWWhzG+Vw==}
+  '@oh-my-pi/pi-natives-win32-x64@18.2.6':
+    resolution: {integrity: sha512-syDZJnTiTxFIkTteT4U5edq/hdPrPjOYmyG8Kq4a/LwHoD59eDpkE3+kqVy33GRfOwzJb0b6d6Hxrp8we75b9g==}
     engines: {bun: '>=1.3.14'}
     cpu: [x64]
     os: [win32]
 
-  '@oh-my-pi/pi-natives@18.2.4':
-    resolution: {integrity: sha512-mEHbn81HzVtLY7LfEml4bl+YAtBZeg01TiIC6JrSVgc9eNAyK3asVJf1DH0EEWE1iHB6kiLiq9Q4ypiffuBP/A==}
+  '@oh-my-pi/pi-natives@18.2.6':
+    resolution: {integrity: sha512-oZtxz7cU6CJvwdGJgpeHDIvhKOBoGVwRzmb7RQt+NdFD7tVe7PrObgbQdAOpmo3LwbJ3Md/jiicWmaxboFSRTQ==}
     engines: {bun: '>=1.3.14'}
 
-  '@oh-my-pi/pi-tui@18.2.4':
-    resolution: {integrity: sha512-85TjyogVhZU+04mpjUjdFxEsdRb+Zhxo9dx0HilDfwJVi1izI4fcmFLZ2++7dvLRammjAaylskWU/TOC7yGs1w==}
+  '@oh-my-pi/pi-tui@18.2.6':
+    resolution: {integrity: sha512-CsmP4SM1Qt19s2aIJ0gBTnSFLm2nXNHkaLFqL5m+3+bTcF3++G+CAEImotsjSnmajeH/Q2pq2w+FlNUD2ZjByA==}
     engines: {bun: '>=1.3.14'}
 
-  '@oh-my-pi/pi-utils@18.2.4':
-    resolution: {integrity: sha512-nXRE+5uqqKI/MkZNBOoOfpCbxxd/9VNW7tQRekMMazu1D+S8iaCxSmP2/8Y+oO9ughUseODzaSfAYda1FVRdYg==}
+  '@oh-my-pi/pi-utils@18.2.6':
+    resolution: {integrity: sha512-jvj8w/Q9aECXpHVjUc4rWaQlFPV+uWCgII6QZjDfroo5xvt0d8ks64cH8gINmMwRieCLz7KU6JKGReuFT54aTw==}
     engines: {bun: '>=1.3.14'}
 
-  '@oh-my-pi/pi-wire@18.2.4':
-    resolution: {integrity: sha512-W1qouFJceeO365enpnoHeN6N4rcLxT11bw4+5k5A4i2s123dtCQSg0w+iDyRFIoaRnsR/mYXiQvtAOxtT5HEhQ==}
+  '@oh-my-pi/pi-wire@18.2.6':
+    resolution: {integrity: sha512-CfKosiyS2L3EfqVAidDYjfpBEVRuHAueYIlydEySARSLj61euYSqCZFMNhCPcA+QFXhfG0J0N5xGRuMk5FzRaA==}
     engines: {bun: '>=1.3.14'}
 
-  '@oh-my-pi/snapcompact@18.2.4':
-    resolution: {integrity: sha512-N6m0+HnzZu2In/QDV6nyctZUlQ8UFJrsbo2+aKjyFfe9LAJziShUijkZZLIwcMbujchLF/8umvL4bC6tjiv45g==}
+  '@oh-my-pi/snapcompact@18.2.6':
+    resolution: {integrity: sha512-hPL6N9YNxejTY1jOm8+FbcbuLjtgPI/v591tunKed7gIcQgOOuztNvTcM/Xbc5xc50CBcWoD6q+j4Hm0iuChlQ==}
     engines: {bun: '>=1.3.14'}
 
   '@opentelemetry/api-logs@0.220.0':
@@ -3346,7 +3346,7 @@ snapshots:
       - supports-color
       - zod
 
-  '@agntn/explorers@0.5.4(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@earendil-works/pi-tui@0.85.1)(@oh-my-pi/pi-coding-agent@18.2.4)(typebox@1.3.34)':
+  '@agntn/explorers@0.5.4(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@earendil-works/pi-tui@0.85.1)(@oh-my-pi/pi-coding-agent@18.2.6)(typebox@1.3.34)':
     dependencies:
       '@agntn/chains': 0.3.8(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(typebox@1.3.34)(zod@4.6.5)
       '@modelcontextprotocol/sdk': 1.30.0(zod@4.6.5)
@@ -3357,7 +3357,7 @@ snapshots:
     optionalDependencies:
       '@earendil-works/pi-coding-agent': 0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5)
       '@earendil-works/pi-tui': 0.85.1
-      '@oh-my-pi/pi-coding-agent': 18.2.4
+      '@oh-my-pi/pi-coding-agent': 18.2.6
       typebox: 1.3.34
     transitivePeerDependencies:
       - '@cfworker/json-schema'
@@ -4094,11 +4094,11 @@ snapshots:
 
   '@noble/hashes@2.4.0': {}
 
-  '@oh-my-pi/omp-stats@18.2.4':
+  '@oh-my-pi/omp-stats@18.2.6':
     dependencies:
-      '@oh-my-pi/pi-ai': 18.2.4
-      '@oh-my-pi/pi-catalog': 18.2.4
-      '@oh-my-pi/pi-utils': 18.2.4
+      '@oh-my-pi/pi-ai': 18.2.6
+      '@oh-my-pi/pi-catalog': 18.2.6
+      '@oh-my-pi/pi-utils': 18.2.6
       '@tailwindcss/node': 4.3.3
       chart.js: 4.5.1
       lucide-react: 1.31.0(react@19.2.7)
@@ -4107,45 +4107,45 @@ snapshots:
       react-dom: 19.2.7(react@19.2.7)
       tailwindcss: 4.3.3
 
-  '@oh-my-pi/omptype@18.2.4': {}
+  '@oh-my-pi/omptype@18.2.6': {}
 
-  '@oh-my-pi/pi-agent-core@18.2.4':
+  '@oh-my-pi/pi-agent-core@18.2.6':
     dependencies:
-      '@oh-my-pi/pi-ai': 18.2.4
-      '@oh-my-pi/pi-catalog': 18.2.4
-      '@oh-my-pi/pi-natives': 18.2.4
-      '@oh-my-pi/pi-utils': 18.2.4
-      '@oh-my-pi/pi-wire': 18.2.4
-      '@oh-my-pi/snapcompact': 18.2.4
+      '@oh-my-pi/pi-ai': 18.2.6
+      '@oh-my-pi/pi-catalog': 18.2.6
+      '@oh-my-pi/pi-natives': 18.2.6
+      '@oh-my-pi/pi-utils': 18.2.6
+      '@oh-my-pi/pi-wire': 18.2.6
+      '@oh-my-pi/snapcompact': 18.2.6
       '@opentelemetry/api': 1.9.1
 
-  '@oh-my-pi/pi-ai@18.2.4':
+  '@oh-my-pi/pi-ai@18.2.6':
     dependencies:
-      '@oh-my-pi/omptype': 18.2.4
-      '@oh-my-pi/pi-catalog': 18.2.4
-      '@oh-my-pi/pi-natives': 18.2.4
-      '@oh-my-pi/pi-utils': 18.2.4
-      '@oh-my-pi/pi-wire': 18.2.4
+      '@oh-my-pi/omptype': 18.2.6
+      '@oh-my-pi/pi-catalog': 18.2.6
+      '@oh-my-pi/pi-natives': 18.2.6
+      '@oh-my-pi/pi-utils': 18.2.6
+      '@oh-my-pi/pi-wire': 18.2.6
 
-  '@oh-my-pi/pi-catalog@18.2.4':
+  '@oh-my-pi/pi-catalog@18.2.6':
     dependencies:
-      '@oh-my-pi/omptype': 18.2.4
-      '@oh-my-pi/pi-utils': 18.2.4
+      '@oh-my-pi/omptype': 18.2.6
+      '@oh-my-pi/pi-utils': 18.2.6
 
-  '@oh-my-pi/pi-coding-agent@18.2.4':
+  '@oh-my-pi/pi-coding-agent@18.2.6':
     dependencies:
       '@babel/parser': 7.29.8
-      '@oh-my-pi/omp-stats': 18.2.4
-      '@oh-my-pi/omptype': 18.2.4
-      '@oh-my-pi/pi-agent-core': 18.2.4
-      '@oh-my-pi/pi-ai': 18.2.4
-      '@oh-my-pi/pi-catalog': 18.2.4
-      '@oh-my-pi/pi-mnemopi': 18.2.4
-      '@oh-my-pi/pi-natives': 18.2.4
-      '@oh-my-pi/pi-tui': 18.2.4
-      '@oh-my-pi/pi-utils': 18.2.4
-      '@oh-my-pi/pi-wire': 18.2.4
-      '@oh-my-pi/snapcompact': 18.2.4
+      '@oh-my-pi/omp-stats': 18.2.6
+      '@oh-my-pi/omptype': 18.2.6
+      '@oh-my-pi/pi-agent-core': 18.2.6
+      '@oh-my-pi/pi-ai': 18.2.6
+      '@oh-my-pi/pi-catalog': 18.2.6
+      '@oh-my-pi/pi-mnemopi': 18.2.6
+      '@oh-my-pi/pi-natives': 18.2.6
+      '@oh-my-pi/pi-tui': 18.2.6
+      '@oh-my-pi/pi-utils': 18.2.6
+      '@oh-my-pi/pi-wire': 18.2.6
+      '@oh-my-pi/snapcompact': 18.2.6
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/api-logs': 0.220.0
       '@opentelemetry/context-async-hooks': 2.10.0(@opentelemetry/api@1.9.1)
@@ -4169,58 +4169,64 @@ snapshots:
       - utf-8-validate
       - yauzl
 
-  '@oh-my-pi/pi-mnemopi@18.2.4':
+  '@oh-my-pi/pi-mnemopi@18.2.6':
     dependencies:
-      '@oh-my-pi/pi-ai': 18.2.4
-      '@oh-my-pi/pi-catalog': 18.2.4
-      '@oh-my-pi/pi-natives': 18.2.4
-      '@oh-my-pi/pi-utils': 18.2.4
+      '@oh-my-pi/pi-ai': 18.2.6
+      '@oh-my-pi/pi-catalog': 18.2.6
+      '@oh-my-pi/pi-natives': 18.2.6
+      '@oh-my-pi/pi-utils': 18.2.6
 
-  '@oh-my-pi/pi-natives-darwin-arm64@18.2.4':
+  '@oh-my-pi/pi-natives-darwin-arm64@18.2.6':
     optional: true
 
-  '@oh-my-pi/pi-natives-darwin-x64@18.2.4':
+  '@oh-my-pi/pi-natives-darwin-x64@18.2.6':
     optional: true
 
-  '@oh-my-pi/pi-natives-linux-arm64@18.2.4':
+  '@oh-my-pi/pi-natives-linux-arm64@18.2.6':
     optional: true
 
-  '@oh-my-pi/pi-natives-linux-x64@18.2.4':
+  '@oh-my-pi/pi-natives-linux-x64@18.2.6':
     optional: true
 
-  '@oh-my-pi/pi-natives-win32-arm64@18.2.4':
+  '@oh-my-pi/pi-natives-win32-arm64@18.2.6':
     optional: true
 
-  '@oh-my-pi/pi-natives-win32-x64@18.2.4':
+  '@oh-my-pi/pi-natives-win32-x64@18.2.6':
     optional: true
 
-  '@oh-my-pi/pi-natives@18.2.4':
+  '@oh-my-pi/pi-natives@18.2.6':
     optionalDependencies:
-      '@oh-my-pi/pi-natives-darwin-arm64': 18.2.4
-      '@oh-my-pi/pi-natives-darwin-x64': 18.2.4
-      '@oh-my-pi/pi-natives-linux-arm64': 18.2.4
-      '@oh-my-pi/pi-natives-linux-x64': 18.2.4
-      '@oh-my-pi/pi-natives-win32-arm64': 18.2.4
-      '@oh-my-pi/pi-natives-win32-x64': 18.2.4
+      '@oh-my-pi/pi-natives-darwin-arm64': 18.2.6
+      '@oh-my-pi/pi-natives-darwin-x64': 18.2.6
+      '@oh-my-pi/pi-natives-linux-arm64': 18.2.6
+      '@oh-my-pi/pi-natives-linux-x64': 18.2.6
+      '@oh-my-pi/pi-natives-win32-arm64': 18.2.6
+      '@oh-my-pi/pi-natives-win32-x64': 18.2.6
 
-  '@oh-my-pi/pi-tui@18.2.4':
+  '@oh-my-pi/pi-tui@18.2.6':
     dependencies:
-      '@oh-my-pi/pi-natives': 18.2.4
-      '@oh-my-pi/pi-utils': 18.2.4
+      '@oh-my-pi/omptype': 18.2.6
+      '@oh-my-pi/pi-agent-core': 18.2.6
+      '@oh-my-pi/pi-ai': 18.2.6
+      '@oh-my-pi/pi-catalog': 18.2.6
+      '@oh-my-pi/pi-natives': 18.2.6
+      '@oh-my-pi/pi-utils': 18.2.6
+      '@oh-my-pi/pi-wire': 18.2.6
+      '@oh-my-pi/snapcompact': 18.2.6
 
-  '@oh-my-pi/pi-utils@18.2.4':
+  '@oh-my-pi/pi-utils@18.2.6':
     dependencies:
-      '@oh-my-pi/pi-natives': 18.2.4
+      '@oh-my-pi/pi-natives': 18.2.6
 
-  '@oh-my-pi/pi-wire@18.2.4': {}
+  '@oh-my-pi/pi-wire@18.2.6': {}
 
-  '@oh-my-pi/snapcompact@18.2.4':
+  '@oh-my-pi/snapcompact@18.2.6':
     dependencies:
-      '@oh-my-pi/pi-ai': 18.2.4
-      '@oh-my-pi/pi-catalog': 18.2.4
-      '@oh-my-pi/pi-natives': 18.2.4
-      '@oh-my-pi/pi-utils': 18.2.4
-      '@oh-my-pi/pi-wire': 18.2.4
+      '@oh-my-pi/pi-ai': 18.2.6
+      '@oh-my-pi/pi-catalog': 18.2.6
+      '@oh-my-pi/pi-natives': 18.2.6
+      '@oh-my-pi/pi-utils': 18.2.6
+      '@oh-my-pi/pi-wire': 18.2.6
 
   '@opentelemetry/api-logs@0.220.0':
     dependencies:
