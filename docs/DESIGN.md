@@ -162,14 +162,17 @@ Every value a row shortens or a cell hides is in a `UTooltip`, never a `title`. 
 
 ## Rosters
 
-`::author-list` in [AuthorList.vue](app/components/content/AuthorList.vue) and `::collection-list` in [CollectionList.vue](app/components/content/CollectionList.vue) index the author and collection pages. Both print the `roster-*` classes from `app.css`, on the clipped shell with the corner crosses.
+`::author-list` in [AuthorList.vue](app/components/content/AuthorList.vue) and `::collection-list` in [CollectionList.vue](app/components/content/CollectionList.vue) index the author and collection pages. The rows are a `UTable` inside the clipped shell with the corner crosses. Everything except that shell and the ruler's ticks, which stay in `app.css` as `.roster` and `.roster-ruler`, is Tailwind utilities from `app/utils/roster.ts`: `ROSTER_TABLE_UI` for the table's `ui` prop, `ROSTER_CLASS` for the bar, footer and cell parts both rosters share.
 
-1. **Bar:** the call, `authors()` or `collections()`, and the row count in the meta.
+1. **Bar:** the call, `authors()` or `collections()`, and the row count in the meta. The collection roster names its order there too, `largest first` or `by key ascending`.
 2. **Ruler** of thin ticks, no cursor.
-3. **Rows:** icon and name as the page link, the key in a boxed tag, the one line about it, then a dotted leader into the last column. An author row ends in its collection keys and puzzle count. A collection row ends in its chain glyphs, each in a `UTooltip`, and its puzzle count, with the unsolved count in the accent under them. Collections are listed largest first.
-4. **Footer:** the locality meta and the call that opens one row.
+3. **Header:** the column names as field labels, 10 px mono uppercase in `dimmed`. A sortable column's name is a `RosterSort` button: its arrow shows the direction, and a click steps through the first direction, the other one, and back to the order the rows came in. Text sorts A to Z first, counts largest first. The about column doesn't sort.
+4. **Rows:** icon and name as the page link, the key in a boxed tag, the one line about it, then a dotted leader into the last column. An author row ends in its collection keys and puzzle count. A collection row carries its chain glyphs next to the key, each in a `UTooltip`, and ends in `77 of 256 open` with the open count in the accent, or `open` and `closed` for a single puzzle; a bare `256` and an unsolved count on a second line read as two unlabeled numbers. Collections start largest first, and a wrapped name keeps the row on its first line's baseline.
+5. **Footer:** the locality meta and the call that opens one row.
 
-The columns collapse on the roster's own width, `@container roster (width < 52rem)`, not the window's: beside both sidebars at 1024 px the roster is 600 px wide, and a window breakpoint left the about column 14 px wide there. Narrow, the about line and the last column take full rows under the name and key.
+The columns collapse on the table's own width, `@container/roster` with `@max-[52rem]/roster:` variants, not the window's: beside both sidebars at 1024 px the roster is 600 px wide, and a window breakpoint left the about column 14 px wide there. Narrow, the header is hidden from sight but kept for screen readers, and the about line and the last column take full rows under the name and key.
+
+A new sort slides every row from its old place to the new one, 320 ms of `transform` through `useRosterFlip`, with no other motion and none under reduced motion. Rows carry the canvas colour, so one sliding past another covers it instead of mixing the text. With that background a collapsed border would vanish under the next row, so the header line and the row dividers are inset shadows.
 
 ## Full-response viewer
 
