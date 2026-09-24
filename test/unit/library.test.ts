@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readdirSync } from "node:fs";
 import { describe, expect, it, vi } from "vite-plus/test";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
@@ -32,6 +33,7 @@ import {
   community,
   confirmation,
   dataset,
+  datasetCollections,
   dataVersion,
   get,
   getAuthor,
@@ -618,6 +620,12 @@ describe("lazy collection registry", () => {
 
     expect(first).toMatch(/^[a-f0-9]{12}$/);
     expect(await dataVersion()).toBe(first);
+    expect(first).toBe(
+      createHash("sha256")
+        .update(JSON.stringify(await datasetCollections()))
+        .digest("hex")
+        .slice(0, 12),
+    );
   });
 
   it("builds the dataset envelope from the registry", async () => {

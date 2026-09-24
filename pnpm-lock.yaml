@@ -33,9 +33,6 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: 1.30.0
         version: 1.30.0(zod@4.6.5)
-      '@noble/hashes':
-        specifier: 2.4.0
-        version: 2.4.0
       citty:
         specifier: 0.2.2
         version: 0.2.2
@@ -50,6 +47,9 @@ importers:
         specifier: 0.85.1
         version: 0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5)
       '@noble/curves':
+        specifier: 2.4.0
+        version: 2.4.0
+      '@noble/hashes':
         specifier: 2.4.0
         version: 2.4.0
       '@oh-my-pi/omptype':
