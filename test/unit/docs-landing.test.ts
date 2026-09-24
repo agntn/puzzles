@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vite-plus/test";
 import { authorRows } from "../../docs/app/utils/authors.ts";
-import { collectionFacts } from "../../docs/app/utils/collections.ts";
+import { collectionFacts, collectionRows } from "../../docs/app/utils/collections.ts";
 import {
   AUTHORS_STATIC,
   FACTS_STATIC,
@@ -90,36 +90,37 @@ describe("docs landing fixtures", () => {
     expect(AUTHORS_STATIC).toEqual(authorRows(await library.authors()));
   });
 
-  it.each(["README.md", "docs/content/2.collections/00.index.md"])(
-    "lists every collection, largest first, in %s",
-    async (path) => {
-      const library = await import("../../src/index.ts");
-      const text = readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
-      const collections = await library.collections();
-      const countsByKey = new Map(
-        collections.map((collection) => [`\`${collection.key}\``, collection.count()]),
-      );
-      const counts = text
-        .split("\n")
-        .filter((line) => line.startsWith("|"))
-        .map((line) => line.split("|").map((cell) => cell.trim()))
-        .map((cells) => cells.find((cell) => countsByKey.has(cell)))
-        .filter((key) => key !== undefined)
-        .map((key) => countsByKey.get(key)!);
-      expect(counts).toHaveLength(collections.length);
-      expect(counts).toEqual([...counts].sort((left, right) => right - left));
-    },
-  );
-
-  it("asks the library for each row's count in the collections table", async () => {
+  it("lists every collection, largest first, in README.md", async () => {
     const library = await import("../../src/index.ts");
-    const text = readFileSync(
-      new URL("../../docs/content/2.collections/00.index.md", import.meta.url),
-      "utf8",
+    const text = readFileSync(new URL("../../README.md", import.meta.url), "utf8");
+    const collections = await library.collections();
+    const countsByKey = new Map(
+      collections.map((collection) => [`\`${collection.key}\``, collection.count()]),
     );
-    for (const key of library.collectionKeys()) {
-      const row = text.split("\n").find((line) => line.includes(`| \`${key}\``));
-      expect(row, key).toContain(`:dataset-count{collection="${key}"}`);
+    const counts = text
+      .split("\n")
+      .filter((line) => line.startsWith("|"))
+      .map((line) => line.split("|").map((cell) => cell.trim()))
+      .map((cells) => cells.find((cell) => countsByKey.has(cell)))
+      .filter((key) => key !== undefined)
+      .map((key) => countsByKey.get(key)!);
+    expect(counts).toHaveLength(collections.length);
+    expect(counts).toEqual([...counts].sort((left, right) => right - left));
+  });
+
+  it("list every collection on the index, largest first", async () => {
+    const library = await import("../../src/index.ts");
+    const rows = collectionRows(await library.collections());
+    const counts = rows.map((row) => row.total);
+
+    expect(rows.map((row) => row.key).toSorted()).toEqual([...library.collectionKeys()].toSorted());
+    expect(counts).toEqual([...counts].sort((left, right) => right - left));
+    expect(rows.find((row) => row.key === "zden")?.chains).toEqual(
+      expect.arrayContaining(["bitcoin", "ethereum", "litecoin", "decred"]),
+    );
+    for (const row of rows) {
+      const collection = await library.requireCollection(row.key);
+      expect(row.open, row.key).toBe(collection.unsolved().length);
     }
   });
 

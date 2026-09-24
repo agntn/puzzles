@@ -50,3 +50,28 @@ export function collectionFacts(collection: AnyCollection): CollectionFactsData 
     hints: collection.hints,
   };
 }
+
+/** One row of the collections index: what the library says, without the presentation. */
+export interface CollectionRow {
+  readonly key: string;
+  readonly total: number;
+  readonly open: number;
+  readonly chains: readonly string[];
+}
+
+/**
+ * The rows of the collections index, largest collection first, manifest order between equals.
+ *
+ * @param {readonly AnyCollection[]} collections - Every collection, in manifest order.
+ * @returns {readonly CollectionRow[]} Key, puzzle count, unsolved count and chains per collection.
+ */
+export function collectionRows(collections: readonly AnyCollection[]): readonly CollectionRow[] {
+  return collections
+    .map((collection) => ({
+      key: collection.key,
+      total: collection.count(),
+      open: collection.unsolved().length,
+      chains: [...new Set(collection.all().map((puzzle) => puzzle.chain()))],
+    }))
+    .sort((left, right) => right.total - left.total);
+}
