@@ -79,6 +79,7 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(Value.Check(schemas.hints, { id: "" })).toBe(false);
     expect(Value.Check(schemas.hints, { id: "warp/challenge_1" })).toBe(true);
     expect(Value.Check(schemas.verify, { id: "b1000/1" })).toBe(true);
+    expect(Value.Check(schemas.list, { collection: "" })).toBe(false);
     expect(Value.Check(schemas.list, { collection: "x".repeat(collection.maxLength + 1) })).toBe(
       false,
     );
@@ -123,6 +124,7 @@ describe("tool schemas and executors share one argument contract", () => {
     await expect(
       listTool({ collection: "x".repeat(facts.parameters.collection.maxLength + 1) }),
     ).rejects.toThrow(/collection/);
+    await expect(listTool({ collection: "" })).rejects.toThrow("Invalid collection");
     await expect(listTool({ address: "" })).rejects.toThrow(/address/);
     await expect(
       listTool({ address: "x".repeat(facts.parameters.address.maxLength + 1) }),

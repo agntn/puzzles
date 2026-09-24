@@ -468,6 +468,15 @@ describe.concurrent("puzzles CLI", () => {
     );
   });
 
+  it("quotes an empty collection filter instead of losing it in the sentence", async () => {
+    const result = await failure("list", "--collection", "");
+
+    expect(result.code).toBe(1);
+    expect(result.stderr.trim()).toBe(
+      `Unknown collection: "". Known collections: ${collectionKeys().join(", ")}`,
+    );
+  });
+
   it("names the accepted statuses when the filter is not one", async () => {
     await expect(failure("list", "--status", "foo")).resolves.toEqual({
       code: 1,
