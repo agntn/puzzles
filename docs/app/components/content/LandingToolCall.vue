@@ -85,34 +85,3 @@ watch(
     </footer>
   </div>
 </template>
-
-<style scoped>
-.console-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-}
-.console-controls > span {
-  color: var(--ui-text-dimmed);
-  font-size: 10px;
-}
-.console-controls button {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  color: var(--ui-text-muted);
-  border: 1px solid var(--console-line);
-  cursor: pointer;
-}
-.console-controls button:hover {
-  color: var(--console-accent);
-  border-color: var(--console-corner);
-  background: color-mix(in srgb, var(--ui-text-muted) 8%, var(--ui-bg));
-}
-.console-controls button:focus-visible {
-  outline: 1px solid var(--ui-primary);
-  outline-offset: 3px;
-}
-</style>
