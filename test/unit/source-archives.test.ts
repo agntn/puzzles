@@ -119,6 +119,17 @@ const sources = [
     },
   },
   {
+    file: "iamabananaamaa/iamabananaamaa-2013-12-23",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/1ticec/medium_1mbtc_riddle_me_this_for_a_private_key/",
+    author: "u/IAMABananaAMAA",
+    date: "2013-12-23",
+    archive: {
+      url: "https://web.archive.org/web/20230531170758/https://old.reddit.com/r/bitcoinpuzzles/comments/1ticec/medium_1mbtc_riddle_me_this_for_a_private_key/",
+      date: "2023-05-31T17:07:58Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "satoshi_birthday_quiz/aoinakamoto-2019-04-05",
     url: "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/",
     author: "u/AoiNakamoto",

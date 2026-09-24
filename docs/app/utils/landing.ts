@@ -828,14 +828,14 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "b3bad306d56b",
-  total: 353,
-  solved: 147,
+  dataVersion: "8cdad342fdad",
+  total: 354,
+  solved: 148,
   unsolved: 95,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 253,
+  withPubkey: 254,
   unsolvedPrize: {
     AR: 1900,
     ETH: 9.61254155,
@@ -845,7 +845,7 @@ export const STATS_STATIC = {
     AR: 5550,
     ETH: 22.74624155,
     DAI: 100,
-    BTC: 1064.12358961,
+    BTC: 1064.12458961,
     LTC: 230.8255,
     DCR: 460,
   },
@@ -1121,19 +1121,19 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     author: "IAMABananaAMAA",
     authorKey: "iamabananaamaa",
     authorUrl: "https://www.reddit.com/user/IAMABananaAMAA/",
-    total: 1,
+    total: 2,
     statuses: {
-      solved: 1,
+      solved: 2,
     },
     chains: ["bitcoin"],
     prize: {
-      BTC: 0.001,
+      BTC: 0.002,
     },
     unsolvedPrize: {},
-    withPubkey: 1,
-    withKey: 1,
+    withPubkey: 2,
+    withKey: 2,
     firstStarted: "2013-12-22 22:35:39",
-    lastStarted: "2013-12-22 22:35:39",
+    lastStarted: "2013-12-23 04:53:59",
     hints: [],
   },
   {
@@ -1500,7 +1500,7 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     about:
       "Started r/bitcoinpuzzles in December 2013 and put a puzzle up the same evening: a GIF with 1 mBTC inside. Marked it easy. Took that back within the hour.",
     collections: ["iamabananaamaa"],
-    puzzles: 1,
+    puzzles: 2,
   },
   {
     key: "ktimesg",

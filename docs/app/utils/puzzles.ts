@@ -98,11 +98,11 @@ const PRESENTATION: Readonly<
   },
   iamabananaamaa: {
     icon: "i-lucide-file-image",
-    title: "IAMABananaAMAA's GIF puzzle",
+    title: "IAMABananaAMAA's puzzles",
     sample: "iamabananaamaa/gif",
     chains: ["bitcoin"],
     blurb:
-      "Posted 17 minutes after the r/bitcoinpuzzles welcome post. A ZIP after the last byte of a GIF, then two Base64 alphabets. Solved in two and a half hours.",
+      "Two puzzles from the first night of r/bitcoinpuzzles. A ZIP after the last byte of a GIF, then a Caesar riddle whose key needed no shift at all.",
   },
   ktimesg: {
     icon: "i-lucide-timer",

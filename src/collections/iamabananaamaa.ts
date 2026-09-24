@@ -1,5 +1,6 @@
 import { NamedCollection } from "../core/collection.ts";
 import { fact, party, PartyKind, profile } from "../core/parts.ts";
+import { iAmABananaAmaaCaesar } from "./iamabananaamaa/caesar.ts";
 import { iAmABananaAmaaGif } from "./iamabananaamaa/gif.ts";
 
 /** The welcome post of r/bitcoinpuzzles. */
@@ -36,7 +37,7 @@ export class IAmABananaAmaaCollection extends NamedCollection {
   });
 
   /** Every puzzle in this collection. */
-  static readonly puzzles = [iAmABananaAmaaGif];
+  static readonly puzzles = [iAmABananaAmaaGif, iAmABananaAmaaCaesar];
 
   /** Builds the canonical collection. */
   constructor() {
