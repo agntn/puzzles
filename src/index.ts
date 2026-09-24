@@ -160,7 +160,7 @@ export {
 } from "./core/errors.ts";
 
 export {
-  verifyPuzzle,
+  verify,
   type VerifyFailure,
   type VerifyResult,
   type VerifySuccess,

@@ -4,7 +4,7 @@ import { all, requirePuzzle } from "../core/dataset.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
 import type { Puzzle } from "../core/puzzle.ts";
 import { toJson } from "../core/utils.ts";
-import { verifyPuzzle, type VerifyResult } from "../core/verify.ts";
+import { verify, type VerifyResult } from "../core/verify.ts";
 
 async function selectPuzzles(
   args: Readonly<{ all?: boolean | undefined; id?: string | undefined }>,
@@ -37,7 +37,7 @@ export default defineCommand({
   },
   async run({ args }) {
     const puzzles = await selectPuzzles(args);
-    const results = await Promise.all(puzzles.map((puzzle) => verifyPuzzle(puzzle)));
+    const results = await Promise.all(puzzles.map((puzzle) => verify(puzzle)));
     if (args.json) {
       printLine(toJson(results));
     } else if (args.quiet !== true) {

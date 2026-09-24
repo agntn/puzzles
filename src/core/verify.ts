@@ -27,7 +27,7 @@ export interface VerifyFailure {
 /** Result of verifying a puzzle's known key material. */
 export type VerifyResult = VerifySuccess | VerifyFailure;
 
-/** The decoders a secret needs, from the keys wallets that `verifyPuzzle` loads on its first call. */
+/** The decoders a secret needs, from the keys wallets that `verify` loads on its first call. */
 type Decoders = Pick<typeof import("./crypto.ts"), "privateKeyFromSeed" | "wifToPrivateKey">;
 
 interface ResolvedKey {
@@ -129,7 +129,7 @@ function resolveKey(puzzle: Puzzle, decoders: Decoders): ResolvedKey | Unresolve
  * @param {Puzzle} puzzle - The puzzle.
  * @returns {Promise<VerifyResult>} The outcome, with the derived address when a key was available.
  */
-export async function verifyPuzzle(puzzle: Puzzle): Promise<VerifyResult> {
+export async function verify(puzzle: Puzzle): Promise<VerifyResult> {
   const crypto = await import("./crypto.ts");
   const id = puzzle.id();
   const chain = puzzle.chain();

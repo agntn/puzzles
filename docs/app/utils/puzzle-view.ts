@@ -170,7 +170,7 @@ function assetLinks(collection: string, assets: Assets | undefined): AssetLink[]
 /**
  * Reads one puzzle into everything its page renders. Plain data, safe for the Nuxt payload.
  *
- * @param {ViewLibrary} library - `secretOf`, `verifyPuzzle` and `transactionExplorerUrl`.
+ * @param {ViewLibrary} library - `secretOf`, `verify` and `transactionExplorerUrl`.
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
  * @param {readonly Hint[]} shared - The hints of the puzzle's collection, listed ahead of its own.

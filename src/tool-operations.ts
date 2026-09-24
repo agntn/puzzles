@@ -450,8 +450,8 @@ export async function verifyTool(id: string): Promise<ToolResult> {
     dataset: { requirePuzzle },
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
-  const { verifyPuzzle } = await import("./core/verify.ts");
-  const result = await verifyPuzzle(puzzle);
+  const { verify } = await import("./core/verify.ts");
+  const result = await verify(puzzle);
   const summary = result.verified
     ? `${result.id}: verified, derives ${result.derivedAddress}`
     : result.unavailable

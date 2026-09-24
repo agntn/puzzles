@@ -310,7 +310,7 @@ async function assertPackedLibrary(): Promise<void> {
     "importing the library and looking up a puzzle must not load the verification crypto",
   );
   assert.ok(puzzle !== undefined);
-  assert.equal((await library.verifyPuzzle(puzzle)).verified, true, "b1000/1 verifies once packed");
+  assert.equal((await library.verify(puzzle)).verified, true, "b1000/1 verifies once packed");
   assert.ok(loaded.some(verificationCrypto), "the first verification loads the crypto");
 }
 

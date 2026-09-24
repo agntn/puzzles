@@ -71,14 +71,14 @@ b1000/71	unsolved	7.100226 BTC	1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU
 ## 🧠 Library
 
 ```ts
-import { get, stats, verifyPuzzle } from "@agntn/puzzles";
+import { get, stats, verify } from "@agntn/puzzles";
 import { b1000 } from "@agntn/puzzles/collections/b1000";
 
 const puzzle = await get("b1000/71"); // loads the b1000 collection, nothing else
 puzzle?.address().value; // "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU"
 puzzle?.keyRange(); // [2n ** 70n, 2n ** 71n - 1n]
 
-(await verifyPuzzle(b1000.require(1))).verified; // true, key 1 derives its address
+(await verify(b1000.require(1))).verified; // true, key 1 derives its address
 (await stats()).unsolved; // how many are still waiting for a key
 (await b1000.require(71).balance()).totalUnits(); // 7.10190014 when I ran it, mempool.space decides
 ```
