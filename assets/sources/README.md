@@ -1,6 +1,6 @@
 # Archived sources
 
-Local reading copies of the pages the collection records cite and nobody else keeps: six tweets and nine Reddit threads, as of September 24, 2026. The archive keeps the Ballet announcement, Zden's two hints, the kitten image source used by Bitimage, the two announcements the author records cite, the two AoiNakamoto quiz threads, the five Quizchain block threads, AoiNakamoto's question on r/Bitcoin before the birthday quiz and IAMABananaAMAA's Caesar riddle, each with every surviving comment. The quiz and riddle threads are where each answer key was published, for the book quiz the prize address too, for Quizchain the private key of every block, and for the riddle the key itself. Tweets are archived as single posts: no replies, no quote tweets, no other post about the same puzzle.
+Local reading copies of the pages the collection records cite and nobody else keeps: six tweets and ten Reddit threads, as of September 25, 2026. The archive keeps the Ballet announcement, Zden's two hints, the kitten image source used by Bitimage, the two announcements the author records cite, the two AoiNakamoto quiz threads, the five Quizchain block threads, AoiNakamoto's question on r/Bitcoin before the birthday quiz and IAMABananaAMAA's Caesar riddle, each with every surviving comment. The quiz and riddle threads are where each answer key was published, for the book quiz the prize address too, for Quizchain the private key of every block, and for the riddle the key itself. Tweets are archived as single posts: no replies, no quote tweets, no other post about the same puzzle.
 
 - [Ballet bounty announcement](ballet/bobbyclee-2020-07-31.md)
 - [Bitimage's kitten image source](bitimage/aantonop-2015-05-27.md)
@@ -14,6 +14,7 @@ Local reading copies of the pages the collection records cite and nobody else ke
 - [Quizchain block 3 thread](quizchain/aoinakamoto-2019-04-07-bae43s.md)
 - [Quizchain block 4 thread](quizchain/aoinakamoto-2019-04-07-baejeg.md)
 - [Quizchain block 5 thread](quizchain/aoinakamoto-2019-04-07-baf89m.md)
+- [Quizchain block 6 thread](quizchain/aoinakamoto-2019-04-07-bafyoo.md)
 - [IAMABananaAMAA's Caesar riddle thread](iamabananaamaa/iamabananaamaa-2013-12-23.md)
 - [Satoshi birthday 7 million quiz thread](satoshi_birthday_quiz/aoinakamoto-2019-04-05.md)
 - [AoiNakamoto's giveaway question on r/Bitcoin](satoshi_birthday_quiz/aoinakamoto-2019-04-05-b9l37o.md)
