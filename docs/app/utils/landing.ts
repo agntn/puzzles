@@ -31,6 +31,7 @@ export const WALK: readonly string[] = [
   "ktimesg/80_bit",
   "iamabananaamaa/gif",
   "wickex/youtube",
+  "picture_puzzle",
 ];
 
 /* generated:landing-fixtures:start */
@@ -824,18 +825,47 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 6,
     tool: "wickex/youtube\tsolved\t0.001 BTC\t1LhQZc57j9i3xofj5poayd6PnakN7xHwDA\nchain: bitcoin  address kind: p2pkh\nhash160: d80eb27236847fae88418ce952444a4657092259\npublic key: 04f84646d641306db5209da72a4f7ce6386404fb4035a296b38467a39406a6bac7b85b541eab98b8b217245a7ba0f9dfca5549a659470d69abb3544d7772d5c684 (uncompressed)\nprivate key: unknown\nstarted: 2013-12-23 02:22:43\nsolved: 2013-12-23 03:08:58 (46m)\nsolver: IAMABananaAMAA, reddit https://www.reddit.com/user/IAMABananaAMAA/\ntransactions: 6\n\tfunding\t2013-12-23 02:22:25\t0.001 BTC\t57252340e3fa7f4480c4e578fa81da48fd1f7a4dc0c640b43b651a2ebfbd9c8c\n\tclaim\t2013-12-23 03:08:58\t0.0009 BTC\t5575a2365c3473d1e2ecdc7735fe8550942640de62cafcfe406914a99e0fd28b\n\tincrease\t2013-12-23 03:08:58\t0.001 BTC\t8c0dad07879ca7e87d4e6c6b65a669394d79466c09ea31533d5bcee2e4a70072\n\tclaim\t2013-12-23 03:27:40\t0.0009 BTC\td800bb1584c0258907c0790251ea1e8585ec3077e0ee3eb2d4b6642f0ef5e785\n\tincrease\t2014-02-01 04:53:39\t0.00027486 BTC\t53326fec15eead49002ddc811b3275e276dd3b488efb77a19196f06cda938a3d\n\tsweep\t2014-02-01 04:53:39\t0.00017486 BTC\t730ee0ff5dff3f8a296beabab0f06b02b76362f10cbce560f2e58d9522129d9d\nclaim: https://blockstream.info/tx/5575a2365c3473d1e2ecdc7735fe8550942640de62cafcfe406914a99e0fd28b\nhints: 5\n\tofficial\t2013-12-23\tI'll start you all off with the following code: 68 74 74 70 3a 2f 2f 77 77 77 2e 79 6f 75 74 75 62 65 2e 63 6f 6d 2f 77 61 74 63 68 3f 76 3d 71 59 78 38 46 76 58 39 69 62 30\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/medium_1mbtc_find_the_private_key/\tanswer: Hex -> Text -> Youtube URL\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce87ss1/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tThe morse-output should be all-caps by the way!\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86ukc/\tanswer: I personally loaded the Youtube video into Audacity to make it more clear, but it was morse code -> text.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce87ss1/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tIt's case-sensitive and all caps.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86v8h/\tanswer: That was a bit.ly which went to the second video. That video was loaded into Sonic Visualiser and that had a string encoded into the sound.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce87ss1/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tThe image is meaningless. You're one step away, Brainwallet.org!\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86xa9/\tanswer: That string in Brainwallet.org was the private key.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce87ss1/\tanswer date: 2013-12-23\n\tcommunity\t2013-12-23\tAny hint on the image? I have the text (I dont want to spoil it here, but \"STI...I5Z\") but I don't know about that.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86vnj/\nexplorer: https://blockstream.info/address/1LhQZc57j9i3xofj5poayd6PnakN7xHwDA\nsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/medium_1mbtc_find_the_private_key/",
   },
+  {
+    id: "picture_puzzle",
+    collection: "picture_puzzle",
+    chain: "bitcoin",
+    status: "solved",
+    address: "1MeQumbMGbTDPUNtBbLwzfyZqeeZzpRnex",
+    kind: "p2pkh",
+    hash160: "e275dd7b615b5dd80e4fd298255bcc9ff42692bc",
+    redeemScript: undefined,
+    prize: "0.001 BTC",
+    prizeAmount: 0.001,
+    currency: undefined,
+    startedAt: "2013-12-23 05:40:33",
+    solvedAt: "2013-12-23 10:39:50",
+    solveTime: "4h 59m",
+    bits: undefined,
+    range: undefined,
+    pubkey:
+      "0443363aa63ab32ed94309fbaf2783e6f4dc0878cc04b2f6c954b5345ade0c11da8be5ef87dfd13126fa6884bd7c7440a4f70be75af1d7fb1a9480608a3acbadcf",
+    pubkeyFormat: "uncompressed",
+    secret: "hex",
+    keyLiteral: 'hex("00000000000000000000004804804824004000024020024124824824824123a3")',
+    verdict: "verified",
+    detail: "1MeQumbMGbTDPUNtBbLwzfyZqeeZzpRnex",
+    explorer: "https://blockstream.info/address/1MeQumbMGbTDPUNtBbLwzfyZqeeZzpRnex",
+    source: "https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/",
+    transactions: 2,
+    tool: 'picture_puzzle\tsolved\t0.001 BTC\t1MeQumbMGbTDPUNtBbLwzfyZqeeZzpRnex\nchain: bitcoin  address kind: p2pkh\nhash160: e275dd7b615b5dd80e4fd298255bcc9ff42692bc\npublic key: 0443363aa63ab32ed94309fbaf2783e6f4dc0878cc04b2f6c954b5345ade0c11da8be5ef87dfd13126fa6884bd7c7440a4f70be75af1d7fb1a9480608a3acbadcf (uncompressed)\nprivate key: 00000000000000000000004804804824004000024020024124824824824123a3 (hex)\nstarted: 2013-12-23 05:40:33\nsolved: 2013-12-23 10:39:50 (4h 59m)\nsolver: 6loss, reddit https://www.reddit.com/user/6loss/\ntransactions: 2\n\tfunding\t2013-12-23 05:41:54\t0.001 BTC\t0519cc7068fe31f543185203cebac565f228a46b5a9eaf1a53f7e88a91201cd7\n\tclaim\t2013-12-23 10:39:50\t0.0009 BTC\t24a43b26d8988238a77a43ff7ee3f62c4cc72db27323e685afe3155c235cc63a\nclaim: https://blockstream.info/tx/24a43b26d8988238a77a43ff7ee3f62c4cc72db27323e685afe3155c235cc63a\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/picture_puzzle/puzzle.png\nasset source: https://i.imgur.com/Gm9ldPp.png\nhints: 7\n\tofficial\t2013-12-23\tEverything you need to get the 1mBTC is contained in the picture. It\'s a very easy puzzle, but it may be a little harder than it first appears.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\tanswer: When sounded out the first three spell "directory.io" The QR code reveals "00110011001101100010000001100100011011110111011101101110" which when translated to text is "36 down". Entering directory.io/00110011001101100010000001100100011011110111011101101110 in your browser takes you to a page full of bitcoin addresses and private keys. Starting from the top of the page and counting "36 down" you end up with the address and private key of the competition.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tEvery CLUE that you need is in the picture. Just realized my OP may be confusing. To rephrase, "the picture will lead you to the private key".\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\n\tofficial\t2013-12-23\tThe QR code needs to be used two different ways. Firstly it must be used "as is". This is important to get you to where you need to go. Once you\'re there use the decoded instruction to point you in the right direction. Hopefully now we\'re all on the same *page*.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\n\tofficial\t2013-12-23\tYou\'re on the right track. It\'s not a book though. Think of another word :)\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/comment/ce8dx3n/\tanswer: 1 = Directory 2 = Eye 3 = \'O\' 4 = QR Code\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tNot exactly. When you get to where you need to go, follow the clue ;)\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/comment/ce8der1/\n\tofficial\t2013-12-23\tTry throwing the binary in your browser, you\'ll never know where you end up ;)\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/comment/ce8ecx8/\n\tcommunity\t2013-12-23\tBook, Eye, Letter O, 36 Down... interesting\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/comment/ce8dw8t/\nexplorer: https://blockstream.info/address/1MeQumbMGbTDPUNtBbLwzfyZqeeZzpRnex\nsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/',
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "b891d9b3f9fe",
-  total: 354,
-  solved: 148,
+  dataVersion: "994261e0bc42",
+  total: 355,
+  solved: 149,
   unsolved: 95,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 254,
+  withPubkey: 255,
   unsolvedPrize: {
     AR: 1900,
     ETH: 9.61254155,
@@ -845,7 +875,7 @@ export const STATS_STATIC = {
     AR: 5550,
     ETH: 22.74624155,
     DAI: 100,
-    BTC: 1064.12458961,
+    BTC: 1064.12558961,
     LTC: 230.8255,
     DCR: 460,
   },
@@ -1240,6 +1270,26 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "picture_puzzle",
+    author: "givesadvice4bitcoin",
+    authorKey: "givesadvice4bitcoin",
+    authorUrl: "https://www.reddit.com/user/givesadvice4bitcoin/",
+    total: 1,
+    statuses: {
+      solved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.001,
+    },
+    unsolvedPrize: {},
+    withPubkey: 1,
+    withKey: 1,
+    firstStarted: "2013-12-23 05:40:33",
+    lastStarted: "2013-12-23 05:40:33",
+    hints: [],
+  },
+  {
     key: "quizchain",
     author: "AoiNakamoto",
     authorKey: "aoi-nakamoto",
@@ -1549,6 +1599,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     about:
       "Pseudonymous puzzle maker who signs the movie frames as @cryptop1r4t3 and keeps a Nostr key as the only contact.",
     collections: ["movie_enigma"],
+    puzzles: 1,
+  },
+  {
+    key: "givesadvice4bitcoin",
+    to: "/authors/givesadvice4bitcoin",
+    name: "givesadvice4bitcoin",
+    kind: "person",
+    about:
+      "Posted a picture puzzle on r/bitcoinpuzzles seven hours after the subreddit opened. Four pictures, 1 mBTC, marked easy, and a little harder than it looked.",
+    collections: ["picture_puzzle"],
     puzzles: 1,
   },
   {

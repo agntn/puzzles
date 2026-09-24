@@ -150,6 +150,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Thirty brainwallets from 2014. Almost all cracked since.",
   },
+  picture_puzzle: {
+    icon: "i-lucide-scan-qr-code",
+    title: "1 mBTC picture puzzle",
+    sample: "picture_puzzle",
+    chains: ["bitcoin"],
+    blurb:
+      "A directory, an eye, the letter O and a QR code: a page on directory.io and the 36th key down. Claimed five hours in.",
+  },
   quizchain: {
     icon: "i-lucide-link",
     title: "Quizchain",
