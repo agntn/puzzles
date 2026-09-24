@@ -25,7 +25,7 @@ docs/
 ├── public/                        # favicon.svg and the icons and manifest cut from it
 ├── content/index.md               # landing
 ├── content/1.guide/               # getting started, records, registry, lookups, verification, balances, cli, agents, custom, playground
-├── content/2.collections/         # one page per collection, each with the collection dossier and the puzzle list; the six singletons embed their puzzle page
+├── content/2.collections/         # one page per collection, each with the collection dossier and the puzzle list; the seven singletons embed their puzzle page
 └── content/3.authors/             # one page per author key, each with `::author-facts` read off `getAuthor()`; the overview lists them through `::author-list`
 ```
 

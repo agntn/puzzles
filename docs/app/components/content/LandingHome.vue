@@ -161,7 +161,7 @@ const customCode = [
     </section>
 
     <LandingFeature
-      title="Twenty-one authors, every fact with its page"
+      title="Twenty-two authors, every fact with its page"
       to="/authors"
       link="Author dossiers"
       :checks="[

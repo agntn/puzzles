@@ -18,6 +18,7 @@ import { LedgerDonjonCollection } from "../../src/collections/ledger_donjon.ts";
 import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MineshopCollection } from "../../src/collections/mineshop.ts";
 import { MovieEnigmaCollection } from "../../src/collections/movie_enigma.ts";
+import { PicturePuzzleCollection } from "../../src/collections/picture_puzzle.ts";
 import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi_birthday_quiz.ts";
@@ -73,6 +74,7 @@ const concreteClasses = [
   LuckyLurkerCollection,
   MineshopCollection,
   MovieEnigmaCollection,
+  PicturePuzzleCollection,
   QuizchainCollection,
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
@@ -622,20 +624,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(354);
+    expect(await all()).toHaveLength(355);
     expect(await stats()).toEqual({
-      total: 354,
+      total: 355,
       claimed: 12,
       expired: 3,
-      solved: 148,
+      solved: 149,
       swept: 96,
       unsolved: 95,
-      with_pubkey: 254,
+      with_pubkey: 255,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
         DAI: 100,
-        BTC: 1064.12458961,
+        BTC: 1064.12558961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -668,7 +670,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(354);
+    ).toBe(355);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -695,6 +697,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(148);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(149);
   });
 });

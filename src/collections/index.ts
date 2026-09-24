@@ -26,6 +26,10 @@ export const builtins: readonly CollectionEntry[] = [
   { key: "luckylurker", load: () => import("./luckylurker.ts").then((m) => m.luckyLurker) },
   { key: "mineshop", load: () => import("./mineshop.ts").then((m) => m.mineshop) },
   { key: "movie_enigma", load: () => import("./movie_enigma.ts").then((m) => m.movieEnigma) },
+  {
+    key: "picture_puzzle",
+    load: () => import("./picture_puzzle.ts").then((m) => m.picturePuzzle),
+  },
   { key: "quizchain", load: () => import("./quizchain.ts").then((m) => m.quizchain) },
   { key: "rushwallet", load: () => import("./rushwallet.ts").then((m) => m.rushwallet) },
   {

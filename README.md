@@ -112,8 +112,9 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `book_quiz`             | bitcoin                             | A book quiz nobody won in time          |
 | `ktimesg`               | bitcoin                             | 80 hidden bits and a mempool race       |
 | `wickex`                | bitcoin                             | Hex, Morse and a spectrogram passphrase |
+| `picture_puzzle`        | bitcoin                             | Four pictures that spell a key database |
 
-Identifiers are `collection/name`. The six singletons, `gsmg`, `bitaps`, `mineshop`, `movie_enigma`, `satoshi_birthday_quiz` and `book_quiz`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
+Identifiers are `collection/name`. The seven singletons, `gsmg`, `bitaps`, `mineshop`, `movie_enigma`, `satoshi_birthday_quiz`, `book_quiz` and `picture_puzzle`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
 ## 🤖 Agents
 
