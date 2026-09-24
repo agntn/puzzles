@@ -96,8 +96,8 @@ export class SatoshiBirthdayQuizCollection extends SingletonCollection {
     profiles: [profile("reddit", "https://www.reddit.com/user/AoiNakamoto/")],
     facts: [
       fact(
-        "Asked r/bitcoinpuzzles on 2019-04-05 whether a quiz giveaway would be welcome, hours before posting the birthday quiz.",
-        "https://www.reddit.com/r/bitcoinpuzzles/comments/b9l37o/",
+        "Asked r/Bitcoin on 2019-04-05 whether a quiz giveaway would be welcome, hours before posting the birthday quiz.",
+        "https://www.reddit.com/r/Bitcoin/comments/b9l37o/",
         { date: "2019-04-05" },
       ),
       fact(

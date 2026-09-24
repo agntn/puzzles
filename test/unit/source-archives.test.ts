@@ -140,6 +140,12 @@ const sources = [
       content: "confirmed",
     },
   },
+  {
+    file: "satoshi_birthday_quiz/aoinakamoto-2019-04-05-b9l37o",
+    url: "https://www.reddit.com/r/Bitcoin/comments/b9l37o/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-05",
+  },
 ] as const;
 
 type Source = (typeof sources)[number];
