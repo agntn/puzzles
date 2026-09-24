@@ -70,6 +70,7 @@ const expectedCollections = [
   "genesis",
   "gsmg",
   "hash_collision",
+  "iamabananaamaa",
   "ktimesg",
   "ledger_donjon",
   "luckylurker",

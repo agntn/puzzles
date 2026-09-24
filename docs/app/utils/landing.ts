@@ -29,6 +29,7 @@ export const WALK: readonly string[] = [
   "book_quiz",
   "quizchain/1",
   "ktimesg/80_bit",
+  "iamabananaamaa/gif",
 ];
 
 /* generated:landing-fixtures:start */
@@ -763,18 +764,47 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 3,
     tool: "ktimesg/80_bit\tsolved\t0.005 BTC\t1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q\nchain: bitcoin  address kind: p2pkh\nhash160: 90b881be7044a596b0ac843d84ff31278ba92a12\npublic key: 03a61fc84b6429f07fc0edf25265ef7a0ced3cd9a0edea85e9f58b50b5d73f66e7 (compressed)\nprivate key: b40e7d34265ab9533a64622bd1a188fb8abb8829af545169abad49b46be5fe56 (hex)\nstarted: 2024-11-01 00:01:53\nsolved: 2024-11-02 00:37:21 (1d 35m)\nsolver: 14q4SoQwENXXzsVT3GMwDrDUGiW5QZeiDg\ntransactions: 3\n\tfunding\t2024-10-28 12:12:51\t0.0025 BTC\te4a2751bf7b936bd7661028799f083376a423aa05582a7f24225763bac43568b\n\tincrease\t2024-10-28 12:58:01\t0.0025 BTC\ta7d8b7f7a8ce7c2a79d9d166c2f96cbd5ff1d3223a707f9d29bf6d091fc5b2f9\n\tclaim\t2024-11-02 00:37:21\t0.00495 BTC\tdc8309f8b588e70c4f91f766108a9bbccd03839e846997cb93fe7dd08d162f36\nclaim: https://blockstream.info/tx/dc8309f8b588e70c4f91f766108a9bbccd03839e846997cb93fe7dd08d162f36\nhints: 3\n\tofficial\t2024-10-16\tThe Hamming length of the range will therefore be 80 contiguous bits, but they may start anywhere.\tsource: https://bitcointalk.org/index.php?topic=1306983.msg64639847#msg64639847\n\tofficial\t2024-11-01\tminKey = 0x659756abf6c17ca70e0000000000000000000140be6ddd93e441f8d4b4a85653b20b4cdcc5c748207a0daa16191d07a425d8080c276f9412472e0429e61bc355 maxKey = 0x659756abf6c17ca70fffffffffffffffffffff40be6ddd93e441f8d4b4a85653b20b4cdcc5c748207a0daa16191d07a425d8080c276f9412472e0429e61bc355\tsource: https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846\tanswer: assert shift == 361; elem = shift_inv * (public_key - min_elem); assert idlp_key == 0x2d56cbf370cbeef9e80a; private_key = min_key | (idlp_key << shift); assert private_key % secp256k1.N == 0xb40e7d34265ab9533a64622bd1a188fb8abb8829af545169abad49b46be5fe56\tanswer source: https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64695204\tanswer date: 2024-11-02\n\tofficial\t2024-11-01\tThe challenge involves correctly extracting pubkey from the raw TX, otherwise it's a no brainer.\tsource: https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846\nexplorer: https://blockstream.info/address/1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q\nsource: https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846",
   },
+  {
+    id: "iamabananaamaa/gif",
+    collection: "iamabananaamaa",
+    chain: "bitcoin",
+    status: "solved",
+    address: "1DprL7pbKGwjMKoJ4c6BEKrTmtbPB4AiNJ",
+    kind: "p2pkh",
+    hash160: "8cae3ce6d5497fa7a9b30e085efd2c972c6e0f81",
+    redeemScript: undefined,
+    prize: "0.001 BTC",
+    prizeAmount: 0.001,
+    currency: undefined,
+    startedAt: "2013-12-22 22:35:39",
+    solvedAt: "2013-12-23 01:04:43",
+    solveTime: "2h 29m",
+    bits: undefined,
+    range: undefined,
+    pubkey: "03987951b3fa4a6f68ba76bd509a8ac4945b3cb1e14be1eadd5d3210f590313024",
+    pubkeyFormat: "compressed",
+    secret: "wif",
+    keyLiteral: 'wif("L21s1A2LjTL5WLEfWPJtuKxHKF3PcfJnyiEtjNtPUxwnSdqWBD66")',
+    verdict: "verified",
+    detail: "1DprL7pbKGwjMKoJ4c6BEKrTmtbPB4AiNJ",
+    explorer: "https://blockstream.info/address/1DprL7pbKGwjMKoJ4c6BEKrTmtbPB4AiNJ",
+    source:
+      "https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/easy_1mbtc_find_the_private_key_in_this_gif/",
+    transactions: 2,
+    tool: "iamabananaamaa/gif\tsolved\t0.001 BTC\t1DprL7pbKGwjMKoJ4c6BEKrTmtbPB4AiNJ\nchain: bitcoin  address kind: p2pkh\nhash160: 8cae3ce6d5497fa7a9b30e085efd2c972c6e0f81\npublic key: 03987951b3fa4a6f68ba76bd509a8ac4945b3cb1e14be1eadd5d3210f590313024 (compressed)\nprivate key: L21s1A2LjTL5WLEfWPJtuKxHKF3PcfJnyiEtjNtPUxwnSdqWBD66 (wif)\nstarted: 2013-12-22 22:35:39\nsolved: 2013-12-23 01:04:43 (2h 29m)\nsolver: Wickex, reddit https://www.reddit.com/user/Wickex/\ntransactions: 2\n\tfunding\t2013-12-22 22:27:31\t0.001 BTC\t17975f67f8be43470c3abaa6ba847444de9453dafc817396a2c5383be31a8669\n\tclaim\t2013-12-23 01:04:43\t0.0009 BTC\t594f82e1a11a7fbf212715075685d3b3201342d0b26075e0dbd8365fa1eaba50\nclaim: https://blockstream.info/tx/594f82e1a11a7fbf212715075685d3b3201342d0b26075e0dbd8365fa1eaba50\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/iamabananaamaa/gif/puzzle.gif\nasset source: http://i.imgur.com/7rXofNv.gif\nhints: 5\n\tofficial\t2013-12-22\tYou don't need specialized software, no. However, you will (I believe) most likely need a program that basically anybody on the planet has since it has so many wide uses and public options.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce81be8/\tanswer: images can be 'merged' with ZIP/RAR files, which you can open by renaming the extension of the .gif file to .zip. In there was a file called MEGAN.txt, with a string inside of it.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce86ejm/\tanswer date: 2013-12-23\n\tofficial\t2013-12-22\tHint: Megan may not be a person, but if she was, she'd be 35 years old.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce8257x/\tanswer: referring to MEGAN-35, a kind of hash. By decrypting it (google MEGAN-35 decrypter or something similar) I got another string, which turned out to be an ATOM-128 hash. When decrypted, it gave you the private key!\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce86ejm/\tanswer date: 2013-12-23\n\tofficial\t2013-12-22\tJust to save you time, the thing in the bottom right is an error on the gif's part. The creator messed something up when creating it.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce825x4/\n\tofficial\t2013-12-23\tThe zip file name was ATOM :).\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce86n19/\n\tcommunity\t2013-12-22\tOh right. It is just a compressed file. This is the output of MEGAN.txt = jZXbm2zukIKdShNxcJnrkuXPm2XRSZGY=M1Gku=9gKGJc/9uju1eoJ=ynhfSjuXPddfvc2n4cJyqlMf2dLD4k2Nvi2refuSI\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce828ht/\nexplorer: https://blockstream.info/address/1DprL7pbKGwjMKoJ4c6BEKrTmtbPB4AiNJ\nsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/easy_1mbtc_find_the_private_key_in_this_gif/",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "d712e33e782d",
-  total: 351,
-  solved: 145,
+  dataVersion: "6c1ccf4c35fc",
+  total: 352,
+  solved: 146,
   unsolved: 95,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 251,
+  withPubkey: 252,
   unsolvedPrize: {
     AR: 1900,
     ETH: 9.61254155,
@@ -784,7 +814,7 @@ export const STATS_STATIC = {
     AR: 5550,
     ETH: 22.74624155,
     DAI: 100,
-    BTC: 1064.12158961,
+    BTC: 1064.12258961,
     LTC: 230.8255,
     DCR: 460,
   },
@@ -1053,6 +1083,26 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 0,
     firstStarted: "2013-09-13 04:48:29",
     lastStarted: "2013-09-13 05:59:09",
+    hints: [],
+  },
+  {
+    key: "iamabananaamaa",
+    author: "IAMABananaAMAA",
+    authorKey: "iamabananaamaa",
+    authorUrl: "https://www.reddit.com/user/IAMABananaAMAA/",
+    total: 1,
+    statuses: {
+      solved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.001,
+    },
+    unsolvedPrize: {},
+    withPubkey: 1,
+    withKey: 1,
+    firstStarted: "2013-12-22 22:35:39",
+    lastStarted: "2013-12-22 22:35:39",
     hints: [],
   },
   {
@@ -1390,6 +1440,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Bitcoin Core contributor and applied cryptography consultant, creator of OpenTimestamps, who paid for hash collisions with Bitcoin script in 2013.",
     collections: ["hash_collision"],
     puzzles: 6,
+  },
+  {
+    key: "iamabananaamaa",
+    to: "/authors/iamabananaamaa",
+    name: "IAMABananaAMAA",
+    kind: "person",
+    about:
+      "Started r/bitcoinpuzzles in December 2013 and put a puzzle up the same evening: a GIF with 1 mBTC inside. Marked it easy. Took that back within the hour.",
+    collections: ["iamabananaamaa"],
+    puzzles: 1,
   },
   {
     key: "ktimesg",

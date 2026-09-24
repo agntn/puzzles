@@ -96,6 +96,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Peter Todd's P2SH scripts that pay for a collision. SHA-1 fell in 2017.",
   },
+  iamabananaamaa: {
+    icon: "i-lucide-file-image",
+    title: "IAMABananaAMAA's GIF puzzle",
+    sample: "iamabananaamaa/gif",
+    chains: ["bitcoin"],
+    blurb:
+      "Posted 17 minutes after the r/bitcoinpuzzles welcome post. A ZIP after the last byte of a GIF, then two Base64 alphabets. Solved in two and a half hours.",
+  },
   ktimesg: {
     icon: "i-lucide-timer",
     title: "kTimesG's 80-bit key challenge",
