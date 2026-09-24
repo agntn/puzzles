@@ -93,27 +93,7 @@ const customCode = [
       way they sit on disk.
       <template #visual>
         <div @mouseenter="paused = true" @mouseleave="paused = false">
-          <LandingRecord :sample="current" />
-          <div class="mt-3 flex items-center justify-between font-mono text-[11px] text-dimmed">
-            <NuxtLink
-              :to="`/collections/${current.id}`"
-              class="truncate hover:text-highlighted hover:underline"
-              >{{ current.id }} · {{ current.chain }} · {{ current.status }}</NuxtLink
-            >
-            <span class="inline-flex shrink-0 gap-1">
-              <button
-                type="button"
-                class="puzzles-copy"
-                aria-label="Previous puzzle"
-                @click="step(-1)"
-              >
-                <UIcon name="i-lucide-chevron-left" class="size-3.5" />
-              </button>
-              <button type="button" class="puzzles-copy" aria-label="Next puzzle" @click="step(1)">
-                <UIcon name="i-lucide-chevron-right" class="size-3.5" />
-              </button>
-            </span>
-          </div>
+          <LandingRecord :sample="current" @previous="step(-1)" @next="step(1)" />
         </div>
       </template>
     </LandingFeature>
