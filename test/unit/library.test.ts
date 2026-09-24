@@ -471,6 +471,13 @@ describe("lazy collection registry", () => {
       await expect(miss(requirePuzzle(id))).resolves.toBe(`Puzzle not found: ${id}.`);
     }
     await expect(miss(requireCollection("bitcoin"))).resolves.toBe("Unknown collection: bitcoin.");
+
+    /* A blank key would vanish into the sentence, so the miss quotes it. */
+    await expect(miss(requireCollection(" "))).resolves.toBe('Unknown collection: " ".');
+    await expect(miss(requirePuzzle(" "))).resolves.toBe('Puzzle not found: " ".');
+    await expect(miss(requireAuthor("peter-todd "))).resolves.toBe(
+      'Unknown author: "peter-todd ". Did you mean peter-todd?',
+    );
   });
 
   it("shares the archived RushWallet video clue with all 30 wallets", () => {

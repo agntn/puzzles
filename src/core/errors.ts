@@ -14,6 +14,18 @@ function withDetail(message: string, detail: string | undefined): string {
   return detail === undefined ? message : `${message}. ${detail}`;
 }
 
+/**
+ * Echoes the key a lookup missed. A plain key reads as is; an empty one, or one with whitespace at
+ * either end, is quoted, because otherwise it vanishes into the sentence and `Unknown collection: .`
+ * reads as a collection named `.`.
+ *
+ * @param {string} key - The key the caller passed.
+ * @returns {string} The key, quoted when bare text would hide it.
+ */
+function echo(key: string): string {
+  return key === "" || key.trim() !== key ? JSON.stringify(key) : key;
+}
+
 /** Raised when a puzzle identifier can't be resolved. */
 export class PuzzleNotFoundError extends PuzzlesError {
   override readonly name = "PuzzleNotFoundError";
@@ -26,7 +38,7 @@ export class PuzzleNotFoundError extends PuzzlesError {
    * caller could have asked for instead, so a miss does not cost a second lookup.
    */
   constructor(puzzleId: string, detail?: string) {
-    super(withDetail(`Puzzle not found: ${puzzleId}`, detail));
+    super(withDetail(`Puzzle not found: ${echo(puzzleId)}`, detail));
     this.puzzleId = puzzleId;
   }
 }
@@ -54,7 +66,7 @@ export class UnknownAuthorError extends PuzzlesError {
 
   /** Constructs an unknown author error, with the keys that do resolve when known. */
   constructor(author: string, detail?: string) {
-    super(withDetail(`Unknown author: ${author}`, detail));
+    super(withDetail(`Unknown author: ${echo(author)}`, detail));
     this.author = author;
   }
 }
@@ -68,7 +80,7 @@ export class UnknownCollectionError extends PuzzlesError {
 
   /** Constructs an unknown collection error, with the keys that do resolve when known. */
   constructor(collection: string, detail?: string) {
-    super(withDetail(`Unknown collection: ${collection}`, detail));
+    super(withDetail(`Unknown collection: ${echo(collection)}`, detail));
     this.collection = collection;
   }
 }

@@ -141,7 +141,7 @@ export const facts = {
         "The puzzle paying to this address. Case only matters where the chain says it does, so an EIP-55 Ethereum address and an uppercased bech32 one both resolve",
     },
     chain: { description: "Only puzzles on one blockchain" },
-    collection: { maxLength: 50, description: "Collection key, for example b1000" },
+    collection: { minLength: 1, maxLength: 50, description: "Collection key, for example b1000" },
     author: {
       minLength: 1,
       maxLength: 50,
