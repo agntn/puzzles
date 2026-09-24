@@ -25,8 +25,8 @@ importers:
         specifier: 0.3.8
         version: 0.3.8(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(typebox@1.3.34)(zod@4.6.5)
       '@agntn/explorers':
-        specifier: 0.5.4
-        version: 0.5.4(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@earendil-works/pi-tui@0.85.1)(@oh-my-pi/pi-coding-agent@18.2.7)(typebox@1.3.34)
+        specifier: 0.5.6
+        version: 0.5.6(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@earendil-works/pi-tui@0.85.1)(@oh-my-pi/pi-coding-agent@18.2.7)(typebox@1.3.34)
       '@agntn/keys':
         specifier: 0.3.2
         version: 0.3.2(zod@4.6.5)
@@ -82,6 +82,17 @@ importers:
 
 packages:
 
+  '@agntn/chains@0.3.5':
+    resolution: {integrity: sha512-4jtD40PMWz7d2+jMKcMszTWaJ9boGSn2nRuQCPjUih+Kix/ilO3+YgylCAx6vyl3pPs4L1JEkHP4c4LE3fdmdg==}
+    engines: {node: '>=24'}
+    hasBin: true
+    peerDependencies:
+      '@earendil-works/pi-coding-agent': '>=0.84.2 <1'
+      typebox: '>=1.3.14 <2'
+    peerDependenciesMeta:
+      '@earendil-works/pi-coding-agent':
+        optional: true
+
   '@agntn/chains@0.3.8':
     resolution: {integrity: sha512-O2MVJAg18jcsi+6WISopbKL4LYReKrv5ncLLQ6jeOeQnsp5bWyQ6+wYOzPnAfKLG4mSiqPLXfN6TNLCl6h4Phg==}
     engines: {node: '>=24'}
@@ -93,8 +104,8 @@ packages:
       '@earendil-works/pi-coding-agent':
         optional: true
 
-  '@agntn/explorers@0.5.4':
-    resolution: {integrity: sha512-JzgFPgoTK/VfttHtijUPKjJq3/Sf0KDZx3w0VmHlo9rzKD+oxkbg3BJkl9h7iA1lCv91gUZCHj/jRheAXS2m7A==}
+  '@agntn/explorers@0.5.6':
+    resolution: {integrity: sha512-Iq9OUWCYbRaS+Kv7DLrB+FEvT0+QNG8CO+vZjyaaYDIVLM4GYlsL4x04CmrArAuSgUfMKpNGbbU8jD+4sQJQtw==}
     engines: {node: '>=24'}
     hasBin: true
     peerDependencies:
@@ -3328,10 +3339,26 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
   zod@4.6.5:
     resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
 
 snapshots:
+
+  '@agntn/chains@0.3.5(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(typebox@1.3.34)(zod@4.4.3)':
+    dependencies:
+      '@modelcontextprotocol/sdk': 1.30.0(zod@4.4.3)
+      citty: 0.2.2
+      consola: 3.4.2
+      typebox: 1.3.34
+    optionalDependencies:
+      '@earendil-works/pi-coding-agent': 0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5)
+    transitivePeerDependencies:
+      - '@cfworker/json-schema'
+      - supports-color
+      - zod
 
   '@agntn/chains@0.3.8(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(typebox@1.3.34)(zod@4.6.5)':
     dependencies:
@@ -3346,14 +3373,14 @@ snapshots:
       - supports-color
       - zod
 
-  '@agntn/explorers@0.5.4(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@earendil-works/pi-tui@0.85.1)(@oh-my-pi/pi-coding-agent@18.2.7)(typebox@1.3.34)':
+  '@agntn/explorers@0.5.6(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@earendil-works/pi-tui@0.85.1)(@oh-my-pi/pi-coding-agent@18.2.7)(typebox@1.3.34)':
     dependencies:
-      '@agntn/chains': 0.3.8(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(typebox@1.3.34)(zod@4.6.5)
-      '@modelcontextprotocol/sdk': 1.30.0(zod@4.6.5)
+      '@agntn/chains': 0.3.5(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(typebox@1.3.34)(zod@4.4.3)
+      '@modelcontextprotocol/sdk': 1.30.0(zod@4.4.3)
       citty: 0.2.2
       consola: 3.4.2
       ofetch: 1.5.1
-      zod: 4.6.5
+      zod: 4.4.3
     optionalDependencies:
       '@earendil-works/pi-coding-agent': 0.85.1(@modelcontextprotocol/sdk@1.30.0(zod@4.6.5))(ws@8.21.3)(zod@4.6.5)
       '@earendil-works/pi-tui': 0.85.1
@@ -4063,6 +4090,28 @@ snapshots:
       '@mariozechner/clipboard-win32-arm64-msvc': 0.3.9
       '@mariozechner/clipboard-win32-x64-msvc': 0.3.9
     optional: true
+
+  '@modelcontextprotocol/sdk@1.30.0(zod@4.4.3)':
+    dependencies:
+      '@hono/node-server': 2.1.1(hono@4.13.2)
+      ajv: 8.20.0
+      ajv-formats: 3.0.1(ajv@8.20.0)
+      content-type: 1.0.5
+      cors: 2.8.6
+      cross-spawn: 7.0.6
+      eventsource: 3.0.7
+      eventsource-parser: 3.1.1
+      express: 5.2.1
+      express-rate-limit: 8.6.2(express@5.2.1)
+      hono: 4.13.2
+      jose: 6.2.9
+      json-schema-typed: 8.0.2
+      pkce-challenge: 5.0.1
+      raw-body: 3.0.2
+      zod: 4.4.3
+      zod-to-json-schema: 3.25.2(zod@4.4.3)
+    transitivePeerDependencies:
+      - supports-color
 
   '@modelcontextprotocol/sdk@1.30.0(zod@4.6.5)':
     dependencies:
@@ -6413,10 +6462,16 @@ snapshots:
       '@yuku-parser/binding-win32-arm64': 0.9.5
       '@yuku-parser/binding-win32-x64': 0.9.5
 
+  zod-to-json-schema@3.25.2(zod@4.4.3):
+    dependencies:
+      zod: 4.4.3
+
   zod-to-json-schema@3.25.2(zod@4.6.5):
     dependencies:
       zod: 4.6.5
 
   zod@3.25.76: {}
+
+  zod@4.4.3: {}
 
   zod@4.6.5: {}
