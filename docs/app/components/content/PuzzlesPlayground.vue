@@ -522,18 +522,6 @@ const verdict = computed(() => {
 });
 
 /**
- * The subject glyph of a verdict: the shield the outcome earns.
- *
- * @param {boolean} verified - Whether the key derived the address.
- * @param {boolean} unavailable - Whether there was nothing to derive.
- * @returns {string} The Lucide icon name.
- */
-function verdictIcon(verified: boolean, unavailable: boolean): string {
-  if (verified) return "i-lucide-shield-check";
-  return unavailable ? "i-lucide-shield-question" : "i-lucide-shield-x";
-}
-
-/**
  * One tick per puzzle in the dataset, the unsolved ones open.
  *
  * @param {StatsAnswer["cells"]} cells - The totals as the panel lists them.

@@ -433,8 +433,7 @@ button:not(:disabled),
   display: inline-block;
 }
 
-.puzzles-rotating,
-.puzzles-tool {
+.puzzles-rotating {
   margin: 0;
   padding: 1rem;
   overflow-x: auto;
@@ -445,12 +444,6 @@ button:not(:disabled),
   color: var(--ui-text);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-}
-
-.puzzles-tool {
-  padding: 0;
-  background: transparent !important;
-  font-size: 0.75rem;
 }
 
 .tok-kw {
