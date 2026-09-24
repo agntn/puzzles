@@ -531,21 +531,6 @@ button:not(:disabled),
   color: var(--ui-text-dimmed);
 }
 
-.puzzles-progress {
-  height: 0.25rem;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--ui-bg-accented);
-}
-
-.puzzles-progress > span {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  background: var(--puzzles-fill);
-  transition: width 0.5s ease;
-}
-
 .puzzles-code {
   margin: 0;
   padding: 0.875rem 0;
@@ -586,49 +571,9 @@ button:not(:disabled),
   text-indent: 0;
 }
 
-.puzzles-pulse {
-  animation: puzzles-pulse 1.4s ease-in-out infinite;
-}
-
-@keyframes puzzles-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.35;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .puzzles-pulse {
-    animation: none;
-  }
-}
-
 /* Inline-block children would inherit the hanging indent of a wrapped code line. */
 .puzzles-code-line * {
   text-indent: 0;
-}
-
-/* Rows: the one list primitive, on the landing and on collection pages */
-
-.puzzles-row {
-  display: grid;
-  align-items: center;
-  gap: 0 0.75rem;
-  padding: 0.75rem 1rem;
-  color: var(--ui-text-muted);
-  transition: background-color 0.15s ease;
-}
-
-.puzzles-row:hover {
-  background: var(--ui-bg-muted);
-}
-
-.puzzles-row-active {
-  background: var(--puzzles-cell-active);
 }
 
 /* UTooltip in the instrument grammar: one quiet 1px edge with a short amber segment, the top right corner cut, mono text. */
