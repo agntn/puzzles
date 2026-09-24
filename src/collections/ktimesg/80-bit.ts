@@ -11,7 +11,7 @@ import {
 } from "../../core/parts.ts";
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 
-/** The announcement: the rules, two weeks ahead, with a made-up range as the example. */
+/** The announcement. Rules two weeks early, with a made-up range as the example. */
 const ANNOUNCEMENT = "https://bitcointalk.org/index.php?topic=1306983.msg64639847#msg64639847";
 
 /** The post with the address, the real range and the SHA-256 of the solve steps. */
@@ -20,11 +20,7 @@ const RANGE = "https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64
 /** The post with the solve steps, after the claim. */
 const STEPS = "https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64695204";
 
-/**
- * 80 unknown contiguous bits in the middle of a 512-bit key that reduces modulo the curve order to
- * the real one. The author pushed a spend of the address to reveal the public key, and someone
- * broke the key in the mempool and replaced the spend with their own 39 minutes later.
- */
+/** 80 unknown bits in a 511-bit key, public key only in a pending spend. Taken 39 minutes in. */
 export const kTimesG80Bit = bitcoinPuzzle({
   id: "ktimesg/80_bit",
   address: p2pkh("1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q", "90b881be7044a596b0ac843d84ff31278ba92a12"),

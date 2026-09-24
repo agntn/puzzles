@@ -8,7 +8,7 @@ const ANNOUNCEMENT = "https://bitcointalk.org/index.php?topic=1306983.msg6463984
 /** Where kTimesG looked back on the claim. */
 const RECAP = "https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64695204";
 
-/** Key range challenges kTimesG posts in the BitcoinTalk puzzle thread. */
+/** kTimesG's key cracking challenges from BitcoinTalk. */
 export class KTimesGCollection extends NamedCollection {
   /** Stable collection key used in puzzle identifiers. */
   static readonly key = "ktimesg";
@@ -18,18 +18,18 @@ export class KTimesGCollection extends NamedCollection {
     key: "ktimesg",
     kind: PartyKind.Person,
     about:
-      "Writes on BitcoinTalk about cracking Bitcoin keys. In 2024 put up 0.005 BTC for anyone who could crack a key with 80 unknown bits before a transaction confirmed. Someone did, 39 minutes in.",
+      "Writes on BitcoinTalk about cracking Bitcoin keys. In 2024 offered 0.005 BTC to whoever cracked a key with 80 unknown bits before its transaction confirmed. Someone did, 39 minutes in.",
     profiles: [
       profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=3610370"),
     ],
     facts: [
       fact(
-        "Announced the 80-bit challenge two weeks ahead and asked only one thing of a winner: what method was used to break the key.",
+        "Announced the 80-bit challenge two weeks early. Only asked the winner to say how they broke the key.",
         ANNOUNCEMENT,
         { date: "2024-10-16" },
       ),
       fact(
-        "Said after the claim that the spend took 39 minutes to be replaced, and that nobody gets 40 minutes when the real 80-bit puzzle is emptied.",
+        "Was disappointed it took 39 minutes to replace the spend. With a real 80-bit puzzle, nobody gets 40.",
         RECAP,
         { date: "2024-11-02" },
       ),
