@@ -415,6 +415,9 @@ describe("lazy collection registry", () => {
       "iamabananaamaa/gif",
       "iamabananaamaa/gif",
     ]);
+    expect(
+      ["caesar", "iamabananaamaa/caesar"].map((query) => iAmABananaAmaa.get(query)?.id()),
+    ).toEqual(["iamabananaamaa/caesar", "iamabananaamaa/caesar"]);
 
     expect(["youtube", "wickex/youtube"].map((query) => wickex.get(query)?.id())).toEqual([
       "wickex/youtube",
@@ -612,20 +615,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(353);
+    expect(await all()).toHaveLength(354);
     expect(await stats()).toEqual({
-      total: 353,
+      total: 354,
       claimed: 12,
       expired: 3,
-      solved: 147,
+      solved: 148,
       swept: 96,
       unsolved: 95,
-      with_pubkey: 253,
+      with_pubkey: 254,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
         DAI: 100,
-        BTC: 1064.12358961,
+        BTC: 1064.12458961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -658,7 +661,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(353);
+    ).toBe(354);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -685,6 +688,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(147);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(148);
   });
 });

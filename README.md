@@ -100,6 +100,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `dug`                   | bitcoin                             | 2025 student seed hunt                  |
 | `bitimage`              | bitcoin                             | Seeds hashed from photographs           |
 | `luckylurker`           | bitcoin                             | Two Bitcoin Vault seed challenges       |
+| `iamabananaamaa`        | bitcoin                             | A ZIP in a GIF, then a fake Caesar      |
 | `bitaps`                | bitcoin                             | A 3 of 5 secret sharing scheme          |
 | `gsmg`                  | bitcoin                             | A multi phase image puzzle              |
 | `movie_enigma`          | bitcoin                             | Film titles as seed words, solved 2026  |
@@ -110,7 +111,6 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `satoshi_birthday_quiz` | bitcoin                             | Seven quiz answers hashed into a wallet |
 | `book_quiz`             | bitcoin                             | A book quiz nobody won in time          |
 | `ktimesg`               | bitcoin                             | 80 hidden bits and a mempool race       |
-| `iamabananaamaa`        | bitcoin                             | A ZIP hiding at the end of a GIF        |
 | `wickex`                | bitcoin                             | Hex, Morse and a spectrogram passphrase |
 
 Identifiers are `collection/name`. The six singletons, `gsmg`, `bitaps`, `mineshop`, `movie_enigma`, `satoshi_birthday_quiz` and `book_quiz`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
