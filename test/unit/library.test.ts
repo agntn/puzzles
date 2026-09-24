@@ -42,6 +42,7 @@ import {
   p2pkh,
   party,
   PuzzleNotFoundError,
+  requireAuthor,
   requireCollection,
   requirePuzzle,
   SingletonCollection,
@@ -400,6 +401,49 @@ describe("lazy collection registry", () => {
     expect(rushwallet.get("rushwallet/9")?.id()).toBe("rushwallet/9");
     expect(rushwallet.get(9 as never)).toBeUndefined();
     expect(() => rushwallet.require(9 as never)).toThrow(PuzzleNotFoundError);
+  });
+
+  it("names the one puzzle, collection or author a miss most likely meant", async () => {
+    const miss = async (lookup: Promise<unknown>): Promise<string> =>
+      lookup.then(
+        () => "",
+        (error: Readonly<Error>) => error.message.replace(/ (?:Known|Collection) .*$/u, ""),
+      );
+
+    /* Case, separators and a bare name each point at exactly one identifier. */
+    await expect(miss(requirePuzzle("135"))).resolves.toBe(
+      "Puzzle not found: 135. Did you mean b1000/135?",
+    );
+    await expect(miss(requirePuzzle("B1000/71"))).resolves.toBe(
+      "Puzzle not found: B1000/71. Did you mean b1000/71?",
+    );
+    await expect(miss(requirePuzzle("b100/71"))).resolves.toBe(
+      "Puzzle not found: b100/71. Did you mean b1000/71?",
+    );
+    await expect(miss(requirePuzzle("Zden/Level-5"))).resolves.toBe(
+      "Puzzle not found: Zden/Level-5. Did you mean zden/level_5?",
+    );
+    await expect(miss(requirePuzzle("zden/level5"))).resolves.toBe(
+      "Puzzle not found: zden/level5. Did you mean zden/level_5?",
+    );
+    await expect(miss(requirePuzzle("GSMG"))).resolves.toBe(
+      "Puzzle not found: GSMG. Did you mean gsmg?",
+    );
+    await expect(miss(requirePuzzle("b100/99999"))).resolves.toBe(
+      "Puzzle not found: b100/99999. Did you mean collection b1000?",
+    );
+    await expect(miss(requireCollection("hashcollision"))).resolves.toBe(
+      "Unknown collection: hashcollision. Did you mean hash_collision?",
+    );
+    await expect(miss(requireAuthor("peter_todd"))).resolves.toBe(
+      "Unknown author: peter_todd. Did you mean peter-todd?",
+    );
+
+    /* A number one digit off is another puzzle, and a name several collections share is a tie. */
+    for (const id of ["b1000/999", "b1000/071", "1", "nope/1"]) {
+      await expect(miss(requirePuzzle(id))).resolves.toBe(`Puzzle not found: ${id}.`);
+    }
+    await expect(miss(requireCollection("bitcoin"))).resolves.toBe("Unknown collection: bitcoin.");
   });
 
   it("shares the archived RushWallet video clue with all 30 wallets", () => {

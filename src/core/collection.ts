@@ -2,6 +2,7 @@ import type { BalanceOptions } from "./balance.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
 import { frozen, type Hint, type Party } from "./parts.ts";
 import { Puzzle, Status } from "./puzzle.ts";
+import { closestPuzzle } from "./suggest.ts";
 import { type Balance } from "./types.ts";
 import { filterPuzzles } from "./utils.ts";
 import { verifyPuzzle, type VerifyResult } from "./verify.ts";
@@ -84,25 +85,30 @@ export abstract class Collection<Query> {
   requireId(id: string): Puzzle {
     const puzzle = this.#byId.get(id);
     if (puzzle === undefined) {
-      throw new PuzzleNotFoundError(id, this.#shape());
+      throw new PuzzleNotFoundError(id, this.#shape(id));
     }
     return puzzle;
   }
 
   /**
    * What the collection does answer to, so a caller that guessed the identifier wrong can fix it
-   * from the error instead of listing the collection first.
+   * from the error instead of listing the collection first. A name that differs from one of its
+   * puzzles only in case or separators, such as `zden/level5`, is named first.
    *
-   * @returns {string} How many puzzles it holds and one identifier it resolves.
+   * @param {string} id - The identifier that missed.
+   * @returns {string} The puzzle it most likely meant, how many puzzles it holds and one identifier it resolves.
    */
-  #shape(): string {
+  #shape(id: string): string {
     const example = this.#puzzles[0];
     if (example === undefined) {
       return `Collection ${this.key} holds no puzzles`;
     }
     const count = this.#puzzles.length;
     const held = count === 1 ? "1 puzzle" : `${count} puzzles`;
-    return `Collection ${this.key} holds ${held}, for example ${example.id()}`;
+    const shape = `Collection ${this.key} holds ${held}, for example ${example.id()}`;
+    const slash = id.indexOf("/");
+    const guess = closestPuzzle(slash === -1 ? id : id.slice(slash + 1), this.#puzzles);
+    return guess === undefined ? shape : `Did you mean ${guess}? ${shape}`;
   }
 
   /**

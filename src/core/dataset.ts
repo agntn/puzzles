@@ -7,11 +7,13 @@ import { defined, frozen, type Hint, type Party } from "./parts.ts";
 import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
 import {
   type AnyCollection,
+  collectionKeys,
   collections,
   getCollection,
   knownCollections,
   requireCollection,
 } from "./registry.ts";
+import { closestKey, closestPuzzle } from "./suggest.ts";
 import { filterPuzzles, prizeTotals, statusCounts } from "./utils.ts";
 
 /** Aggregate puzzle statistics. */
@@ -171,8 +173,13 @@ export async function requireAuthor(key: string): Promise<AuthorEntry> {
   if (entry !== undefined) {
     return entry;
   }
-  const known = (await authors()).map((row) => row.key).join(", ");
-  throw new UnknownAuthorError(String(key), `Known authors: ${known}`);
+  const keys = (await authors()).map((row) => row.key);
+  const known = `Known authors: ${keys.join(", ")}`;
+  const guess = typeof key === "string" ? closestKey(key, keys) : undefined;
+  throw new UnknownAuthorError(
+    String(key),
+    guess === undefined ? known : `Did you mean ${guess}? ${known}`,
+  );
 }
 
 /**
@@ -214,7 +221,9 @@ export async function get(id: string): Promise<Puzzle | undefined> {
 /**
  * Looks up a puzzle or throws a typed not found error. The error says what the identifier's
  * collection does hold, or which collections exist when the identifier named none, so a caller
- * that guessed wrong recovers without a second lookup.
+ * that guessed wrong recovers without a second lookup. When one puzzle explains the miss, the
+ * error names it first: `B1000/71` and `b100/71` mean `b1000/71`, and a bare `135` means the one
+ * puzzle of that name, `b1000/135`.
  *
  * @param {string} id - Universal puzzle identifier.
  * @returns {Promise<Puzzle>} The puzzle.
@@ -224,13 +233,64 @@ export async function requirePuzzle(id: string): Promise<Puzzle> {
   if (puzzle !== undefined) {
     return puzzle;
   }
-  const collection =
-    typeof id === "string" ? await getCollection(id.split("/")[0] ?? id) : undefined;
+  if (typeof id !== "string") {
+    throw new PuzzleNotFoundError(id, knownCollections());
+  }
+  const [prefix = id, ...rest] = id.split("/");
+  const collection = await getCollection(prefix);
   if (collection !== undefined) {
     /* The collection exists and the identifier is not one of its own, so this throws its shape. */
     return collection.requireId(id);
   }
-  throw new PuzzleNotFoundError(id, knownCollections());
+  const key = closestKey(prefix, collectionKeys());
+  const guess =
+    (await guessPuzzle(key, prefix, rest.join("/"))) ??
+    (key === undefined ? undefined : `collection ${key}`);
+  const known = knownCollections();
+  throw new PuzzleNotFoundError(
+    id,
+    guess === undefined ? known : `Did you mean ${guess}? ${known}`,
+  );
+}
+
+/**
+ * The puzzle an identifier whose collection segment missed most likely meant. A segment one typo
+ * or a case away from a collection key reads as that key, with the name matched inside it; a
+ * segment with no name behind it may instead be a puzzle name, which counts when exactly one
+ * collection holds it.
+ *
+ * @param {string | undefined} key - The collection key the segment most likely meant.
+ * @param {string} prefix - The collection segment that missed.
+ * @param {string} name - The rest of the identifier, empty when it had no slash.
+ * @returns {Promise<string | undefined>} The identifier to suggest.
+ */
+async function guessPuzzle(
+  key: string | undefined,
+  prefix: string,
+  name: string,
+): Promise<string | undefined> {
+  const collection = key === undefined ? undefined : await getCollection(key);
+  if (collection === undefined) {
+    return name === "" ? closestPuzzle(prefix, await all()) : undefined;
+  }
+  return guessInCollection(collection, name);
+}
+
+/**
+ * The puzzle a name most likely meant once its collection is settled: the singleton itself when
+ * the identifier had no name, else the name as written or with case and separators folded.
+ *
+ * @param {AnyCollection} collection - The collection the identifier most likely meant.
+ * @param {string} name - The rest of the identifier, empty when it had no slash.
+ * @returns {string | undefined} The identifier to suggest.
+ */
+function guessInCollection(collection: AnyCollection, name: string): string | undefined {
+  const puzzles = collection.all();
+  if (name === "") {
+    return puzzles.length === 1 && puzzles[0]?.id() === collection.key ? collection.key : undefined;
+  }
+  const id = `${collection.key}/${name}`;
+  return collection.get(id)?.id() === id ? id : closestPuzzle(name, puzzles);
 }
 
 /**

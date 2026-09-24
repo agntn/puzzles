@@ -446,7 +446,7 @@ describe.concurrent("puzzles CLI", () => {
 
     expect(result.code).toBe(1);
     expect(result.stderr.trim()).toBe(
-      `Puzzle not found: 135. Known collections: ${collectionKeys().join(", ")}`,
+      `Puzzle not found: 135. Did you mean b1000/135? Known collections: ${collectionKeys().join(", ")}`,
     );
   });
 
