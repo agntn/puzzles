@@ -5,16 +5,18 @@
  * `pnpm publish` does, unpacks it inside the checkout so the packed files resolve their
  * dependencies from the repository's node_modules, and exercises every published entry from
  * there: the library and its lazy collections, the MCP server over an in-memory transport, the
- * Pi and OMP extensions without any src/ next to them, and the CLI bin run as a command. The load
- * hook in record-loads.ts records which packed modules each step pulled in, so the lazy manifest
- * is checked on the published layout, not only on the sources. Run: pnpm test:packed
+ * Pi and OMP extensions without any src/ next to them, and the CLI bin run as a command. It also
+ * runs `mcp` from the checkout's own `dist/cli.mjs`, which serves src/ there and the bundle
+ * everywhere else. The load hook in record-loads.ts records which packed modules each step pulled
+ * in, so the lazy manifest is checked on the published layout, not only on the sources.
+ * Run: pnpm test:packed
  */
 
 import { loaded, recordSourcesUnder, type LoadedModule } from "./record-loads.ts";
 import assert from "node:assert/strict";
 import { execFile, execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { mkdtemp, readdir, readFile, rm, stat } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readdir, readFile, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { promisify } from "node:util";
@@ -384,7 +386,7 @@ async function assertPackedExtensions(): Promise<void> {
   );
 }
 
-/** What one run of the packed bin printed and how it exited. */
+/** What one run of a built bin printed and how it exited. */
 interface BinRun {
   readonly code: number;
   readonly stderr: string;
@@ -392,26 +394,31 @@ interface BinRun {
 }
 
 /**
- * Runs the packed bin under the load hook. A non-zero exit comes back as a run too, because an
- * unknown command prints the usage and exits 1 on purpose.
+ * Runs a built bin under the load hook. stdin is closed at once, because `mcp` serves it until it
+ * ends, and a non-zero exit comes back as a run too, because an unknown command prints the usage
+ * and exits 1 on purpose. An inherited `PUZZLES_DIST` is dropped, so only `environment` sets it.
  *
- * @param {string} binPath - The packed bin file.
+ * @param {string} binPath - The bin file.
  * @param {readonly string[]} args - Arguments for the bin.
+ * @param {Readonly<Record<string, string>>} environment - Extra variables for the child.
  * @returns {Promise<BinRun>} The exit code and both streams.
  */
-async function runPackedBin(binPath: string, args: readonly string[]): Promise<BinRun> {
+async function runBin(
+  binPath: string,
+  args: readonly string[],
+  environment: Readonly<Record<string, string>> = {},
+): Promise<BinRun> {
   const hook = new URL("./record-loads.ts", import.meta.url).href;
+  const { PUZZLES_DIST: _inherited, ...inherited } = process.env;
+  const pending = execFileAsync(process.execPath, ["--import", hook, binPath, ...args], {
+    cwd: root,
+    encoding: "utf8",
+    env: { ...inherited, ...environment, PUZZLES_REPORT_LOADS: "1" },
+    timeout: 120_000,
+  });
+  pending.child.stdin?.end();
   try {
-    const { stdout, stderr } = await execFileAsync(
-      process.execPath,
-      ["--import", hook, binPath, ...args],
-      {
-        cwd: root,
-        encoding: "utf8",
-        env: { ...process.env, PUZZLES_REPORT_LOADS: "1" },
-        timeout: 120_000,
-      },
-    );
+    const { stdout, stderr } = await pending;
     return { code: 0, stdout, stderr };
   } catch (error) {
     const failed = error as Partial<BinRun>;
@@ -424,6 +431,21 @@ async function runPackedBin(binPath: string, args: readonly string[]): Promise<B
     }
     return { code: failed.code, stdout: failed.stdout, stderr: failed.stderr };
   }
+}
+
+/**
+ * Reads the module URLs a run loaded from the hook's report on stderr.
+ *
+ * @param {BinRun} binRun - The run.
+ * @param {string} label - Names the run in a failure.
+ * @returns {string[]} Every module URL the run loaded.
+ */
+function loadedUrls(binRun: BinRun, label: string): string[] {
+  const recorded = /@loaded (\[.*\])/u.exec(binRun.stderr)?.[1];
+  assert.ok(recorded !== undefined, `the load hook reported nothing for ${label}`);
+  const urls: unknown = JSON.parse(recorded);
+  assert.ok(Array.isArray(urls), `the load hook reported something other than a list for ${label}`);
+  return urls.map(String);
 }
 
 /**
@@ -442,17 +464,10 @@ async function assertHelpStaysLight(binPath: string): Promise<void> {
   ] as const;
   for (const usage of usages) {
     const label = `puzzles ${usage.args.join(" ")}`;
-    const { code, stdout, stderr } = await runPackedBin(binPath, usage.args);
-    assert.equal(code, usage.code, `${label} exited ${code}`);
-    assert.match(stdout, /mcp/u, `${label} prints the usage naming the mcp command`);
-    const recorded = /@loaded (\[.*\])/u.exec(stderr)?.[1];
-    assert.ok(recorded !== undefined, `the load hook reported nothing for ${label}`);
-    const urls: unknown = JSON.parse(recorded);
-    assert.ok(
-      Array.isArray(urls),
-      `the load hook reported something other than a list for ${label}`,
-    );
-    const strings = urls.map(String);
+    const binRun = await runBin(binPath, usage.args);
+    assert.equal(binRun.code, usage.code, `${label} exited ${binRun.code}`);
+    assert.match(binRun.stdout, /mcp/u, `${label} prints the usage naming the mcp command`);
+    const strings = loadedUrls(binRun, label);
     assert.deepEqual(
       /* pnpm's store paths carry peer hashes, so only the package directory itself counts as the SDK. */
       strings.filter((url) => url.includes("/node_modules/@modelcontextprotocol/")),
@@ -493,6 +508,55 @@ async function assertPackedBin(manifest: Manifest): Promise<void> {
     assert.equal(listed.trim().split("\n").length, expectedCollections.length);
   }
   await assertHelpStaysLight(binPath);
+  /* An install has no src/ to serve, so `mcp` has to fall back to the bundle it ships. */
+  const served = await runBin(binPath, ["mcp"]);
+  assert.equal(served.code, 0, `the packed mcp exited ${served.code}`);
+  assert.ok(
+    loadedUrls(served, "the packed mcp").includes(`${packageRootUrl}dist/mcp.mjs`),
+    "the packed mcp serves dist/mcp.mjs",
+  );
+}
+
+/**
+ * The checkout's own build serves `mcp` from src/, so a local server takes a change on restart
+ * instead of `pnpm build`. `PUZZLES_DIST=1` keeps the bundle, and so does a copy under
+ * `node_modules`, where Node refuses to strip types. The packed bin has no src/ at all.
+ */
+async function assertCheckoutBin(): Promise<void> {
+  const sourceUrl = pathToFileURL(path.join(root, "src/")).href;
+  const bin = path.join(root, "dist/cli.mjs");
+  const live = await runBin(bin, ["mcp"]);
+  assert.equal(live.code, 0, `the checkout's mcp exited ${live.code}`);
+  assert.ok(
+    loadedUrls(live, "the checkout's mcp").includes(`${sourceUrl}mcp.ts`),
+    "the checkout's mcp serves src/mcp.ts",
+  );
+  const bundled = await runBin(bin, ["mcp"], { PUZZLES_DIST: "1" });
+  assert.equal(bundled.code, 0, `mcp under PUZZLES_DIST=1 exited ${bundled.code}`);
+  assert.deepEqual(
+    loadedUrls(bundled, "mcp under PUZZLES_DIST=1").filter((url) => url.startsWith(sourceUrl)),
+    [],
+    "mcp under PUZZLES_DIST=1 keeps the bundle",
+  );
+
+  const cache = path.join(root, "node_modules/.cache");
+  await mkdir(cache, { recursive: true });
+  const copy = await mkdtemp(path.join(cache, "puzzles-bin-"));
+  try {
+    for (const entry of ["dist", "src", "packages", "package.json"]) {
+      await cp(path.join(root, entry), path.join(copy, entry), { recursive: true });
+    }
+    const installed = await runBin(path.join(copy, "dist/cli.mjs"), ["mcp"]);
+    const copiedSource = pathToFileURL(path.join(copy, "src/")).href;
+    assert.equal(installed.code, 0, `mcp under node_modules exited ${installed.code}`);
+    assert.deepEqual(
+      loadedUrls(installed, "mcp under node_modules").filter((url) => url.startsWith(copiedSource)),
+      [],
+      "mcp under node_modules keeps the bundle",
+    );
+  } finally {
+    await rm(copy, { recursive: true, force: true });
+  }
 }
 
 try {
@@ -512,6 +576,7 @@ try {
   await assertPackedMcpServer();
   await assertPackedExtensions();
   await assertPackedBin(manifest);
+  await assertCheckoutBin();
 
   console.log(
     `Packed ${manifest.name}@${manifest.version}: ${expectedCollections.length} lazy collection entries, ${expectedToolNames.length} tools over MCP, Pi and OMP without src/, and ${manifest.bin["puzzles"]} ran as a command`,
