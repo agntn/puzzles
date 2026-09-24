@@ -48,7 +48,7 @@ A class with a `static readonly key`, its author built with `party()`, any hint 
 
 ## Fragile sources
 
-Every X/Twitter URL a record cites needs an `assets/sources/<collection>/<handle>-<date>.{md,png}` pair and a row in `test/unit/source-archives.test.ts`. A forum or Reddit thread whose comments hold the answer, the address or the author's explanation gets the same treatment. See `assets/sources/README.md`.
+Every X/Twitter URL a record cites needs an `assets/sources/<collection>/<handle>-<date>.{md,png}` pair and a row in `test/unit/source-archives.test.ts`. A forum or Reddit thread whose post or comments hold the answer, the address or the author's explanation gets the same treatment. See `assets/sources/README.md`.
 
 ## Proof
 

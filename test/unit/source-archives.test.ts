@@ -75,6 +75,50 @@ const sources = [
     },
   },
   {
+    file: "quizchain/aoinakamoto-2019-04-07-badtpz",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/badtpz/easy_7_mbtc_quizchain_block_2/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-07",
+    archive: {
+      url: "https://web.archive.org/web/20230611110306/https://old.reddit.com/r/bitcoinpuzzles/comments/badtpz/easy_7_mbtc_quizchain_block_2/",
+      date: "2023-06-11T11:03:06Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "quizchain/aoinakamoto-2019-04-07-bae43s",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/bae43s/easy_7_mbtc_quizchain_block_3/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-07",
+    archive: {
+      url: "https://web.archive.org/web/20230611090018/https://old.reddit.com/r/bitcoinpuzzles/comments/bae43s/easy_7_mbtc_quizchain_block_3/",
+      date: "2023-06-11T09:00:18Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "quizchain/aoinakamoto-2019-04-07-baejeg",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/baejeg/medium_7_mbtc_quizchain_block_4/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-07",
+    archive: {
+      url: "https://web.archive.org/web/20230611095721/https://old.reddit.com/r/bitcoinpuzzles/comments/baejeg/medium_7_mbtc_quizchain_block_4/",
+      date: "2023-06-11T09:57:21Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "quizchain/aoinakamoto-2019-04-07-baf89m",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/baf89m/easy_7_mbtc_quizchain_block_5/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-07",
+    archive: {
+      url: "https://web.archive.org/web/20230611162510/https://old.reddit.com/r/bitcoinpuzzles/comments/baf89m/easy_7_mbtc_quizchain_block_5/",
+      date: "2023-06-11T16:25:10Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "satoshi_birthday_quiz/aoinakamoto-2019-04-05",
     url: "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/",
     author: "u/AoiNakamoto",
