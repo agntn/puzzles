@@ -109,6 +109,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `mineshop`              | ethereum                            | A seed split between a video and a post |
 | `satoshi_birthday_quiz` | bitcoin                             | Seven quiz answers hashed into a wallet |
 | `book_quiz`             | bitcoin                             | A book quiz nobody won in time          |
+| `ktimesg`               | bitcoin                             | 80 hidden bits and a mempool race       |
 
 Identifiers are `collection/name`. The six singletons, `gsmg`, `bitaps`, `mineshop`, `movie_enigma`, `satoshi_birthday_quiz` and `book_quiz`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
