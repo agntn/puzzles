@@ -1,213 +1,86 @@
 <script setup lang="ts">
+import type { TableColumn } from "@nuxt/ui";
 import { authors } from "@agntn/puzzles";
-import { authorIcon, authorRows } from "../../utils/authors";
+import { authorIcon, authorRows, type AuthorRow } from "../../utils/authors";
+import { ROSTER_CLASS, ROSTER_TABLE_UI } from "../../utils/roster";
 
 /** Every author, loaded once for the prerender and again in the browser on navigation. */
 const { data } = await useAsyncData("author-rows", async () => authorRows(await authors()));
 
-const rows = computed(() => data.value ?? []);
+const rows = computed(() => [...(data.value ?? [])]);
+
+/** Empty until a header is clicked: the rows then keep the registry's order. */
+const sorting = ref<{ id: string; desc: boolean }[]>([]);
+
+const roster = useTemplateRef<HTMLElement>("roster");
+useRosterFlip(
+  () => roster.value,
+  () => sorting.value,
+);
+
+const columns: TableColumn<AuthorRow>[] = [
+  {
+    accessorKey: "name",
+    header: "Author",
+    sortingFn: "text",
+    meta: { class: { th: "w-[12.5rem]" } },
+  },
+  { accessorKey: "key", header: "Key", meta: { class: { th: "w-[10rem]" } } },
+  { accessorKey: "about", header: "About", enableSorting: false },
+  {
+    id: "puzzles",
+    header: "Puzzles",
+    accessorFn: (row) => row.puzzles,
+    meta: { class: { th: "w-[13rem]" } },
+  },
+];
 </script>
 
 <template>
-  <section v-if="rows.length > 0" class="roster not-prose my-6" aria-label="Authors">
+  <section v-if="rows.length > 0" ref="roster" class="roster not-prose my-6" aria-label="Authors">
     <span class="console-cross console-cross-tl" aria-hidden="true">+</span>
     <span class="console-cross console-cross-br" aria-hidden="true">+</span>
-    <header class="roster-bar">
-      <span class="roster-title">authors()</span>
-      <span class="roster-meta">{{ rows.length }} subjects · every name is a page</span>
+    <header :class="ROSTER_CLASS.bar">
+      <span :class="ROSTER_CLASS.title">authors()</span>
+      <span :class="ROSTER_CLASS.meta">{{ rows.length }} subjects · every name is a page</span>
     </header>
     <div class="roster-ruler" aria-hidden="true" />
-    <ol class="roster-rows">
-      <li v-for="row in rows" :key="row.key">
-        <NuxtLink :to="row.to" class="roster-name">
-          <UIcon :name="authorIcon(row.kind)" class="size-3.5" aria-hidden="true" />
-          <span>{{ row.name }}</span>
+    <UTable
+      v-model:sorting="sorting"
+      :data="rows"
+      :columns="columns"
+      :get-row-id="(row) => row.key"
+      :ui="ROSTER_TABLE_UI"
+    >
+      <template #name-header="{ column }"><RosterSort :column="column" label="Author" /></template>
+      <template #key-header="{ column }"><RosterSort :column="column" label="Key" /></template>
+      <template #puzzles-header="{ column }"
+        ><RosterSort :column="column" label="Puzzles"
+      /></template>
+      <template #name-cell="{ row }">
+        <NuxtLink :to="row.original.to" :class="[ROSTER_CLASS.name, 'items-center']">
+          <UIcon :name="authorIcon(row.original.kind)" class="size-3.5" aria-hidden="true" />
+          <span class="truncate">{{ row.original.name }}</span>
         </NuxtLink>
-        <span class="roster-id">{{ row.key }}</span>
-        <span class="roster-about">{{ row.about }}</span>
-        <span class="roster-count"
-          ><span class="roster-leader" aria-hidden="true" />{{ row.collections.join(", ") }} ·
-          {{ row.puzzles }}</span
+      </template>
+      <template #key-cell="{ row }">
+        <span :class="ROSTER_CLASS.id">{{ row.original.key }}</span>
+      </template>
+      <template #about-cell="{ row }">
+        <span :class="ROSTER_CLASS.about">{{ row.original.about }}</span>
+      </template>
+      <template #puzzles-cell="{ row }">
+        <span :class="ROSTER_CLASS.count"
+          ><span :class="ROSTER_CLASS.leader" aria-hidden="true" />{{
+            row.original.collections.join(", ")
+          }}
+          · {{ row.original.puzzles }}</span
         >
-      </li>
-    </ol>
-    <footer class="roster-bar roster-footer">
+      </template>
+    </UTable>
+    <footer :class="ROSTER_CLASS.footer">
       <span>local dataset / no network</span>
-      <span class="roster-meta">getAuthor(key) opens one</span>
+      <span :class="ROSTER_CLASS.meta">getAuthor(key) opens one</span>
     </footer>
   </section>
 </template>
-
-<style scoped>
-.roster {
-  --console-line: color-mix(in srgb, var(--ui-border) 75%, transparent);
-  --console-corner: color-mix(in srgb, var(--ui-text-muted) 55%, var(--ui-bg));
-  --console-accent: color-mix(in srgb, var(--ui-primary) 65%, var(--ui-text-highlighted));
-  position: relative;
-  padding: 1px;
-  isolation: isolate;
-  font-family: var(--font-mono);
-  font-size: 12px;
-}
-.roster::before,
-.roster::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  clip-path: polygon(
-    0 0,
-    calc(100% - 16px) 0,
-    100% 16px,
-    100% 100%,
-    16px 100%,
-    0 calc(100% - 16px)
-  );
-}
-.roster::before {
-  inset: 0;
-  z-index: -2;
-  background: var(--console-line);
-}
-.roster::after {
-  inset: 1px;
-  z-index: -1;
-  background: var(--ui-bg);
-}
-.roster-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 16px;
-  padding: 10px 28px 10px 20px;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ui-text-muted);
-  background: color-mix(in srgb, var(--ui-text-muted) 5%, var(--ui-bg));
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%);
-}
-.roster-footer {
-  padding-right: 20px;
-  border-top: 1px solid var(--console-line);
-  background: transparent;
-  clip-path: none;
-  text-transform: none;
-  letter-spacing: 0.04em;
-}
-.roster-title {
-  color: var(--ui-text-highlighted);
-  font-size: 13px;
-  letter-spacing: 0;
-  text-transform: none;
-}
-.roster-meta {
-  color: var(--ui-text-dimmed);
-  text-transform: none;
-  letter-spacing: 0.04em;
-}
-.roster-ruler {
-  height: 5px;
-  border-top: 1px solid var(--console-line);
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--console-corner) 0 1px,
-    transparent 1px 12px
-  );
-  background-size: 12px 3px;
-  background-repeat: repeat-x;
-  background-position: 20px 0;
-}
-.roster-rows {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.roster-rows li {
-  display: grid;
-  grid-template-columns: 11rem 9rem minmax(0, 1fr) 11rem;
-  gap: 4px 16px;
-  align-items: baseline;
-  padding: 9px 20px;
-  border-top: 1px solid var(--console-line);
-}
-.roster-rows li:first-child {
-  border-top: 0;
-}
-.roster-rows li:hover {
-  background: color-mix(in srgb, var(--ui-text-muted) 4%, var(--ui-bg));
-}
-.roster-name {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  color: var(--ui-text-highlighted);
-}
-.roster-name > span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.roster-name:hover {
-  color: var(--console-accent);
-}
-.roster-id {
-  display: inline-block;
-  justify-self: start;
-  padding: 1px 5px;
-  font-size: 10px;
-  line-height: 1.4;
-  letter-spacing: 0.08em;
-  color: var(--ui-text-muted);
-  box-shadow: inset 0 0 0 1px var(--console-line);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
-}
-.roster-about {
-  min-width: 0;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--ui-text-muted);
-}
-.roster-count {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  font-size: 11px;
-  color: var(--ui-text-dimmed);
-  overflow-wrap: anywhere;
-}
-.roster-leader {
-  flex: 1;
-  min-width: 16px;
-  height: 4px;
-  border-bottom: 1px dotted var(--console-line);
-}
-@media (width < 900px) {
-  .roster-rows li {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-  .roster-about {
-    grid-column: 1 / -1;
-  }
-  .roster-id {
-    justify-self: end;
-  }
-  .roster-count {
-    grid-column: 1 / -1;
-  }
-  .roster-leader {
-    display: none;
-  }
-}
-@media (width < 400px) {
-  .roster-bar,
-  .roster-rows li {
-    padding-inline: 14px;
-  }
-}
-</style>

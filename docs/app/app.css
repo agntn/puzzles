@@ -1830,3 +1830,55 @@ button.console-lead:focus-visible {
     gap: 2px 0;
   }
 }
+
+/*
+ * The roster: an index of pages, one row each. `AuthorList` and `CollectionList` print it. Only
+ * the clipped shell and the ruler's ticks live here; every other part is Tailwind utilities from
+ * `app/utils/roster.ts`.
+ */
+.roster {
+  --console-line: color-mix(in srgb, var(--ui-border) 75%, transparent);
+  --console-corner: color-mix(in srgb, var(--ui-text-muted) 55%, var(--ui-bg));
+  --console-accent: color-mix(in srgb, var(--ui-primary) 65%, var(--ui-text-highlighted));
+  position: relative;
+  padding: 1px;
+  isolation: isolate;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.roster::before,
+.roster::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 16px) 0,
+    100% 16px,
+    100% 100%,
+    16px 100%,
+    0 calc(100% - 16px)
+  );
+}
+.roster::before {
+  inset: 0;
+  z-index: -2;
+  background: var(--console-line);
+}
+.roster::after {
+  inset: 1px;
+  z-index: -1;
+  background: var(--ui-bg);
+}
+.roster-ruler {
+  height: 5px;
+  border-top: 1px solid var(--console-line);
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--console-corner) 0 1px,
+    transparent 1px 12px
+  );
+  background-size: 12px 3px;
+  background-repeat: repeat-x;
+  background-position: 20px 0;
+}
