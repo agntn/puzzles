@@ -173,6 +173,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Keybase's scrypt brainwallet. Four solved, two expired with the keys published.",
   },
+  wickex: {
+    icon: "i-lucide-audio-waveform",
+    title: "Wickex's YouTube puzzle",
+    sample: "wickex/youtube",
+    chains: ["bitcoin"],
+    blurb:
+      "Hex that spells a YouTube link, Morse in the audio, a passphrase in a spectrogram. Swept 46 minutes in, sent back, swept again.",
+  },
   zden: {
     icon: "i-lucide-image",
     title: "Zden's puzzles",

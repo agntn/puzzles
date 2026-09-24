@@ -30,6 +30,7 @@ export const WALK: readonly string[] = [
   "quizchain/1",
   "ktimesg/80_bit",
   "iamabananaamaa/gif",
+  "wickex/youtube",
 ];
 
 /* generated:landing-fixtures:start */
@@ -793,18 +794,48 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 2,
     tool: "iamabananaamaa/gif\tsolved\t0.001 BTC\t1DprL7pbKGwjMKoJ4c6BEKrTmtbPB4AiNJ\nchain: bitcoin  address kind: p2pkh\nhash160: 8cae3ce6d5497fa7a9b30e085efd2c972c6e0f81\npublic key: 03987951b3fa4a6f68ba76bd509a8ac4945b3cb1e14be1eadd5d3210f590313024 (compressed)\nprivate key: L21s1A2LjTL5WLEfWPJtuKxHKF3PcfJnyiEtjNtPUxwnSdqWBD66 (wif)\nstarted: 2013-12-22 22:35:39\nsolved: 2013-12-23 01:04:43 (2h 29m)\nsolver: Wickex, reddit https://www.reddit.com/user/Wickex/\ntransactions: 2\n\tfunding\t2013-12-22 22:27:31\t0.001 BTC\t17975f67f8be43470c3abaa6ba847444de9453dafc817396a2c5383be31a8669\n\tclaim\t2013-12-23 01:04:43\t0.0009 BTC\t594f82e1a11a7fbf212715075685d3b3201342d0b26075e0dbd8365fa1eaba50\nclaim: https://blockstream.info/tx/594f82e1a11a7fbf212715075685d3b3201342d0b26075e0dbd8365fa1eaba50\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/iamabananaamaa/gif/puzzle.gif\nasset source: http://i.imgur.com/7rXofNv.gif\nhints: 5\n\tofficial\t2013-12-22\tYou don't need specialized software, no. However, you will (I believe) most likely need a program that basically anybody on the planet has since it has so many wide uses and public options.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce81be8/\tanswer: images can be 'merged' with ZIP/RAR files, which you can open by renaming the extension of the .gif file to .zip. In there was a file called MEGAN.txt, with a string inside of it.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce86ejm/\tanswer date: 2013-12-23\n\tofficial\t2013-12-22\tHint: Megan may not be a person, but if she was, she'd be 35 years old.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce8257x/\tanswer: referring to MEGAN-35, a kind of hash. By decrypting it (google MEGAN-35 decrypter or something similar) I got another string, which turned out to be an ATOM-128 hash. When decrypted, it gave you the private key!\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce86ejm/\tanswer date: 2013-12-23\n\tofficial\t2013-12-22\tJust to save you time, the thing in the bottom right is an error on the gif's part. The creator messed something up when creating it.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce825x4/\n\tofficial\t2013-12-23\tThe zip file name was ATOM :).\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce86n19/\n\tcommunity\t2013-12-22\tOh right. It is just a compressed file. This is the output of MEGAN.txt = jZXbm2zukIKdShNxcJnrkuXPm2XRSZGY=M1Gku=9gKGJc/9uju1eoJ=ynhfSjuXPddfvc2n4cJyqlMf2dLD4k2Nvi2refuSI\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/comment/ce828ht/\nexplorer: https://blockstream.info/address/1DprL7pbKGwjMKoJ4c6BEKrTmtbPB4AiNJ\nsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/easy_1mbtc_find_the_private_key_in_this_gif/",
   },
+  {
+    id: "wickex/youtube",
+    collection: "wickex",
+    chain: "bitcoin",
+    status: "solved",
+    address: "1LhQZc57j9i3xofj5poayd6PnakN7xHwDA",
+    kind: "p2pkh",
+    hash160: "d80eb27236847fae88418ce952444a4657092259",
+    redeemScript: undefined,
+    prize: "0.001 BTC",
+    prizeAmount: 0.001,
+    currency: undefined,
+    startedAt: "2013-12-23 02:22:43",
+    solvedAt: "2013-12-23 03:08:58",
+    solveTime: "46m",
+    bits: undefined,
+    range: undefined,
+    pubkey:
+      "04f84646d641306db5209da72a4f7ce6386404fb4035a296b38467a39406a6bac7b85b541eab98b8b217245a7ba0f9dfca5549a659470d69abb3544d7772d5c684",
+    pubkeyFormat: "uncompressed",
+    secret: "none",
+    keyLiteral: undefined,
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://blockstream.info/address/1LhQZc57j9i3xofj5poayd6PnakN7xHwDA",
+    source:
+      "https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/medium_1mbtc_find_the_private_key/",
+    transactions: 6,
+    tool: "wickex/youtube\tsolved\t0.001 BTC\t1LhQZc57j9i3xofj5poayd6PnakN7xHwDA\nchain: bitcoin  address kind: p2pkh\nhash160: d80eb27236847fae88418ce952444a4657092259\npublic key: 04f84646d641306db5209da72a4f7ce6386404fb4035a296b38467a39406a6bac7b85b541eab98b8b217245a7ba0f9dfca5549a659470d69abb3544d7772d5c684 (uncompressed)\nprivate key: unknown\nstarted: 2013-12-23 02:22:43\nsolved: 2013-12-23 03:08:58 (46m)\nsolver: IAMABananaAMAA, reddit https://www.reddit.com/user/IAMABananaAMAA/\ntransactions: 6\n\tfunding\t2013-12-23 02:22:25\t0.001 BTC\t57252340e3fa7f4480c4e578fa81da48fd1f7a4dc0c640b43b651a2ebfbd9c8c\n\tclaim\t2013-12-23 03:08:58\t0.0009 BTC\t5575a2365c3473d1e2ecdc7735fe8550942640de62cafcfe406914a99e0fd28b\n\tincrease\t2013-12-23 03:08:58\t0.001 BTC\t8c0dad07879ca7e87d4e6c6b65a669394d79466c09ea31533d5bcee2e4a70072\n\tclaim\t2013-12-23 03:27:40\t0.0009 BTC\td800bb1584c0258907c0790251ea1e8585ec3077e0ee3eb2d4b6642f0ef5e785\n\tincrease\t2014-02-01 04:53:39\t0.00027486 BTC\t53326fec15eead49002ddc811b3275e276dd3b488efb77a19196f06cda938a3d\n\tsweep\t2014-02-01 04:53:39\t0.00017486 BTC\t730ee0ff5dff3f8a296beabab0f06b02b76362f10cbce560f2e58d9522129d9d\nclaim: https://blockstream.info/tx/5575a2365c3473d1e2ecdc7735fe8550942640de62cafcfe406914a99e0fd28b\nhints: 5\n\tofficial\t2013-12-23\tI'll start you all off with the following code: 68 74 74 70 3a 2f 2f 77 77 77 2e 79 6f 75 74 75 62 65 2e 63 6f 6d 2f 77 61 74 63 68 3f 76 3d 71 59 78 38 46 76 58 39 69 62 30\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/medium_1mbtc_find_the_private_key/\tanswer: Hex -> Text -> Youtube URL\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce87ss1/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tThe morse-output should be all-caps by the way!\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86ukc/\tanswer: I personally loaded the Youtube video into Audacity to make it more clear, but it was morse code -> text.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce87ss1/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tIt's case-sensitive and all caps.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86v8h/\tanswer: That was a bit.ly which went to the second video. That video was loaded into Sonic Visualiser and that had a string encoded into the sound.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce87ss1/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tThe image is meaningless. You're one step away, Brainwallet.org!\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86xa9/\tanswer: That string in Brainwallet.org was the private key.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce87ss1/\tanswer date: 2013-12-23\n\tcommunity\t2013-12-23\tAny hint on the image? I have the text (I dont want to spoil it here, but \"STI...I5Z\") but I don't know about that.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86vnj/\nexplorer: https://blockstream.info/address/1LhQZc57j9i3xofj5poayd6PnakN7xHwDA\nsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/medium_1mbtc_find_the_private_key/",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "6c1ccf4c35fc",
-  total: 352,
-  solved: 146,
+  dataVersion: "b3bad306d56b",
+  total: 353,
+  solved: 147,
   unsolved: 95,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 252,
+  withPubkey: 253,
   unsolvedPrize: {
     AR: 1900,
     ETH: 9.61254155,
@@ -814,7 +845,7 @@ export const STATS_STATIC = {
     AR: 5550,
     ETH: 22.74624155,
     DAI: 100,
-    BTC: 1064.12258961,
+    BTC: 1064.12358961,
     LTC: 230.8255,
     DCR: 460,
   },
@@ -1301,6 +1332,26 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "wickex",
+    author: "Wickex",
+    authorKey: "wickex",
+    authorUrl: "https://www.reddit.com/user/Wickex/",
+    total: 1,
+    statuses: {
+      solved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.001,
+    },
+    unsolvedPrize: {},
+    withPubkey: 1,
+    withKey: 0,
+    firstStarted: "2013-12-23 02:22:43",
+    lastStarted: "2013-12-23 02:22:43",
+    hints: [],
+  },
+  {
     key: "zden",
     author: "Zden",
     authorKey: "zden",
@@ -1519,6 +1570,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "The identity and encryption company that published WarpWallet in 2013 and paid to have its own brainwallets cracked. Part of Zoom since 2020.",
     collections: ["warp"],
     puzzles: 6,
+  },
+  {
+    key: "wickex",
+    to: "/authors/wickex",
+    name: "Wickex",
+    kind: "person",
+    about:
+      "Solved the first puzzle on r/bitcoinpuzzles in December 2013 and, to keep it fair, posted the second one the same night: hex, a YouTube video, Morse code and a brainwallet.",
+    collections: ["wickex"],
+    puzzles: 1,
   },
   {
     key: "zden",

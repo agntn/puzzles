@@ -80,6 +80,7 @@ const expectedCollections = [
   "rushwallet",
   "satoshi_birthday_quiz",
   "warp",
+  "wickex",
   "zden",
 ];
 
