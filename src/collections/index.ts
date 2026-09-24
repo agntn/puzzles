@@ -17,6 +17,7 @@ export const builtins: readonly CollectionEntry[] = [
   { key: "genesis", load: () => import("./genesis.ts").then((m) => m.genesis) },
   { key: "gsmg", load: () => import("./gsmg.ts").then((m) => m.gsmg) },
   { key: "hash_collision", load: () => import("./hash_collision.ts").then((m) => m.hashCollision) },
+  { key: "ktimesg", load: () => import("./ktimesg.ts").then((m) => m.kTimesG) },
   { key: "ledger_donjon", load: () => import("./ledger_donjon.ts").then((m) => m.ledgerDonjon) },
   { key: "luckylurker", load: () => import("./luckylurker.ts").then((m) => m.luckyLurker) },
   { key: "mineshop", load: () => import("./mineshop.ts").then((m) => m.mineshop) },

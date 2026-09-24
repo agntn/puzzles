@@ -12,6 +12,7 @@ import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash_collision.ts";
+import { kTimesG, KTimesGCollection } from "../../src/collections/ktimesg.ts";
 import { LedgerDonjonCollection } from "../../src/collections/ledger_donjon.ts";
 import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MineshopCollection } from "../../src/collections/mineshop.ts";
@@ -64,6 +65,7 @@ const concreteClasses = [
   GenesisCollection,
   GsmgCollection,
   HashCollisionCollection,
+  KTimesGCollection,
   LedgerDonjonCollection,
   LuckyLurkerCollection,
   MineshopCollection,
@@ -399,6 +401,12 @@ describe("lazy collection registry", () => {
     expect(quizchain.get(4)?.id()).toBe("quizchain/4");
     expect(quizchain.get(5)?.id()).toBe("quizchain/5");
 
+    expect(["80_bit", "ktimesg/80_bit"].map((query) => kTimesG.get(query)?.id())).toEqual([
+      "ktimesg/80_bit",
+      "ktimesg/80_bit",
+    ]);
+    expect(kTimesG.get(80 as never)).toBeUndefined();
+
     expect(rushwallet.get("9")?.id()).toBe("rushwallet/9");
     expect(rushwallet.get("rushwallet/9")?.id()).toBe("rushwallet/9");
     expect(rushwallet.get(9 as never)).toBeUndefined();
@@ -590,20 +598,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(350);
+    expect(await all()).toHaveLength(351);
     expect(await stats()).toEqual({
-      total: 350,
+      total: 351,
       claimed: 12,
       expired: 3,
-      solved: 144,
+      solved: 145,
       swept: 96,
       unsolved: 95,
-      with_pubkey: 250,
+      with_pubkey: 251,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
         DAI: 100,
-        BTC: 1064.11658961,
+        BTC: 1064.12158961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -636,7 +644,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(350);
+    ).toBe(351);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -663,6 +671,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(144);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(145);
   });
 });

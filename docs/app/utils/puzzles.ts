@@ -96,6 +96,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Peter Todd's P2SH scripts that pay for a collision. SHA-1 fell in 2017.",
   },
+  ktimesg: {
+    icon: "i-lucide-timer",
+    title: "kTimesG's 80-bit key challenge",
+    sample: "ktimesg/80_bit",
+    chains: ["bitcoin"],
+    blurb:
+      "80 unknown bits in a 511-bit key. The public key only ever showed up in the mempool. Taken 39 minutes in.",
+  },
   ledger_donjon: {
     icon: "i-lucide-scissors",
     title: "Ledger Donjon CTF",
