@@ -18,7 +18,7 @@ export class KTimesGCollection extends NamedCollection {
     key: "ktimesg",
     kind: PartyKind.Person,
     about:
-      "A regular of the BitcoinTalk puzzle thread who put 0.005 BTC behind an argument about what an 80-bit secure key is.",
+      "Puzzle thread regular on BitcoinTalk. In 2024 put up 0.005 BTC for anyone who could crack a key with 80 unknown bits before a transaction confirmed. Someone did, 39 minutes in.",
     profiles: [
       profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=3610370"),
     ],

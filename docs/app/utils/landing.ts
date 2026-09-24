@@ -767,7 +767,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "e6906d0a8e5b",
+  dataVersion: "ee69419147cf",
   total: 351,
   solved: 145,
   unsolved: 95,
@@ -1397,7 +1397,7 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     name: "kTimesG",
     kind: "person",
     about:
-      "A regular of the BitcoinTalk puzzle thread who put 0.005 BTC behind an argument about what an 80-bit secure key is.",
+      "Puzzle thread regular on BitcoinTalk. In 2024 put up 0.005 BTC for anyone who could crack a key with 80 unknown bits before a transaction confirmed. Someone did, 39 minutes in.",
     collections: ["ktimesg"],
     puzzles: 1,
   },
