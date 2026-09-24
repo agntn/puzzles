@@ -17,9 +17,6 @@ importers:
       '@agntn/keys':
         specifier: 0.3.2
         version: 0.3.2(supports-color@10.2.2)(zod@4.6.5)
-      '@noble/hashes':
-        specifier: 2.4.0
-        version: 2.4.0
       better-sqlite3:
         specifier: 12.11.1
         version: 12.11.1

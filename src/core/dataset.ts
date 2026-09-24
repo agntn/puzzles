@@ -1,5 +1,3 @@
-import { sha256 } from "@noble/hashes/sha2.js";
-import { bytesToHex, utf8ToBytes } from "@noble/hashes/utils.js";
 import { version } from "../version.ts";
 import type { Chain } from "./chains.ts";
 import { PuzzleNotFoundError, UnknownAuthorError } from "./errors.ts";
@@ -348,12 +346,20 @@ function serializeSnapshot(snapshot: readonly AnyCollection[]): readonly Dataset
 export async function dataVersion(): Promise<string> {
   const [snapshot, record] = await views();
   record.serialized ??= serializeSnapshot(snapshot);
-  record.dataVersion ??= serializedVersion(record.serialized);
+  record.dataVersion ??= await serializedVersion(record.serialized);
   return record.dataVersion;
 }
 
-function serializedVersion(serialized: readonly DatasetCollection[]): string {
-  return bytesToHex(sha256(utf8ToBytes(JSON.stringify(serialized)))).slice(0, 12);
+/**
+ * Web Crypto is global on Node 24, in browsers and in Workers, so the hash needs no dependency.
+ *
+ * @param {readonly DatasetCollection[]} serialized The collections `dataset()` serializes.
+ * @returns {Promise<string>} The first 12 hex characters of their SHA-256.
+ */
+async function serializedVersion(serialized: readonly DatasetCollection[]): Promise<string> {
+  const bytes = new TextEncoder().encode(JSON.stringify(serialized));
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
+  return Array.from(digest.subarray(0, 6), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 /**
@@ -364,7 +370,7 @@ function serializedVersion(serialized: readonly DatasetCollection[]): string {
 export async function dataset(): Promise<Dataset> {
   const [snapshot, record] = await views();
   record.serialized ??= serializeSnapshot(snapshot);
-  record.dataVersion ??= serializedVersion(record.serialized);
+  record.dataVersion ??= await serializedVersion(record.serialized);
   return Object.freeze({
     version,
     data_version: record.dataVersion,

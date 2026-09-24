@@ -5,7 +5,7 @@ const repoRoot = resolve(import.meta.dirname, "..");
 const librarySource = resolve(repoRoot, "src");
 
 /** Runtime deps under src/index.ts, installed here so they resolve from docs/node_modules. */
-const libraryDependencies = ["@agntn/chains", "@agntn/explorers", "@agntn/keys", "@noble/hashes"];
+const libraryDependencies = ["@agntn/chains", "@agntn/explorers", "@agntn/keys"];
 
 /** Every subpath src/ imports, dynamic ones too, so dev bundles them up front, not on demand. */
 const libraryEntries = [
@@ -21,8 +21,6 @@ const libraryEntries = [
   "@agntn/keys/blockchains/decred",
   "@agntn/keys/blockchains/ethereum",
   "@agntn/keys/blockchains/litecoin",
-  "@noble/hashes/sha2.js",
-  "@noble/hashes/utils.js",
 ];
 
 export default defineNuxtConfig({
