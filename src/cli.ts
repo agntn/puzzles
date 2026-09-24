@@ -1,5 +1,9 @@
 #!/usr/bin/env node
+import { existsSync } from "node:fs";
+import { sep } from "node:path";
+import { fileURLToPath } from "node:url";
 import { type ArgsDef, type CommandDef, defineCommand, runMain } from "citty";
+import type McpCommand from "./commands/mcp.ts";
 import { printError } from "./commands/output.ts";
 import { PuzzlesError } from "./core/errors.ts";
 import { version } from "./version.ts";
@@ -44,6 +48,44 @@ async function command<T extends ArgsDef>(
   };
 }
 
+/** The same file from `src/cli.ts` and `dist/cli.mjs`; the npm package ships only `dist`. */
+const sourceMcpCommand = new URL("../src/commands/mcp.ts", import.meta.url);
+
+/**
+ * Narrows the module a runtime URL import returned, which TypeScript types as `any`.
+ *
+ * @param {unknown} value - The imported module namespace.
+ * @returns {boolean} Whether it exports a default command.
+ */
+function isMcpModule(value: unknown): value is { readonly default: typeof McpCommand } {
+  return typeof value === "object" && value !== null && "default" in value;
+}
+
+/**
+ * Loads the MCP command. A built bin inside a checkout runs the live source, as the Pi and OMP
+ * extensions do, so a local server needs a restart after a change instead of `pnpm build`. Node
+ * refuses to strip types under `node_modules`, so a copy there keeps the bundle, and so does the
+ * npm package, which ships no `src`. `PUZZLES_DIST=1` keeps it everywhere, for tests of the build.
+ *
+ * @returns {Promise<{ readonly default: typeof McpCommand }>} The module holding the command.
+ */
+async function loadMcpCommand(): Promise<{ readonly default: typeof McpCommand }> {
+  const sourcePath = fileURLToPath(sourceMcpCommand);
+  const fromSource =
+    !import.meta.url.endsWith(".ts") &&
+    process.env["PUZZLES_DIST"] !== "1" &&
+    !sourcePath.includes(`${sep}node_modules${sep}`) &&
+    existsSync(sourcePath);
+  if (!fromSource) {
+    return import("./commands/mcp.ts");
+  }
+  const module: unknown = await import(sourceMcpCommand.href);
+  if (!isMcpModule(module)) {
+    throw new TypeError(`${sourcePath} has no default command`);
+  }
+  return module;
+}
+
 const main = defineCommand({
   meta: {
     name: "puzzles",
@@ -57,7 +99,7 @@ const main = defineCommand({
     export: () => command(() => import("./commands/export.ts")),
     hints: () => command(() => import("./commands/hints.ts")),
     list: () => command(() => import("./commands/list.ts")),
-    mcp: () => command(() => import("./commands/mcp.ts")),
+    mcp: () => command(loadMcpCommand),
     show: () => command(() => import("./commands/show.ts")),
     stats: () => command(() => import("./commands/stats.ts")),
     verify: () => command(() => import("./commands/verify.ts")),
