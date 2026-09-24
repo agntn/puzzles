@@ -1,32 +1,18 @@
 <script setup lang="ts">
-import { CHAIN_ICONS, COLLECTIONS } from "../../utils/puzzles";
+import { COLLECTIONS } from "../../utils/puzzles";
 import { FACTS_STATIC, STATS_STATIC } from "../../utils/landing";
-import { formatPrizeTotals } from "../../utils/format";
 
 const { samples, loaded, tick, paused, current, step } = useLandingPuzzle();
 
 const unsolvedBtc = STATS_STATIC.unsolvedPrize.BTC.toFixed(2);
 
-/** Chains that hold at least one puzzle, read off the same fixtures as the rows. */
+/** Chains that hold at least one puzzle, read off the same fixtures as the collection roster. */
 const chainCount = new Set(FACTS_STATIC.flatMap((row) => row.chains)).size;
 
 const { copied, copy } = useCopied();
 
 /** The collection list highlights whichever collection the panels are showing. */
 const activeCollection = computed(() => current.value.collection);
-
-const rows = computed(() =>
-  COLLECTIONS.map((entry) => {
-    const facts = FACTS_STATIC.find((row) => row.key === entry.key);
-    return {
-      ...entry,
-      total: facts?.total ?? 0,
-      open: facts?.statuses.unsolved ?? 0,
-      unsolvedPrize: formatPrizeTotals(facts?.unsolvedPrize ?? {}),
-      chainIcons: (facts?.chains ?? []).map((chain) => CHAIN_ICONS[chain] ?? "i-lucide-link"),
-    };
-  }),
-);
 
 const customCode = [
   ["kw", "import"],
@@ -190,79 +176,7 @@ const customCode = [
             live balance. The numbers here come from the library at build time.
           </p>
         </div>
-        <div class="puzzles-frame mt-10 overflow-hidden rounded-xl">
-          <div
-            class="hidden grid-cols-[1.25rem_minmax(0,13rem)_minmax(0,1fr)_5rem_7rem_9rem_1rem] gap-x-3 border-b border-muted px-4 py-2.5 font-mono text-[10px] tracking-[0.1em] text-dimmed uppercase lg:grid"
-          >
-            <span />
-            <span>collection</span>
-            <span />
-            <span>chains</span>
-            <span class="text-right">puzzles · open</span>
-            <span class="text-right">unclaimed</span>
-            <span />
-          </div>
-          <ol class="divide-y divide-muted">
-            <li v-for="entry in rows" :key="entry.key">
-              <NuxtLink
-                :to="entry.to"
-                class="puzzles-row grid-cols-[1.25rem_minmax(0,1fr)_1rem] lg:grid-cols-[1.25rem_minmax(0,13rem)_minmax(0,1fr)_5rem_7rem_9rem_1rem]"
-                :class="{ 'puzzles-row-active': entry.key === activeCollection }"
-              >
-                <UIcon :name="entry.icon" class="size-4 text-dimmed" />
-                <span class="min-w-0">
-                  <span class="block truncate text-sm font-medium text-highlighted">{{
-                    entry.title
-                  }}</span>
-                  <span class="block truncate font-mono text-[11px] text-dimmed lg:hidden"
-                    >{{ entry.total }} puzzles · {{ entry.open }} open<template
-                      v-if="entry.unsolvedPrize !== '-'"
-                    >
-                      · {{ entry.unsolvedPrize }}</template
-                    ></span
-                  >
-                </span>
-                <span class="hidden truncate text-xs leading-5 text-muted lg:block">{{
-                  entry.blurb
-                }}</span>
-                <span class="hidden items-center gap-1.5 lg:flex">
-                  <UIcon
-                    v-for="icon in entry.chainIcons"
-                    :key="icon"
-                    :name="icon"
-                    class="size-3.5 text-dimmed"
-                  />
-                </span>
-                <span class="hidden text-right font-mono text-[12px] text-muted lg:block"
-                  >{{ entry.total }} · {{ entry.open }}</span
-                >
-                <span
-                  class="hidden truncate text-right font-mono text-[12px] lg:block"
-                  :class="entry.unsolvedPrize === '-' ? 'text-dimmed' : 'text-primary'"
-                  >{{ entry.unsolvedPrize }}</span
-                >
-                <UIcon name="i-lucide-arrow-right" class="size-4 text-dimmed" />
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink
-                to="/guide/custom"
-                class="puzzles-row grid-cols-[1.25rem_minmax(0,1fr)_1rem] lg:grid-cols-[1.25rem_minmax(0,13rem)_minmax(0,1fr)_auto_1rem]"
-              >
-                <UIcon name="i-lucide-plus" class="size-4 text-dimmed" />
-                <span class="block truncate text-sm font-medium text-highlighted">Yours</span>
-                <span class="hidden truncate text-xs leading-5 text-muted lg:block"
-                  >A class extending NamedCollection or NumericCollection, registered with a loader
-                  so it stays lazy like the built-ins.</span
-                >
-                <span class="hidden font-mono text-[12px] text-dimmed lg:block"
-                  >registerCollection({ key, load })</span
-                >
-                <UIcon name="i-lucide-arrow-right" class="size-4 text-dimmed" />
-              </NuxtLink>
-            </li>
-          </ol>
-        </div>
+        <LandingCollections :active="activeCollection" class="mt-10" />
       </div>
     </section>
 

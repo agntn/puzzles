@@ -1832,7 +1832,7 @@ button.console-lead:focus-visible {
 }
 
 /*
- * The roster: an index of pages, one row each. `AuthorList` and `CollectionList` print it. Only
+ * The roster: an index of pages, one row each. `AuthorList`, `CollectionList` and `LandingCollections` print it. Only
  * the clipped shell and the ruler's ticks live here; every other part is Tailwind utilities from
  * `app/utils/roster.ts`.
  */

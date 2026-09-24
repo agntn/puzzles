@@ -1,5 +1,5 @@
 /*
- * The roster's parts as Tailwind utilities, shared by `AuthorList` and `CollectionList`. The rows
+ * The roster's parts as Tailwind utilities, shared by `AuthorList`, `CollectionList` and `LandingCollections`. The rows
  * stack once the table itself is narrower than 52rem (`@container/roster` on the table's root),
  * not the window: beside both sidebars at 1024px the roster is 600px wide.
  */
