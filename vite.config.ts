@@ -72,7 +72,13 @@ export default defineConfig({
       "tool-operations": "src/tool-operations.ts",
       "collections/*": ["src/collections/*.ts", "!src/collections/index.ts"],
     },
-    dts: true,
+    /*
+     * No source maps. The dts plugin takes `declarationMap` from tsconfig and turns on maps for the
+     * runtime files too, over two thirds of the unpacked package, mostly the sources again in
+     * `sourcesContent`, while the declaration maps pointed at a src/ the tarball does not carry.
+     * The runtime files are not minified, so a stack trace reads without them.
+     */
+    dts: { sourcemap: false },
     format: "esm",
     platform: "node",
     /* Shared chunks keep stable names under _chunks, where the tool loading probes look for them. */

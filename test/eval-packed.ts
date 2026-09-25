@@ -243,6 +243,11 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
     [],
     "every emitted runtime file must be .mjs",
   );
+  assert.deepEqual(
+    files.filter((file) => file.endsWith(".map")),
+    [],
+    "the packed package must not carry source maps",
+  );
   const collectionTarget = manifest.exports["./collections/*"]?.import ?? "";
   assert.notEqual(collectionTarget, "", "the collections export has no import target");
   for (const key of expectedCollections) {
