@@ -1,3 +1,56 @@
+## v0.23.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.22.0...v0.23.0)
+
+### 🚀 Enhancements
+
+- **collections:** Archive quizchain blocks 2 to 5 ([#265](https://github.com/agntn/puzzles/pull/265))
+- **docs:** Sortable rosters on UTable ([#267](https://github.com/agntn/puzzles/pull/267))
+- **errors:** Did you mean b1000/135? ([#268](https://github.com/agntn/puzzles/pull/268))
+- **collections:** Add ktimesg ([#271](https://github.com/agntn/puzzles/pull/271))
+- **collections:** Iamabananaamaa GIF puzzle ([#273](https://github.com/agntn/puzzles/pull/273))
+- **docs:** Landing roster of collections ([#274](https://github.com/agntn/puzzles/pull/274))
+- **collections:** Wickex YouTube puzzle ([#275](https://github.com/agntn/puzzles/pull/275))
+- **docs:** Verify console on the landing ([#277](https://github.com/agntn/puzzles/pull/277))
+- **collections:** Add iamabananaamaa/caesar ([#279](https://github.com/agntn/puzzles/pull/279))
+- **cli:** Serve mcp from src inside a checkout ([#281](https://github.com/agntn/puzzles/pull/281))
+- **docs:** Record file on the console shell ([#283](https://github.com/agntn/puzzles/pull/283))
+- **collections:** Add picture_puzzle ([#284](https://github.com/agntn/puzzles/pull/284))
+- **collections:** Add quizchain/6 ([#287](https://github.com/agntn/puzzles/pull/287))
+- **collections:** Add quizchain/7 ([#289](https://github.com/agntn/puzzles/pull/289))
+- **docs:** Landing registry as a manifest map ([#290](https://github.com/agntn/puzzles/pull/290))
+- **collections:** Add quizchain/8 ([#291](https://github.com/agntn/puzzles/pull/291))
+- **docs:** Custom collection panel in two files ([#293](https://github.com/agntn/puzzles/pull/293))
+- **registry:** Type built-in collection lookups ([#295](https://github.com/agntn/puzzles/pull/295))
+- **docs:** One design system across the site ([#296](https://github.com/agntn/puzzles/pull/296))
+
+### 🩹 Fixes
+
+- **tools:** Reject an empty collection filter ([#280](https://github.com/agntn/puzzles/pull/280))
+- **collections:** AoiNakamoto asked r/Bitcoin ([#282](https://github.com/agntn/puzzles/pull/282))
+- **parts:** Mark keys rebuilt from a recipe ([#294](https://github.com/agntn/puzzles/pull/294))
+
+### 💅 Refactors
+
+- **dataset:** Drop @noble/hashes ([#269](https://github.com/agntn/puzzles/pull/269))
+- **verify:** ⚠️  Rename verifyPuzzle to verify ([#288](https://github.com/agntn/puzzles/pull/288))
+
+### 🏡 Chore
+
+- Apply automated updates ([515377e](https://github.com/agntn/puzzles/commit/515377e))
+
+### ✅ Tests
+
+- **fixtures:** Give the refresh tests 30 s ([#286](https://github.com/agntn/puzzles/pull/286))
+
+#### ⚠️ Breaking Changes
+
+- **verify:** ⚠️  Rename verifyPuzzle to verify ([#288](https://github.com/agntn/puzzles/pull/288))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.22.0
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.21.3...v0.22.0)
