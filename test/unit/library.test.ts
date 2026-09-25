@@ -402,12 +402,10 @@ describe("lazy collection registry", () => {
       "quizchain/1",
     ]);
     expect(quizchain.get("block-1")).toBeUndefined();
-    expect(quizchain.get(2)?.id()).toBe("quizchain/2");
-    expect(quizchain.get(3)?.id()).toBe("quizchain/3");
-    expect(quizchain.get(4)?.id()).toBe("quizchain/4");
-    expect(quizchain.get(5)?.id()).toBe("quizchain/5");
-    expect(quizchain.get(6)?.id()).toBe("quizchain/6");
-    expect(quizchain.get(7)?.id()).toBe("quizchain/7");
+    const blocks = [2, 3, 4, 5, 6, 7, 8];
+    expect(blocks.map((block) => quizchain.get(block)?.id())).toEqual(
+      blocks.map((block) => `quizchain/${block}`),
+    );
 
     expect(["80_bit", "ktimesg/80_bit"].map((query) => kTimesG.get(query)?.id())).toEqual([
       "ktimesg/80_bit",
@@ -599,7 +597,7 @@ describe("lazy collection registry", () => {
     expect(zden?.author.facts?.every((entry) => entry.source.startsWith("https://"))).toBe(true);
     const aoi = await getAuthor("aoi-nakamoto");
     expect(aoi?.collections).toEqual(["book_quiz", "quizchain", "satoshi_birthday_quiz"]);
-    expect(aoi?.puzzles).toBe(9);
+    expect(aoi?.puzzles).toBe(10);
     expect(await getAuthor("nobody")).toBeUndefined();
     expect(await getAuthor(7 as never)).toBeUndefined();
   });
@@ -626,20 +624,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(357);
+    expect(await all()).toHaveLength(358);
     expect(await stats()).toEqual({
-      total: 357,
+      total: 358,
       claimed: 12,
       expired: 3,
-      solved: 151,
+      solved: 152,
       swept: 96,
       unsolved: 95,
-      with_pubkey: 257,
+      with_pubkey: 258,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
         DAI: 100,
-        BTC: 1064.20958961,
+        BTC: 1064.21658961,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -672,7 +670,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(357);
+    ).toBe(358);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -699,6 +697,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(151);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(152);
   });
 });
