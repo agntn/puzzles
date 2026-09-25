@@ -33,7 +33,7 @@
 ### 💅 Refactors
 
 - **dataset:** Drop @noble/hashes ([#269](https://github.com/agntn/puzzles/pull/269))
-- **verify:** ⚠️  Rename verifyPuzzle to verify ([#288](https://github.com/agntn/puzzles/pull/288))
+- **verify:** ⚠️ Rename verifyPuzzle to verify ([#288](https://github.com/agntn/puzzles/pull/288))
 
 ### 🏡 Chore
 
@@ -45,7 +45,7 @@
 
 #### ⚠️ Breaking Changes
 
-- **verify:** ⚠️  Rename verifyPuzzle to verify ([#288](https://github.com/agntn/puzzles/pull/288))
+- **verify:** ⚠️ Rename verifyPuzzle to verify ([#288](https://github.com/agntn/puzzles/pull/288))
 
 ### ❤️ Contributors
 
