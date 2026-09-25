@@ -165,10 +165,10 @@ A puzzle page, and the page of each singleton collection, is one record on the s
 
 `::collection-puzzles` in [CollectionPuzzles.vue](app/components/content/CollectionPuzzles.vue) closes a collection page on the same shell (`tool-console console-wide`).
 
-1. **Bar:** `List` tag and `<key>.all()`; the meta carries one 2 px tick per puzzle for a named collection, the puzzle count and the status counts in record order, the unsolved count in the accent; the hatched mark.
+1. **Bar:** `List` tag and `<key>.all()`; the meta carries one 2 px tick per puzzle when the list is rows, the puzzle count and the status counts in record order, the unsolved count in the accent; the hatched mark.
 2. **Ruler** with one cursor sweep.
-3. **Named collection:** `console-rows`, one per puzzle: name as the page link, `StatusPill`, prize, a dotted leader into the shortened address, then the public key and private key glyphs, the key in the accent. Rows slide in once, 30 ms apart. Below 640 px the prize goes under the name and the address is dropped.
-4. **Numbered collection:** a grid of square cells, `auto-fill` from 2.5 rem. A closed cell stands on a 3 px hatched strip, red hatching for `swept`; an open cell has no strip and a half accent edge, the full accent on hover. A 3 px square in the top right corner marks a published private key.
+3. **Rows:** a named collection, and a numbered one under 20 puzzles, where a few squares would say less than a row. `console-rows`, one per puzzle: name as the page link, `StatusPill`, prize, a dotted leader into the shortened address, then the public key and private key glyphs, the key in the accent. Rows slide in once, 30 ms apart. Below 640 px the prize goes under the name and the address is dropped.
+4. **Grid:** a numbered collection of 20 puzzles or more, square cells, `auto-fill` from 2.5 rem. A closed cell stands on a 3 px hatched strip, red hatching for `swept`; an open cell has no strip and a half accent edge, the full accent on hover. A 3 px square in the top right corner marks a published private key.
 5. **Footer:** what a name or a cell opens and what the marks mean, the locality meta.
 
 Every value a row shortens or a cell hides is in a `UTooltip`, never a `title`. The tooltip is themed once in `app.config.ts` (`ui.tooltip`) with `.puzzles-tooltip` in `app.css`: one quiet 1 px edge with a 14 px amber segment at the top left, the top right corner cut by 7 px, mono 11 px, no shadow, radius or scale animation, and it wraps so a full address fits. A structured tooltip uses the `#content` slot with `puzzles-tooltip-value`, `puzzles-tooltip-sep` and `puzzles-tooltip-open`.

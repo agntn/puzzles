@@ -38,8 +38,17 @@ function keyText(derived: boolean): string {
   return derived ? "private key derived from the published recipe" : "private key published";
 }
 
-/** A numbered collection reads as a grid of cells, a named one as rows. */
-const numeric = computed(() => data.value?.numeric === true);
+/** CashAddr's prefix is the same on every Bitcoin Cash row, so the short form drops it. */
+const CASHADDR_PREFIX = /^bitcoincash:/u;
+
+/** How many puzzles a numbered collection needs before its rows turn into a grid of cells. */
+const GRID_FROM = 20;
+
+/**
+ * A large numbered collection reads as a grid of cells. Anything smaller reads as rows, where a
+ * handful of puzzles gets its status, prize and address instead of a few lonely squares.
+ */
+const grid = computed(() => data.value?.numeric === true && rows.value.length >= GRID_FROM);
 
 /** Status counts in record order, for the bar. */
 const counts = computed(() => {
@@ -61,7 +70,7 @@ const counts = computed(() => {
     <header class="console-bar">
       <span class="console-title"><span class="console-tag">List</span>{{ collection }}.all()</span>
       <span class="console-meta"
-        ><span v-if="!numeric" class="console-ticks-bar" aria-hidden="true"
+        ><span v-if="!grid" class="console-ticks-bar" aria-hidden="true"
           ><span
             v-for="row in rows"
             :key="row.id"
@@ -80,7 +89,7 @@ const counts = computed(() => {
     </header>
     <div class="console-ruler" aria-hidden="true"><span class="console-cursor" /></div>
 
-    <ol v-if="numeric" class="puzzles-list-cells">
+    <ol v-if="grid" class="puzzles-list-cells">
       <li v-for="row in rows" :key="row.id">
         <UTooltip>
           <template #content>
@@ -115,7 +124,7 @@ const counts = computed(() => {
         <span class="puzzles-list-address">
           <span class="console-leader" aria-hidden="true" />
           <UTooltip :text="row.address">
-            <span>{{ shorten(row.address, 14, 8) }}</span>
+            <span>{{ shorten(row.address.replace(CASHADDR_PREFIX, ""), 14, 8) }}</span>
           </UTooltip>
         </span>
         <span class="puzzles-list-marks">
@@ -136,9 +145,9 @@ const counts = computed(() => {
 
     <footer class="console-footer console-footer-plain">
       <span
-        >{{ numeric ? "every cell is a page, hover for the prize" : "every name is a page" }} ·
+        >{{ grid ? "every cell is a page, hover for the prize" : "every name is a page" }} ·
         {{
-          numeric ? "the corner mark is a known private key" : "the key marks a known private key"
+          grid ? "the corner mark is a known private key" : "the key marks a known private key"
         }}</span
       >
       <span class="console-meta">local dataset / no network</span>
