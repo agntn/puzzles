@@ -93,7 +93,7 @@ const log = computed(() =>
             <dd>{{ data.solves.length }}</dd>
           </div>
           <div>
-            <dt>Prize taken</dt>
+            <dt>Prize recorded</dt>
             <dd>{{ formatPrizeTotals(data.prize) }}</dd>
           </div>
           <div v-if="data.authorPage">
