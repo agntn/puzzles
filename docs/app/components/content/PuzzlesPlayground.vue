@@ -905,7 +905,9 @@ const responseTitle = computed(() => {
                       ? answer.view.bits === undefined
                         ? "none published"
                         : `${answer.view.bits}-bit search width`
-                      : answer.view.secret
+                      : answer.view.derived
+                        ? `${answer.view.secret}, derived from the recipe`
+                        : answer.view.secret
                   }}
                 </dd>
               </div>

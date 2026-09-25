@@ -17,7 +17,8 @@ const ticks = computed(() => transactionTicks(view.value));
 
 const keyMaterial = computed(() => {
   const current = view.value;
-  if (current.secret !== "none") return current.secret;
+  if (current.secret !== "none")
+    return current.derived ? `${current.secret}, derived from the recipe` : current.secret;
   return current.bits === undefined ? "none published" : `${current.bits}-bit search width`;
 });
 

@@ -156,7 +156,8 @@ function seedTail(key: KeyData): string[] {
 export function keyLiteral(key: KeyData | undefined): string | undefined {
   if (key === undefined) return undefined;
   const head = keyHead(key);
-  return head === undefined ? undefined : [head, ...hexTail(key), ...seedTail(key)].join("");
+  if (head === undefined) return undefined;
+  return [head, ...hexTail(key), ...seedTail(key), ...(key.derived ? [".derived()"] : [])].join("");
 }
 
 function verdictOf(result: VerifyResult): LandingSample["verdict"] {

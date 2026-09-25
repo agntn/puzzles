@@ -126,21 +126,34 @@ function field<T>(
   return value === undefined ? [] : [`${label}: ${format(value)}`];
 }
 
-function formatSecret(secret: Secret | undefined): string {
+/**
+ * The secret with its kind in parentheses, and a note when the record rebuilt it instead of
+ * reading it from a source.
+ *
+ * @param {Secret | undefined} secret - The secret the record exposes.
+ * @param {boolean} derived - Whether no source printed it.
+ * @returns {string} The private key line's value.
+ */
+function formatSecret(secret: Secret | undefined, derived: boolean): string {
   if (secret === undefined) {
     return "unknown";
   }
+  const [value, kind] = secretParts(secret);
+  return `${value} (${kind}${derived ? ", derived from the published recipe" : ""})`;
+}
+
+function secretParts(secret: Secret): readonly [value: string, kind: string] {
   switch (secret.kind) {
     case "hex":
-      return `${secret.hex} (hex)`;
+      return [secret.hex, "hex"];
     case "wif":
-      return `${secret.wif} (wif)`;
+      return [secret.wif, "wif"];
     case "encrypted":
-      return `${secret.encrypted} (bip38)`;
+      return [secret.encrypted, "bip38"];
     case "seed":
-      return `${secret.phrase} (seed phrase)`;
+      return [secret.phrase, "seed phrase"];
     case "mini":
-      return `${secret.mini} (mini)`;
+      return [secret.mini, "mini"];
   }
 }
 
@@ -213,7 +226,7 @@ function seedLines(key: KeyData, secret: Secret["kind"] | undefined): string[] {
  */
 function keyLines(key: KeyData | undefined): string[] {
   const secret = secretOf(key);
-  const lines = [`private key: ${formatSecret(secret)}`];
+  const lines = [`private key: ${formatSecret(secret, key?.derived === true)}`];
   const kind = secret?.kind;
   return key === undefined ? lines : [...lines, ...wifLines(key, kind), ...seedLines(key, kind)];
 }

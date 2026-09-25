@@ -30,13 +30,15 @@ export const quizchainBlock8 = bitcoinPuzzle({
   startedAt: "2019-04-08 07:41:07",
   status: Status.Solved,
   pubkey: compressed("03bb1014ab885aede78f390ad446993f0a6ec9c501c0e646db087b9ea94f41260b"),
-  key: wif("KwwbEXjw3E9HfiCqk3RmfYNMG7KYkUmWDnxeyc1MTdmKGwcwTHwX").entropy(
-    "cc0444e284fef38d8d6907c93d49b162245b8fbc203bb3ffd35945d22dfd6677",
-    source(
-      THREAD,
-      "SHA-256 of the author's answer with the six characters before the last three of the block 6 key appended",
-    ),
-  ),
+  key: wif("KwwbEXjw3E9HfiCqk3RmfYNMG7KYkUmWDnxeyc1MTdmKGwcwTHwX")
+    .entropy(
+      "cc0444e284fef38d8d6907c93d49b162245b8fbc203bb3ffd35945d22dfd6677",
+      source(
+        THREAD,
+        "SHA-256 of the author's answer with the six characters before the last three of the block 6 key appended",
+      ),
+    )
+    .derived(),
   prize: 0.007,
   hints: [
     official("How many mbtc do I plan to offer as the prize for block 77?", THREAD, undefined, {

@@ -10,6 +10,7 @@ import {
   compressed,
   confirmation,
   decredPuzzle,
+  derivation,
   ethereumPuzzle,
   hex,
   litecoinPuzzle,
@@ -45,6 +46,15 @@ describe("puzzle record factories", () => {
     const puzzle = bitcoinPuzzle({ ...required, key: passphrase("public fixture") });
     expect(puzzle.keyData()).toEqual({ wif: { passphrase: "public fixture" } });
     expect(puzzle.hasPrivateKey()).toBe(false);
+  });
+
+  it("marks a derived key only when the record has a secret", () => {
+    expect(bitcoinPuzzle({ ...required, key: hex("1".padStart(64, "0")) }).hasDerivedKey()).toBe(
+      false,
+    );
+    const pathOnly = bitcoinPuzzle({ ...required, key: derivation("m/0").derived() });
+    expect(pathOnly.keyData()).toEqual({ seed: { path: "m/0" }, derived: true });
+    expect(pathOnly.hasDerivedKey()).toBe(false);
   });
 
   it("hands back a key builder that leaves the record alone", () => {

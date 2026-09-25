@@ -19,6 +19,7 @@ const { data } = await useAsyncData(
         address: puzzle.address().value,
         pubkey: puzzle.hasPubkey(),
         key: puzzle.hasPrivateKey(),
+        derived: puzzle.hasDerivedKey(),
         bits: puzzle.keyData()?.bits,
       })),
     };
@@ -26,6 +27,16 @@ const { data } = await useAsyncData(
 );
 
 const rows = computed(() => data.value?.rows ?? []);
+
+/**
+ * What the key mark means for one row: a key a source printed, or one the record rebuilt.
+ *
+ * @param {boolean} derived - Whether the record rebuilt the key from the published recipe.
+ * @returns {string} The tooltip and the accessible label.
+ */
+function keyText(derived: boolean): string {
+  return derived ? "private key derived from the published recipe" : "private key published";
+}
 
 /** A numbered collection reads as a grid of cells, a named one as rows. */
 const numeric = computed(() => data.value?.numeric === true);
@@ -81,7 +92,8 @@ const counts = computed(() => {
             ><span class="puzzles-tooltip-sep">&nbsp;·&nbsp;</span
             ><span class="puzzles-tooltip-value">{{ row.prize }}</span
             ><template v-if="row.key"
-              ><span class="puzzles-tooltip-sep">&nbsp;·&nbsp;</span>key published</template
+              ><span class="puzzles-tooltip-sep">&nbsp;·&nbsp;</span
+              >{{ row.derived ? "key derived" : "key published" }}</template
             >
           </template>
           <NuxtLink :to="`/collections/${row.id}`" :class="`puzzles-list-cell-${row.status}`"
@@ -110,11 +122,11 @@ const counts = computed(() => {
           <UTooltip v-if="row.pubkey" text="public key known">
             <UIcon name="i-lucide-badge-check" class="size-3.5" aria-label="public key known" />
           </UTooltip>
-          <UTooltip v-if="row.key" text="private key published">
+          <UTooltip v-if="row.key" :text="keyText(row.derived)">
             <UIcon
               name="i-lucide-key-round"
               class="puzzles-list-key size-3.5"
-              aria-label="private key published"
+              :aria-label="keyText(row.derived)"
             />
           </UTooltip>
           <span v-if="row.bits !== undefined">{{ row.bits }}b</span>
@@ -126,9 +138,7 @@ const counts = computed(() => {
       <span
         >{{ numeric ? "every cell is a page, hover for the prize" : "every name is a page" }} ·
         {{
-          numeric
-            ? "the corner mark is a published private key"
-            : "the key marks a published private key"
+          numeric ? "the corner mark is a known private key" : "the key marks a known private key"
         }}</span
       >
       <span class="console-meta">local dataset / no network</span>

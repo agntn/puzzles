@@ -201,6 +201,8 @@ export interface Shares {
 /** Serialized private key material. */
 export interface KeyData {
   readonly bits?: number;
+  /** No source printed the secret; the record rebuilt it from a published recipe. */
+  readonly derived?: true;
   readonly hex?: string;
   readonly mini?: string;
   readonly seed?: Seed;
@@ -513,6 +515,16 @@ export class Key {
     return this.#with({
       seed: { ...this.#data.seed, entropy: defined({ hash, source, passphrase }) },
     });
+  }
+
+  /**
+   * Marks the secret as derived: no source printed it, and the record rebuilt it from a recipe
+   * the author published or confirmed. The recipe itself stays in the entropy source or a hint.
+   *
+   * @returns {Key} A new builder with the mark recorded.
+   */
+  derived(): Key {
+    return this.#with({ derived: true });
   }
 
   /**

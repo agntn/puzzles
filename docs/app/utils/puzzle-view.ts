@@ -33,6 +33,8 @@ export interface HintRow extends Hint {
 export interface PuzzleView extends LandingSample {
   readonly name: string;
   readonly preGenesis: boolean;
+  /** No source printed the private key; the record rebuilt it from the published recipe. */
+  readonly derived: boolean;
   readonly keyRows: readonly KeyRow[];
   readonly transactionRows: readonly TransactionRow[];
   readonly assets: readonly AssetLink[];
@@ -189,6 +191,7 @@ export async function toPuzzleView(
     ...sample,
     name: puzzle.name(),
     preGenesis: puzzle.preGenesis(),
+    derived: puzzle.hasDerivedKey(),
     keyRows: keyRows(puzzle.keyData()),
     transactionRows: puzzle.transactions().map((transaction) => ({
       type: transaction.tx_type.replaceAll("_", " "),

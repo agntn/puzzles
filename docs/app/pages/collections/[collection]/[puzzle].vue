@@ -52,11 +52,22 @@ function afterClause(solveTime: string | undefined): string {
   return solveTime === undefined ? "" : ` after ${solveTime}`;
 }
 
+/**
+ * A clause for the private key of a solved puzzle: printed by a source, or rebuilt from the
+ * published recipe. Empty when the record has no key.
+ *
+ * @param {PuzzleView} view - The puzzle view.
+ * @returns {string} The clause with its leading comma, or an empty string.
+ */
+function keyClause(view: PuzzleView): string {
+  if (view.secret === "none") return "";
+  return view.derived ? ", key derived from the published recipe" : ", key published";
+}
+
 /** The first sentence of the description per status: what happened to the puzzle. */
 const OUTCOME: Readonly<Record<Status, (view: PuzzleView, when: string) => string>> = {
   unsolved: (view) => `Open since ${view.startedAt.slice(0, 10)}${bitsClause(view.bits)}.`,
-  solved: (view, when) =>
-    `Solved on ${when}${afterClause(view.solveTime)}${view.secret === "none" ? "" : ", key published"}.`,
+  solved: (view, when) => `Solved on ${when}${afterClause(view.solveTime)}${keyClause(view)}.`,
   claimed: (view, when) =>
     `Claimed on ${when}${afterClause(view.solveTime)}, without a published key.`,
   swept: (_, when) => `Swept on ${when} by someone other than a solver.`,

@@ -46,7 +46,7 @@ export const iAmABananaAmaaGif = bitcoinPuzzle({
   startedAt: "2013-12-22 22:35:39",
   status: Status.Solved,
   pubkey: compressed("03987951b3fa4a6f68ba76bd509a8ac4945b3cb1e14be1eadd5d3210f590313024"),
-  key: wif("L21s1A2LjTL5WLEfWPJtuKxHKF3PcfJnyiEtjNtPUxwnSdqWBD66"),
+  key: wif("L21s1A2LjTL5WLEfWPJtuKxHKF3PcfJnyiEtjNtPUxwnSdqWBD66").derived(),
   prize: 0.001,
   hints: [
     official(
