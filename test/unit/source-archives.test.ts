@@ -197,6 +197,12 @@ const sources = [
     author: "u/AoiNakamoto",
     date: "2019-04-05",
   },
+  {
+    file: "satoshi_birthday_quiz/aoinakamoto-2019-04-10-ekjcc1k",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/bbij0e/meidum_7_mbtc_quizchain_block_18/ekjcc1k/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-10",
+  },
 ] as const;
 
 type Source = (typeof sources)[number];
