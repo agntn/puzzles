@@ -95,12 +95,20 @@ export class SatoshiBirthdayQuizCollection extends SingletonCollection {
     kind: PartyKind.Person,
     about:
       "Pseudonymous author of the 2019 Quizchain puzzle series on Reddit, who shut it all down in August 2019 and called it a failed experiment.",
-    profiles: [profile("reddit", "https://www.reddit.com/user/AoiNakamoto/")],
+    profiles: [
+      profile("reddit", "https://www.reddit.com/user/AoiNakamoto/"),
+      profile("twitter", "https://x.com/NakamotoAoi"),
+    ],
     facts: [
       fact(
         "Asked r/Bitcoin on 2019-04-05 whether a quiz giveaway would be welcome, hours before posting the birthday quiz.",
         "https://www.reddit.com/r/Bitcoin/comments/b9l37o/",
         { date: "2019-04-05" },
+      ),
+      fact(
+        "Called @NakamotoAoi their Twitter feed in a reply under Quizchain block 18.",
+        "https://www.reddit.com/r/bitcoinpuzzles/comments/bbij0e/meidum_7_mbtc_quizchain_block_18/ekjcc1k/",
+        { date: "2019-04-10" },
       ),
       fact(
         "Ran the Quizchain blocks on r/bitcoinpuzzles and r/Grycoin from April to August 2019, a few mBTC each for a text puzzle hashed into a wallet.",
