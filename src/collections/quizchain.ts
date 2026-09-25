@@ -1,5 +1,6 @@
 import { NumericCollection } from "../core/collection.ts";
 import { quizchainBlock1 } from "./quizchain/1.ts";
+import { quizchainBlock10 } from "./quizchain/10.ts";
 import { quizchainBlock2 } from "./quizchain/2.ts";
 import { quizchainBlock3 } from "./quizchain/3.ts";
 import { quizchainBlock4 } from "./quizchain/4.ts";
@@ -29,6 +30,7 @@ export class QuizchainCollection extends NumericCollection {
     quizchainBlock7,
     quizchainBlock8,
     quizchainBlock9,
+    quizchainBlock10,
   ];
 
   /** Builds the canonical collection. */
