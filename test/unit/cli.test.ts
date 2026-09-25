@@ -42,6 +42,24 @@ async function failure(...args: readonly string[]): Promise<Failure> {
 }
 
 /*
+ * Runs the CLI with `test/support/fetch-stub.ts` in place of the network, so a balance pass is read
+ * the way a script reads it: both streams and the exit code, whether it failed or not.
+ */
+async function stubbed(failing: string, ...args: readonly string[]): Promise<Failure> {
+  try {
+    const { stderr, stdout } = await execute(
+      process.execPath,
+      ["--import", "./test/support/fetch-stub.ts", "src/cli.ts", ...args],
+      { cwd: process.cwd(), env: { ...process.env, PUZZLES_FETCH_FAIL: failing } },
+    );
+    return { code: 0, stderr, stdout };
+  } catch (error) {
+    const { code, stderr, stdout } = error as Failure;
+    return { code, stderr, stdout };
+  }
+}
+
+/*
  * Every test here spawns the CLI, some of them four times, and the whole block runs at once. On a CI
  * runner the authors test took 4.8 s on main and then crossed the default 5 s, so the block gets the
  * live tests' 30 s.
@@ -542,6 +560,78 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       code: 1,
       stdout: "",
       stderr: "Ethereum balance lookup requires an Etherscan API key\n",
+    });
+  });
+
+  it("checks every filtered puzzle in turn and keeps going past a failed lookup", async () => {
+    const result = await stubbed(
+      "1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+      "balance",
+      "--collection",
+      "ballet",
+    );
+
+    expect(result.code).toBe(1);
+    expect(result.stdout).toBe(
+      [
+        "OK\tballet/AA007448\t0.000011 BTC",
+        "FAIL\tballet/AA009926\tBalance lookup failed: HTTP 0 from https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+        "OK\tballet/AA012381\t0.000011 BTC",
+        "",
+      ].join("\n"),
+    );
+    expect(result.stderr).toBe(
+      [
+        "fetch https://mempool.space/api/address/1LL6Xy92LwGDRfQP9fBU7f1477cEKctr7c",
+        "fetch https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+        "fetch https://mempool.space/api/address/1QGtbKxx6FKDD66LwnrzHCAHmyZ7mDHqC4",
+        "",
+      ].join("\n"),
+    );
+  });
+
+  it("prints a filtered pass as one JSON array", async () => {
+    const result = await stubbed(
+      "1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+      "balance",
+      "--collection",
+      "ballet",
+      "--status",
+      "unsolved",
+      "--json",
+    );
+
+    expect(result.code).toBe(1);
+    expect(JSON.parse(result.stdout)).toEqual([
+      {
+        id: "ballet/AA009926",
+        chain: "bitcoin",
+        error:
+          "Balance lookup failed: HTTP 0 from https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+      },
+      {
+        id: "ballet/AA012381",
+        chain: "bitcoin",
+        confirmed: "1100",
+        unconfirmed: "0",
+        decimals: 8,
+      },
+    ]);
+  });
+
+  it("asks for an id or a filter before checking balances", async () => {
+    await expect(failure("balance")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid id: pass a puzzle identifier or a filter such as --status\n",
+    });
+  });
+
+  it("refuses an id and a filter together", async () => {
+    await expect(failure("balance", "b1000/71", "--status", "unsolved")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid id: pass a puzzle identifier or filters, not both\n",
     });
   });
 
