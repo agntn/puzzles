@@ -2610,3 +2610,207 @@ button.console-lead:focus-visible {
     display: none;
   }
 }
+
+/* The entity dossier: one card per author or solver page, AuthorFacts and SolverFacts. */
+.dossier {
+  --console-line: color-mix(in srgb, var(--ui-border) 75%, transparent);
+  --console-corner: color-mix(in srgb, var(--ui-text-muted) 55%, var(--ui-bg));
+  --console-accent: color-mix(in srgb, var(--ui-primary) 65%, var(--ui-text-highlighted));
+  position: relative;
+  padding: 1px;
+  isolation: isolate;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.dossier::before,
+.dossier::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 16px) 0,
+    100% 16px,
+    100% 100%,
+    16px 100%,
+    0 calc(100% - 16px)
+  );
+}
+.dossier::before {
+  inset: 0;
+  z-index: -2;
+  background: var(--console-line);
+}
+.dossier::after {
+  inset: 1px;
+  z-index: -1;
+  background: var(--ui-bg);
+}
+.dossier-bar,
+.dossier-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 10px 20px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+}
+.dossier-bar {
+  background: color-mix(in srgb, var(--ui-text-muted) 5%, var(--ui-bg));
+  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 0 100%);
+}
+.dossier-entry {
+  animation: dossier-entry 360ms ease-out both;
+}
+@keyframes dossier-entry {
+  from {
+    transform: translateX(-8px);
+  }
+  to {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dossier-entry {
+    animation: none;
+  }
+}
+.dossier-id {
+  color: var(--ui-text-highlighted);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.dossier-band {
+  padding: 16px 20px;
+  border-top: 1px solid var(--console-line);
+}
+.dossier-trail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px 28px;
+}
+.dossier-channels {
+  margin: 0;
+  min-width: 0;
+}
+.dossier-channels dt > span,
+.dossier-addresses dt > span,
+.dossier-log-title > span:first-child > span {
+  color: var(--ui-text-dimmed);
+}
+.dossier-collections a:hover,
+.dossier-entry a:hover {
+  color: var(--console-accent);
+}
+.dossier-addresses {
+  margin: 0;
+  align-self: start;
+}
+.dossier-addresses dd + dd {
+  margin-top: 2px;
+}
+.dossier-log .dossier-log-mark {
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--console-corner);
+  color: transparent;
+}
+.dossier-log .dossier-log-mark > * {
+  display: none;
+}
+.dossier-log .dossier-log-mark:not(.dossier-log-mark-open) {
+  background: var(--console-corner);
+}
+.dossier-log .dossier-log-rule {
+  width: 1px;
+  margin-top: 4px;
+  border-radius: 0;
+  background: var(--console-line);
+}
+.dossier-entry {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 16px;
+}
+.dossier-entry-date {
+  padding-top: 3px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ui-text-dimmed);
+}
+.dossier-entry-body {
+  min-width: 0;
+}
+.dossier-entry p {
+  margin: 0 0 3px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ui-text-highlighted);
+}
+.dossier-entry a {
+  font-size: 11px;
+  color: var(--ui-text-muted);
+  overflow-wrap: anywhere;
+}
+.dossier-entry a::before {
+  content: "↗ ";
+  color: var(--ui-text-dimmed);
+}
+.dossier-entry:hover .dossier-entry-date {
+  color: var(--console-accent);
+}
+.dossier-footer {
+  border-top: 1px solid var(--console-line);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.dossier-footer > .console-meta {
+  margin-left: auto;
+}
+.dossier-collections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dossier-collections a {
+  color: var(--ui-text-highlighted);
+}
+.dossier-collections a > span {
+  color: var(--ui-text-dimmed);
+}
+.dossier-collections li > span {
+  margin-left: 10px;
+  color: var(--ui-text-dimmed);
+  font-size: 11px;
+  white-space: nowrap;
+}
+@media (width < 900px) {
+  .dossier-trail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (width < 640px) {
+  .dossier-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
+@media (width < 400px) {
+  .dossier-bar,
+  .dossier-footer,
+  .dossier-band {
+    padding-inline: 14px;
+  }
+}

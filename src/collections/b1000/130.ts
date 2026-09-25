@@ -2,11 +2,13 @@ import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 import {
   claim,
   compressed,
+  fact,
   funding,
   hex,
   increase,
   p2pkh,
   party,
+  PartyKind,
   profile,
   pubkeyReveal,
 } from "../../core/parts.ts";
@@ -63,10 +65,19 @@ export const b1000Puzzle130 = bitcoinPuzzle({
     ),
   ],
   solver: party("RetiredCoder", {
+    key: "retired-coder",
+    kind: PartyKind.Person,
     addresses: ["3Emiwzxme7Mrj4d89uqohXNncnRM15YESs", "1Prestige1zSYorBdz94KA2UbJW3hYLTn4"],
     profiles: [
       profile("github", "https://github.com/RetiredC"),
       profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=3657819"),
+    ],
+    facts: [
+      fact(
+        "Registered the bitcointalk account on October 5, 2024.",
+        "https://bitcointalk.org/index.php?action=profile;u=3657819",
+        { date: "2024-10-05" },
+      ),
     ],
   }),
 });

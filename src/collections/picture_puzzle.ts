@@ -116,7 +116,21 @@ export const picturePuzzleRecord = bitcoinPuzzle({
     ),
   ],
   solver: party("6loss", {
+    key: "6loss",
+    about: "Reddit user who claimed the 1 mBTC picture puzzle five hours after it went up.",
     profiles: [profile("reddit", "https://www.reddit.com/user/6loss/")],
+    facts: [
+      fact(
+        "Wrote Claimed =) under the post and promised to fund a new puzzle with the prize.",
+        comment("ce8efwb"),
+        { date: "2013-12-23" },
+      ),
+      fact(
+        "givesadvice4bitcoin congratulated the claim and named 6loss the winner in the edited post.",
+        comment("ce8eg7y"),
+        { date: "2013-12-23" },
+      ),
+    ],
   }),
   assets: assets({ puzzle: "puzzle.png", sourceUrl: PICTURE }),
 });

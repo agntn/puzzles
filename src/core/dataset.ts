@@ -1,6 +1,6 @@
 import { version } from "../version.ts";
 import type { Chain } from "./chains.ts";
-import { PuzzleNotFoundError, UnknownAuthorError } from "./errors.ts";
+import { PuzzleNotFoundError, UnknownAuthorError, UnknownSolverError } from "./errors.ts";
 import { defined, frozen, type Hint, type Party } from "./parts.ts";
 import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
 import {
@@ -62,6 +62,30 @@ export interface AuthorEntry {
   readonly puzzles: number;
 }
 
+/** One puzzle on a solver's record, with what the puzzle says about the solve. */
+export interface SolveEntry {
+  readonly chain: Chain;
+  /** The prize's unit, the chain symbol unless the puzzle names another. */
+  readonly currency: string;
+  readonly id: string;
+  readonly prize?: number;
+  readonly solvedAt?: string;
+  readonly status: Status;
+}
+
+/**
+ * One solver as the registry sees it: the records of every puzzle credited to its key, joined into
+ * one, and those puzzles in dataset order.
+ */
+export interface SolverEntry {
+  /** Collections published by an author with the same key, the same party on the other side. */
+  readonly authored: readonly string[];
+  readonly collections: readonly string[];
+  readonly key: string;
+  readonly solver: Party;
+  readonly solves: readonly SolveEntry[];
+}
+
 /** Optional constraints for selecting puzzles across the registry. */
 export interface PuzzleQuery {
   readonly address?: string | undefined;
@@ -77,6 +101,7 @@ export interface PuzzleQuery {
  */
 interface DerivedViews {
   authors?: readonly AuthorEntry[];
+  solvers?: readonly SolverEntry[];
   dataVersion?: string;
   puzzles?: readonly Puzzle[];
   serialized?: readonly DatasetCollection[];
@@ -175,6 +200,148 @@ export async function requireAuthor(key: string): Promise<AuthorEntry> {
   const known = `Known authors: ${keys.join(", ")}`;
   const guess = typeof key === "string" ? closestKey(key, keys) : undefined;
   throw new UnknownAuthorError(
+    String(key),
+    guess === undefined ? known : `Did you mean ${guess}? ${known}`,
+  );
+}
+
+/**
+ * Both lists as one, each item once by its identity, in the order the lists give them.
+ *
+ * @param {readonly T[] | undefined} a - The first list.
+ * @param {readonly T[] | undefined} b - The second list.
+ * @param {(item: T) => string} id - What makes two items the same.
+ * @returns {T[] | undefined} The union, or `undefined` when both are empty.
+ */
+function union<T>(
+  a: readonly T[] | undefined,
+  b: readonly T[] | undefined,
+  id: (item: T) => string,
+): T[] | undefined {
+  const seen = new Map<string, T>();
+  for (const item of [...(a ?? []), ...(b ?? [])]) {
+    if (!seen.has(id(item))) seen.set(id(item), item);
+  }
+  return seen.size === 0 ? undefined : [...seen.values()];
+}
+
+/**
+ * Joins two records of the same party. Scalars keep the first value a record states; lists keep
+ * every item once, in the order the records give them.
+ *
+ * @param {Party} first - The record seen first, in dataset order.
+ * @param {Party} next - A later record with the same key.
+ * @returns {Party} One record with absent fields omitted.
+ */
+function joinParties(first: Party, next: Party): Party {
+  return defined({
+    key: first.key ?? next.key,
+    kind: first.kind ?? next.kind,
+    name: first.name ?? next.name,
+    aliases: union(first.aliases, next.aliases, (alias) => alias),
+    about: first.about ?? next.about,
+    addresses: union(first.addresses, next.addresses, (address) => address),
+    profiles: union(first.profiles, next.profiles, (link) => link.url),
+    facts: union(first.facts, next.facts, (item) => `${item.source}\n${item.text}`),
+  });
+}
+
+/**
+ * Every named solver in dataset order of its first solve, one entry per solver key. A solver
+ * record without a key, which is every solver known only by the address it swept to, has no entry.
+ *
+ * @returns {Promise<readonly SolverEntry[]>} One entry per solver key.
+ */
+export async function solvers(): Promise<readonly SolverEntry[]> {
+  const [snapshot, record] = await views();
+  if (record.solvers === undefined) {
+    const entries = new Map<
+      string,
+      { solver: Party; solves: SolveEntry[]; collections: string[] }
+    >();
+    for (const collection of snapshot) {
+      for (const puzzle of collection.all()) {
+        const solver = puzzle.solver();
+        if (solver?.key === undefined) continue;
+        const entry = entries.get(solver.key);
+        const solve: SolveEntry = defined({
+          id: puzzle.id(),
+          chain: puzzle.chain(),
+          status: puzzle.status(),
+          solvedAt: puzzle.solvedAt(),
+          prize: puzzle.prize(),
+          currency: puzzle.prizeCurrency(),
+        });
+        if (entry === undefined) {
+          entries.set(solver.key, { solver, solves: [solve], collections: [collection.key] });
+          continue;
+        }
+        entry.solver = joinParties(entry.solver, solver);
+        entry.solves.push(solve);
+        if (!entry.collections.includes(collection.key)) entry.collections.push(collection.key);
+      }
+    }
+    record.solvers = frozen(
+      [...entries].map(([key, entry]) => ({
+        key,
+        ...entry,
+        authored: snapshot
+          .filter((collection) => collection.author.key === key)
+          .map((collection) => collection.key),
+      })),
+    );
+  }
+  return record.solvers;
+}
+
+/**
+ * Looks a solver up by key, loading every collection.
+ *
+ * @param {string} key - The solver key.
+ * @returns {Promise<SolverEntry | undefined>} The solver, or `undefined` when no puzzle credits it.
+ */
+export async function getSolver(key: string): Promise<SolverEntry | undefined> {
+  if (typeof key !== "string") {
+    return undefined;
+  }
+  return (await solvers()).find((entry) => entry.key === key);
+}
+
+/**
+ * The solver key a lookup means: the key itself, or the key of the solver a puzzle identifier
+ * credits. A puzzle whose solver has no key leaves the query as it is, so the miss names it.
+ *
+ * @param {string} query - A solver key or a puzzle identifier.
+ * @returns {Promise<string>} The key to look up.
+ */
+export async function resolveSolverKey(query: string): Promise<string> {
+  if ((await getSolver(query)) !== undefined) {
+    return query;
+  }
+  return (await get(query))?.solver()?.key ?? query;
+}
+
+/**
+ * Looks a solver up or throws, naming the keys that do resolve.
+ *
+ * @param {string} key - The solver key.
+ * @returns {Promise<SolverEntry>} The solver.
+ */
+export async function requireSolver(key: string): Promise<SolverEntry> {
+  const entry = await getSolver(key);
+  if (entry !== undefined) {
+    return entry;
+  }
+  const keys = (await solvers()).map((row) => row.key);
+  const known = `Known solvers: ${keys.join(", ")}`;
+  const puzzle = await get(key);
+  if (puzzle !== undefined) {
+    const what =
+      puzzle.solver() === undefined ? "records no solver" : "knows its solver by address only";
+    throw new UnknownSolverError(key, `${puzzle.id()} ${what}. ${known}`);
+  }
+  const guess = typeof key === "string" ? closestKey(key, keys) : undefined;
+  throw new UnknownSolverError(
     String(key),
     guess === undefined ? known : `Did you mean ${guess}? ${known}`,
   );

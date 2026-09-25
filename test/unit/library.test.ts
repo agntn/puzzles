@@ -42,6 +42,7 @@ import {
   get,
   getAuthor,
   getCollection,
+  getSolver,
   hasCollection,
   NamedCollection,
   official,
@@ -51,7 +52,9 @@ import {
   requireAuthor,
   requireCollection,
   requirePuzzle,
+  requireSolver,
   SingletonCollection,
+  solvers,
   stats,
   Status,
   type AnyCollection,
@@ -144,10 +147,14 @@ describe("lazy collection registry", () => {
 
   it("credits Level 4's published solution without adopting its example WIF", async () => {
     const puzzle = await requirePuzzle("zden/level_4");
-    expect(puzzle.solver()).toEqual({
+    expect(puzzle.solver()).toMatchObject({
+      key: "mmorsl",
       name: "mmorsl",
       profiles: [{ name: "steemit", url: "https://steemit.com/@mmorsl" }],
     });
+    expect(puzzle.solver()?.facts?.[0]?.source).toBe(
+      "https://steemit.com/bitcoin/@mmorsl/solution-of-the-bitcoin-crypto-puzzle-level-4-by-zden",
+    );
     expect(puzzle.assets()).toEqual({
       puzzle: "level_4/puzzle.png",
       solution: "level_4/solution.md",
@@ -157,10 +164,7 @@ describe("lazy collection registry", () => {
       "assets/zden/level_4/puzzle.png",
       "assets/zden/level_4/solution.md",
     ]);
-    expect(puzzle.toJSON().solver).toEqual({
-      name: "mmorsl",
-      profiles: [{ name: "steemit", url: "https://steemit.com/@mmorsl" }],
-    });
+    expect(puzzle.toJSON().solver).toEqual(puzzle.solver());
     expect(puzzle.key()).toBeUndefined();
     expect(puzzle.hasPrivateKey()).toBe(false);
   });
@@ -634,6 +638,129 @@ describe("lazy collection registry", () => {
       author: { name: "Keyless" },
       collections: ["keyless"],
       puzzles: 1,
+    });
+    vi.resetModules();
+  });
+
+  it("joins the records of one solver by key, in the order of its first solve", async () => {
+    const entries = await solvers();
+    expect(entries.every((entry) => Object.isFrozen(entry))).toBe(true);
+    expect(entries.map((entry) => entry.key)).toContain("retired-coder");
+
+    const retired = await requireSolver("retired-coder");
+    expect(retired.solves.map((solve) => solve.id)).toEqual([
+      "b1000/120",
+      "b1000/125",
+      "b1000/130",
+      "b1000/135",
+    ]);
+    expect(retired.solves[0]).toEqual({
+      id: "b1000/120",
+      chain: "bitcoin",
+      status: "solved",
+      solvedAt: "2023-02-27 09:40:55",
+      prize: 1.2,
+      currency: "BTC",
+    });
+    expect(retired.collections).toEqual(["b1000"]);
+    expect(retired.authored).toEqual([]);
+    /* The four records repeat the profiles; the joined record keeps each once. */
+    expect(retired.solver.profiles).toHaveLength(2);
+    expect(retired.solver.about).toMatch(/^Author of RCKangaroo/u);
+    expect(retired.solver.facts?.length).toBeGreaterThan(2);
+
+    const wickexSolver = await requireSolver("wickex");
+    expect(wickexSolver.solves.map((solve) => solve.id)).toEqual(["iamabananaamaa/gif"]);
+    expect(wickexSolver.authored).toEqual(["wickex"]);
+
+    const decred = await requireSolver("blockcrushr-labs");
+    expect(decred.solves[0]).toEqual({
+      id: "zden/decred_autonomy",
+      chain: "decred",
+      status: "solved",
+      currency: "DCR",
+    });
+
+    /* A solver known only by the address the prize went to has no entry. */
+    expect(entries.flatMap((entry) => entry.solves).map((solve) => solve.id)).not.toContain(
+      "b1000/66",
+    );
+    expect(await getSolver("nobody")).toBeUndefined();
+    expect(await getSolver(7 as never)).toBeUndefined();
+  });
+
+  it("names the solver a miss most likely meant, or why a puzzle has none", async () => {
+    const miss = async (lookup: Promise<unknown>): Promise<string> =>
+      lookup.then(
+        () => "",
+        (error: Readonly<Error>) =>
+          `${error.name}: ${error.message.replace(/ Known solvers: .*$/u, "")}`,
+      );
+
+    await expect(miss(requireSolver("retiredcoder"))).resolves.toBe(
+      "UnknownSolverError: Unknown solver: retiredcoder. Did you mean retired-coder?",
+    );
+    await expect(miss(requireSolver("b1000/66"))).resolves.toBe(
+      "UnknownSolverError: Unknown solver: b1000/66. b1000/66 knows its solver by address only.",
+    );
+    await expect(miss(requireSolver("b1000/71"))).resolves.toBe(
+      "UnknownSolverError: Unknown solver: b1000/71. b1000/71 records no solver.",
+    );
+  });
+
+  it("merges two records of one solver without repeating a list item", async () => {
+    vi.resetModules();
+    const lib = await import("../../src/index.ts");
+    const solved = (name: string, solver: ReturnType<typeof lib.party>) =>
+      lib.bitcoinPuzzle({
+        id: `joined/${name}`,
+        address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+        sourceUrl: "https://example.com/puzzle",
+        startedAt: "2026-01-01",
+        solver,
+      });
+    lib.registerCollection(
+      new lib.NamedCollection("joined", lib.party("Joined", { key: "joined" }), [
+        solved("one", lib.party("Solver", { key: "solver", aliases: ["S"] })),
+        solved(
+          "two",
+          lib.party("Solver", {
+            key: "solver",
+            about: "Solves.",
+            aliases: ["S", "T"],
+            profiles: [lib.profile("site", "https://example.com/")],
+            facts: [lib.fact("Solved two.", "https://example.com/two")],
+          }),
+        ),
+        solved(
+          "three",
+          lib.party("Solver", {
+            key: "solver",
+            profiles: [lib.profile("site", "https://example.com/")],
+            facts: [lib.fact("Solved two.", "https://example.com/two")],
+          }),
+        ),
+      ]),
+    );
+
+    expect(await lib.getSolver("solver")).toEqual({
+      key: "solver",
+      solver: {
+        key: "solver",
+        name: "Solver",
+        aliases: ["S", "T"],
+        about: "Solves.",
+        profiles: [{ name: "site", url: "https://example.com/" }],
+        facts: [{ text: "Solved two.", source: "https://example.com/two" }],
+      },
+      solves: ["one", "two", "three"].map((name) => ({
+        id: `joined/${name}`,
+        chain: "bitcoin",
+        status: "unsolved",
+        currency: "BTC",
+      })),
+      collections: ["joined"],
+      authored: [],
     });
     vi.resetModules();
   });

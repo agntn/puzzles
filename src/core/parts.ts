@@ -82,7 +82,10 @@ export interface Fact {
   readonly text: string;
 }
 
-/** A puzzle author or solver. An author with a `key` has a page of its own. */
+/**
+ * A puzzle author or solver. An author or a solver with a `key` has a page of its own, and a solver
+ * credited on several puzzles carries the same key on each, so the registry joins the records.
+ */
 export interface Party {
   readonly about?: string;
   readonly addresses?: readonly string[];
@@ -788,8 +791,8 @@ export function fact(
 }
 
 /**
- * Builds an author or solver record. An author gets a `key` and a `kind`; what research found
- * goes in `facts`, each with the page that states it.
+ * Builds an author or solver record. An author gets a `key` and a `kind`, and so does a named
+ * solver; what research found goes in `facts`, each with the page that states it.
  *
  * @param {string} [name] - Display name, when known.
  * @param {PartyOptions} [options] - Key, kind, aliases, addresses, profile links and sourced facts.

@@ -310,6 +310,31 @@ function authorProblems(collection: AnyCollection): string[] {
   return problems.map((problem) => `${collection.key}: author ${problem}`);
 }
 
+/**
+ * Checks a solver record: a named solver has a page key, and its kind, prose and links pass the
+ * author checks. A solver known only by an address stays without a key.
+ *
+ * @param {Puzzle} puzzle - The puzzle whose solver to check.
+ * @returns {string[]} One line per failed check, named after the puzzle.
+ */
+function solverProblems(puzzle: Puzzle): string[] {
+  const solver = puzzle.solver();
+  if (solver === undefined) return [];
+  const problems = [
+    ...(solver.name === undefined ||
+    (solver.key !== undefined && /^[a-z0-9]+(-[a-z0-9]+)*$/u.test(solver.key))
+      ? []
+      : ["key is not kebab-case"]),
+    ...(solver.key === undefined || solver.name !== undefined ? [] : ["key has no name"]),
+    ...(solver.kind === undefined || Object.values(PartyKind).includes(solver.kind)
+      ? []
+      : ["kind is unknown"]),
+    ...partyProseProblems(solver),
+    ...partyLinkProblems(solver, [puzzle]),
+  ];
+  return problems.map((problem) => `${puzzle.id()}: solver ${problem}`);
+}
+
 function mutablePartProblem(puzzle: Puzzle): string | undefined {
   const seen = new WeakSet<object>();
   const walk = (value: unknown, path: string): string[] => {
@@ -508,6 +533,67 @@ describe("collection class data", () => {
     expect(registered.filter((collection) => (collection.author.facts?.length ?? 0) < 2)).toEqual(
       [],
     );
+  });
+
+  it("gives every named solver a page key, an about line, sourced facts and one identity", () => {
+    expect(puzzles.flatMap(solverProblems)).toEqual([]);
+    const identity = new Map<string, string>();
+    for (const collection of registered) {
+      if (collection.author.key !== undefined) {
+        identity.set(
+          collection.author.key,
+          JSON.stringify([collection.author.name, collection.author.kind]),
+        );
+      }
+    }
+    for (const puzzle of puzzles) {
+      const solver = puzzle.solver();
+      if (solver?.key === undefined) continue;
+      /* The records of one solver join by key, so they have to agree on who it is. */
+      const who = JSON.stringify([solver.name, solver.kind]);
+      const seen = identity.get(`solver:${solver.key}`);
+      expect(seen ?? who, `${puzzle.id()}: solver ${solver.key}`).toBe(who);
+      identity.set(`solver:${solver.key}`, who);
+      /* A solver key that is also an author key names the same party. */
+      const author = identity.get(solver.key);
+      expect(author ?? who, `${puzzle.id()}: author ${solver.key}`).toBe(who);
+    }
+    const sourced = new Set(
+      puzzles.flatMap((puzzle) =>
+        (puzzle.solver()?.facts?.length ?? 0) > 0 ? [puzzle.solver()?.key] : [],
+      ),
+    );
+    const described = new Set(
+      puzzles.flatMap((puzzle) =>
+        puzzle.solver()?.about === undefined ? [] : [puzzle.solver()?.key],
+      ),
+    );
+    const keys = new Set(puzzles.map((puzzle) => puzzle.solver()?.key).filter(Boolean));
+    expect([...keys].filter((key) => !sourced.has(key) || !described.has(key))).toEqual([]);
+  });
+
+  it("names every way a solver can fail the data gate", () => {
+    const solved = (solver: Party) =>
+      bitcoinPuzzle({
+        id: "fixture/one",
+        address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+        sourceUrl: "https://example.com/puzzle",
+        startedAt: "2026-01-01",
+        solver,
+      });
+
+    expect(solverProblems(solved(party("Fixture", { kind: "team" as never })))).toEqual([
+      "fixture/one: solver key is not kebab-case",
+      "fixture/one: solver kind is unknown",
+    ]);
+    expect(solverProblems(solved(party(undefined, { key: "fixture" })))).toEqual([
+      "fixture/one: solver key has no name",
+    ]);
+    expect(
+      solverProblems(
+        solved(party(undefined, { addresses: ["1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"] })),
+      ),
+    ).toEqual([]);
   });
 
   it("names every way an author can fail the data gate", () => {

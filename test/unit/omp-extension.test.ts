@@ -148,6 +148,16 @@ describe("OMP extension", () => {
     expect(rendered?.text).toBe("Show puzzle b1000/1 forged 1m line");
   });
 
+  it("renders the solver call and executes it against the library", async () => {
+    const { tools } = await registerTools();
+    const tool = tools.get("puzzles_solver");
+
+    expect(tool?.renderCall?.({ key: "lia" }, {}, {})?.text).toBe("Show solver lia");
+    expect(tool?.parameters.safeParse({ key: "" }).success).toBe(false);
+    const result = await tool?.execute("call-solver", { key: "lia" });
+    expect(result?.content[0]?.text).toContain("\tarweave/weave8\tclaimed\t");
+  });
+
   it("executes the verify tool against the library", async () => {
     const { tools } = await registerTools();
     const result = await tools.get("puzzles_verify")?.execute("call-1", { id: "b1000/1" });

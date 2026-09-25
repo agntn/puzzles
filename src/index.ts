@@ -117,11 +117,16 @@ export {
   dataVersion,
   get,
   getAuthor,
+  getSolver,
   requireAuthor,
   requirePuzzle,
+  requireSolver,
   selectPuzzles,
+  solvers,
   stats,
   type AuthorEntry,
+  type SolveEntry,
+  type SolverEntry,
   type CollectionSummary,
   type Dataset,
   type DatasetCollection,
@@ -159,6 +164,7 @@ export {
   PuzzlesError,
   UnknownAuthorError,
   UnknownCollectionError,
+  UnknownSolverError,
 } from "./core/errors.ts";
 
 export {

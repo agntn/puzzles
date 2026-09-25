@@ -1,4 +1,4 @@
-import type { AuthorEntry } from "./dataset.ts";
+import type { AuthorEntry, SolverEntry } from "./dataset.ts";
 import { type Chain, chains, parseChain, sameAddress } from "./chains.ts";
 import type { CollectionSummary, Stats } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
@@ -241,7 +241,8 @@ function formatRedeemScript(script: RedeemScript): string {
 
 function formatParty(party: Party): string {
   const profiles = (party.profiles ?? []).map((item) => `${item.name} ${item.url}`);
-  return [party.name, ...profiles, ...(party.addresses ?? [])]
+  const name = party.key === undefined ? party.name : `${party.name ?? party.key} (${party.key})`;
+  return [name, ...profiles, ...(party.addresses ?? [])]
     .filter((item) => item !== undefined)
     .join(", ");
 }
@@ -456,14 +457,14 @@ export function formatAuthor(entry: AuthorEntry): string {
 }
 
 /**
- * The lines of one author record block: a count line, then one indented line per item.
+ * The lines of one author or solver record block: a count line, then one indented line per item.
  *
  * @param {string} label - The block name.
  * @param {readonly T[]} items - The block's items.
  * @param {(item: T) => string} line - How one item prints.
  * @returns {string[]} `label: N` followed by the items, tab indented.
  */
-function authorBlock<T>(
+function recordBlock<T>(
   label: string,
   items: readonly T[] | undefined,
   line: (item: T) => string,
@@ -485,11 +486,55 @@ export function formatAuthorRecord(entry: AuthorEntry): string {
     `collections: ${entry.collections.join(", ")} (${entry.puzzles} puzzles)`,
     ...field("aliases", author.aliases, (aliases) => aliases.join(", ")),
     ...field("about", author.about),
-    ...authorBlock("profiles", author.profiles, (link) => `${link.name}\t${link.url}`),
-    ...authorBlock("addresses", author.addresses, (address) => address),
-    ...authorBlock(
+    ...recordBlock("profiles", author.profiles, (link) => `${link.name}\t${link.url}`),
+    ...recordBlock("addresses", author.addresses, (address) => address),
+    ...recordBlock(
       "facts",
       author.facts,
+      (item) => `${item.date ?? "-"}\t${item.text}\tsource: ${item.source}`,
+    ),
+  ].join("\n");
+}
+
+/**
+ * Formats a solver as the one discovery row the CLI and the tools share.
+ *
+ * @param {SolverEntry} entry - The solver with its solves.
+ * @returns {string} `key: name (kind), N solves: a, b`, then the collections it also published.
+ */
+export function formatSolver(entry: SolverEntry): string {
+  const { solver } = entry;
+  const kind = solver.kind === undefined ? "" : ` (${solver.kind})`;
+  const solves = entry.solves.length === 1 ? "1 solve" : `${entry.solves.length} solves`;
+  const authored = entry.authored.length === 0 ? "" : `, author of ${entry.authored.join(", ")}`;
+  return `${entry.key}: ${solver.name ?? "unknown"}${kind}, ${solves}: ${entry.solves.map((solve) => solve.id).join(", ")}${authored}`;
+}
+
+/**
+ * One solver's complete record for a model: identity, every solve with its date and prize, the
+ * collections the same party published, channels, addresses and the sourced facts.
+ *
+ * @param {SolverEntry} entry - The solver with its solves.
+ * @returns {string} The record as lines.
+ */
+export function formatSolverRecord(entry: SolverEntry): string {
+  const { solver } = entry;
+  return [
+    `${entry.key}\t${solver.name ?? "unknown"}\t${solver.kind ?? "kind unknown"}`,
+    ...recordBlock(
+      "solves",
+      entry.solves,
+      (solve) =>
+        `${solve.id}\t${solve.status}\t${solve.solvedAt ?? "-"}\t${formatPrize(solve.prize, solve.currency)}`,
+    ),
+    ...(entry.authored.length === 0 ? [] : [`authored: ${entry.authored.join(", ")}`]),
+    ...field("aliases", solver.aliases, (aliases) => aliases.join(", ")),
+    ...field("about", solver.about),
+    ...recordBlock("profiles", solver.profiles, (link) => `${link.name}\t${link.url}`),
+    ...recordBlock("addresses", solver.addresses, (address) => address),
+    ...recordBlock(
+      "facts",
+      solver.facts,
       (item) => `${item.date ?? "-"}\t${item.text}\tsource: ${item.source}`,
     ),
   ].join("\n");

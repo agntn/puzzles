@@ -191,7 +191,11 @@ const { copied, copy } = useCopied();
         </dd>
         <dd v-if="view.solverName || view.solverUrl" class="console-lead">
           <span class="console-tag">Solver</span>
-          <a v-if="view.solverUrl" :href="view.solverUrl" target="_blank" rel="noopener">{{
+          <NuxtLink v-if="view.solverKey" :to="`/solvers/${view.solverKey}`"
+            >{{ view.solverName ?? view.solverKey
+            }}<span class="puzzle-dim"> and what else they solved</span></NuxtLink
+          >
+          <a v-else-if="view.solverUrl" :href="view.solverUrl" target="_blank" rel="noopener">{{
             view.solverName ?? linkText(view.solverUrl)
           }}</a>
           <span v-else>{{ view.solverName }}</span>

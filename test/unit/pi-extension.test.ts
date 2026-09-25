@@ -90,6 +90,16 @@ describe("Pi extension", () => {
     });
   });
 
+  it("shows a solver through the shared executor with the entry as details", async () => {
+    const tool = (await registerTools()).get("puzzles_solver");
+    const result = await tool?.execute("call-5", { key: "dug/2025-1" });
+
+    expect(result?.content[0]?.text.split("\n")[0]).toBe("floflo777\tfloflo777\tperson");
+    expect(result?.details).toMatchObject({
+      solver: { key: "floflo777", collections: ["dug"], authored: [] },
+    });
+  });
+
   it("lists collections through the shared executor", async () => {
     const tool = (await registerTools()).get("puzzles_collections");
     const result = await tool?.execute("call-3", {});

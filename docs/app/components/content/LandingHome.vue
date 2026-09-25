@@ -122,7 +122,7 @@ const activeCollection = computed(() => current.value.collection);
     </LandingFeature>
 
     <LandingFeature
-      title="Nine tools, three hosts, one executor each"
+      title="Eleven tools, three hosts, one executor each"
       to="/guide/agents"
       link="MCP, Pi and OMP"
       :checks="[

@@ -20,7 +20,7 @@ describe("tool discovery in a fresh process", () => {
           path.join(extensions, "puzzles.ts"),
           `import "../../../dist/_chunks/${chunk}";
 export default function extension(api) {
-  for (const name of ["puzzles_show", "puzzles_stats", "a", "b", "c", "d", "e", "f", "g"]) {
+  for (const name of ["puzzles_show", "puzzles_stats", "a", "b", "c", "d", "e", "f", "g", "h", "i"]) {
     api.registerTool({ name, async execute() {
       return { content: [{ type: "text", text:
         "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH Total: 1 puzzles in 1 collections"

@@ -101,6 +101,7 @@ const main = defineCommand({
     list: () => command(() => import("./commands/list.ts")),
     mcp: () => command(loadMcpCommand),
     show: () => command(() => import("./commands/show.ts")),
+    solvers: () => command(() => import("./commands/solvers.ts")),
     stats: () => command(() => import("./commands/stats.ts")),
     verify: () => command(() => import("./commands/verify.ts")),
   },

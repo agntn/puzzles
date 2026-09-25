@@ -119,6 +119,7 @@ export default defineNuxtConfig({
         "lucide:shield-alert",
         "lucide:split",
         "lucide:terminal",
+        "lucide:trophy",
         "lucide:user-round",
         "lucide:users",
         "lucide:wallet",

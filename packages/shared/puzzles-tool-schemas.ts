@@ -36,6 +36,7 @@ export interface PuzzleToolFacts {
     readonly id: TextLimits;
     readonly limit: IntegerLimits;
     readonly offset: IntegerLimits;
+    readonly solver: TextLimits;
     readonly status: Described;
     readonly withPubkey: Described;
   };
@@ -59,6 +60,8 @@ export function puzzleToolSchemas(facts: PuzzleToolFacts) {
     collections: Type.Object({}),
     authors: Type.Object({}),
     author: Type.Object({ key: Type.String(parameters.author) }),
+    solvers: Type.Object({}),
+    solver: Type.Object({ key: Type.String(parameters.solver) }),
     show: Type.Object({ id: puzzleId }),
     hints: Type.Object({ id: puzzleId }),
     list: Type.Object({

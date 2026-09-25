@@ -41,6 +41,8 @@ export interface PuzzleView extends LandingSample {
   readonly assetSource: string | undefined;
   readonly hints: readonly HintRow[];
   readonly solverName: string | undefined;
+  /** The solver's page key, when the record names the solver. */
+  readonly solverKey: string | undefined;
   readonly solverUrl: string | undefined;
   readonly claimUrl: string | undefined;
   readonly json: string;
@@ -207,6 +209,7 @@ export async function toPuzzleView(
       ...puzzle.hints().map((hint) => ({ ...hint, shared: false })),
     ],
     solverName: solver?.name,
+    solverKey: solver?.key,
     solverUrl: solver?.profiles?.[0]?.url,
     claimUrl: puzzle.claimExplorerUrl(),
     json: JSON.stringify(puzzle.toJSON(), null, 2),

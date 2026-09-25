@@ -104,6 +104,28 @@ describe("puzzles MCP server", () => {
     );
   });
 
+  it("lists solvers and shows one by solver key or puzzle identifier", async () => {
+    const rows = firstText(await client.callTool({ name: "puzzles_solvers", arguments: {} })).split(
+      "\n",
+    );
+    expect(rows).toContain("pogo: pogo, 2 solves: arweave/weave1, arweave/weave2");
+
+    const byPuzzle = firstText(
+      await client.callTool({ name: "puzzles_solver", arguments: { key: "movie_enigma" } }),
+    ).split("\n");
+    expect(byPuzzle[0]).toBe("rabbidbird\trabbidbird\tkind unknown");
+    expect(byPuzzle).toContain("\tmovie_enigma\tsolved\t2026-09-08 01:32:56\t0.001 BTC");
+    expect(byPuzzle.at(-1)).toMatch(
+      /\tsource: https:\/\/github\.com\/floflo777\/open-crypto-puzzles\/issues\/24$/u,
+    );
+
+    const missing = await client.callTool({ name: "puzzles_solver", arguments: { key: "nobody" } });
+    expect(missing.isError).toBe(true);
+    expect(firstText(missing)).toMatch(
+      /^puzzles_solver failed: Unknown solver: nobody\. Known solvers: pogo, /u,
+    );
+  });
+
   it("shows one puzzle", async () => {
     const result = await client.callTool({
       name: "puzzles_show",

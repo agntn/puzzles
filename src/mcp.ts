@@ -11,6 +11,8 @@ import { puzzleToolSchemas } from "../packages/shared/puzzles-tool-schemas.ts";
 import {
   authorsTool,
   authorTool,
+  solversTool,
+  solverTool,
   balanceTool,
   collectionsTool,
   facts,
@@ -44,6 +46,12 @@ const tools: readonly ToolDefinition[] = [
     ...facts.tools.author,
     inputSchema: schemas.author,
     execute: (args) => authorTool(args["key"] as string),
+  },
+  { ...facts.tools.solvers, inputSchema: schemas.solvers, execute: () => solversTool() },
+  {
+    ...facts.tools.solver,
+    inputSchema: schemas.solver,
+    execute: (args) => solverTool(args["key"] as string),
   },
   {
     ...facts.tools.show,

@@ -404,6 +404,33 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     expect(missing.stderr).toMatch(/^Unknown author: nobody\. Known authors: tiamat, /u);
   });
 
+  it("lists solvers and shows one, by solver key or puzzle identifier", async () => {
+    const rows = (await puzzles("solvers")).split("\n");
+    expect(rows).toContain(
+      "retired-coder: RetiredCoder (person), 4 solves: b1000/120, b1000/125, b1000/130, b1000/135",
+    );
+    expect(rows).toContain(
+      "wickex: Wickex (person), 1 solve: iamabananaamaa/gif, author of wickex",
+    );
+
+    const record = (await puzzles("solvers", "b1000/135")).split("\n");
+    expect(record[0]).toBe("retired-coder\tRetiredCoder\tperson");
+    expect(record).toContain("\tb1000/130\tsolved\t2024-09-23 08:13:37\t13 BTC");
+
+    const entry = await json<{ readonly key: string; readonly authored: readonly string[] }>(
+      "solvers",
+      "iamabananaamaa",
+      "--json",
+    );
+    expect(entry).toMatchObject({ key: "iamabananaamaa", authored: ["iamabananaamaa"] });
+
+    const missing = await failure("solvers", "b1000/66");
+    expect(missing.code).toBe(1);
+    expect(missing.stderr).toMatch(
+      /^Unknown solver: b1000\/66\. b1000\/66 knows its solver by address only\. Known solvers: pogo, /u,
+    );
+  });
+
   it("prints every status a collection has puzzles in", async () => {
     const rows = (await puzzles("collections")).split("\n");
 
