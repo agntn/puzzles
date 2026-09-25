@@ -449,6 +449,7 @@ describe("collection class data", () => {
         "quizchain/6",
         "quizchain/7",
         "quizchain/8",
+        "quizchain/9",
         "satoshi_birthday_quiz",
       ],
     );

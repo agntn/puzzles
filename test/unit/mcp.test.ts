@@ -55,7 +55,7 @@ describe("puzzles MCP server", () => {
   it("reports dataset statistics", async () => {
     const result = await client.callTool({ name: "puzzles_stats", arguments: {} });
 
-    expect(firstText(result)).toContain("Total: 358 puzzles in 24 collections");
+    expect(firstText(result)).toContain("Total: 359 puzzles in 24 collections");
   });
 
   it("lists collections with the same rows as the CLI", async () => {
