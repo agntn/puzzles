@@ -1,4 +1,5 @@
 import { resolve } from "node:path";
+import { puzzlesTheme } from "./shiki-theme";
 
 /** Bundled from the checkout's sources: a deploy needs neither dist/ nor the root node_modules. */
 const repoRoot = resolve(import.meta.dirname, "..");
@@ -191,10 +192,11 @@ export default defineNuxtConfig({
     build: {
       markdown: {
         highlight: {
+          // One theme of CSS variables for both modes; app.css gives the variables their light and dark values.
           theme: {
-            default: "github-light",
-            light: "github-light",
-            dark: "vitesse-dark",
+            default: puzzlesTheme,
+            light: puzzlesTheme,
+            dark: puzzlesTheme,
           },
         },
       },

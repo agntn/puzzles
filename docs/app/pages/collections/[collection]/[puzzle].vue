@@ -83,6 +83,18 @@ const description = computed(() => {
   return `${outcome} ${prize} on a ${chainName(view.chain)} address, ${view.address}. Part of ${entry.value?.title ?? collection.value}.`;
 });
 
+/** The lead under the title: the description without the full address, which the dossier prints with its node. */
+const lead = computed(() => {
+  const view = data.value?.view;
+  if (view === undefined) return "";
+  const outcome = OUTCOME[view.status](view, view.solvedAt?.slice(0, 10) ?? "an unknown date");
+  const prize = view.prize === "-" ? "No prize recorded" : view.prize;
+  return `${outcome} ${prize} on ${chainName(view.chain)}.`;
+});
+
+/** The part of the id after the collection key. */
+const name = computed(() => String(route.params.puzzle ?? ""));
+
 useSeo({
   title: seoTitle.value,
   description: description.value,
@@ -107,30 +119,69 @@ defineOgImage(
 
 <template>
   <div class="puzzles-landing">
-    <header
-      class="puzzles-hero mx-auto w-full max-w-[var(--ui-container)] px-8 pt-14 pb-8 sm:px-12 lg:px-16"
-    >
-      <p class="puzzles-eyebrow">
-        <NuxtLink to="/collections" class="hover:text-highlighted">collections</NuxtLink>
-        <span class="text-dimmed">/</span>
-        <NuxtLink v-if="entry" :to="entry.to" class="hover:text-highlighted">{{
-          entry.title
-        }}</NuxtLink>
-      </p>
-      <h1
-        class="mt-4 font-mono text-3xl leading-[1.1] font-medium tracking-tight break-all text-highlighted sm:text-4xl"
-      >
-        {{ title }}
-      </h1>
-      <p v-if="data" class="mt-4 max-w-2xl text-base leading-7 break-words text-muted">
-        {{ description }}
-      </p>
-    </header>
+    <header class="puzzles-hero hero-page puzzle-hero">
+      <div class="hero-zone">
+        <span class="hero-cross hero-cross-tl" aria-hidden="true">+</span>
+        <span class="hero-cross hero-cross-tr" aria-hidden="true">+</span>
+        <span class="hero-bracket hero-bracket-l" aria-hidden="true" />
+        <span class="hero-bracket hero-bracket-r" aria-hidden="true" />
 
-    <section class="puzzles-section">
-      <div class="mx-auto w-full max-w-[var(--ui-container)] px-8 py-10 sm:px-12 lg:px-16">
+        <p class="console-id">
+          <span class="console-id-tag">ID</span>
+          <NuxtLink to="/collections" class="puzzle-crumb">collections</NuxtLink>
+          <span class="console-id-sep" aria-hidden="true">/</span>
+          <NuxtLink v-if="entry" :to="entry.to" class="puzzle-crumb">{{ entry.title }}</NuxtLink>
+        </p>
+
+        <h1 class="hero-title puzzle-title">
+          <span class="puzzle-title-key">{{ collection }}/</span><wbr /><span
+            class="puzzle-title-name"
+            >{{ name }}</span
+          >
+        </h1>
+        <p v-if="data" class="hero-lead">{{ lead }}</p>
+      </div>
+
+      <div class="hero-instrument hero-instrument-keep">
+        <svg class="hero-circuit" viewBox="0 0 160 56" aria-hidden="true">
+          <path class="hero-circuit-rail" d="M80 0V16L96 32V56" />
+          <path class="hero-circuit-live" d="M80 0V16L96 32V56" pathLength="1" />
+          <path class="hero-circuit-seg" d="M96 38V48" />
+          <rect class="hero-circuit-node" x="92.5" y="52.5" width="7" height="7" />
+        </svg>
+        <span class="hero-circuit-tag" aria-hidden="true">get(id)</span>
         <PuzzlePage :puzzle="id" />
       </div>
-    </section>
+    </header>
   </div>
 </template>
+
+<style scoped>
+.puzzle-hero {
+  padding-top: 56px;
+}
+.puzzle-crumb {
+  color: var(--ui-text-muted);
+}
+.puzzle-crumb:hover {
+  color: var(--console-accent);
+}
+/* The id in mono like the logo: the collection key dimmed, the puzzle's name bright. */
+.puzzle-title {
+  font-family: var(--font-mono);
+  font-size: clamp(1.75rem, 1rem + 2.4vw, 2.75rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  color: var(--ui-text-highlighted);
+}
+/* Break after the slash, never inside the key or the name. */
+.puzzle-title > span {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.puzzle-title .puzzle-title-key {
+  color: var(--ui-text-dimmed);
+}
+</style>

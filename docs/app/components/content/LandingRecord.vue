@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { addressLiteral, exportName, factoryName, statusLiteral } from "../../utils/samples";
 import type { LandingSample } from "../../utils/samples";
+import { LANDING_STATIC } from "../../utils/landing";
 import { clip, shorten } from "../../utils/format";
 
 const props = defineProps<{ sample: LandingSample }>();
@@ -43,9 +44,13 @@ const fileName = computed(
     `src/collections/${props.sample.collection}/${props.sample.id.replace(/^[^/]+\//u, "").replaceAll("_", "-")}.ts`,
 );
 
-/** The pieces the record imports: the factory, the address builder and the key builders it uses. */
-const imports = computed(() => {
-  const sample = props.sample;
+/**
+ * The pieces a record imports: the factory, the address builder and the key builders it uses.
+ *
+ * @param {LandingSample} sample - The record on screen.
+ * @returns {string} The names, sorted and joined as the import line lists them.
+ */
+function importsOf(sample: LandingSample): string {
   const names = new Set<string>([factoryName(sample.chain), sample.kind]);
   if (sample.redeemScript !== undefined) names.add("redeemScript");
   if (sample.status !== "unsolved") names.add("Status");
@@ -55,7 +60,7 @@ const imports = computed(() => {
       names.add(builder);
   }
   return [...names].sort((a, b) => a.localeCompare(b)).join(", ");
-});
+}
 
 /**
  * Long hex values and keys are shortened for the panel; the copy button hands out the whole value.
@@ -82,8 +87,13 @@ function field(key: string, value: string, cls: string, full = value): Line {
   };
 }
 
-const lines = computed<Line[]>(() => {
-  const sample = props.sample;
+/**
+ * The module's lines for one record, as the panel prints them.
+ *
+ * @param {LandingSample} sample - The record.
+ * @returns {Line[]} One line per row of the literal.
+ */
+function linesOf(sample: LandingSample): Line[] {
   const address = addressLiteral(sample);
   const source = `"${sample.source}"`;
   const rows: Line[] = [
@@ -92,7 +102,7 @@ const lines = computed<Line[]>(() => {
       segments: [
         seg("import", "tok-kw"),
         seg(" { "),
-        seg(imports.value, "", true),
+        seg(importsOf(sample), "", true),
         seg(" } "),
         seg("from", "tok-kw"),
         seg(" "),
@@ -140,7 +150,15 @@ const lines = computed<Line[]>(() => {
   }
   rows.push({ key: "close", segments: [seg("});")] });
   return rows;
-});
+}
+
+const lines = computed(() => linesOf(props.sample));
+
+/**
+ * Every record the walk shows, drawn invisibly in the same cell as the one on screen: the cell takes
+ * the tallest at any width, so the panel keeps one height and the page doesn't jump on a rotation.
+ */
+const sizers = LANDING_STATIC.map((sample) => ({ id: sample.id, lines: linesOf(sample) }));
 
 /**
  * Splits a value where code breaks naturally, after a slash and before a chained call, so a
@@ -199,9 +217,17 @@ const text = computed(() =>
           {{ copied === "record" ? "copied" : "copy" }}
         </button>
       </p>
-      <pre
-        class="console-snippet console-lines"
-      ><code><span v-for="line in lines" :key="line.key"><template v-for="(segment, index) in line.segments" :key="index"><Transition v-if="segment.roll" name="puzzles-roll" mode="out-in"><span :key="segment.text" class="puzzles-roll-slot"><span :class="segment.cls"><template v-for="(piece, part) in pieces(segment.text)" :key="part"><wbr v-if="part > 0" />{{ piece }}</template></span>{{ segment.tail }}</span></Transition><span v-else :class="segment.cls">{{ segment.text }}</span></template></span></code></pre>
+      <div class="record-stack">
+        <pre
+          v-for="sizer in sizers"
+          :key="sizer.id"
+          class="console-snippet console-lines record-sizer"
+          aria-hidden="true"
+        ><code><span v-for="line in sizer.lines" :key="line.key"><template v-for="(segment, index) in line.segments" :key="index"><span :class="segment.cls"><template v-for="(piece, part) in pieces(segment.text)" :key="part"><wbr v-if="part > 0" />{{ piece }}</template>{{ segment.tail }}</span></template></span></code></pre>
+        <pre
+          class="console-snippet console-lines"
+        ><code><span v-for="line in lines" :key="line.key"><template v-for="(segment, index) in line.segments" :key="index"><Transition v-if="segment.roll" name="puzzles-roll" mode="out-in"><span :key="segment.text" class="puzzles-roll-slot"><span :class="segment.cls"><template v-for="(piece, part) in pieces(segment.text)" :key="part"><wbr v-if="part > 0" />{{ piece }}</template></span>{{ segment.tail }}</span></Transition><span v-else :class="segment.cls">{{ segment.text }}</span></template></span></code></pre>
+      </div>
     </div>
 
     <footer class="console-footer console-footer-plain">
@@ -223,9 +249,57 @@ const text = computed(() =>
 </template>
 
 <style scoped>
+/* One line everywhere, so the panel has one height for every record: the path, each code line and the footer
+   end in an ellipsis instead of wrapping. The copy button still hands out every value whole. */
 .record-file {
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+}
+.record-file :deep(.puzzles-roll-slot) {
+  display: inline;
+}
+.record-file :deep(wbr) {
+  display: none;
+}
+.record-stack > pre > code > span {
+  overflow: hidden;
+  padding-left: calc(2.25em + 1em) !important;
+  text-indent: 0 !important;
+  text-overflow: ellipsis;
+  white-space: pre !important;
+}
+.record-stack > pre > code > span :deep(*) {
+  white-space: pre !important;
+  overflow-wrap: normal !important;
+}
+.record-stack :deep(wbr) {
+  display: none;
+}
+.record-stack > pre > code > span::before {
+  margin-left: calc(-2.25em - 1em);
+}
+.record-stack :deep(.puzzles-roll-slot) {
+  display: inline;
+}
+.console-footer-plain {
+  flex-wrap: nowrap;
+}
+/* The visible file and an invisible copy of every walked record share one grid cell. */
+.record-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.record-stack > pre {
+  grid-area: 1 / 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+}
+.record-sizer {
+  visibility: hidden;
+  pointer-events: none;
 }
 .record-body {
   padding: 14px 20px 16px;
@@ -235,8 +309,10 @@ const text = computed(() =>
 }
 .record-link {
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ui-text-highlighted);
-  overflow-wrap: anywhere;
 }
 .record-link > span {
   color: var(--ui-text-dimmed);

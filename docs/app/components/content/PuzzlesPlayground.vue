@@ -31,6 +31,7 @@ import {
   transactionTicks,
 } from "../../utils/record";
 import { statusCountLabels } from "../../../../src/core/utils.ts";
+import { jsonTokens, shellTokens } from "../../utils/tokens";
 import {
   fetchErrorData,
   formatPrize,
@@ -750,7 +751,8 @@ const responseTitle = computed(() => {
               {{ copiedKey === "cli" ? "copied" : "copy" }}
             </button>
           </p>
-          <pre class="console-snippet"><span>$ </span>{{ cliLine }}</pre>
+          <!-- prettier-ignore -->
+          <pre class="console-snippet"><code><span class="playground-prompt">$ </span><span v-for="(token, index) in shellTokens(cliLine)" :key="index" :class="token.cls">{{ token.text }}</span></code></pre>
         </div>
         <div class="playground-column">
           <p class="console-label console-rule-title">
@@ -770,7 +772,8 @@ const responseTitle = computed(() => {
               {{ copiedKey === "tool" ? "copied" : "copy" }}
             </button>
           </p>
-          <pre class="console-snippet">{{ toolCall }}</pre>
+          <!-- prettier-ignore -->
+          <pre class="console-snippet"><code><span v-for="(token, index) in jsonTokens(toolCall)" :key="index" :class="token.cls">{{ token.text }}</span></code></pre>
         </div>
       </div>
 
@@ -791,6 +794,16 @@ const responseTitle = computed(() => {
       </footer>
     </form>
 
+    <!-- The call runs from the request down into the response, the way the zone's circuit runs into the request. -->
+    <div class="playground-link" aria-hidden="true">
+      <svg :key="cliLine" class="hero-circuit" viewBox="0 0 160 56">
+        <path class="hero-circuit-rail" d="M80 0V16L96 32V56" />
+        <path class="hero-circuit-live" d="M80 0V16L96 32V56" pathLength="1" />
+        <path class="hero-circuit-seg" d="M96 38V48" />
+        <rect class="hero-circuit-node" x="92.5" y="52.5" width="7" height="7" />
+      </svg>
+      <span class="hero-circuit-tag">answer</span>
+    </div>
     <section class="tool-console console-wide" aria-live="polite">
       <span class="console-cross console-cross-tl" aria-hidden="true">+</span>
       <span class="console-cross console-cross-br" aria-hidden="true">+</span>
@@ -848,7 +861,9 @@ const responseTitle = computed(() => {
               :icon="CHAIN_ICONS[answer.view.chain] ?? 'i-lucide-link'"
             />
             <div class="console-name">
-              <span class="console-label">Record / {{ answer.view.collection }}</span>
+              <span class="console-label"
+                >Record / <span class="console-label-key">{{ answer.view.collection }}</span></span
+              >
               <h3 class="console-name-mono">{{ answer.view.id }}</h3>
               <p class="console-aliases">
                 <span class="console-chain"
@@ -1295,7 +1310,18 @@ const responseTitle = computed(() => {
 <style scoped>
 .playground {
   display: grid;
-  gap: 40px;
+  gap: 0;
+}
+/* The link between the two instruments: the zone's circuit, standing on its own 56 px of height. */
+.playground-link {
+  position: relative;
+  height: 56px;
+}
+.playground-link > .hero-circuit {
+  bottom: 0;
+}
+.playground-link > .hero-circuit-tag {
+  bottom: 18px;
 }
 .playground-columns {
   display: grid;
@@ -1337,6 +1363,9 @@ const responseTitle = computed(() => {
 .playground .console-note {
   margin-top: 16px;
   line-height: 1.8;
+}
+.playground-prompt {
+  color: var(--ui-text-dimmed);
 }
 .playground .console-snippet {
   padding: 12px 16px;

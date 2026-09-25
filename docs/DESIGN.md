@@ -4,7 +4,7 @@ The site presents records and tools, not a simulated terminal. Use real identifi
 
 ## Scope and source of truth
 
-This document records the accepted visual direction. [app/app.css](app/app.css) owns shared tokens and the grammar every instrument shares: the clipped shell, the `console-*` labels and rules, the scan line, the corner crosses, the ID bar's tag, file number and hatched mark, the ruler with its cursor, the subject band with its crosses grid, the dashed readout with its circuit link, rows and tick gauge, the leads with their dotted leaders and nodes, the address node, the rule titles and the copy buttons, chips and snippets of the playground. [ConsoleReticle.vue](app/components/content/ConsoleReticle.vue) is the instrument icon and [ConsoleResponse.vue](app/components/content/ConsoleResponse.vue) the `03 Full tool response` row with its dialog; every instrument uses both instead of repeating the SVG or the modal. The previous and next buttons under the landing instruments that walk the samples are `.console-controls` in `app.css`. [LandingRecord.vue](app/components/content/LandingRecord.vue) owns the record file, described under [Record file](#record-file). [LandingCustom.vue](app/components/content/LandingCustom.vue) owns the custom collection files, described under [Custom collection](#custom-collection). [LandingRegistry.vue](app/components/content/LandingRegistry.vue) owns the registry map, described under [Registry map](#registry-map). [LandingVerify.vue](app/components/content/LandingVerify.vue) owns the landing's verification console: the sample's verdict on the reticle with its shield glyph, and the three calls behind it in a dashed readout, each with the value it returned, a square marker (filled in the accent for a value, hollow for nothing, red for a mismatch) and one line on what the value means. [AuthorFacts.vue](app/components/content/AuthorFacts.vue) owns what only the author dossier has: its bar and footer, the channels and addresses band, the log on `UTimeline`. [CollectionFacts.vue](app/components/content/CollectionFacts.vue) owns the collection dossier's own parts, described under [Collection dossier](#collection-dossier), and [PuzzleFacts.vue](app/components/content/PuzzleFacts.vue) the puzzle dossier's, described under [Puzzle dossier](#puzzle-dossier). [HintLog.vue](app/components/content/HintLog.vue) is the hint log both dossiers print. [AuthorList.vue](app/components/content/AuthorList.vue) and [CollectionList.vue](app/components/content/CollectionList.vue) are the two rosters, described under [Rosters](#rosters). [PuzzlesPlayground.vue](app/components/content/PuzzlesPlayground.vue) owns the playground's two instruments, described under [Playground](#playground). Change those sources rather than adding a second theme file. Other panels share the typography, palette and flat surfaces, but do not all need clipped corners or targeting marks.
+This document records the accepted visual direction. [app/app.css](app/app.css) owns shared tokens and the grammar every instrument shares: the clipped shell, the `console-*` labels and rules, the scan line, the corner crosses, the ID bar's tag, file number and hatched mark, the ruler with its cursor, the subject band with its crosses grid, the dashed readout with its circuit link, rows and tick gauge, the leads with their dotted leaders and nodes, the address node, the rule titles and the copy buttons, chips and snippets of the playground. [ConsoleReticle.vue](app/components/content/ConsoleReticle.vue) is the instrument icon and [ConsoleResponse.vue](app/components/content/ConsoleResponse.vue) the `03 Full tool response` row with its dialog; every instrument uses both instead of repeating the SVG or the modal. The previous and next buttons under the landing instruments that walk the samples are `.console-controls` in `app.css`. [LandingRecord.vue](app/components/content/LandingRecord.vue) owns the record file, described under [Record file](#record-file). [LandingCustom.vue](app/components/content/LandingCustom.vue) owns the custom collection files, described under [Custom collection](#custom-collection). [LandingRegistry.vue](app/components/content/LandingRegistry.vue) owns the registry map, described under [Registry map](#registry-map). [LandingHero.vue](app/components/content/LandingHero.vue) owns the hero zone, [LandingLock.vue](app/components/content/LandingLock.vue) the lock instrument under it and [LandingStart.vue](app/components/content/LandingStart.vue) the closing section, described under [Hero](#hero), [Lock instrument](#lock-instrument) and [Start](#start). The ID strip (`console-id`), the boxed actions (`console-action`) and the install line (`console-install`) live in `app.css`, because the hero, the start section and the [footer](#footer) share them. The `--console-*` palette sits on `:root` for the same reason. [tokens.ts](app/utils/tokens.ts) colors TypeScript lines with `tok-*` for every snippet written in a component. [LandingVerify.vue](app/components/content/LandingVerify.vue) owns the landing's verification console: the verdict on the reticle with its shield glyph, and the three calls behind it in one readout, each row the call, the value it returned with a square marker (filled in the accent for a value, hollow for nothing, red for a mismatch) and one sentence on what it means. Values stay short enough for one line (`{ verified: true }`, `{ verified: false, unavailable }`, `{ verified: false, error }`); the derived address or the error goes in the sentence. A container query on the readout (`width < 30rem`) puts every value under its call together, never one row alone; the rows are grids, since a flex row let the sentence ride up beside the call. [AuthorFacts.vue](app/components/content/AuthorFacts.vue) owns what only the author dossier has: its bar and footer, the channels and addresses band, the log on `UTimeline`. [CollectionFacts.vue](app/components/content/CollectionFacts.vue) owns the collection dossier's own parts, described under [Collection dossier](#collection-dossier), and [PuzzleFacts.vue](app/components/content/PuzzleFacts.vue) the puzzle dossier's, described under [Puzzle dossier](#puzzle-dossier). [HintLog.vue](app/components/content/HintLog.vue) is the hint log both dossiers print. [AuthorList.vue](app/components/content/AuthorList.vue) and [CollectionList.vue](app/components/content/CollectionList.vue) are the two rosters, described under [Rosters](#rosters). [PuzzlesPlayground.vue](app/components/content/PuzzlesPlayground.vue) owns the playground's two instruments, described under [Playground](#playground). Change those sources rather than adding a second theme file. Other panels share the typography, palette and flat surfaces, but do not all need clipped corners or targeting marks.
 
 Reference views:
 
@@ -23,6 +23,10 @@ Use the restrained instrument geometry of Person of Interest and Destiny from St
 - The existing amber halo at the page top, hero and OG image stays. It does not justify glow on cards, icons or buttons.
 - No decorative tabs, executor diagrams, fake window controls or invented activity indicators.
 - No entrance fade on the whole card. Motion belongs to a change in data, not to decoration running forever.
+- People read these panels. Prose goes in Figtree at 14 to 15 px and values at 13 px or more. A new layer has to carry data or it goes. A panel that needs a legend for every mark has too many marks.
+- An identifier inside an uppercase label keeps its case: `Collection / zden`, not `COLLECTION / ZDEN`. Wrap it in `.console-label-key` from `app.css`; chain names and address kinds are labels and stay uppercase.
+- Every instrument's bar carries a tag (`Call`, `File`, `ID`, `Start`) before its title, and every footer is `console-footer-plain`, sentence case. Where a response row sits above the footer, the two share one edge.
+- The theme comes from the library's domain: bounties, keys, locks, time on chain. A diagram of the implementation is not a hero.
 
 A request to darken the border changes the border. It does not reopen the font, geometry or layout.
 
@@ -64,14 +68,15 @@ This is a compact panel scale, not the body type scale for documentation. Do not
 
 ## Panel anatomy
 
-1. **Header:** `puzzles_show` and `MCP · Pi · OMP` on one row. The tinted background follows the clipped corner.
-2. **Input:** small `01` marker, `Input / id`, actual identifier and a quiet directional mark.
-3. **Summary:** `02`, label and textual status. Below it, the instrument icon sits beside collection, identifier and chain/address kind.
-4. **Metrics:** prize and transaction count in two columns. One top and bottom rule, one internal divider. No nested cards.
-5. **Address:** full address, wrapped as needed, with two short corner brackets. A quiet `[ target ]` annotation is enough.
-6. **Metadata:** public key availability and start date in aligned rows. Unknown values remain explicit.
-7. **Response action:** `03` and a full-width button opening the complete response.
-8. **Footer:** truthful locality/network information and previous/next controls.
+The landing's small instruments, the tool console ([LandingToolCall.vue](app/components/content/LandingToolCall.vue)), the verification console ([LandingVerify.vue](app/components/content/LandingVerify.vue)) and the author card ([LandingAuthor.vue](app/components/content/LandingAuthor.vue)), share one anatomy, the dossier's in small:
+
+1. **Bar:** a tag, the call with its argument (`puzzles_show("b1000/71")`, `verify("…")`) or the author's key and file number, the meta, the hatched mark. One line for every sample: the title ends in an ellipsis with the whole call in a `UTooltip`, the meta never wraps and goes below 640 px. Hosts that don't fit the bar move to the footer (`MCP · Pi · OMP / no network`). The argument as a full JSON object broke the bar onto two or three lines for most ids.
+2. **Ruler** with the cursor, corner crosses on the shell.
+3. **Subject band** on the crosses grid: the reticle with the chain, verdict or author glyph, the label with the key in its own case, the name, one line of chain and address kind or one sentence.
+4. **Readout** under the subject, four or five rows at most. The tool console prints prize (accent while open), address shortened with a `UTooltip`, public key and one `On chain` row with the transaction count and start date; the author card its collections as links, puzzles with the open count in the accent, the years active and a tick gauge, all computed from the static facts.
+5. **Response row** where the instrument has one, then the footer, sentence case.
+
+Each of them stays within about 40 px of the text column beside it at 1440 and 1024 px; measure both with `getBoundingClientRect()` before handing a change over. Two readout rows merged into one and the arguments moved into the bar took the tool console from 543 to 438 px.
 
 The shell is `width: 100%`, capped at `35rem`, with 1 px padding. Two clipped pseudo-elements provide the outer line and inner fill. The outer cut is 16 px; the header uses 15 px to align inside it. Keep decoration non-interactive and its stacking context isolated.
 
@@ -117,6 +122,10 @@ The reticle is keyed by record id. The scan increments only when the id changes.
 
 The playground is two instruments of the dossier family stacked at full width, never side by side: the dossier's readout and bands need the width, and a 2/5 column squeezed them.
 
+The page ([playground.vue](app/pages/playground.vue)) opens with the landing's hero zone, from the shared `hero-*` classes in `app.css`: the ID strip `playground / @agntn/puzzles v…`, the title broken after its first sentence on wide screens, one sentence, three readouts (the tools from `facts`, the collections from the manifest, the one network call) and the verification note as a line of the zone with a `Note` tag. The note had been a callout, a box with its own frame inside the zone's frame, and it didn't sit in the zone. The zone runs into the request through the `call` circuit, the request into the response through the `answer` circuit (`.playground-link`), which draws again on every new call. Everything under the zone reads from the left; `.hero-instrument` resets the zone's centering, and `.hero-instrument-keep` keeps the instruments on a phone, where the landing hides its lock.
+
+The CLI line and the tool JSON are colored with `shellTokens` and `jsonTokens` from [tokens.ts](app/utils/tokens.ts), the same `tok-*` palette as everywhere. The tokens sit in a `<code>`: `.console-snippet > span` colors its direct children and would win over `tok-*`.
+
 1. **Request:** bar with the `CALL` tag, the tool name and its file number among the eight operations, the hosts as meta and the hatched mark; the ruler with one cursor sweep on load. One band in two columns: the operations as leads (tag, tool name, leader, node; the pressed one gets the accent) with the chosen tool's description from `facts` under them, and the input as a dashed readout whose rows hold the form controls, followed by the sample chips and the operation's note. A second band, also in two columns, prints the same call as a CLI line and as the JSON an MCP client sends, each under a rule title with its copy button. The footer carries the permalink as an arrow link and the meta `every state is a link`.
 2. **Response:** bar with the operation's tag, the call as `puzzles_show("b1000/71")` and a truthful meta (the status, the match count, the error name). The ruler's cursor sweeps once per answer and the scan line crosses the subject band once per answer. A `show`, `verify`, `balance`, `author` and `stats` answer fills the subject band: reticle with the chain, verdict or author kind glyph, label, name and one sentence on the left, the dashed readout on the right. A record adds its literal under the sentence, factory, address builder, status and key chain colored with the landing's `tok-*` classes, long values shortened on screen and copied whole; the block wraps and never scrolls. The readout's gauge shows one tick per transaction for a record and one tick per puzzle for the totals, the open ones in the accent. A record adds a trail band: page, explorer and source as leads, the address with its node and the balance line. A `list`, `collections` and `authors` answer is rows with a leader to the last column. An error fills the subject band alone. The `03 Full tool response` row and the footer with its arrow links, locality and the measured milliseconds close the instrument.
 
@@ -132,8 +141,12 @@ A collection page opens with a dossier on the shared console shell (`tool-consol
 2. **Subject band:** reticle with the collection's icon from `puzzles.ts`, the `Collection` label, the display title, key and chains, the blurb. The readout has three rows like the author's: author as a link, prize recorded, still unsolved in the accent (`none` in plain text when nothing is open), and the tick gauge, one tick per puzzle.
 3. **Census:** one counter per status in record order, then public and private keys after a brighter divider. Each counter is a 10 px label, an 18 px tabular number with its share as a dimmed percent, and a 2 px bar of that share; the unsolved bar is in the accent, like the open ticks. The bars grow from the left once on load.
 4. **Access:** leads for `getCollection("<key>")`, the sample in the playground and, for more than one puzzle, the list in the playground.
-5. **Hints:** only when the collection carries shared hints. Each entry is the dossier log's grid: date and time on the left, the kind tag and text in Figtree 14 px, then `Source` and `Confirm` leads. A lead shows host, path and query on one line with an ellipsis and the full URL in a `UTooltip`; a confirmation with a description shows the description and its host. Below 640 px the date goes above the text and the leads stay on one line.
+5. **Hints:** only when the collection carries shared hints. The source and the confirmation share one row of `Source` and `Confirm` tags, the confirmation as its host with the description in a `UTooltip`; two full lead rows per hint made twelve hints half the page. Each entry is the dossier log's grid: date and time on the left, the kind tag and text in Figtree 14 px, then `Source` and `Confirm` leads. A lead shows host, path and query on one line with an ellipsis and the full URL in a `UTooltip`; a confirmation with a description shows the description and its host. Below 640 px the date goes above the text and the leads stay on one line.
 6. **Footer:** arrow links to the author and to all collections, the locality meta and the data version in three blocks.
+
+## Puzzle page header
+
+A puzzle page ([[puzzle].vue](app/pages/collections/[collection]/[puzzle].vue)) opens with the hero zone like the landing and the playground: the `console-id` strip with `collections / <collection title>` as links, the id as the title in mono with the collection key dimmed and the name bright, one sentence on the outcome and the prize, and the `get(id)` circuit into the dossier. The sentence leaves the address out, since the dossier prints it with its node; the SEO description keeps it. The title breaks after the slash only (`<wbr>`, each part `inline-block`), and a name wider than the line wraps inside itself.
 
 ## Puzzle dossier
 
@@ -170,6 +183,8 @@ The landing's data as code section shows the sample's module on the shared shell
 
 Below 640 px the rule title drops its hatched mark. Below 400 px the padding is 14 px, the annotation goes, and the gutter and continuation indent narrow so `hashCollisionPuzzleSha1` still fits at 320 px.
 
+The panel keeps one height for every record, so the page doesn't jump on a rotation. Every line stays on one line (`white-space: pre`, no `<wbr>`, an ellipsis where it doesn't fit; the copy button still hands out every value whole), the path in the bar and the footer too. Under the visible file every walked record from `LANDING_STATIC` is drawn invisibly in the same grid cell (`.record-sizer`), so the cell takes the tallest record's line count. The grid has one `minmax(0, 1fr)` column, or the unbroken lines widen the page. Measured over all 28 samples: 426 px at desktop, 414 px on a phone.
+
 ## Custom collection
 
 The landing's custom collection section shows the two files a collection outside the package needs, drawn by [LandingCustom.vue](app/components/content/LandingCustom.vue) on the shared shell. It is static: the example is not a record in `src/collections/`, so nothing walks.
@@ -192,6 +207,139 @@ The landing's registry section shows which collection modules the sample walk ha
 
 Below 400 px the padding is 14 px, the annotation goes and the cells narrow to `8rem`; at 320 px that is one column, since two would cut most keys.
 
+## Page edges
+
+Two gutters, one per kind of page, and the header, the content and the footer always share the one the page uses.
+
+- **Docs pages** keep the Nuxt UI container (`px-4 sm:px-6 lg:px-8`): 32 px at desktop, 16 px on a phone. Wider gutters beside both asides looked roomy for nothing.
+- **Pages built on `.puzzles-landing`**, the landing, the playground and a puzzle page, use `px-8 sm:px-12 lg:px-16`: 64 px at desktop, 32 px on a phone. The narrow docs gutter there read as cramped on a large screen. `.hero-page` takes the same gutters, and a rule in `app.css` (`html:has(.puzzles-landing)`) gives the header's and the footer's container the same padding, so the package name lines up with the content. It updates on client navigation too.
+
+Inside a page every section shares one left and one right edge: the hero zone and its instrument have no width of their own, and an instrument beside text sits on the container's outer edge (`margin-inline: auto 0` on the right, `0 auto` on the left, from `LandingFeature.vue`), never centered in its column. At 1440 px the landing spans 64 to 1376 px. Measure the logo, the leftmost content edge of each section and the footer with `getBoundingClientRect()` after a layout change.
+
+## Feature sections
+
+[LandingFeature.vue](app/components/content/LandingFeature.vue) sets the text beside each landing instrument: the title and the paragraph in Figtree, the points on a rail of ticks with a square node each, like the sidebar, and the link as the `Read` tag, the page's name in mono and an arrow in the accent. Inline code in that copy is `.puzzles-code`, the docs' boxed value, at 13 px. The sections are split by the panel line with ticks under it (`.puzzles-section`), like the site header's edge.
+
+## Hero
+
+The zone's styles (`hero-page`, `hero-zone`, brackets, crosses, title, lead, readouts, share bar, circuit) live in `app.css`, since the landing and the playground both draw it. [LandingHero.vue](app/components/content/LandingHero.vue) draws the landing hero as one zone above the lock instrument. The zone and the instrument share the 72rem width, so their edges line up.
+
+1. **Zone:** open brackets on both sides with a short thick mark near the top, crosses above the corners, the crosses grid behind it. The amber halo sits in the upper half and fades out before the instrument.
+2. **ID strip:** `console-id` with the `ID` tag, the package, its version and the data version in blocks of four.
+3. **Title and lead:** Figtree, the title in two tones. The lead quotes no counts, the metrics carry them.
+4. **Metrics:** records, unclaimed BTC with the other currencies under it, open over total. One row of three, a label over a 28 px tabular value. Below 640 px the row keeps three columns at 20 px and the unit drops under the value.
+5. **Share bar:** closed records hatched, open ones an accent outline, both counts under it. One split only. A bar per collection was tried and read as noise.
+6. **Actions:** `console-action` segments 34 px high. The label is mono uppercase, the glyph sits in its own cell behind a rule, the top right corner is cut by 8 px. The primary one fills with the accent. The frame uses the quiet panel line and turns to a dimmed accent on hover.
+7. **Install:** `console-install`, a dashed outline with corner brackets, the `Install` tag, the command and the copy button. Below 400 px the tag goes.
+8. **Circuit:** a dotted rail from the zone's center down to the instrument's bar, a jog to the right, a node on the bar and a boxed `get(id)` tag. The accent runs down the rail once per sample.
+
+Below 48rem the instrument is hidden and the zone ends the hero.
+
+## Lock instrument
+
+[LandingLock.vue](app/components/content/LandingLock.vue) shows the walk's sample as a combination lock on the shared shell (`tool-console console-wide`). A puzzle is a prize behind a key someone has to find, and the lock says that at a glance. It replaced a diagram of the manifest and `import()`, which the registry map already shows.
+
+1. **Bar:** `Call` tag, `await get("<id>")`, the sample's number on the walk, chain and address kind as meta. The ruler's cursor loops while the collection's module loads.
+2. **Subject band:** the dial where the dossiers put their reticle, the record beside it.
+   - **Dial:** one position per collection, in manifest order. The ring is each collection's bounty: the closed share hatched, the open share in the accent, the active position in full accent. A notch per position inside the ring and a longer one every six, frame corners outside. The wedge and its pointer turn the short way to the collection, 700 ms with a slight overshoot, like a dial clicking into place. Lock arcs around the hub turn once per record.
+   - **Hub:** the lock glyph and the state word, then the collection key. `locked` is in the accent, `solved`, `claimed` and `swept` show an open lock, `expired` a timer.
+   - **Record:** the `Puzzle / <key>` label keeps the key in its own case. Then the id at 28 px, one Figtree sentence about the target, and four readouts in one row: prize, key (the search range of a numbered puzzle, otherwise the key material published), the address shortened with a `UTooltip`, verify.
+3. **Time band:** `On chain [ first year to last year ]`, one axis of years for every sample, read off `FACTS_STATIC` so there is no clock. The record's span runs from start to solve, hatched, with a hollow node at the start and a filled one at the end, so a solve of a few days still shows. An unsolved record runs to the end of the axis in the accent. The label reads `locked since <date>` or `held <solve time>`.
+4. **Footer:** the locality meta and the id as an arrow link.
+
+The dial stays sparse on purpose. Rotated labels for all 24 keys, a graduation, axis marks, rim circuits and faint spans of the other samples were all tried, and each read as clutter. Below 72rem the dial column narrows to 14rem and the readouts go two by two.
+
+## Start
+
+[LandingStart.vue](app/components/content/LandingStart.vue) closes the landing on the shared shell.
+
+1. **Bar:** `Start` tag, the install command, `Node.js 24 or newer` from `engines` as meta.
+2. **Copy:** the title in Figtree, one sentence, three notes as boxed tags (`Pin`, `Data`, `Balance`) with a sentence each, then the two actions.
+3. **First lookup:** a rule title `First lookup [ index.ts ]` with a copy button over a numbered snippet: install, import, `get("b1000/71")`, `status()` and `address()` with their values in comments, and the same lookup from the CLI. The values come from `LANDING_STATIC`, so the fixture test pins them. Shell lines get a dimmed prompt, TypeScript goes through `tokens()`.
+4. **Footer:** the license meta and an arrow link to the CLI guide.
+
+Below 56rem the two columns stack. Below 640 px the rule title drops its annotation and hatched mark.
+
+## Footer
+
+[AppFooterLeft.vue](app/components/AppFooterLeft.vue) overrides the Docus footer on every page: the `console-id` strip with the package, its version and the license link, then one Figtree sentence. It imports no landing fixture, so a docs page doesn't pull the walk's data for it.
+
+## Callouts
+
+`::warning`, `::caution`, `::note` and `::tip` render through [PuzzlesCallout.vue](app/components/PuzzlesCallout.vue). The four `Prose*` files in `app/components/content/` override the Nuxt UI ones and pass their kind. A plain alert box with a coloured bar read as a generic component, not as part of the family.
+
+1. **Strip:** 44 px on the left, hatched in the kind's colour, the glyph boxed at the top. Amber for warning, red for caution, muted for note, green for tip.
+2. **Shell:** the clipped outline with both cuts and the corner crosses, like every instrument.
+3. **Bar:** the kind as a boxed tag in its colour, then the title from the markdown (`::warning{title="Pre-1.0"}`) in the instrument's title face, the hatched mark before the cut. Without a title the bar holds the tag alone.
+4. **Ruler**, then the text in Figtree 14 px in the reading colour, not tinted.
+
+The title is an attribute, so the body doesn't repeat it in bold. The glyphs come from `appConfig.ui.icons`, where Nuxt UI keeps the note's under `info`; the other kinds use their own name. Below 640 px the strip narrows to 32 px and the title wraps under the tag.
+
+## Code blocks
+
+Fenced code in the docs renders through [ProsePre.vue](app/components/content/ProsePre.vue), which overrides the Nuxt UI block and keeps its props (`code`, `language`, `filename`, `highlights`, `hideHeader`, `copy`), so markdown needs no change.
+
+1. **Shell:** the clipped outline with both cuts, like the callouts.
+2. **Bar:** the language as a boxed tag in its reader's name (`ts`, `shell`, `json`), the filename in the title face when the block has one, the hatched mark and the `console-button` copy.
+3. **Ruler**, then the lines with numbers in a gutter like the landing's snippets. A highlighted line gets the accent edge. Long lines scroll inside the block; the page never does.
+
+The colours come from [shiki-theme.ts](shiki-theme.ts), a Shiki theme whose every colour is a `--shiki-token-*` variable from `app.css`. The landing's `tok-*` classes read the same variables, so a snippet looks the same in a panel and on a page: keywords amber, calls light amber, strings blue, comments grey, names, punctuation and numbers in the text colour. `nuxt.config.ts` uses the theme for both modes and imports only its type from `shiki`.
+
+## Tables and inline code
+
+Markdown tables render through [ProseTable.vue](app/components/content/ProseTable.vue), which overrides the Nuxt UI one with the roster's grammar: the clipped shell with corner crosses, the ruler on the tinted band, the column names as field labels (10 px mono uppercase), rows split by a quiet inset rule, cells in Figtree 14 px. A row tints on hover. Wide tables scroll inside the shell.
+
+Inline code carries `.puzzles-code` from `app.config.ts` (`ui.prose.code`), styled in `app.css`: a boxed value with one quiet edge like the tags, no radius, no fill, the identifier in the highlight colour. It applies everywhere prose uses backticks, callouts and tables included.
+
+## Page header links
+
+[DocsPageHeaderLinks.vue](app/components/DocsPageHeaderLinks.vue) overrides the Docus copy controls with the same actions. The copy button and the menu trigger are boxed segments 30 px high in one frame with the top right corner cut, the glyph in its own cell, the label in mono uppercase. The trigger's glyph lights in the accent while the menu is open.
+
+The menu is a `UDropdownMenu` in the tooltip's grammar: one quiet edge with a 14 px accent segment at the top left, the top right corner cut by 9 px, no radius or shadow, items in mono 12 px, a quiet rule between groups. A highlighted item gets the accent edge and its glyph lights. The classes (`.puzzles-menu*`) live in `app.css` because the menu renders in a portal, outside the component's scope. It opens from the keyboard with the arrow keys.
+
+## Page header rule
+
+Every docs page header ends in a section rule instead of a border: a dot, the line with ticks every 12 px under it, and a hatched block at the end, drawn by `.puzzles-page-header` in `app.css` (hooked in `ui.pageHeader.slots.root`). The rule sits on the header's bottom edge and the body right under it starts 20 px below, so the gap under the line matches the one above it.
+
+## Page foot
+
+Under every docs page, two parts:
+
+1. **Edit and report:** the Docus separator keeps its markup; `app.css` targets it with `[role="separator"]:has(a[href*="/edit/"])`, because `USeparator` also sits in the header and asides. The rule starts at a dot and ends in a hatched block, the two links are boxed buttons in mono uppercase, the `or` is hidden. Below 640 px the buttons wrap and the block goes, so the page never scrolls sideways.
+2. **Previous and next:** [UContentSurround.vue](app/components/UContentSurround.vue) overrides the Nuxt UI surround with two small instruments like the callouts: a hatched strip with the arrow boxed, the clipped shell with corner crosses, a bar with the direction as a boxed tag, the page title and the hatched mark, the ruler, the description in Figtree and the path in mono. On hover the edge and the arrow turn toward the accent. The next card mirrors the strip to the right. Below 640 px the cards stack.
+
+## Site header
+
+The Docus header in the family's grammar. Classes hook in `app.config.ts` (`ui.header`, `ui.contentSearchButton`, `ui.kbd`), the look lives in `app.css`, and the logo and the area links are overrides.
+
+1. **Logo:** [AppHeaderLogo.vue](app/components/AppHeaderLogo.vue), the lock from the landing's instrument in a boxed cell with the top right corner cut, in the accent, then `@agntn/` dimmed and `puzzles` bright in mono 14 px, then the version as a boxed tag, hidden below 400 px.
+2. **Areas:** [AppHeaderCTA.vue](app/components/AppHeaderCTA.vue), `Docs` (lit on the guide, the collections and the authors) and `Playground`, mono uppercase with the sidebar's square node, filled in the accent for the area you are in. The docs sections moved to the tabs, so they aren't repeated here.
+3. **Search:** the field is the family's input, a dashed outline with corner brackets on a faint tint, the prompt in mono, the glyph in the accent. Keys are boxed tags everywhere. The modal (`ui.contentSearch.slots.modal`) is the clipped shell with both cuts and an accent segment, no radius or shadow; the palette (`ui.commandPalette`) opens with the input row as an instrument bar, tinted with ticks under it, the close button a quiet boxed cell; group labels are section titles in mono uppercase with a rule from a dot; a result is the page name in mono and its description in Figtree, the highlighted one on the accent edge with its glyph lit, matches in the accent. The classes live in `app.css` because the modal is portalled; `UCommandPalette` is used nowhere else, so the global slots touch only the search.
+4. **Icon buttons:** GitHub, and on a phone search and the menu, sit in boxed cells; the glyph lights in the accent on hover.
+5. **Bottom edge:** the quiet panel line with ticks every 12 px, like the ruler.
+6. **Section tabs:** `navigation.sub: "header"` turns on the Docus row under the header, drawn by [AppHeaderBottom.vue](app/components/AppHeaderBottom.vue): the sections from `useSubNavigation().sections` as tabs, glyph and mono label, the section you are in with its glyph in the accent and an accent segment on the bottom edge. A new section becomes a tab by itself. The row shows on docs pages from `lg` up; the landing has none.
+
+With the tabs the sidebar holds the current section only, title included, so the lists can grow without turning the aside into one long column. The mobile menu has no tabs, so [AppHeaderBody.vue](app/components/AppHeaderBody.vue) renders the sidebar with every section (`full`).
+
+## Sidebar
+
+[DocsAsideLeftBody.vue](app/components/DocsAsideLeftBody.vue) draws the docs navigation in the table of contents' grammar, so both asides rhyme. [AppHeaderBody.vue](app/components/AppHeaderBody.vue) renders the same component in the mobile menu, so one navigation serves both. The tree and its icons come from `useSubNavigation`.
+
+1. **Group title:** the glyph boxed in a 24 px cell in the accent, the name in mono uppercase at 12 px in the highlight colour, a rule from a dot and the hatched block. A page count was tried and dropped: it counted the overview too and said 25 next to a site that says 24 collections.
+2. **Pages:** on a rail of ticks every 12 px, icon and name in Figtree 13.5 px. The page on screen gets a square node in the accent on the rail, the name in the highlight colour and the icon in the accent. Pages under a page sit indented with a short tick.
+3. **Index row:** the page whose path is the section's own, the overview of the collections and the authors or the guide's first page, is lifted out of the list and stands between the title and the entries as a lead: the boxed `Index` tag, its name, a dotted leader and a node, lit in the accent on that page. An overview listed among the entities read as one of them.
+4. **Width:** the lists are grids with one `minmax(0, 1fr)` column, so a long name ends in an ellipsis instead of stretching the aside into a sideways scroll.
+
+## Table of contents
+
+[DocsAsideRight.vue](app/components/DocsAsideRight.vue) overrides the Docus right aside on wide screens. A section title like the instruments' opens it. The list hangs on a rail of ticks every 12 px, like the ruler turned upright. Top level entries are numbered `01`, `02` in mono and carry a square node on the rail; the sections in view fill it in the accent and light their number. Subsections sit past the number column with a short tick, the one in view in the accent. The text stays in Figtree at 13 px. The aside's root is the sticky element, since it sits in the page's full height right column. The active headings come from Nuxt UI's `useScrollspy`, refreshed on mount and on page load and transition like the original. Below `lg` the Nuxt UI toc and the Docus mobile bar stay.
+
+The layouts with a right aside get one grid track per panel (`ui.page` in `app.config.ts`): the toc takes `min(13.75rem, 20%)` and the text the rest, so the toc is about 220 px on a large screen instead of Nuxt UI's 186, and the text keeps 833 px, above the 52rem the rosters and dossiers need before they stack. A toc of 263 px took the text to 790 px and folded every roster on a large desktop. The left menu layout keeps the Nuxt UI ten column grid.
+
+## Registry map on the landing
+
+[LandingRegistry.vue](app/components/content/LandingRegistry.vue): the bar `Call get("id")` with `manifest` as meta and the hatched mark, corner crosses, the manifest cells on the crosses grid, and a gauge instead of a paragraph: one tick per key, loaded ones hatched, the walk's collection taller in the accent, read as `loaded 13 / 24 · 11 still keys`. Only the shown collection is in the accent; a loaded key is highlighted text with a hatched node. The sentence about `import()` is the footer's meta.
+
 ## Rosters
 
 `::author-list` in [AuthorList.vue](app/components/content/AuthorList.vue) and `::collection-list` in [CollectionList.vue](app/components/content/CollectionList.vue) index the author and collection pages, and [LandingCollections.vue](app/components/content/LandingCollections.vue) prints the collection roster on the landing. The rows are a `UTable` inside the clipped shell with the corner crosses. Everything except that shell and the ruler's ticks, which stay in `app.css` as `.roster` and `.roster-ruler`, is Tailwind utilities from `app/utils/roster.ts`: `ROSTER_TABLE_UI` for the table's `ui` prop, `ROSTER_CLASS` for the bar, footer and cell parts every roster shares.
@@ -201,7 +349,7 @@ Below 400 px the padding is 14 px, the annotation goes and the cells narrow to `
 3. **Header:** the column names as field labels, 10 px mono uppercase in `dimmed`. A sortable column's name is a `RosterSort` button: its arrow shows the direction, and a click steps through the first direction, the other one, and back to the order the rows came in. Text sorts A to Z first, counts largest first. The about column doesn't sort.
 4. **Rows:** icon and name as the page link, the key in a boxed tag, the one line about it, then a dotted leader into the last column. An author row ends in its collection keys and puzzle count. A collection row carries its chain glyphs next to the key, each in a `UTooltip`, and ends in `77 of 256 open` with the open count in the accent, or `open` and `closed` for a single puzzle; a bare `256` and an unsolved count on a second line read as two unlabeled numbers. Collections start largest first, and a wrapped name keeps the row on its first line's baseline.
 5. **Footer:** the locality meta and the call that opens one row.
-6. **Landing:** the same collection roster, read off `FACTS_STATIC` so it renders before any collection loads. It keeps the manifest order, adds an unclaimed column with the prize the CLI prints (`none` in `dimmed` when nothing is left) and gives the row of the collection the walk is showing the `--puzzles-cell-active` background through the table's `meta.class.tr`. Its footer links to the custom collection guide. Every cell holds one line: a long name or blurb ends in an ellipsis with the whole text in a `UTooltip`, since the collection page prints it in full. The cells are `align-middle` and the name link a block `flex`, because on the roster's baseline a clipped name rode above the row with a gap under it. Narrow, the open count and the prize share one line.
+6. **Landing:** the bar carries the `Call` tag and the hatched mark, its meta hides below 640 px; the open column's header is right aligned like its values; the key and its chain glyphs stay on one line; the row of the collection the walk shows gets the accent edge on its first cell and a faint tint, not a full tinted row. The entry path sits under the section's copy as an `Import` lead instead of inline code, which broke the sentence at every width. The same collection roster, read off `FACTS_STATIC` so it renders before any collection loads. It keeps the manifest order, adds an unclaimed column with the prize the CLI prints (`none` in `dimmed` when nothing is left) and gives the row of the collection the walk is showing the `--puzzles-cell-active` background through the table's `meta.class.tr`. Its footer links to the custom collection guide. Every cell holds one line: a long name or blurb ends in an ellipsis with the whole text in a `UTooltip`, since the collection page prints it in full. The cells are `align-middle` and the name link a block `flex`, because on the roster's baseline a clipped name rode above the row with a gap under it. Narrow, the open count and the prize share one line.
 
 The columns collapse on the table's own width, `@container/roster` with `@max-[52rem]/roster:` variants, not the window's: beside both sidebars at 1024 px the roster is 600 px wide, and a window breakpoint left the about column 14 px wide there. Narrow, the header is hidden from sight but kept for screen readers, and the about line and the last column take full rows under the name and key.
 

@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { COLLECTIONS } from "../../utils/puzzles";
-import { FACTS_STATIC, STATS_STATIC } from "../../utils/landing";
+import { FACTS_STATIC } from "../../utils/landing";
 
-const { samples, loaded, tick, paused, current, step } = useLandingPuzzle();
-
-const unsolvedBtc = STATS_STATIC.unsolvedPrize.BTC.toFixed(2);
+const { samples, loaded, paused, current, step } = useLandingPuzzle();
 
 /** Chains that hold at least one puzzle, read off the same fixtures as the collection roster. */
 const chainCount = new Set(FACTS_STATIC.flatMap((row) => row.chains)).size;
-
-const { copied, copy } = useCopied();
 
 /** The collection list highlights whichever collection the panels are showing. */
 const activeCollection = computed(() => current.value.collection);
@@ -17,56 +13,7 @@ const activeCollection = computed(() => current.value.collection);
 
 <template>
   <div class="puzzles-landing not-prose">
-    <header
-      class="puzzles-hero mx-auto w-full max-w-[var(--ui-container)] px-8 pt-24 pb-20 text-center sm:px-12 lg:px-16"
-    >
-      <h1
-        class="mx-auto max-w-3xl text-4xl leading-[1.08] font-medium tracking-tight text-balance text-highlighted sm:text-5xl lg:text-[3.75rem]"
-      >
-        Every puzzle, <span class="text-primary">one record.</span>
-      </h1>
-      <p class="mx-auto mt-6 max-w-xl text-base leading-7 text-muted">
-        {{ STATS_STATIC.total }} public crypto bounties and puzzles in
-        {{ COLLECTIONS.length }} collections, {{ unsolvedBtc }} BTC of it still unclaimed. Each one
-        is a typed record: address, key material, prize, what happened on chain. One library behind
-        the CLI, an MCP server and the Pi and OMP extensions, with live balances from the explorers.
-      </p>
-      <div class="mt-8 flex flex-wrap items-center justify-center gap-2">
-        <UButton to="/guide" color="primary" trailing-icon="i-lucide-arrow-right">
-          Get started
-        </UButton>
-        <UButton
-          to="https://github.com/agntn/puzzles"
-          target="_blank"
-          color="neutral"
-          variant="outline"
-          icon="i-simple-icons-github"
-        >
-          Star on GitHub
-        </UButton>
-      </div>
-      <button
-        type="button"
-        class="puzzles-install mt-5"
-        :aria-label="copied === 'install' ? 'Copied' : 'Copy install command'"
-        @click="copy('install', 'pnpm add @agntn/puzzles')"
-      >
-        <span class="text-dimmed">$</span>
-        <span>pnpm add @agntn/puzzles</span>
-        <UIcon
-          :name="copied === 'install' ? 'i-lucide-check' : 'i-lucide-copy'"
-          class="size-3.5 text-dimmed"
-        />
-      </button>
-
-      <div
-        class="mx-auto mt-16 hidden max-w-6xl md:block"
-        @mouseenter="paused = true"
-        @mouseleave="paused = false"
-      >
-        <LandingFlow :sample="current" :tick="tick" :loaded="loaded" />
-      </div>
-    </header>
+    <LandingHero :sample="current" :loaded="loaded" @pause="paused = $event" />
 
     <LandingFeature
       title="Data as code, one file per puzzle"
@@ -121,9 +68,8 @@ const activeCollection = computed(() => current.value.collection);
       ]"
     >
       Importing the package evaluates no puzzle records. Each registry key has its own lazy
-      <code class="font-mono text-[13px] text-highlighted">import()</code>, so a bundler splits each
-      collection into its own chunk. Only ever ask about
-      <code class="font-mono text-[13px] text-highlighted">b1000</code>? The other collections stay
+      <code class="puzzles-code">import()</code>, so a bundler splits each collection into its own
+      chunk. Only ever ask about <code class="puzzles-code">b1000</code>? The other collections stay
       unloaded. This panel shows the walk loading one collection at a time.
       <template #visual>
         <div @mouseenter="paused = true" @mouseleave="paused = false">
@@ -140,11 +86,13 @@ const activeCollection = computed(() => current.value.collection);
           </h2>
           <p class="mt-4 text-sm leading-6 text-muted">
             Each collection is a class with an author and its puzzle list, published on its own
-            entry as
-            <code class="font-mono text-[13px] text-highlighted"
-              >@agntn/puzzles/collections/&lt;key&gt;</code
-            >. Every puzzle has a page with its record, its transactions, its key material and its
-            live balance. The numbers here come from the library at build time.
+            entry. Every puzzle has a page with its record, its transactions, its key material and
+            its live balance. The numbers here come from the library at build time.
+          </p>
+          <!-- The entry path as a lead, like the addresses and calls in the instruments, so the copy never breaks around it. -->
+          <p class="landing-entry">
+            <span class="console-tag">Import</span>
+            <code>@agntn/puzzles/collections/&lt;key&gt;</code>
           </p>
         </div>
         <LandingCollections :active="activeCollection" class="mt-10" />
@@ -164,8 +112,8 @@ const activeCollection = computed(() => current.value.collection);
     >
       Who funded a puzzle says something about how it was built. So every collection's author is a
       record, not a name and a link, and
-      <code class="font-mono text-[13px] text-highlighted">getAuthor(key)</code> answers with it.
-      The card follows the walk: it shows whoever published the puzzle on screen.
+      <code class="puzzles-code">getAuthor(key)</code> answers with it. The card follows the walk:
+      it shows whoever published the puzzle on screen.
       <template #visual>
         <div @mouseenter="paused = true" @mouseleave="paused = false">
           <LandingAuthor :sample="current" />
@@ -183,11 +131,11 @@ const activeCollection = computed(() => current.value.collection);
         'Limits live in one facts table and the executors enforce them, so a host that skips schema validation hits the same wall',
       ]"
     >
-      <code class="font-mono text-[13px] text-highlighted">puzzles mcp</code> serves the tools over
-      stdio, the Pi and OMP extensions render them in the terminal. All three call the same
-      functions, so they answer identically and a fix lands once. Only
-      <code class="font-mono text-[13px] text-highlighted">puzzles_balance</code> reaches out to a
-      block explorer, and it says so in its annotations.
+      <code class="puzzles-code">puzzles mcp</code> serves the tools over stdio, the Pi and OMP
+      extensions render them in the terminal. All three call the same functions, so they answer
+      identically and a fix lands once. Only
+      <code class="puzzles-code">puzzles_balance</code> reaches out to a block explorer, and it says
+      so in its annotations.
       <template #visual>
         <div
           @mouseenter="paused = true"
@@ -212,36 +160,39 @@ const activeCollection = computed(() => current.value.collection);
       reverse
     >
       A collection outside the package is the same shape as one inside it: a class extending
-      <code class="font-mono text-[13px] text-highlighted">NamedCollection</code> or
-      <code class="font-mono text-[13px] text-highlighted">NumericCollection</code> with its puzzle
-      list. Register a loader and the registry treats it like a built-in, including the part where
-      nothing loads until someone asks.
+      <code class="puzzles-code">NamedCollection</code> or
+      <code class="puzzles-code">NumericCollection</code> with its puzzle list. Register a loader
+      and the registry treats it like a built-in, including the part where nothing loads until
+      someone asks.
       <template #visual>
         <LandingCustom />
       </template>
     </LandingFeature>
 
     <section class="puzzles-section">
-      <div
-        class="mx-auto w-full max-w-[var(--ui-container)] px-8 py-20 text-center sm:px-12 lg:px-16"
-      >
-        <h2 class="text-2xl font-medium tracking-tight text-highlighted sm:text-3xl">
-          Start with one command
-        </h2>
-        <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-muted">
-          Pre-1.0, so pin exact versions. The records are public data about public puzzles. Every
-          key in here was public before it got here. A balance is what the explorer said five
-          minutes ago at most.
-        </p>
-        <div class="mt-8 flex flex-wrap items-center justify-center gap-2">
-          <UButton to="/guide" color="primary" trailing-icon="i-lucide-arrow-right">
-            Read the guide
-          </UButton>
-          <UButton to="/playground" color="neutral" variant="outline">
-            Open the playground
-          </UButton>
-        </div>
+      <div class="mx-auto w-full max-w-[var(--ui-container)] px-8 py-20 sm:px-12 lg:px-16">
+        <LandingStart />
       </div>
     </section>
   </div>
 </template>
+
+<style scoped>
+.landing-entry {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.landing-entry > .console-tag {
+  margin: 0;
+}
+.landing-entry > code {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--ui-text-highlighted);
+}
+</style>

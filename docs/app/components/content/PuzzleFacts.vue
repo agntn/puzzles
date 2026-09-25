@@ -88,7 +88,9 @@ const { copied, copy } = useCopied();
       <div class="console-identity-block">
         <ConsoleReticle :key="view.id" :icon="CHAIN_ICONS[view.chain] ?? 'i-lucide-link'" />
         <div class="console-name">
-          <span class="console-label">Puzzle / {{ entry?.title ?? view.collection }}</span>
+          <span class="console-label"
+            >Puzzle / <span class="console-label-key">{{ view.collection }}</span></span
+          >
           <h3 class="console-name-mono">{{ view.name }}</h3>
           <p class="console-aliases">
             <span class="console-chain"

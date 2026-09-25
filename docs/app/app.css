@@ -194,32 +194,61 @@ button:not(:disabled),
   box-shadow: inset 0 0 0 1px var(--ui-border-accented);
 }
 
-@keyframes puzzles-derive {
-  from {
-    opacity: 0.35;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-.puzzles-derive {
-  animation: puzzles-derive 0.35s ease;
-}
-
 .puzzles-landing {
   overflow-anchor: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .puzzles-derive {
-    animation: none;
+/* Sections split by the panel line with ticks under it, like the site header's edge. */
+.puzzles-section {
+  position: relative;
+  border-top: 1px solid var(--console-line);
+}
+.puzzles-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, var(--console-corner) 0 1px, transparent 1px 12px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+/* Landing bars stay one line whatever the sample: the title ends in an ellipsis, the meta never wraps and goes on a phone. */
+.puzzles-landing .tool-console > .console-bar {
+  flex-wrap: nowrap;
+}
+.puzzles-landing .tool-console > .console-bar > .console-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.puzzles-landing .tool-console > .console-bar > .console-meta,
+.puzzles-landing .tool-console > .console-bar > .console-hosts {
+  flex: none;
+  white-space: nowrap;
+}
+@media (width < 640px) {
+  .puzzles-landing .tool-console > .console-bar > .console-meta,
+  .puzzles-landing .tool-console > .console-bar > .console-hosts {
+    display: none;
   }
 }
-
-.puzzles-section {
-  border-top: 1px solid var(--ui-border-muted);
+/* On the landing inline code sits in 14 px copy with no Nuxt UI size class behind it, and never splits:
+   a package path broken at its slash split its box in two. */
+.puzzles-landing .puzzles-code {
+  padding: 0 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: nowrap;
+}
+/* An identifier inside an uppercase label keeps its own case. */
+.console-label-key {
+  text-transform: none;
+  letter-spacing: 0.02em;
 }
 
 .puzzles-eyebrow {
@@ -233,25 +262,6 @@ button:not(:disabled),
   color: var(--ui-text-muted);
 }
 
-.puzzles-install {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.625rem;
-  height: 2.25rem;
-  padding: 0 0.875rem;
-  border: 0;
-  border-radius: 0.5rem;
-  background: var(--ui-bg-muted);
-  color: var(--ui-text);
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  box-shadow: var(--puzzles-frame);
-}
-
-.puzzles-install:hover {
-  color: var(--ui-text-highlighted);
-}
-
 .puzzles-hero {
   position: relative;
 }
@@ -263,119 +273,6 @@ button:not(:disabled),
   z-index: -1;
   background: radial-gradient(ellipse 50% 60% at 50% 30%, var(--puzzles-glow), transparent 70%);
   pointer-events: none;
-}
-
-/* Hero flow diagram */
-
-.puzzles-flow {
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-  font-family: var(--font-sans);
-}
-
-.puzzles-flow-wires path {
-  fill: none;
-  stroke: var(--puzzles-line);
-  stroke-width: 1.25;
-}
-
-.puzzles-flow-pulse {
-  fill: none;
-  stroke: var(--ui-primary);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-dasharray: 46 1400;
-  stroke-dashoffset: 46;
-  opacity: 0;
-  animation: puzzles-flow-pulse 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.puzzles-flow-pulse-late {
-  animation-delay: 0.45s;
-}
-
-@keyframes puzzles-flow-pulse {
-  0% {
-    stroke-dashoffset: 46;
-    opacity: 0;
-  }
-
-  10% {
-    opacity: 1;
-  }
-
-  85% {
-    opacity: 1;
-  }
-
-  100% {
-    stroke-dashoffset: -560;
-    opacity: 0;
-  }
-}
-
-.puzzles-flow-node rect {
-  fill: color-mix(in oklch, var(--ui-bg) 88%, transparent);
-  stroke: var(--puzzles-line);
-  stroke-width: 1;
-}
-
-.puzzles-flow-node text {
-  fill: var(--ui-text-highlighted);
-}
-
-.puzzles-flow-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  fill: var(--ui-text-dimmed) !important;
-  letter-spacing: 0.04em;
-}
-
-.puzzles-flow-mono {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  fill: var(--ui-text-muted) !important;
-}
-
-.puzzles-flow-accent {
-  fill: var(--ui-primary) !important;
-}
-
-.puzzles-flow-dim rect {
-  stroke-dasharray: 3 3;
-}
-
-.puzzles-flow-dim text {
-  fill: var(--ui-text-dimmed);
-}
-
-.puzzles-flow-wire-dim {
-  stroke-dasharray: 3 3;
-  opacity: 0.6;
-}
-
-.puzzles-flow-rule {
-  stroke: var(--ui-border-muted);
-  stroke-width: 1;
-}
-
-.puzzles-flow-domain {
-  font-family: var(--font-mono);
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.puzzles-flow-small {
-  font-size: 13px;
-  font-weight: 500;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .puzzles-flow-pulse {
-    animation: none;
-  }
 }
 
 /* Section animations */
@@ -531,6 +428,722 @@ button:not(:disabled),
   color: var(--ui-text-dimmed);
 }
 
+/* Inline code as a boxed value: one quiet edge like the tags, no radius or fill, the identifier in the highlight colour. */
+/* Where docs code has to wrap, each line gets its own whole box instead of a box cut open at the break. */
+.puzzles-code {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--console-line);
+  font-weight: 400;
+  color: var(--ui-text-highlighted);
+}
+
+/* UDropdownMenu in the tooltip's grammar: one quiet edge with an accent segment, the top right corner cut, mono items. */
+.puzzles-menu {
+  position: relative;
+  isolation: isolate;
+  min-width: 15rem;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-family: var(--font-mono);
+}
+.puzzles-menu::before,
+.puzzles-menu::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
+}
+.puzzles-menu::before {
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(var(--console-accent), var(--console-accent)) 0 0 / 14px 1px no-repeat,
+    color-mix(in srgb, var(--ui-text-muted) 35%, var(--ui-bg));
+}
+.puzzles-menu::after {
+  inset: 1px;
+  z-index: -1;
+  background: color-mix(in srgb, var(--ui-text-muted) 5%, var(--ui-bg));
+}
+.puzzles-menu-group {
+  padding: 4px;
+}
+.puzzles-menu-separator {
+  margin-inline: 0;
+  background: var(--console-line);
+}
+.puzzles-menu-item {
+  padding: 7px 10px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ui-text);
+}
+.puzzles-menu-item::before {
+  border-radius: 0;
+}
+.puzzles-menu-item[data-highlighted]::before {
+  background: color-mix(in srgb, var(--ui-text-muted) 8%, transparent);
+  box-shadow: inset 2px 0 0 var(--console-accent);
+}
+.puzzles-menu-item[data-highlighted] {
+  color: var(--ui-text-highlighted);
+}
+.puzzles-menu-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--ui-text-muted);
+}
+.puzzles-menu-item[data-highlighted] .puzzles-menu-icon {
+  color: var(--console-accent);
+}
+
+/* The page foot's edit and report links as a section title: a rule that starts at a dot, boxed buttons, a hatched block at the end. */
+[role="separator"]:has(a[href*="/edit/"]) [data-slot="border"] {
+  border-color: var(--console-line);
+}
+[role="separator"]:has(a[href*="/edit/"]) [data-slot="border"]:first-child {
+  position: relative;
+}
+[role="separator"]:has(a[href*="/edit/"]) [data-slot="border"]:first-child::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--console-corner);
+}
+[role="separator"]:has(a[href*="/edit/"])::after {
+  content: "";
+  flex: none;
+  width: 28px;
+  height: 7px;
+  margin-left: 12px;
+  background: repeating-linear-gradient(135deg, var(--console-corner) 0 1px, transparent 1px 4px);
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
+[role="separator"]:has(a[href*="/edit/"]) [data-slot="container"] > div {
+  gap: 8px;
+}
+[role="separator"]:has(a[href*="/edit/"]) [data-slot="container"] > div > span {
+  display: none;
+}
+[role="separator"]:has(a[href*="/edit/"]) a {
+  height: 26px;
+  padding: 0 9px;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px var(--console-line);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+}
+[role="separator"]:has(a[href*="/edit/"]) a [data-slot="leadingIcon"] {
+  width: 12px;
+  height: 12px;
+}
+[role="separator"]:has(a[href*="/edit/"]) a:hover {
+  color: var(--ui-text-highlighted);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--console-accent) 55%, transparent);
+}
+[role="separator"]:has(a[href*="/edit/"]) a:hover [data-slot="leadingIcon"] {
+  color: var(--console-accent);
+}
+@media (width < 640px) {
+  [role="separator"]:has(a[href*="/edit/"]) [data-slot="container"] {
+    white-space: normal;
+  }
+  [role="separator"]:has(a[href*="/edit/"]) [data-slot="container"] > div {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  [role="separator"]:has(a[href*="/edit/"])::after {
+    display: none;
+  }
+}
+
+/* The page header ends in a section rule instead of a border: a dot, the line, a hatched block, ticks under it. */
+.puzzles-page-header {
+  position: relative;
+  padding-bottom: 28px;
+}
+/* The body right under the header starts as close to the rule as the description sits above it. */
+.puzzles-page-header + div {
+  margin-top: 20px;
+}
+.puzzles-page-header::before {
+  content: "";
+  position: absolute;
+  right: 40px;
+  bottom: 0;
+  left: 0;
+  height: 7px;
+  background:
+    radial-gradient(circle at 3px 3.5px, var(--console-corner) 0 1.5px, transparent 2px) no-repeat,
+    linear-gradient(var(--console-line), var(--console-line)) 8px 3px / calc(100% - 8px) 1px
+      no-repeat,
+    repeating-linear-gradient(90deg, var(--console-corner) 0 1px, transparent 1px 12px) 20px 5px /
+      calc(100% - 20px) 2px no-repeat;
+  opacity: 0.9;
+}
+.puzzles-page-header::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 28px;
+  height: 7px;
+  background: repeating-linear-gradient(135deg, var(--console-corner) 0 1px, transparent 1px 4px);
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
+
+/* The site header: a quiet bottom line with ticks under it like the ruler, the icon buttons boxed. */
+.puzzles-site-header {
+  border-bottom-color: var(--console-line);
+}
+.puzzles-site-header::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, var(--console-corner) 0 1px, transparent 1px 12px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+.puzzles-site-header [data-slot="right"] > a[data-slot="base"],
+.puzzles-site-header [data-slot="right"] > button[data-slot="base"] {
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px var(--console-line);
+  color: var(--ui-text-muted);
+}
+.puzzles-site-header [data-slot="right"] > a[data-slot="base"]:hover,
+.puzzles-site-header [data-slot="right"] > button[data-slot="base"]:hover {
+  background: color-mix(in srgb, var(--ui-text-muted) 6%, transparent);
+  color: var(--console-accent);
+}
+
+/* The search field as the family's input: a dashed readout with corner brackets, the prompt in mono, the glyph in the accent. */
+.puzzles-search {
+  position: relative;
+  height: 34px;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--ui-text-muted) 4%, var(--ui-bg));
+  box-shadow: none;
+  outline: 1px dashed var(--console-line);
+  outline-offset: -1px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ui-text-muted);
+}
+.puzzles-search::before,
+.puzzles-search::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+.puzzles-search::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid var(--console-corner);
+  border-left: 1px solid var(--console-corner);
+}
+.puzzles-search::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1px solid var(--console-corner);
+  border-bottom: 1px solid var(--console-corner);
+}
+.puzzles-search [data-slot="leadingIcon"] {
+  color: var(--console-accent);
+}
+.puzzles-search:hover {
+  color: var(--ui-text-highlighted);
+  outline-color: color-mix(in srgb, var(--console-accent) 45%, var(--console-line));
+}
+
+/* The search modal: the clipped shell with an accent segment, no radius or shadow, like the tooltip and the menu. */
+.puzzles-search-modal {
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none;
+  isolation: isolate;
+}
+.puzzles-search-modal::before,
+.puzzles-search-modal::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
+}
+.puzzles-search-modal::before {
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(var(--console-accent), var(--console-accent)) 0 0 / 18px 1px no-repeat,
+    color-mix(in srgb, var(--ui-text-muted) 35%, var(--ui-bg));
+}
+.puzzles-search-modal::after {
+  inset: 1px;
+  z-index: -1;
+  background: var(--ui-bg);
+}
+.puzzles-palette {
+  --tw-divide-opacity: 1;
+}
+.puzzles-palette > * + * {
+  border-color: var(--console-line) !important;
+}
+/* The input row as the instrument's bar: tinted, the prompt in mono, ticks under it like the ruler. */
+.puzzles-palette-input {
+  position: relative;
+  background: color-mix(in srgb, var(--ui-text-muted) 5%, var(--ui-bg));
+}
+.puzzles-palette-input::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, var(--console-corner) 0 1px, transparent 1px 12px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+.puzzles-palette-input input {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+.puzzles-palette-input [data-slot="leadingIcon"] {
+  color: var(--console-accent);
+}
+.puzzles-palette-close {
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: inset 0 0 0 1px var(--console-line);
+  color: var(--ui-text-muted) !important;
+}
+.puzzles-palette-close [data-slot="leadingIcon"] {
+  color: var(--ui-text-muted);
+}
+.puzzles-palette-close:hover [data-slot="leadingIcon"] {
+  color: var(--console-accent);
+}
+/* Group labels as section titles: mono uppercase, a rule from a dot to the edge. */
+.puzzles-palette-group {
+  padding: 8px 6px;
+}
+.puzzles-palette-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+}
+.puzzles-palette-label::after {
+  content: "";
+  flex: 1;
+  height: 7px;
+  background:
+    radial-gradient(circle at 3px 3.5px, var(--console-corner) 0 1.5px, transparent 2px) no-repeat,
+    linear-gradient(var(--console-line), var(--console-line)) 8px 3px / calc(100% - 8px) 1px
+      no-repeat;
+}
+/* Items: the page name in mono, what it covers in the reading face, the highlighted one on the accent edge. */
+.puzzles-palette-item {
+  padding: 7px 10px;
+}
+.puzzles-palette-item::before {
+  border-radius: 0 !important;
+}
+.puzzles-palette-item[data-highlighted]::before {
+  background: color-mix(in srgb, var(--ui-text-muted) 7%, transparent) !important;
+  box-shadow: inset 2px 0 0 var(--console-accent);
+}
+.puzzles-palette-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--ui-text-dimmed);
+}
+.puzzles-palette-item[data-highlighted] .puzzles-palette-icon {
+  color: var(--console-accent);
+}
+.puzzles-palette-name {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ui-text-highlighted);
+}
+.puzzles-palette-about,
+.puzzles-palette-text {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ui-text-muted);
+}
+.puzzles-palette-text > .puzzles-palette-name {
+  margin-right: 6px;
+}
+.puzzles-palette mark {
+  color: var(--console-accent) !important;
+  background: color-mix(in srgb, var(--ui-primary) 12%, transparent) !important;
+}
+.puzzles-palette-empty {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* Keys as boxed tags: no radius, one quiet edge, mono. */
+.puzzles-kbd {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--console-line);
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--ui-text-muted);
+}
+
+/* The hero zone, shared by the landing and the playground: brackets, crosses, readouts, the circuit into the instrument. */
+/* The wide gutters of the landing, the playground and the puzzle pages (px-8, sm:px-12, lg:px-16). */
+.hero-page {
+  width: 100%;
+  max-width: var(--ui-container);
+  margin-inline: auto;
+  padding: 88px 2rem 80px;
+  text-align: center;
+}
+@media (width >= 40rem) {
+  .hero-page {
+    padding-inline: 3rem;
+  }
+}
+@media (width >= 64rem) {
+  .hero-page {
+    padding-inline: 4rem;
+  }
+}
+.hero-zone {
+  position: relative;
+  margin-inline: auto;
+  padding: 32px 48px 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M16 18h4m-2-2v4' fill='none' stroke='%23818a94' stroke-opacity='.1'/%3E%3C/svg%3E");
+  background-size: 36px 36px;
+  background-position: 24px 20px;
+}
+/* The halo stays at the top of the page and fades out before the instrument, so both sit on the same canvas. */
+.hero-page.puzzles-hero::before {
+  background: radial-gradient(ellipse 42% 32% at 50% 20%, var(--puzzles-glow), transparent 75%);
+}
+.hero-zone > :not(.hero-bracket, .hero-cross) {
+  position: relative;
+}
+.hero-metrics,
+.hero-share,
+.hero-share-read {
+  max-width: 48rem;
+  margin-inline: auto;
+}
+.hero-bracket {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  border-block: 1px solid var(--console-corner);
+  pointer-events: none;
+}
+.hero-bracket::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  width: 3px;
+  height: 22px;
+  background: var(--console-corner);
+}
+.hero-bracket-l {
+  left: 0;
+  border-left: 1px solid var(--console-corner);
+}
+.hero-bracket-l::after {
+  left: 4px;
+}
+.hero-bracket-r {
+  right: 0;
+  border-right: 1px solid var(--console-corner);
+}
+.hero-bracket-r::after {
+  right: 4px;
+}
+.hero-cross {
+  position: absolute;
+  top: -7px;
+  width: 12px;
+  line-height: 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--console-corner);
+  pointer-events: none;
+}
+.hero-cross-tl {
+  left: -7px;
+}
+.hero-cross-tr {
+  right: -7px;
+}
+.hero-title {
+  margin: 28px auto 0;
+  max-width: 48rem;
+  font-family: var(--font-sans);
+  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 3.75rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ui-text-highlighted);
+}
+.hero-title span {
+  color: var(--ui-primary);
+}
+.hero-lead {
+  max-width: 36rem;
+  margin: 20px auto 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ui-text-muted);
+}
+/* Three readouts in one row: label, a large tabular value, one quiet line under it. */
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 32px auto 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+}
+.hero-metrics > div {
+  min-width: 0;
+  padding: 2px 20px 12px;
+}
+.hero-metrics > div + div {
+  box-shadow: inset 1px 0 0 var(--console-line);
+}
+.hero-metrics dt {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+}
+.hero-metrics dd {
+  margin: 6px 0 0;
+  font-size: 28px;
+  line-height: 1.1;
+  color: var(--ui-text-highlighted);
+  white-space: nowrap;
+}
+.hero-metrics dd > span {
+  font-size: 13px;
+  color: var(--ui-text-dimmed);
+}
+.hero-metrics dd.hero-metric-accent {
+  color: var(--console-accent);
+}
+.hero-metrics dd.hero-metric-sub {
+  margin-top: 6px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ui-text-dimmed);
+  white-space: normal;
+}
+/* The share bar: closed records hatched, the open ones an accent outline, the way the gauges mark them. */
+.hero-share {
+  display: flex;
+  gap: 3px;
+  height: 9px;
+  margin-top: 4px;
+  padding-inline: 20px;
+}
+.hero-share-closed {
+  background: repeating-linear-gradient(135deg, var(--console-corner) 0 1px, transparent 1px 4px);
+  box-shadow: inset 0 0 0 1px var(--console-line);
+  transform-origin: left;
+  animation: hero-grow 900ms ease-out both;
+}
+.hero-share-open {
+  box-shadow: inset 0 0 0 1px var(--console-accent);
+  transform-origin: right;
+  animation: hero-grow 900ms ease-out 200ms both;
+}
+@keyframes hero-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.hero-share-read {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-inline: 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ui-text-dimmed);
+}
+.hero-share-read > span:last-child {
+  color: var(--console-accent);
+}
+/* The circuit from the install line down into the instrument's bar: a dotted drop, a thick segment, a node. */
+/* The zone centers its text; whatever instrument hangs under it reads from the left. */
+.hero-instrument {
+  text-align: left;
+  position: relative;
+  margin-top: 56px;
+}
+.hero-circuit {
+  position: absolute;
+  bottom: 100%;
+  left: calc(50% - 80px);
+  width: 160px;
+  height: 56px;
+  overflow: visible;
+}
+.hero-circuit-rail {
+  fill: none;
+  stroke: var(--console-line);
+  stroke-dasharray: 1 2;
+}
+/* The call runs down the rail once per sample, into the instrument's bar. */
+.hero-circuit-live {
+  fill: none;
+  stroke: var(--console-accent);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hero-circuit 420ms ease-in forwards;
+}
+@keyframes hero-circuit {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.hero-circuit-seg {
+  stroke: var(--console-corner);
+  stroke-width: 2;
+}
+.hero-circuit-node {
+  fill: var(--console-accent);
+}
+.hero-circuit-tag {
+  position: absolute;
+  bottom: calc(100% + 18px);
+  left: calc(50% + 30px);
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ui-text-muted);
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
+@media (width < 48rem) {
+  .hero-instrument:not(.hero-instrument-keep) {
+    display: none;
+  }
+  .hero-instrument-keep > .hero-circuit,
+  .hero-instrument-keep > .hero-circuit-tag {
+    display: none;
+  }
+}
+@media (width < 640px) {
+  .hero-page {
+    padding-block: 64px 56px;
+  }
+  .hero-zone {
+    padding: 24px 20px 28px;
+  }
+  .hero-cross {
+    display: none;
+  }
+  .hero-zone {
+    padding-inline: 16px;
+  }
+  .hero-metrics > div {
+    padding-inline: 10px;
+  }
+  .hero-metrics dd {
+    font-size: 20px;
+  }
+  .hero-metrics dd > span {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+  }
+  .hero-share,
+  .hero-share-read {
+    padding-inline: 10px;
+  }
+}
+@media (width < 400px) {
+  .hero-metrics dd.hero-metric-sub {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-share-closed,
+  .hero-share-open {
+    animation: none;
+  }
+  .hero-circuit-live {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Pages built on .puzzles-landing (the landing, the playground, a puzzle page) use wide gutters; the header and the
+   footer take the same ones there, so the package name lines up with the content. Docs keep the Nuxt UI container. */
+html:has(.puzzles-landing) .puzzles-site-header [data-slot="container"],
+html:has(.puzzles-landing) footer [data-slot="container"] {
+  padding-inline: 2rem;
+}
+@media (width >= 40rem) {
+  html:has(.puzzles-landing) .puzzles-site-header [data-slot="container"],
+  html:has(.puzzles-landing) footer [data-slot="container"] {
+    padding-inline: 3rem;
+  }
+}
+@media (width >= 64rem) {
+  html:has(.puzzles-landing) .puzzles-site-header [data-slot="container"],
+  html:has(.puzzles-landing) footer [data-slot="container"] {
+    padding-inline: 4rem;
+  }
+}
+
 /* UTooltip in the instrument grammar: one quiet 1px edge with a short amber segment, the top right corner cut, mono text. */
 .puzzles-tooltip {
   --tooltip-edge: color-mix(in srgb, var(--ui-text-muted) 35%, var(--ui-bg));
@@ -574,11 +1187,15 @@ button:not(:disabled),
   color: var(--ui-text-dimmed);
 }
 
-/* Operational panel: the instrument grammar shared by the landing console and the author page. */
-.tool-console {
+/* The instrument palette, on the root so a strip or a button outside a panel shares it. */
+:root {
   --console-line: color-mix(in srgb, var(--ui-border) 75%, transparent);
   --console-corner: color-mix(in srgb, var(--ui-text-muted) 55%, var(--ui-bg));
   --console-accent: color-mix(in srgb, var(--ui-primary) 65%, var(--ui-text-highlighted));
+}
+
+/* Operational panel: the instrument grammar shared by the landing console and the author page. */
+.tool-console {
   position: relative;
   width: 100%;
   max-width: 35rem;
@@ -1641,6 +2258,10 @@ button.console-lead:focus-visible {
   text-transform: none;
   letter-spacing: 0;
 }
+/* The response row already draws the edge the footer would; two neighbours share one line. */
+.console-output + .console-footer-plain {
+  border-top: 0;
+}
 .console-footer-plain > .console-meta {
   margin-left: auto;
 }
@@ -1801,4 +2422,191 @@ button.console-lead:focus-visible {
   background-size: 12px 3px;
   background-repeat: repeat-x;
   background-position: 20px 0;
+}
+
+/* Shared by the landing hero, the closing section and the footer: the ID strip, boxed actions, the install line. */
+/* The ID strip: a boxed tag, the package and its version, the data version in blocks of four. */
+.console-id {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0;
+  padding: 4px 10px 4px 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ui-text-muted);
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
+.console-id-tag {
+  padding: 1px 6px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ui-bg);
+  background: var(--console-corner);
+}
+.console-id-sep {
+  color: var(--ui-text-dimmed);
+}
+.console-id-data {
+  color: var(--ui-text-dimmed);
+  white-space: nowrap;
+}
+.console-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 32px;
+}
+/* Actions as boxed segments: the label and a square cell for the glyph, split by a rule, the top right corner cut. */
+.console-action {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: stretch;
+  height: 34px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ui-text-highlighted);
+}
+.console-action::before,
+.console-action::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  pointer-events: none;
+}
+.console-action::before {
+  inset: 0;
+  background: var(--console-line);
+  transition: background 0.15s ease;
+}
+.console-action::after {
+  inset: 1px;
+  background: var(--ui-bg);
+}
+.console-action-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+}
+.console-action-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  color: var(--ui-text-muted);
+  box-shadow: inset -1px 0 0 var(--console-line);
+  transition: color 0.15s ease;
+}
+.console-action-label + .console-action-cell {
+  box-shadow: inset 1px 0 0 var(--console-line);
+}
+.console-action:hover::before {
+  background: color-mix(in srgb, var(--console-accent) 45%, var(--console-line));
+}
+.console-action:hover .console-action-cell {
+  color: var(--console-accent);
+}
+.console-action-primary {
+  color: var(--ui-bg);
+  font-weight: 500;
+}
+.console-action-primary::before,
+.console-action-primary::after {
+  background: var(--ui-primary);
+}
+.console-action-primary .console-action-cell {
+  color: var(--ui-bg);
+  box-shadow: inset 1px 0 0 color-mix(in srgb, var(--ui-bg) 18%, transparent) !important;
+}
+.console-action-primary .console-action-cell > * {
+  transition: transform 0.15s ease;
+}
+.console-action-primary:hover::before,
+.console-action-primary:hover::after {
+  background: color-mix(in srgb, var(--ui-primary) 88%, var(--ui-text-highlighted));
+}
+.console-action-primary:hover .console-action-cell {
+  color: var(--ui-bg);
+}
+.console-action-primary:hover .console-action-cell > * {
+  transform: translateX(2px);
+}
+.console-action:focus-visible {
+  outline: 1px solid var(--ui-primary);
+  outline-offset: 3px;
+}
+/* The install line: boxed tag, the command, the copy button, corner brackets like the readout. */
+.console-install {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+  margin-top: 16px;
+  padding: 5px 5px 5px 6px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  outline: 1px dashed var(--console-line);
+  outline-offset: -1px;
+}
+.console-install::before,
+.console-install::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+.console-install::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid var(--console-corner);
+  border-left: 1px solid var(--console-corner);
+}
+.console-install::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1px solid var(--console-corner);
+  border-bottom: 1px solid var(--console-corner);
+}
+.console-install-tag {
+  padding: 1px 5px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+  box-shadow: inset 0 0 0 1px var(--console-line);
+}
+.console-install code {
+  min-width: 0;
+  color: var(--ui-text-highlighted);
+  overflow-wrap: anywhere;
+}
+.console-install-prompt {
+  color: var(--ui-text-dimmed);
+}
+@media (width < 640px) {
+  .console-install {
+    font-size: 12px;
+    gap: 8px;
+  }
+  .console-install code {
+    white-space: nowrap;
+  }
+  .console-id-data {
+    display: none;
+  }
+}
+@media (width < 400px) {
+  .console-install-tag {
+    display: none;
+  }
 }

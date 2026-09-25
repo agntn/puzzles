@@ -61,7 +61,7 @@ const columns: TableColumn<Row>[] = [
     sortingFn: (left, right) =>
       left.original.open - right.original.open || left.original.total - right.original.total,
     meta: {
-      class: { th: "w-[8.5rem]", td: "@max-[52rem]/roster:col-span-1!" },
+      class: { th: "w-[8.5rem] text-end", td: "@max-[52rem]/roster:col-span-1!" },
     },
   },
   {
@@ -94,7 +94,9 @@ const ui = { ...ROSTER_TABLE_UI, td: `${ROSTER_TABLE_UI.td} align-middle` };
 const meta = {
   class: {
     tr: (row: { original: Row }) =>
-      row.original.key === props.active ? "bg-(--puzzles-cell-active)!" : "",
+      row.original.key === props.active
+        ? "bg-[color-mix(in_srgb,var(--ui-text-muted)_5%,var(--ui-bg))]! [&>td:first-child]:shadow-[inset_2px_0_0_var(--console-accent)]!"
+        : "",
   },
 };
 </script>
@@ -104,8 +106,11 @@ const meta = {
     <span class="console-cross console-cross-tl" aria-hidden="true">+</span>
     <span class="console-cross console-cross-br" aria-hidden="true">+</span>
     <header :class="ROSTER_CLASS.bar">
-      <span :class="ROSTER_CLASS.title">collections()</span>
-      <span :class="ROSTER_CLASS.meta">{{ rows.length }} collections · {{ order }}</span>
+      <span :class="ROSTER_CLASS.title"><span class="console-tag">Call</span>collections()</span>
+      <span class="flex items-center gap-4 max-[640px]:hidden"
+        ><span :class="ROSTER_CLASS.meta">{{ rows.length }} collections · {{ order }}</span
+        ><span class="console-mark" aria-hidden="true"
+      /></span>
     </header>
     <div class="roster-ruler" aria-hidden="true" />
     <UTable
@@ -135,11 +140,9 @@ const meta = {
         </UTooltip>
       </template>
       <template #key-cell="{ row }">
-        <span
-          class="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 @max-[52rem]/roster:justify-end"
-        >
-          <span :class="ROSTER_CLASS.id">{{ row.original.key }}</span>
-          <span class="inline-flex gap-1 text-muted"
+        <span class="flex min-w-0 flex-nowrap items-center gap-x-2 @max-[52rem]/roster:justify-end">
+          <span :class="[ROSTER_CLASS.id, 'min-w-0']">{{ row.original.key }}</span>
+          <span class="inline-flex flex-none gap-1 text-muted"
             ><UTooltip v-for="chain in row.original.chains" :key="chain" :text="chain"
               ><UIcon
                 :name="CHAIN_ICONS[chain] ?? 'i-lucide-link'"
@@ -179,9 +182,9 @@ const meta = {
       </template>
     </UTable>
     <footer :class="ROSTER_CLASS.footer">
-      <span>local dataset / no network</span>
-      <NuxtLink to="/guide/custom" :class="[ROSTER_CLASS.meta, 'hover:text-(--console-accent)']"
-        >registerCollection({ key, load }) adds yours →</NuxtLink
+      <span>Local dataset / no network</span>
+      <NuxtLink to="/guide/custom" class="text-highlighted hover:text-(--console-accent)"
+        ><span aria-hidden="true">→ </span>registerCollection({ key, load }) adds yours</NuxtLink
       >
     </footer>
   </section>

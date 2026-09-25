@@ -26,24 +26,28 @@ defineProps<{ hints: readonly HintEntry[] }>();
           <span class="console-tag">{{ hint.kind }}</span
           ><span v-if="hint.shared" class="console-tag">collection</span>{{ hint.text }}
         </p>
-        <p class="console-lead">
-          <span class="console-tag">Source</span>
-          <UTooltip :text="hint.source">
-            <a :href="hint.source" target="_blank" rel="noopener">{{ linkText(hint.source) }}</a>
-          </UTooltip>
-          <span class="console-leader" aria-hidden="true" />
-        </p>
-        <p v-if="hint.confirmation" class="console-lead">
-          <span class="console-tag">Confirm</span>
-          <UTooltip :text="hint.confirmation.url">
-            <a :href="hint.confirmation.url" target="_blank" rel="noopener"
-              >{{ hint.confirmation.description ?? linkText(hint.confirmation.url)
-              }}<span v-if="hint.confirmation.description" class="hint-log-host">
-                {{ host(hint.confirmation.url) }}</span
-              ></a
+        <!-- Source and confirmation on one row: a hint is its text, the rest is where it was said. -->
+        <p class="hint-log-links">
+          <span class="hint-log-link">
+            <span class="console-tag">Source</span>
+            <UTooltip :text="hint.source">
+              <a :href="hint.source" target="_blank" rel="noopener">{{ linkText(hint.source) }}</a>
+            </UTooltip>
+          </span>
+          <span v-if="hint.confirmation" class="hint-log-link">
+            <span class="console-tag">Confirm</span>
+            <UTooltip
+              :text="
+                hint.confirmation.description
+                  ? `${hint.confirmation.description} ${hint.confirmation.url}`
+                  : hint.confirmation.url
+              "
             >
-          </UTooltip>
-          <span class="console-leader" aria-hidden="true" />
+              <a :href="hint.confirmation.url" target="_blank" rel="noopener">{{
+                host(hint.confirmation.url)
+              }}</a>
+            </UTooltip>
+          </span>
         </p>
         <details v-if="hint.answer" class="hint-log-answer">
           <summary>Published answer</summary>
@@ -66,7 +70,7 @@ defineProps<{ hints: readonly HintEntry[] }>();
 <style scoped>
 .hint-log {
   display: grid;
-  gap: 18px;
+  gap: 14px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -104,6 +108,34 @@ defineProps<{ hints: readonly HintEntry[] }>();
   font-family: var(--font-mono);
   vertical-align: 1px;
 }
+.hint-log-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin: 0;
+  font-size: 12px;
+}
+.hint-log-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+.hint-log-link > .console-tag {
+  flex: none;
+  margin: 0;
+}
+.hint-log-link a {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ui-text-muted);
+}
+.hint-log-link a:hover {
+  color: var(--console-accent);
+}
 .hint-log-entry .console-lead {
   flex-wrap: nowrap;
   gap: 0 10px;
@@ -120,12 +152,8 @@ defineProps<{ hints: readonly HintEntry[] }>();
 .hint-log-entry .console-lead > a:hover {
   color: var(--console-accent);
 }
-.hint-log-host {
-  margin-left: 8px;
-  color: var(--ui-text-dimmed);
-}
 .hint-log-answer {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 .hint-log-answer summary {
   cursor: pointer;
