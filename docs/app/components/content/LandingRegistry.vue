@@ -39,11 +39,13 @@ const busy = computed(() => !props.loaded.includes(props.sample.collection));
 
 <template>
   <div class="tool-console landing-registry">
+    <span class="console-cross console-cross-tl" aria-hidden="true">+</span>
+    <span class="console-cross console-cross-br" aria-hidden="true">+</span>
     <header class="console-bar">
-      <span class="console-title registry-call"
-        ><span class="console-tag">Call</span>await get("{{ sample.id }}")</span
-      >
-      <span class="console-hosts">{{ loaded.length }} of {{ COLLECTIONS.length }} loaded</span>
+      <!-- prettier-ignore -->
+      <span class="console-title registry-call"><span class="console-tag">Call</span>get(<span class="tok-str">{{ JSON.stringify(sample.id) }}</span>)</span>
+      <span class="console-meta">manifest</span>
+      <span class="console-mark" aria-hidden="true" />
     </header>
     <div class="console-ruler" aria-hidden="true">
       <span
@@ -77,13 +79,29 @@ const busy = computed(() => !props.loaded.includes(props.sample.collection));
       </ol>
     </div>
 
-    <p class="registry-note">
-      <code>import("@agntn/puzzles")</code> loaded no records. Each <code>get(id)</code> here
-      imported one module; the other {{ COLLECTIONS.length - loaded.length }} are still just keys.
-    </p>
+    <!-- The count as a gauge: one tick per key, the loaded modules filled, the one the walk shows in the accent. -->
+    <div
+      class="registry-gauge"
+      :aria-label="`${loaded.length} of ${COLLECTIONS.length} modules loaded`"
+    >
+      <span class="registry-ticks" aria-hidden="true">
+        <span
+          v-for="row in rows"
+          :key="row.key"
+          :data-state="row.state"
+          :data-active="row.active"
+        />
+      </span>
+      <span class="console-gauge-read"
+        >loaded {{ loaded.length }} / {{ COLLECTIONS.length }}
+        <span class="registry-rest"
+          >· {{ COLLECTIONS.length - loaded.length }} still keys</span
+        ></span
+      >
+    </div>
 
     <footer class="console-footer console-footer-plain">
-      <span>One chunk per collection</span>
+      <span>import() loads no records · one chunk per key</span>
       <NuxtLink :to="`/collections/${sample.collection}`" class="registry-link"
         ><span aria-hidden="true">→ </span>{{ sample.collection }}</NuxtLink
       >
@@ -96,8 +114,43 @@ const busy = computed(() => !props.loaded.includes(props.sample.collection));
   min-width: 0;
   overflow-wrap: anywhere;
 }
+/* The manifest on the crosses grid, like every subject band. */
 .registry-body {
-  padding: 14px 20px 12px;
+  padding: 14px 20px 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M16 18h4m-2-2v4' fill='none' stroke='%23818a94' stroke-opacity='.1'/%3E%3C/svg%3E");
+  background-size: 36px 36px;
+  background-position: 24px 20px;
+}
+.registry-gauge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px 12px;
+  border-top: 1px solid var(--console-line);
+}
+.registry-ticks {
+  display: flex;
+  flex: 1;
+  gap: 3px;
+  align-items: flex-end;
+  min-width: 0;
+}
+.registry-ticks > span {
+  flex: 1;
+  max-width: 8px;
+  height: 10px;
+  box-shadow: inset 0 0 0 1px var(--console-corner);
+}
+.registry-ticks > span[data-state="loaded"] {
+  background: repeating-linear-gradient(180deg, var(--console-corner) 0 2px, transparent 2px 3px);
+}
+.registry-ticks > span[data-active="true"] {
+  height: 14px;
+  background: var(--console-accent);
+  box-shadow: none;
+}
+.registry-rest {
+  color: var(--ui-text-dimmed);
 }
 /* A map of the manifest: as many columns as fit, one cell per key, its node tells whether it loaded. */
 .registry-modules {
@@ -137,16 +190,17 @@ const busy = computed(() => !props.loaded.includes(props.sample.collection));
   height: 5px;
   box-shadow: inset 0 0 0 1px var(--console-corner);
 }
-.registry-module[data-state="loaded"] .registry-icon,
-.registry-module[data-state="loading"] .registry-icon {
+.registry-module[data-state="loaded"] .registry-icon {
+  color: var(--ui-text-muted);
+}
+.registry-module[aria-current="true"] .registry-icon {
   color: var(--console-accent);
 }
 .registry-module[data-state="loaded"] .registry-key {
   color: var(--ui-text-highlighted);
 }
-.registry-module[data-state="loaded"] .registry-node,
-.registry-module[data-state="loading"] .registry-node {
-  box-shadow: inset 0 0 0 1px var(--console-accent);
+.registry-module[data-state="loaded"] .registry-node {
+  background: repeating-linear-gradient(180deg, var(--console-corner) 0 1px, transparent 1px 2px);
 }
 .registry-module[aria-current="true"] .registry-key {
   color: var(--console-accent);
@@ -162,20 +216,6 @@ const busy = computed(() => !props.loaded.includes(props.sample.collection));
 .registry-module:focus-visible {
   outline: 1px solid var(--ui-primary);
   outline-offset: 2px;
-}
-.registry-note {
-  margin: 0;
-  padding: 10px 20px 12px;
-  border-top: 1px solid var(--console-line);
-  font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--ui-text-muted);
-}
-.registry-note code {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--ui-text-highlighted);
 }
 .registry-link {
   margin-left: auto;
@@ -195,7 +235,7 @@ const busy = computed(() => !props.loaded.includes(props.sample.collection));
 }
 @media (width < 400px) {
   .registry-body,
-  .registry-note {
+  .registry-gauge {
     padding-inline: 14px;
   }
   .registry-body > .console-rule-title > span:first-child > span {

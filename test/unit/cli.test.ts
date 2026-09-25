@@ -41,7 +41,12 @@ async function failure(...args: readonly string[]): Promise<Failure> {
   throw new Error(`puzzles ${args.join(" ")} exited 0`);
 }
 
-describe.concurrent("puzzles CLI", () => {
+/*
+ * Every test here spawns the CLI, some of them four times, and the whole block runs at once. On a CI
+ * runner the authors test took 4.8 s on main and then crossed the default 5 s, so the block gets the
+ * live tests' 30 s.
+ */
+describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
   it("prints machine-readable statistics", async () => {
     const result = await json<{ readonly total: number; readonly unsolved: number }>(
       "stats",

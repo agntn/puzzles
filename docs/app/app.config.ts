@@ -24,6 +24,10 @@ export default defineAppConfig({
   header: {
     title: "@agntn/puzzles",
   },
+  /** Sections as tabs under the header, so the sidebar holds one section as the lists grow. */
+  navigation: {
+    sub: "header",
+  },
   github: {
     url: "https://github.com/agntn/puzzles",
     branch: "main",
@@ -63,24 +67,81 @@ export default defineAppConfig({
         text: "whitespace-normal text-highlighted [overflow-wrap:anywhere]",
       },
     },
+    /** The site header, the search field and the keys in the instrument grammar; the look lives in app.css. */
+    header: {
+      slots: {
+        root: "puzzles-site-header",
+      },
+    },
+    contentSearchButton: {
+      slots: {
+        base: "puzzles-search",
+      },
+    },
+    /** The search modal and its palette in the instrument grammar; the look lives in app.css (portalled). */
+    contentSearch: {
+      slots: {
+        modal: "puzzles-search-modal",
+      },
+    },
+    commandPalette: {
+      slots: {
+        root: "puzzles-palette",
+        input: "puzzles-palette-input",
+        close: "puzzles-palette-close",
+        group: "puzzles-palette-group",
+        label: "puzzles-palette-label",
+        item: "puzzles-palette-item",
+        itemLeadingIcon: "puzzles-palette-icon",
+        itemLabel: "puzzles-palette-text",
+        itemLabelBase: "puzzles-palette-name",
+        itemDescription: "puzzles-palette-about",
+        empty: "puzzles-palette-empty",
+      },
+    },
+    kbd: {
+      base: "puzzles-kbd",
+    },
     pageHeader: {
       slots: {
-        root: "py-8 border-b border-muted",
+        root: "puzzles-page-header py-8 border-b-0",
         headline: "puzzles-eyebrow mb-3",
         title: "text-3xl sm:text-4xl font-medium tracking-tight text-highlighted",
         description: "text-base leading-7 text-muted",
       },
     },
+    /**
+     * The layouts with a right aside get one track per panel instead of the ten column grid: the toc
+     * takes a fixed 13.75rem, a little wider than Nuxt UI's, and the text keeps 52rem on a large
+     * screen, the width the rosters need before they stack.
+     */
+    page: {
+      compoundVariants: [
+        {
+          left: true,
+          right: true,
+          class: {
+            root: "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_min(13.75rem,20%)]",
+            left: "lg:col-span-1",
+            center: "lg:col-span-1",
+            right: "lg:col-span-1",
+          },
+        },
+        {
+          left: false,
+          right: true,
+          class: {
+            root: "lg:grid-cols-[minmax(0,1fr)_min(13.75rem,20%)]",
+            center: "lg:col-span-1",
+            right: "lg:col-span-1",
+          },
+        },
+      ],
+    },
     /** Nuxt UI truncates TOC entries; headings here are sentences, so let them wrap. */
     contentToc: {
       slots: {
         linkText: "whitespace-normal",
-      },
-    },
-    contentSurround: {
-      slots: {
-        link: "rounded-xl puzzles-frame border-0 bg-default hover:bg-muted",
-        linkLeadingIcon: "text-muted",
       },
     },
     prose: {
@@ -100,10 +161,9 @@ export default defineAppConfig({
       cardGroup: {
         base: "grid grid-cols-1 sm:grid-cols-2 gap-3 my-5 *:my-0",
       },
-      table: {
-        slots: {
-          root: "rounded-xl puzzles-frame",
-        },
+      /** Inline code in the instrument grammar; the look lives in `.puzzles-code` in app.css. */
+      code: {
+        base: "puzzles-code",
       },
       pre: {
         slots: {

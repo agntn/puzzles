@@ -50,17 +50,17 @@ const VERDICTS: Readonly<
   Record<LandingSample["verdict"], (sample: LandingSample) => Pick<Row, "value" | "note" | "state">>
 > = {
   verified: (sample) => ({
-    value: `{ verified: true, derivedAddress: "${shorten(sample.detail, 10, 8)}" }`,
-    note: "the derived address equals the stored one",
+    value: "{ verified: true }",
+    note: `derivedAddress ${shorten(sample.detail, 10, 8)} equals the stored one`,
     state: "ok",
   }),
   unavailable: (sample) => ({
-    value: "{ verified: false, unavailable: true }",
+    value: "{ verified: false, unavailable }",
     note: `${sample.detail}. An answer, not an exception`,
     state: "dim",
   }),
   failed: (sample) => ({
-    value: `{ verified: false, error: "${sample.detail}" }`,
+    value: "{ verified: false, error }",
     note: sample.detail,
     state: "failed",
   }),
@@ -88,83 +88,130 @@ watch(
 </script>
 
 <template>
-  <div class="tool-console">
+  <div class="tool-console landing-verify">
+    <span class="console-cross console-cross-tl" aria-hidden="true">+</span>
+    <span class="console-cross console-cross-br" aria-hidden="true">+</span>
     <header class="console-bar">
-      <span class="console-title">verify</span>
-      <span class="console-hosts">secp256k1 · in your browser</span>
+      <!-- prettier-ignore -->
+      <span class="console-title"><span class="console-tag">Call</span>verify(<span class="tok-str">{{ JSON.stringify(sample.id) }}</span>)</span>
+      <span class="console-meta">secp256k1 · in your browser</span>
+      <span class="console-mark" aria-hidden="true" />
     </header>
-
-    <div class="console-request">
-      <span class="console-label"><span class="console-index">01</span> Input / id</span>
-      <code>{{ sample.id }}</code>
-      <span aria-hidden="true">↳</span>
+    <div class="console-ruler" aria-hidden="true">
+      <span :key="sample.id" class="console-cursor" />
     </div>
 
-    <div class="console-result">
+    <!-- The verdict on the crosses grid, then the three calls behind it, each with what it returned. -->
+    <div class="verify-subject">
       <div v-if="scan > 0" :key="scan" class="console-scan" aria-hidden="true" />
-      <span class="console-label"><span class="console-index">02</span> Verdict</span>
-      <div class="console-subject">
+      <div class="verify-identity">
         <ConsoleReticle :key="sample.id" :icon="verdictIcon(verified, unavailable)" />
-        <div class="console-identity">
-          <span class="console-label">Collection / {{ sample.collection }}</span>
+        <div class="verify-name">
+          <span class="console-label"
+            >Verdict / <span class="console-label-key">{{ sample.collection }}</span></span
+          >
           <h3 :class="{ 'verify-ok': verified, 'verify-failed': sample.verdict === 'failed' }">
             {{ verdictLabel(verified, unavailable) }}
           </h3>
-          <span>{{ sample.chain }} / {{ sample.kind }}</span>
+          <span class="verify-aliases">{{ sample.chain }} / {{ sample.kind }}</span>
         </div>
       </div>
-      <span class="console-label"><span class="console-index">03</span> Derivation</span>
       <ol :key="sample.id" class="console-readout console-animate verify-steps">
         <li
           v-for="(row, index) in rows"
           :key="row.key"
           :style="{ animationDelay: `${index * 45}ms` }"
         >
-          <code class="tok-fn">{{ row.call }}</code>
-          <p class="verify-value" :data-state="row.state">{{ row.value }}</p>
+          <code class="tok-fn verify-call">{{ row.call }}</code>
+          <span class="verify-value" :data-state="row.state">{{ row.value }}</span>
           <p class="verify-note">{{ row.note }}</p>
         </li>
       </ol>
     </div>
 
-    <footer class="console-footer">
+    <footer class="console-footer console-footer-plain">
       <span>Local dataset / no network</span>
       <NuxtLink
         :to="`/playground?op=verify&id=${encodeURIComponent(sample.id)}`"
         class="verify-link"
-        >run it in the playground <UIcon name="i-lucide-arrow-right" class="size-3.5"
-      /></NuxtLink>
+        ><span aria-hidden="true">→ </span>run it in the playground</NuxtLink
+      >
     </footer>
   </div>
 </template>
 
 <style scoped>
-.console-identity h3.verify-ok {
+/* The subject band: crosses behind it, the verdict with its shield, the three calls in one readout under it. */
+.verify-subject {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  padding: 18px 20px 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Cpath d='M16 18h4m-2-2v4' fill='none' stroke='%23818a94' stroke-opacity='.1'/%3E%3C/svg%3E");
+  background-size: 36px 36px;
+  background-position: 24px 20px;
+}
+.verify-subject > :not(.console-scan) {
+  position: relative;
+}
+.verify-identity {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+.verify-name {
+  min-width: 0;
+}
+.verify-name h3 {
+  margin: 4px 0 6px;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--ui-text-highlighted);
+}
+.verify-name h3.verify-ok {
   color: var(--console-accent);
 }
-.console-identity h3.verify-failed {
+.verify-name h3.verify-failed {
   color: var(--puzzles-del);
 }
+.verify-aliases {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+}
+/* One row per call: the call, then the value it returned with a marker, one line on what it means under both. */
 .verify-steps {
   display: grid;
-  margin: 10px 0 2px;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  container-type: inline-size;
 }
 .verify-steps > li {
-  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 16px;
+  padding: 9px 12px;
 }
 .verify-steps > li + li {
   border-top: 1px solid var(--console-line);
 }
-.verify-steps code {
+.verify-call {
+  min-width: 0;
   font-size: 12px;
   overflow-wrap: anywhere;
 }
-/* The value the call returned, marked like the gauge: accent for a result, hollow for nothing, red for a mismatch. */
 .verify-value {
-  display: flex;
+  display: inline-flex;
   align-items: baseline;
-  gap: 10px;
-  margin: 6px 0 0;
+  gap: 8px;
+  white-space: nowrap;
   font-size: 12px;
   line-height: 1.5;
   overflow-wrap: anywhere;
@@ -191,20 +238,16 @@ watch(
   box-shadow: inset 0 0 0 1px var(--puzzles-del);
 }
 .verify-note {
-  margin: 4px 0 0 17px;
+  grid-column: 1 / -1;
+  margin: 0;
   font-family: var(--font-sans);
   font-size: 12px;
   line-height: 1.5;
   color: var(--ui-text-dimmed);
 }
 .verify-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   margin-left: auto;
-  color: var(--ui-text-muted);
-  text-transform: none;
-  letter-spacing: 0.04em;
+  color: var(--ui-text-highlighted);
 }
 .verify-link:hover {
   color: var(--console-accent);
@@ -214,8 +257,21 @@ watch(
   outline-offset: 3px;
 }
 @media (width < 400px) {
+  .verify-subject {
+    padding-inline: 14px;
+  }
+  .verify-identity {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+/* Too narrow for the longest call and value side by side: every value goes under its call, never just one. */
+@container (width < 30rem) {
   .verify-steps > li {
-    padding-inline: 12px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .verify-value {
+    white-space: normal;
   }
 }
 </style>
