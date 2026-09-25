@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { readdirSync } from "node:fs";
-import { describe, expect, it, vi } from "vite-plus/test";
+import { describe, expect, expectTypeOf, it, vi } from "vite-plus/test";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
@@ -54,6 +54,7 @@ import {
   SingletonCollection,
   stats,
   Status,
+  type AnyCollection,
 } from "../../src/index.ts";
 
 const concreteClasses = [
@@ -226,6 +227,20 @@ describe("lazy collection registry", () => {
     const collection = await requireCollection("movie_enigma");
     expect(collection.hintsById("movie_enigma")).toEqual(hints);
     expect(puzzle.status()).toBe(Status.Solved);
+  });
+
+  it("types a built-in lookup by the queries its collection takes", async () => {
+    const numeric = await requireCollection("b1000");
+    expectTypeOf<Parameters<typeof numeric.get>[0]>().toEqualTypeOf<number | string>();
+    expect(numeric.get(71)?.id()).toBe("b1000/71");
+    const singleton = await getCollection("gsmg");
+    expect(singleton.get()?.id()).toBe("gsmg");
+    const alias = await getCollection("warpwallet");
+    expectTypeOf<Parameters<typeof alias.get>[0]>().toEqualTypeOf<string>();
+    // @ts-expect-error A named collection takes no number.
+    expect(alias.get(1)).toBeUndefined();
+    const key: string = "b1000";
+    expectTypeOf(await getCollection(key)).toEqualTypeOf<AnyCollection | undefined>();
   });
 
   it("preserves universal and historical collection lookups", async () => {
