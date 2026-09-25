@@ -531,51 +531,6 @@ button:not(:disabled),
   color: var(--ui-text-dimmed);
 }
 
-.puzzles-code {
-  margin: 0;
-  padding: 0.875rem 0;
-  overflow-x: auto;
-  background: var(--ui-bg-muted);
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  line-height: 1.65;
-  color: var(--ui-text);
-  counter-reset: line;
-}
-
-.puzzles-code-line {
-  display: block;
-  padding: 0 1rem 0 0;
-  white-space: pre;
-}
-
-.puzzles-code-line::before {
-  counter-increment: line;
-  content: counter(line);
-  display: inline-block;
-  width: 2.75rem;
-  padding-right: 1rem;
-  text-align: right;
-  color: var(--ui-text-dimmed);
-  user-select: none;
-}
-
-.puzzles-code-line-wrap {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  padding-left: 2.75rem;
-  text-indent: -2.75rem;
-}
-
-.puzzles-code-line-wrap::before {
-  text-indent: 0;
-}
-
-/* Inline-block children would inherit the hanging indent of a wrapped code line. */
-.puzzles-code-line * {
-  text-indent: 0;
-}
-
 /* UTooltip in the instrument grammar: one quiet 1px edge with a short amber segment, the top right corner cut, mono text. */
 .puzzles-tooltip {
   --tooltip-edge: color-mix(in srgb, var(--ui-text-muted) 35%, var(--ui-bg));
@@ -617,15 +572,6 @@ button:not(:disabled),
 }
 .puzzles-tooltip-sep {
   color: var(--ui-text-dimmed);
-}
-
-/* Below the small breakpoint a wrapped record line reads worse than a scrolling one. */
-@media (width < 40rem) {
-  .puzzles-code-line-wrap {
-    white-space: pre;
-    padding-left: 0;
-    text-indent: 0;
-  }
 }
 
 /* Operational panel: the instrument grammar shared by the landing console and the author page. */
@@ -1518,6 +1464,45 @@ button.console-lead:focus-visible {
 }
 .console-snippet + .console-rule-title {
   margin-top: 16px;
+}
+/* Line numbers in a gutter; a wrapped line continues four columns in, never under the number. */
+.console-lines {
+  padding-left: 0;
+  font-size: 11.5px;
+  counter-reset: line;
+}
+.console-lines > code > span {
+  display: block;
+  min-height: 1.7em;
+  padding-left: calc(3.25em + 4ch);
+  text-indent: calc(-3.25em - 4ch);
+}
+.console-lines > code > span::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2.25em;
+  margin-right: 1em;
+  text-align: right;
+  text-indent: 0;
+  color: var(--ui-text-dimmed);
+  user-select: none;
+}
+.console-lines > code > span * {
+  text-indent: 0;
+}
+@media (width < 400px) {
+  .console-lines {
+    font-size: 11px;
+  }
+  .console-lines > code > span {
+    padding-left: calc(2.5em + 2ch);
+    text-indent: calc(-2.5em - 2ch);
+  }
+  .console-lines > code > span::before {
+    width: 1.75em;
+    margin-right: 0.75em;
+  }
 }
 .console-chips {
   display: flex;

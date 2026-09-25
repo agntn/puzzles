@@ -13,15 +13,6 @@ const { copied, copy } = useCopied();
 
 /** The collection list highlights whichever collection the panels are showing. */
 const activeCollection = computed(() => current.value.collection);
-
-const customCode = [
-  ["kw", "import"],
-  ["", " { NamedCollection, bitcoinPuzzle, hex, p2pkh, party, registerCollection } "],
-  ["kw", "from"],
-  ["", " "],
-  ["str", '"@agntn/puzzles"'],
-  ["", ";"],
-] as const;
 </script>
 
 <template>
@@ -226,15 +217,7 @@ const customCode = [
       list. Register a loader and the registry treats it like a built-in, including the part where
       nothing loads until someone asks.
       <template #visual>
-        <div class="puzzles-frame overflow-hidden rounded-xl">
-          <div class="flex items-center gap-2 border-b border-muted px-4 py-3">
-            <UIcon name="i-vscode-icons-file-type-typescript" class="size-4" />
-            <span class="text-sm text-default">mine.ts</span>
-          </div>
-          <pre
-            class="puzzles-code"
-          ><code><span class="puzzles-code-line puzzles-code-line-wrap"><template v-for="([cls, text], index) in customCode" :key="index"><span :class="cls === '' ? '' : `tok-${cls}`">{{ text }}</span></template></span><span class="puzzles-code-line"> </span><span class="puzzles-code-line"><span class="tok-kw">export const</span> minePuzzleFirst = <span class="tok-fn">bitcoinPuzzle</span>({</span><span class="puzzles-code-line">  <span class="tok-key">id</span>: <span class="tok-str">"mine/first"</span>,</span><span class="puzzles-code-line">  <span class="tok-key">address</span>: <span class="tok-fn">p2pkh</span>(<span class="tok-str">"1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"</span>),</span><span class="puzzles-code-line">  <span class="tok-key">sourceUrl</span>: <span class="tok-str">"https://example.com/first"</span>,</span><span class="puzzles-code-line">  <span class="tok-key">startedAt</span>: <span class="tok-str">"2026-01-01 00:00:00"</span>,</span><span class="puzzles-code-line">  <span class="tok-key">key</span>: <span class="tok-fn">hex</span>(<span class="tok-str">"00…01"</span>, <span class="tok-const">1</span>),</span><span class="puzzles-code-line">});</span><span class="puzzles-code-line"> </span><span class="puzzles-code-line"><span class="tok-kw">export class</span> <span class="tok-fn">MineCollection</span> <span class="tok-kw">extends</span> NamedCollection {</span><span class="puzzles-code-line">  <span class="tok-kw">static readonly</span> key = <span class="tok-str">"mine"</span>;</span><span class="puzzles-code-line">  <span class="tok-kw">static readonly</span> author = <span class="tok-fn">party</span>(<span class="tok-str">"you"</span>);</span><span class="puzzles-code-line">  <span class="tok-kw">static readonly</span> puzzles = [minePuzzleFirst];</span><span class="puzzles-code-line">  <span class="tok-fn">constructor</span>() {</span><span class="puzzles-code-line">    <span class="tok-kw">super</span>(MineCollection.key, MineCollection.author, MineCollection.puzzles);</span><span class="puzzles-code-line">  }</span><span class="puzzles-code-line">}</span><span class="puzzles-code-line"> </span><span class="puzzles-code-line puzzles-code-line-wrap"><span class="tok-cm">// Lazy, like the built-ins: the module loads on the first get("mine/first").</span></span><span class="puzzles-code-line puzzles-code-line-wrap"><span class="tok-fn">registerCollection</span>({ key: <span class="tok-str">"mine"</span>, load: () =&gt; <span class="tok-kw">import</span>(<span class="tok-str">"./mine"</span>).then((m) =&gt; <span class="tok-kw">new</span> m.<span class="tok-fn">MineCollection</span>()) });</span></code></pre>
-        </div>
+        <LandingCustom />
       </template>
     </LandingFeature>
 
