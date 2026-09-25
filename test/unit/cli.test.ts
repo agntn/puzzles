@@ -53,7 +53,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "--json",
     );
 
-    expect(result.total).toBe(358);
+    expect(result.total).toBe(359);
     expect(result.unsolved).toBe(95);
   });
 

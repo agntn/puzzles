@@ -170,6 +170,17 @@ const sources = [
     },
   },
   {
+    file: "quizchain/aoinakamoto-2019-04-08-baswxz",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/baswxz/easy_7_mbtc_quizchain_block_9/",
+    author: "u/AoiNakamoto",
+    date: "2019-04-08",
+    archive: {
+      url: "https://web.archive.org/web/20230611152622/https://old.reddit.com/r/bitcoinpuzzles/comments/baswxz/easy_7_mbtc_quizchain_block_9/",
+      date: "2023-06-11T15:26:22Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "iamabananaamaa/iamabananaamaa-2013-12-23",
     url: "https://www.reddit.com/r/bitcoinpuzzles/comments/1ticec/medium_1mbtc_riddle_me_this_for_a_private_key/",
     author: "u/IAMABananaAMAA",
