@@ -6,6 +6,7 @@ import {
   bitcoinPuzzle,
   community,
   confirmation,
+  hex,
   official,
   p2pkh,
   seed,
@@ -251,6 +252,21 @@ describe("puzzles_show text", () => {
     );
     expect(text).toContain("seed phrase: abandon abandon about");
     expect(text).toContain("derivation path: m/0");
+  });
+
+  it("says when the record derived the private key instead of quoting it", () => {
+    const puzzle = bitcoinPuzzle({
+      id: "fixture/derived",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      key: hex("1".padStart(64, "0")).derived(),
+    });
+
+    expect(puzzle.hasDerivedKey()).toBe(true);
+    expect(formatPuzzleRecord(puzzle).split("\n")).toContain(
+      `private key: ${"1".padStart(64, "0")} (hex, derived from the published recipe)`,
+    );
   });
 
   it("prints a range a handwritten puzzle computes without declaring bits", () => {

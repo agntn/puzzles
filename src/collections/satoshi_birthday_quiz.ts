@@ -38,10 +38,12 @@ export const satoshiBirthdayQuizPuzzle = bitcoinPuzzle({
   key: seed(
     "another blush custom lucky brisk sugar estate dinosaur walnut grab drill toddler street series retreat smile barrel cart grunt frequent helmet lake engine solve",
     "m/44'/0'/0'/0/0",
-  ).entropy(
-    "098310da4251c5b19359f3f6cca90bf1bd6f882e066512c4619cae56aef9529e",
-    source(THREAD, "SHA-256 of the seven answer sentences, joined by single spaces"),
-  ),
+  )
+    .entropy(
+      "098310da4251c5b19359f3f6cca90bf1bd6f882e066512c4619cae56aef9529e",
+      source(THREAD, "SHA-256 of the seven answer sentences, joined by single spaces"),
+    )
+    .derived(),
   prize: 0.07,
   hints: [
     official(

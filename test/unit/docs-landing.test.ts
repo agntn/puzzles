@@ -63,6 +63,7 @@ describe("docs landing fixtures", () => {
       ".xpub(",
       ".entropy(",
       ".shares(",
+      ".derived(",
     ]) {
       expect(literals.some((literal) => literal.includes(builder))).toBe(true);
     }

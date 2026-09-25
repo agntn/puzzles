@@ -29,13 +29,15 @@ export const quizchainBlock6 = bitcoinPuzzle({
   startedAt: "2019-04-07 16:18:11",
   status: Status.Solved,
   pubkey: compressed("03df2f84cb1a3f49cfdab70808b73626e687802ce33f712e8d7781512e02c776fd"),
-  key: wif("L2Z1rzCuFPhH9HBkKjHhBhQw3YULpnGTwWjvVJAf2m2AvhDciMQz").entropy(
-    "8d00e61b8c3ee3e8dbf990c104f1e719be79e76ec8466b8278828e0e42285a95",
-    source(
-      THREAD,
-      "SHA-256 of the author's two words, a space and the last three characters of the block 5 key",
-    ),
-  ),
+  key: wif("L2Z1rzCuFPhH9HBkKjHhBhQw3YULpnGTwWjvVJAf2m2AvhDciMQz")
+    .entropy(
+      "8d00e61b8c3ee3e8dbf990c104f1e719be79e76ec8466b8278828e0e42285a95",
+      source(
+        THREAD,
+        "SHA-256 of the author's two words, a space and the last three characters of the block 5 key",
+      ),
+    )
+    .derived(),
   prize: 0.007,
   hints: [
     official("Do you know another two words?", THREAD, undefined, {

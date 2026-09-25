@@ -295,6 +295,16 @@ export abstract class Puzzle {
   }
 
   /**
+   * Whether the private key is known only because the record rebuilt it from a published recipe,
+   * not because a source printed it.
+   *
+   * @returns {boolean} Whether the known private key is derived.
+   */
+  hasDerivedKey(): boolean {
+    return this.keyData()?.derived === true && this.hasPrivateKey();
+  }
+
+  /**
    * Fetches the current native token balance of the target address.
    *
    * The `@agntn/explorers` provider for the chain loads on first use, so the

@@ -33,13 +33,15 @@ export const quizchainBlock7 = bitcoinPuzzle({
   startedAt: "2019-04-08 02:50:59",
   status: Status.Solved,
   pubkey: compressed("02f74aee052f5adb58c5715d033b9b4d69d95e21a067f4b0e8e34a1acb0dd5141a"),
-  key: wif("L14NcSSbGBZBs5i1FrasxWWBgUWEx6SmBaujCYF4gMZfxCZP6LbF").entropy(
-    "2c42845a53de06199d986dc725c87877cfe210b75fce8aeabcdeea583bf2a435",
-    source(
-      THREAD,
-      "SHA-256 of the author's solution with the last three characters of the block 6 key appended",
-    ),
-  ),
+  key: wif("L14NcSSbGBZBs5i1FrasxWWBgUWEx6SmBaujCYF4gMZfxCZP6LbF")
+    .entropy(
+      "2c42845a53de06199d986dc725c87877cfe210b75fce8aeabcdeea583bf2a435",
+      source(
+        THREAD,
+        "SHA-256 of the author's solution with the last three characters of the block 6 key appended",
+      ),
+    )
+    .derived(),
   prize: 0.077,
   hints: [
     official(

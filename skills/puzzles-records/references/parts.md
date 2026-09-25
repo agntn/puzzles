@@ -49,4 +49,5 @@ seed("session cigar grape…", "m/84'/0'/0'/0/0").xpub("zpub…");
 derivation("m/84'/0'/0'/0/0").shares(3, 5, [share(1, "…"), share(2, "…")]);
 mini("S6c56bnX…");
 seed("…", "m/44'/0'/0'/0/0").entropy("1808d3…", source(url, "kitten tweet"), "Required");
+wif("L2Z1…").entropy("8d00…", source(url, "recipe")).derived(); // nobody printed it, the record ran the recipe
 ```

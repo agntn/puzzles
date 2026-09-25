@@ -29,7 +29,7 @@ import { bitcoinPuzzle, type Puzzle, Status } from "../../src/core/puzzle.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { NamedCollection } from "../../src/core/collection.ts";
-import { all, collections } from "../../src/index.ts";
+import { all, collections, verify } from "../../src/index.ts";
 import { decryptBip38, isBip38 } from "../support/bip38.ts";
 
 const puzzles = await all();
@@ -99,6 +99,24 @@ function privateKeyProblem(puzzle: Puzzle): string | undefined {
     return undefined;
   }
   return declaredKeyProblem(puzzle, key, key.hex) ?? derivationProblem(puzzle, key.hex);
+}
+
+/**
+ * A derived mark needs a secret to mark, and since no source printed that secret, the derivation
+ * is its only evidence: the key has to verify against the stored address.
+ *
+ * @param {Puzzle} puzzle - The puzzle to check.
+ * @returns {Promise<string | undefined>} The problem, or nothing when the mark holds.
+ */
+async function derivedKeyProblem(puzzle: Puzzle): Promise<string | undefined> {
+  if (puzzle.keyData()?.derived !== true) {
+    return undefined;
+  }
+  if (!puzzle.hasPrivateKey()) {
+    return `${puzzle.id()}: derived mark without a private key`;
+  }
+  const result = await verify(puzzle);
+  return result.verified ? undefined : `${puzzle.id()}: derived key does not verify`;
 }
 
 function claimedPubkeyProblem(puzzle: Puzzle): string | undefined {
@@ -369,6 +387,21 @@ describe("collection class data", () => {
 
   it("derives every stored address from its recorded private key", () => {
     expect(collect(privateKeyProblem)).toEqual([]);
+  });
+
+  it("verifies every key the record derived instead of quoting", async () => {
+    const problems = await Promise.all(puzzles.map((puzzle) => derivedKeyProblem(puzzle)));
+    expect(problems.filter((problem) => problem !== undefined)).toEqual([]);
+    expect(puzzles.filter((puzzle) => puzzle.hasDerivedKey()).map((puzzle) => puzzle.id())).toEqual(
+      [
+        "iamabananaamaa/gif",
+        "picture_puzzle",
+        "quizchain/6",
+        "quizchain/7",
+        "quizchain/8",
+        "satoshi_birthday_quiz",
+      ],
+    );
   });
 
   it("records a public key for every claimed or swept puzzle", () => {
