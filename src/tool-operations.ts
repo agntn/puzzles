@@ -118,6 +118,19 @@ export const facts = {
       ],
       openWorld: false,
     },
+    stages: {
+      name: "puzzles_stages",
+      title: "Puzzle Stages",
+      description:
+        "List the stages of a puzzle that runs in several, in the author's order: what each one shows, the pages and files the author published for it, the repository copies, and the published answer when somebody solved it.",
+      promptSnippet:
+        "Use puzzles_stages to walk a multi-stage puzzle step by step and see which steps already have a public answer.",
+      promptGuidelines: [
+        "A stage's about line describes it and never gives its answer; the answer, when there is one, carries its own source and date.",
+        "A stage without an answer is not proven unsolvable, only unsolved in public as far as the record knows.",
+      ],
+      openWorld: false,
+    },
     list: {
       name: "puzzles_list",
       title: "List Puzzles",
@@ -430,6 +443,21 @@ export async function showTool(id: string): Promise<ToolResult> {
     puzzle,
     hints: collection.hintsById(puzzle.id()),
   });
+}
+
+/**
+ * The stages of one puzzle in the author's order, as `puzzles_show` prints them.
+ *
+ * @param {string} id - Universal puzzle identifier.
+ * @returns {Promise<ToolResult>} The stages as text, with the stage list in `details`.
+ */
+export async function stagesTool(id: string): Promise<ToolResult> {
+  const {
+    dataset: { requirePuzzle },
+    utils: { formatStageReport },
+  } = await loadCore();
+  const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
+  return text(formatStageReport(puzzle).join("\n"), { id: puzzle.id(), stages: puzzle.stages() });
 }
 
 /**

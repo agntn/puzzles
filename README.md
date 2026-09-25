@@ -24,7 +24,7 @@ Docs, one page per puzzle and a live playground: [puzzles.agntn.dev](https://puz
 - 💤 **Lazy registry.** Importing the package loads no records. `get("b1000/71")` imports one collection module.
 - ✅ **Verification is a value.** A published key derives the address or it doesn't. Nothing throws for a bad record.
 - 💰 **Live balances.** `puzzle.balance()` through `@agntn/explorers`. Base units as `bigint`, API keys redacted from errors.
-- 🤖 **Eleven agent tools.** One executor behind MCP, Pi and OMP. Same answer everywhere.
+- 🤖 **Twelve agent tools.** One executor behind MCP, Pi and OMP. Same answer everywhere.
 - 🌐 **Runs anywhere.** Neutral ESM on the Fetch API. Node, browsers, edge workers.
 
 ## 📦 Install
@@ -61,6 +61,7 @@ b1000/71	unsolved	7.100226 BTC	1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU
 | `puzzles solvers [key]`     | One row per named solver, or one solver's record: every solve, profiles and sourced facts                               |
 | `puzzles show <id>`         | One puzzle. `--json` for the whole record                                                                               |
 | `puzzles hints <id>`        | The collection's hints, the puzzle's own, then its hint files. `--json` for both                                        |
+| `puzzles stages <id>`       | The stages of a multi-stage puzzle with their pages, files and published answers. `--json` for the list                 |
 | `puzzles list [collection]` | One puzzle per line. `--address`, `--chain`, `--status` and `--with-pubkey` narrow it, `--limit` and `--offset` page it |
 | `puzzles verify [id]`       | A published key against its address. `--all` for every puzzle, exit 1 on a mismatch                                     |
 | `puzzles balance <id>`      | The live balance. `--api-key` or `ETHERSCAN_API_KEY` for Ethereum                                                       |
@@ -132,7 +133,7 @@ pi install npm:@agntn/puzzles
 }
 ```
 
-Eleven tools: `puzzles_stats`, `puzzles_collections`, `puzzles_authors`, `puzzles_author`, `puzzles_solvers`, `puzzles_solver`, `puzzles_show`, `puzzles_hints`, `puzzles_list`, `puzzles_verify` and `puzzles_balance`. Only the last one leaves the process, and its annotations say so. What the text carries and where the limits live: the [agents guide](https://puzzles.agntn.dev/guide/agents).
+Twelve tools: `puzzles_stats`, `puzzles_collections`, `puzzles_authors`, `puzzles_author`, `puzzles_solvers`, `puzzles_solver`, `puzzles_show`, `puzzles_hints`, `puzzles_stages`, `puzzles_list`, `puzzles_verify` and `puzzles_balance`. Only the last one leaves the process, and its annotations say so. What the text carries and where the limits live: the [agents guide](https://puzzles.agntn.dev/guide/agents).
 
 ## 🚫 What this does not do
 

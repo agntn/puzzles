@@ -67,6 +67,26 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     expect(result).toMatchObject({ id: "b1000/1", status: "solved" });
   });
 
+  it("prints the stages of a puzzle as the tool does", async () => {
+    const { stagesTool } = await import("../../src/tool-operations.ts");
+    const output = await puzzles("stages", "gsmg");
+    const staged = await json<{ readonly stages: readonly { readonly name: string }[] }>(
+      "stages",
+      "gsmg",
+      "--json",
+    );
+
+    expect(output.trimEnd()).toBe((await stagesTool("gsmg")).content[0]?.text);
+    expect(staged.stages.map((stage) => stage.name)).toEqual([
+      "phase 1",
+      "phase 2",
+      "phase 3",
+      "SalPhaseIon",
+      "Cosmic Duality",
+    ]);
+    expect((await puzzles("stages", "b1000/71")).trim()).toBe("b1000/71: no stages recorded");
+  });
+
   it("prints the hints that hold for a puzzle as the tool does", async () => {
     const output = await puzzles("hints", "warp/challenge_1");
 

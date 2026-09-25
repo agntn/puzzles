@@ -169,6 +169,18 @@ describe("puzzles MCP server", () => {
     expect(firstText(bare)).toBe("arweave/weave1: no hints recorded");
   });
 
+  it("walks the stages of a puzzle with their pages and published answers", async () => {
+    const staged = firstText(
+      await client.callTool({ name: "puzzles_stages", arguments: { id: "gsmg" } }),
+    ).split("\n");
+    const bare = await client.callTool({ name: "puzzles_stages", arguments: { id: "b1000/71" } });
+
+    expect(staged.slice(0, 2)).toEqual(["gsmg: 5 stages", "stages: 5"]);
+    expect(staged.filter((line) => line.startsWith("\t\tanswer: "))).toHaveLength(3);
+    expect(staged).toContain("\t\tthe seed is planted\thttps://gsmg.io/theseedisplanted");
+    expect(firstText(bare)).toBe("b1000/71: no stages recorded");
+  });
+
   it("lists Movie Enigma's official hints without extra confirmation links", async () => {
     const result = await client.callTool({
       name: "puzzles_hints",

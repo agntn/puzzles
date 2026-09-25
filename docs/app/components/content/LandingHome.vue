@@ -122,11 +122,11 @@ const activeCollection = computed(() => current.value.collection);
     </LandingFeature>
 
     <LandingFeature
-      title="Eleven tools, three hosts, one executor each"
+      title="Twelve tools, three hosts, one executor each"
       to="/guide/agents"
       link="MCP, Pi and OMP"
       :checks="[
-        'puzzles_stats, puzzles_collections, puzzles_authors, puzzles_author, puzzles_show, puzzles_hints, puzzles_list, puzzles_verify, puzzles_balance',
+        'puzzles_stats, puzzles_collections, puzzles_authors, puzzles_author, puzzles_show, puzzles_hints, puzzles_stages, puzzles_list, puzzles_verify, puzzles_balance',
         'The text carries the whole record: address, status, prize, key material, transactions, explorer links',
         'Limits live in one facts table and the executors enforce them, so a host that skips schema validation hits the same wall',
       ]"

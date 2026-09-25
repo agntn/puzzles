@@ -33,6 +33,7 @@ export {
 export {
   AddressKind,
   answer,
+  artifact,
   assets,
   bits,
   compressed,
@@ -66,6 +67,7 @@ export {
   share,
   shares,
   source,
+  stage,
   standard,
   sweep,
   TransactionType,
@@ -73,6 +75,7 @@ export {
   wif,
   type Address,
   type Answer,
+  type Artifact,
   type Assets,
   type Confirmation,
   type Entropy,
@@ -91,6 +94,7 @@ export {
   type Seed,
   type Share,
   type Shares,
+  type Stage,
   type Transaction,
   type Wif,
 } from "./core/parts.ts";

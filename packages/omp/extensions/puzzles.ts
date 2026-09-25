@@ -158,6 +158,17 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
   });
 
   pi.registerTool({
+    ...registration(tools.facts.tools.stages),
+    parameters: Type.Object({ id: puzzleId }),
+    renderCall(args) {
+      return line(`Stages of puzzle ${args.id}`);
+    },
+    async execute(_toolCallId, params) {
+      return tools.stagesTool(params.id);
+    },
+  });
+
+  pi.registerTool({
     ...registration(tools.facts.tools.list),
     parameters: Type.Object({
       address: Type.Optional(Type.String(parameters.address)),

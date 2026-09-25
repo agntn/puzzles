@@ -328,6 +328,64 @@ const { copied, copy } = useCopied();
       </p>
     </div>
 
+    <div v-if="view.stages.length > 0" class="puzzle-transactions puzzle-stages">
+      <p class="console-label console-rule-title">
+        <span
+          >Stages <span aria-hidden="true">[ {{ view.stages.length }} ]</span></span
+        >
+        <span class="console-mark" aria-hidden="true" />
+      </p>
+      <ol class="console-rows console-animate">
+        <template v-for="(stage, index) in view.stages" :key="stage.name">
+          <li
+            class="puzzle-stage-head"
+            :style="{ animationDelay: `${Math.min(index * 60, 600)}ms` }"
+          >
+            <span class="puzzle-tx-type">{{ stage.name }}</span>
+            <div class="puzzle-stage-body">
+              <p class="puzzle-stage-about">{{ stage.about }}</p>
+              <details v-if="stage.answer" class="puzzle-stage-answer">
+                <summary>Published answer</summary>
+                <p>{{ stage.answer.text }}</p>
+                <p class="console-lead">
+                  <span class="console-tag">{{ stage.answer.date?.slice(0, 10) ?? "Source" }}</span>
+                  <UTooltip :text="stage.answer.source">
+                    <a :href="stage.answer.source" target="_blank" rel="noopener">{{
+                      linkText(stage.answer.source)
+                    }}</a>
+                  </UTooltip>
+                  <span class="console-leader" aria-hidden="true" />
+                </p>
+              </details>
+            </div>
+          </li>
+          <li v-for="item in stage.artifacts" :key="`${stage.name}/${item.name}`">
+            <span aria-hidden="true" />
+            <span class="puzzle-tx-amount">{{ item.name }}</span>
+            <span class="console-leader" aria-hidden="true" />
+            <UTooltip :text="item.url">
+              <a
+                :href="item.url"
+                target="_blank"
+                rel="noopener"
+                class="puzzle-tx-id puzzle-stage-url"
+                >{{ linkText(item.url) }}</a
+              >
+            </UTooltip>
+            <a
+              v-if="item.file"
+              :href="item.file"
+              target="_blank"
+              rel="noopener"
+              class="puzzle-tx-id puzzle-stage-copy"
+              >copy</a
+            >
+            <span v-else aria-hidden="true" />
+          </li>
+        </template>
+      </ol>
+    </div>
+
     <div v-if="view.hints.length > 0" class="console-band">
       <p class="console-label console-rule-title">
         <span
@@ -499,6 +557,61 @@ const { copied, copy } = useCopied();
 .puzzle-transactions .console-rows .puzzle-tx-id:hover {
   color: var(--console-accent);
 }
+.puzzle-stages .console-rows li {
+  grid-template-columns: 6.5rem auto minmax(16px, 1fr) minmax(0, max-content) 2.5rem;
+}
+.puzzle-stages .console-rows li.puzzle-stage-head {
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+}
+.puzzle-stage-head + li,
+.puzzle-stages .console-rows li:not(.puzzle-stage-head) + li:not(.puzzle-stage-head) {
+  border-top-style: dashed;
+}
+.puzzle-stage-about {
+  margin: 0;
+  max-width: 72ch;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ui-text-highlighted);
+}
+.puzzle-stage-body {
+  min-width: 0;
+}
+.puzzle-stage-answer {
+  margin-top: 8px;
+}
+.puzzle-stage-answer summary {
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+}
+.puzzle-stage-answer summary:hover {
+  color: var(--console-accent);
+}
+.puzzle-stage-answer > p:first-of-type {
+  margin: 6px 0;
+  max-width: 72ch;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  color: var(--ui-text-highlighted);
+}
+.puzzle-stage-answer .console-lead a {
+  color: var(--ui-text-muted);
+}
+.puzzle-stage-answer .console-lead a:hover {
+  color: var(--console-accent);
+}
+.puzzle-stage-url {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .puzzle-unfold {
   display: flex;
   align-items: center;
@@ -577,6 +690,21 @@ const { copied, copy } = useCopied();
   .puzzle-transactions .console-rows .puzzle-tx-id {
     grid-column: 1 / -1;
     font-size: 11px;
+  }
+  .puzzle-stages .console-rows li {
+    grid-template-columns: 5.5rem minmax(0, 1fr) auto;
+  }
+  .puzzle-stages .console-rows li.puzzle-stage-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .puzzle-stages .console-rows li:not(.puzzle-stage-head) > span:first-child {
+    display: none;
+  }
+  .puzzle-stages .console-rows .puzzle-tx-id.puzzle-stage-url {
+    grid-column: 1 / 3;
+  }
+  .puzzle-stages .console-rows .puzzle-tx-id.puzzle-stage-copy {
+    grid-column: 3;
   }
   .puzzle-transactions > .console-rule-title {
     padding-inline: 14px;

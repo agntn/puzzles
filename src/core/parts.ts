@@ -116,6 +116,21 @@ export interface Assets {
   readonly source_url?: string;
 }
 
+/** One thing the author published for a stage: where it lives, and the repository's copy. */
+export interface Artifact {
+  readonly file?: string;
+  readonly name: string;
+  readonly url: string;
+}
+
+/** One stage of a puzzle that runs in several: what it is, and what its author published for it. */
+export interface Stage {
+  readonly about: string;
+  readonly answer?: Answer;
+  readonly artifacts: readonly Artifact[];
+  readonly name: string;
+}
+
 /** Who gave a hint: the puzzle's author, or someone else. */
 export const HintKind = {
   Community: "community",
@@ -831,6 +846,36 @@ export function assets(
     hints: options.hints,
     source_url: options.sourceUrl,
   });
+}
+
+/**
+ * Records one thing the author published for a stage.
+ *
+ * @param {string} name - What it is, as the stage shows it.
+ * @param {string} url - Where the author published it.
+ * @param {string} [file] - Its copy under the collection's asset directory, if the repo keeps one.
+ * @returns {Artifact} The artifact.
+ */
+export function artifact(name: string, url: string, file?: string): Artifact {
+  return defined({ name, url, file });
+}
+
+/**
+ * Records one stage of a puzzle, in the order its author runs them.
+ *
+ * @param {string} name - The stage's name, in the author's words when the author gives one.
+ * @param {string} about - What the stage puts in front of you, on one line, without its answer.
+ * @param {readonly Artifact[]} artifacts - What the author published for it.
+ * @param {Answer} [solution] - The published answer that gets you past it, with its own source.
+ * @returns {Stage} The stage.
+ */
+export function stage(
+  name: string,
+  about: string,
+  artifacts: readonly Artifact[],
+  solution?: Answer,
+): Stage {
+  return defined({ name, about, artifacts, answer: solution });
 }
 
 /**

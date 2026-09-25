@@ -118,6 +118,14 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
   });
 
   pi.registerTool({
+    ...registration(tools.facts.tools.stages),
+    parameters: schemas.stages,
+    async execute(_toolCallId, params): Promise<Result> {
+      return agentResult(await tools.stagesTool(params.id));
+    },
+  });
+
+  pi.registerTool({
     ...registration(tools.facts.tools.list),
     parameters: schemas.list,
     async execute(_toolCallId, params): Promise<Result> {

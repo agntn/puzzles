@@ -11,6 +11,7 @@ import {
 import {
   AddressKind,
   answer,
+  artifact,
   assets,
   confirmation,
   fact,
@@ -23,6 +24,7 @@ import {
   PartyKind,
   profile,
   PubkeyFormat,
+  stage,
   TransactionType,
 } from "../../src/core/parts.ts";
 import { bitcoinPuzzle, type Puzzle, Status } from "../../src/core/puzzle.ts";
@@ -212,6 +214,29 @@ function problemsOf(hint: Hint): string[] {
     ...(hint.date === undefined || isRecordDate(hint.date) ? [] : ["date is not a record date"]),
     ...answerProblems(hint.answer),
   ];
+}
+
+/**
+ * The problems of every stage a puzzle runs in: a one line name and description, at least one
+ * artifact with a one line name and a web URL, and an answer that passes the hint answer checks.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {string[]} One line per failed check, named after the puzzle and the stage number.
+ */
+function stageProblems(puzzle: Puzzle): string[] {
+  return puzzle.stages().flatMap((item, index) => {
+    const owner = `${puzzle.id()} stage ${index + 1}`;
+    return [
+      ...(isOneLine(item.name) ? [] : [`${owner}: name is not one line`]),
+      ...(isOneLine(item.about) ? [] : [`${owner}: about is not one line`]),
+      ...(item.artifacts.length === 0 ? [`${owner}: has no artifact`] : []),
+      ...answerProblems(item.answer).map((problem) => `${owner}: ${problem}`),
+      ...item.artifacts.flatMap((entry, number) => [
+        ...(isOneLine(entry.name) ? [] : [`${owner} artifact ${number + 1}: name is not one line`]),
+        ...(isWebUrl(entry.url) ? [] : [`${owner} artifact ${number + 1}: url is not a web URL`]),
+      ]),
+    ];
+  });
 }
 
 /**
@@ -448,6 +473,54 @@ describe("collection class data", () => {
 
     expect(assetProblems(escaped)).toEqual([
       "fixture/escaped: asset ../../README.md leaves assets/fixture/",
+    ]);
+  });
+
+  it("refuses a stage artifact file that resolves outside its collection directory", () => {
+    const escaped = bitcoinPuzzle({
+      id: "fixture/escaped",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      stages: [
+        stage("phase 1", "A page.", [artifact("page", "https://example.com/a", "../../README.md")]),
+      ],
+    });
+
+    expect(assetProblems(escaped)).toEqual([
+      "fixture/escaped: asset ../../README.md leaves assets/fixture/",
+    ]);
+  });
+
+  it("describes every stage and names every artifact on one line with a web URL", () => {
+    expect(puzzles.flatMap((puzzle) => stageProblems(puzzle))).toEqual([]);
+  });
+
+  it("names every way a stage can fail the data gate", () => {
+    const staged = bitcoinPuzzle({
+      id: "fixture/staged",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      stages: [
+        stage(" ", "", []),
+        stage(
+          "phase 2",
+          "A blob.",
+          [artifact("two\nlines", "ftp://example.com/blob")],
+          answer("two\nlines", "ftp://example.com/answer"),
+        ),
+      ],
+    });
+
+    expect(stageProblems(staged)).toEqual([
+      "fixture/staged stage 1: name is not one line",
+      "fixture/staged stage 1: about is not one line",
+      "fixture/staged stage 1: has no artifact",
+      "fixture/staged stage 2: answer text is not one line",
+      "fixture/staged stage 2: answer source is not a web URL",
+      "fixture/staged stage 2 artifact 1: name is not one line",
+      "fixture/staged stage 2 artifact 1: url is not a web URL",
     ]);
   });
 

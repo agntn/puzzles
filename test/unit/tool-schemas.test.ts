@@ -9,6 +9,7 @@ import {
   hintsTool,
   listTool,
   showTool,
+  stagesTool,
   solverTool,
 } from "../../src/tool-operations.ts";
 
@@ -85,6 +86,8 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(Value.Check(schemas.show, { id: "x".repeat(id.maxLength + 1) })).toBe(false);
     expect(Value.Check(schemas.hints, { id: "" })).toBe(false);
     expect(Value.Check(schemas.hints, { id: "warp/challenge_1" })).toBe(true);
+    expect(Value.Check(schemas.stages, { id: "" })).toBe(false);
+    expect(Value.Check(schemas.stages, { id: "gsmg" })).toBe(true);
     expect(Value.Check(schemas.verify, { id: "b1000/1" })).toBe(true);
     expect(Value.Check(schemas.list, { collection: "" })).toBe(false);
     expect(Value.Check(schemas.list, { collection: "x".repeat(collection.maxLength + 1) })).toBe(
@@ -156,6 +159,8 @@ describe("tool schemas and executors share one argument contract", () => {
     await expect(showTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
     await expect(hintsTool("")).rejects.toThrow(/id/);
     await expect(hintsTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
+    await expect(stagesTool("")).rejects.toThrow(/id/);
+    await expect(stagesTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
     expect((await listTool({ collection: "gsmg", limit: 1 })).details).toMatchObject({
       matched: 1,
       returned: 1,

@@ -1,6 +1,6 @@
 # Parts
 
-The constructors in `src/core/parts.ts`, exported from the package root too. They keep optional fields absent instead of empty, so build every address, key, transaction, asset, party and hint with them.
+The constructors in `src/core/parts.ts`, exported from the package root too. They keep optional fields absent instead of empty, so build every address, key, transaction, asset, stage, party and hint with them.
 
 ```ts
 p2pkh(value, hash160?);
@@ -20,6 +20,8 @@ claim(txid, date, amount);
 sweep(txid, date, amount);
 
 assets({ puzzle, solution, hints, sourceUrl });
+stage(name, about, artifacts, answer?); // one stage of a puzzle that runs in several, in the author's order; about describes it on one line, answer is the published solution with its own source
+artifact(name, url, file?); // what the author published for a stage; file is its copy under assets/<collection>/
 party(name, { key, kind, aliases, about, addresses, profiles, facts }); // an author; a solver takes name, addresses, profiles
 profile(name, url);
 fact(text, source, { date? }); // one sentence a public page states about a party
