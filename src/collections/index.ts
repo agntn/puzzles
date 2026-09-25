@@ -24,6 +24,7 @@ export const builtins = [
   { key: "ledger_donjon", load: () => import("./ledger_donjon.ts").then((m) => m.ledgerDonjon) },
   { key: "luckylurker", load: () => import("./luckylurker.ts").then((m) => m.luckyLurker) },
   { key: "mineshop", load: () => import("./mineshop.ts").then((m) => m.mineshop) },
+  { key: "mini", load: () => import("./mini.ts").then((m) => m.mini) },
   { key: "movie_enigma", load: () => import("./movie_enigma.ts").then((m) => m.movieEnigma) },
   {
     key: "picture_puzzle",

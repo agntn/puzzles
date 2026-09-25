@@ -71,7 +71,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "--json",
     );
 
-    expect(result.total).toBe(360);
+    expect(result.total).toBe(363);
     expect(result.unsolved).toBe(95);
   });
 
@@ -417,13 +417,13 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "--json",
     );
 
-    expect(result).toHaveLength(24);
+    expect(result).toHaveLength(25);
     expect(result.map((entry) => entry.key)).toContain("hash_collision");
   });
 
   it("lists authors and shows one, by author key or collection key", async () => {
     const rows = (await puzzles("authors")).split("\n");
-    expect(rows).toHaveLength(22);
+    expect(rows).toHaveLength(23);
     expect(rows).toContain("zden: Zden (person), 1 collection: zden, 16 puzzles");
 
     const record = (await puzzles("authors", "warp")).split("\n");
@@ -445,7 +445,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
   it("lists solvers and shows one, by solver key or puzzle identifier", async () => {
     const rows = (await puzzles("solvers")).split("\n");
     expect(rows).toContain(
-      "retired-coder: RetiredCoder (person), 4 solves: b1000/120, b1000/125, b1000/130, b1000/135",
+      "retired-coder: RetiredCoder (person), 4 solves: b1000/120, b1000/125, b1000/130, b1000/135, author of mini",
     );
     expect(rows).toContain(
       "wickex: Wickex (person), 1 solve: iamabananaamaa/gif, author of wickex",
@@ -487,7 +487,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(24);
+    expect(result.collections).toHaveLength(25);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 
@@ -588,6 +588,26 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
         "",
       ].join("\n"),
     );
+  });
+
+  it("hands each chain the key of its own variable", async () => {
+    const run = await execute(
+      process.execPath,
+      ["--import", "./test/support/fetch-stub.ts", "src/cli.ts", "balance", "mini/130"],
+      {
+        cwd: process.cwd(),
+        env: {
+          ...process.env,
+          ETHERSCAN_API_KEY: "etherscan-secret",
+          BLOCKCHAIR_API_KEY: "blockchair-secret",
+        },
+      },
+    ).catch((error: unknown) => error as Failure);
+
+    const [request] = run.stderr.split("\n");
+    expect(request).toMatch(/^fetch https:\/\/api\.blockchair\.com\/bitcoin-cash\//u);
+    expect(request).toContain("key=blockchair-secret");
+    expect(run.stderr).not.toContain("etherscan-secret");
   });
 
   it("prints a filtered pass as one JSON array", async () => {

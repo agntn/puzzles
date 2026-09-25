@@ -32,6 +32,7 @@ export const WALK: readonly string[] = [
   "iamabananaamaa/gif",
   "wickex/youtube",
   "picture_puzzle",
+  "mini/130",
 ];
 
 /* generated:landing-fixtures:start */
@@ -854,18 +855,47 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 2,
     tool: 'picture_puzzle\tsolved\t0.001 BTC\t1MeQumbMGbTDPUNtBbLwzfyZqeeZzpRnex\nchain: bitcoin  address kind: p2pkh\nhash160: e275dd7b615b5dd80e4fd298255bcc9ff42692bc\npublic key: 0443363aa63ab32ed94309fbaf2783e6f4dc0878cc04b2f6c954b5345ade0c11da8be5ef87dfd13126fa6884bd7c7440a4f70be75af1d7fb1a9480608a3acbadcf (uncompressed)\nprivate key: 00000000000000000000004804804824004000024020024124824824824123a3 (hex, derived from the published recipe)\nstarted: 2013-12-23 05:40:33\nsolved: 2013-12-23 10:39:50 (4h 59m)\nsolver: 6loss (6loss), reddit https://www.reddit.com/user/6loss/\ntransactions: 2\n\tfunding\t2013-12-23 05:41:54\t0.001 BTC\t0519cc7068fe31f543185203cebac565f228a46b5a9eaf1a53f7e88a91201cd7\n\tclaim\t2013-12-23 10:39:50\t0.0009 BTC\t24a43b26d8988238a77a43ff7ee3f62c4cc72db27323e685afe3155c235cc63a\nclaim: https://blockstream.info/tx/24a43b26d8988238a77a43ff7ee3f62c4cc72db27323e685afe3155c235cc63a\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/picture_puzzle/puzzle.png\nasset source: https://i.imgur.com/Gm9ldPp.png\nhints: 7\n\tofficial\t2013-12-23\tEverything you need to get the 1mBTC is contained in the picture. It\'s a very easy puzzle, but it may be a little harder than it first appears.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\tanswer: When sounded out the first three spell "directory.io" The QR code reveals "00110011001101100010000001100100011011110111011101101110" which when translated to text is "36 down". Entering directory.io/00110011001101100010000001100100011011110111011101101110 in your browser takes you to a page full of bitcoin addresses and private keys. Starting from the top of the page and counting "36 down" you end up with the address and private key of the competition.\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tEvery CLUE that you need is in the picture. Just realized my OP may be confusing. To rephrase, "the picture will lead you to the private key".\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\n\tofficial\t2013-12-23\tThe QR code needs to be used two different ways. Firstly it must be used "as is". This is important to get you to where you need to go. Once you\'re there use the decoded instruction to point you in the right direction. Hopefully now we\'re all on the same *page*.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\n\tofficial\t2013-12-23\tYou\'re on the right track. It\'s not a book though. Think of another word :)\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/comment/ce8dx3n/\tanswer: 1 = Directory 2 = Eye 3 = \'O\' 4 = QR Code\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/\tanswer date: 2013-12-23\n\tofficial\t2013-12-23\tNot exactly. When you get to where you need to go, follow the clue ;)\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/comment/ce8der1/\n\tofficial\t2013-12-23\tTry throwing the binary in your browser, you\'ll never know where you end up ;)\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/comment/ce8ecx8/\n\tcommunity\t2013-12-23\tBook, Eye, Letter O, 36 Down... interesting\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/comment/ce8dw8t/\nexplorer: https://blockstream.info/address/1MeQumbMGbTDPUNtBbLwzfyZqeeZzpRnex\nsource: https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/',
   },
+  {
+    id: "mini/130",
+    collection: "mini",
+    chain: "bitcoincash",
+    status: "solved",
+    address: "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez",
+    kind: "p2pkh",
+    hash160: "a24922852051a9002ebf4c864a55acb75bb4cf75",
+    redeemScript: undefined,
+    prize: "1.3 BCH",
+    prizeAmount: 1.3,
+    currency: undefined,
+    startedAt: "2024-12-14 16:22:32",
+    solvedAt: "2024-12-15 17:21:10",
+    solveTime: "1d 58m",
+    bits: 130,
+    range: ["200000000000000000000000000000000", "3ffffffffffffffffffffffffffffffff"],
+    pubkey: "03633cbe3ec02b9401c5effa144c5b4d22f87940259634858fc7e59b1c09937852",
+    pubkeyFormat: "compressed",
+    secret: "hex",
+    keyLiteral: 'hex("000000000000000000000000000000033e7665705359f04f28b88cf897c603c9", 130)',
+    verdict: "verified",
+    detail: "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez",
+    explorer:
+      "https://blockchair.com/bitcoin-cash/address/bitcoincash%3Aqz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez",
+    source: "https://bitcointalk.org/index.php?topic=5522785",
+    transactions: 3,
+    tool: "mini/130\tsolved\t1.3 BCH\tbitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez\nchain: bitcoincash  address kind: p2pkh\nhash160: a24922852051a9002ebf4c864a55acb75bb4cf75\npublic key: 03633cbe3ec02b9401c5effa144c5b4d22f87940259634858fc7e59b1c09937852 (compressed)\nprivate key: 000000000000000000000000000000033e7665705359f04f28b88cf897c603c9 (hex)\nstarted: 2024-12-14 16:22:32\nsolved: 2024-12-15 17:21:10 (1d 58m)\nsolver: bitcoincash:qrda29v338en6lkt5s8mv3wls0l778qg0sdxk42358\ntransactions: 3\n\tfunding\t2015-01-15 18:07:14\t0.13 BCH\t08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15\n\tincrease\t2017-07-11 05:00:53\t1.17 BCH\t5d45587cfd1d5b0fb826805541da7d94c61fe432259e68ee26f4a04544384164\n\tclaim\t2024-12-15 17:21:10\t1.3 BCH\tc237333cdee09fe03b913d857f06ae6aec830f87c9a5f58a94c28bdbce558bf3\nclaim: https://blockchair.com/bitcoin-cash/tx/c237333cdee09fe03b913d857f06ae6aec830f87c9a5f58a94c28bdbce558bf3\nhints: 5\n\tofficial\t2024-12-14\tMessage: Anything one man can imagine, other men can make real. Signature: IIONt3uYHbMh+vUnqDBGHP2gGu1Q2Fw0WnsKj05eT9P8KI2kGgPniiPirCd5IeLRnRdxeiehDxxsyn/VujUaX8o=\tsource: https://bitcointalk.org/index.php?topic=5522785.msg64847018#msg64847018\tanswer: Since it seems that the winner is not here, I will explain this riddle. 1. So we have a signature, we should check for weak K1, use kangaroos of course What's the range for search? Use a hint from the message, 80bit. Fails, it seems K1 is strong. 2. Remember that I posted another signature, take K2, may be K1==K2? No. So if we have both strong K1 and K2, what it can be? Remember that ECDSA Signature is vulnerable not only when K1==K2 but also if we know that K1 has some relation with K2, for example, K2=K1+1 (the simplest case). How to check it? Remember that R1=G*K1 and R2=G*K2 and we have these R1 and R2 points in signatures, so we can substract: PntDiff = R1 - R2 (and also try R2 - R1) and check if it's G. It's not G, ok, may be the difference is not 1 but more? We should try to solve PntDiff (both variants) with kangaroos. What's the range? Same, 80bits. And we can solve it, so now we have delta_K. 3. Now calculate, google or ask chatbot to get the formula: pk = ((delta_k * s1 * s2) + (z2 * s1) - (z1 * s2)) / (r1 * s2 - r2 * s1) [mod n] That's all!\tanswer source: https://bitcointalk.org/index.php?topic=5522785.msg64850761#msg64850761\tanswer date: 2024-12-15\n\tofficial\t2024-12-14\tA hint is in the message\tsource: https://bitcointalk.org/index.php?topic=5522785.msg64847038#msg64847038\n\tofficial\t2024-12-14\tYes, you should have some understanding of ECDSA signature vulnerabilities.\tsource: https://bitcointalk.org/index.php?topic=5522785.msg64847430#msg64847430\n\tofficial\t2024-12-15\tSame K or weak K would be too easy. This riddle is just one step more complex.\tsource: https://bitcointalk.org/index.php?topic=5522785.msg64849365#msg64849365\n\tofficial\t2024-12-15\t24 hours have passed, here is the first hint: don't take anything from the blockchain.\tsource: https://bitcointalk.org/index.php?topic=5522785.msg64850292#msg64850292\nexplorer: https://blockchair.com/bitcoin-cash/address/bitcoincash%3Aqz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez\nsource: https://bitcointalk.org/index.php?topic=5522785\nkey range: 200000000000000000000000000000000..3ffffffffffffffffffffffffffffffff (hex, 130 bits)",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "3c1773e5a65a",
-  total: 360,
-  solved: 154,
+  dataVersion: "fe69aa0c0cde",
+  total: 363,
+  solved: 157,
   unsolved: 95,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 260,
+  withPubkey: 263,
   unsolvedPrize: {
     AR: 1900,
     ETH: 9.61254155,
@@ -876,6 +906,7 @@ export const STATS_STATIC = {
     ETH: 22.74624155,
     DAI: 100,
     BTC: 1064.23058961,
+    BCH: 3.75,
     LTC: 230.8255,
     DCR: 460,
   },
@@ -1250,6 +1281,26 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "mini",
+    author: "RetiredCoder",
+    authorKey: "retired-coder",
+    authorUrl: "https://github.com/RetiredC",
+    total: 3,
+    statuses: {
+      solved: 3,
+    },
+    chains: ["bitcoincash"],
+    prize: {
+      BCH: 3.75,
+    },
+    unsolvedPrize: {},
+    withPubkey: 3,
+    withKey: 3,
+    firstStarted: "2024-10-14 13:48:32",
+    lastStarted: "2024-12-14 16:22:32",
+    hints: [],
+  },
+  {
     key: "movie_enigma",
     author: "klems",
     authorKey: "klems",
@@ -1590,6 +1641,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Founder and managing director of Mineshop.eu, an ASIC miner shop in Ireland, and the YouTuber who buried a 10 ETH seed in a video.",
     collections: ["mineshop"],
     puzzles: 1,
+  },
+  {
+    key: "retired-coder",
+    to: "/authors/retired-coder",
+    name: "RetiredCoder",
+    kind: "person",
+    about:
+      "Bitcoin puzzle solver and author of RCKangaroo who gave away the Bitcoin Cash left on three solved puzzle addresses as mini-puzzles on BitCoinTalk.",
+    collections: ["mini"],
+    puzzles: 3,
   },
   {
     key: "klems",
