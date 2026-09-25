@@ -200,8 +200,8 @@ const text = computed(() =>
         </button>
       </p>
       <pre
-        class="console-snippet record-code"
-      ><code><span v-for="line in lines" :key="line.key" class="record-line"><template v-for="(segment, index) in line.segments" :key="index"><Transition v-if="segment.roll" name="puzzles-roll" mode="out-in"><span :key="segment.text" class="puzzles-roll-slot"><span :class="segment.cls"><template v-for="(piece, part) in pieces(segment.text)" :key="part"><wbr v-if="part > 0" />{{ piece }}</template></span>{{ segment.tail }}</span></Transition><span v-else :class="segment.cls">{{ segment.text }}</span></template></span></code></pre>
+        class="console-snippet console-lines"
+      ><code><span v-for="line in lines" :key="line.key"><template v-for="(segment, index) in line.segments" :key="index"><Transition v-if="segment.roll" name="puzzles-roll" mode="out-in"><span :key="segment.text" class="puzzles-roll-slot"><span :class="segment.cls"><template v-for="(piece, part) in pieces(segment.text)" :key="part"><wbr v-if="part > 0" />{{ piece }}</template></span>{{ segment.tail }}</span></Transition><span v-else :class="segment.cls">{{ segment.text }}</span></template></span></code></pre>
     </div>
 
     <footer class="console-footer console-footer-plain">
@@ -233,32 +233,6 @@ const text = computed(() =>
 .record-body > .console-rule-title {
   margin-bottom: 10px;
 }
-/* Line numbers in a gutter; a wrapped value continues four columns in, never under the number. */
-.record-code {
-  padding-left: 0;
-  font-size: 11.5px;
-  counter-reset: line;
-}
-.record-line {
-  display: block;
-  min-height: 1.7em;
-  padding-left: calc(3.25em + 4ch);
-  text-indent: calc(-3.25em - 4ch);
-}
-.record-line::before {
-  counter-increment: line;
-  content: counter(line);
-  display: inline-block;
-  width: 2.25em;
-  margin-right: 1em;
-  text-align: right;
-  text-indent: 0;
-  color: var(--ui-text-dimmed);
-  user-select: none;
-}
-.record-line * {
-  text-indent: 0;
-}
 .record-link {
   min-width: 0;
   color: var(--ui-text-highlighted);
@@ -285,17 +259,6 @@ const text = computed(() =>
   }
   .record-body > .console-rule-title > span:first-child > span {
     display: none;
-  }
-  .record-code {
-    font-size: 11px;
-  }
-  .record-line {
-    padding-left: calc(2.5em + 2ch);
-    text-indent: calc(-2.5em - 2ch);
-  }
-  .record-line::before {
-    width: 1.75em;
-    margin-right: 0.75em;
   }
 }
 </style>
