@@ -346,7 +346,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       code: 1,
       stdout: "",
       stderr:
-        "Invalid chain: expected one of arweave, bitcoin, decred, ethereum, litecoin, monero\n",
+        "Invalid chain: expected one of arweave, bitcoin, bitcoincash, decred, ethereum, litecoin, monero\n",
     });
   });
 
@@ -575,7 +575,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     expect(result.stdout).toBe(
       [
         "OK\tballet/AA007448\t0.000011 BTC",
-        "FAIL\tballet/AA009926\tBalance lookup failed: HTTP 0 from https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+        "FAIL\tballet/AA009926\tBalance lookup failed: No response from mempool (fetch failed): https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
         "OK\tballet/AA012381\t0.000011 BTC",
         "",
       ].join("\n"),
@@ -607,7 +607,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
         id: "ballet/AA009926",
         chain: "bitcoin",
         error:
-          "Balance lookup failed: HTTP 0 from https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+          "Balance lookup failed: No response from mempool (fetch failed): https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
       },
       {
         id: "ballet/AA012381",

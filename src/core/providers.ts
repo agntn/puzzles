@@ -1,6 +1,7 @@
 import { InvalidAddressError as ChainAddressError } from "@agntn/chains";
 import { type Balance as Snapshot, HTTPError, type ProviderConfig } from "@agntn/explorers";
 import { Arweave } from "@agntn/explorers/providers/arweave";
+import { Blockchair } from "@agntn/explorers/providers/blockchair";
 import { Dcrdata } from "@agntn/explorers/providers/dcrdata";
 import { Etherscan } from "@agntn/explorers/providers/etherscan";
 import { Mempool } from "@agntn/explorers/providers/mempool";
@@ -26,6 +27,7 @@ type Lookup = (address: string, config: Readonly<ProviderConfig>) => Promise<Sna
 const lookups: Readonly<Record<Exclude<Chain, typeof Chain.Monero>, Lookup>> = {
   arweave: (address, config) => new Arweave(config).getBalance(address, "arweave"),
   bitcoin: (address, config) => new Mempool(config).getBalance(address, "bitcoin"),
+  bitcoincash: (address, config) => new Blockchair(config).getBalance(address, "bitcoincash"),
   decred: (address, config) => new Dcrdata(config).getBalance(address, "decred"),
   ethereum: (address, config) =>
     new Etherscan({ ...config, defaultChain: "ethereum" }).getBalance(address, "ethereum"),

@@ -11,9 +11,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@agntn/chains": "0.3.8",
-    "@agntn/explorers": "0.5.6",
-    "@agntn/keys": "0.3.2",
+    "@agntn/chains": "0.3.10",
+    "@agntn/explorers": "0.5.7",
+    "@agntn/keys": "0.3.4",
     "better-sqlite3": "12.11.1",
     "docus": "5.13.0",
     "nuxt": "4.5.2"

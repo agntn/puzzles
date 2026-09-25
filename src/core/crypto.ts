@@ -1,5 +1,6 @@
 import { type AbstractBlockchain, decodeWIF, encodeWIF, type WIFChain } from "@agntn/keys";
 import { Bitcoin } from "@agntn/keys/blockchains/bitcoin";
+import { BitcoinCash } from "@agntn/keys/blockchains/bitcoincash";
 import { Decred } from "@agntn/keys/blockchains/decred";
 import { Ethereum } from "@agntn/keys/blockchains/ethereum";
 import { Litecoin } from "@agntn/keys/blockchains/litecoin";
@@ -13,6 +14,7 @@ import { AddressKind, PubkeyFormat } from "./parts.ts";
  */
 
 const bitcoin = new Bitcoin();
+const bitcoinCash = new BitcoinCash();
 const litecoin = new Litecoin();
 const decred = new Decred();
 const ethereum = new Ethereum();
@@ -26,6 +28,8 @@ function walletFor(chain: Chain): AbstractBlockchain | undefined {
   switch (chain) {
     case Chain.Bitcoin:
       return bitcoin;
+    case Chain.BitcoinCash:
+      return bitcoinCash;
     case Chain.Litecoin:
       return litecoin;
     case Chain.Decred:
@@ -40,6 +44,9 @@ function walletFor(chain: Chain): AbstractBlockchain | undefined {
 
 function wifChain(chain: Chain): WIFChain {
   switch (chain) {
+    case Chain.BitcoinCash:
+      // Bitcoin Cash kept Bitcoin's WIF version byte when it forked.
+      return Chain.Bitcoin;
     case Chain.Bitcoin:
     case Chain.Litecoin:
     case Chain.Decred:
@@ -81,7 +88,7 @@ function addressType(chain: Chain, kind: AddressKind): string | undefined {
  * Encodes a private key as the chain's mainnet WIF.
  *
  * @param {string} hexKey - Private key as 64 hex characters.
- * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Litecoin and Decred have one.
+ * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Bitcoin Cash, Litecoin and Decred have one.
  * @param {boolean} compressed - Whether the public key is compressed.
  * @returns {string} The WIF string.
  */
@@ -93,7 +100,7 @@ export function privateKeyToWif(hexKey: string, chain: Chain, compressed: boolea
  * Decodes a mainnet WIF against the chain the record says it belongs to.
  *
  * @param {string} wif - Wallet Import Format key.
- * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Litecoin and Decred have one.
+ * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Bitcoin Cash, Litecoin and Decred have one.
  * @returns {{ readonly compressed: boolean; readonly hex: string; }} The private key in hex and whether the WIF marks it compressed.
  */
 export function wifToPrivateKey(

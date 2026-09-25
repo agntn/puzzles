@@ -64,7 +64,7 @@ b1000/71	unsolved	7.100226 BTC	1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU
 | `puzzles stages <id>`       | The stages of a multi-stage puzzle with their pages, files and published answers. `--json` for the list                 |
 | `puzzles list [collection]` | One puzzle per line. `--address`, `--chain`, `--status` and `--with-pubkey` narrow it, `--limit` and `--offset` page it |
 | `puzzles verify [id]`       | A published key against its address. `--all` for every puzzle, exit 1 on a mismatch                                     |
-| `puzzles balance [id]`      | The live balance. The `list` filters check a whole set, one row each. `--api-key` or `ETHERSCAN_API_KEY` for Ethereum   |
+| `puzzles balance [id]`      | The live balance. The `list` filters check a whole set, one row each. `--api-key`, or one variable per chain            |
 | `puzzles export`            | The whole dataset with its `data_version`                                                                               |
 | `puzzles mcp`               | The MCP server over stdio                                                                                               |
 

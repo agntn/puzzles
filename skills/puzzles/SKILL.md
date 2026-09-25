@@ -30,7 +30,7 @@ An identifier is `collection/name`, for example `b1000/90`. A collection with a 
 - **Absent means unknown.** A record leaves out what nobody published: no key, no solver, no prize. Nothing is null, and a missing field is not a zero.
 - **A hint is not a fact.** `official` comes from the puzzle's author, `community` from anyone else, and neither says the hint is right. The `source` is where it was published. A published `answer` responds to one hint and is not a verified key.
 - **An unverifiable puzzle is an answer.** `puzzles_verify` reports `unverifiable` when the record holds no key material. That is a result, not a tool error. `not verified` is the one to worry about: the recorded key does not derive the address.
-- **Balances are live.** Ethereum needs an Etherscan key through `apiKey` or `ETHERSCAN_API_KEY`. There is no retry or rate limiting, so don't loop the call over hundreds of addresses.
+- **Balances are live.** Ethereum needs an Etherscan key through `apiKey` or `ETHERSCAN_API_KEY`; Bitcoin Cash takes `BLOCKCHAIR_API_KEY` once Blockchair starts refusing. There is no retry or rate limiting, so don't loop the call over hundreds of addresses.
 
 ## Pitfalls
 

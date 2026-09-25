@@ -27,6 +27,7 @@ minimumReleaseAgeExclude:
   - "@oh-my-pi/pi-wire@18.2.4"
   - "@oh-my-pi/snapcompact@18.2.4"
   - "@agntn/chains@0.3.6"
+  - "@agntn/explorers@0.5.7"
 
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@0.3.3

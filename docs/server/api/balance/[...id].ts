@@ -58,8 +58,10 @@ export default defineCachedEventHandler(
       throw error;
     }
     try {
+      // The secret is Etherscan's, so no other explorer sees it.
+      const etherscan = puzzle.chain() === "ethereum" && config.etherscanApiKey !== "";
       const balance = await puzzle.balance({
-        apiKey: config.etherscanApiKey === "" ? undefined : config.etherscanApiKey,
+        apiKey: etherscan ? config.etherscanApiKey : undefined,
         timeout: 20_000,
       });
       return {
