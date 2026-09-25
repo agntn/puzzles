@@ -1,5 +1,5 @@
 import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
-import { claim, funding, party, standard } from "../../core/parts.ts";
+import { claim, fact, funding, party, standard } from "../../core/parts.ts";
 
 /** Puzzle `arweave/weave13`. */
 export const arweavePuzzleWeave13 = ethereumPuzzle({
@@ -23,5 +23,15 @@ export const arweavePuzzleWeave13 = ethereumPuzzle({
       1,
     ),
   ],
-  solver: party("lefevre"),
+  solver: party("lefevre", {
+    key: "lefevre",
+    about:
+      "Handle credited with Arweave Puzzle 13, an image puzzle worth 1 ETH, four days after it went up.",
+    facts: [
+      fact(
+        "ZorenX's write-up of Puzzle 13 names lefevre as the solver: eight pictures identified, their labels hashed with SHA-256 into the key.",
+        "https://medium.com/@zorenskye/arweave-puzzle-series-puzzle-13-solved-d770655f705b",
+      ),
+    ],
+  }),
 });

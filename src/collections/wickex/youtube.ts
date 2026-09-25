@@ -2,11 +2,13 @@ import {
   answer,
   claim,
   community,
+  fact,
   funding,
   increase,
   official,
   p2pkh,
   party,
+  PartyKind,
   profile,
   sweep,
   uncompressed,
@@ -127,6 +129,17 @@ export const wickexYouTube = bitcoinPuzzle({
     ),
   ],
   solver: party("IAMABananaAMAA", {
+    key: "iamabananaamaa",
+    kind: PartyKind.Person,
+    about:
+      "Started r/bitcoinpuzzles, solved the second puzzle posted there the same night and sent the prize back.",
     profiles: [profile("reddit", "https://www.reddit.com/user/IAMABananaAMAA/")],
+    facts: [
+      fact(
+        "Wrote that the prize was taken and refunded, then listed the four steps: hex, Morse, a short link and a second video.",
+        METHOD,
+        { date: "2013-12-23" },
+      ),
+    ],
   }),
 });

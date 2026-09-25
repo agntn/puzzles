@@ -2,11 +2,13 @@ import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 import {
   claim,
   compressed,
+  fact,
   funding,
   hex,
   increase,
   p2pkh,
   party,
+  PartyKind,
   profile,
   pubkeyReveal,
 } from "../../core/parts.ts";
@@ -78,10 +80,39 @@ export const b1000Puzzle135 = bitcoinPuzzle({
     ),
   ],
   solver: party("RetiredCoder", {
+    key: "retired-coder",
+    kind: PartyKind.Person,
+    about:
+      "Author of RCKangaroo, an open source Pollard kangaroo solver for Nvidia GPUs, who took four of the puzzle transaction's keys and then retired from the race.",
     addresses: ["3Emiwzxme7Mrj4d89uqohXNncnRM15YESs", "1Prestige1zSYorBdz94KA2UbJW3hYLTn4"],
     profiles: [
       profile("github", "https://github.com/RetiredC"),
       profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=3657819"),
+    ],
+    facts: [
+      fact(
+        "The GitHub profile says: I've solved 134-bit range point on Secp256k1 (Bitcoin challenges #120, #125, #130, #135). Probably, it's a world record.",
+        "https://github.com/RetiredC",
+      ),
+      fact(
+        "Publishes RCKangaroo, a CUDA implementation of Pollard's kangaroo method with symmetry that solves the discrete log in a known range.",
+        "https://github.com/RetiredC/RCKangaroo",
+      ),
+      fact(
+        "Announced #135 on bitcointalk: about 5 months on 200 GPUs, and I quit, officially.",
+        "https://bitcointalk.org/index.php?topic=5517607.msg66986617#msg66986617",
+        { date: "2026-07-28" },
+      ),
+      fact(
+        "Released RCKangaroo v4.0 with the ASM turbo kernels the same day, calling its main loop without inversions the Triple Montgomery trick.",
+        "https://bitcointalk.org/index.php?topic=5517607.msg66986810#msg66986810",
+        { date: "2026-07-28" },
+      ),
+      fact(
+        "Said the run paid, but never again: it was too boring to pay bills for five months.",
+        "https://bitcointalk.org/index.php?topic=5517607.msg66987408#msg66987408",
+        { date: "2026-07-28" },
+      ),
     ],
   }),
 });

@@ -71,6 +71,31 @@ export const facts = {
       ],
       openWorld: false,
     },
+    solvers: {
+      name: "puzzles_solvers",
+      title: "Puzzle Solvers",
+      description:
+        "List every named puzzle solver with its kind, the puzzles credited to it and the collections it also published.",
+      promptSnippet: "Use puzzles_solvers to learn who solved which puzzles.",
+      promptGuidelines: [
+        "A solver key is kebab-case, for example retired-coder; a puzzle identifier also resolves to its solver.",
+        "A solver known only by the address the prize went to has no key and is not listed.",
+      ],
+      openWorld: false,
+    },
+    solver: {
+      name: "puzzles_solver",
+      title: "Show Solver",
+      description:
+        "Show one solver's record: name, kind, every solve with its date and prize, profiles, addresses and the sourced facts public pages state about them.",
+      promptSnippet:
+        "Use puzzles_solver for who solved a puzzle, what else they solved, and what public sources say about them, with the page that says it.",
+      promptGuidelines: [
+        "A fact is one sentence a public page states, with that page as its source; it is not a verified biography.",
+        "A pseudonymous solver is recorded under the handle; the record does not name the person behind it.",
+      ],
+      openWorld: false,
+    },
     show: {
       name: "puzzles_show",
       title: "Show Puzzle",
@@ -146,6 +171,12 @@ export const facts = {
       minLength: 1,
       maxLength: 50,
       description: "Author key, for example peter-todd, or a collection key such as hash_collision",
+    },
+    solver: {
+      minLength: 1,
+      maxLength: 100,
+      description:
+        "Solver key, for example retired-coder, or a puzzle identifier such as b1000/135",
     },
     status: {
       description:
@@ -349,6 +380,36 @@ export async function authorTool(key: string): Promise<ToolResult> {
     (await getAuthor(wanted)) === undefined ? await getCollection(wanted) : undefined;
   const entry = await requireAuthor(byCollection?.author.key ?? wanted);
   return text(formatAuthorRecord(entry), { author: entry });
+}
+
+/**
+ * Lists every named solver with its solves, the same rows the CLI prints.
+ *
+ * @returns {Promise<ToolResult>} One line per solver, with the entries in `details`.
+ */
+export async function solversTool(): Promise<ToolResult> {
+  const {
+    dataset: { solvers },
+    utils: { formatSolver },
+  } = await loadCore();
+  const entries = await solvers();
+  return text(entries.map(formatSolver).join("\n"), { solvers: entries });
+}
+
+/**
+ * One solver's complete record for a model.
+ *
+ * @param {string} key - Solver key, or a puzzle identifier.
+ * @returns {Promise<ToolResult>} The record as text, with the solver entry in `details`.
+ */
+export async function solverTool(key: string): Promise<ToolResult> {
+  const {
+    dataset: { requireSolver, resolveSolverKey },
+    utils: { formatSolverRecord },
+  } = await loadCore();
+  const wanted = assertLength("key", key, facts.parameters.solver);
+  const entry = await requireSolver(await resolveSolverKey(wanted));
+  return text(formatSolverRecord(entry), { solver: entry });
 }
 
 /**

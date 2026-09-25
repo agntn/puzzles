@@ -7,6 +7,7 @@ import {
   increase,
   p2pkh,
   party,
+  PartyKind,
   profile,
   pubkeyReveal,
 } from "../../core/parts.ts";
@@ -53,6 +54,8 @@ export const b1000Puzzle120 = bitcoinPuzzle({
     ),
   ],
   solver: party("RetiredCoder", {
+    key: "retired-coder",
+    kind: PartyKind.Person,
     addresses: ["3Emiwzxme7Mrj4d89uqohXNncnRM15YESs", "1Prestige1zSYorBdz94KA2UbJW3hYLTn4"],
     profiles: [
       profile("github", "https://github.com/RetiredC"),

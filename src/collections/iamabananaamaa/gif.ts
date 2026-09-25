@@ -4,10 +4,12 @@ import {
   claim,
   community,
   compressed,
+  fact,
   funding,
   official,
   p2pkh,
   party,
+  PartyKind,
   profile,
   wif,
 } from "../../core/parts.ts";
@@ -106,7 +108,22 @@ export const iAmABananaAmaaGif = bitcoinPuzzle({
     ),
   ],
   solver: party("Wickex", {
+    key: "wickex",
+    kind: PartyKind.Person,
+    about: "Solved the first puzzle on r/bitcoinpuzzles and posted the second one the same night.",
     profiles: [profile("reddit", "https://www.reddit.com/user/Wickex/")],
+    facts: [
+      fact(
+        "Posted the prize address as the answer, about two and a half hours after the GIF went up.",
+        comment("ce846u3"),
+        { date: "2013-12-23" },
+      ),
+      fact(
+        "Explained the method: a ZIP hidden in the GIF, then MEGAN-35 and ATOM-128 decoding down to the key.",
+        METHOD,
+        { date: "2013-12-23" },
+      ),
+    ],
   }),
   assets: assets({ puzzle: "gif/puzzle.gif", sourceUrl: GIF }),
 });

@@ -1,5 +1,5 @@
 import { arweavePuzzle, Status } from "../../core/puzzle.ts";
-import { claim, funding, party, standard } from "../../core/parts.ts";
+import { claim, fact, funding, party, standard } from "../../core/parts.ts";
 
 /** Puzzle `arweave/weave1`. */
 export const arweavePuzzleWeave1 = arweavePuzzle({
@@ -16,5 +16,15 @@ export const arweavePuzzleWeave1 = arweavePuzzle({
     funding("KZac9xX660vJQmymsawId_pdM-oJjBYIlCSVE__Vq7w", "2019-05-23 15:13:40", 500),
     claim("BYZEa-jS5pfY-dakErCemga4fkM-mjBDEONW0IzcYAs", "2019-05-23 19:53:50", 999.99978588),
   ],
-  solver: party("pogo"),
+  solver: party("pogo", {
+    key: "pogo",
+    about:
+      "Handle credited with the first two Arweave puzzles, each solved within two days of going up.",
+    facts: [
+      fact(
+        "ZorenX's write-up of Puzzle 01 names pogo as the solver: a row of mini riddles typed into the page in the exact format it wanted.",
+        "https://zorenx.medium.com/arweave-puzzle-series-puzzle-01-solved-59aa19a0ea2f",
+      ),
+    ],
+  }),
 });

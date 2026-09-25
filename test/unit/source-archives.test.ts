@@ -53,6 +53,24 @@ const sources = [
     date: "2022-03-21",
   },
   {
+    file: "arweave/arpoxy-2019-11-10",
+    tweet: "1193546824289832960",
+    author: "Arpoxy",
+    date: "2019-11-10",
+  },
+  {
+    file: "dug/0xflorent-2026-05-31",
+    tweet: "2061070356564091258",
+    author: "0xFlorent_",
+    date: "2026-05-31",
+  },
+  {
+    file: "dug/0xflorent-2026-06-21",
+    tweet: "2068735759889145906",
+    author: "0xFlorent_",
+    date: "2026-06-21",
+  },
+  {
     file: "book_quiz/aoinakamoto-2019-04-06",
     url: "https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
     author: "u/AoiNakamoto",

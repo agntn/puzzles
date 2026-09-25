@@ -114,6 +114,28 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
   });
 
   pi.registerTool({
+    ...registration(tools.facts.tools.solvers),
+    parameters: Type.Object({}),
+    renderCall() {
+      return line("Puzzle solvers");
+    },
+    async execute() {
+      return tools.solversTool();
+    },
+  });
+
+  pi.registerTool({
+    ...registration(tools.facts.tools.solver),
+    parameters: Type.Object({ key: Type.String(parameters.solver) }),
+    renderCall(args) {
+      return line(`Show solver ${args.key}`);
+    },
+    async execute(_toolCallId, params) {
+      return tools.solverTool(params.key);
+    },
+  });
+
+  pi.registerTool({
     ...registration(tools.facts.tools.show),
     parameters: Type.Object({ id: puzzleId }),
     renderCall(args) {

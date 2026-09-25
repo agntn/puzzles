@@ -71,6 +71,20 @@ export class UnknownAuthorError extends PuzzlesError {
   }
 }
 
+/** Raised when a solver key can't be resolved. */
+export class UnknownSolverError extends PuzzlesError {
+  override readonly name = "UnknownSolverError";
+
+  /** The unresolved solver key. */
+  readonly solver: string;
+
+  /** Constructs an unknown solver error, with the keys that do resolve when known. */
+  constructor(solver: string, detail?: string) {
+    super(withDetail(`Unknown solver: ${echo(solver)}`, detail));
+    this.solver = solver;
+  }
+}
+
 /** Raised when a collection name can't be resolved. */
 export class UnknownCollectionError extends PuzzlesError {
   override readonly name = "UnknownCollectionError";

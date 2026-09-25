@@ -1,5 +1,14 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, funding, p2pkh, party, profile, uncompressed } from "../../core/parts.ts";
+import {
+  assets,
+  claim,
+  fact,
+  funding,
+  p2pkh,
+  party,
+  profile,
+  uncompressed,
+} from "../../core/parts.ts";
 
 /** Puzzle `zden/level_4`. */
 export const zdenPuzzleLevel4 = bitcoinPuzzle({
@@ -15,7 +24,17 @@ export const zdenPuzzleLevel4 = bitcoinPuzzle({
   solvedAt: "2017-06-11 22:26:45",
   solveTime: 382037,
   solver: party("mmorsl", {
+    key: "mmorsl",
+    about:
+      "Steemit user who won Zden's Level 4 and wrote the solution article Zden's catalogue links to.",
     profiles: [profile("steemit", "https://steemit.com/@mmorsl")],
+    facts: [
+      fact(
+        "Published the solution article on Steemit, which Zden's catalog links as the article by the winner.",
+        "https://steemit.com/bitcoin/@mmorsl/solution-of-the-bitcoin-crypto-puzzle-level-4-by-zden",
+        { date: "2017-06-12" },
+      ),
+    ],
   }),
   transactions: [
     funding(

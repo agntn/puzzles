@@ -62,8 +62,28 @@ export const movieEnigmaPuzzle = bitcoinPuzzle({
     ),
   ],
   solver: party("rabbidbird", {
+    key: "rabbidbird",
+    about:
+      "GitHub user who solved the Bitcoin Movie Enigma after four and a half years, by not trusting the BIP39 checksum.",
     addresses: ["35h2x1Rqq3HmV1NX4KQAGZoz8Vmf42ktQT"],
     profiles: [profile("github", "https://github.com/rabbidbird")],
+    facts: [
+      fact(
+        "Announced the claim in floflo777's open-crypto-puzzles tracker, with the ten intruders and the five movie groups that pick them.",
+        "https://github.com/floflo777/open-crypto-puzzles/issues/24",
+        { date: "2026-09-08" },
+      ),
+      fact(
+        "Found that the winning phrase fails the BIP39 checksum and still derives the address, which is why searches that filter by checksum threw it away.",
+        "https://github.com/floflo777/open-crypto-puzzles/issues/24",
+        { date: "2026-09-08" },
+      ),
+      fact(
+        "Thanked the contributors of issue 9 in the same tracker for settling which film each frame shows.",
+        "https://github.com/floflo777/open-crypto-puzzles/issues/24",
+        { date: "2026-09-08" },
+      ),
+    ],
   }),
   assets: assets({
     solution: "solution.md",

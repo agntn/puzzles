@@ -95,6 +95,8 @@ const expectedToolNames = [
   "puzzles_hints",
   "puzzles_list",
   "puzzles_show",
+  "puzzles_solver",
+  "puzzles_solvers",
   "puzzles_stats",
   "puzzles_verify",
 ];

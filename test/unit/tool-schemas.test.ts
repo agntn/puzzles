@@ -3,7 +3,14 @@ import { describe, expect, it } from "vite-plus/test";
 import { puzzleToolSchemas } from "../../packages/shared/puzzles-tool-schemas.ts";
 import { chains } from "../../src/core/chains.ts";
 import { InvalidArgumentError } from "../../src/core/errors.ts";
-import { authorTool, facts, hintsTool, listTool, showTool } from "../../src/tool-operations.ts";
+import {
+  authorTool,
+  facts,
+  hintsTool,
+  listTool,
+  showTool,
+  solverTool,
+} from "../../src/tool-operations.ts";
 
 const schemas = puzzleToolSchemas(facts);
 
@@ -97,6 +104,19 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(Value.Check(schemas.authors, {})).toBe(true);
     await expect(authorTool("")).rejects.toBeInstanceOf(InvalidArgumentError);
     await expect(authorTool("x".repeat(author.maxLength + 1))).rejects.toBeInstanceOf(
+      InvalidArgumentError,
+    );
+  });
+
+  it("bounds the solver key like the executor does", async () => {
+    const { solver } = facts.parameters;
+
+    expect(Value.Check(schemas.solver, { key: "" })).toBe(false);
+    expect(Value.Check(schemas.solver, { key: "x".repeat(solver.maxLength + 1) })).toBe(false);
+    expect(Value.Check(schemas.solver, { key: "retired-coder" })).toBe(true);
+    expect(Value.Check(schemas.solvers, {})).toBe(true);
+    await expect(solverTool("")).rejects.toBeInstanceOf(InvalidArgumentError);
+    await expect(solverTool("x".repeat(solver.maxLength + 1))).rejects.toBeInstanceOf(
       InvalidArgumentError,
     );
   });

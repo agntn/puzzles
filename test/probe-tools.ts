@@ -34,7 +34,7 @@ if (surface === "mcp") {
   const server = createMcpServer();
   const client = new Client({ name: "probe", version: "1" });
   await Promise.all([server.connect(a), client.connect(b)]);
-  assert.equal((await client.listTools()).tools.length, 9);
+  assert.equal((await client.listTools()).tools.length, 11);
   call = (name, args) => client.callTool({ name, arguments: args });
   close = async () => {
     await Promise.all([client.close(), server.close()]);
@@ -65,7 +65,7 @@ if (surface === "mcp") {
       tools.set(tool.name, tool);
     },
   } as unknown as PiApi & OmpApi);
-  assert.equal(tools.size, 9);
+  assert.equal(tools.size, 11);
   call = (name, args) => {
     const tool = tools.get(name);
     assert.ok(tool);

@@ -14,6 +14,7 @@ const NAV_ICONS: Record<string, string> = {
   "/guide/playground": "i-lucide-flask-conical",
   "/collections": "i-lucide-layers",
   "/authors": "i-lucide-users",
+  "/solvers": "i-lucide-trophy",
   "/playground": "i-lucide-flask-conical",
   ...Object.fromEntries(COLLECTIONS.map((entry) => [entry.to, entry.icon])),
 };

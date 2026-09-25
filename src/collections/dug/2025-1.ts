@@ -2,9 +2,11 @@ import {
   assets,
   claim,
   compressed,
+  fact,
   funding,
   p2wpkh,
   party,
+  PartyKind,
   profile,
   seed,
 } from "../../core/parts.ts";
@@ -31,9 +33,30 @@ export const dug2025Index1 = bitcoinPuzzle({
   ),
   pubkey: compressed("030349e3498e3abcd935bacdc117533b9e3ce3ec05b2958b4ecadde7c68c9c8e45"),
   solver: party("floflo777", {
+    key: "floflo777",
+    kind: PartyKind.Person,
+    aliases: ["0xFlorent_"],
+    about:
+      "Keeps a public catalogue of crypto bounties with an oracle per puzzle, and recovers ETH stuck in old contracts.",
     profiles: [
       profile("github", "https://github.com/floflo777"),
       profile("twitter", "https://twitter.com/0xFlorent_"),
+    ],
+    facts: [
+      fact(
+        "Keeps open-crypto-puzzles, a catalogue of public bounties with an oracle per puzzle, whose README counts about 40 worked and a few solved.",
+        "https://github.com/floflo777/open-crypto-puzzles",
+      ),
+      fact(
+        "Posted on X about unlocking 1,003.62 ETH trapped in a 2016 ICO contract so its 48 investors could claim it.",
+        "https://x.com/0xFlorent_/status/2061070356564091258",
+        { date: "2026-05-31" },
+      ),
+      fact(
+        "Solved a TeikhosBounty contract deployed in 2018, which pays 0.5 ETH to whoever submits the right public key.",
+        "https://x.com/0xFlorent_/status/2068735759889145906",
+        { date: "2026-06-21" },
+      ),
     ],
   }),
   assets: assets({ solution: "2025-solution.md", sourceUrl: source }),

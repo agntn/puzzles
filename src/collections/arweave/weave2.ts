@@ -1,5 +1,5 @@
 import { arweavePuzzle, Status } from "../../core/puzzle.ts";
-import { claim, funding, party, standard } from "../../core/parts.ts";
+import { claim, fact, funding, party, standard } from "../../core/parts.ts";
 
 /** Puzzle `arweave/weave2`. */
 export const arweavePuzzleWeave2 = arweavePuzzle({
@@ -17,5 +17,13 @@ export const arweavePuzzleWeave2 = arweavePuzzle({
     funding("0lvvvE0Isy3TqmJwOhIWVidJNECLwdCI5L9vp1JLync", "2019-05-24 10:04:08", 1000),
     claim("NgecvZjHWx9GTi3SdIQnw8SwPQBmJ8BIOVrIvKCQnRY", "2019-05-24 17:51:23", 1249.74967882),
   ],
-  solver: party("pogo"),
+  solver: party("pogo", {
+    key: "pogo",
+    facts: [
+      fact(
+        "ZorenX's write-up of Puzzle 02 names pogo as the solver: numbered paper pieces answered with a square count, a chess position and a cryptarithm.",
+        "https://zorenx.medium.com/arweave-puzzle-series-puzzle-02-solved-71fd4c71bbc",
+      ),
+    ],
+  }),
 });
