@@ -155,7 +155,7 @@ type VerifyResult = VerifySuccess | VerifyFailure;
 
 ```ts
 // Synchronous, from the manifest: nothing is loaded.
-builtins; // readonly CollectionEntry[]: { key, load: () => Promise<Collection> }
+builtins; // readonly tuple of { key, load: () => Promise<Collection> }, literal keys kept
 collectionKeys(); // keys in registration order
 hasCollection(name); // canonical key or historical alias
 registerCollection(collection); // an instance, or { key, load } for a lazy one
@@ -163,6 +163,7 @@ registerCollection(collection); // an instance, or { key, load } for a lazy one
 // Asynchronous: a collection module is imported on first use.
 await getCollection(name); // Collection | undefined
 await requireCollection(name); // throws UnknownCollectionError
+await requireCollection("b1000"); // built-in keys and aliases are typed: Collection<number | string>, so .get(71) compiles
 await collections(); // every instance, registration order, shared array until the next registration
 await collectionSummaries(); // { key, author, total, claimed, expired, solved, swept, unsolved }[]
 await all(); // every puzzle instance

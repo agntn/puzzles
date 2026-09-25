@@ -21,10 +21,34 @@ interface TableEntry extends CollectionEntry {
   readonly instance?: AnyCollection;
 }
 
-const aliases: ReadonlyMap<string, string> = new Map([
+const aliasPairs = [
   ["peter_todd", "hash_collision"],
   ["warpwallet", "warp"],
-]);
+] as const;
+
+const aliases: ReadonlyMap<string, string> = new Map(aliasPairs);
+
+type QueryOf<C> = C extends Collection<infer Query> ? Query : never;
+
+type Builtin = (typeof builtins)[number];
+
+type Alias = (typeof aliasPairs)[number];
+
+/**
+ * The collection type behind every built-in key and historical alias, by the query it takes: `b1000`
+ * is a `Collection<number | string>`, `gsmg` a `Collection<string | void>`. The type stays when a
+ * registration replaces a built-in key, so a fork should take the same queries.
+ */
+export type BuiltinCollections = {
+  readonly [E in Builtin as E["key"]]: Collection<QueryOf<Awaited<ReturnType<E["load"]>>>>;
+} & {
+  readonly [A in Alias as A[0]]: Collection<
+    QueryOf<Awaited<ReturnType<Extract<Builtin, { key: A[1] }>["load"]>>>
+  >;
+};
+
+/** A built-in collection key or historical alias. */
+export type BuiltinKey = keyof BuiltinCollections;
 
 let entries: Map<string, TableEntry> | undefined;
 let snapshot: Promise<readonly AnyCollection[]> | undefined;
@@ -37,7 +61,8 @@ const pending = new Map<string, Promise<AnyCollection>>();
  * @returns {Map<string, TableEntry>} The seeded table.
  */
 function table(): Map<string, TableEntry> {
-  entries ??= new Map(builtins.map((entry): [string, TableEntry] => [entry.key, entry]));
+  const manifest: readonly CollectionEntry[] = builtins;
+  entries ??= new Map(manifest.map((entry): [string, TableEntry] => [entry.key, entry]));
   return entries;
 }
 
@@ -116,22 +141,28 @@ export function hasCollection(name: string): boolean {
 
 /**
  * Loads a collection by canonical key or historical alias. A built-in's module is imported on the
- * first call for its key, and parallel callers share that one import.
+ * first call for its key, and parallel callers share that one import. A built-in key comes back typed
+ * with its query, so `(await getCollection("b1000")).get(71)` compiles.
  *
  * @param {string} name - Collection key or historical alias.
  * @returns {Promise<AnyCollection | undefined>} The collection, or `undefined` when no entry has that key.
  */
+export function getCollection<K extends BuiltinKey>(name: K): Promise<BuiltinCollections[K]>;
+export function getCollection(name: string): Promise<AnyCollection | undefined>;
 export async function getCollection(name: string): Promise<AnyCollection | undefined> {
   const entry = table().get(canonical(name));
   return entry === undefined ? undefined : load(entry);
 }
 
 /**
- * Loads a collection or throws a typed error.
+ * Loads a collection or throws a typed error. A built-in key comes back typed with its query, as in
+ * `getCollection`.
  *
  * @param {string} name - Collection key or historical alias.
  * @returns {Promise<AnyCollection>} The collection.
  */
+export function requireCollection<K extends BuiltinKey>(name: K): Promise<BuiltinCollections[K]>;
+export function requireCollection(name: string): Promise<AnyCollection>;
 export async function requireCollection(name: string): Promise<AnyCollection> {
   const collection = await getCollection(name);
   if (collection === undefined) {

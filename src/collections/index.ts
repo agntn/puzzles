@@ -1,11 +1,10 @@
-import type { CollectionEntry } from "../core/registry.ts";
-
 /**
  * Every collection shipped with the package, in manifest order. Only the key lives here. A module
  * is imported on the first lookup for its key, so importing the package evaluates no records and a
- * bundler splits each collection into its own chunk.
+ * bundler splits each collection into its own chunk. The list keeps its literal type, so
+ * `getCollection("b1000")` knows the query type of the collection it loads.
  */
-export const builtins: readonly CollectionEntry[] = [
+export const builtins = [
   { key: "arweave", load: () => import("./arweave.ts").then((m) => m.arweave) },
   { key: "b1000", load: () => import("./b1000.ts").then((m) => m.b1000) },
   { key: "ballet", load: () => import("./ballet.ts").then((m) => m.ballet) },
@@ -39,4 +38,4 @@ export const builtins: readonly CollectionEntry[] = [
   { key: "warp", load: () => import("./warp.ts").then((m) => m.warp) },
   { key: "wickex", load: () => import("./wickex.ts").then((m) => m.wickex) },
   { key: "zden", load: () => import("./zden.ts").then((m) => m.zden) },
-];
+] as const;

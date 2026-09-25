@@ -103,6 +103,8 @@ export {
   registerCollection,
   requireCollection,
   type AnyCollection,
+  type BuiltinCollections,
+  type BuiltinKey,
   type CollectionEntry,
 } from "./core/registry.ts";
 
