@@ -439,8 +439,9 @@ export abstract class Puzzle {
               : [assetLink("solution", assets.solution, directory)]),
           ];
     for (const { file } of this.stages().flatMap((item) => item.artifacts)) {
-      if (file !== undefined && !links.some((link) => link.file === file)) {
-        links.push(assetLink("artifact", file, directory));
+      const link = file === undefined ? undefined : assetLink("artifact", file, directory);
+      if (link !== undefined && !links.some((other) => other.path === link.path)) {
+        links.push(link);
       }
     }
     return links.length === 0 ? NO_ASSET_LINKS : frozen(links);

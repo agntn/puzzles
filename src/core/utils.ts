@@ -308,12 +308,14 @@ function formatStages(puzzle: Puzzle): string[] {
     return [];
   }
   const links = puzzle.assetLinks();
+  const directory = `assets/${puzzle.collection()}`;
   return [
     `stages: ${stages.length}`,
     ...stages.flatMap((stage) => [
       `\t${stage.name}\t${stage.about}`,
       ...stage.artifacts.map((item) => {
-        const copy = links.find((link) => link.file === item.file)?.url;
+        const path = item.file === undefined ? undefined : `${directory}/${item.file}`;
+        const copy = links.find((link) => link.path === path)?.url;
         return `\t\t${[item.name, item.url, ...(copy === undefined ? [] : [copy])].join("\t")}`;
       }),
       ...(stage.answer === undefined ? [] : [`\t\t${formatAnswer(stage.answer)}`]),

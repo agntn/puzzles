@@ -26,6 +26,7 @@ import {
   stage,
   Status,
 } from "../../src/index.ts";
+import { formatStageReport } from "../../src/core/utils.ts";
 
 const required = {
   id: "fixture/1",
@@ -206,6 +207,48 @@ describe("puzzle record factories", () => {
     });
 
     expect(puzzle.assetLinks().map((link) => link.kind)).toEqual(["artifact"]);
+  });
+
+  it("keeps a stage copy under the collection when the image path is overridden", () => {
+    class Mirrored extends BitcoinPuzzle {
+      override id(): string {
+        return "fixture/mirrored";
+      }
+
+      override address() {
+        return required.address;
+      }
+
+      override sourceUrl(): string {
+        return required.sourceUrl;
+      }
+
+      override startedAt(): string {
+        return required.startedAt;
+      }
+
+      override assets() {
+        return assets({ puzzle: "puzzle.png" });
+      }
+
+      override stages() {
+        return [stage("one", "An image.", [artifact("image", required.sourceUrl, "puzzle.png")])];
+      }
+
+      override assetPath(): string {
+        return "mirror/puzzle.png";
+      }
+    }
+
+    const puzzle = new Mirrored();
+
+    expect(puzzle.assetLinks().map((link) => [link.kind, link.path])).toEqual([
+      ["puzzle", "mirror/puzzle.png"],
+      ["artifact", "assets/fixture/puzzle.png"],
+    ]);
+    expect(formatStageReport(puzzle)).toContain(
+      `\t\timage\t${required.sourceUrl}\thttps://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/puzzle.png`,
+    );
   });
 
   it("keeps the solver separate from the solution file in the serialized record", () => {
