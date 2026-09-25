@@ -17,7 +17,7 @@ export class MiniCollection extends NumericCollection {
     key: "retired-coder",
     kind: PartyKind.Person,
     about:
-      "Bitcoin puzzle solver and author of RCKangaroo who gave away the Bitcoin Cash left on three solved puzzle addresses as mini-puzzles on BitCoinTalk.",
+      "Bitcoin puzzle solver and author of RCKangaroo who gave away the Bitcoin Cash left on three solved puzzle addresses as mini-puzzles on BitcoinTalk.",
     profiles: [
       profile("github", "https://github.com/RetiredC"),
       profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=3657819"),

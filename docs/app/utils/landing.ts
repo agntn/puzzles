@@ -888,7 +888,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "fe69aa0c0cde",
+  dataVersion: "25c59f5dbf30",
   total: 363,
   solved: 157,
   unsolved: 95,
@@ -1648,7 +1648,7 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     name: "RetiredCoder",
     kind: "person",
     about:
-      "Bitcoin puzzle solver and author of RCKangaroo who gave away the Bitcoin Cash left on three solved puzzle addresses as mini-puzzles on BitCoinTalk.",
+      "Bitcoin puzzle solver and author of RCKangaroo who gave away the Bitcoin Cash left on three solved puzzle addresses as mini-puzzles on BitcoinTalk.",
     collections: ["mini"],
     puzzles: 3,
   },
