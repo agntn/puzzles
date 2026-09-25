@@ -47,6 +47,33 @@ describe("docs landing fixtures", () => {
     ]);
   });
 
+  it("encodes file names in asset and stage links so a # or ? still reaches the file", async () => {
+    const library = await import("../../src/index.ts");
+    const puzzle = library.bitcoinPuzzle({
+      id: "fixture/odd",
+      address: library.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      assets: library.assets({ puzzle: "grid #1.png", hints: ["odd/hint?.svg"] }),
+      stages: [
+        library.stage("one", "A blob.", [
+          library.artifact("blob", "https://example.com/a", "blob #2.txt"),
+        ]),
+      ],
+    });
+    const view = await toPuzzleView(library, puzzle, "", []);
+
+    expect(view.assets.map((asset) => asset.url)).toEqual([
+      "/assets/fixture/grid%20%231.png",
+      "/assets/fixture/odd/hint%3F.svg",
+    ]);
+    expect(view.assets.map((asset) => asset.path)).toEqual([
+      "assets/fixture/grid #1.png",
+      "assets/fixture/odd/hint?.svg",
+    ]);
+    expect(view.stages[0]?.artifacts[0]?.file).toBe("/assets/fixture/blob%20%232.txt");
+  });
+
   it("cover every collection and every builder the key literal mirrors", async () => {
     const library = await import("../../src/index.ts");
 

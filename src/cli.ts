@@ -102,6 +102,7 @@ const main = defineCommand({
     mcp: () => command(loadMcpCommand),
     show: () => command(() => import("./commands/show.ts")),
     solvers: () => command(() => import("./commands/solvers.ts")),
+    stages: () => command(() => import("./commands/stages.ts")),
     stats: () => command(() => import("./commands/stats.ts")),
     verify: () => command(() => import("./commands/verify.ts")),
   },

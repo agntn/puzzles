@@ -3,6 +3,7 @@ import { type Chain, chains, parseChain, sameAddress } from "./chains.ts";
 import type { CollectionSummary, Stats } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
 import {
+  type Answer,
   type Confirmation,
   type Entropy,
   type EntropySource,
@@ -295,6 +296,34 @@ function formatAssets(puzzle: Puzzle): string[] {
 }
 
 /**
+ * The stage count, then each stage with its description on one line, its artifacts under it (the
+ * name, where the author published it, the repository copy) and its published answer, if any.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {string[]} The count line and the artifact lines, or nothing for a single-stage puzzle.
+ */
+function formatStages(puzzle: Puzzle): string[] {
+  const stages = puzzle.stages();
+  if (stages.length === 0) {
+    return [];
+  }
+  const links = puzzle.assetLinks();
+  const directory = `assets/${puzzle.collection()}`;
+  return [
+    `stages: ${stages.length}`,
+    ...stages.flatMap((stage) => [
+      `\t${stage.name}\t${stage.about}`,
+      ...stage.artifacts.map((item) => {
+        const path = item.file === undefined ? undefined : `${directory}/${item.file}`;
+        const copy = links.find((link) => link.path === path)?.url;
+        return `\t\t${[item.name, item.url, ...(copy === undefined ? [] : [copy])].join("\t")}`;
+      }),
+      ...(stage.answer === undefined ? [] : [`\t\t${formatAnswer(stage.answer)}`]),
+    ]),
+  ];
+}
+
+/**
  * The hint files a record ships, the hints that came as a file rather than as a line of text.
  *
  * @param {Puzzle} puzzle - The puzzle.
@@ -324,17 +353,24 @@ function formatConfirmation(confirmation: Confirmation | undefined): string {
 }
 
 /**
+ * A published answer with its source and date, tab-separated, the way hints and stages print it.
+ *
+ * @param {Answer} published - The answer.
+ * @returns {string} The answer cells.
+ */
+function formatAnswer(published: Answer): string {
+  const date = published.date === undefined ? "" : `\tanswer date: ${published.date}`;
+  return `answer: ${published.text}\tanswer source: ${published.source}${date}`;
+}
+
+/**
  * One tab-separated hint with its source and any optional confirmation or published answer.
  *
  * @param {Hint} hint - The hint.
  * @returns {string} The line.
  */
 function formatHint(hint: Hint): string {
-  const published = hint.answer;
-  const answer =
-    published === undefined
-      ? ""
-      : `\tanswer: ${published.text}\tanswer source: ${published.source}${published.date === undefined ? "" : `\tanswer date: ${published.date}`}`;
+  const answer = hint.answer === undefined ? "" : `\t${formatAnswer(hint.answer)}`;
   return `\t${hint.kind}\t${hint.date ?? "-"}\t${hint.text}\tsource: ${hint.source}${formatConfirmation(hint.confirmation)}${answer}`;
 }
 
@@ -390,6 +426,19 @@ export function formatHintReport(puzzle: Puzzle, inherited: readonly Hint[]): st
 }
 
 /**
+ * The lines `puzzles stages` and `puzzles_stages` print: `id: N stages` or `id: no stages
+ * recorded`, then the `stages` block `puzzles_show` prints.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {string[]} The header, then the stage lines.
+ */
+export function formatStageReport(puzzle: Puzzle): string[] {
+  const count = puzzle.stages().length;
+  const header = count === 0 ? "no stages recorded" : `${count} stage${count === 1 ? "" : "s"}`;
+  return [`${puzzle.id()}: ${header}`, ...formatStages(puzzle)];
+}
+
+/**
  * Formats a puzzle as the lines `puzzles_show` prints: the summary row, then every field the
  * record has as `name: value`, so a client that only sees the text still has the record. The
  * hints the collection shares print as `collection hints` ahead of the puzzle's own.
@@ -418,6 +467,7 @@ export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = 
     ...formatTransactions(puzzle),
     ...field("claim", puzzle.claimExplorerUrl()),
     ...formatAssets(puzzle),
+    ...formatStages(puzzle),
     ...formatHintBlocks(inherited, puzzle.hints()),
     `explorer: ${puzzle.explorerUrl()}`,
     `source: ${puzzle.sourceUrl()}`,

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
 import {
+  artifact,
   arweavePuzzle,
   assets,
   BitcoinPuzzle,
@@ -22,8 +23,10 @@ import {
   passphrase,
   Puzzle,
   type PuzzleSpec,
+  stage,
   Status,
 } from "../../src/index.ts";
+import { formatStageReport } from "../../src/core/utils.ts";
 
 const required = {
   id: "fixture/1",
@@ -147,6 +150,8 @@ describe("puzzle record factories", () => {
     expect(Object.isFrozen(puzzle.assetLinks())).toBe(true);
     expect(puzzle.hints()).toEqual([]);
     expect(Object.isFrozen(puzzle.hints())).toBe(true);
+    expect(puzzle.stages()).toEqual([]);
+    expect(Object.isFrozen(puzzle.stages())).toBe(true);
     expect(puzzle.toJSON()).toEqual({
       id: required.id,
       address: required.address,
@@ -155,6 +160,95 @@ describe("puzzle record factories", () => {
       chain,
       status: Status.Unsolved,
     });
+  });
+
+  it("lists each stage artifact file once, after the files the asset block names", () => {
+    const puzzle = bitcoinPuzzle({
+      ...required,
+      assets: assets({ puzzle: "puzzle.png" }),
+      stages: [
+        stage("phase 1", "An image.", [
+          artifact("image", "https://example.com/puzzle", "puzzle.png"),
+          artifact("page", "https://example.com/next"),
+        ]),
+        stage(
+          "phase 2",
+          "A blob.",
+          [artifact("ciphertext", "https://example.com/next", "phase2.txt")],
+          answer("hunter2", "https://example.com/writeup", { date: "2026-01-02" }),
+        ),
+      ],
+    });
+
+    expect(puzzle.assetLinks().map((link) => [link.kind, link.path])).toEqual([
+      ["puzzle", "assets/fixture/puzzle.png"],
+      ["artifact", "assets/fixture/phase2.txt"],
+    ]);
+    expect(puzzle.stages()[0]?.artifacts[1]).toEqual({
+      name: "page",
+      url: "https://example.com/next",
+    });
+    expect(puzzle.toJSON().stages?.map((item) => item.name)).toEqual(["phase 1", "phase 2"]);
+    expect("answer" in (puzzle.stages()[0] ?? {})).toBe(false);
+    expect(puzzle.stages()[1]?.answer).toEqual({
+      text: "hunter2",
+      source: "https://example.com/writeup",
+      date: "2026-01-02",
+    });
+    expect(Object.isFrozen(puzzle.stages()[1]?.artifacts[0])).toBe(true);
+  });
+
+  it("links stage artifact files on a record without an asset block", () => {
+    const puzzle = bitcoinPuzzle({
+      ...required,
+      stages: [
+        stage("phase 1", "A blob.", [artifact("ciphertext", "https://example.com/a", "a.txt")]),
+      ],
+    });
+
+    expect(puzzle.assetLinks().map((link) => link.kind)).toEqual(["artifact"]);
+  });
+
+  it("keeps a stage copy under the collection when the image path is overridden", () => {
+    class Mirrored extends BitcoinPuzzle {
+      override id(): string {
+        return "fixture/mirrored";
+      }
+
+      override address() {
+        return required.address;
+      }
+
+      override sourceUrl(): string {
+        return required.sourceUrl;
+      }
+
+      override startedAt(): string {
+        return required.startedAt;
+      }
+
+      override assets() {
+        return assets({ puzzle: "puzzle.png" });
+      }
+
+      override stages() {
+        return [stage("one", "An image.", [artifact("image", required.sourceUrl, "puzzle.png")])];
+      }
+
+      override assetPath(): string {
+        return "mirror/puzzle.png";
+      }
+    }
+
+    const puzzle = new Mirrored();
+
+    expect(puzzle.assetLinks().map((link) => [link.kind, link.path])).toEqual([
+      ["puzzle", "mirror/puzzle.png"],
+      ["artifact", "assets/fixture/puzzle.png"],
+    ]);
+    expect(formatStageReport(puzzle)).toContain(
+      `\t\timage\t${required.sourceUrl}\thttps://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/puzzle.png`,
+    );
   });
 
   it("keeps the solver separate from the solution file in the serialized record", () => {

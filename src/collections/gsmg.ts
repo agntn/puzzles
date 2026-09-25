@@ -1,5 +1,7 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
+  answer,
+  artifact,
   assets,
   decrease,
   fact,
@@ -8,9 +10,22 @@ import {
   party,
   PartyKind,
   profile,
+  stage,
   uncompressed,
 } from "../core/parts.ts";
 import { bitcoinPuzzle } from "../core/puzzle.ts";
+
+/** The community writeup of every published step, pinned to the commit the answers cite. */
+const WRITEUP =
+  "https://github.com/puzzlehunt/gsmgio-5btc-puzzle/blob/fb92dd15487c6e2d275adb8c923698b7166c328e/README.md";
+
+/** The page that carries both ciphertexts, the one the phase 1 answer opens. */
+const CHOICE =
+  "https://gsmg.io/choiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself";
+
+/** The SHA-256 of the text on the first image, the page with SalPhaseIon and Cosmic Duality. */
+const SALPHASEION =
+  "https://gsmg.io/89727c598b9cd1cf8873f27cb7057f050645ddb6a7a157a110239ac0152f6a32";
 
 /** GSMG.IO multi-phase cryptographic challenge. */
 export const gsmgPuzzle = bitcoinPuzzle({
@@ -44,6 +59,51 @@ export const gsmgPuzzle = bitcoinPuzzle({
     hints: ["follow_the_white_rabbit.png"],
     sourceUrl: "https://gsmg.io/puzzle",
   }),
+  stages: [
+    stage(
+      "phase 1",
+      "A 14 by 14 grid of black, white, blue and yellow squares with a pixel rabbit in the middle. The one real QR code sits at the bottom and only opens the address on blockchain.com, so no, that's not the shortcut. Read the grid right and you land on a page with eight pictures, a password form hidden with display: none and a comment in the source wishing luck to the little bunny hunter.",
+      [
+        artifact("puzzle image", "https://gsmg.io/puzzle", "puzzle.png"),
+        artifact("the seed is planted", "https://gsmg.io/theseedisplanted"),
+      ],
+      answer(
+        "The grid read as bits, black and blue 1, white and yellow 0, counterclockwise in a spiral from the top left, spells gsmg.io/theseedisplanted, and the hidden form there takes theflowerblossomsthroughwhatseemstobeaconcretesurface.",
+        `${WRITEUP}#1-httpsgsmgiopuzzle`,
+        { date: "2020-04-26" },
+      ),
+    ),
+    stage(
+      "phase 2",
+      "The page opens with someone asking if you're looking for the private keymaker, then drops a base64 AES blob on you. After that it gets weird: a riddle about an electrical network theorem, a chancellor waiting for banks to be bailed out, a chess position in FEN and a buddhist who is forced to move.",
+      [artifact("ciphertext", CHOICE, "phase2.txt")],
+      answer(
+        "causality, from the Merovingian in The Matrix Reloaded. Its SHA-256 in lowercase hex, eb3efb5151e6255994711fe8f2264427ceeebf88109e1d7fad5b0a8b6d07e5bf, is the OpenSSL password.",
+        `${WRITEUP}#3-httpsgsmgiochoiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself`,
+        { date: "2020-04-26" },
+      ),
+    ),
+    stage(
+      "phase 3",
+      "A second blob on the same page, about six times the first one. This time the author says how to open it: parts 1 to 7 go through sha-256 and the digest is the password. Same aes-256-cbc as before, so at least the lock is familiar.",
+      [artifact("ciphertext", CHOICE, "phase3.txt")],
+      answer(
+        "causality, Safenet, Luna, HSM, 11110, 0x736B6E616220726F662074756F6C69616220646E6F63657320666F206B6E697262206E6F20726F6C6C65636E61684320393030322F6E614A2F33302073656D695420656854 and B5KR/1r5B/2R5/2b1p1p1/2P1k1P1/1p2P2p/1P2P2P/3N1N2 b - - 0 1, joined and hashed: 1a57c572caf3cf722e41f5f9cf99ffacff06728a43032dd44c481c77d2ec30d5. Inside is phase 3.1 and one more blob, phase 3.2, that opens with the SHA-256 of jacquefrescogiveitjustonesecondheisenbergsuncertaintyprinciple.",
+        `${WRITEUP}#3-httpsgsmgiochoiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself`,
+        { date: "2020-04-26" },
+      ),
+    ),
+    stage(
+      "SalPhaseIon",
+      "A back door in the first image. The page path is the SHA-256 of the text printed under the grid, and behind it sits one long line of mostly the letters a to i, with a few words mixed in and an AES blob split into single characters. Parts of it decode. The writeup has no password for the blob.",
+      [artifact("letters and blob", SALPHASEION, "salphaseion.txt")],
+    ),
+    stage(
+      "Cosmic Duality",
+      "Same page, second heading. A clean 28 line base64 AES blob and not one word about its password. The writeup stops here and has no password for it.",
+      [artifact("ciphertext", SALPHASEION, "cosmic-duality.txt")],
+    ),
+  ],
 });
 
 /** GSMG.IO multi-phase cryptographic challenge. */

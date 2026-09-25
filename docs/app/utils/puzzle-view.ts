@@ -1,4 +1,4 @@
-import type { Assets, Chain, Entropy, Hint, KeyData, Puzzle } from "../../../src/index.ts";
+import type { Answer, Assets, Chain, Entropy, Hint, KeyData, Puzzle } from "../../../src/index.ts";
 import { formatPrize } from "./format.ts";
 import { toSample, type LandingSample, type SampleLibrary } from "./samples.ts";
 
@@ -24,6 +24,21 @@ export interface AssetLink {
   readonly image: boolean;
 }
 
+/** One artifact of a stage: where the author published it and the file the site serves, if any. */
+export interface ArtifactRow {
+  readonly name: string;
+  readonly url: string;
+  readonly file?: string;
+}
+
+/** One stage as the page prints it: its name, what it is about, its artifacts and its answer. */
+export interface StageRow {
+  readonly name: string;
+  readonly about: string;
+  readonly artifacts: readonly ArtifactRow[];
+  readonly answer?: Answer;
+}
+
 /** One hint as the page prints it: the record, plus whether the whole collection shares it. */
 export interface HintRow extends Hint {
   readonly shared: boolean;
@@ -39,6 +54,7 @@ export interface PuzzleView extends LandingSample {
   readonly transactionRows: readonly TransactionRow[];
   readonly assets: readonly AssetLink[];
   readonly assetSource: string | undefined;
+  readonly stages: readonly StageRow[];
   readonly hints: readonly HintRow[];
   readonly solverName: string | undefined;
   /** The solver's page key, when the record names the solver. */
@@ -143,6 +159,18 @@ function keyRows(key: KeyData | undefined): KeyRow[] {
 }
 
 /**
+ * The site URL of a file under `assets/<collection>/`, encoded segment by segment like the
+ * library's asset URLs, so a `#` or a `?` in a file name still addresses the file.
+ *
+ * @param {string} collection - The collection key.
+ * @param {string} file - The file name under the collection's asset directory.
+ * @returns {string} The site path of the file.
+ */
+export function assetHref(collection: string, file: string): string {
+  return `/${["assets", collection, ...file.split("/")].map(encodeURIComponent).join("/")}`;
+}
+
+/**
  * Links to the files a record ships. The site serves `assets/` from the checkout, so the
  * links stay local and never depend on which repository the package lives in this week.
  *
@@ -164,7 +192,7 @@ function assetLinks(collection: string, assets: Assets | undefined): AssetLink[]
           {
             label,
             path: `assets/${collection}/${path}`,
-            url: `/assets/${collection}/${path}`,
+            url: assetHref(collection, path),
             image: /\.(?:png|jpe?g|gif|webp|svg)$/iu.test(path),
           },
         ],
@@ -204,6 +232,16 @@ export async function toPuzzleView(
     })),
     assets: assetLinks(puzzle.collection(), assets),
     assetSource: assets?.source_url,
+    stages: puzzle.stages().map((stage) => ({
+      name: stage.name,
+      about: stage.about,
+      ...(stage.answer === undefined ? {} : { answer: stage.answer }),
+      artifacts: stage.artifacts.map((item) => ({
+        name: item.name,
+        url: item.url,
+        ...(item.file === undefined ? {} : { file: assetHref(puzzle.collection(), item.file) }),
+      })),
+    })),
     hints: [
       ...shared.map((hint) => ({ ...hint, shared: true })),
       ...puzzle.hints().map((hint) => ({ ...hint, shared: false })),

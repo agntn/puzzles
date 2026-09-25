@@ -64,6 +64,7 @@ export function puzzleToolSchemas(facts: PuzzleToolFacts) {
     solver: Type.Object({ key: Type.String(parameters.solver) }),
     show: Type.Object({ id: puzzleId }),
     hints: Type.Object({ id: puzzleId }),
+    stages: Type.Object({ id: puzzleId }),
     list: Type.Object({
       address: Type.Optional(Type.String(parameters.address)),
       collection: Type.Optional(Type.String(parameters.collection)),

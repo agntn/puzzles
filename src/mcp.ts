@@ -17,6 +17,7 @@ import {
   collectionsTool,
   facts,
   hintsTool,
+  stagesTool,
   listTool,
   showTool,
   statsTool,
@@ -62,6 +63,11 @@ const tools: readonly ToolDefinition[] = [
     ...facts.tools.hints,
     inputSchema: schemas.hints,
     execute: (args) => hintsTool(args["id"] as string),
+  },
+  {
+    ...facts.tools.stages,
+    inputSchema: schemas.stages,
+    execute: (args) => stagesTool(args["id"] as string),
   },
   {
     ...facts.tools.list,

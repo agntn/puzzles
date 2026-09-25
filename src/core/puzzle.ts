@@ -12,6 +12,7 @@ import {
   type Party,
   type Pubkey,
   secretOf,
+  type Stage,
   type Transaction,
   TransactionType,
 } from "./parts.ts";
@@ -35,6 +36,7 @@ export interface PuzzleData {
   readonly solve_time?: number;
   readonly solver?: Party;
   readonly source_url: string;
+  readonly stages?: readonly Stage[];
   readonly start_date: string;
   readonly status: Status;
   readonly transactions?: readonly Transaction[];
@@ -43,7 +45,7 @@ export interface PuzzleData {
 /** One file a puzzle ships: its role, its name under `assets/<collection>/`, and where it lives. */
 export interface AssetLink {
   readonly file: string;
-  readonly kind: "puzzle" | "hint" | "solution";
+  readonly kind: "puzzle" | "hint" | "solution" | "artifact";
   readonly path: string;
   readonly url: string;
 }
@@ -53,6 +55,9 @@ const NO_TRANSACTIONS: readonly Transaction[] = Object.freeze([]);
 
 /** The asset list of a puzzle that ships no files. */
 const NO_ASSET_LINKS: readonly AssetLink[] = Object.freeze([]);
+
+/** The stage list of a puzzle that runs in one. */
+const NO_STAGES: readonly Stage[] = Object.freeze([]);
 
 /** The hint list of a puzzle that recorded none. */
 const NO_HINTS: readonly Hint[] = Object.freeze([]);
@@ -230,6 +235,16 @@ export abstract class Puzzle {
   }
 
   /**
+   * The stages of a puzzle that runs in several, in the author's order, each with what the author
+   * published for it.
+   *
+   * @returns {readonly Stage[]} The stages, or an empty list for a puzzle that runs in one.
+   */
+  stages(): readonly Stage[] {
+    return NO_STAGES;
+  }
+
+  /**
    * Hints about this puzzle alone, in record order; the collection's sit on `Collection.hints`.
    *
    * @returns {readonly Hint[]} The hints, or an empty list when the record has none.
@@ -404,23 +419,32 @@ export abstract class Puzzle {
   }
 
   /**
-   * Every file the record ships, the puzzle image as `assetPath()` and `assetUrl()` answer it,
-   * then the hints, then the solution, each with its path from the repository root and its
-   * canonical remote URL.
+   * Every file the record ships, once each: the puzzle image as `assetPath()` and `assetUrl()`
+   * answer it, then the hints, the solution and the stage artifacts, each with its path from the
+   * repository root and its canonical remote URL.
    *
    * @returns {readonly AssetLink[]} The files, or an empty list when the record ships none.
    */
   assetLinks(): readonly AssetLink[] {
     const assets = this.assets();
-    if (assets === undefined) {
-      return NO_ASSET_LINKS;
-    }
     const directory = `assets/${this.collection()}`;
-    return frozen([
-      ...imageLink(assets.puzzle, this.assetPath(), this.assetUrl()),
-      ...(assets.hints ?? []).map((hint) => assetLink("hint", hint, directory)),
-      ...(assets.solution === undefined ? [] : [assetLink("solution", assets.solution, directory)]),
-    ]);
+    const links: AssetLink[] =
+      assets === undefined
+        ? []
+        : [
+            ...imageLink(assets.puzzle, this.assetPath(), this.assetUrl()),
+            ...(assets.hints ?? []).map((hint) => assetLink("hint", hint, directory)),
+            ...(assets.solution === undefined
+              ? []
+              : [assetLink("solution", assets.solution, directory)]),
+          ];
+    for (const { file } of this.stages().flatMap((item) => item.artifacts)) {
+      const link = file === undefined ? undefined : assetLink("artifact", file, directory);
+      if (link !== undefined && !links.some((other) => other.path === link.path)) {
+        links.push(link);
+      }
+    }
+    return links.length === 0 ? NO_ASSET_LINKS : frozen(links);
   }
 
   /**
@@ -451,6 +475,7 @@ export abstract class Puzzle {
   toJSON(): PuzzleData {
     const transactions = this.transactions();
     const hints = this.hints();
+    const stages = this.stages();
     const record = defined<PuzzleData>({
       id: this.id(),
       chain: this.chain(),
@@ -468,6 +493,7 @@ export abstract class Puzzle {
       transactions: transactions.length === 0 ? undefined : transactions,
       solver: this.solver(),
       assets: this.assets(),
+      stages: stages.length === 0 ? undefined : stages,
       hints: hints.length === 0 ? undefined : hints,
     });
     return frozen(record);
@@ -535,6 +561,7 @@ export interface PuzzleSpec {
   readonly solveTime?: number;
   readonly solver?: Party;
   readonly sourceUrl: string;
+  readonly stages?: readonly Stage[];
   readonly startedAt: string;
   readonly status?: Status;
   readonly transactions?: readonly Transaction[];
@@ -612,6 +639,10 @@ class SpecPuzzle extends Puzzle {
 
   override assets(): Assets | undefined {
     return this.#spec.assets;
+  }
+
+  override stages(): readonly Stage[] {
+    return this.#spec.stages ?? NO_STAGES;
   }
 
   override hints(): readonly Hint[] {

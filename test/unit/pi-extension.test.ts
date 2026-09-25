@@ -141,6 +141,7 @@ describe("Pi host loader", () => {
       ["puzzles_stats", {}],
       ["puzzles_show", { id: "gsmg" }],
       ["puzzles_hints", { id: "gsmg" }],
+      ["puzzles_stages", { id: "gsmg" }],
       ["puzzles_list", { collection: "b1000", limit: 1 }],
     ] as const) {
       const result = await hosted.get(name)?.execute("call-1", params);

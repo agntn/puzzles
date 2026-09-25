@@ -25,6 +25,7 @@ abstract class Puzzle {
   transactions(): readonly Transaction[]; // ([])
   solver(): Party | undefined;
   assets(): Assets | undefined;
+  stages(): readonly Stage[]; // ([])
   hints(): readonly Hint[]; // ([])
 }
 ```
@@ -48,7 +49,7 @@ puzzle.claimTransaction();
 puzzle.formattedSolveTime(); // "1y 2mo 3d"
 puzzle.assetPath(); // "assets/zden/level_4/puzzle.png"
 puzzle.assetUrl(); // raw GitHub URL
-/** Each file with its kind, path and URL: the image, the hints, the solution. */
+/** Each file once with its kind, path and URL: the image, the hints, the solution, the stage artifacts. */
 puzzle.assetLinks();
 await puzzle.balance({ apiKey?, baseUrl?, timeout? }); // Balance through the chain's @agntn/explorers provider
 puzzle.explorerUrl();
