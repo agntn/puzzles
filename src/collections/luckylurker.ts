@@ -8,7 +8,7 @@ export class LuckyLurkerCollection extends NamedCollection {
   /** Stable collection key used in puzzle identifiers. */
   static readonly key = "luckylurker";
 
-  /** Paul Jones publishes the Vaults as Paul_LuckyLurker on BitcoinTalk. */
+  /** Paul Jones publishes the Vaults as Paul_LuckyLurker on Bitcointalk. */
   static readonly author = party("Paul Jones", {
     key: "paul-jones",
     kind: PartyKind.Person,

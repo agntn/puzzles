@@ -8,7 +8,7 @@ const ANNOUNCEMENT = "https://bitcointalk.org/index.php?topic=1306983.msg6463984
 /** Where kTimesG looked back on the claim. */
 const RECAP = "https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64695204";
 
-/** kTimesG's key cracking challenges from BitcoinTalk. */
+/** kTimesG's key cracking challenges from Bitcointalk. */
 export class KTimesGCollection extends NamedCollection {
   /** Stable collection key used in puzzle identifiers. */
   static readonly key = "ktimesg";
@@ -18,7 +18,7 @@ export class KTimesGCollection extends NamedCollection {
     key: "ktimesg",
     kind: PartyKind.Person,
     about:
-      "Writes on BitcoinTalk about cracking Bitcoin keys. In 2024 offered 0.005 BTC to whoever cracked a key with 80 unknown bits before its transaction confirmed. Someone did, 39 minutes in.",
+      "Writes on Bitcointalk about cracking Bitcoin keys. In 2024 offered 0.005 BTC to whoever cracked a key with 80 unknown bits before its transaction confirmed. Someone did, 39 minutes in.",
     profiles: [
       profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=3610370"),
     ],
