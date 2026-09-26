@@ -51,21 +51,30 @@ export function formatPrize(prize: number | undefined, currency: string): string
 }
 
 /**
- * Sums prizes per currency, rounded to the eight places every chain here settles in, so a
- * float carry never prints as `1058.0688491299998`.
+ * Sums prizes per currency as exact decimals, so a total keeps every place its prizes carry (an
+ * ETH prize can have eighteen) and a float carry never prints as `1058.0688491299998`.
  *
  * @param {readonly Puzzle[]} puzzles - The puzzles to sum over.
  * @returns {Record<string, number>} Amounts per currency, in first-seen order.
  */
 export function prizeTotals(puzzles: readonly Puzzle[]): Record<string, number> {
-  const totals: Record<string, number> = {};
+  const sums: Record<string, { units: bigint; places: number }> = {};
   for (const puzzle of puzzles) {
     const prize = puzzle.prize();
     if (prize === undefined) continue;
-    const currency = puzzle.prizeCurrency();
-    totals[currency] = Number(((totals[currency] ?? 0) + prize).toFixed(8));
+    const [whole = "0", fraction = ""] = amounts.format(prize).split(".");
+    const sum = (sums[puzzle.prizeCurrency()] ??= { units: 0n, places: 0 });
+    const places = Math.max(sum.places, fraction.length);
+    sum.units =
+      sum.units * 10n ** BigInt(places - sum.places) + BigInt(whole + fraction.padEnd(places, "0"));
+    sum.places = places;
   }
-  return totals;
+  return Object.fromEntries(
+    Object.entries(sums).map(([currency, { units, places }]) => [
+      currency,
+      Number(`${units}e-${places}`),
+    ]),
+  );
 }
 
 /**

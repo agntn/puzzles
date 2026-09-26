@@ -70,7 +70,7 @@ const columns: TableColumn<Row>[] = [
     enableSorting: false,
     meta: {
       class: {
-        th: "w-[8.5rem]",
+        th: "w-[10.5rem]",
         td: "@max-[52rem]/roster:col-span-1! @max-[52rem]/roster:justify-self-end",
       },
     },

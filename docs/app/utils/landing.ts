@@ -927,12 +927,12 @@ export const STATS_STATIC = {
   withPubkey: 263,
   unsolvedPrize: {
     AR: 1900,
-    ETH: 12.61254155,
+    ETH: 12.612541554256945,
     BTC: 908.87574943,
   },
   totalPrize: {
     AR: 5550,
-    ETH: 26.24624155,
+    ETH: 26.246241554256944,
     DAI: 100,
     BTC: 1064.23058961,
     BCH: 3.75,
@@ -1298,10 +1298,10 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     },
     chains: ["ethereum"],
     prize: {
-      ETH: 8.61254155,
+      ETH: 8.612541554256945,
     },
     unsolvedPrize: {
-      ETH: 8.61254155,
+      ETH: 8.612541554256945,
     },
     withPubkey: 0,
     withKey: 0,
