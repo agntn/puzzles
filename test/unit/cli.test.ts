@@ -591,7 +591,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     expect(result.stdout).toBe(
       [
         "OK\tballet/AA007448\t0.000011 BTC",
-        "FAIL\tballet/AA009926\tBalance lookup failed: No response from mempool (fetch failed): https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+        "FAIL\tballet/AA009926\tBalance lookup failed: No response from mempool (fetch failed): https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m; then No response from blockstream (fetch failed): https://blockstream.info/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
         "OK\tballet/AA012381\t0.000011 BTC",
         "",
       ].join("\n"),
@@ -600,6 +600,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       [
         "fetch https://mempool.space/api/address/1LL6Xy92LwGDRfQP9fBU7f1477cEKctr7c",
         "fetch https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+        "fetch https://blockstream.info/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
         "fetch https://mempool.space/api/address/1QGtbKxx6FKDD66LwnrzHCAHmyZ7mDHqC4",
         "",
       ].join("\n"),
@@ -643,7 +644,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
         id: "ballet/AA009926",
         chain: "bitcoin",
         error:
-          "Balance lookup failed: No response from mempool (fetch failed): https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+          "Balance lookup failed: No response from mempool (fetch failed): https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m; then No response from blockstream (fetch failed): https://blockstream.info/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
       },
       {
         id: "ballet/AA012381",

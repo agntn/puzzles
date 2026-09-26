@@ -197,6 +197,88 @@ describe("Puzzle.balance", () => {
     await expect(b1000.balance(1)).rejects.toBeInstanceOf(InvalidAddressError);
   });
 
+  it.each([
+    ["gets no response", () => Promise.reject(new TypeError("fetch failed"))],
+    ["answers 503", () => new Response("Service Unavailable", { status: 503 })],
+  ])("asks Blockstream once when mempool.space %s", async (_, failure) => {
+    const urls = stubFetch((url) =>
+      url.startsWith("https://mempool.space/")
+        ? failure()
+        : json({
+            chain_stats: { funded_txo_sum: 1500, spent_txo_sum: 400 },
+            mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
+          }),
+    );
+
+    const balance = await b1000.balance(1);
+
+    expect(urls).toEqual([
+      "https://mempool.space/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+      "https://blockstream.info/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+    ]);
+    expect(balance.confirmed).toBe(1100n);
+  });
+
+  it("asks Blockstream after the retries mempool.space's own rate limit takes", async () => {
+    const urls = stubFetch((url) =>
+      url.startsWith("https://mempool.space/")
+        ? new Response("Too Many Requests", { status: 429, headers: { "retry-after": "0" } })
+        : json({
+            chain_stats: { funded_txo_sum: 1500, spent_txo_sum: 400 },
+            mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
+          }),
+    );
+
+    const balance = await b1000.balance(1);
+
+    expect(urls.filter((url) => url.startsWith("https://mempool.space/"))).toHaveLength(3);
+    expect(urls.at(-1)).toBe(
+      "https://blockstream.info/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+    );
+    expect(balance.confirmed).toBe(1100n);
+  });
+
+  it("names both hosts when the fallback fails too", async () => {
+    stubFetch(() => Promise.reject(new TypeError("fetch failed")));
+
+    const failure = b1000.balance(1);
+
+    await expect(failure).rejects.toBeInstanceOf(BalanceProviderError);
+    await expect(failure).rejects.toThrow(
+      /^Balance lookup failed: No response from mempool .*mempool\.space.*; then No response from blockstream .*blockstream\.info/u,
+    );
+  });
+
+  it("keeps a rejected address and malformed data to the first provider", async () => {
+    const urls = stubFetch(() => new Response("Invalid Bitcoin address", { status: 400 }));
+    await expect(b1000.balance(1)).rejects.toBeInstanceOf(InvalidAddressError);
+    expect(urls).toHaveLength(1);
+
+    urls.length = 0;
+    stubFetch((url) => {
+      urls.push(url);
+      return json({ chain_stats: null, mempool_stats: {} });
+    });
+    await expect(b1000.balance(1)).rejects.toBeInstanceOf(BalanceProviderError);
+    expect(urls).toHaveLength(1);
+  });
+
+  it("asks no fallback when a baseUrl names the endpoint", async () => {
+    const urls = stubFetch(() => Promise.reject(new TypeError("fetch failed")));
+
+    await expect(b1000.balance(1, { baseUrl: "https://example.test" })).rejects.toBeInstanceOf(
+      BalanceProviderError,
+    );
+    expect(urls).toEqual(["https://example.test/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"]);
+  });
+
+  it("leaves Litecoin with its one provider", async () => {
+    const urls = stubFetch(() => Promise.reject(new TypeError("fetch failed")));
+
+    await expect(zden.balance("litecoin_segwit")).rejects.toBeInstanceOf(BalanceProviderError);
+    expect(urls).toHaveLength(1);
+  });
+
   it("rejects unsupported chains without touching the network", async () => {
     const urls = stubFetch(() => json({}));
     const monero = moneroPuzzle({

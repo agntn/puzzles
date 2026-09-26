@@ -49,7 +49,7 @@ Every collection has the same methods from `Collection`: `get`, `require`, `all`
 
 ## Network and crypto load late
 
-- `puzzle.balance(options)` goes through `@agntn/explorers` and loads the provider on the first call. Amounts are `bigint` base units. Ethereum needs an Etherscan key. There is no retry or rate limiting.
+- `puzzle.balance(options)` goes through `@agntn/explorers` and loads the provider on the first call. Amounts are `bigint` base units. Ethereum needs an Etherscan key. A Bitcoin lookup that mempool.space leaves unanswered goes once to Blockstream; nothing else retries.
 - `collection.verify(query)` loads the key derivation on the first call. An expected failure is a `VerifyResult` with `verified: false`, not an exception. `verify(puzzle)` does the same for a puzzle already in hand.
 - `dataVersion()` serializes the whole dataset once, then caches. Fine at startup, wasteful in a loop.
 

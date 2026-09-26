@@ -14,7 +14,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 - `src/core/registry.ts` is a lazy manifest registry: a table seeded on first use from `builtins` in `src/collections/index.ts`, where each entry is a key plus a literal `import()` of the collection module. Keys, aliases, and `hasCollection()` answer synchronously; instances load on the first lookup for their key.
 - `src/core/dataset.ts` computes the asynchronous aggregate views `all()`, `selectPuzzles()`, `get()`, `collectionSummaries()`, `stats()`, `dataVersion()`, `dataset()`; the cached ones are memoized per loaded snapshot, so a registration invalidates them by identity.
 - `src/core/chains.ts` narrows `@agntn/chains` to the seven supported chains and reads names, symbols, decimals, explorer bases, and the address and txid format checks from it.
-- `src/core/balance.ts` holds the balance contract (`BalanceOptions` and the error classes); `src/core/providers.ts` maps each chain to its `@agntn/explorers` provider and is imported by `Puzzle.balance()` on first use.
+- `src/core/balance.ts` holds the balance contract (`BalanceOptions` and the error classes); `src/core/providers.ts` maps each chain to its `@agntn/explorers` provider, gives Bitcoin one Blockstream fallback after a transport failure, a rate limit or a 5xx, and is imported by `Puzzle.balance()` on first use.
 - `src/core/verify.ts` resolves a record's secret and compares the derived address; `src/core/crypto.ts` maps each chain to its `@agntn/keys` wallet and translates a record's pubkey format and address kind into keys' options. Curves, checksums, WIF and seed derivation live in keys.
 - `src/collections/index.ts` is the manifest; `src/collections/<key>.ts` is a collection: author and the puzzle list, published as `@agntn/puzzles/collections/<key>` and bundled as its own input.
 - `src/collections/<key>/<name>.ts` is one puzzle record built with a factory for its chain. Singleton collections keep their single puzzle in the collection file.
@@ -80,4 +80,4 @@ Do not mistake these for intentional architecture:
 - `dataVersion()` serializes the whole dataset on first use.
 - Puzzle accessors rebuild their parts on every call; only the instances themselves are cached.
 - Pi and OMP wrappers keep their own loader and schema code because OMP cannot re-export another module's extension and the two harnesses ship different typebox builds; the facts they register come from one table.
-- Balance adapters have no retry, timeout, or rate-limit handling.
+- Balance lookups have no retry of their own and no fallback beyond Bitcoin's one to Blockstream; the timeout and the rate limit backoff are what `@agntn/explorers` providers bring.

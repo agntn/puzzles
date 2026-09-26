@@ -2,9 +2,10 @@ import { setTimeout as sleep } from "node:timers/promises";
 
 /*
  * Loaded with `node --import` into a CLI child, which a test cannot stub from the outside. Every
- * address answers a funded Mempool record, except the one in `PUZZLES_FETCH_FAIL`, whose request
- * fails the way an unreachable host does. Every URL is logged to stderr in request order, and a
- * request sent while another is still open is logged as `overlap`.
+ * address answers a funded Esplora record, except the one in `PUZZLES_FETCH_FAIL`, whose requests
+ * fail the way an unreachable host does, at mempool.space and at Blockstream alike. Every URL is
+ * logged to stderr in request order, and a request sent while another is still open is logged as
+ * `overlap`.
  */
 const failing = process.env["PUZZLES_FETCH_FAIL"];
 let open = 0;

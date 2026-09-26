@@ -135,7 +135,7 @@ class Balance {
 
 interface BalanceOptions {
   apiKey?: string; // Etherscan requires one
-  baseUrl?: string; // override the provider endpoint
+  baseUrl?: string; // override the provider endpoint; Bitcoin then skips its Blockstream fallback
   timeout?: number; // milliseconds, provider default 15 s
 }
 // Errors: InvalidAddressError, UnsupportedChainError (Monero), BalanceProviderError; API keys are redacted.

@@ -1,7 +1,14 @@
 import { InvalidAddressError as ChainAddressError } from "@agntn/chains";
-import { type Balance as Snapshot, HTTPError, type ProviderConfig } from "@agntn/explorers";
+import {
+  type Balance as Snapshot,
+  HTTPError,
+  type ProviderConfig,
+  RateLimitError,
+  TransportError,
+} from "@agntn/explorers";
 import { Arweave } from "@agntn/explorers/providers/arweave";
 import { Blockchair } from "@agntn/explorers/providers/blockchair";
+import { Blockstream } from "@agntn/explorers/providers/blockstream";
 import { Dcrdata } from "@agntn/explorers/providers/dcrdata";
 import { Etherscan } from "@agntn/explorers/providers/etherscan";
 import { Mempool } from "@agntn/explorers/providers/mempool";
@@ -33,6 +40,30 @@ const lookups: Readonly<Record<Exclude<Chain, typeof Chain.Monero>, Lookup>> = {
     new Etherscan({ ...config, defaultChain: "ethereum" }).getBalance(address, "ethereum"),
   litecoin: (address, config) => new Mempool(config).getBalance(address, "litecoin"),
 };
+
+/**
+ * A second provider a chain falls back to once, when the first one gets no answer through: a
+ * timeout, a refused connection, a rate limit or a 5xx. mempool.space drops some Bitcoin lookups of
+ * a long pass, and Blockstream reads the same Esplora data from another host.
+ */
+const fallbacks: Readonly<Partial<Record<Chain, Lookup>>> = {
+  bitcoin: (address, config) => new Blockstream(config).getBalance(address, "bitcoin"),
+};
+
+/**
+ * The failures another host can get past. An answer that rejects the address or the data would
+ * fail the same way there.
+ *
+ * @param {unknown} error - The first provider's failure.
+ * @returns {boolean} Whether the fallback may try.
+ */
+function isTransient(error: unknown): boolean {
+  return (
+    error instanceof RateLimitError ||
+    error instanceof TransportError ||
+    (error instanceof HTTPError && error.statusCode >= 500)
+  );
+}
 
 function baseUnits(value: string, label: string): bigint {
   if (!/^-?\d+$/.test(value)) {
@@ -70,9 +101,15 @@ function redact(message: string, apiKey: string | undefined): string {
  * @param {unknown} error - The thrown value.
  * @param {string} address - Address to describe.
  * @param {string | undefined} apiKey - Provider API key, when the chain needs one.
+ * @param {unknown} first - The first provider's failure, when this one comes from the fallback.
  * @returns {BalanceError} The balance error that stands in for the provider failure.
  */
-function translate(error: unknown, address: string, apiKey: string | undefined): BalanceError {
+function translate(
+  error: unknown,
+  address: string,
+  apiKey: string | undefined,
+  first?: unknown,
+): BalanceError {
   if (error instanceof BalanceError) {
     return error;
   }
@@ -82,12 +119,43 @@ function translate(error: unknown, address: string, apiKey: string | undefined):
   ) {
     return new InvalidAddressError(`Invalid address: ${address}`);
   }
-  const message = error instanceof Error ? error.message : String(error);
+  const failures = first === undefined ? [error] : [first, error];
+  const message = failures
+    .map((failure) => (failure instanceof Error ? failure.message : String(failure)))
+    .join("; then ");
   return new BalanceProviderError(`Balance lookup failed: ${redact(message, apiKey)}`);
 }
 
 /**
- * Fetches a puzzle's native token balance through the provider registered for its chain.
+ * Asks the chain's fallback after the first provider failed, when the failure lets it: a `baseUrl`
+ * names one endpoint, so it has no fallback.
+ *
+ * @param {Chain} chain - Chain of the address.
+ * @param {string} address - Address to look up.
+ * @param {Readonly<ProviderConfig>} config - Provider configuration.
+ * @param {unknown} error - The first provider's failure.
+ * @returns {Promise<Balance>} The balance from the fallback.
+ */
+async function fallBack(
+  chain: Chain,
+  address: string,
+  config: Readonly<ProviderConfig>,
+  error: unknown,
+): Promise<Balance> {
+  const fallback = fallbacks[chain];
+  if (fallback === undefined || config.baseUrl !== undefined || !isTransient(error)) {
+    throw translate(error, address, config.apiKey);
+  }
+  try {
+    return toBalance(chain, await fallback(address, config));
+  } catch (second) {
+    throw translate(second, address, config.apiKey, error);
+  }
+}
+
+/**
+ * Fetches a puzzle's native token balance through the provider registered for its chain, and once
+ * through its fallback when that provider gets no answer through.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @param {BalanceOptions} options - Lookup options.
@@ -110,6 +178,6 @@ export async function lookupBalance(puzzle: Puzzle, options: BalanceOptions): Pr
   try {
     return toBalance(chain, await lookups[chain](address, config));
   } catch (error) {
-    throw translate(error, address, options.apiKey);
+    return fallBack(chain, address, config, error);
   }
 }
