@@ -73,19 +73,23 @@ describe("puzzle list pagination", () => {
     const crossed = await listTool({ chain: "ethereum", collection: "b1000" });
 
     expect(chain.details).toMatchObject({
-      matched: 7,
-      returned: 7,
+      matched: 11,
+      returned: 11,
       ids: [
         "arweave/weave7",
         "arweave/weave9",
         "arweave/weave11",
         "arweave/weave13",
         "mineshop",
+        "teikhos/1",
+        "teikhos/2",
+        "teikhos/3",
+        "teikhos/4",
         "zden/xixoio",
         "zden/codex_protocol",
       ],
     });
-    expect(narrowed.details["ids"]).toEqual(["zden/xixoio", "zden/codex_protocol"]);
+    expect(narrowed.details["ids"]).toEqual(["teikhos/4", "zden/xixoio", "zden/codex_protocol"]);
     expect(crossed.details).toMatchObject({ matched: 0, returned: 0, ids: [] });
   });
 

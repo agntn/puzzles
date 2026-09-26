@@ -182,6 +182,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Seven questions about Bitcoin history, hashed into a brainwallet. Swept five hours after it was funded.",
   },
+  teikhos: {
+    icon: "i-lucide-shield",
+    title: "TeikhosBounty",
+    sample: "teikhos/4",
+    chains: ["ethereum"],
+    blurb:
+      "Four Ethereum contracts that pay for a public key nobody published. One fell in 2026, to a key a failed attempt left on chain four years earlier.",
+  },
   warp: {
     icon: "i-lucide-key-round",
     title: "WarpWallet challenges",

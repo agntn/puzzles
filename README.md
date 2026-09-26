@@ -98,6 +98,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `quizchain`             | bitcoin                             | Quiz blocks chained by their keys       |
 | `warp`                  | bitcoin                             | Keybase's scrypt brainwallet challenges |
 | `hash_collision`        | bitcoin                             | Peter Todd's P2SH collision bounties    |
+| `teikhos`               | ethereum                            | Contracts that pay for a public key     |
 | `ballet`                | bitcoin                             | BIP38 keys printed on physical wallets  |
 | `dug`                   | bitcoin                             | 2025 student seed hunt                  |
 | `mini`                  | bitcoincash                         | RetiredCoder's Bitcoin Cash riddles     |

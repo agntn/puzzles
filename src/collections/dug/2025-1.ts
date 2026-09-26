@@ -52,11 +52,6 @@ export const dug2025Index1 = bitcoinPuzzle({
         "https://x.com/0xFlorent_/status/2061070356564091258",
         { date: "2026-05-31" },
       ),
-      fact(
-        "Solved a TeikhosBounty contract deployed in 2018, which pays 0.5 ETH to whoever submits the right public key.",
-        "https://x.com/0xFlorent_/status/2068735759889145906",
-        { date: "2026-06-21" },
-      ),
     ],
   }),
   assets: assets({ solution: "2025-solution.md", sourceUrl: source }),

@@ -10,7 +10,7 @@ Local reading copies of the pages the collection records cite and nobody else ke
 - [Movie Enigma announcement](movie_enigma/cryptop1r4t3-2022-03-21.md)
 - [Weave 4 answer from its solver](arweave/arpoxy-2019-11-10.md)
 - [HongCoin recovery announcement](dug/0xflorent-2026-05-31.md)
-- [TeikhosBounty solve](dug/0xflorent-2026-06-21.md)
+- [TeikhosBounty solve](teikhos/0xflorent-2026-06-21.md)
 - [7 million book quiz thread](book_quiz/aoinakamoto-2019-04-06.md)
 - [Quizchain block 1 thread](quizchain/aoinakamoto-2019-04-07.md)
 - [Quizchain block 2 thread](quizchain/aoinakamoto-2019-04-07-badtpz.md)
