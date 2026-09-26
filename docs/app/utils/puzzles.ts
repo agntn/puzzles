@@ -166,6 +166,14 @@ const PRESENTATION: Readonly<
     blurb:
       "All of 2020 in one collage, runes included. Find the seed phrase, says the picture. Six years on, the 0.2 BTC is still there.",
   },
+  "wealth-in-poetry": {
+    icon: "i-lucide-feather",
+    title: "Securing Wealth in Poetry",
+    sample: "wealth-in-poetry",
+    chains: ["bitcoin"],
+    blurb:
+      "An essay on hiding seed phrases in stories, with a real one hidden in the essay. You've read every word, it says. The 0.03 BTC is still there.",
+  },
   "picture-puzzle": {
     icon: "i-lucide-scan-qr-code",
     title: "1 mBTC picture puzzle",

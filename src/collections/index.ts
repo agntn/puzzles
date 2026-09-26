@@ -42,6 +42,10 @@ export const builtins = [
   },
   { key: "teikhos", load: () => import("./teikhos.ts").then((m) => m.teikhos) },
   { key: "warp", load: () => import("./warp.ts").then((m) => m.warp) },
+  {
+    key: "wealth-in-poetry",
+    load: () => import("./wealth-in-poetry.ts").then((m) => m.wealthInPoetry),
+  },
   { key: "wickex", load: () => import("./wickex.ts").then((m) => m.wickex) },
   { key: "zden", load: () => import("./zden.ts").then((m) => m.zden) },
 ] as const;
