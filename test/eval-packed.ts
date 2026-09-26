@@ -397,22 +397,26 @@ async function assertPackedExtensions(): Promise<void> {
   );
 }
 
-/** What one run of a built bin printed and how it exited. */
+/** What one run of a built bin printed, how it exited, and the load hook's report, if it wrote one. */
 interface BinRun {
   readonly code: number;
+  readonly loads: string | undefined;
   readonly stderr: string;
   readonly stdout: string;
 }
+
+let binRuns = 0;
 
 /**
  * Runs a built bin under the load hook. stdin is closed at once, because `mcp` serves it until it
  * ends, and a non-zero exit comes back as a run too, because an unknown command prints the usage
  * and exits 1 on purpose. An inherited `PUZZLES_DIST` is dropped, so only `environment` sets it.
+ * The hook writes its report to a file of its own for each run.
  *
  * @param {string} binPath - The bin file.
  * @param {readonly string[]} args - Arguments for the bin.
  * @param {Readonly<Record<string, string>>} environment - Extra variables for the child.
- * @returns {Promise<BinRun>} The exit code and both streams.
+ * @returns {Promise<BinRun>} The exit code, both streams and the load report.
  */
 async function runBin(
   binPath: string,
@@ -421,16 +425,18 @@ async function runBin(
 ): Promise<BinRun> {
   const hook = new URL("./record-loads.ts", import.meta.url).href;
   const { PUZZLES_DIST: _inherited, ...inherited } = process.env;
+  binRuns += 1;
+  const report = path.join(temporaryRoot, `loads-${binRuns}.json`);
   const pending = execFileAsync(process.execPath, ["--import", hook, binPath, ...args], {
     cwd: root,
     encoding: "utf8",
-    env: { ...inherited, ...environment, PUZZLES_REPORT_LOADS: "1" },
+    env: { ...inherited, ...environment, PUZZLES_REPORT_LOADS: report },
     timeout: 120_000,
   });
   pending.child.stdin?.end();
   try {
     const { stdout, stderr } = await pending;
-    return { code: 0, stdout, stderr };
+    return { code: 0, loads: await readReport(report), stdout, stderr };
   } catch (error) {
     const failed = error as Partial<BinRun>;
     if (
@@ -440,21 +446,35 @@ async function runBin(
     ) {
       throw error;
     }
-    return { code: failed.code, stdout: failed.stdout, stderr: failed.stderr };
+    return {
+      code: failed.code,
+      loads: await readReport(report),
+      stdout: failed.stdout,
+      stderr: failed.stderr,
+    };
   }
 }
 
 /**
- * Reads the module URLs a run loaded from the hook's report on stderr.
+ * Reads a load report, or nothing when the run exited before the hook could write one.
+ *
+ * @param {string} file - The report file.
+ * @returns {Promise<string | undefined>} The report text.
+ */
+async function readReport(file: string): Promise<string | undefined> {
+  return existsSync(file) ? readFile(file, "utf8") : undefined;
+}
+
+/**
+ * Reads the module URLs a run loaded from the hook's report.
  *
  * @param {BinRun} binRun - The run.
  * @param {string} label - Names the run in a failure.
  * @returns {string[]} Every module URL the run loaded.
  */
 function loadedUrls(binRun: BinRun, label: string): string[] {
-  const recorded = /@loaded (\[.*\])/u.exec(binRun.stderr)?.[1];
-  assert.ok(recorded !== undefined, `the load hook reported nothing for ${label}`);
-  const urls: unknown = JSON.parse(recorded);
+  assert.ok(binRun.loads !== undefined, `the load hook reported nothing for ${label}`);
+  const urls: unknown = JSON.parse(binRun.loads);
   assert.ok(Array.isArray(urls), `the load hook reported something other than a list for ${label}`);
   return urls.map(String);
 }
