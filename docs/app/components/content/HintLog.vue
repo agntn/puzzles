@@ -103,6 +103,8 @@ defineProps<{ hints: readonly HintEntry[] }>();
   font-size: 14px;
   line-height: 1.6;
   color: var(--ui-text-highlighted);
+  /* A hint can be one long token, like a 511-bit hex range; it breaks inside only when it has to. */
+  overflow-wrap: anywhere;
 }
 .hint-log-body > p:first-child > .console-tag {
   font-family: var(--font-mono);
@@ -167,6 +169,7 @@ defineProps<{ hints: readonly HintEntry[] }>();
   font-family: var(--font-sans);
   font-size: 14px;
   color: var(--ui-text-highlighted);
+  overflow-wrap: anywhere;
 }
 @media (width < 640px) {
   .hint-log-entry {
