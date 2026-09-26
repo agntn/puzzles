@@ -164,7 +164,7 @@ const PRESENTATION: Readonly<
     sample: "brave_new_world",
     chains: ["bitcoin"],
     blurb:
-      "One collage from 2020, an address up its left edge and a seed phrase somewhere in the picture. The 0.2 BTC is still there.",
+      "All of 2020 in one collage, runes included. Find the seed phrase, says the picture. Six years on, the 0.2 BTC is still there.",
   },
   picture_puzzle: {
     icon: "i-lucide-scan-qr-code",
