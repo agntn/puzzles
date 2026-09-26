@@ -52,18 +52,18 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Seeds hashed out of photographs. One solved, one waits on a passphrase.",
   },
-  book_quiz: {
+  "book-quiz": {
     icon: "i-lucide-book-open",
     title: "7 million book quiz",
-    sample: "book_quiz",
+    sample: "book-quiz",
     chains: ["bitcoin"],
     blurb:
       "Seven questions about a campaign book, one hour to sweep it. The deadline won and the author took the prize back.",
   },
-  coin_artist: {
+  "coin-artist": {
     icon: "i-lucide-flame",
     title: "TORCHED H34R7S Bitcoin Puzzle",
-    sample: "coin_artist/torched-h34r7s",
+    sample: "coin-artist/torched-h34r7s",
     chains: ["bitcoin"],
     blurb: "TORCHED H34R7S. A Bitcoin key painted into flames and decoded in 2018.",
   },
@@ -89,10 +89,10 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "A multi phase image puzzle. The prize has been halved twice.",
   },
-  hash_collision: {
+  "hash-collision": {
     icon: "i-lucide-hash",
     title: "Hash collision bounties",
-    sample: "hash_collision/sha1",
+    sample: "hash-collision/sha1",
     chains: ["bitcoin"],
     blurb: "Peter Todd's P2SH scripts that pay for a collision. SHA-1 fell in 2017.",
   },
@@ -107,15 +107,15 @@ const PRESENTATION: Readonly<
   ktimesg: {
     icon: "i-lucide-timer",
     title: "kTimesG's 80-bit key challenge",
-    sample: "ktimesg/80_bit",
+    sample: "ktimesg/80-bit",
     chains: ["bitcoin"],
     blurb:
       "80 unknown bits in a 511-bit key. The public key only ever showed up in the mempool. Taken 39 minutes in.",
   },
-  ledger_donjon: {
+  "ledger-donjon": {
     icon: "i-lucide-scissors",
     title: "Ledger Donjon CTF",
-    sample: "ledger_donjon/scissors_secret_sharing",
+    sample: "ledger-donjon/scissors-secret-sharing",
     chains: ["bitcoin"],
     blurb:
       "Scissors Secret Sharing. Twelve BIP39 words, ten out of order. CTF points, not a BTC prize.",
@@ -123,7 +123,7 @@ const PRESENTATION: Readonly<
   luckylurker: {
     icon: "i-lucide-vault",
     title: "LuckyLurker Bitcoin Vault puzzles",
-    sample: "luckylurker/vault_1",
+    sample: "luckylurker/vault-1",
     chains: ["bitcoin"],
     blurb: "Paul Jones’s two Bitcoin Vaults. The first solved, the second funded with 1 BTC.",
   },
@@ -143,10 +143,10 @@ const PRESENTATION: Readonly<
     blurb:
       "Seven small riddles on Bitcointalk. Four replay a solved puzzle key for the Bitcoin Cash still on its address, three put 0.01 BTC on a fresh key.",
   },
-  movie_enigma: {
+  "movie-enigma": {
     icon: "i-lucide-clapperboard",
     title: "Bitcoin Movie Enigma",
-    sample: "movie_enigma",
+    sample: "movie-enigma",
     chains: ["bitcoin"],
     blurb:
       "34 film stills, one BIP39 word each, ten intruders. Solved in 2026 with a phrase whose checksum fails.",
@@ -158,18 +158,18 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Thirty brainwallets from 2014. Almost all cracked since.",
   },
-  brave_new_world: {
+  "brave-new-world": {
     icon: "i-lucide-cctv",
     title: "Brave New World",
-    sample: "brave_new_world",
+    sample: "brave-new-world",
     chains: ["bitcoin"],
     blurb:
       "All of 2020 in one collage, runes included. Find the seed phrase, says the picture. Six years on, the 0.2 BTC is still there.",
   },
-  picture_puzzle: {
+  "picture-puzzle": {
     icon: "i-lucide-scan-qr-code",
     title: "1 mBTC picture puzzle",
-    sample: "picture_puzzle",
+    sample: "picture-puzzle",
     chains: ["bitcoin"],
     blurb:
       "A directory, an eye, the letter O and a QR code: a page on directory.io and the 36th key down. Claimed five hours in.",
@@ -182,10 +182,10 @@ const PRESENTATION: Readonly<
     blurb:
       "One quiz answer plus the tail of the author's favorite address, hashed into a wallet. The key went public in the comments.",
   },
-  satoshi_birthday_quiz: {
+  "satoshi-birthday-quiz": {
     icon: "i-lucide-cake",
     title: "Satoshi birthday 7 million quiz",
-    sample: "satoshi_birthday_quiz",
+    sample: "satoshi-birthday-quiz",
     chains: ["bitcoin"],
     blurb:
       "Seven questions about Bitcoin history, hashed into a brainwallet. Swept five hours after it was funded.",
@@ -201,7 +201,7 @@ const PRESENTATION: Readonly<
   warp: {
     icon: "i-lucide-key-round",
     title: "WarpWallet challenges",
-    sample: "warp/challenge_1",
+    sample: "warp/challenge-1",
     chains: ["bitcoin"],
     blurb: "Keybase's scrypt brainwallet. Four solved, two expired with the keys published.",
   },
@@ -216,7 +216,7 @@ const PRESENTATION: Readonly<
   zden: {
     icon: "i-lucide-image",
     title: "Zden's puzzles",
-    sample: "zden/decred_janus",
+    sample: "zden/decred-janus",
     chains: ["bitcoin", "ethereum", "litecoin", "decred"],
     blurb: "Fifteen visual puzzles on four chains, most of them solved.",
   },

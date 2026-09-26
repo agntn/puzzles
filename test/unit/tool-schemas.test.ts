@@ -85,7 +85,7 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(Value.Check(schemas.show, { id: "" })).toBe(false);
     expect(Value.Check(schemas.show, { id: "x".repeat(id.maxLength + 1) })).toBe(false);
     expect(Value.Check(schemas.hints, { id: "" })).toBe(false);
-    expect(Value.Check(schemas.hints, { id: "warp/challenge_1" })).toBe(true);
+    expect(Value.Check(schemas.hints, { id: "warp/challenge-1" })).toBe(true);
     expect(Value.Check(schemas.stages, { id: "" })).toBe(false);
     expect(Value.Check(schemas.stages, { id: "gsmg" })).toBe(true);
     expect(Value.Check(schemas.verify, { id: "b1000/1" })).toBe(true);

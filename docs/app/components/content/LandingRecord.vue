@@ -40,8 +40,7 @@ function seg(text: string, cls = "", roll = false): Segment {
 }
 
 const fileName = computed(
-  () =>
-    `src/collections/${props.sample.collection}/${props.sample.id.replace(/^[^/]+\//u, "").replaceAll("_", "-")}.ts`,
+  () => `src/collections/${props.sample.collection}/${props.sample.id.replace(/^[^/]+\//u, "")}.ts`,
 );
 
 /**

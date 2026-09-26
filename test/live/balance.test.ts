@@ -38,7 +38,7 @@ describe("Puzzle.balance, live", () => {
   });
 
   it("reads a Litecoin balance through Mempool", async () => {
-    const balance = await (await requirePuzzle("zden/litecoin_segwit")).balance();
+    const balance = await (await requirePuzzle("zden/litecoin-segwit")).balance();
 
     expect(balance.chain).toBe("litecoin");
     expect(balance.confirmed).toBeGreaterThanOrEqual(0n);
@@ -46,7 +46,7 @@ describe("Puzzle.balance, live", () => {
 
   it("reads a Decred balance through Dcrdata", async () => {
     /* dcrdata answers a fresh address in 6 to 11 seconds. The provider default is 15. */
-    const balance = await (await requirePuzzle("zden/decred_janus")).balance({ timeout: 30_000 });
+    const balance = await (await requirePuzzle("zden/decred-janus")).balance({ timeout: 30_000 });
 
     expect(balance.chain).toBe("decred");
     expect(balance.confirmed).toBeGreaterThanOrEqual(0n);

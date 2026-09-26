@@ -7,11 +7,11 @@ Local reading copies of the pages the collection records cite and nobody else ke
 - [Demobit hint 1](zden/zd3n-2018-02-21.md)
 - [Level 5 and XIXOIO Christmas hints](zden/zd3n-2018-12-24.md)
 - [Genesis puzzle pre-announcement](genesis/caesrcd-2026-08-22.md)
-- [Movie Enigma announcement](movie_enigma/cryptop1r4t3-2022-03-21.md)
+- [Movie Enigma announcement](movie-enigma/cryptop1r4t3-2022-03-21.md)
 - [Weave 4 answer from its solver](arweave/arpoxy-2019-11-10.md)
 - [HongCoin recovery announcement](dug/0xflorent-2026-05-31.md)
 - [TeikhosBounty solve](teikhos/0xflorent-2026-06-21.md)
-- [7 million book quiz thread](book_quiz/aoinakamoto-2019-04-06.md)
+- [7 million book quiz thread](book-quiz/aoinakamoto-2019-04-06.md)
 - [Quizchain block 1 thread](quizchain/aoinakamoto-2019-04-07.md)
 - [Quizchain block 2 thread](quizchain/aoinakamoto-2019-04-07-badtpz.md)
 - [Quizchain block 3 thread](quizchain/aoinakamoto-2019-04-07-bae43s.md)
@@ -30,9 +30,9 @@ Local reading copies of the pages the collection records cite and nobody else ke
 - [Mini-puzzle #5](mini/retiredcoder-2025-04-16.md)
 - [Mini-puzzle #6](mini/retiredcoder-2026-03-14.md)
 - [Mini-puzzle #7](mini/retiredcoder-2026-07-29.md)
-- [Satoshi birthday 7 million quiz thread](satoshi_birthday_quiz/aoinakamoto-2019-04-05.md)
-- [AoiNakamoto's giveaway question on r/Bitcoin](satoshi_birthday_quiz/aoinakamoto-2019-04-05-b9l37o.md)
-- [AoiNakamoto's comment naming @NakamotoAoi](satoshi_birthday_quiz/aoinakamoto-2019-04-10-ekjcc1k.md)
+- [Satoshi birthday 7 million quiz thread](satoshi-birthday-quiz/aoinakamoto-2019-04-05.md)
+- [AoiNakamoto's giveaway question on r/Bitcoin](satoshi-birthday-quiz/aoinakamoto-2019-04-05-b9l37o.md)
+- [AoiNakamoto's comment naming @NakamotoAoi](satoshi-birthday-quiz/aoinakamoto-2019-04-10-ekjcc1k.md)
 
 ## Capture and provenance
 

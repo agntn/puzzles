@@ -1,7 +1,7 @@
 import type { Puzzle } from "./puzzle.ts";
 
 /**
- * Folds case and word separators, so `Level-5`, `level5` and `level_5` compare equal.
+ * Folds case and word separators, so `Level-5`, `level5` and `level-5` compare equal.
  *
  * @param {string} text - A key or puzzle name as a caller typed it.
  * @returns {string} The folded spelling.

@@ -22,7 +22,7 @@ const STEPS = "https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64
 
 /** 80 unknown bits in a 511-bit key, public key only in a pending spend. Taken 39 minutes in. */
 export const kTimesG80Bit = bitcoinPuzzle({
-  id: "ktimesg/80_bit",
+  id: "ktimesg/80-bit",
   address: p2pkh("1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q", "90b881be7044a596b0ac843d84ff31278ba92a12"),
   sourceUrl: RANGE,
   startedAt: "2024-11-01 00:01:53",

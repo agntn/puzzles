@@ -20,7 +20,7 @@ A field goes in only when a citable source states it. Do not run a solver, a dec
 
 ## New puzzle
 
-1. Create `src/collections/<key>/<name>.ts`. The file name is the identifier segment in kebab-case. The export is concise camelCase without a `Puzzle` suffix.
+1. Create `src/collections/<key>/<name>.ts`. The identifier segment is kebab-case and the file name repeats it. The export is concise camelCase without a `Puzzle` suffix.
 2. Build the record with the chain's factory and the constructors from `src/core/parts.ts`. Leave out every field the puzzle does not have. See [parts.md](references/parts.md).
 3. Import it in `src/collections/<key>.ts` and append it to `static readonly puzzles`.
 
@@ -29,7 +29,7 @@ import { bitcoinPuzzle } from "../../core/puzzle.ts";
 import { funding, official, p2pkh } from "../../core/parts.ts";
 
 export const exampleLevel1 = bitcoinPuzzle({
-  id: "example/level_1",
+  id: "example/level-1",
   address: p2pkh("1…"),
   sourceUrl: "https://…",
   startedAt: "2026-01-01 00:00:00",

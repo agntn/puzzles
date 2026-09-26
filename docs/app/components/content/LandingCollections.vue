@@ -42,7 +42,7 @@ useRosterFlip(
 );
 
 // The prize column takes its width from the blurb, which is one truncated line here anyway. The key
-// column fits `satoshi_birthday_quiz` with its glyph on one line. Stacked, the open count and the
+// column fits `satoshi-birthday-quiz` with its glyph on one line. Stacked, the open count and the
 // prize share a line: `col-span-1!` beats the roster's `nth-[n+3]:col-span-full`, which the CSS
 // order would otherwise keep.
 const columns: TableColumn<Row>[] = [

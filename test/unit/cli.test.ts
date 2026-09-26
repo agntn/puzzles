@@ -117,20 +117,20 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
   });
 
   it("prints the hints that hold for a puzzle as the tool does", async () => {
-    const output = await puzzles("hints", "warp/challenge_1");
+    const output = await puzzles("hints", "warp/challenge-1");
 
     expect(output.split("\n")).toEqual([
-      "warp/challenge_1: 1 hint",
+      "warp/challenge-1: 1 hint",
       "hints: 1",
       "\tofficial\t-\tthis passphrase is 2 random alphanumeric characters, such as 'X9'.\tsource: https://keybase.io/warp\tconfirmation: https://web.archive.org/web/20131213023906/https://keybase.io/warp/warp_1.0.6_SHA256_e68d4587b0e2ec34a7b554fbd1ed2d0fedfaeacf3e47fbb6c5403e252348cbfc.html (Wayback capture of the challenge page)",
     ]);
   });
 
   it("dates a hint the author tweeted and names the page that links it", async () => {
-    const output = await puzzles("hints", "zden/demobit_2018");
+    const output = await puzzles("hints", "zden/demobit-2018");
 
     expect(output.split("\n")).toEqual([
-      "zden/demobit_2018: 1 hint",
+      "zden/demobit-2018: 1 hint",
       "hints: 1",
       "\tofficial\t2018-02-21 11:38:21\tHint #1 for the unsolved Demobit puzzle is the hash of inner data block with lines overlap. It is not the hash of the private key! SHA-256: 1c10494cf872ac2b896f52b2c93f58c23049f5be9455fef3ed4f9d9bf84fe600\tsource: https://twitter.com/Zd3N/status/966275899757879298\tconfirmation: https://web.archive.org/web/20180316114954/http://crypto.haluska.sk/ (Wayback capture of the puzzle page, which links Hint #1 to this tweet)",
     ]);
@@ -163,14 +163,14 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
   });
 
   it("prints the comment in the Janus hint SVG, then the file", async () => {
-    const output = await puzzles("hints", "zden/decred_janus");
-    const hints = await json<Record<string, unknown>>("hints", "zden/decred_janus", "--json");
+    const output = await puzzles("hints", "zden/decred-janus");
+    const hints = await json<Record<string, unknown>>("hints", "zden/decred-janus", "--json");
 
     expect(output.split("\n")).toEqual([
-      "zden/decred_janus: 1 hint, 1 hint asset",
+      "zden/decred-janus: 1 hint, 1 hint asset",
       "hints: 1",
       "\tofficial\t-\t33*bbb\tsource: https://crypto.haluska.sk/decred_tree_hint.svg\tconfirmation: https://web.archive.org/web/20181219152809/http://crypto.haluska.sk/decred_tree_hint.svg (Wayback capture of the hint SVG)",
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred_janus/hint.svg",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred-janus/hint.svg",
     ]);
     expect(hints).toEqual({
       hints: [
@@ -187,9 +187,9 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       hintAssets: [
         {
           kind: "hint",
-          file: "decred_janus/hint.svg",
-          path: "assets/zden/decred_janus/hint.svg",
-          url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred_janus/hint.svg",
+          file: "decred-janus/hint.svg",
+          path: "assets/zden/decred-janus/hint.svg",
+          url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred-janus/hint.svg",
         },
       ],
     });
@@ -205,7 +205,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
         readonly date: string;
         readonly amount: number;
       }[];
-    }>("show", "zden/1bitcoin_white_paper", "--json");
+    }>("show", "zden/1bitcoin-white-paper", "--json");
 
     expect(record.solve_date).toBe("2021-05-19 18:42:33");
     expect(record.solve_time).toBe(3344162);
@@ -238,15 +238,15 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
   });
 
   it("quotes the 1bitcoin notarization sentence the author published", async () => {
-    const output = await puzzles("hints", "zden/1bitcoin_white_paper");
+    const output = await puzzles("hints", "zden/1bitcoin-white-paper");
     const hints = await json<Record<string, unknown>>(
       "hints",
-      "zden/1bitcoin_white_paper",
+      "zden/1bitcoin-white-paper",
       "--json",
     );
 
     expect(output.split("\n")).toEqual([
-      "zden/1bitcoin_white_paper: 1 hint",
+      "zden/1bitcoin-white-paper: 1 hint",
       "hints: 1",
       "\tofficial\t-\tArtwork is also notarized on the Bitcoin blockchain by a transaction of 777 Satoshis from the puzzle's address. The SHA-256 fingerprint from this image creates the private key of the notarization wallet.\tsource: https://crypto.haluska.sk/\tconfirmation: https://web.archive.org/web/20210729030148/https://crypto.haluska.sk/ (Wayback capture of the puzzle page)",
     ]);
@@ -272,16 +272,16 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
 
     expect(output.split("\n")).toEqual([
       "gsmg: 1 hint asset",
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow-the-white-rabbit.png",
     ]);
     expect(hints).toEqual({
       hints: [],
       hintAssets: [
         {
           kind: "hint",
-          file: "follow_the_white_rabbit.png",
-          path: "assets/gsmg/follow_the_white_rabbit.png",
-          url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
+          file: "follow-the-white-rabbit.png",
+          path: "assets/gsmg/follow-the-white-rabbit.png",
+          url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow-the-white-rabbit.png",
         },
       ],
     });
@@ -336,7 +336,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "teikhos/3",
       "teikhos/4",
       "zden/xixoio",
-      "zden/codex_protocol",
+      "zden/codex-protocol",
     ]);
   });
 
@@ -351,9 +351,9 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     );
 
     expect(result.map((puzzle) => puzzle.id)).toEqual([
-      "book_quiz",
-      "warp/warp_challenge_1",
-      "warp/warp_challenge_2",
+      "book-quiz",
+      "warp/warp-challenge-1",
+      "warp/warp-challenge-2",
     ]);
   });
 
@@ -434,7 +434,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     );
 
     expect(result).toHaveLength(27);
-    expect(result.map((entry) => entry.key)).toContain("hash_collision");
+    expect(result.map((entry) => entry.key)).toContain("hash-collision");
   });
 
   it("lists authors and shows one, by author key or collection key", async () => {
@@ -497,7 +497,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     );
     expect(rows).toContain("gsmg: 1 puzzle, 0 solved, 1 unsolved, by GSMG.io");
     expect(rows).toContain(
-      "hash_collision: 6 puzzles, 0 solved, 4 unsolved, 2 claimed, by Peter Todd",
+      "hash-collision: 6 puzzles, 0 solved, 4 unsolved, 2 claimed, by Peter Todd",
     );
     expect(rows).toContain("ballet: 3 puzzles, 1 solved, 2 unsolved, by Bobby Lee");
   });

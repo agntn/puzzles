@@ -10,9 +10,9 @@ import {
   uncompressed,
 } from "../../core/parts.ts";
 
-/** Puzzle `zden/demobit_2018`. */
+/** Puzzle `zden/demobit-2018`. */
 export const zdenPuzzleDemobit2018 = bitcoinPuzzle({
-  id: "zden/demobit_2018",
+  id: "zden/demobit-2018",
   address: p2pkh("1cryptotnptVK1ZbpZFyEqcR5EVp5hjfk", "06c84797d30988bc82a337117d02d7c4347fd35b"),
   sourceUrl: "https://crypto.haluska.sk/crypto_db18.png",
   startedAt: "2018-01-23 14:51:43",
@@ -41,7 +41,7 @@ export const zdenPuzzleDemobit2018 = bitcoinPuzzle({
     ),
   ],
   assets: assets({
-    puzzle: "demobit_2018/puzzle.png",
+    puzzle: "demobit-2018/puzzle.png",
     sourceUrl: "https://crypto.haluska.sk/crypto_db18.png",
   }),
   hints: [

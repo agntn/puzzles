@@ -20,7 +20,7 @@ async function viewOf(id: string) {
 
 describe("docs record helpers", () => {
   it("print a solve date without a dangling separator when the record has no solve time", async () => {
-    const view = await viewOf("luckylurker/vault_1");
+    const view = await viewOf("luckylurker/vault-1");
 
     expect(view.solvedAt).toBeDefined();
     expect(view.solveTime).toBeUndefined();
@@ -38,7 +38,7 @@ describe("docs record helpers", () => {
   });
 
   it("open one tick per outgoing transaction", async () => {
-    const view = await viewOf("luckylurker/vault_1");
+    const view = await viewOf("luckylurker/vault-1");
 
     expect(transactionTicks(view)).toEqual(
       view.transactionRows.map((row) => (row.type === "claim" ? "open" : "closed")),

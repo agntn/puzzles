@@ -6,24 +6,24 @@ import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
-import { BookQuizCollection } from "../../src/collections/book_quiz.ts";
-import { BraveNewWorldCollection } from "../../src/collections/brave_new_world.ts";
-import { CoinArtistCollection } from "../../src/collections/coin_artist.ts";
+import { BookQuizCollection } from "../../src/collections/book-quiz.ts";
+import { BraveNewWorldCollection } from "../../src/collections/brave-new-world.ts";
+import { CoinArtistCollection } from "../../src/collections/coin-artist.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
-import { HashCollisionCollection } from "../../src/collections/hash_collision.ts";
+import { HashCollisionCollection } from "../../src/collections/hash-collision.ts";
 import { iAmABananaAmaa, IAmABananaAmaaCollection } from "../../src/collections/iamabananaamaa.ts";
 import { kTimesG, KTimesGCollection } from "../../src/collections/ktimesg.ts";
-import { LedgerDonjonCollection } from "../../src/collections/ledger_donjon.ts";
+import { LedgerDonjonCollection } from "../../src/collections/ledger-donjon.ts";
 import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MineshopCollection } from "../../src/collections/mineshop.ts";
 import { mini, MiniCollection } from "../../src/collections/mini.ts";
-import { MovieEnigmaCollection } from "../../src/collections/movie_enigma.ts";
-import { PicturePuzzleCollection } from "../../src/collections/picture_puzzle.ts";
+import { MovieEnigmaCollection } from "../../src/collections/movie-enigma.ts";
+import { PicturePuzzleCollection } from "../../src/collections/picture-puzzle.ts";
 import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
-import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi_birthday_quiz.ts";
+import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-birthday-quiz.ts";
 import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
 import { wickex, WickexCollection } from "../../src/collections/wickex.ts";
@@ -129,7 +129,7 @@ describe("lazy collection registry", () => {
   });
 
   it("keeps TORCHED H34R7S's advertised prize separate from its claim", async () => {
-    const puzzle = await requirePuzzle("coin_artist/torched-h34r7s");
+    const puzzle = await requirePuzzle("coin-artist/torched-h34r7s");
     expect(puzzle.address().value).toBe("1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd");
     expect(puzzle.pubkey()?.format).toBe("uncompressed");
     expect(puzzle.status()).toBe(Status.Solved);
@@ -145,15 +145,15 @@ describe("lazy collection registry", () => {
       },
     ]);
     expect(puzzle.solver()).toBeUndefined();
-    expect(puzzle.assetPath()).toBe("assets/coin_artist/torched-h34r7s/puzzle.jpg");
+    expect(puzzle.assetPath()).toBe("assets/coin-artist/torched-h34r7s/puzzle.jpg");
     expect(puzzle.assetLinks().map((asset) => asset.path)).toEqual([
-      "assets/coin_artist/torched-h34r7s/puzzle.jpg",
-      "assets/coin_artist/torched-h34r7s/solution.md",
+      "assets/coin-artist/torched-h34r7s/puzzle.jpg",
+      "assets/coin-artist/torched-h34r7s/solution.md",
     ]);
   });
 
   it("credits Level 4's published solution without adopting its example WIF", async () => {
-    const puzzle = await requirePuzzle("zden/level_4");
+    const puzzle = await requirePuzzle("zden/level-4");
     expect(puzzle.solver()).toMatchObject({
       key: "mmorsl",
       name: "mmorsl",
@@ -163,13 +163,13 @@ describe("lazy collection registry", () => {
       "https://steemit.com/bitcoin/@mmorsl/solution-of-the-bitcoin-crypto-puzzle-level-4-by-zden",
     );
     expect(puzzle.assets()).toEqual({
-      puzzle: "level_4/puzzle.png",
-      solution: "level_4/solution.md",
+      puzzle: "level-4/puzzle.png",
+      solution: "level-4/solution.md",
       source_url: "https://crypto.haluska.sk/crypto4.png",
     });
     expect(puzzle.assetLinks().map((asset) => asset.path)).toEqual([
-      "assets/zden/level_4/puzzle.png",
-      "assets/zden/level_4/solution.md",
+      "assets/zden/level-4/puzzle.png",
+      "assets/zden/level-4/solution.md",
     ]);
     expect(puzzle.toJSON().solver).toEqual(puzzle.solver());
     expect(puzzle.key()).toBeUndefined();
@@ -215,7 +215,7 @@ describe("lazy collection registry", () => {
   });
 
   it("keeps Movie Enigma's original rules separate from its solution", async () => {
-    const puzzle = await requirePuzzle("movie_enigma");
+    const puzzle = await requirePuzzle("movie-enigma");
     const hints = [
       {
         kind: "official",
@@ -235,8 +235,8 @@ describe("lazy collection registry", () => {
     ];
     expect(puzzle.hints()).toEqual(hints);
     expect(puzzle.toJSON().hints).toEqual(hints);
-    const collection = await requireCollection("movie_enigma");
-    expect(collection.hintsById("movie_enigma")).toEqual(hints);
+    const collection = await requireCollection("movie-enigma");
+    expect(collection.hintsById("movie-enigma")).toEqual(hints);
     expect(puzzle.status()).toBe(Status.Solved);
   });
 
@@ -257,8 +257,8 @@ describe("lazy collection registry", () => {
   it("preserves universal and historical collection lookups", async () => {
     expect((await get("b1000/90"))?.id()).toBe("b1000/90");
     expect((await get("gsmg"))?.id()).toBe("gsmg");
-    expect((await get("movie_enigma"))?.id()).toBe("movie_enigma");
-    expect((await getCollection("peter_todd"))?.key).toBe("hash_collision");
+    expect((await get("movie-enigma"))?.id()).toBe("movie-enigma");
+    expect((await getCollection("peter_todd"))?.key).toBe("hash-collision");
     expect((await getCollection("warpwallet"))?.key).toBe("warp");
     expect(await get("missing")).toBeUndefined();
     const foreign = [undefined, null, true, 71n, {}] as never[];
@@ -323,7 +323,7 @@ describe("lazy collection registry", () => {
   });
 
   it("records the solved LuckyLurker Vault with its derived key and published answers", async () => {
-    const puzzle = await requirePuzzle("luckylurker/vault_1");
+    const puzzle = await requirePuzzle("luckylurker/vault-1");
 
     expect(puzzle.address().value).toBe("bc1q32e3dxcd0n2tlzdmchraf2057d0ax4xdwrk3jq");
     expect(puzzle.status()).toBe(Status.Solved);
@@ -354,7 +354,7 @@ describe("lazy collection registry", () => {
   });
 
   it("keeps the Vault's article URLs readable without a Markdown renderer", async () => {
-    const puzzle = await requirePuzzle("luckylurker/vault_1");
+    const puzzle = await requirePuzzle("luckylurker/vault-1");
     for (const [index, url] of [
       [2, "https://luckylurker.com/crypto-casinos-guide/"],
       [4, "https://luckylurker.com/casino/gamdom/"],
@@ -367,7 +367,7 @@ describe("lazy collection registry", () => {
   });
 
   it("includes the funded second Vault without inventing key material", async () => {
-    const puzzle = await requirePuzzle("luckylurker/vault_2");
+    const puzzle = await requirePuzzle("luckylurker/vault-2");
 
     expect(puzzle.status()).toBe(Status.Unsolved);
     expect(puzzle.address().value).toBe("bc1qnepv9pcnqvndux9h9mcaxvk6u993rc0lew9fpp");
@@ -387,7 +387,7 @@ describe("lazy collection registry", () => {
   });
 
   it("includes Autonomy with its archived reward address and solution source", async () => {
-    const puzzle = await requirePuzzle("zden/decred_autonomy");
+    const puzzle = await requirePuzzle("zden/decred-autonomy");
 
     expect(puzzle.chain()).toBe("decred");
     expect(puzzle.address().value).toBe("DseEpHK49hHrTJhxwop3B86K1dryv4CYz8N");
@@ -399,7 +399,7 @@ describe("lazy collection registry", () => {
     expect(puzzle.solver()?.profiles?.[0]?.url).toBe(
       "https://medium.com/blockcrushr-labs/solving-decreds-autonomy-puzzle-aedac18f18f3",
     );
-    expect(puzzle.assetPath()).toBe("assets/zden/decred_autonomy/puzzle.jpg");
+    expect(puzzle.assetPath()).toBe("assets/zden/decred-autonomy/puzzle.jpg");
     expect(puzzle.claimTransaction()).toBeUndefined();
     expect(puzzle.prize()).toBeUndefined();
     expect(puzzle.toJSON()).not.toHaveProperty("solve_date");
@@ -475,9 +475,9 @@ describe("lazy collection registry", () => {
     ]);
     expect(teikhos.get(5)).toBeUndefined();
 
-    expect(["80_bit", "ktimesg/80_bit"].map((query) => kTimesG.get(query)?.id())).toEqual([
-      "ktimesg/80_bit",
-      "ktimesg/80_bit",
+    expect(["80-bit", "ktimesg/80-bit"].map((query) => kTimesG.get(query)?.id())).toEqual([
+      "ktimesg/80-bit",
+      "ktimesg/80-bit",
     ]);
     expect(kTimesG.get(80 as never)).toBeUndefined();
 
@@ -518,10 +518,10 @@ describe("lazy collection registry", () => {
       "Puzzle not found: b100/71. Did you mean b1000/71?",
     );
     await expect(miss(requirePuzzle("Zden/Level-5"))).resolves.toBe(
-      "Puzzle not found: Zden/Level-5. Did you mean zden/level_5?",
+      "Puzzle not found: Zden/Level-5. Did you mean zden/level-5?",
     );
     await expect(miss(requirePuzzle("zden/level5"))).resolves.toBe(
-      "Puzzle not found: zden/level5. Did you mean zden/level_5?",
+      "Puzzle not found: zden/level5. Did you mean zden/level-5?",
     );
     await expect(miss(requirePuzzle("GSMG"))).resolves.toBe(
       "Puzzle not found: GSMG. Did you mean gsmg?",
@@ -530,7 +530,7 @@ describe("lazy collection registry", () => {
       "Puzzle not found: b100/99999. Did you mean collection b1000?",
     );
     await expect(miss(requireCollection("hashcollision"))).resolves.toBe(
-      "Unknown collection: hashcollision. Did you mean hash_collision?",
+      "Unknown collection: hashcollision. Did you mean hash-collision?",
     );
     await expect(miss(requireAuthor("peter_todd"))).resolves.toBe(
       "Unknown author: peter_todd. Did you mean peter-todd?",
@@ -664,7 +664,7 @@ describe("lazy collection registry", () => {
     expect(zden?.author.aliases).toContain("Zden Hlinka");
     expect(zden?.author.facts?.every((entry) => entry.source.startsWith("https://"))).toBe(true);
     const aoi = await getAuthor("aoi-nakamoto");
-    expect(aoi?.collections).toEqual(["book_quiz", "quizchain", "satoshi_birthday_quiz"]);
+    expect(aoi?.collections).toEqual(["book-quiz", "quizchain", "satoshi-birthday-quiz"]);
     expect(aoi?.puzzles).toBe(12);
     expect(await getAuthor("nobody")).toBeUndefined();
     expect(await getAuthor(7 as never)).toBeUndefined();
@@ -724,7 +724,7 @@ describe("lazy collection registry", () => {
 
     const decred = await requireSolver("blockcrushr-labs");
     expect(decred.solves[0]).toEqual({
-      id: "zden/decred_autonomy",
+      id: "zden/decred-autonomy",
       chain: "decred",
       status: "solved",
       currency: "DCR",

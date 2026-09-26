@@ -27,6 +27,50 @@ const libraryEntries = [
   "@agntn/keys/blockchains/litecoin",
 ];
 
+/** Pages published under snake_case ids before the switch to kebab-case, moved for good. */
+const renamedIds = [
+  "bitimage/kitten_passphrase",
+  "book_quiz",
+  "brave_new_world",
+  "coin_artist",
+  "coin_artist/torched-h34r7s",
+  "hash_collision",
+  "hash_collision/hash160",
+  "hash_collision/hash256",
+  "hash_collision/op_abs",
+  "hash_collision/ripemd160",
+  "hash_collision/sha1",
+  "hash_collision/sha256",
+  "ktimesg/80_bit",
+  "ledger_donjon",
+  "ledger_donjon/scissors_secret_sharing",
+  "luckylurker/vault_1",
+  "luckylurker/vault_2",
+  "movie_enigma",
+  "picture_puzzle",
+  "satoshi_birthday_quiz",
+  "warp/challenge_1",
+  "warp/challenge_2",
+  "warp/challenge_3",
+  "warp/challenge_4",
+  "warp/warp_challenge_1",
+  "warp/warp_challenge_2",
+  "zden/1bitcoin_white_paper",
+  "zden/codex_protocol",
+  "zden/decred_autonomy",
+  "zden/decred_janus",
+  "zden/demobit_2018",
+  "zden/level_1",
+  "zden/level_2",
+  "zden/level_3",
+  "zden/level_4",
+  "zden/level_5",
+  "zden/level_halv",
+  "zden/level_sfx",
+  "zden/level_xm17",
+  "zden/litecoin_segwit",
+];
+
 export default defineNuxtConfig({
   extends: ["docus"],
   /** The repo root is its own pnpm workspace; Nuxt must not treat it as this site's. */
@@ -165,6 +209,12 @@ export default defineNuxtConfig({
   mcp: {
     enabled: false,
   },
+  routeRules: Object.fromEntries(
+    renamedIds.map((id) => [
+      `/collections/${id}`,
+      { redirect: { to: `/collections/${id.replaceAll("_", "-")}`, statusCode: 301 } },
+    ]),
+  ),
   nitro: {
     preset: "cloudflare_module",
     compatibilityDate: "2026-09-03",

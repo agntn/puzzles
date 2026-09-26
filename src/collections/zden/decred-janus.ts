@@ -10,9 +10,9 @@ import {
   p2pkh,
 } from "../../core/parts.ts";
 
-/** Puzzle `zden/decred_janus`. */
+/** Puzzle `zden/decred-janus`. */
 export const zdenPuzzleDecredJanus = decredPuzzle({
-  id: "zden/decred_janus",
+  id: "zden/decred-janus",
   address: p2pkh("DsRaAja82UvgnqYaBHYFuyCKURFX2rCyEJ8"),
   sourceUrl: "https://crypto.haluska.sk/decred_tree.svg",
   startedAt: "2017-03-07 04:20:56",
@@ -59,8 +59,8 @@ export const zdenPuzzleDecredJanus = decredPuzzle({
     ),
   ],
   assets: assets({
-    puzzle: "decred_janus/puzzle.svg",
-    hints: ["decred_janus/hint.svg"],
+    puzzle: "decred-janus/puzzle.svg",
+    hints: ["decred-janus/hint.svg"],
     sourceUrl: "https://crypto.haluska.sk/decred_tree.svg",
   }),
   hints: [

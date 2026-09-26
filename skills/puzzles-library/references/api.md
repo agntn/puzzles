@@ -47,7 +47,7 @@ puzzle.transaction(type);
 puzzle.fundingTransaction();
 puzzle.claimTransaction();
 puzzle.formattedSolveTime(); // "1y 2mo 3d"
-puzzle.assetPath(); // "assets/zden/level_4/puzzle.png"
+puzzle.assetPath(); // "assets/zden/level-4/puzzle.png"
 puzzle.assetUrl(); // raw GitHub URL
 /** Each file once with its kind, path and URL: the image, the hints, the solution, the stage artifacts. */
 puzzle.assetLinks();

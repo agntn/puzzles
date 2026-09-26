@@ -47,7 +47,7 @@ const sources = [
     date: "2026-08-22",
   },
   {
-    file: "movie_enigma/cryptop1r4t3-2022-03-21",
+    file: "movie-enigma/cryptop1r4t3-2022-03-21",
     tweet: "1505915271118262286",
     author: "cryptop1r4t3",
     date: "2022-03-21",
@@ -71,7 +71,7 @@ const sources = [
     date: "2026-06-21",
   },
   {
-    file: "book_quiz/aoinakamoto-2019-04-06",
+    file: "book-quiz/aoinakamoto-2019-04-06",
     url: "https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
     author: "u/AoiNakamoto",
     date: "2019-04-06",
@@ -198,7 +198,7 @@ const sources = [
     },
   },
   {
-    file: "satoshi_birthday_quiz/aoinakamoto-2019-04-05",
+    file: "satoshi-birthday-quiz/aoinakamoto-2019-04-05",
     url: "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/",
     author: "u/AoiNakamoto",
     date: "2019-04-05",
@@ -209,13 +209,13 @@ const sources = [
     },
   },
   {
-    file: "satoshi_birthday_quiz/aoinakamoto-2019-04-05-b9l37o",
+    file: "satoshi-birthday-quiz/aoinakamoto-2019-04-05-b9l37o",
     url: "https://www.reddit.com/r/Bitcoin/comments/b9l37o/",
     author: "u/AoiNakamoto",
     date: "2019-04-05",
   },
   {
-    file: "satoshi_birthday_quiz/aoinakamoto-2019-04-10-ekjcc1k",
+    file: "satoshi-birthday-quiz/aoinakamoto-2019-04-10-ekjcc1k",
     url: "https://www.reddit.com/r/bitcoinpuzzles/comments/bbij0e/meidum_7_mbtc_quizchain_block_18/ekjcc1k/",
     author: "u/AoiNakamoto",
     date: "2019-04-10",

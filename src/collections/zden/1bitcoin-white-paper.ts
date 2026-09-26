@@ -12,9 +12,9 @@ import {
   uncompressed,
 } from "../../core/parts.ts";
 
-/** Puzzle `zden/1bitcoin_white_paper`. */
+/** Puzzle `zden/1bitcoin-white-paper`. */
 export const zdenPuzzle1bitcoinWhitePaper = bitcoinPuzzle({
-  id: "zden/1bitcoin_white_paper",
+  id: "zden/1bitcoin-white-paper",
   address: p2pkh("1BiTCoiNsuFnkCFGkv6AGgwWxN31GUwY6W", "75882f9639449778bb4cc2d242ed35dd2cca6f3e"),
   sourceUrl: "https://ipfs.io/ipfs/Qmdm7SxhVGDVt9krbNpwAxkQGwH5a74FVW1sKNXxCjzmBq",
   startedAt: "2021-04-11 01:46:31",
@@ -51,7 +51,7 @@ export const zdenPuzzle1bitcoinWhitePaper = bitcoinPuzzle({
     ),
   ],
   assets: assets({
-    puzzle: "1bitcoin_white_paper/puzzle.png",
+    puzzle: "1bitcoin-white-paper/puzzle.png",
     sourceUrl: "https://ipfs.io/ipfs/Qmdm7SxhVGDVt9krbNpwAxkQGwH5a74FVW1sKNXxCjzmBq",
   }),
   hints: [

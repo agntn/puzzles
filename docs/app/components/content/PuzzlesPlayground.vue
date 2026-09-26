@@ -120,7 +120,7 @@ const NOTES: Readonly<Record<Operation, string>> = {
   authors:
     "The rows puzzles authors prints. One per author key, with the collections it published and its puzzle count.",
   author:
-    "A collection key resolves to its author too, so hash_collision answers with peter-todd. A pseudonymous author stays under the handle.",
+    "A collection key resolves to its author too, so hash-collision answers with peter-todd. A pseudonymous author stays under the handle.",
   stats:
     "Totals over every collection. Loading them all is the one thing this call does that a show doesn't.",
 };
@@ -629,7 +629,7 @@ const responseTitle = computed(() => {
                     id="playground-id"
                     v-model="id"
                     type="text"
-                    placeholder="b1000/71, gsmg, zden/decred_janus"
+                    placeholder="b1000/71, gsmg, zden/decred-janus"
                     spellcheck="false"
                     autocomplete="off"
                     list="puzzles-ids"
@@ -646,7 +646,7 @@ const responseTitle = computed(() => {
                     id="playground-key"
                     v-model="key"
                     type="text"
-                    placeholder="peter-todd, keybase, hash_collision"
+                    placeholder="peter-todd, keybase, hash-collision"
                     spellcheck="false"
                     autocomplete="off"
                     list="puzzles-authors"

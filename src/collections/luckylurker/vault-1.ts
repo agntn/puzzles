@@ -11,7 +11,7 @@ import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 
 /** Vault #1 uses an Electrum SegWit seed, not BIP39, at m/0'/0/1. */
 export const luckyLurkerVault1 = bitcoinPuzzle({
-  id: "luckylurker/vault_1",
+  id: "luckylurker/vault-1",
   address: p2wpkh(
     "bc1q32e3dxcd0n2tlzdmchraf2057d0ax4xdwrk3jq",
     "8ab3169b0d7cd4bf89bbc5c7d4a9f4f35fd354cd",

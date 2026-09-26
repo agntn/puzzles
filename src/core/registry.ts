@@ -22,8 +22,16 @@ interface TableEntry extends CollectionEntry {
 }
 
 const aliasPairs = [
-  ["peter_todd", "hash_collision"],
+  ["peter_todd", "hash-collision"],
   ["warpwallet", "warp"],
+  ["book_quiz", "book-quiz"],
+  ["brave_new_world", "brave-new-world"],
+  ["coin_artist", "coin-artist"],
+  ["hash_collision", "hash-collision"],
+  ["ledger_donjon", "ledger-donjon"],
+  ["movie_enigma", "movie-enigma"],
+  ["picture_puzzle", "picture-puzzle"],
+  ["satoshi_birthday_quiz", "satoshi-birthday-quiz"],
 ] as const;
 
 const aliases: ReadonlyMap<string, string> = new Map(aliasPairs);
