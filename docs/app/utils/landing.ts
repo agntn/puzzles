@@ -35,6 +35,7 @@ export const WALK: readonly string[] = [
   "mini/3",
   "teikhos/4",
   "brave-new-world",
+  "wealth-in-poetry",
 ];
 
 /* generated:landing-fixtures:start */
@@ -942,14 +943,42 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 5,
     tool: "brave-new-world\tunsolved\t0.2 BTC\t1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nchain: bitcoin  address kind: p2pkh\nhash160: bd031e54cde2a3189fd59bc49f731367a1779eb0\npublic key: unknown\nprivate key: unknown\nstarted: 2020-10-08 09:25:30\ntransactions: 5\n\tfunding\t2020-05-10 08:01:46\t0.2 BTC\tfcee21d44ee94c09869947c74b61669bf928358e9c2d1699fb075bb6ebf5d043\n\tincrease\t2023-10-25 01:55:34\t0.00001 BTC\ta490266f12466f91c00546a4b744b5faea70835794b5b182d84e47e4294a33ee\n\tincrease\t2024-12-13 08:42:55\t0.001 BTC\t6ca136b078c61f530e3c7eb46eed0a23785840294fc59ef006df26e26f88fb53\n\tincrease\t2025-05-09 23:02:54\t0.00000557 BTC\t51b778b00ca5dc676e99da96545e5c1ae6cf68c4ca79d59879e77facac64a251\n\tincrease\t2025-06-02 05:48:21\t0.00005727 BTC\t6d1f46d1913c45de1cd515a9cdc4de64ff2abfc19102e2cf23840bb5e944f8f4\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/brave-new-world/puzzle.png\nasset source: https://i.redd.it/n1x7g8ceaur51.png\nexplorer: https://blockstream.info/address/1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nsource: https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/",
   },
+  {
+    id: "wealth-in-poetry",
+    collection: "wealth-in-poetry",
+    chain: "bitcoin",
+    status: "unsolved",
+    address: "1K4ezpLybootYF23TM4a8Y4NyP7auysnRo",
+    kind: "p2pkh",
+    hash160: "c6233aeb3a50a70b82fcd88d69b5f1a3ec6e355a",
+    redeemScript: undefined,
+    prize: "0.03050269 BTC",
+    prizeAmount: 0.03050269,
+    currency: undefined,
+    startedAt: "2019-02-11 15:34:04",
+    solvedAt: undefined,
+    solveTime: undefined,
+    bits: undefined,
+    range: undefined,
+    pubkey: undefined,
+    pubkeyFormat: undefined,
+    secret: "none",
+    keyLiteral: undefined,
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://blockstream.info/address/1K4ezpLybootYF23TM4a8Y4NyP7auysnRo",
+    source: "https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254",
+    transactions: 2,
+    tool: "wealth-in-poetry\tunsolved\t0.03050269 BTC\t1K4ezpLybootYF23TM4a8Y4NyP7auysnRo\nchain: bitcoin  address kind: p2pkh\nhash160: c6233aeb3a50a70b82fcd88d69b5f1a3ec6e355a\npublic key: unknown\nprivate key: unknown\nstarted: 2019-02-11 15:34:04\ntransactions: 2\n\tfunding\t2019-02-10 14:47:11\t0.03050269 BTC\t0a9ddd15961d507d77cd281c230151ea5980be24e4a22ceb38f3c78737f9f60c\n\tincrease\t2019-04-08 17:37:36\t0.00074361 BTC\tb3c9d8cc52234419642edf6824b1d004e0873432cd4b9e127bf557cfc9990dcf\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/wealth-in-poetry/puzzle.txt\nasset source: https://web.archive.org/web/20190211203952/https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\nhints: 1\n\tofficial\t-\tThe beauty of trithemian seeds is that they hide in plain sight. If you’ve read this far, you’ve read every word required to access a wallet with .03 BTC. Good luck!\tsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\nexplorer: https://blockstream.info/address/1K4ezpLybootYF23TM4a8Y4NyP7auysnRo\nsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "88bb6645c241",
-  total: 373,
+  dataVersion: "53face5f4534",
+  total: 374,
   solved: 162,
-  unsolved: 100,
+  unsolved: 101,
   claimed: 12,
   swept: 96,
   expired: 3,
@@ -957,13 +986,13 @@ export const STATS_STATIC = {
   unsolvedPrize: {
     AR: 1900,
     ETH: 12.612541554256945,
-    BTC: 909.07574943,
+    BTC: 909.10625212,
   },
   totalPrize: {
     AR: 5550,
     ETH: 26.246241554256944,
     DAI: 100,
-    BTC: 1064.46058961,
+    BTC: 1064.4910923,
     BCH: 5.1,
     LTC: 230.8255,
     DCR: 460,
@@ -1537,6 +1566,28 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "wealth-in-poetry",
+    author: "Trithemius",
+    authorKey: "trithemius",
+    authorUrl: "https://medium.com/@Trithemius",
+    total: 1,
+    statuses: {
+      unsolved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.03050269,
+    },
+    unsolvedPrize: {
+      BTC: 0.03050269,
+    },
+    withPubkey: 0,
+    withKey: 0,
+    firstStarted: "2019-02-11 15:34:04",
+    lastStarted: "2019-02-11 15:34:04",
+    hints: [],
+  },
+  {
     key: "wickex",
     author: "Wickex",
     authorKey: "wickex",
@@ -1815,6 +1866,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "The identity and encryption company that published WarpWallet in 2013 and paid to have its own brainwallets cracked. Part of Zoom since 2020.",
     collections: ["warp"],
     puzzles: 6,
+  },
+  {
+    key: "trithemius",
+    to: "/authors/trithemius",
+    name: "Trithemius",
+    kind: undefined,
+    about:
+      "Medium account, first @onesourgrape, that published one essay on hiding seed phrases in stories in February 2019, with 0.03 BTC on a wallet hidden in its own text.",
+    collections: ["wealth-in-poetry"],
+    puzzles: 1,
   },
   {
     key: "wickex",

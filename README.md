@@ -99,37 +99,38 @@ That's most of it, really. A collection is its own entry and everything on it is
 
 ## 🗺️ Collections
 
-| Key                     | Chains                              | What it is                              |
-| ----------------------- | ----------------------------------- | --------------------------------------- |
-| `b1000`                 | bitcoin                             | Keys of 1 to 256 bits, one address each |
-| `rushwallet`            | bitcoin                             | Brainwallets from a 2014 contest        |
-| `zden`                  | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                   |
-| `arweave`               | arweave, ethereum                   | Tiamat's weave puzzles                  |
-| `quizchain`             | bitcoin                             | Quiz blocks chained by their keys       |
-| `mini`                  | bitcoin, bitcoincash                | RetiredCoder's seven mini-puzzles       |
-| `warp`                  | bitcoin                             | Keybase's scrypt brainwallet challenges |
-| `hash-collision`        | bitcoin                             | Peter Todd's P2SH collision bounties    |
-| `teikhos`               | ethereum                            | Contracts that pay for a public key     |
-| `ballet`                | bitcoin                             | BIP38 keys printed on physical wallets  |
-| `dug`                   | bitcoin                             | 2025 student seed hunt                  |
-| `bitimage`              | bitcoin                             | Seeds hashed from photographs           |
-| `luckylurker`           | bitcoin                             | Two Bitcoin Vault seed challenges       |
-| `iamabananaamaa`        | bitcoin                             | A ZIP in a GIF, then a fake Caesar      |
-| `bitaps`                | bitcoin                             | A 3 of 5 secret sharing scheme          |
-| `gsmg`                  | bitcoin                             | A multi phase image puzzle              |
-| `movie-enigma`          | bitcoin                             | Film titles as seed words, solved 2026  |
-| `ledger-donjon`         | bitcoin                             | Scissors Secret Sharing from the CTF    |
-| `coin-artist`           | bitcoin                             | TORCHED H34R7S painting                 |
-| `genesis`               | bitcoin                             | Genesis block OP_RETURN puzzle          |
-| `mineshop`              | ethereum                            | A seed split between a video and a post |
-| `satoshi-birthday-quiz` | bitcoin                             | Seven quiz answers hashed into a wallet |
-| `book-quiz`             | bitcoin                             | A book quiz nobody won in time          |
-| `ktimesg`               | bitcoin                             | 80 hidden bits and a mempool race       |
-| `wickex`                | bitcoin                             | Hex, Morse and a spectrogram passphrase |
-| `picture-puzzle`        | bitcoin                             | Four pictures that spell a key database |
-| `brave-new-world`       | bitcoin                             | A seed phrase hidden in a 2020 collage  |
+| Key                     | Chains                              | What it is                               |
+| ----------------------- | ----------------------------------- | ---------------------------------------- |
+| `b1000`                 | bitcoin                             | Keys of 1 to 256 bits, one address each  |
+| `rushwallet`            | bitcoin                             | Brainwallets from a 2014 contest         |
+| `zden`                  | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                    |
+| `arweave`               | arweave, ethereum                   | Tiamat's weave puzzles                   |
+| `quizchain`             | bitcoin                             | Quiz blocks chained by their keys        |
+| `mini`                  | bitcoin, bitcoincash                | RetiredCoder's seven mini-puzzles        |
+| `warp`                  | bitcoin                             | Keybase's scrypt brainwallet challenges  |
+| `hash-collision`        | bitcoin                             | Peter Todd's P2SH collision bounties     |
+| `teikhos`               | ethereum                            | Contracts that pay for a public key      |
+| `ballet`                | bitcoin                             | BIP38 keys printed on physical wallets   |
+| `dug`                   | bitcoin                             | 2025 student seed hunt                   |
+| `bitimage`              | bitcoin                             | Seeds hashed from photographs            |
+| `luckylurker`           | bitcoin                             | Two Bitcoin Vault seed challenges        |
+| `iamabananaamaa`        | bitcoin                             | A ZIP in a GIF, then a fake Caesar       |
+| `bitaps`                | bitcoin                             | A 3 of 5 secret sharing scheme           |
+| `gsmg`                  | bitcoin                             | A multi phase image puzzle               |
+| `movie-enigma`          | bitcoin                             | Film titles as seed words, solved 2026   |
+| `ledger-donjon`         | bitcoin                             | Scissors Secret Sharing from the CTF     |
+| `coin-artist`           | bitcoin                             | TORCHED H34R7S painting                  |
+| `genesis`               | bitcoin                             | Genesis block OP_RETURN puzzle           |
+| `mineshop`              | ethereum                            | A seed split between a video and a post  |
+| `satoshi-birthday-quiz` | bitcoin                             | Seven quiz answers hashed into a wallet  |
+| `book-quiz`             | bitcoin                             | A book quiz nobody won in time           |
+| `ktimesg`               | bitcoin                             | 80 hidden bits and a mempool race        |
+| `wickex`                | bitcoin                             | Hex, Morse and a spectrogram passphrase  |
+| `picture-puzzle`        | bitcoin                             | Four pictures that spell a key database  |
+| `brave-new-world`       | bitcoin                             | A seed phrase hidden in a 2020 collage   |
+| `wealth-in-poetry`      | bitcoin                             | Seed words hidden in a 2019 Medium essay |
 
-Identifiers are `collection/name`. The eight singletons, `gsmg`, `bitaps`, `mineshop`, `movie-enigma`, `satoshi-birthday-quiz`, `book-quiz`, `picture-puzzle` and `brave-new-world`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
+Identifiers are `collection/name`. The nine singletons, `gsmg`, `bitaps`, `mineshop`, `movie-enigma`, `satoshi-birthday-quiz`, `book-quiz`, `picture-puzzle`, `brave-new-world` and `wealth-in-poetry`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
 ## 🤖 Agents
 

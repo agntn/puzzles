@@ -86,6 +86,7 @@ const expectedCollections = [
   "satoshi-birthday-quiz",
   "teikhos",
   "warp",
+  "wealth-in-poetry",
   "wickex",
   "zden",
 ];

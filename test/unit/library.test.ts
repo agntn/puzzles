@@ -26,6 +26,7 @@ import { rushwallet, RushwalletCollection } from "../../src/collections/rushwall
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-birthday-quiz.ts";
 import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
+import { WealthInPoetryCollection } from "../../src/collections/wealth-in-poetry.ts";
 import { wickex, WickexCollection } from "../../src/collections/wickex.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
 import {
@@ -90,6 +91,7 @@ const concreteClasses = [
   SatoshiBirthdayQuizCollection,
   TeikhosCollection,
   WarpCollection,
+  WealthInPoetryCollection,
   WickexCollection,
   ZdenCollection,
 ] as const;
@@ -815,20 +817,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(373);
+    expect(await all()).toHaveLength(374);
     expect(await stats()).toEqual({
-      total: 373,
+      total: 374,
       claimed: 12,
       expired: 3,
       solved: 162,
       swept: 96,
-      unsolved: 100,
+      unsolved: 101,
       with_pubkey: 267,
       total_prize: {
         AR: 5550,
         ETH: 26.246241554256944,
         DAI: 100,
-        BTC: 1064.46058961,
+        BTC: 1064.4910923,
         BCH: 5.1,
         LTC: 230.8255,
         DCR: 460,
@@ -836,7 +838,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1900,
         ETH: 12.612541554256945,
-        BTC: 909.07574943,
+        BTC: 909.10625212,
       },
     });
   });
@@ -879,7 +881,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(373);
+    ).toBe(374);
   });
 
   it("hands back the memoized views frozen through", async () => {
