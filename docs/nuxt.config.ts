@@ -195,6 +195,13 @@ export default defineNuxtConfig({
         { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
         { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
         { rel: "manifest", href: "/site.webmanifest" },
+        /** Feed readers find the releases from any page. */
+        {
+          rel: "alternate",
+          type: "application/rss+xml",
+          title: "@agntn/puzzles changelog",
+          href: "/changelog.xml",
+        },
       ],
       meta: [
         { name: "theme-color", media: "(prefers-color-scheme: dark)", content: "#0b0d10" },
@@ -221,9 +228,20 @@ export default defineNuxtConfig({
     esbuild: { options: { target: "es2022" } },
     /** The puzzle images and hints, served from the checkout's assets/ under /assets. */
     publicAssets: [{ dir: resolve(repoRoot, "assets"), baseURL: "/assets", maxAge: 60 * 60 * 24 }],
+    /** The checkout's CHANGELOG.md, read by /changelog and its feed as `assets:changelog`. */
+    serverAssets: [{ baseName: "changelog", dir: repoRoot, pattern: "CHANGELOG.md" }],
     prerender: {
       crawlLinks: true,
-      routes: ["/", "/playground", "/sitemap.xml", "/robots.txt", "/llms.txt", "/llms-full.txt"],
+      routes: [
+        "/",
+        "/playground",
+        "/changelog",
+        "/changelog.xml",
+        "/sitemap.xml",
+        "/robots.txt",
+        "/llms.txt",
+        "/llms-full.txt",
+      ],
       /**
        * Every puzzle page links the playground with a query; one prerender of the page serves them all.
        *

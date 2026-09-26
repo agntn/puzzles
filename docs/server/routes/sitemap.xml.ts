@@ -3,7 +3,7 @@ import docusSitemap from "docus/server/routes/sitemap.xml";
 import { inferSiteURL } from "docus/utils/meta";
 
 /** Pages outside `content/` that the Docus sitemap cannot see. Keep in step with `app/pages/`. */
-const PAGES = ["/playground"];
+const PAGES = ["/playground", "/changelog"];
 
 /**
  * The Docus sitemap lists content collections only, so the Vue pages are appended here:
