@@ -13,6 +13,9 @@ const CAPTURE = `https://web.archive.org/web/20190211203952/${ARTICLE}`;
 const RESPONSES =
   "https://web.archive.org/web/20200924153242/https://medium.com/@onesourgrape/responses";
 
+/** The account's profile as captured in 2025, under the handle it has now. */
+const PROFILE = "https://web.archive.org/web/20250902124612/https://medium.com/@Trithemius";
+
 /**
  * Securing Wealth in Poetry: an essay on "trithemian seeds", seed phrases hidden in a story and
  * picked out by phone numbers or GPS digits. It closes by saying the reader has read every word
@@ -45,21 +48,21 @@ export const wealthInPoetryPuzzle = bitcoinPuzzle({
   assets: assets({ puzzle: "puzzle.txt", sourceUrl: CAPTURE }),
 });
 
-/** Securing Wealth in Poetry, one Medium article by OneSourGrape. */
+/** Securing Wealth in Poetry, one Medium article by Trithemius. */
 export class WealthInPoetryCollection extends SingletonCollection {
   /** Stable collection key used in puzzle identifiers. */
   static readonly key = "wealth-in-poetry";
 
   /** Who published the puzzle. */
-  static readonly author = party("OneSourGrape", {
-    key: "onesourgrape",
-    aliases: ["Sharon & Philippe", "Trithemius"],
+  static readonly author = party("Trithemius", {
+    key: "trithemius",
+    aliases: ["OneSourGrape", "Sharon & Philippe"],
     about:
-      "Medium account that published one essay on hiding seed phrases in stories in February 2019, with 0.03 BTC on a wallet hidden in its own text.",
-    profiles: [profile("medium", "https://medium.com/@onesourgrape")],
+      "Medium account, first @onesourgrape, that published one essay on hiding seed phrases in stories in February 2019, with 0.03 BTC on a wallet hidden in its own text.",
+    profiles: [profile("medium", "https://medium.com/@Trithemius")],
     facts: [
       fact(
-        "Published Securing Wealth in Poetry in Coinmonks, an essay on trithemian seeds that ends with a .03 BTC wallet hidden in the essay itself.",
+        "Published Securing Wealth in Poetry in Coinmonks as OneSourGrape, handle @onesourgrape, an essay on trithemian seeds that ends with a .03 BTC wallet hidden in the essay itself.",
         ARTICLE,
         { date: "2019-02-11" },
       ),
@@ -72,7 +75,10 @@ export class WealthInPoetryCollection extends SingletonCollection {
         'Went by Sharon & Philippe in 2020, with the bio "Designer, Miner, Grape.", and the two replies to readers on the article show under that name.',
         RESPONSES,
       ),
-      fact("Signs the same article as Trithemius today.", ARTICLE),
+      fact(
+        'Renamed the account to Trithemius, handle @Trithemius, bio "Designer, Miner". Medium keeps the same user id, 89cc82722605, that published the essay as @onesourgrape.',
+        PROFILE,
+      ),
     ],
   });
 

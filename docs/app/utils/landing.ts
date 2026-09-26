@@ -975,7 +975,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "aac2de666dbf",
+  dataVersion: "53face5f4534",
   total: 374,
   solved: 162,
   unsolved: 101,
@@ -1567,9 +1567,9 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   },
   {
     key: "wealth-in-poetry",
-    author: "OneSourGrape",
-    authorKey: "onesourgrape",
-    authorUrl: "https://medium.com/@onesourgrape",
+    author: "Trithemius",
+    authorKey: "trithemius",
+    authorUrl: "https://medium.com/@Trithemius",
     total: 1,
     statuses: {
       unsolved: 1,
@@ -1868,12 +1868,12 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     puzzles: 6,
   },
   {
-    key: "onesourgrape",
-    to: "/authors/onesourgrape",
-    name: "OneSourGrape",
+    key: "trithemius",
+    to: "/authors/trithemius",
+    name: "Trithemius",
     kind: undefined,
     about:
-      "Medium account that published one essay on hiding seed phrases in stories in February 2019, with 0.03 BTC on a wallet hidden in its own text.",
+      "Medium account, first @onesourgrape, that published one essay on hiding seed phrases in stories in February 2019, with 0.03 BTC on a wallet hidden in its own text.",
     collections: ["wealth-in-poetry"],
     puzzles: 1,
   },
