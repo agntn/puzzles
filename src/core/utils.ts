@@ -51,8 +51,9 @@ export function formatPrize(prize: number | undefined, currency: string): string
 }
 
 /**
- * Sums prizes per currency as exact decimals, so a total keeps every place its prizes carry (an
- * ETH prize can have eighteen) and a float carry never prints as `1058.0688491299998`.
+ * Sums prizes per currency as exact decimals, then rounds once to the nearest `number`. A total
+ * keeps the places its prizes carry up to double precision (an ETH prize can have eighteen), and
+ * a float carry never prints as `1058.0688491299998`.
  *
  * @param {readonly Puzzle[]} puzzles - The puzzles to sum over.
  * @returns {Record<string, number>} Amounts per currency, in first-seen order.
