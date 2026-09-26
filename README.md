@@ -124,13 +124,13 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `mineshop`              | ethereum                            | A seed split between a video and a post  |
 | `satoshi-birthday-quiz` | bitcoin                             | Seven quiz answers hashed into a wallet  |
 | `book-quiz`             | bitcoin                             | A book quiz nobody won in time           |
-| `ktimesg`               | bitcoin                             | 80 hidden bits and a mempool race        |
+| `80-bit`                | bitcoin                             | 80 hidden bits and a mempool race        |
 | `wickex`                | bitcoin                             | Hex, Morse and a spectrogram passphrase  |
 | `picture-puzzle`        | bitcoin                             | Four pictures that spell a key database  |
 | `brave-new-world`       | bitcoin                             | A seed phrase hidden in a 2020 collage   |
 | `wealth-in-poetry`      | bitcoin                             | Seed words hidden in a 2019 Medium essay |
 
-Identifiers are `collection/name`. The ten singletons, `gsmg`, `bitaps`, `mineshop`, `movie-enigma`, `genesis`, `satoshi-birthday-quiz`, `book-quiz`, `picture-puzzle`, `brave-new-world` and `wealth-in-poetry`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
+Identifiers are `collection/name`. The eleven singletons, `gsmg`, `bitaps`, `mineshop`, `movie-enigma`, `genesis`, `80-bit`, `satoshi-birthday-quiz`, `book-quiz`, `picture-puzzle`, `brave-new-world` and `wealth-in-poetry`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
 ## 🤖 Agents
 

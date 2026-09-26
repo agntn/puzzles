@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { readdirSync } from "node:fs";
 import { describe, expect, expectTypeOf, it, vi } from "vite-plus/test";
+import { eightyBit, EightyBitCollection } from "../../src/collections/80-bit.ts";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
@@ -14,7 +15,6 @@ import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash-collision.ts";
 import { iAmABananaAmaa, IAmABananaAmaaCollection } from "../../src/collections/iamabananaamaa.ts";
-import { kTimesG, KTimesGCollection } from "../../src/collections/ktimesg.ts";
 import { LedgerDonjonCollection } from "../../src/collections/ledger-donjon.ts";
 import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MineshopCollection } from "../../src/collections/mineshop.ts";
@@ -66,6 +66,7 @@ import {
 import { prizeTotals } from "../../src/core/utils.ts";
 
 const concreteClasses = [
+  EightyBitCollection,
   ArweaveCollection,
   B1000Collection,
   BalletCollection,
@@ -79,7 +80,6 @@ const concreteClasses = [
   GsmgCollection,
   HashCollisionCollection,
   IAmABananaAmaaCollection,
-  KTimesGCollection,
   LedgerDonjonCollection,
   LuckyLurkerCollection,
   MineshopCollection,
@@ -478,11 +478,13 @@ describe("lazy collection registry", () => {
     ]);
     expect(teikhos.get(5)).toBeUndefined();
 
-    expect(["80-bit", "ktimesg/80-bit"].map((query) => kTimesG.get(query)?.id())).toEqual([
-      "ktimesg/80-bit",
-      "ktimesg/80-bit",
+    expect(eightyBit).toBeInstanceOf(SingletonCollection);
+    expect([undefined, "80-bit"].map((query) => eightyBit.get(query)?.id())).toEqual([
+      "80-bit",
+      "80-bit",
     ]);
-    expect(kTimesG.get(80 as never)).toBeUndefined();
+    expect(eightyBit.get("ktimesg/80-bit")).toBeUndefined();
+    expect(hasCollection("ktimesg")).toBe(false);
 
     expect(["gif", "iamabananaamaa/gif"].map((query) => iAmABananaAmaa.get(query)?.id())).toEqual([
       "iamabananaamaa/gif",

@@ -41,7 +41,6 @@ const renamedIds = [
   "hash_collision/ripemd160",
   "hash_collision/sha1",
   "hash_collision/sha256",
-  "ktimesg/80_bit",
   "ledger_donjon",
   "ledger_donjon/scissors_secret_sharing",
   "luckylurker/vault_1",
@@ -225,6 +224,10 @@ export default defineNuxtConfig({
     ),
     /** The Genesis puzzle's page before the collection became a singleton. */
     "/collections/genesis/block": { redirect: { to: "/collections/genesis", statusCode: 301 } },
+    /** kTimesG's challenge before it became the `80-bit` singleton: the collection page and both puzzle ids. */
+    "/collections/ktimesg": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
+    "/collections/ktimesg/80_bit": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
+    "/collections/ktimesg/80-bit": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
   },
   nitro: {
     preset: "cloudflare_module",

@@ -61,6 +61,7 @@ const root = path.resolve(import.meta.dirname, "..");
 const execFileAsync = promisify(execFile);
 
 const expectedCollections = [
+  "80-bit",
   "arweave",
   "b1000",
   "ballet",
@@ -74,7 +75,6 @@ const expectedCollections = [
   "gsmg",
   "hash-collision",
   "iamabananaamaa",
-  "ktimesg",
   "ledger-donjon",
   "luckylurker",
   "mineshop",

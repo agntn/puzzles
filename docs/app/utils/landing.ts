@@ -28,7 +28,7 @@ export const WALK: readonly string[] = [
   "satoshi-birthday-quiz",
   "book-quiz",
   "quizchain/1",
-  "ktimesg/80-bit",
+  "80-bit",
   "iamabananaamaa/gif",
   "wickex/youtube",
   "picture-puzzle",
@@ -743,8 +743,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     tool: 'quizchain/1\tsolved\t0.007 BTC\t16NLaozWwi4JSTRMnMfi3oCkBjXBWVFgYR\nchain: bitcoin  address kind: p2pkh\nhash160: 3ae1b60c6a83290db2e9c228413750d96be80116\npublic key: 028a941c0effd36b57654b9bf871817384f5bd06286cebe73096191bc3584acef3 (compressed)\nprivate key: L58cp8Ex3RsTsiKaaeodmu7SetzDzqQkzfX3bAtjdtmu4KbTpUzp (wif)\nentropy: 50611e63a52089bc14e38becb1ad8880be6ba8f4aff0e64223f3dbd740adc1b7 from https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/comment/ekaqb0l/ (SHA-256 of answer b) with the last three characters of the address appended)\nstarted: 2019-04-07 03:31:37\nsolved: 2019-04-07 05:39:30 (2h 7m)\ntransactions: 2\n\tfunding\t2019-04-07 03:31:37\t0.007 BTC\t808aaa64d0028a6033b2c11a8ab59bc67df2758f4560f15158879a61270da7bb\n\tclaim\t2019-04-07 05:39:30\t0.00672314 BTC\t5a99de28f54d3eee464878ddae0f12c865d4226a4572659cdba080fb568fa779\nclaim: https://blockstream.info/tx/5a99de28f54d3eee464878ddae0f12c865d4226a4572659cdba080fb568fa779\nhints: 6\n\tofficial\t-\tSolve this multiple choice question: a) Satoshi is CEO of Bitcoin and holds the Bitcoin patent. b) Satoshi is an anonymous cypherpunk and the first one to succed building private Internet cash.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\tconfirmation: https://web.archive.org/web/20230611083439/https://old.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/ (Wayback capture of the thread, post and comments)\n\tofficial\t-\tHint: The correct answer is b).\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\n\tofficial\t-\tAdd the last 3 digits of my favorite Bitcoin address to the text of alternative b). For example, if that address ends in "abc" take the string "Satoshi is an anonymous cypherpunk and the first one to succed building private Internet cash.abc".\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\tanswer: Satoshi is an anonymous cypherpunk and the first one to succed building private Internet cash.Pzd\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/comment/ekaqb0l/\n\tofficial\t-\tTake a SHA 256 hash of that and use it as entropy in the Ian Coleman BIP 39 tool. Find the private key in the first address of that wallet at the bottom.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\n\tofficial\t-\tGood luck finding my favorite Bitcoin address.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\tanswer: 1AndrewYangForPresident2o2o6zmPzd\tanswer source: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/comment/ekaqb0l/\n\tofficial\t-\tEdit: I messed up. This quiz as posted was not valid. Edited slightly to reflect correct wording of answer b).\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/\nexplorer: https://blockstream.info/address/16NLaozWwi4JSTRMnMfi3oCkBjXBWVFgYR\nsource: https://www.reddit.com/r/bitcoinpuzzles/comments/bacd6l/easy_7_mbtc_quizchain_experiment/',
   },
   {
-    id: "ktimesg/80-bit",
-    collection: "ktimesg",
+    id: "80-bit",
+    collection: "80-bit",
     chain: "bitcoin",
     status: "solved",
     address: "1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q",
@@ -768,7 +768,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q",
     source: "https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846",
     transactions: 3,
-    tool: "ktimesg/80-bit\tsolved\t0.005 BTC\t1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q\nchain: bitcoin  address kind: p2pkh\nhash160: 90b881be7044a596b0ac843d84ff31278ba92a12\npublic key: 03a61fc84b6429f07fc0edf25265ef7a0ced3cd9a0edea85e9f58b50b5d73f66e7 (compressed)\nprivate key: b40e7d34265ab9533a64622bd1a188fb8abb8829af545169abad49b46be5fe56 (hex)\nstarted: 2024-11-01 00:01:53\nsolved: 2024-11-02 00:37:21 (1d 35m)\nsolver: 14q4SoQwENXXzsVT3GMwDrDUGiW5QZeiDg\ntransactions: 3\n\tfunding\t2024-10-28 12:12:51\t0.0025 BTC\te4a2751bf7b936bd7661028799f083376a423aa05582a7f24225763bac43568b\n\tincrease\t2024-10-28 12:58:01\t0.0025 BTC\ta7d8b7f7a8ce7c2a79d9d166c2f96cbd5ff1d3223a707f9d29bf6d091fc5b2f9\n\tclaim\t2024-11-02 00:37:21\t0.00495 BTC\tdc8309f8b588e70c4f91f766108a9bbccd03839e846997cb93fe7dd08d162f36\nclaim: https://blockstream.info/tx/dc8309f8b588e70c4f91f766108a9bbccd03839e846997cb93fe7dd08d162f36\nhints: 3\n\tofficial\t2024-10-16\tThe Hamming length of the range will therefore be 80 contiguous bits, but they may start anywhere.\tsource: https://bitcointalk.org/index.php?topic=1306983.msg64639847#msg64639847\n\tofficial\t2024-11-01\tminKey = 0x659756abf6c17ca70e0000000000000000000140be6ddd93e441f8d4b4a85653b20b4cdcc5c748207a0daa16191d07a425d8080c276f9412472e0429e61bc355 maxKey = 0x659756abf6c17ca70fffffffffffffffffffff40be6ddd93e441f8d4b4a85653b20b4cdcc5c748207a0daa16191d07a425d8080c276f9412472e0429e61bc355\tsource: https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846\tanswer: assert shift == 361; elem = shift_inv * (public_key - min_elem); assert idlp_key == 0x2d56cbf370cbeef9e80a; private_key = min_key | (idlp_key << shift); assert private_key % secp256k1.N == 0xb40e7d34265ab9533a64622bd1a188fb8abb8829af545169abad49b46be5fe56\tanswer source: https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64695204\tanswer date: 2024-11-02\n\tofficial\t2024-11-01\tThe challenge involves correctly extracting pubkey from the raw TX, otherwise it's a no brainer.\tsource: https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846\nexplorer: https://blockstream.info/address/1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q\nsource: https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846",
+    tool: "80-bit\tsolved\t0.005 BTC\t1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q\nchain: bitcoin  address kind: p2pkh\nhash160: 90b881be7044a596b0ac843d84ff31278ba92a12\npublic key: 03a61fc84b6429f07fc0edf25265ef7a0ced3cd9a0edea85e9f58b50b5d73f66e7 (compressed)\nprivate key: b40e7d34265ab9533a64622bd1a188fb8abb8829af545169abad49b46be5fe56 (hex)\nstarted: 2024-11-01 00:01:53\nsolved: 2024-11-02 00:37:21 (1d 35m)\nsolver: 14q4SoQwENXXzsVT3GMwDrDUGiW5QZeiDg\ntransactions: 3\n\tfunding\t2024-10-28 12:12:51\t0.0025 BTC\te4a2751bf7b936bd7661028799f083376a423aa05582a7f24225763bac43568b\n\tincrease\t2024-10-28 12:58:01\t0.0025 BTC\ta7d8b7f7a8ce7c2a79d9d166c2f96cbd5ff1d3223a707f9d29bf6d091fc5b2f9\n\tclaim\t2024-11-02 00:37:21\t0.00495 BTC\tdc8309f8b588e70c4f91f766108a9bbccd03839e846997cb93fe7dd08d162f36\nclaim: https://blockstream.info/tx/dc8309f8b588e70c4f91f766108a9bbccd03839e846997cb93fe7dd08d162f36\nhints: 3\n\tofficial\t2024-10-16\tThe Hamming length of the range will therefore be 80 contiguous bits, but they may start anywhere.\tsource: https://bitcointalk.org/index.php?topic=1306983.msg64639847#msg64639847\n\tofficial\t2024-11-01\tminKey = 0x659756abf6c17ca70e0000000000000000000140be6ddd93e441f8d4b4a85653b20b4cdcc5c748207a0daa16191d07a425d8080c276f9412472e0429e61bc355 maxKey = 0x659756abf6c17ca70fffffffffffffffffffff40be6ddd93e441f8d4b4a85653b20b4cdcc5c748207a0daa16191d07a425d8080c276f9412472e0429e61bc355\tsource: https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846\tanswer: assert shift == 361; elem = shift_inv * (public_key - min_elem); assert idlp_key == 0x2d56cbf370cbeef9e80a; private_key = min_key | (idlp_key << shift); assert private_key % secp256k1.N == 0xb40e7d34265ab9533a64622bd1a188fb8abb8829af545169abad49b46be5fe56\tanswer source: https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64695204\tanswer date: 2024-11-02\n\tofficial\t2024-11-01\tThe challenge involves correctly extracting pubkey from the raw TX, otherwise it's a no brainer.\tsource: https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846\nexplorer: https://blockstream.info/address/1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q\nsource: https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846",
   },
   {
     id: "iamabananaamaa/gif",
@@ -975,7 +975,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "4b002ec3c09f",
+  dataVersion: "d7b281e58784",
   total: 374,
   solved: 162,
   unsolved: 101,
@@ -989,10 +989,10 @@ export const STATS_STATIC = {
     BTC: 909.10625212,
   },
   totalPrize: {
+    BTC: 1064.4910923,
     AR: 5550,
     ETH: 26.246241554256944,
     DAI: 100,
-    BTC: 1064.4910923,
     BCH: 5.1,
     LTC: 230.8255,
     DCR: 460,
@@ -1001,6 +1001,26 @@ export const STATS_STATIC = {
 
 /** collectionFacts() for every collection: the numbers in the landing rows and the registry panel. */
 export const FACTS_STATIC: readonly CollectionFactsData[] = [
+  {
+    key: "80-bit",
+    author: "kTimesG",
+    authorKey: "ktimesg",
+    authorUrl: "https://bitcointalk.org/index.php?action=profile;u=3610370",
+    total: 1,
+    statuses: {
+      solved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.005,
+    },
+    unsolvedPrize: {},
+    withPubkey: 1,
+    withKey: 1,
+    firstStarted: "2024-11-01 00:01:53",
+    lastStarted: "2024-11-01 00:01:53",
+    hints: [],
+  },
   {
     key: "arweave",
     author: "Tiamat",
@@ -1304,26 +1324,6 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 2,
     firstStarted: "2013-12-22 22:35:39",
     lastStarted: "2013-12-23 04:53:59",
-    hints: [],
-  },
-  {
-    key: "ktimesg",
-    author: "kTimesG",
-    authorKey: "ktimesg",
-    authorUrl: "https://bitcointalk.org/index.php?action=profile;u=3610370",
-    total: 1,
-    statuses: {
-      solved: 1,
-    },
-    chains: ["bitcoin"],
-    prize: {
-      BTC: 0.005,
-    },
-    unsolvedPrize: {},
-    withPubkey: 1,
-    withKey: 1,
-    firstStarted: "2024-11-01 00:01:53",
-    lastStarted: "2024-11-01 00:01:53",
     hints: [],
   },
   {
@@ -1639,6 +1639,16 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
 /** authorRows() for every author: the dossier card on the landing before the collections load. */
 export const AUTHORS_STATIC: readonly AuthorRow[] = [
   {
+    key: "ktimesg",
+    to: "/authors/ktimesg",
+    name: "kTimesG",
+    kind: "person",
+    about:
+      "Writes on Bitcointalk about cracking Bitcoin keys. In 2024 offered 0.005 BTC to whoever cracked a key with 80 unknown bits before its transaction confirmed. Someone did, 39 minutes in.",
+    collections: ["80-bit"],
+    puzzles: 1,
+  },
+  {
     key: "tiamat",
     to: "/authors/tiamat",
     name: "Tiamat",
@@ -1767,16 +1777,6 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Started r/bitcoinpuzzles in December 2013 and put a puzzle up the same evening: a GIF with 1 mBTC inside. Marked it easy. Took that back within the hour.",
     collections: ["iamabananaamaa"],
     puzzles: 2,
-  },
-  {
-    key: "ktimesg",
-    to: "/authors/ktimesg",
-    name: "kTimesG",
-    kind: "person",
-    about:
-      "Writes on Bitcointalk about cracking Bitcoin keys. In 2024 offered 0.005 BTC to whoever cracked a key with 80 unknown bits before its transaction confirmed. Someone did, 39 minutes in.",
-    collections: ["ktimesg"],
-    puzzles: 1,
   },
   {
     key: "ledger-donjon",

@@ -1,15 +1,19 @@
+import { SingletonCollection } from "../core/collection.ts";
 import {
   answer,
   claim,
   compressed,
+  fact,
   funding,
   hex,
   increase,
   official,
   p2pkh,
   party,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+  PartyKind,
+  profile,
+} from "../core/parts.ts";
+import { bitcoinPuzzle, Status } from "../core/puzzle.ts";
 
 /** The announcement. Rules two weeks early, with a made-up range as the example. */
 const ANNOUNCEMENT = "https://bitcointalk.org/index.php?topic=1306983.msg64639847#msg64639847";
@@ -17,12 +21,12 @@ const ANNOUNCEMENT = "https://bitcointalk.org/index.php?topic=1306983.msg6463984
 /** The post with the address, the real range and the SHA-256 of the solve steps. */
 const RANGE = "https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64691846";
 
-/** The post with the solve steps, after the claim. */
+/** The post with the solve steps after the claim, where kTimesG looked back on it. */
 const STEPS = "https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64695204";
 
 /** 80 unknown bits in a 511-bit key, public key only in a pending spend. Taken 39 minutes in. */
 export const kTimesG80Bit = bitcoinPuzzle({
-  id: "ktimesg/80-bit",
+  id: "80-bit",
   address: p2pkh("1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q", "90b881be7044a596b0ac843d84ff31278ba92a12"),
   sourceUrl: RANGE,
   startedAt: "2024-11-01 00:01:53",
@@ -78,3 +82,43 @@ export const kTimesG80Bit = bitcoinPuzzle({
   ],
   solver: party(undefined, { addresses: ["14q4SoQwENXXzsVT3GMwDrDUGiW5QZeiDg"] }),
 });
+
+/** kTimesG's 80-bit key cracking challenge from Bitcointalk. */
+export class EightyBitCollection extends SingletonCollection {
+  /** Stable collection key used in puzzle identifiers. */
+  static readonly key = "80-bit";
+
+  /** Who published the puzzles. */
+  static readonly author = party("kTimesG", {
+    key: "ktimesg",
+    kind: PartyKind.Person,
+    about:
+      "Writes on Bitcointalk about cracking Bitcoin keys. In 2024 offered 0.005 BTC to whoever cracked a key with 80 unknown bits before its transaction confirmed. Someone did, 39 minutes in.",
+    profiles: [
+      profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=3610370"),
+    ],
+    facts: [
+      fact(
+        "Announced the 80-bit challenge two weeks early. Only asked the winner to say how they broke the key.",
+        ANNOUNCEMENT,
+        { date: "2024-10-16" },
+      ),
+      fact(
+        "Was disappointed it took 39 minutes to replace the spend. With a real 80-bit puzzle, nobody gets 40.",
+        STEPS,
+        { date: "2024-11-02" },
+      ),
+    ],
+  });
+
+  /** Every puzzle in this collection. */
+  static readonly puzzles = [kTimesG80Bit];
+
+  /** Builds the canonical collection. */
+  constructor() {
+    super(EightyBitCollection.key, EightyBitCollection.author, EightyBitCollection.puzzles);
+  }
+}
+
+/** Canonical collection instance. */
+export const eightyBit = new EightyBitCollection();

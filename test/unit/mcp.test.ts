@@ -100,7 +100,7 @@ describe("puzzles MCP server", () => {
     const missing = await client.callTool({ name: "puzzles_author", arguments: { key: "nobody" } });
     expect(missing.isError).toBe(true);
     expect(firstText(missing)).toMatch(
-      /^puzzles_author failed: Unknown author: nobody\. Known authors: tiamat, /u,
+      /^puzzles_author failed: Unknown author: nobody\. Known authors: ktimesg, tiamat, /u,
     );
   });
 

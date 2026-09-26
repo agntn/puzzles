@@ -5,6 +5,7 @@
  * `getCollection("b1000")` knows the query type of the collection it loads.
  */
 export const builtins = [
+  { key: "80-bit", load: () => import("./80-bit.ts").then((m) => m.eightyBit) },
   { key: "arweave", load: () => import("./arweave.ts").then((m) => m.arweave) },
   { key: "b1000", load: () => import("./b1000.ts").then((m) => m.b1000) },
   { key: "ballet", load: () => import("./ballet.ts").then((m) => m.ballet) },
@@ -24,7 +25,6 @@ export const builtins = [
     key: "iamabananaamaa",
     load: () => import("./iamabananaamaa.ts").then((m) => m.iAmABananaAmaa),
   },
-  { key: "ktimesg", load: () => import("./ktimesg.ts").then((m) => m.kTimesG) },
   { key: "ledger-donjon", load: () => import("./ledger-donjon.ts").then((m) => m.ledgerDonjon) },
   { key: "luckylurker", load: () => import("./luckylurker.ts").then((m) => m.luckyLurker) },
   { key: "mineshop", load: () => import("./mineshop.ts").then((m) => m.mineshop) },
