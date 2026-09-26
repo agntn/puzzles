@@ -5,6 +5,7 @@ const route = useRoute();
 const links = [
   { label: "Docs", to: "/guide", areas: ["/guide", "/collections", "/authors", "/solvers"] },
   { label: "Playground", to: "/playground", areas: ["/playground"] },
+  { label: "Changelog", to: "/changelog", areas: ["/changelog"] },
 ] as const;
 
 /**
