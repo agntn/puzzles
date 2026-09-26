@@ -1,10 +1,10 @@
-import { NamedCollection } from "../core/collection.ts";
+import { SingletonCollection } from "../core/collection.ts";
 import { confirmation, fact, funding, increase, official, p2wsh, party } from "../core/parts.ts";
 import { bitcoinPuzzle } from "../core/puzzle.ts";
 
 /** The Genesis block puzzle announced through Bitcoin OP_RETURN messages. */
 export const genesisBlock = bitcoinPuzzle({
-  id: "genesis/block",
+  id: "genesis",
   address: p2wsh("bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj"),
   sourceUrl:
     "https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
@@ -198,7 +198,7 @@ export const genesisBlock = bitcoinPuzzle({
 });
 
 /** An anonymous author's puzzle based on data in Bitcoin's Genesis block. */
-export class GenesisCollection extends NamedCollection {
+export class GenesisCollection extends SingletonCollection {
   /** Stable collection key used in puzzle identifiers. */
   static readonly key = "genesis";
 

@@ -216,12 +216,16 @@ export default defineNuxtConfig({
   mcp: {
     enabled: false,
   },
-  routeRules: Object.fromEntries(
-    renamedIds.map((id) => [
-      `/collections/${id}`,
-      { redirect: { to: `/collections/${id.replaceAll("_", "-")}`, statusCode: 301 } },
-    ]),
-  ),
+  routeRules: {
+    ...Object.fromEntries(
+      renamedIds.map((id) => [
+        `/collections/${id}`,
+        { redirect: { to: `/collections/${id.replaceAll("_", "-")}`, statusCode: 301 } },
+      ]),
+    ),
+    /** The Genesis puzzle's page before the collection became a singleton. */
+    "/collections/genesis/block": { redirect: { to: "/collections/genesis", statusCode: 301 } },
+  },
   nitro: {
     preset: "cloudflare_module",
     compatibilityDate: "2026-09-03",
