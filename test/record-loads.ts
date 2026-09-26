@@ -1,3 +1,4 @@
+import { writeFileSync } from "node:fs";
 import { registerHooks } from "node:module";
 
 /** One module Node loaded, with its source when it sits under the recorded root. */
@@ -42,8 +43,14 @@ registerHooks({
   },
 });
 
-if (process.env["PUZZLES_REPORT_LOADS"] !== undefined) {
+/*
+ * `PUZZLES_REPORT_LOADS` names the file that receives every loaded URL as a JSON array on exit.
+ * A file, not stderr: a write in an `exit` handler keeps only what fits the pipe's buffer, and the
+ * list grows with the checkout path and the dependency count.
+ */
+const report = process.env["PUZZLES_REPORT_LOADS"];
+if (report !== undefined) {
   process.on("exit", () => {
-    process.stderr.write(`\n@loaded ${JSON.stringify(loaded.map((module) => module.url))}\n`);
+    writeFileSync(report, JSON.stringify(loaded.map((module) => module.url)));
   });
 }
