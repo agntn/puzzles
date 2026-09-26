@@ -163,6 +163,7 @@ export const facts = {
       promptGuidelines: [
         "This call reaches a public block explorer.",
         "Ethereum needs an Etherscan key through apiKey or ETHERSCAN_API_KEY.",
+        "It counts the chain's own coin, so a prize paid in a token such as DAI is not in it.",
       ],
       openWorld: true,
     },
@@ -561,6 +562,7 @@ export async function verifyTool(id: string): Promise<ToolResult> {
 export async function balanceTool(id: string, apiKey?: string): Promise<ToolResult> {
   const {
     dataset: { requirePuzzle },
+    utils: { formatBalance },
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const key =
@@ -569,7 +571,7 @@ export async function balanceTool(id: string, apiKey?: string): Promise<ToolResu
   const balance = await puzzle.balance({
     apiKey: key ?? (variable === undefined ? undefined : globalThis.process?.env[variable]),
   });
-  return text(`${puzzle.id()}: ${balance.totalAmount()} on ${balance.chain}`, {
+  return text(`${puzzle.id()}: ${formatBalance(balance)}`, {
     id: puzzle.id(),
     chain: balance.chain,
     confirmed: balance.confirmed.toString(),

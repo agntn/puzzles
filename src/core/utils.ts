@@ -1,5 +1,5 @@
 import type { AuthorEntry, SolverEntry } from "./dataset.ts";
-import { type Chain, chains, parseChain, sameAddress } from "./chains.ts";
+import { type Chain, chains, chainSymbol, parseChain, sameAddress } from "./chains.ts";
 import type { CollectionSummary, Stats } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
 import {
@@ -20,6 +20,7 @@ import {
   type Wif,
 } from "./parts.ts";
 import { type AssetLink, type Puzzle, Status } from "./puzzle.ts";
+import type { Balance } from "./types.ts";
 
 /**
  * Serializes a value as JSON, rendering `bigint` balances as decimal strings.
@@ -48,6 +49,17 @@ const amounts = new Intl.NumberFormat("en-US", { maximumFractionDigits: 20, useG
  */
 export function formatPrize(prize: number | undefined, currency: string): string {
   return prize === undefined ? "-" : `${amounts.format(prize)} ${currency}`;
+}
+
+/**
+ * Formats a balance with the chain's native symbol, `7.100226 BTC`. The symbol says which coin it
+ * counts, because a prize in another currency (`100 DAI`) is not part of it.
+ *
+ * @param {Balance} balance - The balance to format.
+ * @returns {string} Every digit of the total and the native symbol.
+ */
+export function formatBalance(balance: Balance): string {
+  return `${balance.totalAmount()} ${chainSymbol(balance.chain)}`;
 }
 
 /**
