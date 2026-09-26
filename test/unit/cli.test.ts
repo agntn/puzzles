@@ -71,8 +71,8 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "--json",
     );
 
-    expect(result.total).toBe(363);
-    expect(result.unsolved).toBe(95);
+    expect(result.total).toBe(368);
+    expect(result.unsolved).toBe(99);
   });
 
   it("shows a puzzle by universal identifier", async () => {
@@ -319,6 +319,11 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "arweave/weave11",
       "arweave/weave13",
       "mineshop",
+      "teikhos/0",
+      "teikhos/1",
+      "teikhos/2",
+      "teikhos/3",
+      "teikhos/4",
       "zden/xixoio",
       "zden/codex_protocol",
     ]);
@@ -417,13 +422,13 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "--json",
     );
 
-    expect(result).toHaveLength(25);
+    expect(result).toHaveLength(26);
     expect(result.map((entry) => entry.key)).toContain("hash_collision");
   });
 
   it("lists authors and shows one, by author key or collection key", async () => {
     const rows = (await puzzles("authors")).split("\n");
-    expect(rows).toHaveLength(23);
+    expect(rows).toHaveLength(24);
     expect(rows).toContain("zden: Zden (person), 1 collection: zden, 16 puzzles");
 
     const record = (await puzzles("authors", "warp")).split("\n");
@@ -487,7 +492,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(25);
+    expect(result.collections).toHaveLength(26);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 

@@ -65,7 +65,7 @@ const sources = [
     date: "2026-05-31",
   },
   {
-    file: "dug/0xflorent-2026-06-21",
+    file: "teikhos/0xflorent-2026-06-21",
     tweet: "2068735759889145906",
     author: "0xFlorent_",
     date: "2026-06-21",

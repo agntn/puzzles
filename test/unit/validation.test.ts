@@ -30,6 +30,7 @@ import {
 import { bitcoinPuzzle, type Puzzle, Status } from "../../src/core/puzzle.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
+import { TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { NamedCollection } from "../../src/core/collection.ts";
 import { all, collections, verify } from "../../src/index.ts";
 import { decryptBip38, isBip38 } from "../support/bip38.ts";
@@ -125,6 +126,8 @@ function claimedPubkeyProblem(puzzle: Puzzle): string | undefined {
   if (
     puzzle.status() === Status.Unsolved ||
     puzzle.collection() === ArweaveCollection.key ||
+    // A TeikhosBounty address is a contract: it pays by self-destructing and never signs.
+    puzzle.collection() === TeikhosCollection.key ||
     puzzle.address().kind === AddressKind.P2SH
   ) {
     return undefined;

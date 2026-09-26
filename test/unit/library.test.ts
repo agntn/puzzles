@@ -23,6 +23,7 @@ import { PicturePuzzleCollection } from "../../src/collections/picture_puzzle.ts
 import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi_birthday_quiz.ts";
+import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
 import { wickex, WickexCollection } from "../../src/collections/wickex.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
@@ -84,6 +85,7 @@ const concreteClasses = [
   QuizchainCollection,
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
+  TeikhosCollection,
   WarpCollection,
   WickexCollection,
   ZdenCollection,
@@ -441,6 +443,31 @@ describe("lazy collection registry", () => {
     ]);
     expect(mini.get(135)).toBeUndefined();
 
+    /* Numbered in deployment order from 0, the first contract, which cannot pay. */
+    expect([4, "4", "teikhos/4"].map((query) => teikhos.get(query)?.id())).toEqual([
+      "teikhos/4",
+      "teikhos/4",
+      "teikhos/4",
+    ]);
+    expect([0, "0", "teikhos/0"].map((query) => teikhos.get(query)?.id())).toEqual([
+      "teikhos/0",
+      "teikhos/0",
+      "teikhos/0",
+    ]);
+    expect(["00", "04", "teikhos/00"].map((query) => teikhos.get(query))).toEqual([
+      undefined,
+      undefined,
+      undefined,
+    ]);
+    expect(teikhos.all().map((puzzle) => [puzzle.address().value, puzzle.status()])).toEqual([
+      ["0xaec7e8c221c3fd24e75c996e32289235fd899ebf", Status.Unsolved],
+      ["0x17e5e0910b9185b0ede564dcbf074ca910ad56a4", Status.Unsolved],
+      ["0xd7c6d542f3dcdceda845112b8fd567b8f8655805", Status.Unsolved],
+      ["0x973c2178b09225d1de3ab037d40b3f24af696255", Status.Unsolved],
+      ["0x735ba26f91e1275fa4b504649b19ef74739fe7e7", Status.Solved],
+    ]);
+    expect(teikhos.get(5)).toBeUndefined();
+
     expect(["80_bit", "ktimesg/80_bit"].map((query) => kTimesG.get(query)?.id())).toEqual([
       "ktimesg/80_bit",
       "ktimesg/80_bit",
@@ -781,18 +808,18 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(363);
+    expect(await all()).toHaveLength(368);
     expect(await stats()).toEqual({
-      total: 363,
+      total: 368,
       claimed: 12,
       expired: 3,
-      solved: 157,
+      solved: 158,
       swept: 96,
-      unsolved: 95,
+      unsolved: 99,
       with_pubkey: 263,
       total_prize: {
         AR: 5550,
-        ETH: 22.74624155,
+        ETH: 26.24624155,
         DAI: 100,
         BTC: 1064.23058961,
         BCH: 3.75,
@@ -801,7 +828,7 @@ describe("lazy collection registry", () => {
       },
       unsolved_prize: {
         AR: 1900,
-        ETH: 9.61254155,
+        ETH: 12.61254155,
         BTC: 908.87574943,
       },
     });
@@ -828,7 +855,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(363);
+    ).toBe(368);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -855,6 +882,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(157);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(158);
   });
 });
