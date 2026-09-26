@@ -18,7 +18,7 @@ The dataset grows, so this skill does not list what is in it. Ask the tools. The
 4. **Checks.** `puzzles_verify` derives the address from the recorded key material, locally. `puzzles_balance` is the only call that reaches the network.
 5. **Who.** `puzzles_authors` and `puzzles_author` for who published a collection and what public pages say about them. `puzzles_solvers` and `puzzles_solver` for who took a prize and what else they solved; `puzzles_solver` also takes a puzzle identifier, so `b1000/135` answers with its solver.
 
-No tools in this harness? The CLI prints the same answers: `puzzles collections`, `puzzles list`, `puzzles show <id> --json`, `puzzles hints <id>`, `puzzles stages <id>`, `puzzles verify <id>`, `puzzles balance <id>`, `puzzles authors [key]`, `puzzles solvers [key]`. Run it without installing through `pnpm dlx @agntn/puzzles <command>`, or expose the tools with `puzzles mcp`.
+No tools in this harness? The CLI prints the same answers: `puzzles collections`, `puzzles list`, `puzzles show <id>`, `puzzles hints <id>`, `puzzles stages <id>`, `puzzles verify <id>`, `puzzles balance <id>`, `puzzles authors [key]`, `puzzles solvers [key]`. Run it without installing through `pnpm dlx @agntn/puzzles <command>`, or expose the tools with `puzzles mcp`.
 
 ## Identifiers
 

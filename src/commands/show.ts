@@ -1,7 +1,8 @@
 import { defineCommand } from "citty";
 import { jsonArg, printLine } from "./output.ts";
 import { requirePuzzle } from "../core/dataset.ts";
-import { formatPuzzle, toJson } from "../core/utils.ts";
+import { requireCollection } from "../core/registry.ts";
+import { formatPuzzleRecord, toJson } from "../core/utils.ts";
 
 export default defineCommand({
   meta: {
@@ -14,6 +15,11 @@ export default defineCommand({
   },
   async run({ args }) {
     const puzzle = await requirePuzzle(args.id ?? "");
-    printLine(args.json ? toJson(puzzle) : formatPuzzle(puzzle));
+    if (args.json) {
+      printLine(toJson(puzzle));
+      return;
+    }
+    const collection = await requireCollection(puzzle.collection());
+    printLine(formatPuzzleRecord(puzzle, collection.hints));
   },
 });
