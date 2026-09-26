@@ -6,6 +6,7 @@ import { bitimage } from "../../src/collections/bitimage.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
   BitcoinPuzzle,
+  bitcoinCashPuzzle,
   bitcoinPuzzle,
   compressed,
   decredPuzzle,
@@ -171,6 +172,25 @@ describe("Collection.verify", () => {
       verified: true,
       derivedAddress: "LTVsBSEBS8oCBdpE7b6SwwrguZzMUnjsWr",
     });
+  });
+
+  it("derives a Bitcoin Cash key into CashAddr and reads its WIF the way Bitcoin writes it", async () => {
+    /* Puzzle #130's key; the BCH side of its address is where RetiredCoder's mini-puzzle sat. */
+    const key = "000000000000000000000000000000033e7665705359f04f28b88cf897c603c9";
+    const address = p2pkh("bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez");
+
+    for (const material of [
+      hex(key, 130),
+      wif("KwDiBf89QgGbjEhKnhXJuH8DvUBxVmJ3761ahfZuohBr53Zh9M3t"),
+    ]) {
+      expect(
+        await verify(bitcoinCashPuzzle({ ...synthetic, address, key: material })),
+      ).toMatchObject({
+        verified: true,
+        derivedAddress: "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez",
+        privateKey: key,
+      });
+    }
   });
 
   it("derives the address at a seed's path", async () => {

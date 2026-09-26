@@ -11,3 +11,4 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - "@agntn/chains@0.3.6"
+  - "@agntn/explorers@0.5.7"

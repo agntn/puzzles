@@ -1,6 +1,7 @@
 import {
   Arweave,
   Bitcoin,
+  BitcoinCash,
   type ChainKey,
   Decred,
   Ethereum,
@@ -17,6 +18,7 @@ import {
 export const Chain = {
   Arweave: "arweave",
   Bitcoin: "bitcoin",
+  BitcoinCash: "bitcoincash",
   Decred: "decred",
   Ethereum: "ethereum",
   Litecoin: "litecoin",
@@ -33,6 +35,7 @@ export const chains = Object.freeze(Object.values(Chain));
 const metadata = Object.freeze({
   arweave: new Arweave(),
   bitcoin: new Bitcoin(),
+  bitcoincash: new BitcoinCash(),
   decred: new Decred(),
   ethereum: new Ethereum(),
   litecoin: new Litecoin(),
@@ -165,15 +168,16 @@ const bech32Prefixes: Readonly<Partial<Record<Chain, readonly string[]>>> = Obje
 /**
  * Whether a chain writes this address in a case that carries no meaning. Ethereum hex is one
  * such case: EIP-55 spends letter case on a checksum, so the same address travels lowercased,
- * uppercased and mixed. Bech32 is defined in either case too. Base58 and base64url are not:
- * there a different case is a different string, and the checksum would reject it anyway.
+ * uppercased and mixed. Bech32 and Bitcoin Cash's CashAddr are defined in either case too.
+ * Base58 and base64url are not: there a different case is a different string, and the checksum
+ * would reject it anyway.
  *
  * @param {Chain} chain - Chain the address lives on.
  * @param {string} address - The address to weigh.
  * @returns {boolean} `true` when letter case does not distinguish two addresses.
  */
 function caseFolds(chain: Chain, address: string): boolean {
-  if (chain === Chain.Ethereum) {
+  if (chain === Chain.Ethereum || chain === Chain.BitcoinCash) {
     return true;
   }
   const prefixes = bech32Prefixes[chain];

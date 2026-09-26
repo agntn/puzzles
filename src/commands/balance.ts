@@ -2,7 +2,7 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { defineCommand } from "citty";
 import { filterArgs, filterQuery, hasFilter } from "./filters.ts";
 import { jsonArg, oneLine, printLine } from "./output.ts";
-import { BalanceError, type BalanceOptions } from "../core/balance.ts";
+import { apiKeyVariables, BalanceError, type BalanceOptions } from "../core/balance.ts";
 import { chainSymbol } from "../core/chains.ts";
 import { requirePuzzle, selectPuzzles } from "../core/dataset.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
@@ -44,17 +44,30 @@ function jsonRow(row: Row): object {
 }
 
 /**
+ * Lookup options for one puzzle. `--api-key` goes to every chain; without it a chain gets the key
+ * of its own variable, so an Etherscan key never reaches Blockchair.
+ *
+ * @param {Puzzle} puzzle - The puzzle to look up.
+ * @param {string | undefined} apiKey - The `--api-key` value, when given.
+ * @returns {BalanceOptions} The options for its lookup.
+ */
+function optionsFor(puzzle: Puzzle, apiKey: string | undefined): BalanceOptions {
+  const variable = apiKeyVariables[puzzle.chain()];
+  return { apiKey: apiKey ?? (variable === undefined ? undefined : process.env[variable]) };
+}
+
+/**
  * Looks the puzzles up one after another. A refused or failed lookup becomes a row of its own
  * instead of ending the pass; any other error still does, because it is not the provider's.
  *
  * @param {readonly Puzzle[]} puzzles - The puzzles the filters picked.
- * @param {BalanceOptions} options - Lookup options.
+ * @param {string | undefined} apiKey - The `--api-key` value, when given.
  * @param {(row: Row) => void} report - Called with each row as soon as it is known.
  * @returns {Promise<readonly Row[]>} Every row, in the order of the puzzles.
  */
 async function lookUp(
   puzzles: readonly Puzzle[],
-  options: BalanceOptions,
+  apiKey: string | undefined,
   report: (row: Row) => void,
 ): Promise<readonly Row[]> {
   const rows: Row[] = [];
@@ -64,7 +77,7 @@ async function lookUp(
     }
     let row: Row;
     try {
-      row = { puzzle, balance: await puzzle.balance(options) };
+      row = { puzzle, balance: await puzzle.balance(optionsFor(puzzle, apiKey)) };
     } catch (error) {
       if (!(error instanceof BalanceError)) {
         throw error;
@@ -88,19 +101,20 @@ export default defineCommand({
     ...filterArgs,
     "api-key": {
       type: "string",
-      description: "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY",
+      description:
+        "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY, Bitcoin Cash to BLOCKCHAIR_API_KEY",
     },
     ...jsonArg,
   },
   async run({ args }) {
-    const options = { apiKey: args["api-key"] ?? process.env["ETHERSCAN_API_KEY"] };
+    const apiKey = args["api-key"];
     const filtered = hasFilter(args);
     if (args.id !== undefined && filtered) {
       throw new InvalidArgumentError("id", "pass a puzzle identifier or filters, not both");
     }
     if (args.id !== undefined) {
       const puzzle = await requirePuzzle(args.id);
-      const balance = await puzzle.balance(options);
+      const balance = await puzzle.balance(optionsFor(puzzle, apiKey));
       printLine(args.json ? toJson(balance) : `${puzzle.id()}: ${amount(balance)}`);
       return;
     }
@@ -108,7 +122,7 @@ export default defineCommand({
       throw new InvalidArgumentError("id", "pass a puzzle identifier or a filter such as --status");
     }
     const puzzles = await selectPuzzles(filterQuery(args));
-    const rows = await lookUp(puzzles, options, (row) => {
+    const rows = await lookUp(puzzles, apiKey, (row) => {
       if (!args.json) {
         printLine(formatRow(row));
       }

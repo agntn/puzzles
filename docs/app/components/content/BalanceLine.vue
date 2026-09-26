@@ -7,6 +7,7 @@ const { state } = useBalance(() => props.id);
 
 const PROVIDERS: Readonly<Record<string, string>> = {
   bitcoin: "mempool.space",
+  bitcoincash: "blockchair.com",
   litecoin: "litecoinspace.org",
   ethereum: "etherscan.io",
   decred: "dcrdata.decred.org",

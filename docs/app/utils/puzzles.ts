@@ -225,6 +225,7 @@ export function collectionEntry(key: string): CollectionEntry | undefined {
 export const CHAIN_ICONS: Readonly<Record<string, string>> = {
   arweave: "i-token-ar",
   bitcoin: "i-token-btc",
+  bitcoincash: "i-token-bch",
   decred: "i-token-dcr",
   ethereum: "i-token-eth",
   litecoin: "i-token-ltc",

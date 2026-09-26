@@ -1,3 +1,4 @@
+import { apiKeyVariables } from "./core/balance.ts";
 import type { Chain } from "./core/chains.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/status.ts";
@@ -208,14 +209,15 @@ export const facts = {
     },
     apiKey: {
       maxLength: 200,
-      description: "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY",
+      description:
+        "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY, Bitcoin Cash to BLOCKCHAIR_API_KEY",
     },
   },
   /**
    * Spelled out rather than imported, because `core/chains.ts` pulls in `@agntn/chains` and tool
    * discovery loads this table. `test/unit/tool-schemas.test.ts` pins the list to the library's.
    */
-  chains: ["arweave", "bitcoin", "decred", "ethereum", "litecoin", "monero"],
+  chains: ["arweave", "bitcoin", "bitcoincash", "decred", "ethereum", "litecoin", "monero"],
   statuses: Object.values(Status),
 } as const satisfies {
   tools: Record<string, ToolFacts>;
@@ -563,8 +565,9 @@ export async function balanceTool(id: string, apiKey?: string): Promise<ToolResu
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const key =
     apiKey === undefined ? undefined : assertLength("apiKey", apiKey, facts.parameters.apiKey);
+  const variable = apiKeyVariables[puzzle.chain()];
   const balance = await puzzle.balance({
-    apiKey: key ?? globalThis.process?.env["ETHERSCAN_API_KEY"],
+    apiKey: key ?? (variable === undefined ? undefined : globalThis.process?.env[variable]),
   });
   return text(`${puzzle.id()}: ${balance.totalAmount()} on ${balance.chain}`, {
     id: puzzle.id(),

@@ -10,7 +10,18 @@ export interface BalanceOptions {
   readonly timeout?: number | undefined;
 }
 
+import type { Chain } from "./chains.ts";
 import { PuzzlesError } from "./errors.ts";
+
+/**
+ * The environment variable the CLI and the agent tools take a chain's provider key from when none
+ * is passed. They read it themselves instead of leaving it to the provider, so the key travels as
+ * `apiKey`, the one value every balance error redacts.
+ */
+export const apiKeyVariables: Readonly<Partial<Record<Chain, string>>> = Object.freeze({
+  bitcoincash: "BLOCKCHAIR_API_KEY",
+  ethereum: "ETHERSCAN_API_KEY",
+});
 
 /** Base error for balance lookups. */
 export class BalanceError extends PuzzlesError {

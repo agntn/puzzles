@@ -4,6 +4,7 @@ import {
   arweavePuzzle,
   assets,
   BitcoinPuzzle,
+  bitcoinCashPuzzle,
   bitcoinPuzzle,
   Chain,
   claim,
@@ -38,6 +39,7 @@ const required = {
 const factories = [
   [Chain.Arweave, arweavePuzzle],
   [Chain.Bitcoin, bitcoinPuzzle],
+  [Chain.BitcoinCash, bitcoinCashPuzzle],
   [Chain.Decred, decredPuzzle],
   [Chain.Ethereum, ethereumPuzzle],
   [Chain.Litecoin, litecoinPuzzle],

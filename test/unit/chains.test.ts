@@ -20,6 +20,7 @@ describe("chain metadata", () => {
     ).toEqual([
       ["arweave", "AR", "Arweave", 12],
       ["bitcoin", "BTC", "Bitcoin", 8],
+      ["bitcoincash", "BCH", "Bitcoin Cash", 8],
       ["decred", "DCR", "Decred", 8],
       ["ethereum", "ETH", "Ethereum", 18],
       ["litecoin", "LTC", "Litecoin", 8],
@@ -57,6 +58,11 @@ describe("chain metadata", () => {
     expect(isValidAddress(Chain.Bitcoin, "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh")).toBe(true);
     expect(isValidAddress(Chain.Bitcoin, "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")).toBe(false);
     expect(isValidAddress(Chain.Ethereum, "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")).toBe(true);
+    /* Bitcoin Cash takes CashAddr; the base58 spelling of the same hash is Bitcoin's. */
+    expect(
+      isValidAddress(Chain.BitcoinCash, "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez"),
+    ).toBe(true);
+    expect(isValidAddress(Chain.BitcoinCash, "1Fo65aKq8s8iquMt6weF1rku1moWVEd5Ua")).toBe(false);
     expect(isValidAddress(Chain.Arweave, "not base64url!")).toBe(false);
   });
 
@@ -75,6 +81,14 @@ describe("chain metadata", () => {
         Chain.Bitcoin,
         "bc1q94ecsn0qk8lap2gefrycnms3ruepy889z969a6",
         "BC1Q94ECSN0QK8LAP2GEFRYCNMS3RUEPY889Z969A6",
+      ),
+    ).toBe(true);
+    /* So is CashAddr. */
+    expect(
+      sameAddress(
+        Chain.BitcoinCash,
+        "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez",
+        "BITCOINCASH:QZ3YJG59YPG6JQPWHAXGVJJ44JM4HDX0W5WSXW2QEZ",
       ),
     ).toBe(true);
     /* Base58 is not: a recased string is a different address, and fails its own checksum. */

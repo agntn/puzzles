@@ -8,7 +8,7 @@ metadata:
 
 # puzzles-records
 
-A record is one `PuzzleSpec` literal handed to the factory for its chain: `bitcoinPuzzle`, `ethereumPuzzle`, `litecoinPuzzle`, `decredPuzzle`, `arweavePuzzle` or `moneroPuzzle`. The collection modules are the only copy of the data. There is no JSON to regenerate.
+A record is one `PuzzleSpec` literal handed to the factory for its chain: `bitcoinPuzzle`, `bitcoinCashPuzzle`, `ethereumPuzzle`, `litecoinPuzzle`, `decredPuzzle`, `arweavePuzzle` or `moneroPuzzle`. The collection modules are the only copy of the data. There is no JSON to regenerate.
 
 The repository's `AGENTS.md` and `CONTRIBUTING.md` own the invariants. This skill is the path through them.
 

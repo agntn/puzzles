@@ -1,15 +1,20 @@
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { afterAll, afterEach, describe, expect, it, vi } from "vite-plus/test";
 import { b1000 } from "../../src/collections/b1000.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
   Balance,
   BalanceProviderError,
+  bitcoinCashPuzzle,
   ethereumPuzzle,
   InvalidAddressError,
   moneroPuzzle,
+  p2pkh,
   standard,
   UnsupportedChainError,
+  type PuzzleSpec,
 } from "../../src/index.ts";
+import type * as Library from "../../src/index.ts";
+import type * as Tools from "../../src/tool-operations.ts";
 
 /* The providers read `globalThis.fetch` at call time, so a stub stands in for the network. */
 function stubFetch(reply: (url: string) => Response | Promise<Response>): string[] {
@@ -40,8 +45,26 @@ const ethereum = ethereumPuzzle({
   startedAt: "2020-01-01 00:00:00",
 });
 
+const cashAddress = "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez";
+
+const bitcoinCash = {
+  id: "test/bitcoincash",
+  address: p2pkh(cashAddress),
+  sourceUrl: "https://example.com",
+  startedAt: "2024-12-14 16:22:32",
+} satisfies PuzzleSpec;
+
+/* Blockchair's dashboard for an address it has seen: funded and emptied by the claim. */
+function blockchairAddress(): Response {
+  return json({
+    data: { [cashAddress]: { address: { balance: 0, received: 130000000, spent: 130000000 } } },
+    context: { state: 915000 },
+  });
+}
+
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
 });
 
 describe("Puzzle.balance", () => {
@@ -59,6 +82,37 @@ describe("Puzzle.balance", () => {
     expect(balance.confirmed).toBe(1100n);
     expect(balance.unconfirmed).toBe(20n);
     expect(balance.total()).toBe(1120n);
+  });
+
+  it("reads a Bitcoin Cash balance through Blockchair", async () => {
+    vi.stubEnv("BLOCKCHAIR_API_KEY", undefined);
+    const urls = stubFetch(() => blockchairAddress());
+
+    const balance = await bitcoinCashPuzzle(bitcoinCash).balance({
+      baseUrl: "https://example.test",
+    });
+
+    expect(urls).toEqual([
+      `https://example.test/bitcoin-cash/dashboards/address/${encodeURIComponent(cashAddress)}`,
+    ]);
+    expect(balance.chain).toBe("bitcoincash");
+    expect(balance.confirmed).toBe(0n);
+    expect(balance.decimals).toBe(8);
+  });
+
+  it("names BLOCKCHAIR_API_KEY when Blockchair blocks a keyless caller", async () => {
+    vi.stubEnv("BLOCKCHAIR_API_KEY", undefined);
+    stubFetch(() =>
+      json(
+        { data: null, context: { code: 430, error: "Your IP address is temporary blacklisted" } },
+        430,
+      ),
+    );
+
+    const failure = bitcoinCashPuzzle(bitcoinCash).balance();
+
+    await expect(failure).rejects.toBeInstanceOf(BalanceProviderError);
+    await expect(failure).rejects.toThrow("BLOCKCHAIR_API_KEY");
   });
 
   it("keeps Decred's unconfirmed delta separate from the confirmed balance", async () => {
@@ -183,5 +237,51 @@ describe("Puzzle.balance", () => {
 
     await expect(failure).rejects.toThrow("REDACTED");
     await expect(failure).rejects.not.toThrow("top-secret");
+  });
+});
+
+describe("balanceTool", () => {
+  /* Registering a fixture mutates the registry, so it runs on a fresh module graph. */
+  afterAll(() => {
+    vi.resetModules();
+  });
+
+  /* The tools load the dataset lazily, so the fixture joins the same fresh graph they read. */
+  async function cashTools(): Promise<typeof Tools> {
+    vi.resetModules();
+    const lib: typeof Library = await import("../../src/index.ts");
+    const tools: typeof Tools = await import("../../src/tool-operations.ts");
+    lib.registerCollection(
+      new lib.NamedCollection("fixture", lib.party("Fixture"), [
+        lib.bitcoinCashPuzzle({ ...bitcoinCash, id: "fixture/cash" }),
+      ]),
+    );
+    return tools;
+  }
+
+  it("sends ETHERSCAN_API_KEY to Ethereum only, never to Blockchair", async () => {
+    const tools = await cashTools();
+    vi.stubEnv("ETHERSCAN_API_KEY", "etherscan-secret");
+    vi.stubEnv("BLOCKCHAIR_API_KEY", undefined);
+    const urls = stubFetch(() => blockchairAddress());
+
+    await tools.balanceTool("fixture/cash");
+
+    expect(urls).toHaveLength(1);
+    expect(urls[0]).not.toContain("etherscan-secret");
+  });
+
+  it("passes BLOCKCHAIR_API_KEY as the key, so an echo of it is redacted", async () => {
+    const tools = await cashTools();
+    vi.stubEnv("BLOCKCHAIR_API_KEY", "blockchair-secret");
+    const urls = stubFetch(() =>
+      json({ data: null, context: { code: 402, error: "bad key blockchair-secret" } }, 402),
+    );
+
+    const failure = tools.balanceTool("fixture/cash");
+
+    await expect(failure).rejects.toThrow("REDACTED");
+    await expect(failure).rejects.not.toThrow("blockchair-secret");
+    expect(urls[0]).toContain("key=blockchair-secret");
   });
 });
