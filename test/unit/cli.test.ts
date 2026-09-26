@@ -71,8 +71,8 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "--json",
     );
 
-    expect(result.total).toBe(367);
-    expect(result.unsolved).toBe(98);
+    expect(result.total).toBe(368);
+    expect(result.unsolved).toBe(99);
   });
 
   it("shows a puzzle by universal identifier", async () => {
@@ -319,6 +319,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "arweave/weave11",
       "arweave/weave13",
       "mineshop",
+      "teikhos/0",
       "teikhos/1",
       "teikhos/2",
       "teikhos/3",

@@ -229,7 +229,7 @@ export abstract class Collection<Query> {
 }
 
 /** The digits of a puzzle number as its identifier spells them: no sign, no leading zero. */
-const PUZZLE_NUMBER = /^[1-9]\d*$/;
+const PUZZLE_NUMBER = /^(?:0|[1-9]\d*)$/;
 
 /**
  * A collection addressed by string names, `decred_janus` or `zden/decred_janus`. A query of
@@ -251,7 +251,7 @@ export class NamedCollection extends Collection<string> {
 export class NumericCollection extends Collection<number | string> {
   protected override idFor(query: number | string): string | undefined {
     const number = typeof query === "string" ? this.#numberOf(query) : query;
-    return typeof number === "number" && Number.isSafeInteger(number) && number >= 1
+    return typeof number === "number" && Number.isSafeInteger(number) && number >= 0
       ? `${this.key}/${number}`
       : undefined;
   }

@@ -26,14 +26,24 @@ export const teikhos4 = ethereumPuzzle({
   prize: 0.5,
   stages: [
     stage(
-      "commit, authenticate, reward",
-      "Deployed two hours after teikhos/3 as a revision with its own stored proof. authenticate() now reveals the caller's commit in the same call and reverts unless it holds, and reward() has no way back to the author: commit, authenticate, wait seven days, call reward().",
+      "commit",
+      "Store a signature by your own address over the message the public key signed, before you submit the key. The earliest commit that holds wins.",
+      [artifact("verified contract source", source)],
+    ),
+    stage(
+      "authenticate",
+      "Submit the public key whose Keccak-512 unmasks the stored proof into a signature by that key. Unlike teikhos/3, the same call reveals your commit and reverts unless it holds, then starts a seven day wait.",
       [artifact("verified contract source", source)],
       answer(
         "ca6a98ceec61e213d9a0a8fdc0a6d5d9ed7566f5f4cfd24871fb9316feb6e1eb2367489f54a0cd4111f4c5356eb744d299a7521296786223c70947c8c36940c6",
         writeup,
         { date: "2026-08-16" },
       ),
+    ),
+    stage(
+      "reward",
+      "After the seven days anyone can call it, and the contract self-destructs to the winner. There is no way back to the author.",
+      [artifact("verified contract source", source)],
     ),
   ],
   solvedAt: "2026-06-21 09:51:23",

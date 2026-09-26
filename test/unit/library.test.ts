@@ -443,13 +443,24 @@ describe("lazy collection registry", () => {
     ]);
     expect(mini.get(135)).toBeUndefined();
 
-    /* Numbered in deployment order, only the contracts that can pay. */
+    /* Numbered in deployment order from 0, the first contract, which cannot pay. */
     expect([4, "4", "teikhos/4"].map((query) => teikhos.get(query)?.id())).toEqual([
       "teikhos/4",
       "teikhos/4",
       "teikhos/4",
     ]);
+    expect([0, "0", "teikhos/0"].map((query) => teikhos.get(query)?.id())).toEqual([
+      "teikhos/0",
+      "teikhos/0",
+      "teikhos/0",
+    ]);
+    expect(["00", "04", "teikhos/00"].map((query) => teikhos.get(query))).toEqual([
+      undefined,
+      undefined,
+      undefined,
+    ]);
     expect(teikhos.all().map((puzzle) => [puzzle.address().value, puzzle.status()])).toEqual([
+      ["0xaec7e8c221c3fd24e75c996e32289235fd899ebf", Status.Unsolved],
       ["0x17e5e0910b9185b0ede564dcbf074ca910ad56a4", Status.Unsolved],
       ["0xd7c6d542f3dcdceda845112b8fd567b8f8655805", Status.Unsolved],
       ["0x973c2178b09225d1de3ab037d40b3f24af696255", Status.Unsolved],
@@ -797,18 +808,18 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(367);
+    expect(await all()).toHaveLength(368);
     expect(await stats()).toEqual({
-      total: 367,
+      total: 368,
       claimed: 12,
       expired: 3,
       solved: 158,
       swept: 96,
-      unsolved: 98,
+      unsolved: 99,
       with_pubkey: 263,
       total_prize: {
         AR: 5550,
-        ETH: 25.24624155,
+        ETH: 26.24624155,
         DAI: 100,
         BTC: 1064.23058961,
         BCH: 3.75,
@@ -817,7 +828,7 @@ describe("lazy collection registry", () => {
       },
       unsolved_prize: {
         AR: 1900,
-        ETH: 11.61254155,
+        ETH: 12.61254155,
         BTC: 908.87574943,
       },
     });
@@ -844,7 +855,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(367);
+    ).toBe(368);
   });
 
   it("hands back the memoized views frozen through", async () => {

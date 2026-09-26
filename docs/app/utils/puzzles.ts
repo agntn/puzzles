@@ -188,7 +188,7 @@ const PRESENTATION: Readonly<
     sample: "teikhos/4",
     chains: ["ethereum"],
     blurb:
-      "Four Ethereum contracts that pay for a public key nobody published. One fell in 2026, to a key a failed attempt left on chain four years earlier.",
+      "Five Ethereum contracts that want a public key nobody published. Four can pay, and one did in 2026, with a key a failed attempt left on chain four years earlier.",
   },
   warp: {
     icon: "i-lucide-key-round",

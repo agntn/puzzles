@@ -73,14 +73,15 @@ describe("puzzle list pagination", () => {
     const crossed = await listTool({ chain: "ethereum", collection: "b1000" });
 
     expect(chain.details).toMatchObject({
-      matched: 11,
-      returned: 11,
+      matched: 12,
+      returned: 12,
       ids: [
         "arweave/weave7",
         "arweave/weave9",
         "arweave/weave11",
         "arweave/weave13",
         "mineshop",
+        "teikhos/0",
         "teikhos/1",
         "teikhos/2",
         "teikhos/3",

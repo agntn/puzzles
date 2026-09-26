@@ -911,28 +911,28 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7",
     source: "https://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code",
     transactions: 2,
-    tool: "teikhos/4\tsolved\t0.5 ETH\t0x735ba26f91e1275fa4b504649b19ef74739fe7e7\nchain: ethereum  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2018-03-14 03:11:51\nsolved: 2026-06-21 09:51:23 (8y 3mo 11d 6h 39m)\nsolver: floflo777 (floflo777), 0x83e4b2a5a464bdfcd83057ac08447f533a595156\ntransactions: 2\n\tfunding\t2018-03-14 03:11:51\t0.5 ETH\t0x9d2172e87c445fa160c46db96bd326b4bcecce2b1574659074e094811893b4d5\n\tclaim\t2026-06-21 09:51:23\t0.5 ETH\t0x4d2bfceb311bda8d265debab1c8ad23cb860922b876eca523327d0405ab97bff\nclaim: https://etherscan.io/tx/0x4d2bfceb311bda8d265debab1c8ad23cb860922b876eca523327d0405ab97bff\nstages: 1\n\tcommit, authenticate, reward\tDeployed two hours after teikhos/3 as a revision with its own stored proof. authenticate() now reveals the caller's commit in the same call and reverts unless it holds, and reward() has no way back to the author: commit, authenticate, wait seven days, call reward().\n\t\tverified contract source\thttps://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code\n\t\tanswer: ca6a98ceec61e213d9a0a8fdc0a6d5d9ed7566f5f4cfd24871fb9316feb6e1eb2367489f54a0cd4111f4c5356eb744d299a7521296786223c70947c8c36940c6\tanswer source: https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/teikhos-bipedaljoe-solver-bounties-2eth\tanswer date: 2026-08-16\nexplorer: https://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7\nsource: https://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code",
+    tool: "teikhos/4\tsolved\t0.5 ETH\t0x735ba26f91e1275fa4b504649b19ef74739fe7e7\nchain: ethereum  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2018-03-14 03:11:51\nsolved: 2026-06-21 09:51:23 (8y 3mo 11d 6h 39m)\nsolver: floflo777 (floflo777), 0x83e4b2a5a464bdfcd83057ac08447f533a595156\ntransactions: 2\n\tfunding\t2018-03-14 03:11:51\t0.5 ETH\t0x9d2172e87c445fa160c46db96bd326b4bcecce2b1574659074e094811893b4d5\n\tclaim\t2026-06-21 09:51:23\t0.5 ETH\t0x4d2bfceb311bda8d265debab1c8ad23cb860922b876eca523327d0405ab97bff\nclaim: https://etherscan.io/tx/0x4d2bfceb311bda8d265debab1c8ad23cb860922b876eca523327d0405ab97bff\nstages: 3\n\tcommit\tStore a signature by your own address over the message the public key signed, before you submit the key. The earliest commit that holds wins.\n\t\tverified contract source\thttps://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code\n\tauthenticate\tSubmit the public key whose Keccak-512 unmasks the stored proof into a signature by that key. Unlike teikhos/3, the same call reveals your commit and reverts unless it holds, then starts a seven day wait.\n\t\tverified contract source\thttps://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code\n\t\tanswer: ca6a98ceec61e213d9a0a8fdc0a6d5d9ed7566f5f4cfd24871fb9316feb6e1eb2367489f54a0cd4111f4c5356eb744d299a7521296786223c70947c8c36940c6\tanswer source: https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/teikhos-bipedaljoe-solver-bounties-2eth\tanswer date: 2026-08-16\n\treward\tAfter the seven days anyone can call it, and the contract self-destructs to the winner. There is no way back to the author.\n\t\tverified contract source\thttps://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code\nexplorer: https://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7\nsource: https://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code",
   },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "0cb5325f4ddb",
-  total: 367,
+  dataVersion: "777a3377cd14",
+  total: 368,
   solved: 158,
-  unsolved: 98,
+  unsolved: 99,
   claimed: 12,
   swept: 96,
   expired: 3,
   withPubkey: 263,
   unsolvedPrize: {
     AR: 1900,
-    ETH: 11.61254155,
+    ETH: 12.61254155,
     BTC: 908.87574943,
   },
   totalPrize: {
     AR: 5550,
-    ETH: 25.24624155,
+    ETH: 26.24624155,
     DAI: 100,
     BTC: 1064.23058961,
     BCH: 3.75,
@@ -1445,21 +1445,21 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     author: "Johan Nygren",
     authorKey: "johan-nygren",
     authorUrl: "https://github.com/resilience-me",
-    total: 4,
+    total: 5,
     statuses: {
-      unsolved: 3,
+      unsolved: 4,
       solved: 1,
     },
     chains: ["ethereum"],
     prize: {
-      ETH: 2.5,
+      ETH: 3.5,
     },
     unsolvedPrize: {
-      ETH: 2,
+      ETH: 3,
     },
     withPubkey: 0,
     withKey: 0,
-    firstStarted: "2018-02-26 02:44:42",
+    firstStarted: "2018-02-26 01:56:30",
     lastStarted: "2018-03-14 03:11:51",
     hints: [],
   },
@@ -1742,7 +1742,7 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     about:
       "Proof-of-personhood tinkerer who named a proof of public key scheme Teikhos and put ETH behind five contracts to show it holds.",
     collections: ["teikhos"],
-    puzzles: 4,
+    puzzles: 5,
   },
   {
     key: "keybase",

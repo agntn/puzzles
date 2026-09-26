@@ -1,5 +1,6 @@
 import { NumericCollection } from "../core/collection.ts";
 import { fact, party, PartyKind, profile } from "../core/parts.ts";
+import { teikhos0 } from "./teikhos/0.ts";
 import { teikhos1 } from "./teikhos/1.ts";
 import { teikhos2 } from "./teikhos/2.ts";
 import { teikhos3 } from "./teikhos/3.ts";
@@ -7,7 +8,7 @@ import { teikhos4 } from "./teikhos/4.ts";
 
 /**
  * Johan Nygren's TeikhosBounty contracts: each pays whoever submits the public key its stored
- * proof was masked with. Numbered in deployment order, leaving out the one that cannot pay.
+ * proof was masked with. Numbered in deployment order from 0, the first one, which cannot pay.
  */
 export class TeikhosCollection extends NumericCollection {
   /** Stable collection key used in puzzle identifiers. */
@@ -40,8 +41,8 @@ export class TeikhosCollection extends NumericCollection {
     ],
   });
 
-  /** Every paying contract, in deployment order. */
-  static readonly puzzles = [teikhos1, teikhos2, teikhos3, teikhos4];
+  /** Every contract, in deployment order. */
+  static readonly puzzles = [teikhos0, teikhos1, teikhos2, teikhos3, teikhos4];
 
   /** Builds the canonical collection. */
   constructor() {
