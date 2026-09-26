@@ -71,7 +71,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "--json",
     );
 
-    expect(result.total).toBe(368);
+    expect(result.total).toBe(372);
     expect(result.unsolved).toBe(99);
   });
 
@@ -610,7 +610,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
   it("hands each chain the key of its own variable", async () => {
     const run = await execute(
       process.execPath,
-      ["--import", "./test/support/fetch-stub.ts", "src/cli.ts", "balance", "mini/130"],
+      ["--import", "./test/support/fetch-stub.ts", "src/cli.ts", "balance", "mini/3"],
       {
         cwd: process.cwd(),
         env: {

@@ -15,12 +15,13 @@ import { bitcoinCashPuzzle, Status } from "../../core/puzzle.ts";
 const THREAD = "https://bitcointalk.org/index.php?topic=5522785";
 
 /**
- * Mini-puzzle #130: a message signed with puzzle #130's key, whose nonce sits 80 bits away from
- * the nonce of a signature the author had published before. privatekeys.pw prints the CashAddr;
- * the post names the puzzle. The key is puzzle #130's own, printed in the thread after the claim.
+ * Mini-puzzle #3, for puzzle #130: a message signed with that puzzle's key, whose nonce sits 80
+ * bits away from the nonce of a signature the author had published before. privatekeys.pw prints
+ * the CashAddr; the post names the puzzle. The key is puzzle #130's own, printed in the thread
+ * after the claim.
  */
-export const mini130 = bitcoinCashPuzzle({
-  id: "mini/130",
+export const mini3 = bitcoinCashPuzzle({
+  id: "mini/3",
   address: p2pkh(
     "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez",
     "a24922852051a9002ebf4c864a55acb75bb4cf75",

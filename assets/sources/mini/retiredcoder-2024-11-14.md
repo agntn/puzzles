@@ -11,7 +11,7 @@ screenshot_sha256: b160824afa237e4a7ed224e0e582df3e740b6659d964cf36b6c781cb3e9bd
 
 # Mini-puzzle for puzzle #125
 
-[Original thread](https://bitcointalk.org/index.php?topic=5518896), posted by RetiredCoder at 2024-11-14 13:45:25 UTC as [msg64739119](https://bitcointalk.org/index.php?topic=5518896.msg64739119#msg64739119). The `sourceUrl` of the [mini/125 record](../../../src/collections/mini/125.ts), the source of its hint and of the published key and WIF, which AbadomRSZ posted at 22:21:24 UTC, and of the [author record](../../../src/collections/mini.ts)'s fact about what mini-puzzles are for. The prize address is not printed: the post names puzzle #125. The thread is one page of 9 posts, and every one of them is below.
+[Original thread](https://bitcointalk.org/index.php?topic=5518896), posted by RetiredCoder at 2024-11-14 13:45:25 UTC as [msg64739119](https://bitcointalk.org/index.php?topic=5518896.msg64739119#msg64739119). The `sourceUrl` of the [mini/2 record](../../../src/collections/mini/2.ts), the source of its hint and of the published key and WIF, which AbadomRSZ posted at 22:21:24 UTC, and of the [author record](../../../src/collections/mini.ts)'s fact about what mini-puzzles are for. The prize address is not printed: the post names puzzle #125. The thread is one page of 9 posts, and every one of them is below.
 
 ## Historical provenance
 
@@ -145,7 +145,7 @@ The screenshot is a headless Chromium render of the live thread on September 26,
 > ```
 >
 > For a faster response... 👆
-> Ive been monitoring Retired Coder's latest posts for the past two days. Today, Im going somewhere, and this happened. Feeling so sad 😢. Anyway, congratulations to the winner!
+> I’ve been monitoring Retired Coder's latest posts for the past two days. Today, I’m going somewhere, and this happened. Feeling so sad 😢. Anyway, congratulations to the winner!
 
 **BitcoinBarrel**, 2024-11-14 22:29:03 UTC, [msg64741280](https://bitcointalk.org/index.php?topic=5518896.msg64741280#msg64741280):
 

@@ -431,16 +431,20 @@ describe("lazy collection registry", () => {
       blocks.map((block) => `quizchain/${block}`),
     );
 
-    /* Numbered by the Bitcoin puzzle each one is built on, and paid out on Bitcoin Cash. */
-    expect([130, "130", "mini/130"].map((query) => mini.get(query)?.id())).toEqual([
-      "mini/130",
-      "mini/130",
-      "mini/130",
+    /* Numbered as the author numbered them, not by the Bitcoin puzzle a few are built on. */
+    expect([7, "7", "mini/7"].map((query) => mini.get(query)?.id())).toEqual([
+      "mini/7",
+      "mini/7",
+      "mini/7",
     ]);
     expect(mini.all().map((puzzle) => [puzzle.id(), puzzle.chain()])).toEqual([
-      ["mini/120", "bitcoincash"],
-      ["mini/125", "bitcoincash"],
-      ["mini/130", "bitcoincash"],
+      ["mini/1", "bitcoincash"],
+      ["mini/2", "bitcoincash"],
+      ["mini/3", "bitcoincash"],
+      ["mini/4", "bitcoin"],
+      ["mini/5", "bitcoin"],
+      ["mini/6", "bitcoin"],
+      ["mini/7", "bitcoincash"],
     ]);
     expect(mini.get(135)).toBeUndefined();
 
@@ -809,21 +813,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(368);
+    expect(await all()).toHaveLength(372);
     expect(await stats()).toEqual({
-      total: 368,
+      total: 372,
       claimed: 12,
       expired: 3,
-      solved: 158,
+      solved: 162,
       swept: 96,
       unsolved: 99,
-      with_pubkey: 263,
+      with_pubkey: 267,
       total_prize: {
         AR: 5550,
         ETH: 26.246241554256944,
         DAI: 100,
-        BTC: 1064.23058961,
-        BCH: 3.75,
+        BTC: 1064.26058961,
+        BCH: 5.1,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -873,7 +877,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(368);
+    ).toBe(372);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -900,6 +904,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(158);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(162);
   });
 });

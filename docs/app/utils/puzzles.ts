@@ -138,10 +138,10 @@ const PRESENTATION: Readonly<
   mini: {
     icon: "i-lucide-puzzle",
     title: "RetiredCoder's mini-puzzles",
-    sample: "mini/130",
-    chains: ["bitcoincash"],
+    sample: "mini/3",
+    chains: ["bitcoin", "bitcoincash"],
     blurb:
-      "Three solved Bitcoin puzzle keys, played again for the Bitcoin Cash still on their addresses. A swapped key, a shuffled key, one signature too many.",
+      "Seven small riddles on Bitcointalk. Four replay a solved puzzle key for the Bitcoin Cash still on its address, three put 0.01 BTC on a fresh key.",
   },
   movie_enigma: {
     icon: "i-lucide-clapperboard",

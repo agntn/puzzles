@@ -11,7 +11,7 @@ screenshot_sha256: 544a0e6fe2d9f9e65c111fcfb0f3dd907f635e1aa61ac4b35d149864d36dd
 
 # Mini-puzzle for puzzle #130
 
-[Original thread](https://bitcointalk.org/index.php?topic=5522785), posted by RetiredCoder at 2024-12-14 16:22:32 UTC as [msg64847018](https://bitcointalk.org/index.php?topic=5522785.msg64847018#msg64847018). The `sourceUrl` of the [mini/130 record](../../../src/collections/mini/130.ts), the source of its five hints, of the author's explanation that is the first hint's answer, and of the key, which Etar posted at 19:41:17 UTC on December 15. It is also where the [author record](../../../src/collections/mini.ts) takes the fact about that explanation. The CashAddr is not printed here; privatekeys.pw prints it. The thread runs four pages, 63 posts, and every one of them is below.
+[Original thread](https://bitcointalk.org/index.php?topic=5522785), posted by RetiredCoder at 2024-12-14 16:22:32 UTC as [msg64847018](https://bitcointalk.org/index.php?topic=5522785.msg64847018#msg64847018). The `sourceUrl` of the [mini/3 record](../../../src/collections/mini/3.ts), the source of its five hints, of the author's explanation that is the first hint's answer, and of the key, which Etar posted at 19:41:17 UTC on December 15. It is also where the [author record](../../../src/collections/mini.ts) takes the fact about that explanation. The CashAddr is not printed here; privatekeys.pw prints it. The thread runs four pages, 63 posts, and every one of them is below.
 
 ## Historical provenance
 

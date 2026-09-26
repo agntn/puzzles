@@ -15,13 +15,14 @@ import { bitcoinCashPuzzle, Status } from "../../core/puzzle.ts";
 const THREAD = "https://bitcointalk.org/index.php?topic=5513047";
 
 /**
- * Mini-puzzle #120: puzzle #120's own key with three hex characters swapped, posted before its
- * solver had ever published it. The prize is the Bitcoin Cash side of the #120 address, the coins
- * it still held from before the 2017 fork. The post never prints the CashAddr, it names the #120
- * address and says the BCH sits there; this is the same HASH160 in Bitcoin Cash's encoding.
+ * Mini-puzzle #1, for puzzle #120: that puzzle's own key with three hex characters swapped, posted
+ * before its solver had ever published it. The prize is the Bitcoin Cash side of the #120 address,
+ * the coins it still held from before the 2017 fork. The post never prints the CashAddr, it names
+ * the #120 address and says the BCH sits there; this is the same HASH160 in Bitcoin Cash's
+ * encoding.
  */
-export const mini120 = bitcoinCashPuzzle({
-  id: "mini/120",
+export const mini1 = bitcoinCashPuzzle({
+  id: "mini/1",
   address: p2pkh(
     "bitcoincash:qp95dcg22sdwa34787k8p8p9d7ma56fs3c39x022wu",
     "4b46e10a541aeec6be3fac709c256fb7da69308e",

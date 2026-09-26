@@ -106,12 +106,12 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `zden`                  | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                   |
 | `arweave`               | arweave, ethereum                   | Tiamat's weave puzzles                  |
 | `quizchain`             | bitcoin                             | Quiz blocks chained by their keys       |
+| `mini`                  | bitcoin, bitcoincash                | RetiredCoder's seven mini-puzzles       |
 | `warp`                  | bitcoin                             | Keybase's scrypt brainwallet challenges |
 | `hash_collision`        | bitcoin                             | Peter Todd's P2SH collision bounties    |
 | `teikhos`               | ethereum                            | Contracts that pay for a public key     |
 | `ballet`                | bitcoin                             | BIP38 keys printed on physical wallets  |
 | `dug`                   | bitcoin                             | 2025 student seed hunt                  |
-| `mini`                  | bitcoincash                         | RetiredCoder's Bitcoin Cash riddles     |
 | `bitimage`              | bitcoin                             | Seeds hashed from photographs           |
 | `luckylurker`           | bitcoin                             | Two Bitcoin Vault seed challenges       |
 | `iamabananaamaa`        | bitcoin                             | A ZIP in a GIF, then a fake Caesar      |

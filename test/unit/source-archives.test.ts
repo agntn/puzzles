@@ -253,6 +253,50 @@ const sources = [
       content: "confirmed",
     },
   },
+  {
+    file: "mini/retiredcoder-2025-01-14",
+    url: "https://bitcointalk.org/index.php?topic=5526453",
+    author: "RetiredCoder",
+    date: "2025-01-14",
+    archive: {
+      url: "https://web.archive.org/web/20250830150658/https://bitcointalk.org/index.php?topic=5526453",
+      date: "2025-08-30T15:06:58Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "mini/retiredcoder-2025-04-16",
+    url: "https://bitcointalk.org/index.php?topic=5538285",
+    author: "RetiredCoder",
+    date: "2025-04-16",
+    archive: {
+      url: "https://web.archive.org/web/20250830144359/https://bitcointalk.org/index.php?topic=5538285",
+      date: "2025-08-30T14:43:59Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "mini/retiredcoder-2026-03-14",
+    url: "https://bitcointalk.org/index.php?topic=5577390",
+    author: "RetiredCoder",
+    date: "2026-03-14",
+    archive: {
+      url: "https://web.archive.org/web/20260926184129/https://bitcointalk.org/index.php?topic=5577390.0",
+      date: "2026-09-26T18:41:29Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "mini/retiredcoder-2026-07-29",
+    url: "https://bitcointalk.org/index.php?topic=5589799",
+    author: "RetiredCoder",
+    date: "2026-07-29",
+    archive: {
+      url: "https://web.archive.org/web/20260730133211/https://bitcointalk.org/index.php?topic=5589799",
+      date: "2026-07-30T13:32:11Z",
+      content: "confirmed",
+    },
+  },
 ] as const;
 
 type Source = (typeof sources)[number];

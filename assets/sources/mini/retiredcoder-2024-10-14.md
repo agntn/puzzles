@@ -11,7 +11,7 @@ screenshot_sha256: a30887f4bc8028452f9cc7e91cdc3cf105b459b7583666d0ee266f2c2d552
 
 # Mini-puzzle for puzzle #120
 
-[Original thread](https://bitcointalk.org/index.php?topic=5513047), posted by RetiredCoder at 2024-10-14 13:48:32 UTC as [msg64633165](https://bitcointalk.org/index.php?topic=5513047.msg64633165#msg64633165). The `sourceUrl` of the [mini/120 record](../../../src/collections/mini/120.ts), the source of both hints and of the published key, which sneeky777 posted at 18:59:33 UTC. The prize address is not printed: the post names puzzle #120 and says the BCH is there. The thread is one page of 14 posts, and every one of them is below.
+[Original thread](https://bitcointalk.org/index.php?topic=5513047), posted by RetiredCoder at 2024-10-14 13:48:32 UTC as [msg64633165](https://bitcointalk.org/index.php?topic=5513047.msg64633165#msg64633165). The `sourceUrl` of the [mini/1 record](../../../src/collections/mini/1.ts), the source of both hints and of the published key, which sneeky777 posted at 18:59:33 UTC. The prize address is not printed: the post names puzzle #120 and says the BCH is there. The thread is one page of 14 posts, and every one of them is below.
 
 ## Historical provenance
 
