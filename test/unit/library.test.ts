@@ -179,7 +179,8 @@ describe("lazy collection registry", () => {
   });
 
   it("keeps the Genesis announcement without inventing a prize or key", async () => {
-    const puzzle = await requirePuzzle("genesis/block");
+    const puzzle = await requirePuzzle("genesis");
+    expect(await requireCollection("genesis")).toBeInstanceOf(SingletonCollection);
     expect(puzzle.address()).toEqual({
       kind: "p2wsh",
       value: "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj",

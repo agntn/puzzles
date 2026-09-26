@@ -77,7 +77,7 @@ const PRESENTATION: Readonly<
   genesis: {
     icon: "i-lucide-blocks",
     title: "Genesis Block Wallet Puzzle",
-    sample: "genesis/block",
+    sample: "genesis",
     chains: ["bitcoin"],
     blurb:
       "Two keys hidden in Genesis block data. Public clues, paid hints, still no verified solution.",
