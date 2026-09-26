@@ -95,12 +95,12 @@ export const gsmgPuzzle = bitcoinPuzzle({
     ),
     stage(
       "SalPhaseIon",
-      "A back door in the first image. The page path is the SHA-256 of the text printed under the grid, and behind it sits one long line of mostly the letters a to i, with a few words mixed in and an AES blob split into single characters. Parts of it decode. The writeup has no password for the blob.",
+      "A back door in the first image. The page path is the SHA-256 of the text printed under the grid, and behind it sits one long line of mostly the letters a to i, with a few words mixed in and a base64 blob split into single characters. The blob opens with Salted__, which says OpenSSL made it, not which cipher or key derivation. Parts of the letters decode. The writeup has no password for the blob.",
       [artifact("letters and blob", SALPHASEION, "salphaseion.txt")],
     ),
     stage(
       "Cosmic Duality",
-      "Same page, second heading. A clean 28 line base64 AES blob and not one word about its password. The writeup stops here and has no password for it.",
+      "Same page, second heading. A clean 28 line base64 blob with the same Salted__ header and not one word about its cipher or password. The writeup stops here and has no password for it.",
       [artifact("ciphertext", SALPHASEION, "cosmic-duality.txt")],
     ),
   ],
@@ -117,7 +117,7 @@ export class GsmgCollection extends SingletonCollection {
     kind: PartyKind.Organization,
     about:
       "A crypto trading bot platform that ran from 2017 to 2026 and left a multi phase puzzle behind. The site now shows the lights off and one mystery left.",
-    addresses: ["1EtbTvVB8QTGN4mduSdy7n4cZQm4iYTpQ1", "17ucy1K9ZUAaoY6JVtM932W9jUp5LXfyHa"],
+    addresses: ["1EtbTvVB8QTGN4mduSdy7n4cZQm4iYTpQ1"],
     profiles: [
       profile("website", "https://gsmg.io/puzzle"),
       profile("website", "https://gsmg.io/"),
