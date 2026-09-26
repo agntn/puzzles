@@ -298,7 +298,9 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
 
     expect(result.code).toBe(1);
     expect(result.stdout).toBe("");
-    expect(result.stderr).toMatch(/^Puzzle not found: nope\/1\. Known collections: arweave, /u);
+    expect(result.stderr).toMatch(
+      /^Puzzle not found: nope\/1\. Known collections: 80-bit, arweave, /u,
+    );
   });
 
   it("lists a single collection filtered by status", async () => {
@@ -459,7 +461,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
 
     const missing = await failure("authors", "nobody");
     expect(missing.code).toBe(1);
-    expect(missing.stderr).toMatch(/^Unknown author: nobody\. Known authors: tiamat, /u);
+    expect(missing.stderr).toMatch(/^Unknown author: nobody\. Known authors: ktimesg, tiamat, /u);
   });
 
   it("lists solvers and shows one, by solver key or puzzle identifier", async () => {

@@ -104,10 +104,10 @@ const PRESENTATION: Readonly<
     blurb:
       "Two puzzles from the first night of r/bitcoinpuzzles. A ZIP after the last byte of a GIF, then a Caesar riddle whose key needed no shift at all.",
   },
-  ktimesg: {
+  "80-bit": {
     icon: "i-lucide-timer",
     title: "kTimesG's 80-bit key challenge",
-    sample: "ktimesg/80-bit",
+    sample: "80-bit",
     chains: ["bitcoin"],
     blurb:
       "80 unknown bits in a 511-bit key. The public key only ever showed up in the mempool. Taken 39 minutes in.",
