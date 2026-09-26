@@ -23,7 +23,7 @@ export default function extension(api) {
   for (const name of ["puzzles_show", "puzzles_stats", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]) {
     api.registerTool({ name, async execute() {
       return { content: [{ type: "text", text:
-        "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH Total: 1 puzzles in 1 collections"
+        "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH Total: 1 puzzle in 1 collection"
       }] };
     } });
   }

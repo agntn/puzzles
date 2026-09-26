@@ -4,7 +4,7 @@ import { frozen, type Hint, type Party } from "./parts.ts";
 import { Puzzle, Status } from "./puzzle.ts";
 import { closestPuzzle } from "./suggest.ts";
 import { type Balance } from "./types.ts";
-import { filterPuzzles } from "./utils.ts";
+import { countOf, filterPuzzles } from "./utils.ts";
 import { verify, type VerifyResult } from "./verify.ts";
 
 /**
@@ -103,9 +103,7 @@ export abstract class Collection<Query> {
     if (example === undefined) {
       return `Collection ${this.key} holds no puzzles`;
     }
-    const count = this.#puzzles.length;
-    const held = count === 1 ? "1 puzzle" : `${count} puzzles`;
-    const shape = `Collection ${this.key} holds ${held}, for example ${example.id()}`;
+    const shape = `Collection ${this.key} holds ${countOf(this.#puzzles.length, "puzzle")}, for example ${example.id()}`;
     const slash = id.indexOf("/");
     const guess = closestPuzzle(slash === -1 ? id : id.slice(slash + 1), this.#puzzles);
     return guess === undefined ? shape : `Did you mean ${guess}? ${shape}`;

@@ -274,8 +274,19 @@ function formatSolved(date: string, duration: string | undefined): string {
   return withNote(date, duration);
 }
 
+/**
+ * A count with its noun, singular for one: `1 puzzle`, `0 puzzles`, `2 puzzles`.
+ *
+ * @param {number} count - How many.
+ * @param {string} noun - The singular noun, which takes an `s` for any other count.
+ * @returns {string} The count and the noun.
+ */
+export function countOf(count: number, noun: string): string {
+  return `${count} ${noun}${count === 1 ? "" : "s"}`;
+}
+
 function formatRange(range: readonly [bigint, bigint], bits: number | undefined): string {
-  const width = bits === undefined ? "" : bits === 1 ? ", 1 bit" : `, ${bits} bits`;
+  const width = bits === undefined ? "" : `, ${countOf(bits, "bit")}`;
   return `${range[0].toString(16)}..${range[1].toString(16)} (hex${width})`;
 }
 
@@ -438,7 +449,7 @@ export function formatHintReport(puzzle: Puzzle, inherited: readonly Hint[]): st
   ] as const;
   const header = counts
     .filter(([count]) => count > 0)
-    .map(([count, noun]) => `${count} ${noun}${count === 1 ? "" : "s"}`)
+    .map(([count, noun]) => countOf(count, noun))
     .join(", ");
   return [
     `${puzzle.id()}: ${header.length === 0 ? "no hints recorded" : header}`,
@@ -456,7 +467,7 @@ export function formatHintReport(puzzle: Puzzle, inherited: readonly Hint[]): st
  */
 export function formatStageReport(puzzle: Puzzle): string[] {
   const count = puzzle.stages().length;
-  const header = count === 0 ? "no stages recorded" : `${count} stage${count === 1 ? "" : "s"}`;
+  const header = count === 0 ? "no stages recorded" : countOf(count, "stage");
   return [`${puzzle.id()}: ${header}`, ...formatStages(puzzle)];
 }
 
@@ -523,9 +534,8 @@ export function statusCountLabels(summary: CollectionSummary): string[] {
 export function formatAuthor(entry: AuthorEntry): string {
   const { author } = entry;
   const kind = author.kind === undefined ? "" : ` (${author.kind})`;
-  const collections =
-    entry.collections.length === 1 ? "1 collection" : `${entry.collections.length} collections`;
-  return `${entry.key}: ${author.name ?? "unknown"}${kind}, ${collections}: ${entry.collections.join(", ")}, ${entry.puzzles} puzzles`;
+  const collections = countOf(entry.collections.length, "collection");
+  return `${entry.key}: ${author.name ?? "unknown"}${kind}, ${collections}: ${entry.collections.join(", ")}, ${countOf(entry.puzzles, "puzzle")}`;
 }
 
 /**
@@ -555,7 +565,7 @@ export function formatAuthorRecord(entry: AuthorEntry): string {
   const { author } = entry;
   return [
     `${entry.key}\t${author.name ?? "unknown"}\t${author.kind ?? "kind unknown"}`,
-    `collections: ${entry.collections.join(", ")} (${entry.puzzles} puzzles)`,
+    `collections: ${entry.collections.join(", ")} (${countOf(entry.puzzles, "puzzle")})`,
     ...field("aliases", author.aliases, (aliases) => aliases.join(", ")),
     ...field("about", author.about),
     ...recordBlock("profiles", author.profiles, (link) => `${link.name}\t${link.url}`),
@@ -577,7 +587,7 @@ export function formatAuthorRecord(entry: AuthorEntry): string {
 export function formatSolver(entry: SolverEntry): string {
   const { solver } = entry;
   const kind = solver.kind === undefined ? "" : ` (${solver.kind})`;
-  const solves = entry.solves.length === 1 ? "1 solve" : `${entry.solves.length} solves`;
+  const solves = countOf(entry.solves.length, "solve");
   const authored = entry.authored.length === 0 ? "" : `, author of ${entry.authored.join(", ")}`;
   return `${entry.key}: ${solver.name ?? "unknown"}${kind}, ${solves}: ${entry.solves.map((solve) => solve.id).join(", ")}${authored}`;
 }
@@ -619,7 +629,7 @@ export function formatSolverRecord(entry: SolverEntry): string {
  * @returns {string} `key: N puzzles, N solved, N unsolved, N swept, by author`.
  */
 export function formatCollection(summary: CollectionSummary): string {
-  return `${summary.key}: ${summary.total} puzzles, ${statusCountLabels(summary).join(", ")}, by ${summary.author ?? "unknown"}`;
+  return `${summary.key}: ${countOf(summary.total, "puzzle")}, ${statusCountLabels(summary).join(", ")}, by ${summary.author ?? "unknown"}`;
 }
 
 /**
