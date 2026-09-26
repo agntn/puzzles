@@ -34,6 +34,7 @@ export const WALK: readonly string[] = [
   "picture_puzzle",
   "mini/3",
   "teikhos/4",
+  "brave_new_world",
 ];
 
 /* generated:landing-fixtures:start */
@@ -913,14 +914,42 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 2,
     tool: "teikhos/4\tsolved\t0.5 ETH\t0x735ba26f91e1275fa4b504649b19ef74739fe7e7\nchain: ethereum  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2018-03-14 03:11:51\nsolved: 2026-06-21 09:51:23 (8y 3mo 11d 6h 39m)\nsolver: floflo777 (floflo777), 0x83e4b2a5a464bdfcd83057ac08447f533a595156\ntransactions: 2\n\tfunding\t2018-03-14 03:11:51\t0.5 ETH\t0x9d2172e87c445fa160c46db96bd326b4bcecce2b1574659074e094811893b4d5\n\tclaim\t2026-06-21 09:51:23\t0.5 ETH\t0x4d2bfceb311bda8d265debab1c8ad23cb860922b876eca523327d0405ab97bff\nclaim: https://etherscan.io/tx/0x4d2bfceb311bda8d265debab1c8ad23cb860922b876eca523327d0405ab97bff\nstages: 3\n\tcommit\tStore a signature by your own address over the message the public key signed, before you submit the key. The earliest commit that holds wins.\n\t\tverified contract source\thttps://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code\n\tauthenticate\tSubmit the public key whose Keccak-512 unmasks the stored proof into a signature by that key. Unlike teikhos/3, the same call reveals your commit and reverts unless it holds, then starts a seven day wait.\n\t\tverified contract source\thttps://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code\n\t\tanswer: ca6a98ceec61e213d9a0a8fdc0a6d5d9ed7566f5f4cfd24871fb9316feb6e1eb2367489f54a0cd4111f4c5356eb744d299a7521296786223c70947c8c36940c6\tanswer source: https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/teikhos-bipedaljoe-solver-bounties-2eth\tanswer date: 2026-08-16\n\treward\tAfter the seven days anyone can call it, and the contract self-destructs to the winner. There is no way back to the author.\n\t\tverified contract source\thttps://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code\nexplorer: https://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7\nsource: https://etherscan.io/address/0x735ba26f91e1275fa4b504649b19ef74739fe7e7#code",
   },
+  {
+    id: "brave_new_world",
+    collection: "brave_new_world",
+    chain: "bitcoin",
+    status: "unsolved",
+    address: "1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ",
+    kind: "p2pkh",
+    hash160: "bd031e54cde2a3189fd59bc49f731367a1779eb0",
+    redeemScript: undefined,
+    prize: "0.2 BTC",
+    prizeAmount: 0.2,
+    currency: undefined,
+    startedAt: "2020-10-08 09:25:30",
+    solvedAt: undefined,
+    solveTime: undefined,
+    bits: undefined,
+    range: undefined,
+    pubkey: undefined,
+    pubkeyFormat: undefined,
+    secret: "none",
+    keyLiteral: undefined,
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://blockstream.info/address/1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ",
+    source: "https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/",
+    transactions: 5,
+    tool: "brave_new_world\tunsolved\t0.2 BTC\t1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nchain: bitcoin  address kind: p2pkh\nhash160: bd031e54cde2a3189fd59bc49f731367a1779eb0\npublic key: unknown\nprivate key: unknown\nstarted: 2020-10-08 09:25:30\ntransactions: 5\n\tfunding\t2020-05-10 08:01:46\t0.2 BTC\tfcee21d44ee94c09869947c74b61669bf928358e9c2d1699fb075bb6ebf5d043\n\tincrease\t2023-10-25 01:55:34\t0.00001 BTC\ta490266f12466f91c00546a4b744b5faea70835794b5b182d84e47e4294a33ee\n\tincrease\t2024-12-13 08:42:55\t0.001 BTC\t6ca136b078c61f530e3c7eb46eed0a23785840294fc59ef006df26e26f88fb53\n\tincrease\t2025-05-09 23:02:54\t0.00000557 BTC\t51b778b00ca5dc676e99da96545e5c1ae6cf68c4ca79d59879e77facac64a251\n\tincrease\t2025-06-02 05:48:21\t0.00005727 BTC\t6d1f46d1913c45de1cd515a9cdc4de64ff2abfc19102e2cf23840bb5e944f8f4\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/brave_new_world/puzzle.png\nasset source: https://i.redd.it/n1x7g8ceaur51.png\nexplorer: https://blockstream.info/address/1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nsource: https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "f65441c466a3",
-  total: 372,
+  dataVersion: "2853de4f9657",
+  total: 373,
   solved: 162,
-  unsolved: 99,
+  unsolved: 100,
   claimed: 12,
   swept: 96,
   expired: 3,
@@ -928,13 +957,13 @@ export const STATS_STATIC = {
   unsolvedPrize: {
     AR: 1900,
     ETH: 12.612541554256945,
-    BTC: 908.87574943,
+    BTC: 909.07574943,
   },
   totalPrize: {
     AR: 5550,
     ETH: 26.246241554256944,
     DAI: 100,
-    BTC: 1064.26058961,
+    BTC: 1064.46058961,
     BCH: 5.1,
     LTC: 230.8255,
     DCR: 460,
@@ -1090,6 +1119,28 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 1,
     firstStarted: "2019-04-06 02:58:10",
     lastStarted: "2019-04-06 02:58:10",
+    hints: [],
+  },
+  {
+    key: "brave_new_world",
+    author: "stsh_n",
+    authorKey: "stsh-n",
+    authorUrl: "https://www.reddit.com/user/stsh_n/",
+    total: 1,
+    statuses: {
+      unsolved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.2,
+    },
+    unsolvedPrize: {
+      BTC: 0.2,
+    },
+    withPubkey: 0,
+    withKey: 0,
+    firstStarted: "2020-10-08 09:25:30",
+    lastStarted: "2020-10-08 09:25:30",
     hints: [],
   },
   {
@@ -1595,6 +1646,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Pseudonymous author of the 2019 Quizchain puzzle series on Reddit, who shut it all down in August 2019 and called it a failed experiment.",
     collections: ["book_quiz", "quizchain", "satoshi_birthday_quiz"],
     puzzles: 12,
+  },
+  {
+    key: "stsh-n",
+    to: "/authors/stsh-n",
+    name: "stsh_n",
+    kind: "person",
+    about:
+      "Reddit account that posted one picture puzzle to its own profile in October 2020, with 0.2 BTC on the address it shows.",
+    collections: ["brave_new_world"],
+    puzzles: 1,
   },
   {
     key: "coin-artist",

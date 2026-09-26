@@ -7,6 +7,7 @@ import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { BookQuizCollection } from "../../src/collections/book_quiz.ts";
+import { BraveNewWorldCollection } from "../../src/collections/brave_new_world.ts";
 import { CoinArtistCollection } from "../../src/collections/coin_artist.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
@@ -70,6 +71,7 @@ const concreteClasses = [
   BitapsCollection,
   BitimageCollection,
   BookQuizCollection,
+  BraveNewWorldCollection,
   CoinArtistCollection,
   DugCollection,
   GenesisCollection,
@@ -813,20 +815,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(372);
+    expect(await all()).toHaveLength(373);
     expect(await stats()).toEqual({
-      total: 372,
+      total: 373,
       claimed: 12,
       expired: 3,
       solved: 162,
       swept: 96,
-      unsolved: 99,
+      unsolved: 100,
       with_pubkey: 267,
       total_prize: {
         AR: 5550,
         ETH: 26.246241554256944,
         DAI: 100,
-        BTC: 1064.26058961,
+        BTC: 1064.46058961,
         BCH: 5.1,
         LTC: 230.8255,
         DCR: 460,
@@ -834,7 +836,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1900,
         ETH: 12.612541554256945,
-        BTC: 908.87574943,
+        BTC: 909.07574943,
       },
     });
   });
@@ -877,7 +879,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(372);
+    ).toBe(373);
   });
 
   it("hands back the memoized views frozen through", async () => {

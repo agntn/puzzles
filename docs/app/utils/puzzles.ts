@@ -158,6 +158,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Thirty brainwallets from 2014. Almost all cracked since.",
   },
+  brave_new_world: {
+    icon: "i-lucide-cctv",
+    title: "Brave New World",
+    sample: "brave_new_world",
+    chains: ["bitcoin"],
+    blurb:
+      "One collage from 2020, an address up its left edge and a seed phrase somewhere in the picture. The 0.2 BTC is still there.",
+  },
   picture_puzzle: {
     icon: "i-lucide-scan-qr-code",
     title: "1 mBTC picture puzzle",
