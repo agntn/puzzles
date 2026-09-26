@@ -206,9 +206,9 @@ describe("lazy collection registry", () => {
         amount: 0.00005,
       },
     ]);
-    expect(puzzle.hints()).toHaveLength(19);
+    expect(puzzle.hints()).toHaveLength(22);
     expect(puzzle.hints()[0]?.source).toBe(puzzle.sourceUrl());
-    expect(puzzle.hints().at(-1)?.date).toBe("2026-09-19");
+    expect(puzzle.hints().at(-1)?.date).toBe("2026-09-26");
     expect(puzzle.hints().at(-1)?.confirmation?.description).toContain("same input address");
     expect(puzzle.hints().some((hint) => hint.text === "It's a 128-bit digest.")).toBe(true);
     expect(

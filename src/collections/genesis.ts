@@ -194,6 +194,33 @@ export const genesisBlock = bitcoinPuzzle({
       ),
       { date: "2026-09-19" },
     ),
+    official(
+      "First 128 bits of SHA-256 hash of the genesis block's entropy. Encrypted pubkey: 50k sats output + 1k input.",
+      "https://mempool.space/tx/ae906bdebdf7cd2e9b2490a727d5d91eaa203c2ae68f8461ea62e07ffe3b9b1c",
+      confirmation(
+        "https://blockstream.info/tx/ae906bdebdf7cd2e9b2490a727d5d91eaa203c2ae68f8461ea62e07ffe3b9b1c",
+        "OP_RETURN funded from the same input address as the announcement. Whitespace normalized.",
+      ),
+      { date: "2026-09-24" },
+    ),
+    official(
+      "It's a contiguous piece of the genesis block, exactly as a standard tool shows it. I got it by copy-pasting the tool's output.",
+      "https://mempool.space/tx/e3ab67c0ad72980678f6da4e0751d765cd73c1457656232ac878cfcfec8ae882",
+      confirmation(
+        "https://blockstream.info/tx/e3ab67c0ad72980678f6da4e0751d765cd73c1457656232ac878cfcfec8ae882",
+        "OP_RETURN funded from the same input address as the announcement, answering the shape questions in c5f4c7ca2959b3c166f4941bcaf9debb2174017b49909a05d0a7e8a584e0e4a6.",
+      ),
+      { date: "2026-09-25" },
+    ),
+    official(
+      "The genesis block is only 2.5E-32 of the 2^128 possibilities. Revealing the seed's master fingerprint without the passphrase is basically giving away the entropy. All the secret pieces have to be cracked at the same time.",
+      "https://mempool.space/tx/88fc7fd69dc89b2d716814d2a1ccdc8bdf419f158c7028b37c1cb83230cda4da",
+      confirmation(
+        "https://blockstream.info/tx/88fc7fd69dc89b2d716814d2a1ccdc8bdf419f158c7028b37c1cb83230cda4da",
+        "OP_RETURN funded from the same input address as the announcement. The message opens with a player's decrypted offer for a master fingerprint; only the text after its \"Reason for decline:\" label is the author's and is recorded here.",
+      ),
+      { date: "2026-09-26" },
+    ),
   ],
 });
 
@@ -228,6 +255,36 @@ export class GenesisCollection extends SingletonCollection {
         "Answered a paid question in September: BIP39, 12 words, a passphrase, and entropy from data that is public in the genesis block.",
         "https://mempool.space/tx/f8f04fc04e2c4f34dc2264f85ff7944c6aa822446bc4cc082e95a52aed5c2a4c",
         { date: "2026-09-11" },
+      ),
+      fact(
+        "The X account caesrcd quoted its announcement on 2026-09-05, asking whether no one would be able to solve the puzzle and saying it was seriously thinking about switching to this new wallet setup.",
+        "https://x.com/caesrcd/status/2096052655449657713",
+        { date: "2026-09-05" },
+      ),
+      fact(
+        "The X account caesrcd quoted Adam Back on a Blockstream bug to say that an LLM spotting bugs that are hard to catch by eye is not just as effective at fixing them.",
+        "https://x.com/caesrcd/status/2098071674205712636",
+        { date: "2026-09-10" },
+      ),
+      fact(
+        "The X account caesrcd recalled the Coldcard incident, where weak entropy, weak passphrases and leaked multisig pubkeys got wallets hit, and wrote that this puzzle's pubkeys had not yet been exposed.",
+        "https://x.com/caesrcd/status/2100944026774151611",
+        { date: "2026-09-18" },
+      ),
+      fact(
+        "Set the terms for the two public keys in OP_RETURN, a week after first offering them for 50k sats: 50k sats to the puzzle address plus 1k to the author address, delivered encrypted.",
+        "https://mempool.space/tx/ae906bdebdf7cd2e9b2490a727d5d91eaa203c2ae68f8461ea62e07ffe3b9b1c",
+        { date: "2026-09-24" },
+      ),
+      fact(
+        "Started sending Electrum-encrypted OP_RETURN messages (base64 BIE1) the same day, readable only by the player whose pubkey they were encrypted to.",
+        "https://mempool.space/tx/5ee1f8e2e5c7eaf571b6bbac6dc89263206d4db2c44ce71df94bb6d10924b81c",
+        { date: "2026-09-24" },
+      ),
+      fact(
+        "The X account caesrcd posted a screenshot of 0xflorent's OP_RETURN message about brute-forcing the puzzle with Claude ten minutes after the block that confirmed it, announcing a heavyweight white-hat on the puzzle.",
+        "https://x.com/caesrcd/status/2103192783779750018",
+        { date: "2026-09-24" },
       ),
     ],
   });
