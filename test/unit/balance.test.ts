@@ -341,6 +341,15 @@ describe("balanceTool", () => {
     return tools;
   }
 
+  it("names the coin, as puzzles balance does", async () => {
+    const tools = await cashTools();
+    stubFetch(() => blockchairAddress());
+
+    const result = await tools.balanceTool("fixture/cash");
+
+    expect(result.content[0]?.text).toBe("fixture/cash: 0 BCH");
+  });
+
   it("sends ETHERSCAN_API_KEY to Ethereum only, never to Blockchair", async () => {
     const tools = await cashTools();
     vi.stubEnv("ETHERSCAN_API_KEY", "etherscan-secret");

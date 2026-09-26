@@ -3,12 +3,11 @@ import { defineCommand } from "citty";
 import { filterArgs, filterQuery, hasFilter } from "./filters.ts";
 import { jsonArg, oneLine, printLine } from "./output.ts";
 import { apiKeyVariables, BalanceError, type BalanceOptions } from "../core/balance.ts";
-import { chainSymbol } from "../core/chains.ts";
 import { requirePuzzle, selectPuzzles } from "../core/dataset.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
 import type { Puzzle } from "../core/puzzle.ts";
 import type { Balance } from "../core/types.ts";
-import { toJson } from "../core/utils.ts";
+import { formatBalance, toJson } from "../core/utils.ts";
 
 /**
  * The pause between two lookups of a filtered pass. Fired at once, a pass over the unsolved
@@ -21,13 +20,9 @@ type Row = Readonly<
   { puzzle: Puzzle; balance: Balance; error?: never } | { puzzle: Puzzle; error: string }
 >;
 
-function amount(balance: Balance): string {
-  return `${balance.totalAmount()} ${chainSymbol(balance.chain)}`;
-}
-
 function formatRow(row: Row): string {
   return row.error === undefined
-    ? `OK\t${row.puzzle.id()}\t${amount(row.balance)}`
+    ? `OK\t${row.puzzle.id()}\t${formatBalance(row.balance)}`
     : `FAIL\t${row.puzzle.id()}\t${oneLine(row.error)}`;
 }
 
@@ -115,7 +110,7 @@ export default defineCommand({
     if (args.id !== undefined) {
       const puzzle = await requirePuzzle(args.id);
       const balance = await puzzle.balance(optionsFor(puzzle, apiKey));
-      printLine(args.json ? toJson(balance) : `${puzzle.id()}: ${amount(balance)}`);
+      printLine(args.json ? toJson(balance) : `${puzzle.id()}: ${formatBalance(balance)}`);
       return;
     }
     if (!filtered) {
