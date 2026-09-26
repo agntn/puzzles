@@ -15,12 +15,12 @@ import { bitcoinCashPuzzle, Status } from "../../core/puzzle.ts";
 const THREAD = "https://bitcointalk.org/index.php?topic=5518896";
 
 /**
- * Mini-puzzle #125: puzzle #125's key cut into twelve hex pieces in no particular order. The prize
- * is the Bitcoin Cash side of the #125 address; the post names the puzzle, not the CashAddr, which
- * is the same HASH160 in Bitcoin Cash's encoding.
+ * Mini-puzzle #2, for puzzle #125: that puzzle's key cut into twelve hex pieces in no particular
+ * order. The prize is the Bitcoin Cash side of the #125 address; the post names the puzzle, not the
+ * CashAddr, which is the same HASH160 in Bitcoin Cash's encoding.
  */
-export const mini125 = bitcoinCashPuzzle({
-  id: "mini/125",
+export const mini2 = bitcoinCashPuzzle({
+  id: "mini/2",
   address: p2pkh(
     "bitcoincash:qrms0yjk4gp8m3phew6nn724gujpvujleq9gkhh8fz",
     "f7079256aa027dc437cbb539f955472416725fc8",

@@ -1,12 +1,17 @@
 import { NumericCollection } from "../core/collection.ts";
 import { fact, party, PartyKind, profile } from "../core/parts.ts";
-import { mini120 } from "./mini/120.ts";
-import { mini125 } from "./mini/125.ts";
-import { mini130 } from "./mini/130.ts";
+import { mini1 } from "./mini/1.ts";
+import { mini2 } from "./mini/2.ts";
+import { mini3 } from "./mini/3.ts";
+import { mini4 } from "./mini/4.ts";
+import { mini5 } from "./mini/5.ts";
+import { mini6 } from "./mini/6.ts";
+import { mini7 } from "./mini/7.ts";
 
 /**
- * RetiredCoder's mini-puzzles, each built on a solved Bitcoin puzzle and paying out the Bitcoin
- * Cash still on that puzzle's address. Addressed by the number of the puzzle it is built on.
+ * RetiredCoder's mini-puzzles, numbered as the author numbered them. Four are built on a solved
+ * Bitcoin puzzle and pay out the Bitcoin Cash still on that puzzle's address; #4 to #6 put 0.01 BTC
+ * on a fresh key.
  */
 export class MiniCollection extends NumericCollection {
   /** Stable collection key used in puzzle identifiers. */
@@ -17,7 +22,7 @@ export class MiniCollection extends NumericCollection {
     key: "retired-coder",
     kind: PartyKind.Person,
     about:
-      "Bitcoin puzzle solver and author of RCKangaroo who gave away the Bitcoin Cash left on three solved puzzle addresses as mini-puzzles on Bitcointalk.",
+      "Bitcoin puzzle solver and author of RCKangaroo who posted seven mini-puzzles on Bitcointalk: the Bitcoin Cash left on four solved puzzle addresses, and 0.01 BTC three times.",
     profiles: [
       profile("github", "https://github.com/RetiredC"),
       profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=3657819"),
@@ -38,11 +43,16 @@ export class MiniCollection extends NumericCollection {
         "https://bitcointalk.org/index.php?topic=5522785.msg64850761#msg64850761",
         { date: "2024-12-15" },
       ),
+      fact(
+        "Printed the key of puzzle #135 while explaining mini-puzzle #7, whose winner did not write the solution in the thread: It's not polite.",
+        "https://bitcointalk.org/index.php?topic=5589799.msg66992048#msg66992048",
+        { date: "2026-07-29" },
+      ),
     ],
   });
 
   /** Every puzzle in this collection, oldest first. */
-  static readonly puzzles = [mini120, mini125, mini130];
+  static readonly puzzles = [mini1, mini2, mini3, mini4, mini5, mini6, mini7];
 
   /** Builds the canonical collection. */
   constructor() {

@@ -1,6 +1,6 @@
 # Archived sources
 
-Local reading copies of the pages the collection records cite and nobody else keeps: nine tweets, fourteen Reddit threads, one Reddit comment and three Bitcointalk threads, as of September 26, 2026. The archive keeps the Ballet announcement, Zden's two hints, the kitten image source used by Bitimage, the two announcements the author records cite, the three posts the solver records cite, the two AoiNakamoto quiz threads, the ten Quizchain block threads, AoiNakamoto's question on r/Bitcoin before the birthday quiz and IAMABananaAMAA's Caesar riddle, each with every surviving comment. The one Reddit comment is the reply where AoiNakamoto names their Twitter feed, kept with the comment it answers. The quiz and riddle threads are where each answer key was published, for the book quiz the prize address too, for Quizchain the private key of blocks 1 to 5 and 10 and the answer to every block, for the riddle the key itself, and for RetiredCoder's three mini-puzzles every hint, the key and, for #130, the author's own explanation. Tweets are archived as single posts: no replies, no quote tweets, no other post about the same puzzle.
+Local reading copies of the pages the collection records cite and nobody else keeps: nine tweets, fourteen Reddit threads, one Reddit comment and seven Bitcointalk threads, as of September 26, 2026. The archive keeps the Ballet announcement, Zden's two hints, the kitten image source used by Bitimage, the two announcements the author records cite, the three posts the solver records cite, the two AoiNakamoto quiz threads, the ten Quizchain block threads, AoiNakamoto's question on r/Bitcoin before the birthday quiz and IAMABananaAMAA's Caesar riddle, each with every surviving comment. The one Reddit comment is the reply where AoiNakamoto names their Twitter feed, kept with the comment it answers. The quiz and riddle threads are where each answer key was published, for the book quiz the prize address too, for Quizchain the private key of blocks 1 to 5 and 10 and the answer to every block, for the riddle the key itself, and for RetiredCoder's seven mini-puzzles every hint, the key and, for #3, #4, #5 and #7, the author's own explanation. Tweets are archived as single posts: no replies, no quote tweets, no other post about the same puzzle.
 
 - [Ballet bounty announcement](ballet/bobbyclee-2020-07-31.md)
 - [Bitimage's kitten image source](bitimage/aantonop-2015-05-27.md)
@@ -26,6 +26,10 @@ Local reading copies of the pages the collection records cite and nobody else ke
 - [Mini-puzzle for puzzle #120](mini/retiredcoder-2024-10-14.md)
 - [Mini-puzzle for puzzle #125](mini/retiredcoder-2024-11-14.md)
 - [Mini-puzzle for puzzle #130](mini/retiredcoder-2024-12-14.md)
+- [Mini-puzzle #4](mini/retiredcoder-2025-01-14.md)
+- [Mini-puzzle #5](mini/retiredcoder-2025-04-16.md)
+- [Mini-puzzle #6](mini/retiredcoder-2026-03-14.md)
+- [Mini-puzzle #7](mini/retiredcoder-2026-07-29.md)
 - [Satoshi birthday 7 million quiz thread](satoshi_birthday_quiz/aoinakamoto-2019-04-05.md)
 - [AoiNakamoto's giveaway question on r/Bitcoin](satoshi_birthday_quiz/aoinakamoto-2019-04-05-b9l37o.md)
 - [AoiNakamoto's comment naming @NakamotoAoi](satoshi_birthday_quiz/aoinakamoto-2019-04-10-ekjcc1k.md)
