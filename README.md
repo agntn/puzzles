@@ -100,6 +100,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `hash_collision`        | bitcoin                             | Peter Todd's P2SH collision bounties    |
 | `ballet`                | bitcoin                             | BIP38 keys printed on physical wallets  |
 | `dug`                   | bitcoin                             | 2025 student seed hunt                  |
+| `mini`                  | bitcoincash                         | RetiredCoder's Bitcoin Cash riddles     |
 | `bitimage`              | bitcoin                             | Seeds hashed from photographs           |
 | `luckylurker`           | bitcoin                             | Two Bitcoin Vault seed challenges       |
 | `iamabananaamaa`        | bitcoin                             | A ZIP in a GIF, then a fake Caesar      |

@@ -77,6 +77,7 @@ const expectedCollections = [
   "ledger_donjon",
   "luckylurker",
   "mineshop",
+  "mini",
   "movie_enigma",
   "picture_puzzle",
   "quizchain",

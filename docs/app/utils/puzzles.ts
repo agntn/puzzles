@@ -135,6 +135,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Six seed words in a video, six in the blog post it links to. The author still spends from the wallet.",
   },
+  mini: {
+    icon: "i-lucide-puzzle",
+    title: "RetiredCoder's mini-puzzles",
+    sample: "mini/130",
+    chains: ["bitcoincash"],
+    blurb:
+      "Three solved Bitcoin puzzle keys, played again for the Bitcoin Cash still on their addresses. A swapped key, a shuffled key, one signature too many.",
+  },
   movie_enigma: {
     icon: "i-lucide-clapperboard",
     title: "Bitcoin Movie Enigma",

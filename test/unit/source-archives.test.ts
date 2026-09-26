@@ -220,6 +220,39 @@ const sources = [
     author: "u/AoiNakamoto",
     date: "2019-04-10",
   },
+  {
+    file: "mini/retiredcoder-2024-10-14",
+    url: "https://bitcointalk.org/index.php?topic=5513047",
+    author: "RetiredCoder",
+    date: "2024-10-14",
+    archive: {
+      url: "https://web.archive.org/web/20250830144758/https://bitcointalk.org/index.php?topic=5513047",
+      date: "2025-08-30T14:47:58Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "mini/retiredcoder-2024-11-14",
+    url: "https://bitcointalk.org/index.php?topic=5518896",
+    author: "RetiredCoder",
+    date: "2024-11-14",
+    archive: {
+      url: "https://web.archive.org/web/20250830143820/https://bitcointalk.org/index.php?topic=5518896",
+      date: "2025-08-30T14:38:20Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "mini/retiredcoder-2024-12-14",
+    url: "https://bitcointalk.org/index.php?topic=5522785",
+    author: "RetiredCoder",
+    date: "2024-12-14",
+    archive: {
+      url: "https://web.archive.org/web/20260925214004/https://bitcointalk.org/index.php?topic=5522785.0",
+      date: "2026-09-25T21:40:04Z",
+      content: "confirmed",
+    },
+  },
 ] as const;
 
 type Source = (typeof sources)[number];

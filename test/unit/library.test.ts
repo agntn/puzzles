@@ -17,6 +17,7 @@ import { kTimesG, KTimesGCollection } from "../../src/collections/ktimesg.ts";
 import { LedgerDonjonCollection } from "../../src/collections/ledger_donjon.ts";
 import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MineshopCollection } from "../../src/collections/mineshop.ts";
+import { mini, MiniCollection } from "../../src/collections/mini.ts";
 import { MovieEnigmaCollection } from "../../src/collections/movie_enigma.ts";
 import { PicturePuzzleCollection } from "../../src/collections/picture_puzzle.ts";
 import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.ts";
@@ -77,6 +78,7 @@ const concreteClasses = [
   LedgerDonjonCollection,
   LuckyLurkerCollection,
   MineshopCollection,
+  MiniCollection,
   MovieEnigmaCollection,
   PicturePuzzleCollection,
   QuizchainCollection,
@@ -426,6 +428,19 @@ describe("lazy collection registry", () => {
       blocks.map((block) => `quizchain/${block}`),
     );
 
+    /* Numbered by the Bitcoin puzzle each one is built on, and paid out on Bitcoin Cash. */
+    expect([130, "130", "mini/130"].map((query) => mini.get(query)?.id())).toEqual([
+      "mini/130",
+      "mini/130",
+      "mini/130",
+    ]);
+    expect(mini.all().map((puzzle) => [puzzle.id(), puzzle.chain()])).toEqual([
+      ["mini/120", "bitcoincash"],
+      ["mini/125", "bitcoincash"],
+      ["mini/130", "bitcoincash"],
+    ]);
+    expect(mini.get(135)).toBeUndefined();
+
     expect(["80_bit", "ktimesg/80_bit"].map((query) => kTimesG.get(query)?.id())).toEqual([
       "ktimesg/80_bit",
       "ktimesg/80_bit",
@@ -663,7 +678,7 @@ describe("lazy collection registry", () => {
       currency: "BTC",
     });
     expect(retired.collections).toEqual(["b1000"]);
-    expect(retired.authored).toEqual([]);
+    expect(retired.authored).toEqual(["mini"]);
     /* The four records repeat the profiles; the joined record keeps each once. */
     expect(retired.solver.profiles).toHaveLength(2);
     expect(retired.solver.about).toMatch(/^Author of RCKangaroo/u);
@@ -766,20 +781,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(360);
+    expect(await all()).toHaveLength(363);
     expect(await stats()).toEqual({
-      total: 360,
+      total: 363,
       claimed: 12,
       expired: 3,
-      solved: 154,
+      solved: 157,
       swept: 96,
       unsolved: 95,
-      with_pubkey: 260,
+      with_pubkey: 263,
       total_prize: {
         AR: 5550,
         ETH: 22.74624155,
         DAI: 100,
         BTC: 1064.23058961,
+        BCH: 3.75,
         LTC: 230.8255,
         DCR: 460,
       },
@@ -812,7 +828,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(360);
+    ).toBe(363);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -839,6 +855,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(154);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(157);
   });
 });
