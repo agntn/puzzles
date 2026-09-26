@@ -147,6 +147,10 @@ function copyCode() {
   color: var(--ui-text-highlighted);
   counter-reset: line;
 }
+/* Plain text has no lines to number, so it starts under the tag instead of at the shell's edge. */
+.pre-body:not(.shiki) {
+  padding-left: 16px;
+}
 .pre-body :deep(code) {
   display: grid;
   min-width: max-content;

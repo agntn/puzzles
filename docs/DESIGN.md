@@ -281,7 +281,7 @@ Fenced code in the docs renders through [ProsePre.vue](app/components/content/Pr
 
 1. **Shell:** the clipped outline with both cuts, like the callouts.
 2. **Bar:** the language as a boxed tag in its reader's name (`ts`, `shell`, `json`), the filename in the title face when the block has one, the hatched mark and the `console-button` copy.
-3. **Ruler**, then the lines with numbers in a gutter like the landing's snippets. A highlighted line gets the accent edge. Long lines scroll inside the block; the page never does.
+3. **Ruler**, then the lines with numbers in a gutter like the landing's snippets. A highlighted line gets the accent edge. A `text` block has no grammar, so Shiki gives it no lines: it goes without numbers and starts under the language tag. Long lines scroll inside the block; the page never does.
 
 The colours come from [shiki-theme.ts](shiki-theme.ts), a Shiki theme whose every colour is a `--shiki-token-*` variable from `app.css`. The landing's `tok-*` classes read the same variables, so a snippet looks the same in a panel and on a page: keywords amber, calls light amber, strings blue, comments grey, names, punctuation and numbers in the text colour. `nuxt.config.ts` uses the theme for both modes and imports only its type from `shiki`.
 
