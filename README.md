@@ -44,11 +44,21 @@ npx @agntn/puzzles stats
 That prints the total, one count per status and how many puzzles have a known public key. No key, no config, no network. The records ship inside the package. The bare `puzzles` below is `pnpm exec puzzles` after a local `pnpm add`, or just `puzzles` after `pnpm add -g @agntn/puzzles`.
 
 ```bash
-puzzles show b1000/71
+puzzles show hash_collision/sha256
 ```
 
 ```text
-b1000/71	unsolved	7.100226 BTC	1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU
+hash_collision/sha256	unsolved	0.277343 BTC	35Snmmy3uhaer2gTboc81ayCip4m9DT4ko
+chain: bitcoin  address kind: p2sh
+hash160: 292fb39df7cd619a396069383928e6bfb74ebec5
+redeem script: 6e879169a87ca887 (hash 292fb39df7cd619a396069383928e6bfb74ebec5)
+public key: unknown
+private key: unknown
+started: 2013-09-13 05:59:09
+transactions: 1
+	funding	2013-09-13 05:59:09	0.1 BTC	397f12ee15f8a3d2ab25c0f6bb7d3c64d2038ca056af10dd8251b98ae0f076b0
+explorer: https://blockstream.info/address/35Snmmy3uhaer2gTboc81ayCip4m9DT4ko
+source: https://bitcointalk.org/index.php?topic=293382.0
 ```
 
 ### Commands
@@ -59,7 +69,7 @@ b1000/71	unsolved	7.100226 BTC	1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU
 | `puzzles collections`       | One row per collection: key, counts, author                                                                             |
 | `puzzles authors [key]`     | One row per author, or one author's record with its sourced facts                                                       |
 | `puzzles solvers [key]`     | One row per named solver, or one solver's record: every solve, profiles and sourced facts                               |
-| `puzzles show <id>`         | One puzzle. `--json` for the whole record                                                                               |
+| `puzzles show <id>`         | One puzzle's record: key material, transactions, hints and links. `--json` for the data                                 |
 | `puzzles hints <id>`        | The collection's hints, the puzzle's own, then its hint files. `--json` for both                                        |
 | `puzzles stages <id>`       | The stages of a multi-stage puzzle with their pages, files and published answers. `--json` for the list                 |
 | `puzzles list [collection]` | One puzzle per line. `--address`, `--chain`, `--status` and `--with-pubkey` narrow it, `--limit` and `--offset` page it |

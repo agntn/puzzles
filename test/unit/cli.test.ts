@@ -85,6 +85,17 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     expect(result).toMatchObject({ id: "b1000/1", status: "solved" });
   });
 
+  it("prints the whole record of a puzzle as the tool does", async () => {
+    const { showTool } = await import("../../src/tool-operations.ts");
+    const derived = await puzzles("show", "quizchain/6");
+    const inherited = await puzzles("show", "b1000/71");
+
+    expect(derived.trimEnd()).toBe((await showTool("quizchain/6")).content[0]?.text);
+    expect(derived).toContain("(wif, derived from the published recipe)");
+    expect(inherited.trimEnd()).toBe((await showTool("b1000/71")).content[0]?.text);
+    expect(inherited).toContain("collection hints: 1");
+  });
+
   it("prints the stages of a puzzle as the tool does", async () => {
     const { stagesTool } = await import("../../src/tool-operations.ts");
     const output = await puzzles("stages", "gsmg");
