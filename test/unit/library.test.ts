@@ -61,6 +61,7 @@ import {
   Status,
   type AnyCollection,
 } from "../../src/index.ts";
+import { prizeTotals } from "../../src/core/utils.ts";
 
 const concreteClasses = [
   ArweaveCollection,
@@ -819,7 +820,7 @@ describe("lazy collection registry", () => {
       with_pubkey: 263,
       total_prize: {
         AR: 5550,
-        ETH: 26.24624155,
+        ETH: 26.246241554256944,
         DAI: 100,
         BTC: 1064.23058961,
         BCH: 3.75,
@@ -828,9 +829,26 @@ describe("lazy collection registry", () => {
       },
       unsolved_prize: {
         AR: 1900,
-        ETH: 12.61254155,
+        ETH: 12.612541554256945,
         BTC: 908.87574943,
       },
+    });
+  });
+
+  it("sums prizes to every place they were recorded with", async () => {
+    const prized = (id: string, prize: number) =>
+      bitcoinPuzzle({
+        id,
+        address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+        sourceUrl: "https://example.com/puzzle",
+        startedAt: "2026-01-01",
+        prize,
+      });
+
+    expect(prizeTotals([await requirePuzzle("mineshop")])).toEqual({ ETH: 8.612541554256945 });
+    expect(prizeTotals([prized("sum/1", 0.1), prized("sum/2", 0.2)])).toEqual({ BTC: 0.3 });
+    expect(prizeTotals([prized("sum/1", 1e-8), prized("sum/2", 1057.06884912)])).toEqual({
+      BTC: 1057.06884913,
     });
   });
 
