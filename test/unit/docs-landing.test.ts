@@ -32,7 +32,7 @@ describe("docs landing fixtures", () => {
 
   it("labels the solution file separately from its solver on the puzzle page", async () => {
     const library = await import("../../src/index.ts");
-    const puzzle = await library.requirePuzzle("movie_enigma");
+    const puzzle = await library.requirePuzzle("movie-enigma");
     const view = await toPuzzleView(library, puzzle, "", []);
 
     expect(view.solverName).toBe("rabbidbird");
@@ -40,8 +40,8 @@ describe("docs landing fixtures", () => {
     expect(view.assets).toEqual([
       {
         label: "solution",
-        path: "assets/movie_enigma/solution.md",
-        url: "/assets/movie_enigma/solution.md",
+        path: "assets/movie-enigma/solution.md",
+        url: "/assets/movie-enigma/solution.md",
         image: false,
       },
     ]);
@@ -154,9 +154,9 @@ describe("docs landing fixtures", () => {
 
   it("read a collection's facts strip without loading another collection", async () => {
     const library = await import("../../src/index.ts");
-    const facts = collectionFacts(await library.requireCollection("hash_collision"));
+    const facts = collectionFacts(await library.requireCollection("hash-collision"));
 
-    expect(facts.key).toBe("hash_collision");
+    expect(facts.key).toBe("hash-collision");
     expect(facts.author).toBe("Peter Todd");
     expect(facts.total).toBe(6);
     expect(facts.chains).toEqual(["bitcoin"]);

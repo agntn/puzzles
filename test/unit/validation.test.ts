@@ -401,7 +401,7 @@ describe("collection class data", () => {
     ).toEqual([]);
   });
 
-  it("keeps puzzle identifiers unique and owned by their collection", () => {
+  it("keeps puzzle identifiers unique, kebab-case and owned by their collection", () => {
     const seen = new Set<string>();
     const problems: string[] = [];
     for (const collection of registered) {
@@ -413,6 +413,9 @@ describe("collection class data", () => {
         seen.add(id);
         if (puzzle.collection() !== collection.key) {
           problems.push(`${id}: id does not belong to ${collection.key}`);
+        }
+        if (id.includes("_")) {
+          problems.push(`${id}: id has an underscore, not kebab-case`);
         }
       }
     }
@@ -448,12 +451,12 @@ describe("collection class data", () => {
     expect(puzzles.filter((puzzle) => puzzle.hasDerivedKey()).map((puzzle) => puzzle.id())).toEqual(
       [
         "iamabananaamaa/gif",
-        "picture_puzzle",
+        "picture-puzzle",
         "quizchain/6",
         "quizchain/7",
         "quizchain/8",
         "quizchain/9",
-        "satoshi_birthday_quiz",
+        "satoshi-birthday-quiz",
       ],
     );
   });

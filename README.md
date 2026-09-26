@@ -44,11 +44,11 @@ npx @agntn/puzzles stats
 That prints the total, one count per status and how many puzzles have a known public key. No key, no config, no network. The records ship inside the package. The bare `puzzles` below is `pnpm exec puzzles` after a local `pnpm add`, or just `puzzles` after `pnpm add -g @agntn/puzzles`.
 
 ```bash
-puzzles show hash_collision/sha256
+puzzles show hash-collision/sha256
 ```
 
 ```text
-hash_collision/sha256	unsolved	0.277343 BTC	35Snmmy3uhaer2gTboc81ayCip4m9DT4ko
+hash-collision/sha256	unsolved	0.277343 BTC	35Snmmy3uhaer2gTboc81ayCip4m9DT4ko
 chain: bitcoin  address kind: p2sh
 hash160: 292fb39df7cd619a396069383928e6bfb74ebec5
 redeem script: 6e879169a87ca887 (hash 292fb39df7cd619a396069383928e6bfb74ebec5)
@@ -108,7 +108,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `quizchain`             | bitcoin                             | Quiz blocks chained by their keys       |
 | `mini`                  | bitcoin, bitcoincash                | RetiredCoder's seven mini-puzzles       |
 | `warp`                  | bitcoin                             | Keybase's scrypt brainwallet challenges |
-| `hash_collision`        | bitcoin                             | Peter Todd's P2SH collision bounties    |
+| `hash-collision`        | bitcoin                             | Peter Todd's P2SH collision bounties    |
 | `teikhos`               | ethereum                            | Contracts that pay for a public key     |
 | `ballet`                | bitcoin                             | BIP38 keys printed on physical wallets  |
 | `dug`                   | bitcoin                             | 2025 student seed hunt                  |
@@ -117,19 +117,19 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `iamabananaamaa`        | bitcoin                             | A ZIP in a GIF, then a fake Caesar      |
 | `bitaps`                | bitcoin                             | A 3 of 5 secret sharing scheme          |
 | `gsmg`                  | bitcoin                             | A multi phase image puzzle              |
-| `movie_enigma`          | bitcoin                             | Film titles as seed words, solved 2026  |
-| `ledger_donjon`         | bitcoin                             | Scissors Secret Sharing from the CTF    |
-| `coin_artist`           | bitcoin                             | TORCHED H34R7S painting                 |
+| `movie-enigma`          | bitcoin                             | Film titles as seed words, solved 2026  |
+| `ledger-donjon`         | bitcoin                             | Scissors Secret Sharing from the CTF    |
+| `coin-artist`           | bitcoin                             | TORCHED H34R7S painting                 |
 | `genesis`               | bitcoin                             | Genesis block OP_RETURN puzzle          |
 | `mineshop`              | ethereum                            | A seed split between a video and a post |
-| `satoshi_birthday_quiz` | bitcoin                             | Seven quiz answers hashed into a wallet |
-| `book_quiz`             | bitcoin                             | A book quiz nobody won in time          |
+| `satoshi-birthday-quiz` | bitcoin                             | Seven quiz answers hashed into a wallet |
+| `book-quiz`             | bitcoin                             | A book quiz nobody won in time          |
 | `ktimesg`               | bitcoin                             | 80 hidden bits and a mempool race       |
 | `wickex`                | bitcoin                             | Hex, Morse and a spectrogram passphrase |
-| `picture_puzzle`        | bitcoin                             | Four pictures that spell a key database |
-| `brave_new_world`       | bitcoin                             | A seed phrase hidden in a 2020 collage  |
+| `picture-puzzle`        | bitcoin                             | Four pictures that spell a key database |
+| `brave-new-world`       | bitcoin                             | A seed phrase hidden in a 2020 collage  |
 
-Identifiers are `collection/name`. The eight singletons, `gsmg`, `bitaps`, `mineshop`, `movie_enigma`, `satoshi_birthday_quiz`, `book_quiz`, `picture_puzzle` and `brave_new_world`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
+Identifiers are `collection/name`. The eight singletons, `gsmg`, `bitaps`, `mineshop`, `movie-enigma`, `satoshi-birthday-quiz`, `book-quiz`, `picture-puzzle` and `brave-new-world`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
 ## 🤖 Agents
 

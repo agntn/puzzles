@@ -9,9 +9,9 @@ import {
   uncompressed,
 } from "../../core/parts.ts";
 
-/** Puzzle `warp/warp_challenge_2`. */
+/** Puzzle `warp/warp-challenge-2`. */
 export const warpPuzzleWarpChallenge2 = bitcoinPuzzle({
-  id: "warp/warp_challenge_2",
+  id: "warp/warp-challenge-2",
   address: p2pkh("1MkupVKiCik9iyfnLrJoZLx9RH4rkF3hnA", "e3b07e2fc4ea14b903c11aee122f7fec19e4a621"),
   sourceUrl: "https://keybase.io/warp",
   startedAt: "2016-02-01 15:19:33",

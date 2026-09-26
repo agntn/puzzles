@@ -230,7 +230,7 @@ export abstract class Collection<Query> {
 const PUZZLE_NUMBER = /^(?:0|[1-9]\d*)$/;
 
 /**
- * A collection addressed by string names, `decred_janus` or `zden/decred_janus`. A query of
+ * A collection addressed by string names, `decred-janus` or `zden/decred-janus`. A query of
  * another type is a miss, not a `TypeError`.
  */
 export class NamedCollection extends Collection<string> {

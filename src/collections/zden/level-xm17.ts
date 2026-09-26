@@ -1,9 +1,9 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 import { assets, claim, funding, hex, p2pkh, uncompressed } from "../../core/parts.ts";
 
-/** Puzzle `zden/level_xm17`. */
+/** Puzzle `zden/level-xm17`. */
 export const zdenPuzzleLevelXm17 = bitcoinPuzzle({
-  id: "zden/level_xm17",
+  id: "zden/level-xm17",
   address: p2pkh("1cryptozWJAE7UzDZF1eSgsT7mVjUsu7g", "06c84797d328c065190a6768e20a84b7a17916c0"),
   sourceUrl: "https://crypto.haluska.sk/cryptoxm17.gif",
   startedAt: "2017-12-24 18:10:13",
@@ -30,8 +30,8 @@ export const zdenPuzzleLevelXm17 = bitcoinPuzzle({
     ),
   ],
   assets: assets({
-    puzzle: "level_xm17/puzzle.gif",
-    solution: "level_xm17/solver.png",
+    puzzle: "level-xm17/puzzle.gif",
+    solution: "level-xm17/solver.png",
     sourceUrl: "https://crypto.haluska.sk/cryptoxm17.gif",
   }),
 });

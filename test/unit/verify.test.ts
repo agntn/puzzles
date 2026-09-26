@@ -47,7 +47,7 @@ describe("Collection.verify", () => {
   });
 
   it("verifies Codex Protocol's key published by Zden", async () => {
-    const puzzle = zden.require("codex_protocol");
+    const puzzle = zden.require("codex-protocol");
     expect(puzzle.keyData()).toEqual({
       hex: "5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbfcf3ec",
     });
@@ -56,13 +56,13 @@ describe("Collection.verify", () => {
     });
     expect(puzzle.hasPrivateKey()).toBe(true);
     expect(puzzle.assets()).toEqual({
-      puzzle: "codex_protocol/puzzle.png",
-      solution: "codex_protocol/solution.md",
-      hints: ["codex_protocol/hint_1.png", "codex_protocol/hint_2.png"],
+      puzzle: "codex-protocol/puzzle.png",
+      solution: "codex-protocol/solution.md",
+      hints: ["codex-protocol/hint-1.png", "codex-protocol/hint-2.png"],
       source_url: "https://crypto.haluska.sk/CodexPuzzle.png",
     });
-    expect(await zden.verify("codex_protocol")).toEqual({
-      id: "zden/codex_protocol",
+    expect(await zden.verify("codex-protocol")).toEqual({
+      id: "zden/codex-protocol",
       verified: true,
       privateKey: "5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbfcf3ec",
       expectedAddress: "0x6b2560b34c7469c561a8fce581c88bfb8cce73b2",
@@ -72,7 +72,7 @@ describe("Collection.verify", () => {
   });
 
   it("returns an expected failure for unavailable secret material", async () => {
-    const result = await bitimage.verify("kitten_passphrase");
+    const result = await bitimage.verify("kitten-passphrase");
 
     expect(result).toMatchObject({ verified: false, unavailable: true });
     expect(result.error).toContain("no private key");

@@ -364,7 +364,7 @@ export async function selectPuzzles(query: PuzzleQuery = {}): Promise<readonly P
 
 /**
  * Looks up a puzzle by its universal identifier, loading only its collection. A historical
- * alias in the collection segment resolves too, so `peter_todd/sha1` finds `hash_collision/sha1`.
+ * alias in the collection segment resolves too, so `peter_todd/sha1` finds `hash-collision/sha1`.
  *
  * @param {string} id - Universal puzzle identifier.
  * @returns {Promise<Puzzle | undefined>} The puzzle, or `undefined` when no collection claims the identifier.

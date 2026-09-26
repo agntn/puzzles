@@ -3,7 +3,7 @@ import { bitcoinPuzzle } from "../../core/puzzle.ts";
 
 /** Vault #2 was announced in September; public hints are scheduled for October 12. */
 export const luckyLurkerVault2 = bitcoinPuzzle({
-  id: "luckylurker/vault_2",
+  id: "luckylurker/vault-2",
   address: p2wpkh(
     "bc1qnepv9pcnqvndux9h9mcaxvk6u993rc0lew9fpp",
     "9e42c287130326de18b72ef1d332dae14b11e1ff",

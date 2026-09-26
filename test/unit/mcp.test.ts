@@ -77,7 +77,7 @@ describe("puzzles MCP server", () => {
     );
     expect(rows).toHaveLength(25);
     expect(rows).toContain(
-      "peter-todd: Peter Todd (person), 1 collection: hash_collision, 6 puzzles",
+      "peter-todd: Peter Todd (person), 1 collection: hash-collision, 6 puzzles",
     );
     expect(rows).toContain("keybase: Keybase (organization), 1 collection: warp, 6 puzzles");
 
@@ -93,7 +93,7 @@ describe("puzzles MCP server", () => {
     expect(byKey.at(-1)).toMatch(/\tsource: https:\/\/crypto\.haluska\.sk\/$/u);
 
     const byCollection = firstText(
-      await client.callTool({ name: "puzzles_author", arguments: { key: "hash_collision" } }),
+      await client.callTool({ name: "puzzles_author", arguments: { key: "hash-collision" } }),
     );
     expect(byCollection.split("\n")[0]).toBe("peter-todd\tPeter Todd\tperson");
 
@@ -111,10 +111,10 @@ describe("puzzles MCP server", () => {
     expect(rows).toContain("pogo: pogo, 2 solves: arweave/weave1, arweave/weave2");
 
     const byPuzzle = firstText(
-      await client.callTool({ name: "puzzles_solver", arguments: { key: "movie_enigma" } }),
+      await client.callTool({ name: "puzzles_solver", arguments: { key: "movie-enigma" } }),
     ).split("\n");
     expect(byPuzzle[0]).toBe("rabbidbird\trabbidbird\tkind unknown");
-    expect(byPuzzle).toContain("\tmovie_enigma\tsolved\t2026-09-08 01:32:56\t0.001 BTC");
+    expect(byPuzzle).toContain("\tmovie-enigma\tsolved\t2026-09-08 01:32:56\t0.001 BTC");
     expect(byPuzzle.at(-1)).toMatch(
       /\tsource: https:\/\/github\.com\/floflo777\/open-crypto-puzzles\/issues\/24$/u,
     );
@@ -138,11 +138,11 @@ describe("puzzles MCP server", () => {
   it("lists the hints of one puzzle with their source and confirmation", async () => {
     const hinted = await client.callTool({
       name: "puzzles_hints",
-      arguments: { id: "warp/challenge_1" },
+      arguments: { id: "warp/challenge-1" },
     });
     const several = await client.callTool({
       name: "puzzles_hints",
-      arguments: { id: "zden/level_5" },
+      arguments: { id: "zden/level-5" },
     });
     const image = await client.callTool({ name: "puzzles_hints", arguments: { id: "gsmg" } });
     const bare = await client.callTool({
@@ -151,12 +151,12 @@ describe("puzzles MCP server", () => {
     });
 
     expect(firstText(hinted).split("\n")).toEqual([
-      "warp/challenge_1: 1 hint",
+      "warp/challenge-1: 1 hint",
       "hints: 1",
       "\tofficial\t-\tthis passphrase is 2 random alphanumeric characters, such as 'X9'.\tsource: https://keybase.io/warp\tconfirmation: https://web.archive.org/web/20131213023906/https://keybase.io/warp/warp_1.0.6_SHA256_e68d4587b0e2ec34a7b554fbd1ed2d0fedfaeacf3e47fbb6c5403e252348cbfc.html (Wayback capture of the challenge page)",
     ]);
     expect(firstText(several).split("\n")).toEqual([
-      "zden/level_5: 3 hints",
+      "zden/level-5: 3 hints",
       "hints: 3",
       "\tofficial\t2018-12-24 10:19:06\tSum of two consecutive following rectangles areas creates one byte of the private key. Apply more operations to obtain the results in byte range.\tsource: https://twitter.com/Zd3N/status/1077146640090316800\tconfirmation: https://web.archive.org/web/20220129183939/https://twitter.com/Zd3N/status/1077146640090316800 (Wayback capture of the tweet, the BTCrypto L5 part of a hints bundle)",
       "\tofficial\t-\tThe new corrected version including new hints! UNSOLVED for over 3 years because the original release was uncomplete! Relaunched on 12th of December 2021. My excuses to everyone!\tsource: https://crypto.haluska.sk/\tconfirmation: https://web.archive.org/web/20220124172559/https://crypto.haluska.sk/ (Wayback capture of the puzzle page)",
@@ -164,7 +164,7 @@ describe("puzzles MCP server", () => {
     ]);
     expect(firstText(image).split("\n")).toEqual([
       "gsmg: 1 hint asset",
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow-the-white-rabbit.png",
     ]);
     expect(firstText(bare)).toBe("arweave/weave1: no hints recorded");
   });
@@ -184,11 +184,11 @@ describe("puzzles MCP server", () => {
   it("lists Movie Enigma's official hints without extra confirmation links", async () => {
     const result = await client.callTool({
       name: "puzzles_hints",
-      arguments: { id: "movie_enigma" },
+      arguments: { id: "movie-enigma" },
     });
 
     expect(firstText(result).split("\n")).toEqual([
-      "movie_enigma: 3 hints",
+      "movie-enigma: 3 hints",
       "hints: 3",
       "\tofficial\t-\tGuess all the 34 movie titles, from the provided movie frames\tsource: https://bitcoinmovieenigma.com/rules",
       '\tofficial\t-\tTransform "somehow" each movie title into an English BIP-0039 seed word\tsource: https://bitcoinmovieenigma.com/rules',

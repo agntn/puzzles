@@ -48,15 +48,15 @@ describe("Pi extension", () => {
 
   it("hands the joined hint list and the hint files to the harness as details", async () => {
     const tool = (await registerTools()).get("puzzles_hints");
-    const result = await tool?.execute("call-3", { id: "warp/warp_challenge_2" });
+    const result = await tool?.execute("call-3", { id: "warp/warp-challenge-2" });
     const image = await tool?.execute("call-4", { id: "gsmg" });
 
-    expect(result?.content[0]?.text).toContain("warp/warp_challenge_2: 1 hint");
-    expect(result?.details).toMatchObject({ id: "warp/warp_challenge_2", hintAssets: [] });
+    expect(result?.content[0]?.text).toContain("warp/warp-challenge-2: 1 hint");
+    expect(result?.details).toMatchObject({ id: "warp/warp-challenge-2", hintAssets: [] });
     expect(result?.details["hints"]).toHaveLength(1);
     expect(image?.details).toMatchObject({
       hints: [],
-      hintAssets: [{ kind: "hint", path: "assets/gsmg/follow_the_white_rabbit.png" }],
+      hintAssets: [{ kind: "hint", path: "assets/gsmg/follow-the-white-rabbit.png" }],
     });
   });
 

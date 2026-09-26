@@ -185,7 +185,7 @@ export const facts = {
     author: {
       minLength: 1,
       maxLength: 50,
-      description: "Author key, for example peter-todd, or a collection key such as hash_collision",
+      description: "Author key, for example peter-todd, or a collection key such as hash-collision",
     },
     solver: {
       minLength: 1,

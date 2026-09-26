@@ -29,7 +29,7 @@ async function lines(id: string): Promise<string[]> {
 
 describe("puzzles_show text", () => {
   it("labels published answers separately in show and hints output", async () => {
-    const published = (await lines("luckylurker/vault_1")).join("\n");
+    const published = (await lines("luckylurker/vault-1")).join("\n");
     expect(published).toContain("\tWord #1: Presence without permanence.\tsource:");
     expect(published).toContain(
       "\tanswer: visit\tanswer source: https://luckylurker.com/bitcoin-vault/",
@@ -101,7 +101,7 @@ describe("puzzles_show text", () => {
       "asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/puzzle.png",
     );
     expect(text).toContain(
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow_the_white_rabbit.png",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow-the-white-rabbit.png",
     );
     expect(text.some((line) => line.startsWith("solved:"))).toBe(false);
     expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
@@ -132,22 +132,22 @@ describe("puzzles_show text", () => {
   });
 
   it("prints no stage block for a puzzle that runs in one", async () => {
-    expect((await lines("zden/litecoin_segwit")).some((line) => line.startsWith("stages:"))).toBe(
+    expect((await lines("zden/litecoin-segwit")).some((line) => line.startsWith("stages:"))).toBe(
       false,
     );
   });
 
   it("lists every hint file a record ships on one line", async () => {
-    const text = await lines("zden/litecoin_segwit");
+    const text = await lines("zden/litecoin-segwit");
 
     expect(text).toContain(
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin_segwit/hint_1.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin_segwit/hint_2.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin_segwit/hint_3.svg",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/hint-1.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/hint-2.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/hint-3.svg",
     );
     expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
   });
 
   it("prints every hint with its kind, its source and what confirms it", async () => {
-    const text = await lines("warp/warp_challenge_2");
+    const text = await lines("warp/warp-challenge-2");
 
     expect(text).toContain("hints: 1");
     expect(text).toContain(
@@ -227,29 +227,29 @@ describe("puzzles_show text", () => {
   });
 
   it("links the solution of a puzzle that ships no image", async () => {
-    const text = await lines("movie_enigma");
+    const text = await lines("movie-enigma");
 
     expect(text).toContain(
-      "solution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/movie_enigma/solution.md",
+      "solution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/movie-enigma/solution.md",
     );
     expect(text.some((line) => line.startsWith("asset:"))).toBe(false);
   });
 
   it("links the solution image next to the puzzle image", async () => {
-    const text = await lines("zden/level_1");
+    const text = await lines("zden/level-1");
 
     expect(text).toContain(
-      "asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level_1/puzzle.png",
+      "asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level-1/puzzle.png",
     );
     expect(text).toContain(
-      "solution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level_1/solver.png",
+      "solution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level-1/solver.png",
     );
   });
 
   it("prints every key representation a record carries", async () => {
     const ballet = await lines("ballet/AA007448");
     const bitaps = await lines("bitaps");
-    const movieEnigma = await lines("movie_enigma");
+    const movieEnigma = await lines("movie-enigma");
 
     expect(ballet).toContain(
       "encrypted wif: 6PnWfKaBfDW6mFFhhFsbNRHnVgojUhdf2b5NXP3FfwXiQ69MxEzVK2J4cH (bip38)",
@@ -338,7 +338,7 @@ describe("puzzles_hints text", () => {
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
-      assets: assets({ puzzle: "both.png", hints: ["hint_1.png", "hint_2.svg"] }),
+      assets: assets({ puzzle: "both.png", hints: ["hint-1.png", "hint-2.svg"] }),
       hints: [
         community(
           "The top is a decoy.",
@@ -354,7 +354,7 @@ describe("puzzles_hints text", () => {
       "\tofficial\t-\tStart at the top.\tsource: https://example.com/puzzle\tconfirmation: https://web.archive.org/web/2026/https://example.com/puzzle",
       "hints: 1",
       "\tcommunity\t-\tThe top is a decoy.\tsource: https://example.com/thread\tconfirmation: https://archive.ph/thread",
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint_1.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint_2.svg",
+      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint-1.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint-2.svg",
     ]);
   });
 });

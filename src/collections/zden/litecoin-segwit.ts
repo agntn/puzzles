@@ -1,9 +1,9 @@
 import { litecoinPuzzle, Status } from "../../core/puzzle.ts";
 import { assets, claim, compressed, funding, p2pkh } from "../../core/parts.ts";
 
-/** Puzzle `zden/litecoin_segwit`. */
+/** Puzzle `zden/litecoin-segwit`. */
 export const zdenPuzzleLitecoinSegwit = litecoinPuzzle({
-  id: "zden/litecoin_segwit",
+  id: "zden/litecoin-segwit",
   address: p2pkh("LartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS", "ab85f21bf9ca1126f3776f4686cf02737be7a2b7"),
   sourceUrl: "https://crypto.haluska.sk/LitecoinSegWit.png",
   startedAt: "2017-05-10 05:46:11",
@@ -50,11 +50,11 @@ export const zdenPuzzleLitecoinSegwit = litecoinPuzzle({
     ),
   ],
   assets: assets({
-    puzzle: "litecoin_segwit/puzzle.png",
+    puzzle: "litecoin-segwit/puzzle.png",
     hints: [
-      "litecoin_segwit/hint_1.svg",
-      "litecoin_segwit/hint_2.svg",
-      "litecoin_segwit/hint_3.svg",
+      "litecoin-segwit/hint-1.svg",
+      "litecoin-segwit/hint-2.svg",
+      "litecoin-segwit/hint-3.svg",
     ],
     sourceUrl: "https://crypto.haluska.sk/LitecoinSegWit.png",
   }),

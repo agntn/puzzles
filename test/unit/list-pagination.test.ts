@@ -46,7 +46,7 @@ describe("puzzle list pagination", () => {
       returned: 2,
       offset: 1,
       nextOffset: 3,
-      ids: ["warp/challenge_2", "warp/challenge_3"],
+      ids: ["warp/challenge-2", "warp/challenge-3"],
     });
     expect(result.content[0]?.text).toMatch(/^2 of 4 matching puzzles \(offset 1\):/);
     expect(result.content[0]?.text).toContain("Next page: offset=3. Keep the same filters.");
@@ -87,10 +87,10 @@ describe("puzzle list pagination", () => {
         "teikhos/3",
         "teikhos/4",
         "zden/xixoio",
-        "zden/codex_protocol",
+        "zden/codex-protocol",
       ],
     });
-    expect(narrowed.details["ids"]).toEqual(["teikhos/4", "zden/xixoio", "zden/codex_protocol"]);
+    expect(narrowed.details["ids"]).toEqual(["teikhos/4", "zden/xixoio", "zden/codex-protocol"]);
     expect(crossed.details).toMatchObject({ matched: 0, returned: 0, ids: [] });
   });
 
@@ -101,7 +101,7 @@ describe("puzzle list pagination", () => {
 
     expect(base58.details).toMatchObject({ matched: 1, returned: 1, ids: ["b1000/1"] });
     expect(checksummed.details["ids"]).toEqual(["zden/xixoio"]);
-    expect(shouted.details["ids"]).toEqual(["movie_enigma"]);
+    expect(shouted.details["ids"]).toEqual(["movie-enigma"]);
     expect(base58.content[0]?.text).toContain("1 matching puzzles");
   });
 

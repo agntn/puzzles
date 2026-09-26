@@ -116,7 +116,7 @@ describe("Puzzle.balance", () => {
   });
 
   it("keeps Decred's unconfirmed delta separate from the confirmed balance", async () => {
-    const address = zden.require("decred_janus").address().value;
+    const address = zden.require("decred-janus").address().value;
     const urls = stubFetch(() =>
       json({
         addrStr: address,
@@ -127,7 +127,7 @@ describe("Puzzle.balance", () => {
       }),
     );
 
-    const balance = await zden.balance("decred_janus", { baseUrl: "https://example.test/api" });
+    const balance = await zden.balance("decred-janus", { baseUrl: "https://example.test/api" });
 
     expect(urls).toEqual([`https://example.test/api/addr/${address}?noTxList=1`]);
     expect(balance.confirmed).toBe(1000n);
@@ -275,7 +275,7 @@ describe("Puzzle.balance", () => {
   it("leaves Litecoin with its one provider", async () => {
     const urls = stubFetch(() => Promise.reject(new TypeError("fetch failed")));
 
-    await expect(zden.balance("litecoin_segwit")).rejects.toBeInstanceOf(BalanceProviderError);
+    await expect(zden.balance("litecoin-segwit")).rejects.toBeInstanceOf(BalanceProviderError);
     expect(urls).toHaveLength(1);
   });
 

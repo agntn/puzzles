@@ -1,9 +1,9 @@
 import { bitcoinPuzzle } from "../../core/puzzle.ts";
 import { assets, derivation, funding, increase, p2wpkh, source } from "../../core/parts.ts";
 
-/** Puzzle `bitimage/kitten_passphrase`. */
+/** Puzzle `bitimage/kitten-passphrase`. */
 export const bitimagePuzzleKittenPassphrase = bitcoinPuzzle({
-  id: "bitimage/kitten_passphrase",
+  id: "bitimage/kitten-passphrase",
   address: p2wpkh(
     "bc1qcyrndzgy036f6ax370g8zyvlw86ulawgt0246r",
     "c1073689047c749d74d1f3d071119f71f5cff5c8",
@@ -33,7 +33,7 @@ export const bitimagePuzzleKittenPassphrase = bitcoinPuzzle({
     ),
   ],
   assets: assets({
-    puzzle: "kitten_passphrase/puzzle.jpg",
+    puzzle: "kitten-passphrase/puzzle.jpg",
     sourceUrl: "https://twitter.com/aantonop/status/603701870482300928",
   }),
 });

@@ -25,10 +25,10 @@ const title = computed(() => id.value);
 
 /**
  * The document title: the collection and the puzzle in the words a search uses, with the id after them.
- * `zden/level_5` becomes `Zden's puzzles level 5 (zden/level_5)`.
+ * `zden/level-5` becomes `Zden's puzzles level 5 (zden/level-5)`.
  */
 const seoTitle = computed(() => {
-  const name = String(route.params.puzzle ?? "").replaceAll("_", " ");
+  const name = String(route.params.puzzle ?? "").replaceAll("-", " ");
   return `${entry.value?.title ?? collection.value} ${name} (${id.value})`;
 });
 

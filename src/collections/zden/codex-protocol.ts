@@ -1,9 +1,9 @@
 import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
 import { assets, claim, funding, hex, standard, uncompressed } from "../../core/parts.ts";
 
-/** Puzzle `zden/codex_protocol`. */
+/** Puzzle `zden/codex-protocol`. */
 export const zdenPuzzleCodexProtocol = ethereumPuzzle({
-  id: "zden/codex_protocol",
+  id: "zden/codex-protocol",
   address: standard("0x6b2560b34c7469c561a8fce581c88bfb8cce73b2"),
   sourceUrl: "https://crypto.haluska.sk/CodexPuzzle.png",
   startedAt: "2018-04-16 22:39:45",
@@ -28,9 +28,9 @@ export const zdenPuzzleCodexProtocol = ethereumPuzzle({
     ),
   ],
   assets: assets({
-    puzzle: "codex_protocol/puzzle.png",
-    solution: "codex_protocol/solution.md",
-    hints: ["codex_protocol/hint_1.png", "codex_protocol/hint_2.png"],
+    puzzle: "codex-protocol/puzzle.png",
+    solution: "codex-protocol/solution.md",
+    hints: ["codex-protocol/hint-1.png", "codex-protocol/hint-2.png"],
     sourceUrl: "https://crypto.haluska.sk/CodexPuzzle.png",
   }),
 });

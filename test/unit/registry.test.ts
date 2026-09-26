@@ -120,9 +120,17 @@ describe("registry consistency", () => {
   it("resolves a historical alias in the collection segment of an identifier", async () => {
     const lib = await freshLibrary();
 
-    expect((await lib.get("peter_todd/sha1"))?.id()).toBe("hash_collision/sha1");
-    expect((await lib.get("warpwallet/challenge_1"))?.id()).toBe("warp/challenge_1");
+    expect((await lib.get("peter_todd/sha1"))?.id()).toBe("hash-collision/sha1");
+    expect((await lib.get("warpwallet/challenge-1"))?.id()).toBe("warp/challenge-1");
     expect(await lib.get("peter_todd/nope")).toBeUndefined();
+  });
+
+  it("resolves the snake_case keys of renamed collections", async () => {
+    const lib = await freshLibrary();
+
+    expect((await lib.get("movie_enigma"))?.id()).toBe("movie-enigma");
+    expect((await lib.get("hash_collision/sha1"))?.id()).toBe("hash-collision/sha1");
+    expect((await lib.getCollection("coin_artist"))?.key).toBe("coin-artist");
   });
 
   it("refreshes every aggregate after registration and replacement", async () => {
