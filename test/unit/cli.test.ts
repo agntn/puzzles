@@ -445,6 +445,10 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     const record = (await puzzles("authors", "warp")).split("\n");
     expect(record[0]).toBe("keybase\tKeybase\torganization");
     expect(record).toContain("collections: warp (6 puzzles)");
+    expect(rows).toContain("gsmg: GSMG.io (organization), 1 collection: gsmg, 1 puzzle");
+    expect((await puzzles("authors", "gsmg")).split("\n")).toContain(
+      "collections: gsmg (1 puzzle)",
+    );
 
     const entry = await json<{ readonly key: string; readonly puzzles: number }>(
       "authors",
@@ -491,6 +495,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     expect(rows).toContain(
       "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
     );
+    expect(rows).toContain("gsmg: 1 puzzle, 0 solved, 1 unsolved, by GSMG.io");
     expect(rows).toContain(
       "hash_collision: 6 puzzles, 0 solved, 4 unsolved, 2 claimed, by Peter Todd",
     );

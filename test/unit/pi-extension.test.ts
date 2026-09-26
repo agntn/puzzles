@@ -104,7 +104,7 @@ describe("Pi extension", () => {
     const tool = (await registerTools()).get("puzzles_collections");
     const result = await tool?.execute("call-3", {});
 
-    expect(result?.content[0]?.text).toContain("gsmg: 1 puzzles, 0 solved, 1 unsolved, by GSMG.io");
+    expect(result?.content[0]?.text).toContain("gsmg: 1 puzzle, 0 solved, 1 unsolved, by GSMG.io");
   });
 });
 

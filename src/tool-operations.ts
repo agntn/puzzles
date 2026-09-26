@@ -337,11 +337,11 @@ export async function statsTool(): Promise<ToolResult> {
   const {
     dataset: { stats, dataVersion },
     registry: { collectionKeys },
-    utils: { formatPrizeTotals },
+    utils: { countOf, formatPrizeTotals },
   } = await loadCore();
   const [result, version] = await Promise.all([stats(), dataVersion()]);
   const lines = [
-    `Total: ${result.total} puzzles in ${collectionKeys().length} collections`,
+    `Total: ${countOf(result.total, "puzzle")} in ${countOf(collectionKeys().length, "collection")}`,
     `Solved: ${result.solved}  Unsolved: ${result.unsolved}  Claimed: ${result.claimed}  Swept: ${result.swept}  Expired: ${result.expired}`,
     `With public key: ${result.with_pubkey}`,
     `Total prize: ${formatPrizeTotals(result.total_prize)}`,

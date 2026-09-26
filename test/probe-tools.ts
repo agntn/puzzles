@@ -92,7 +92,7 @@ try {
   assert.match(JSON.stringify(shown), /1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH/u);
   const firstShow = performance.now() - firstStart;
   const stats = await call("puzzles_stats", {});
-  assert.match(JSON.stringify(stats), /Total: [1-9]\d* puzzles in [1-9]\d* collections/u);
+  assert.match(JSON.stringify(stats), /Total: [1-9]\d* puzzles? in [1-9]\d* collections?/u);
   const repeatStart = performance.now();
   let last: unknown;
   for (let i = 0; i < 1000; i++) {
