@@ -46,6 +46,12 @@ export default defineAppConfig({
       slots: {
         base: "h-9 rounded-lg px-3.5 text-sm leading-none font-medium cursor-pointer transition-colors",
       },
+      /** The site's own `chip` variant, a filter chip: neutral when off, primary when picked. */
+      variants: {
+        variant: {
+          chip: "",
+        },
+      },
       compoundVariants: [
         {
           color: "primary",
@@ -57,7 +63,28 @@ export default defineAppConfig({
           variant: "outline",
           class: "puzzles-neutral-outline ring-0",
         },
+        {
+          color: "neutral",
+          variant: "chip",
+          class: "puzzles-chip-button",
+        },
+        {
+          color: "primary",
+          variant: "chip",
+          class: "puzzles-chip-button puzzles-chip-on",
+        },
       ],
+    },
+    /**
+     * The site's own `field` variant: the instrument draws the frame, the field carries the mono value.
+     * Not `none`, which the search palette's input already renders.
+     */
+    input: {
+      variants: {
+        variant: {
+          field: { base: "puzzles-field", leadingIcon: "puzzles-field-icon" },
+        },
+      },
     },
     /** A tooltip is a console label: flat, clipped corner, mono, and it wraps, because it carries full addresses. */
     tooltip: {
