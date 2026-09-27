@@ -1,6 +1,6 @@
 # docs/
 
-Docus site for `@agntn/puzzles`. Markdown lives in `content/`. The playground and the puzzle pages are Vue pages that import the library into the browser. The one server route answered at request time, `/api/balance/:id`, exists because balances need an explorer and the Etherscan key has to stay on the worker. `/api/changelog` and `/changelog.xml` are prerendered from the checkout's `CHANGELOG.md`.
+Docus site for `@agntn/puzzles`. Markdown lives in `content/`. The playground and the puzzle pages are Vue pages that import the library into the browser. Two server routes answer at request time. `/api/balance/:id` exists because balances need an explorer and the Etherscan key has to stay on the worker. `/mcp` is the Docus MCP server with the twelve puzzle tools beside its own `list-pages` and `get-page`. `/api/changelog` and `/changelog.xml` are prerendered from the checkout's `CHANGELOG.md`.
 
 ## Design
 
@@ -22,6 +22,9 @@ docs/
 ├── app/pages/changelog.vue        # every release of CHANGELOG.md on ChangelogFeed, own route like the playground
 ├── app/pages/collections/[collection]/[puzzle].vue   # one page per puzzle, prerendered through the links on the collection pages
 ├── server/api/balance/[...id].ts  # puzzle.balance() on the worker, cached five minutes per puzzle
+├── server/mcp/index.ts            # the Docus MCP handler at /mcp, named and versioned like `puzzles mcp`
+├── server/mcp/tools/              # one file per puzzle tool, each `puzzlesMcpTool("<name>")`
+├── server/utils/puzzles-mcp.ts    # a tool from `@agntn/puzzles/mcp`: its entry in `toolListings` and `callTool`, the TypeBox schema read into Zod
 ├── server/routes/sitemap.xml.ts   # Docus sitemap plus the playground, the changelog and every puzzle page
 ├── server/routes/changelog.xml.ts # RSS 2.0 feed of the releases, prerendered; every page links it as rel="alternate"
 ├── server/api/changelog.get.ts    # the releases as JSON for /changelog, prerendered with the page
@@ -58,6 +61,12 @@ Two resolution traps, both because the repo root is its own pnpm workspace:
 - `nuxt.config.ts` pins `workspaceDir` to `docs/` and disables devtools and telemetry, which would otherwise resolve from the root.
 
 `pnpm exec nuxt typecheck` runs vue-tsc over the `.vue` files too, which plain `tsc -p .nuxt/tsconfig.app.json` skips; read the `app/` and `server/` lines only, because Docus's own sources report errors under this config. `pnpm install` here runs `nuxt prepare` on postinstall, so `.nuxt/` and its types exist before the root `pnpm lint` reads them: oxlint's type-aware rules resolve the auto-imports and `@agntn/puzzles` alias through those files, and without them every docs file lints as `error` typed. The root `pnpm test` needs them too: `test/unit/docs-landing.test.ts` imports `app/utils`, vite resolves `docs/tsconfig.json` for those files, and that file only references the `.nuxt/tsconfig.*.json` that `nuxt prepare` writes. CI installs the docs for those two reasons.
+
+## MCP
+
+`@agntn/puzzles/mcp` is a third alias, for `../src/mcp.ts`. A file in `server/mcp/tools/` names one tool and nothing else: `puzzlesMcpTool()` takes the name, prose and annotations from `toolListings` and runs `callTool()` from there, so a tool changed in `src/` changes here without an edit. A new tool in `src/tool-operations.ts` needs one more file here. `@nuxtjs/mcp-toolkit` wants Zod, so its schema is `z.fromJSONSchema()` over the TypeBox one. A schema error reads in Zod's words. Every other answer is the text `puzzles mcp` gives.
+
+On the `cloudflare_module` preset the toolkit hands its server to `createMcpHandler` from `agents`, which tells an SDK v1 server apart with `instanceof`. pnpm installs one copy of `@modelcontextprotocol/sdk` per `zod` peer it resolves, and `@agntn/explorers` pins another `zod` than Docus, so the toolkit and `agents` can each get their own copy and every request fails with "createMcpHandler received an unsupported server". `nitro.alias` points every import of the SDK at the copy in `docs/node_modules`. Keep it until both resolve the same one. `agents` 0.24 still takes a v1 server through that branch. `@modelcontextprotocol/sdk` and `typebox` are dependencies here for `src/mcp.ts`, pinned to the root's versions and deduped like the others. They run on the worker only, so they stay out of `optimizeDeps`.
 
 ## Pages per puzzle
 
