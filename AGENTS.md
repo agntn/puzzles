@@ -21,7 +21,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 - `src/commands/` and `src/cli.ts` are the citty commands and the `puzzles` entry point. Inside a checkout, the built `dist/cli.mjs` loads the `mcp` command from `src/`, like the Pi and OMP extensions, so a local server needs only a restart after a change. The npm package ships no `src/` and runs the bundle, and so does a copy under `node_modules`, where Node does not strip types. `PUZZLES_DIST=1` forces the bundle. A change to `src/cli.ts` itself still needs `pnpm build`; `test/eval-packed.ts` runs `mcp` in each of these layouts.
 - `src/tool-operations.ts` implements every agent tool once, for MCP and both extensions, holds the `facts` table they register from (names, prose, parameter constraints, the status list), and enforces those constraints in the executors.
 - `packages/shared/puzzles-tool-schemas.ts` builds the TypeBox parameter schemas from `facts` for Pi and the MCP server; the OMP wrapper rebuilds them from the host TypeBox build.
-- `src/mcp.ts` runs the MCP server on the low-level SDK `Server` with the shared typebox schemas.
+- `src/mcp.ts` runs the MCP server on the low-level SDK `Server` with the shared typebox schemas, and exports `toolListings` and `callTool()` for the remote server at `puzzles.agntn.dev/mcp` (`docs/server/mcp/`).
 - `packages/{pi,omp}/extensions/puzzles.ts` are the harness-specific wrappers over `tool-operations.ts`.
 - `vite.config.ts` configures Vite+: `vp lint`, `vp fmt`, `vp test` and `vp pack`, which emits every entry as one bundle so they share the registry and core chunks under `dist/_chunks/`.
 
@@ -56,7 +56,7 @@ Repository-wide operating contract for agents changing this package. It suppleme
 - New collection: follow the registration invariant, add its author with `party()` and any collection-wide hints as the fourth constructor argument, add its `{ key, load }` entry to the manifest, and extend `test/unit/library.test.ts`.
 - New puzzle field: add the method to `Puzzle` with a safe default, extend `toJSON()`, `PuzzleSpec`, and the internal spec-backed puzzle, then teach `parts.ts` how to build it.
 - New CLI command: add `src/commands/<name>.ts`, register it in `src/cli.ts`, cover it in `test/unit/cli.test.ts`.
-- New agent tool: implement it in `src/tool-operations.ts`, add its `facts` entry and its schema in `packages/shared/puzzles-tool-schemas.ts`, register it in `src/mcp.ts` and both extensions, extend the tool test files.
+- New agent tool: implement it in `src/tool-operations.ts`, add its `facts` entry and its schema in `packages/shared/puzzles-tool-schemas.ts`, register it in `src/mcp.ts` and both extensions, add its one-line file under `docs/server/mcp/tools/`, extend the tool test files.
 - New public export: add it to `src/index.ts`; build before checking extensions because they resolve `dist/index.d.mts`.
 - Commit and PR scope is the layer, never the element. Anything under `src/collections/` is `collections`, with the collection or puzzle identifier in the subject: `feat(collections): add movie-enigma`, `fix(collections): b1000/135 solved`. Code takes the module name (`verify`, `dataset`, `cli`, `tools`), so the scope vocabulary stays a dozen names and never grows with the dataset.
 

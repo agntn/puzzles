@@ -5,8 +5,14 @@ import { puzzlesTheme } from "./shiki-theme";
 const repoRoot = resolve(import.meta.dirname, "..");
 const librarySource = resolve(repoRoot, "src");
 
-/** Runtime deps under src/index.ts, installed here so they resolve from docs/node_modules. */
-const libraryDependencies = ["@agntn/chains", "@agntn/explorers", "@agntn/keys"];
+/** Runtime deps under src/index.ts and src/mcp.ts, installed here so they resolve from docs/node_modules. */
+const libraryDependencies = [
+  "@agntn/chains",
+  "@agntn/explorers",
+  "@agntn/keys",
+  "@modelcontextprotocol/sdk",
+  "typebox",
+];
 
 /** Every subpath src/ imports, dynamic ones too, so dev bundles them up front, not on demand. */
 const libraryEntries = [
@@ -75,6 +81,7 @@ export default defineNuxtConfig({
   /** The repo root is its own pnpm workspace; Nuxt must not treat it as this site's. */
   workspaceDir: import.meta.dirname,
   alias: {
+    "@agntn/puzzles/mcp": resolve(librarySource, "mcp.ts"),
     "@agntn/puzzles/tools": resolve(librarySource, "tool-operations.ts"),
     "@agntn/puzzles": resolve(librarySource, "index.ts"),
   },
@@ -109,6 +116,19 @@ export default defineNuxtConfig({
     description:
       "Public crypto bounties, puzzles and challenges as typed records, as a library, a CLI, an MCP server and Pi and OMP extensions.",
     sections: [
+      {
+        title: "MCP Server",
+        description:
+          "The twelve puzzle tools and the page tools of this site over Streamable HTTP.",
+        links: [
+          {
+            title: "MCP endpoint",
+            href: "https://puzzles.agntn.dev/mcp",
+            description:
+              "Add it to any MCP client as an HTTP server, for example `claude mcp add --transport http puzzles https://puzzles.agntn.dev/mcp`.",
+          },
+        ],
+      },
       {
         title: "Playground",
         description: "Look up, list and verify puzzles in the browser.",
@@ -211,10 +231,6 @@ export default defineNuxtConfig({
       ],
     },
   },
-  /** Docus ships an MCP endpoint that wants the Cloudflare Agents SDK on Workers. Not needed. */
-  mcp: {
-    enabled: false,
-  },
   routeRules: {
     ...Object.fromEntries(
       renamedIds.map((id) => [
@@ -231,6 +247,16 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: "cloudflare_module",
+    /**
+     * One MCP SDK in the worker. The toolkit builds its server from one copy and `agents` checks it
+     * with `instanceof` against another. pnpm splits them by the `zod` peer each one resolves.
+     */
+    alias: {
+      "@modelcontextprotocol/sdk": resolve(
+        import.meta.dirname,
+        "node_modules/@modelcontextprotocol/sdk/dist/esm",
+      ),
+    },
     compatibilityDate: "2026-09-03",
     esbuild: { options: { target: "es2022" } },
     /** The puzzle images and hints, served from the checkout's assets/ under /assets. */

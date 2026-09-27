@@ -136,6 +136,7 @@ Identifiers are `collection/name`. A singleton, such as `gsmg`, `genesis` or `80
 
 ```bash
 claude mcp add puzzles --scope user -- npx -y @agntn/puzzles mcp
+claude mcp add --transport http puzzles https://puzzles.agntn.dev/mcp # nothing to install
 pi install npm:@agntn/puzzles
 ```
 
