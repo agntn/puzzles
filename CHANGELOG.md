@@ -14,7 +14,7 @@
 - **collections:** Add mini ([#306](https://github.com/agntn/puzzles/pull/306))
 - **collections:** Add teikhos ([#308](https://github.com/agntn/puzzles/pull/308))
 - **balance:** Blockstream fallback for Bitcoin ([#312](https://github.com/agntn/puzzles/pull/312))
-- **collections:** ⚠️  All seven mini-puzzles ([#318](https://github.com/agntn/puzzles/pull/318))
+- **collections:** ⚠️ All seven mini-puzzles ([#318](https://github.com/agntn/puzzles/pull/318))
 - **collections:** Add brave_new_world ([#321](https://github.com/agntn/puzzles/pull/321))
 - **collections:** Add wealth-in-poetry ([#325](https://github.com/agntn/puzzles/pull/325))
 - **docs:** Changelog page with an RSS feed ([#326](https://github.com/agntn/puzzles/pull/326))
@@ -34,9 +34,9 @@
 
 ### 💅 Refactors
 
-- **collections:** ⚠️  Kebab-case identifiers ([#323](https://github.com/agntn/puzzles/pull/323))
-- **collections:** ⚠️  Genesis as a singleton ([#327](https://github.com/agntn/puzzles/pull/327))
-- **collections:** ⚠️  Ktimesg becomes 80-bit ([#328](https://github.com/agntn/puzzles/pull/328))
+- **collections:** ⚠️ Kebab-case identifiers ([#323](https://github.com/agntn/puzzles/pull/323))
+- **collections:** ⚠️ Genesis as a singleton ([#327](https://github.com/agntn/puzzles/pull/327))
+- **collections:** ⚠️ Ktimesg becomes 80-bit ([#328](https://github.com/agntn/puzzles/pull/328))
 
 ### 📖 Documentation
 
@@ -57,10 +57,10 @@
 
 #### ⚠️ Breaking Changes
 
-- **collections:** ⚠️  All seven mini-puzzles ([#318](https://github.com/agntn/puzzles/pull/318))
-- **collections:** ⚠️  Kebab-case identifiers ([#323](https://github.com/agntn/puzzles/pull/323))
-- **collections:** ⚠️  Genesis as a singleton ([#327](https://github.com/agntn/puzzles/pull/327))
-- **collections:** ⚠️  Ktimesg becomes 80-bit ([#328](https://github.com/agntn/puzzles/pull/328))
+- **collections:** ⚠️ All seven mini-puzzles ([#318](https://github.com/agntn/puzzles/pull/318))
+- **collections:** ⚠️ Kebab-case identifiers ([#323](https://github.com/agntn/puzzles/pull/323))
+- **collections:** ⚠️ Genesis as a singleton ([#327](https://github.com/agntn/puzzles/pull/327))
+- **collections:** ⚠️ Ktimesg becomes 80-bit ([#328](https://github.com/agntn/puzzles/pull/328))
 
 ### ❤️ Contributors
 
