@@ -119,6 +119,53 @@ function toCallToolResult(result: ToolResult): CallToolResult {
 }
 
 /**
+ * The `tools/list` entries, in order. Every tool only reads, so the hints differ in `openWorldHint`
+ * alone, which is true for the tools that ask an explorer.
+ */
+export const toolListings: readonly Tool[] = tools.map((tool) => ({
+  name: tool.name,
+  title: tool.title,
+  description: tool.description,
+  inputSchema: tool.inputSchema as Tool["inputSchema"],
+  annotations: {
+    readOnlyHint: true,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: tool.openWorld,
+  },
+}));
+
+const toolsByName = new Map(tools.map((tool) => [tool.name, tool]));
+
+/**
+ * Runs one tool the way `tools/call` does: an unknown name, a schema miss and an executor failure
+ * all come back as an error result, never as a throw, so every transport answers with the same text.
+ *
+ * @param {string} name - The tool's name, such as `puzzles_show`.
+ * @param {Readonly<Record<string, unknown>>} args - The arguments the client sent.
+ * @returns {Promise<CallToolResult>} The tool's text, or the sanitized error.
+ */
+export async function callTool(
+  name: string,
+  args: Readonly<Record<string, unknown>>,
+): Promise<CallToolResult> {
+  const tool = toolsByName.get(name);
+  if (tool === undefined) {
+    return errorResult(`Unknown puzzles tool: ${JSON.stringify(name)}`);
+  }
+  if (!Value.Check(tool.inputSchema, args)) {
+    return errorResult(validationError(tool.inputSchema, args));
+  }
+  try {
+    return toCallToolResult(await tool.execute(args));
+  } catch (error) {
+    return errorResult(
+      `${tool.name} failed: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
+/**
  * Creates an unconnected MCP server exposing the puzzle data tools. It sits on the low-level
  * `Server`, deprecated or not: `McpServer.registerTool` takes Zod only, and the schemas are TypeBox
  * because Pi shares them.
@@ -126,41 +173,13 @@ function toCallToolResult(result: ToolResult): CallToolResult {
  * @returns {Server} The unconnected MCP server exposing the puzzle data tools.
  */
 export function createMcpServer(): Server {
-  const toolsByName = new Map(tools.map((tool) => [tool.name, tool]));
   const server = new Server({ name: "puzzles", version }, { capabilities: { tools: {} } });
 
-  server.setRequestHandler(ListToolsRequestSchema, () => ({
-    tools: tools.map((tool): Tool => ({
-      name: tool.name,
-      title: tool.title,
-      description: tool.description,
-      inputSchema: tool.inputSchema as Tool["inputSchema"],
-      annotations: {
-        readOnlyHint: true,
-        destructiveHint: false,
-        idempotentHint: true,
-        openWorldHint: tool.openWorld,
-      },
-    })),
-  }));
+  server.setRequestHandler(ListToolsRequestSchema, () => ({ tools: [...toolListings] }));
 
-  server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    const tool = toolsByName.get(request.params.name);
-    if (tool === undefined) {
-      return errorResult(`Unknown puzzles tool: ${JSON.stringify(request.params.name)}`);
-    }
-    const args = request.params.arguments ?? {};
-    if (!Value.Check(tool.inputSchema, args)) {
-      return errorResult(validationError(tool.inputSchema, args));
-    }
-    try {
-      return toCallToolResult(await tool.execute(args));
-    } catch (error) {
-      return errorResult(
-        `${tool.name} failed: ${error instanceof Error ? error.message : String(error)}`,
-      );
-    }
-  });
+  server.setRequestHandler(CallToolRequestSchema, (request) =>
+    callTool(request.params.name, request.params.arguments ?? {}),
+  );
 
   return server;
 }
