@@ -18,6 +18,7 @@ import {
   formatPuzzleRecord,
 } from "../../src/core/utils.ts";
 import { showTool } from "../../src/tool-operations.ts";
+import { ASSETS } from "../support/assets.ts";
 
 /*
  * MCP hands a model `content[0].text` and nothing else, so the record's own fields have to be in
@@ -97,12 +98,8 @@ describe("puzzles_show text", () => {
     const text = await lines("gsmg");
 
     expect(text).toContain("private key: unknown");
-    expect(text).toContain(
-      "asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/puzzle.png",
-    );
-    expect(text).toContain(
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow-the-white-rabbit.png",
-    );
+    expect(text).toContain(`asset: ${ASSETS}/assets/gsmg/puzzle.png`);
+    expect(text).toContain(`hint assets: ${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`);
     expect(text.some((line) => line.startsWith("solved:"))).toBe(false);
     expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
   });
@@ -111,7 +108,7 @@ describe("puzzles_show text", () => {
     const text = await lines("gsmg");
     const choice =
       "https://gsmg.io/choiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself";
-    const copy = "https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg";
+    const copy = `${ASSETS}/assets/gsmg`;
     const salphaseion =
       "https://gsmg.io/89727c598b9cd1cf8873f27cb7057f050645ddb6a7a157a110239ac0152f6a32";
     const start = text.indexOf("stages: 5");
@@ -141,7 +138,7 @@ describe("puzzles_show text", () => {
     const text = await lines("zden/litecoin-segwit");
 
     expect(text).toContain(
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/hint-1.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/hint-2.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/hint-3.svg",
+      `hint assets: ${ASSETS}/assets/zden/litecoin-segwit/hint-1.svg, ${ASSETS}/assets/zden/litecoin-segwit/hint-2.svg, ${ASSETS}/assets/zden/litecoin-segwit/hint-3.svg`,
     );
     expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
   });
@@ -229,21 +226,15 @@ describe("puzzles_show text", () => {
   it("links the solution of a puzzle that ships no image", async () => {
     const text = await lines("movie-enigma");
 
-    expect(text).toContain(
-      "solution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/movie-enigma/solution.md",
-    );
+    expect(text).toContain(`solution asset: ${ASSETS}/assets/movie-enigma/solution.md`);
     expect(text.some((line) => line.startsWith("asset:"))).toBe(false);
   });
 
   it("links the solution image next to the puzzle image", async () => {
     const text = await lines("zden/level-1");
 
-    expect(text).toContain(
-      "asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level-1/puzzle.png",
-    );
-    expect(text).toContain(
-      "solution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/level-1/solver.png",
-    );
+    expect(text).toContain(`asset: ${ASSETS}/assets/zden/level-1/puzzle.png`);
+    expect(text).toContain(`solution asset: ${ASSETS}/assets/zden/level-1/solver.png`);
   });
 
   it("prints every key representation a record carries", async () => {
@@ -354,7 +345,7 @@ describe("puzzles_hints text", () => {
       "\tofficial\t-\tStart at the top.\tsource: https://example.com/puzzle\tconfirmation: https://web.archive.org/web/2026/https://example.com/puzzle",
       "hints: 1",
       "\tcommunity\t-\tThe top is a decoy.\tsource: https://example.com/thread\tconfirmation: https://archive.ph/thread",
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint-1.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint-2.svg",
+      `hint assets: ${ASSETS}/assets/fixture/hint-1.png, ${ASSETS}/assets/fixture/hint-2.svg`,
     ]);
   });
 });

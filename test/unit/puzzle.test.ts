@@ -28,6 +28,7 @@ import {
   Status,
 } from "../../src/index.ts";
 import { formatStageReport } from "../../src/core/utils.ts";
+import { ASSETS } from "../support/assets.ts";
 
 const required = {
   id: "fixture/1",
@@ -249,7 +250,7 @@ describe("puzzle record factories", () => {
       ["artifact", "assets/fixture/puzzle.png"],
     ]);
     expect(formatStageReport(puzzle)).toContain(
-      `\t\timage\t${required.sourceUrl}\thttps://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/puzzle.png`,
+      `\t\timage\t${required.sourceUrl}\t${ASSETS}/assets/fixture/puzzle.png`,
     );
   });
 
@@ -276,7 +277,7 @@ describe("puzzle record factories", () => {
         kind: "solution",
         file: "notes #1?.md",
         path: "assets/fixture/notes #1?.md",
-        url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/notes%20%231%3F.md",
+        url: `${ASSETS}/assets/fixture/notes%20%231%3F.md`,
       },
     ]);
   });
@@ -309,9 +310,7 @@ describe("puzzle record factories", () => {
     }
     const puzzle = new Mirrored();
 
-    expect(puzzle.assetUrl()).toBe(
-      "https://raw.githubusercontent.com/agntn/puzzles/main/mirror/puzzle.png",
-    );
+    expect(puzzle.assetUrl()).toBe(`${ASSETS}/mirror/puzzle.png`);
     expect(puzzle.assetLinks().map((link) => [link.kind, link.path])).toEqual([
       ["puzzle", "mirror/puzzle.png"],
       ["hint", "assets/fixture/hint.png"],
@@ -441,13 +440,13 @@ describe("puzzle record factories", () => {
         kind: "puzzle",
         file: "puzzle.png",
         path: "assets/fixture/puzzle.png",
-        url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/puzzle.png",
+        url: `${ASSETS}/assets/fixture/puzzle.png`,
       },
       {
         kind: "hint",
         file: "hint.txt",
         path: "assets/fixture/hint.txt",
-        url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/fixture/hint.txt",
+        url: `${ASSETS}/assets/fixture/hint.txt`,
       },
     ]);
     expect(Object.isFrozen(puzzle.assetLinks())).toBe(true);

@@ -2,6 +2,7 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { describe, expect, it } from "vite-plus/test";
 import { collectionKeys } from "../../src/core/registry.ts";
+import { ASSETS } from "../support/assets.ts";
 
 const execute = promisify(execFile);
 
@@ -170,7 +171,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
       "zden/decred-janus: 1 hint, 1 hint asset",
       "hints: 1",
       "\tofficial\t-\t33*bbb\tsource: https://crypto.haluska.sk/decred_tree_hint.svg\tconfirmation: https://web.archive.org/web/20181219152809/http://crypto.haluska.sk/decred_tree_hint.svg (Wayback capture of the hint SVG)",
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred-janus/hint.svg",
+      `hint assets: ${ASSETS}/assets/zden/decred-janus/hint.svg`,
     ]);
     expect(hints).toEqual({
       hints: [
@@ -189,7 +190,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
           kind: "hint",
           file: "decred-janus/hint.svg",
           path: "assets/zden/decred-janus/hint.svg",
-          url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred-janus/hint.svg",
+          url: `${ASSETS}/assets/zden/decred-janus/hint.svg`,
         },
       ],
     });
@@ -272,7 +273,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
 
     expect(output.split("\n")).toEqual([
       "gsmg: 1 hint asset",
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow-the-white-rabbit.png",
+      `hint assets: ${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
     ]);
     expect(hints).toEqual({
       hints: [],
@@ -281,7 +282,7 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
           kind: "hint",
           file: "follow-the-white-rabbit.png",
           path: "assets/gsmg/follow-the-white-rabbit.png",
-          url: "https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow-the-white-rabbit.png",
+          url: `${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
         },
       ],
     });
