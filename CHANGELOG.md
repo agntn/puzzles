@@ -1,3 +1,72 @@
+## v0.24.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.23.0...v0.24.0)
+
+### 🚀 Enhancements
+
+- **solvers:** One record and page per solver ([#297](https://github.com/agntn/puzzles/pull/297))
+- **collections:** Link AoiNakamoto's X account ([#298](https://github.com/agntn/puzzles/pull/298))
+- **parts:** Add `stages` ([#299](https://github.com/agntn/puzzles/pull/299))
+- **collections:** Add quizchain/9 ([#301](https://github.com/agntn/puzzles/pull/301))
+- **collections:** Add quizchain/10 ([#302](https://github.com/agntn/puzzles/pull/302))
+- **cli:** Check balances of a filtered set ([#304](https://github.com/agntn/puzzles/pull/304))
+- **chains:** Support Bitcoin Cash ([#305](https://github.com/agntn/puzzles/pull/305))
+- **collections:** Add mini ([#306](https://github.com/agntn/puzzles/pull/306))
+- **collections:** Add teikhos ([#308](https://github.com/agntn/puzzles/pull/308))
+- **balance:** Blockstream fallback for Bitcoin ([#312](https://github.com/agntn/puzzles/pull/312))
+- **collections:** ⚠️  All seven mini-puzzles ([#318](https://github.com/agntn/puzzles/pull/318))
+- **collections:** Add brave_new_world ([#321](https://github.com/agntn/puzzles/pull/321))
+- **collections:** Add wealth-in-poetry ([#325](https://github.com/agntn/puzzles/pull/325))
+- **docs:** Changelog page with an RSS feed ([#326](https://github.com/agntn/puzzles/pull/326))
+- **collections:** Genesis hints to September 26 ([#330](https://github.com/agntn/puzzles/pull/330))
+- **collections:** Add quizchain/11 to 77 ([#331](https://github.com/agntn/puzzles/pull/331))
+
+### 🩹 Fixes
+
+- **cli:** Match show to puzzles_show ([#311](https://github.com/agntn/puzzles/pull/311))
+- **dataset:** Keep every digit in prize totals ([#314](https://github.com/agntn/puzzles/pull/314))
+- **tools:** Name the coin in puzzles_balance ([#315](https://github.com/agntn/puzzles/pull/315))
+- **collections:** Gsmg without unsourced claims ([#317](https://github.com/agntn/puzzles/pull/317))
+- **docs:** Indent plain text code blocks ([#319](https://github.com/agntn/puzzles/pull/319))
+- **cli:** Say 1 puzzle, not 1 puzzles ([#320](https://github.com/agntn/puzzles/pull/320))
+- **docs:** Wrap long hint text in the hint log ([#329](https://github.com/agntn/puzzles/pull/329))
+- **assets:** Pin links to the release tag ([#332](https://github.com/agntn/puzzles/pull/332))
+
+### 💅 Refactors
+
+- **collections:** ⚠️  Kebab-case identifiers ([#323](https://github.com/agntn/puzzles/pull/323))
+- **collections:** ⚠️  Genesis as a singleton ([#327](https://github.com/agntn/puzzles/pull/327))
+- **collections:** ⚠️  Ktimesg becomes 80-bit ([#328](https://github.com/agntn/puzzles/pull/328))
+
+### 📖 Documentation
+
+- Keep singleton and author counts live ([#333](https://github.com/agntn/puzzles/pull/333))
+- Point DESIGN.md at the agntn design system ([#334](https://github.com/agntn/puzzles/pull/334))
+
+### 📦 Build
+
+- Ship no source maps ([#300](https://github.com/agntn/puzzles/pull/300))
+
+### 🏡 Chore
+
+- Apply automated updates ([910bd11](https://github.com/agntn/puzzles/commit/910bd11))
+
+### ✅ Tests
+
+- **packed:** Write the load report to a file ([#310](https://github.com/agntn/puzzles/pull/310))
+
+#### ⚠️ Breaking Changes
+
+- **collections:** ⚠️  All seven mini-puzzles ([#318](https://github.com/agntn/puzzles/pull/318))
+- **collections:** ⚠️  Kebab-case identifiers ([#323](https://github.com/agntn/puzzles/pull/323))
+- **collections:** ⚠️  Genesis as a singleton ([#327](https://github.com/agntn/puzzles/pull/327))
+- **collections:** ⚠️  Ktimesg becomes 80-bit ([#328](https://github.com/agntn/puzzles/pull/328))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.23.0
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.22.0...v0.23.0)
