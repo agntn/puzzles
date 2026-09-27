@@ -12,6 +12,9 @@ const id = computed(() => `${collection.value}/${String(route.params.puzzle ?? "
 /** The same record `PuzzlePage` renders below, resolved once under one key. */
 const { data } = await usePuzzlePage(() => id.value);
 
+/** The puzzle's story from `stories/`, printed under the dossier when the puzzle has one. */
+const { data: story } = await usePuzzleStory(() => id.value);
+
 if (data.value === null) {
   throw createError({
     statusCode: 404,
@@ -142,6 +145,23 @@ defineOgImage(
         <p v-if="data" class="hero-lead">{{ lead }}</p>
       </div>
 
+      <section v-if="story" class="puzzle-story" aria-labelledby="puzzle-story-title">
+        <p id="puzzle-story-title" class="console-label console-rule-title">
+          <span
+            >Story
+            <span aria-hidden="true"
+              >[ how <span class="console-label-key">{{ id }}</span> went ]</span
+            ></span
+          >
+          <span class="console-mark" aria-hidden="true" />
+        </p>
+        <p class="puzzle-story-lead">
+          What the post asked, what the answer turned out to be, and what the chain says happened.
+          The record below holds the data.
+        </p>
+        <ContentRenderer :value="story" class="puzzle-story-body" />
+      </section>
+
       <div class="hero-instrument hero-instrument-keep">
         <svg class="hero-circuit" viewBox="0 0 160 56" aria-hidden="true">
           <path class="hero-circuit-rail" d="M80 0V16L96 32V56" />
@@ -179,6 +199,26 @@ defineOgImage(
 .puzzle-title > span {
   display: inline-block;
   max-width: 100%;
+  overflow-wrap: anywhere;
+}
+/* The story sits between the hero and the dossier, as wide as the dossier, left aligned like any docs page. */
+.puzzle-story {
+  margin-top: 56px;
+  text-align: left;
+}
+.puzzle-story-lead {
+  max-width: 48rem;
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: var(--ui-text-muted);
+}
+.puzzle-story-body > :first-child {
+  margin-top: 24px;
+}
+/* The landing keeps its inline code on one line. In the story a long answer string has to wrap. */
+.puzzle-story :deep(.puzzles-code),
+.puzzle-story :deep(code) {
+  white-space: normal;
   overflow-wrap: anywhere;
 }
 .puzzle-title .puzzle-title-key {

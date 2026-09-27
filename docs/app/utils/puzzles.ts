@@ -188,7 +188,7 @@ const PRESENTATION: Readonly<
     sample: "quizchain/1",
     chains: ["bitcoin"],
     blurb:
-      "One quiz answer plus the tail of the author's favorite address, hashed into a wallet. The key went public in the comments.",
+      "A quiz answer plus a piece of the previous block's key, hashed into a wallet. The chain ran from April to July 2019, one block at a time.",
   },
   "satoshi-birthday-quiz": {
     icon: "i-lucide-cake",

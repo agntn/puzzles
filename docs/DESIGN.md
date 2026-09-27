@@ -161,7 +161,7 @@ A collection page opens with a dossier on the shared console shell (`tool-consol
 
 ## Puzzle page header
 
-A puzzle page ([[puzzle].vue](app/pages/collections/[collection]/[puzzle].vue)) opens with the hero zone like the landing and the playground: the `console-id` strip with `collections / <collection title>` as links, the id as the title in mono with the collection key dimmed and the name bright, one sentence on the outcome and the prize, and the `get(id)` circuit into the dossier. The sentence leaves the address out, since the dossier prints it with its node; the SEO description keeps it. The title breaks after the slash only (`<wbr>`, each part `inline-block`), and a name wider than the line wraps inside itself.
+A puzzle page ([[puzzle].vue](app/pages/collections/[collection]/[puzzle].vue)) opens with the hero zone like the landing and the playground: the `console-id` strip with `collections / <collection title>` as links, the id as the title in mono with the collection key dimmed and the name bright, one sentence on the outcome and the prize, and the `get(id)` circuit into the dossier. The sentence leaves the address out, since the dossier prints it with its node; the SEO description keeps it. When the puzzle has a story in `stories/`, it sits between the hero zone and the circuit, as wide as the dossier: a `Story [ how <id> went ]` rule title with the id in its own case (`console-label-key`), one muted sentence on what the text is, then the prose. Inline code in the story wraps, unlike the landing's. The title breaks after the slash only (`<wbr>`, each part `inline-block`), and a name wider than the line wraps inside itself.
 
 ## Puzzle dossier
 
