@@ -102,10 +102,10 @@ That's most of it, really. A collection is its own entry and everything on it is
 | Key                     | Chains                              | What it is                               |
 | ----------------------- | ----------------------------------- | ---------------------------------------- |
 | `b1000`                 | bitcoin                             | Keys of 1 to 256 bits, one address each  |
+| `quizchain`             | bitcoin                             | Quiz blocks chained by their keys        |
 | `rushwallet`            | bitcoin                             | Brainwallets from a 2014 contest         |
 | `zden`                  | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                    |
 | `arweave`               | arweave, ethereum                   | Tiamat's weave puzzles                   |
-| `quizchain`             | bitcoin                             | Quiz blocks chained by their keys        |
 | `mini`                  | bitcoin, bitcoincash                | RetiredCoder's seven mini-puzzles        |
 | `warp`                  | bitcoin                             | Keybase's scrypt brainwallet challenges  |
 | `hash-collision`        | bitcoin                             | Peter Todd's P2SH collision bounties     |
