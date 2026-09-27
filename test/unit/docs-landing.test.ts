@@ -1,7 +1,14 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vite-plus/test";
 import { authorRows } from "../../docs/app/utils/authors.ts";
-import { collectionFacts, collectionRows } from "../../docs/app/utils/collections.ts";
+import {
+  collectionFacts,
+  collectionFilterQuery,
+  collectionRows,
+  matchesCollection,
+  NO_COLLECTION_FILTER,
+  readCollectionFilter,
+} from "../../docs/app/utils/collections.ts";
 import {
   AUTHORS_STATIC,
   FACTS_STATIC,
@@ -150,6 +157,56 @@ describe("docs landing fixtures", () => {
       const collection = await library.requireCollection(row.key);
       expect(row.open, row.key).toBe(collection.unsolved().length);
     }
+  });
+
+  it("filter the index by chain, state and every word of the search", async () => {
+    const library = await import("../../src/index.ts");
+    const rows = collectionRows(await library.collections());
+    const keys = (filter: Partial<typeof NO_COLLECTION_FILTER>) =>
+      rows
+        .filter((row) => matchesCollection(row, { ...NO_COLLECTION_FILTER, ...filter }))
+        .map((row) => row.key);
+
+    expect(keys({})).toEqual(rows.map((row) => row.key));
+    expect(keys({ chain: "arweave" })).toEqual(["arweave"]);
+    expect(keys({ chain: "ethereum" })).toContain("zden");
+    expect(keys({ state: "open" })).toEqual(
+      rows.filter((row) => row.open > 0).map((row) => row.key),
+    );
+    expect(keys({ state: "open" })).not.toContain("quizchain");
+    expect(keys({ state: "closed" })).toContain("quizchain");
+    expect(keys({ state: "open" }).length + keys({ state: "closed" }).length).toBe(rows.length);
+    expect(keys({ text: "  ZDEN " })).toEqual(["zden"]);
+    expect(keys({ text: "zden arweave" })).toEqual([]);
+    expect(
+      matchesCollection(
+        { key: "warp", total: 1, open: 0, chains: ["bitcoin"], blurb: "A scrypt brainwallet" },
+        { ...NO_COLLECTION_FILTER, text: "Brainwallet scrypt" },
+      ),
+    ).toBe(true);
+  });
+
+  it("read and write the index filter as a link", () => {
+    const chains = ["bitcoin", "ethereum"];
+
+    expect(readCollectionFilter({}, chains)).toEqual(NO_COLLECTION_FILTER);
+    expect(readCollectionFilter({ chain: "ethereum", state: "closed", q: "zden" }, chains)).toEqual(
+      {
+        chain: "ethereum",
+        state: "closed",
+        text: "zden",
+      },
+    );
+    expect(readCollectionFilter({ chain: "solana", state: "solved", q: ["a"] }, chains)).toEqual(
+      NO_COLLECTION_FILTER,
+    );
+    expect(readCollectionFilter({ q: "x".repeat(100) }, chains).text).toHaveLength(64);
+    expect(collectionFilterQuery(NO_COLLECTION_FILTER)).toEqual({});
+    expect(collectionFilterQuery({ chain: "bitcoin", state: "open", text: " key " })).toEqual({
+      chain: "bitcoin",
+      state: "open",
+      q: "key",
+    });
   });
 
   it("read a collection's facts strip without loading another collection", async () => {
