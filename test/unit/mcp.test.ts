@@ -3,6 +3,7 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { beforeAll, describe, expect, it } from "vite-plus/test";
 import { createMcpServer } from "../../src/mcp.ts";
 import { facts } from "../../src/tool-operations.ts";
+import { ASSETS } from "../support/assets.ts";
 
 const toolNames = Object.values(facts.tools)
   .map((tool) => tool.name)
@@ -164,7 +165,7 @@ describe("puzzles MCP server", () => {
     ]);
     expect(firstText(image).split("\n")).toEqual([
       "gsmg: 1 hint asset",
-      "hint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/follow-the-white-rabbit.png",
+      `hint assets: ${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
     ]);
     expect(firstText(bare)).toBe("arweave/weave1: no hints recorded");
   });

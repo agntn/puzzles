@@ -1,3 +1,4 @@
+import { version } from "../version.ts";
 import type { BalanceOptions } from "./balance.ts";
 import { addressExplorerUrl, Chain, chainSymbol, transactionExplorerUrl } from "./chains.ts";
 import type { Balance } from "./types.ts";
@@ -62,7 +63,11 @@ const NO_STAGES: readonly Stage[] = Object.freeze([]);
 /** The hint list of a puzzle that recorded none. */
 const NO_HINTS: readonly Hint[] = Object.freeze([]);
 
-const ASSET_ROOT = "https://raw.githubusercontent.com/agntn/puzzles/main";
+/**
+ * Assets under the release tag of this package version, not `main`: a published record keeps
+ * pointing at the files it was written against after a later release moves or renames them.
+ */
+const ASSET_ROOT = `https://raw.githubusercontent.com/agntn/puzzles/v${version}`;
 
 /**
  * The canonical remote URL of a repository path, encoded segment by segment so a file name that
