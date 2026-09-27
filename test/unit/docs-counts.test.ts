@@ -55,7 +55,7 @@ const numberWords = new Set(Array.from({ length: 100 }, (_, count) => spellOut(c
  * Every count in front of a noun, as a word or in digits: `twelve collections`, `7 tools`.
  *
  * @param {string} text - Prose to scan.
- * @param {string} noun - The plural noun the count precedes.
+ * @param {string} noun - The plural noun the count precedes, as a regular expression fragment.
  * @returns {string[]} The counts, each as the word `spellOut` writes.
  */
 function countsIn(text: string, noun: string): string[] {
@@ -88,6 +88,7 @@ function proseFiles(): string[] {
   return [
     "README.md",
     "AGENTS.md",
+    "docs/AGENTS.md",
     "docs/content/index.md",
     "docs/content/2.collections/00.index.md",
     "docs/app/app.config.ts",
@@ -111,6 +112,14 @@ describe("the prose counts what the registry ships", () => {
     for (const collection of await collections()) {
       expect(tree).toContain(collection.constructor.name);
     }
+  });
+
+  it("names only manifest keys in the collectionKeys() example", () => {
+    const guide = readFileSync(path.join(root, "docs/content/1.guide/03.registry.md"), "utf8");
+    const example = /^collectionKeys\(\); \/\/ \[(.*)\]/m.exec(guide)?.[1] ?? "";
+    const named = [...example.matchAll(/"([^"]+)"/g)].map((match) => match[1]);
+    expect(named).not.toHaveLength(0);
+    expect(collectionKeys()).toEqual(expect.arrayContaining(named));
   });
 
   it("keeps the skills general instead of listing the collections", () => {
@@ -160,6 +169,11 @@ describe("the prose counts what the registry ships", () => {
       "twenty",
     ]);
     expect(countsIn("the other eleven, 50 puzzles by default", "collections")).toHaveLength(0);
+    expect(countsIn("Eleven singletons, the 11 singleton ids", "singleton(?:s| ids)")).toEqual([
+      "eleven",
+      "eleven",
+    ]);
+    expect(countsIn("Twenty-six authors, puzzles authors", "authors")).toEqual(["twenty-six"]);
     const corpus = files.map((file) => readFileSync(path.join(root, file), "utf8"));
     for (const noun of ["tools", "factories"] as const) {
       expect(
@@ -179,14 +193,15 @@ describe("the prose counts what the registry ships", () => {
   });
 
   /*
-   * How many puzzles, collections and populated chains the dataset holds changes with every record. The docs pages
-   * ask the library through `:dataset-count` and `::dataset-stats`; README, frontmatter and the
-   * site config cannot call it, so they do not quote the number at all.
+   * How many puzzles, collections, singletons, authors and populated chains the dataset holds changes with every
+   * record. The docs pages ask the library through `:dataset-count` and `::dataset-stats`; README, frontmatter and
+   * the site config cannot call it, so they do not quote the number at all.
    */
   it.each(files)("%s quotes no dataset total", (file) => {
     const text = readFileSync(path.join(root, file), "utf8");
-    expect(countsIn(text, "collections"), `collections in ${file}`).toEqual([]);
-    expect(countsIn(text, "chains"), `chains in ${file}`).toEqual([]);
+    for (const noun of ["collections", "chains", "authors", "singleton(?:s| ids)"]) {
+      expect(countsIn(text, noun), `${noun} in ${file}`).toEqual([]);
+    }
     expect(text, `puzzle total in ${file}`).not.toMatch(
       new RegExp(String.raw`(?<![\d.])${puzzles.length}(?![\d.])`),
     );

@@ -3,18 +3,20 @@ import {
   authors,
   type Chain,
   collectionKeys,
+  collections,
   requireAuthor,
   selectPuzzles,
+  SingletonCollection,
   type Status,
 } from "@agntn/puzzles";
 
 /**
  * A count the prose quotes, asked from the library at render time so no page keeps a copy.
  * `of` picks what to count: puzzles by default, narrowed by the filters `selectPuzzles` takes
- * or by an author key, or the collections in the manifest, or the authors.
+ * or by an author key, or the collections in the manifest, the singletons among them, or the authors.
  */
 const props = defineProps<{
-  of?: "puzzles" | "collections" | "authors";
+  of?: "puzzles" | "collections" | "singletons" | "authors";
   collection?: string;
   chain?: Chain;
   status?: Status;
@@ -27,6 +29,10 @@ const { data } = await useAsyncData(
   async () => {
     if (props.of === "collections") {
       return collectionKeys().length;
+    }
+    if (props.of === "singletons") {
+      return (await collections()).filter((collection) => collection instanceof SingletonCollection)
+        .length;
     }
     if (props.of === "authors") {
       return (await authors()).length;

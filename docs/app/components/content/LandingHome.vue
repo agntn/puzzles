@@ -100,7 +100,7 @@ const activeCollection = computed(() => current.value.collection);
     </section>
 
     <LandingFeature
-      title="Twenty-six authors, every fact with its page"
+      title="Every author, every fact with its page"
       to="/authors"
       link="Author dossiers"
       :checks="[

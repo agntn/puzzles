@@ -130,7 +130,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `brave-new-world`       | bitcoin                             | A seed phrase hidden in a 2020 collage   |
 | `wealth-in-poetry`      | bitcoin                             | Seed words hidden in a 2019 Medium essay |
 
-Identifiers are `collection/name`. The eleven singletons, `gsmg`, `bitaps`, `mineshop`, `movie-enigma`, `genesis`, `80-bit`, `satoshi-birthday-quiz`, `book-quiz`, `picture-puzzle`, `brave-new-world` and `wealth-in-poetry`, are just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
+Identifiers are `collection/name`. A singleton, such as `gsmg`, `genesis` or `80-bit`, is just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
 ## 🤖 Agents
 
