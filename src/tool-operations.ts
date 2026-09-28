@@ -238,6 +238,17 @@ export interface ListParams {
   readonly withPubkey?: boolean;
 }
 
+/** Every argument the list tool takes, in the order an error names them. */
+const listArguments = [
+  "address",
+  "chain",
+  "collection",
+  "limit",
+  "offset",
+  "status",
+  "withPubkey",
+] as const satisfies readonly (keyof ListParams)[];
+
 function text(value: string, details: Readonly<Record<string, unknown>>): ToolResult {
   return { content: [{ type: "text", text: value }], details };
 }
@@ -286,6 +297,23 @@ function assertLimit(value: number | undefined): number {
     throw new InvalidArgumentError("limit", `expected an integer from ${minimum} to ${maximum}`);
   }
   return value;
+}
+
+/**
+ * Rejects a list argument the tool does not declare, so a host that skips schema validation still
+ * refuses `with_pubkey` instead of listing every puzzle as if the filter held.
+ *
+ * @param {ListParams} params - The arguments the caller passed.
+ */
+function assertListArguments(params: ListParams): void {
+  const known: readonly string[] = listArguments;
+  const unknown = Object.keys(params).find((key) => !known.includes(key));
+  if (unknown !== undefined) {
+    throw new InvalidArgumentError(
+      "arguments",
+      `unknown property ${JSON.stringify(unknown)}, expected one of ${listArguments.join(", ")}`,
+    );
+  }
 }
 
 function assertOffset(value: number | undefined): number {
@@ -496,6 +524,7 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
     dataset: { selectPuzzles },
     utils: { parseStatus, requireChain, formatPuzzle },
   } = await loadCore();
+  assertListArguments(params);
   const limit = assertLimit(params.limit);
   const offset = assertOffset(params.offset);
   const filtered = await selectPuzzles({

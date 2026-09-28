@@ -67,6 +67,16 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
   const tools = await loadTools();
   const { chains, parameters, statuses } = tools.facts;
   const puzzleId = Type.String(parameters.id);
+  /**
+   * Closed like the shared schemas. OMP drops its own `i` intent before it validates, so that key
+   * never reaches this check.
+   *
+   * @param {T} properties - The tool's parameters.
+   * @returns {ReturnType<typeof Type.Object<T>>} An object schema that takes no other key.
+   */
+  function closed<T extends Parameters<typeof Type.Object>[0]>(properties: T) {
+    return Type.Object(properties, { additionalProperties: false });
+  }
   const line = (text: string) => new Text(sanitizeTerminalText(text), 0, 0);
 
   pi.registerTool({
@@ -104,7 +114,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
 
   pi.registerTool({
     ...registration(tools.facts.tools.author),
-    parameters: Type.Object({ key: Type.String(parameters.author) }),
+    parameters: closed({ key: Type.String(parameters.author) }),
     renderCall(args) {
       return line(`Show author ${args.key}`);
     },
@@ -126,7 +136,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
 
   pi.registerTool({
     ...registration(tools.facts.tools.solver),
-    parameters: Type.Object({ key: Type.String(parameters.solver) }),
+    parameters: closed({ key: Type.String(parameters.solver) }),
     renderCall(args) {
       return line(`Show solver ${args.key}`);
     },
@@ -137,7 +147,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
 
   pi.registerTool({
     ...registration(tools.facts.tools.show),
-    parameters: Type.Object({ id: puzzleId }),
+    parameters: closed({ id: puzzleId }),
     renderCall(args) {
       return line(`Show puzzle ${args.id}`);
     },
@@ -148,7 +158,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
 
   pi.registerTool({
     ...registration(tools.facts.tools.hints),
-    parameters: Type.Object({ id: puzzleId }),
+    parameters: closed({ id: puzzleId }),
     renderCall(args) {
       return line(`Hints for puzzle ${args.id}`);
     },
@@ -159,7 +169,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
 
   pi.registerTool({
     ...registration(tools.facts.tools.stages),
-    parameters: Type.Object({ id: puzzleId }),
+    parameters: closed({ id: puzzleId }),
     renderCall(args) {
       return line(`Stages of puzzle ${args.id}`);
     },
@@ -170,7 +180,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
 
   pi.registerTool({
     ...registration(tools.facts.tools.list),
-    parameters: Type.Object({
+    parameters: closed({
       address: Type.Optional(Type.String(parameters.address)),
       collection: Type.Optional(Type.String(parameters.collection)),
       chain: Type.Optional(Type.Enum(chains, parameters.chain)),
@@ -191,7 +201,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
 
   pi.registerTool({
     ...registration(tools.facts.tools.verify),
-    parameters: Type.Object({ id: puzzleId }),
+    parameters: closed({ id: puzzleId }),
     renderCall(args) {
       return line(`Verify puzzle ${args.id}`);
     },
@@ -202,7 +212,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
 
   pi.registerTool({
     ...registration(tools.facts.tools.balance),
-    parameters: Type.Object({
+    parameters: closed({
       id: puzzleId,
       apiKey: Type.Optional(Type.String(parameters.apiKey)),
     }),

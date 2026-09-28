@@ -5,7 +5,7 @@ import {
   type CallToolResult,
   type Tool,
 } from "@modelcontextprotocol/sdk/types.js";
-import { type TSchema } from "typebox";
+import { IsObject, type TSchema } from "typebox";
 import { Value } from "typebox/value";
 import { puzzleToolSchemas } from "../packages/shared/puzzles-tool-schemas.ts";
 import {
@@ -86,7 +86,21 @@ const tools: readonly ToolDefinition[] = [
   },
 ];
 
-function validationError(schema: TSchema, value: unknown): string {
+/**
+ * The first reason the arguments fail their schema. A key the tool does not declare is named
+ * before anything else, because the typebox message for it says only that one exists. The key
+ * comes from the client, so it is quoted.
+ *
+ * @param {TSchema} schema - The tool's input schema.
+ * @param {Readonly<Record<string, unknown>>} value - The arguments the client sent.
+ * @returns {string} A one-line validation message for the client.
+ */
+function validationError(schema: TSchema, value: Readonly<Record<string, unknown>>): string {
+  const declared: object = IsObject(schema) ? schema.properties : {};
+  const unknown = Object.keys(value).filter((key) => !Object.hasOwn(declared, key));
+  if (unknown.length > 0) {
+    return `Invalid arguments at /: unknown property ${unknown.map((key) => JSON.stringify(key)).join(", ")}`;
+  }
   const first = Value.Errors(schema, value)[0];
   return first === undefined
     ? "Invalid arguments"

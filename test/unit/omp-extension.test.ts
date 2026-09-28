@@ -109,6 +109,10 @@ describe("OMP extension", () => {
       show.parameters.safeParse({ id: "x".repeat(facts.parameters.id.maxLength + 1) }).success,
     ).toBe(false);
     expect(show.parameters.safeParse({ id: "b1000/1" }).success).toBe(true);
+    expect(show.parameters.safeParse({ id: "b1000/1", name: "1" }).success).toBe(false);
+    expect(list.parameters.safeParse({ with_pubkey: true }).success).toBe(false);
+    expect(list.parameters.safeParse({ withPubkey: true }).success).toBe(true);
+    expect(tools.get("puzzles_stats")?.parameters.safeParse({ _: "" }).success).toBe(true);
   });
 
   it("executes list pagination through the shared executor", async () => {

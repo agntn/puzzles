@@ -1,4 +1,4 @@
-import { Type } from "typebox";
+import { type TObject, type TProperties, Type } from "typebox";
 
 /**
  * Parameter schemas for the puzzles tools, built from the `facts` table in
@@ -55,17 +55,28 @@ export type PuzzleToolSchemas = ReturnType<typeof puzzleToolSchemas>;
 export function puzzleToolSchemas(facts: PuzzleToolFacts) {
   const { chains, parameters, statuses } = facts;
   const puzzleId = Type.String(parameters.id);
+  /**
+   * A closed object rejects a stray `with_pubkey` instead of listing every puzzle as if it had
+   * filtered them. The tools without arguments stay open, since an empty object has nothing to
+   * misread.
+   *
+   * @param {T} properties - The tool's parameters.
+   * @returns {TObject<T>} An object schema that takes no other key.
+   */
+  function closed<T extends TProperties>(properties: T): TObject<T> {
+    return Type.Object(properties, { additionalProperties: false });
+  }
   return {
     stats: Type.Object({}),
     collections: Type.Object({}),
     authors: Type.Object({}),
-    author: Type.Object({ key: Type.String(parameters.author) }),
+    author: closed({ key: Type.String(parameters.author) }),
     solvers: Type.Object({}),
-    solver: Type.Object({ key: Type.String(parameters.solver) }),
-    show: Type.Object({ id: puzzleId }),
-    hints: Type.Object({ id: puzzleId }),
-    stages: Type.Object({ id: puzzleId }),
-    list: Type.Object({
+    solver: closed({ key: Type.String(parameters.solver) }),
+    show: closed({ id: puzzleId }),
+    hints: closed({ id: puzzleId }),
+    stages: closed({ id: puzzleId }),
+    list: closed({
       address: Type.Optional(Type.String(parameters.address)),
       collection: Type.Optional(Type.String(parameters.collection)),
       chain: Type.Optional(Type.Enum(chains, parameters.chain)),
@@ -74,8 +85,8 @@ export function puzzleToolSchemas(facts: PuzzleToolFacts) {
       limit: Type.Optional(Type.Integer(parameters.limit)),
       offset: Type.Optional(Type.Integer(parameters.offset)),
     }),
-    verify: Type.Object({ id: puzzleId }),
-    balance: Type.Object({
+    verify: closed({ id: puzzleId }),
+    balance: closed({
       id: puzzleId,
       apiKey: Type.Optional(Type.String(parameters.apiKey)),
     }),
