@@ -31,6 +31,10 @@ export const builtins = [
   { key: "mini", load: () => import("./mini.ts").then((m) => m.mini) },
   { key: "movie-enigma", load: () => import("./movie-enigma.ts").then((m) => m.movieEnigma) },
   {
+    key: "path-to-greatness",
+    load: () => import("./path-to-greatness.ts").then((m) => m.pathToGreatness),
+  },
+  {
     key: "picture-puzzle",
     load: () => import("./picture-puzzle.ts").then((m) => m.picturePuzzle),
   },

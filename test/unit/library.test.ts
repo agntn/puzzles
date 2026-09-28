@@ -20,6 +20,7 @@ import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MineshopCollection } from "../../src/collections/mineshop.ts";
 import { mini, MiniCollection } from "../../src/collections/mini.ts";
 import { MovieEnigmaCollection } from "../../src/collections/movie-enigma.ts";
+import { PathToGreatnessCollection } from "../../src/collections/path-to-greatness.ts";
 import { PicturePuzzleCollection } from "../../src/collections/picture-puzzle.ts";
 import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
@@ -85,6 +86,7 @@ const concreteClasses = [
   MineshopCollection,
   MiniCollection,
   MovieEnigmaCollection,
+  PathToGreatnessCollection,
   PicturePuzzleCollection,
   QuizchainCollection,
   RushwalletCollection,
@@ -828,14 +830,14 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(441);
+    expect(await all()).toHaveLength(442);
     expect(await stats()).toEqual({
-      total: 441,
+      total: 442,
       claimed: 12,
       expired: 3,
       solved: 229,
       swept: 96,
-      unsolved: 101,
+      unsolved: 102,
       with_pubkey: 334,
       total_prize: {
         AR: 5550,
@@ -843,13 +845,14 @@ describe("lazy collection registry", () => {
         DAI: 100,
         BTC: 1065.1847923,
         BCH: 5.1,
-        LTC: 230.8255,
+        LTC: 233.85158794,
         DCR: 460,
       },
       unsolved_prize: {
         AR: 1900,
         ETH: 12.612541554256945,
         BTC: 909.10625212,
+        LTC: 3.02608794,
       },
     });
   });
@@ -892,7 +895,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(441);
+    ).toBe(442);
   });
 
   it("hands back the memoized views frozen through", async () => {

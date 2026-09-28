@@ -174,6 +174,14 @@ const PRESENTATION: Readonly<
     blurb:
       "An essay on hiding seed phrases in stories, with a real one hidden in the essay. You've read every word, it says. The 0.03 BTC is still there.",
   },
+  "path-to-greatness": {
+    icon: "i-lucide-gamepad-2",
+    title: "Path to Greatness",
+    sample: "path-to-greatness",
+    chains: ["litecoin"],
+    blurb:
+      "Clues hidden in a parkour game demo lead to a Litecoin key. Donations go straight into the prize, and nobody has taken it.",
+  },
   "picture-puzzle": {
     icon: "i-lucide-scan-qr-code",
     title: "1 mBTC picture puzzle",
