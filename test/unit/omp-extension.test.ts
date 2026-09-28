@@ -2,6 +2,7 @@ import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
 import * as OmpTypeBox from "@oh-my-pi/omptype/typebox";
 import { describe, expect, it } from "vite-plus/test";
 import puzzlesExtension from "../../packages/omp/extensions/puzzles.ts";
+import { InvalidArgumentError } from "../../src/core/errors.ts";
 import { facts } from "../../src/tool-operations.ts";
 
 interface RegisteredTool {
@@ -109,6 +110,10 @@ describe("OMP extension", () => {
       show.parameters.safeParse({ id: "x".repeat(facts.parameters.id.maxLength + 1) }).success,
     ).toBe(false);
     expect(show.parameters.safeParse({ id: "b1000/1" }).success).toBe(true);
+    expect(show.parameters.safeParse({ id: "b1000/1", name: "1" }).success).toBe(false);
+    expect(list.parameters.safeParse({ with_pubkey: true }).success).toBe(false);
+    expect(list.parameters.safeParse({ withPubkey: true }).success).toBe(true);
+    expect(tools.get("puzzles_stats")?.parameters.safeParse({ _: "" }).success).toBe(true);
   });
 
   it("executes list pagination through the shared executor", async () => {
@@ -156,6 +161,29 @@ describe("OMP extension", () => {
     expect(tool?.parameters.safeParse({ key: "" }).success).toBe(false);
     const result = await tool?.execute("call-solver", { key: "lia" });
     expect(result?.content[0]?.text).toContain("\tarweave/weave8\tclaimed\t");
+  });
+
+  it("refuses a stray argument on every tool that takes some, when the host skips validation", async () => {
+    const { tools } = await registerTools();
+    const calls: Readonly<Record<string, Readonly<Record<string, unknown>>>> = {
+      puzzles_author: { key: "dug", name: "Dug" },
+      puzzles_solver: { key: "lia", name: "Lia" },
+      puzzles_show: { id: "b1000/71", name: "71" },
+      puzzles_hints: { id: "gsmg", name: "gsmg" },
+      puzzles_stages: { id: "gsmg", name: "gsmg" },
+      puzzles_list: { collection: "b1000", with_pubkey: true },
+      puzzles_verify: { id: "b1000/1", name: "1" },
+      puzzles_balance: { id: "b1000/71", api_key: "secret" },
+    };
+
+    for (const [name, params] of Object.entries(calls)) {
+      await expect(tools.get(name)?.execute("call-stray", params), name).rejects.toThrow(
+        InvalidArgumentError,
+      );
+    }
+    await expect(
+      tools.get("puzzles_stats")?.execute("call-open", { _: "" }),
+    ).resolves.toBeDefined();
   });
 
   it("executes the verify tool against the library", async () => {

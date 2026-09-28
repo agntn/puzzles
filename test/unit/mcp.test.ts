@@ -233,6 +233,29 @@ describe("puzzles MCP server", () => {
     expect(firstText(result)).toContain("Invalid arguments");
   });
 
+  it("names an argument the tool does not take instead of ignoring it", async () => {
+    const misspelled = await client.callTool({
+      name: "puzzles_list",
+      arguments: { collection: "b1000", with_pubkey: true },
+    });
+    const stray = await client.callTool({
+      name: "puzzles_show",
+      arguments: { id: "b1000/71", name: "71" },
+    });
+
+    expect(misspelled.isError).toBe(true);
+    expect(firstText(misspelled)).toBe('Invalid arguments at /: unknown property "with_pubkey"');
+    expect(stray.isError).toBe(true);
+    expect(firstText(stray)).toBe('Invalid arguments at /: unknown property "name"');
+  });
+
+  it("leaves the tools without arguments open to a placeholder key", async () => {
+    const result = await client.callTool({ name: "puzzles_stats", arguments: { _: "" } });
+
+    expect(result.isError).toBeFalsy();
+    expect(firstText(result)).toMatch(/^Total: /u);
+  });
+
   it("reports an unknown puzzle as a tool error", async () => {
     const result = await client.callTool({
       name: "puzzles_verify",

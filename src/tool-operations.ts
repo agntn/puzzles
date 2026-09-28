@@ -238,6 +238,34 @@ export interface ListParams {
   readonly withPubkey?: boolean;
 }
 
+/**
+ * The arguments each tool takes, in the order an error names them. The tools without arguments
+ * take any object, like their open schemas. `test/unit/tool-schemas.test.ts` pins the table to
+ * the schemas.
+ */
+export const toolArguments = {
+  stats: [],
+  collections: [],
+  authors: [],
+  author: ["key"],
+  solvers: [],
+  solver: ["key"],
+  show: ["id"],
+  hints: ["id"],
+  stages: ["id"],
+  list: [
+    "address",
+    "chain",
+    "collection",
+    "limit",
+    "offset",
+    "status",
+    "withPubkey",
+  ] satisfies (keyof ListParams)[],
+  verify: ["id"],
+  balance: ["id", "apiKey"],
+} as const satisfies Record<keyof typeof facts.tools, readonly string[]>;
+
 function text(value: string, details: Readonly<Record<string, unknown>>): ToolResult {
   return { content: [{ type: "text", text: value }], details };
 }
@@ -286,6 +314,31 @@ function assertLimit(value: number | undefined): number {
     throw new InvalidArgumentError("limit", `expected an integer from ${minimum} to ${maximum}`);
   }
   return value;
+}
+
+/**
+ * Rejects an argument the tool does not declare, so a host that skips schema validation still
+ * refuses `with_pubkey` instead of listing every puzzle as if the filter held. The Pi and OMP
+ * wrappers call it before they pick their arguments out of the object.
+ *
+ * @param {keyof typeof toolArguments} tool - The tool's short name, such as `show`.
+ * @param {unknown} params - The arguments the caller passed.
+ */
+export function assertArguments(tool: keyof typeof toolArguments, params: unknown): void {
+  const known: readonly string[] = toolArguments[tool];
+  if (known.length === 0) {
+    return;
+  }
+  if (typeof params !== "object" || params === null || Array.isArray(params)) {
+    throw new InvalidArgumentError("arguments", "expected an object");
+  }
+  const unknown = Object.keys(params).find((key) => !known.includes(key));
+  if (unknown !== undefined) {
+    throw new InvalidArgumentError(
+      "arguments",
+      `unknown property ${JSON.stringify(unknown)}, expected one of ${known.join(", ")}`,
+    );
+  }
 }
 
 function assertOffset(value: number | undefined): number {
@@ -496,6 +549,7 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
     dataset: { selectPuzzles },
     utils: { parseStatus, requireChain, formatPuzzle },
   } = await loadCore();
+  assertArguments("list", params);
   const limit = assertLimit(params.limit);
   const offset = assertOffset(params.offset);
   const filtered = await selectPuzzles({

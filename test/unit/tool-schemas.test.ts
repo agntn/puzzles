@@ -11,6 +11,7 @@ import {
   showTool,
   stagesTool,
   solverTool,
+  toolArguments,
 } from "../../src/tool-operations.ts";
 
 const schemas = puzzleToolSchemas(facts);
@@ -124,6 +125,29 @@ describe("tool schemas and executors share one argument contract", () => {
     );
   });
 
+  it("rejects a key no tool parameter declares, except on the tools that take none", () => {
+    for (const [tool, schema] of Object.entries(schemas)) {
+      const declared = Object.keys(schema.properties);
+      if (declared.length === 0) {
+        expect(Value.Check(schema, { _: "" }), tool).toBe(true);
+      } else {
+        expect(schema, tool).toMatchObject({ additionalProperties: false });
+        expect(Value.Check(schema, { stray: true }), tool).toBe(false);
+      }
+    }
+    expect(Value.Check(schemas.list, { with_pubkey: true })).toBe(false);
+    expect(Value.Check(schemas.list, { withPubkey: true })).toBe(true);
+  });
+
+  it("names the same arguments in the executors' table as in each schema", () => {
+    for (const [tool, schema] of Object.entries(schemas)) {
+      expect([...toolArguments[tool as keyof typeof toolArguments]].sort(), tool).toEqual(
+        Object.keys(schema.properties).sort(),
+      );
+    }
+    expect(Object.keys(toolArguments).sort()).toEqual(Object.keys(facts.tools).sort());
+  });
+
   it("tracks the facts, so a changed limit shows up in the schema", () => {
     /* Positive control for the guard above: a drifted table must produce a drifted schema. */
     const drifted = puzzleToolSchemas({
@@ -161,6 +185,17 @@ describe("tool schemas and executors share one argument contract", () => {
     await expect(hintsTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
     await expect(stagesTool("")).rejects.toThrow(/id/);
     await expect(stagesTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
+    await expect(listTool({ with_pubkey: true } as never)).rejects.toThrow(
+      'Invalid arguments: unknown property "with_pubkey", expected one of address, chain, collection, limit, offset, status, withPubkey',
+    );
+    for (const params of [null, "b1000", ["b1000"]]) {
+      await expect(listTool(params as never)).rejects.toThrow(
+        "Invalid arguments: expected an object",
+      );
+    }
+    await expect(listTool({ collection: "gsmg", state: "solved" } as never)).rejects.toThrow(
+      InvalidArgumentError,
+    );
     expect((await listTool({ collection: "gsmg", limit: 1 })).details).toMatchObject({
       matched: 1,
       returned: 1,
