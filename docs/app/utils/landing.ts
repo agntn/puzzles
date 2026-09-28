@@ -923,7 +923,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     status: "unsolved",
     address: "1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ",
     kind: "p2pkh",
-    hash160: "bd031e54cde2a3189fd59bc49f731367a1779eb0",
+    hash160: "ccbd031e54cde2a3189fd59bc49f731367a1779e",
     redeemScript: undefined,
     prize: "0.2 BTC",
     prizeAmount: 0.2,
@@ -942,7 +942,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ",
     source: "https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/",
     transactions: 5,
-    tool: "brave-new-world\tunsolved\t0.2 BTC\t1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nchain: bitcoin  address kind: p2pkh\nhash160: bd031e54cde2a3189fd59bc49f731367a1779eb0\npublic key: unknown\nprivate key: unknown\nstarted: 2020-10-08 09:25:30\ntransactions: 5\n\tfunding\t2020-05-10 08:01:46\t0.2 BTC\tfcee21d44ee94c09869947c74b61669bf928358e9c2d1699fb075bb6ebf5d043\n\tincrease\t2023-10-25 01:55:34\t0.00001 BTC\ta490266f12466f91c00546a4b744b5faea70835794b5b182d84e47e4294a33ee\n\tincrease\t2024-12-13 08:42:55\t0.001 BTC\t6ca136b078c61f530e3c7eb46eed0a23785840294fc59ef006df26e26f88fb53\n\tincrease\t2025-05-09 23:02:54\t0.00000557 BTC\t51b778b00ca5dc676e99da96545e5c1ae6cf68c4ca79d59879e77facac64a251\n\tincrease\t2025-06-02 05:48:21\t0.00005727 BTC\t6d1f46d1913c45de1cd515a9cdc4de64ff2abfc19102e2cf23840bb5e944f8f4\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/brave-new-world/puzzle.png\nasset source: https://i.redd.it/n1x7g8ceaur51.png\nexplorer: https://blockstream.info/address/1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nsource: https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/",
+    tool: "brave-new-world\tunsolved\t0.2 BTC\t1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nchain: bitcoin  address kind: p2pkh\nhash160: ccbd031e54cde2a3189fd59bc49f731367a1779e\npublic key: unknown\nprivate key: unknown\nstarted: 2020-10-08 09:25:30\ntransactions: 5\n\tfunding\t2020-05-10 08:01:46\t0.2 BTC\tfcee21d44ee94c09869947c74b61669bf928358e9c2d1699fb075bb6ebf5d043\n\tincrease\t2023-10-25 01:55:34\t0.00001 BTC\ta490266f12466f91c00546a4b744b5faea70835794b5b182d84e47e4294a33ee\n\tincrease\t2024-12-13 08:42:55\t0.001 BTC\t6ca136b078c61f530e3c7eb46eed0a23785840294fc59ef006df26e26f88fb53\n\tincrease\t2025-05-09 23:02:54\t0.00000557 BTC\t51b778b00ca5dc676e99da96545e5c1ae6cf68c4ca79d59879e77facac64a251\n\tincrease\t2025-06-02 05:48:21\t0.00005727 BTC\t6d1f46d1913c45de1cd515a9cdc4de64ff2abfc19102e2cf23840bb5e944f8f4\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/brave-new-world/puzzle.png\nasset source: https://i.redd.it/n1x7g8ceaur51.png\nexplorer: https://blockstream.info/address/1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nsource: https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/",
   },
   {
     id: "wealth-in-poetry",
@@ -1004,7 +1004,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "a37872a3e2ed",
+  dataVersion: "6f2fb1ec81c2",
   total: 442,
   solved: 229,
   unsolved: 102,

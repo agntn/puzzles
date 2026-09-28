@@ -1,5 +1,8 @@
 import { existsSync } from "node:fs";
 import { resolve, sep } from "node:path";
+import { sha256 } from "@noble/hashes/sha2.js";
+import { bytesToHex } from "@noble/hashes/utils.js";
+import { bech32, createBase58check } from "@scure/base";
 import { describe, expect, it } from "vite-plus/test";
 import { isValidAddress, isValidTransactionId } from "../../src/core/chains.ts";
 import {
@@ -36,6 +39,8 @@ import { all, collections, verify } from "../../src/index.ts";
 import { decryptBip38, isBip38 } from "../support/bip38.ts";
 
 const puzzles = await all();
+const base58check = createBase58check(sha256);
+const CASHADDR_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
 const registered = await collections();
 
 function privateKeyBits(hexKey: string): number {
@@ -388,6 +393,40 @@ function mutablePartProblem(puzzle: Puzzle): string | undefined {
   return mutable.length === 0 ? undefined : `${puzzle.id()}: mutable ${mutable.join(", ")}`;
 }
 
+/**
+ * The hash an address encodes, in hex: the payload after the version byte of a Base58Check or
+ * CashAddr address, or the witness program of a SegWit one. The address format test has already
+ * checked the checksum, so a CashAddr only drops its eight checksum characters here.
+ *
+ * @param {string} address - The address as the record stores it.
+ * @returns {string} The encoded hash in hex.
+ */
+function encodedHash(address: string): string {
+  if (address.startsWith("bitcoincash:")) {
+    const words = Array.from(address.slice("bitcoincash:".length, -8), (character) =>
+      CASHADDR_CHARSET.indexOf(character),
+    );
+    return bytesToHex(bech32.fromWords(words).slice(1));
+  }
+  if (/^(bc|ltc)1/u.test(address)) {
+    return bytesToHex(
+      bech32.fromWords(bech32.decode(address as `${string}1${string}`).words.slice(1)),
+    );
+  }
+  return bytesToHex(base58check.decode(address).slice(1));
+}
+
+function hash160Problem(puzzle: Puzzle): string | undefined {
+  const { hash160, value } = puzzle.address();
+  if (hash160 === undefined) {
+    return undefined;
+  }
+  const encoded = encodedHash(value);
+  return encoded === hash160
+    ? undefined
+    : `${puzzle.id()}: hash160 ${hash160} is not the ${encoded} its address encodes`;
+}
+
 function collect(check: (puzzle: Puzzle) => string | undefined): string[] {
   return puzzles.map((puzzle) => check(puzzle)).filter((problem) => problem !== undefined);
 }
@@ -431,6 +470,10 @@ describe("collection class data", () => {
           : `${puzzle.id()}: address does not match the ${puzzle.chain()} format`,
       ),
     ).toEqual([]);
+  });
+
+  it("keeps every hash160 equal to the hash its address encodes", () => {
+    expect(collect(hash160Problem)).toEqual([]);
   });
 
   it("keeps every transaction identifier in its chain's format", () => {
