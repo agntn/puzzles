@@ -173,5 +173,5 @@ describe("Pi host loader", () => {
         (await direct.get(name)?.execute("call-1", params))?.content[0]?.text,
       );
     }
-  }, 30_000);
+  });
 });
