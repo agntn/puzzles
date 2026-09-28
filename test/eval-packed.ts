@@ -80,6 +80,7 @@ const expectedCollections = [
   "mineshop",
   "mini",
   "movie-enigma",
+  "path-to-greatness",
   "picture-puzzle",
   "quizchain",
   "rushwallet",

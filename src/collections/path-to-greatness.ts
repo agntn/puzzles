@@ -1,0 +1,155 @@
+import { SingletonCollection } from "../core/collection.ts";
+import {
+  assets,
+  confirmation,
+  fact,
+  funding,
+  increase,
+  official,
+  p2pkh,
+  party,
+  PartyKind,
+  profile,
+} from "../core/parts.ts";
+import { litecoinPuzzle } from "../core/puzzle.ts";
+
+/** The hunt's page today: the clue images, the rules and the prize address. */
+const SITE = "https://p2gtreasure.com/";
+
+/** The first site, kept under `old/`: the gameplay demo, the prize and the donation address. */
+const OLD = "https://p2gtreasure.com/old/index.html";
+
+/** The first site as the Wayback Machine saw it on February 5, 2021, three days after the first coins. */
+const CAPTURE = "https://web.archive.org/web/20210205193730/https://www.p2gtreasure.com/";
+
+/** The site with the clue images as the Wayback Machine saw it on May 16, 2021. */
+const CLUES_CAPTURE = "https://web.archive.org/web/20210516142206/https://www.p2gtreasure.com/";
+
+/** The rules of the first site. */
+const RULES = "https://p2gtreasure.com/old/rules.html";
+
+/** The page about the game the demo belongs to. */
+const GAME = "https://p2gtreasure.com/old/p2g.html";
+
+/**
+ * Path to Greatness: Treasure Hunt. Clues inside a gameplay demo, later nine images on the site,
+ * lead to the private key of a Litecoin wallet. The prize is whatever that wallet holds, and
+ * donations to it raise the stakes.
+ */
+export const treasureHunt = litecoinPuzzle({
+  id: "path-to-greatness",
+  address: p2pkh("LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS", "69fb2ecbe0eed5feeb7e410b279048cd3891b789"),
+  sourceUrl: SITE,
+  startedAt: "2021-02-02 14:57:06",
+  prize: 3.02608794,
+  hints: [
+    official(
+      "Clues can be found inside the demo, and will lead you to a Litecoin wallet's private key.",
+      OLD,
+      confirmation(CAPTURE, "Wayback capture of the first site, February 2021"),
+    ),
+    official("The first and last steps are the only steps I will ever provide.", RULES),
+    official(
+      "The clues above will lead to a Litecoin wallet's private key.",
+      SITE,
+      confirmation(CLUES_CAPTURE, "Wayback capture of the site with the clue images, May 2021"),
+    ),
+  ],
+  transactions: [
+    funding(
+      "7f7a13c612ccc937fede4802b24861c00b386fc116a3a57d6a4e386e93f45f21",
+      "2021-02-02 14:57:06",
+      0.03477051,
+    ),
+    increase(
+      "1e2e74c76942b40b4f79a9d98c5ba00eda553e4f8ea60e2fb15b9a85fdd039f0",
+      "2021-02-05 15:53:48",
+      0.06420958,
+    ),
+    increase(
+      "af864bcaa7e86a3c1de5e33dc22d8d528a07e79c349a74244358b0f647be0666",
+      "2021-02-05 15:53:48",
+      0.57788622,
+    ),
+    increase(
+      "cb2462b981de7768245bc1951575c163010e0ce6dc3d3f80499fe3fe5f551458",
+      "2021-02-05 16:05:38",
+      0.07233959,
+    ),
+    increase(
+      "37319ffe3ac77c1a9c413e411347938e973400761cea3c7890dfe2f9d65dc834",
+      "2021-02-12 18:14:43",
+      0.06348393,
+    ),
+    increase(
+      "ebe20c79330a96bfd789b716bfa0f579088fafbb62c877bb6395ec2f25c92b86",
+      "2021-05-15 22:54:29",
+      0.15546076,
+    ),
+    increase(
+      "16abed94cd0641bda707b21fcb6a9caf614524ff3590645af104d075bca10638",
+      "2021-05-22 23:08:52",
+      0.15794155,
+    ),
+    increase(
+      "b83f8e1037bd07d8e82b1c4c35a3727b2919e709eecd570f83ecb743c8fa2711",
+      "2021-07-22 18:02:39",
+      1.8999958,
+    ),
+  ],
+  assets: assets({
+    puzzle: "computer-screen.jpg",
+    hints: [
+      "clue1-imagine.jpg",
+      "clue2-scramble.jpg",
+      "clue3-wasd.jpg",
+      "clue4-chess.jpg",
+      "clue5-wonders.jpg",
+      "00111111.jpg",
+      "qr1.jpg",
+      "qr2.jpg",
+    ],
+    sourceUrl: "https://p2gtreasure.com/Clues/p2g_clues.zip",
+  }),
+});
+
+/** Path to Greatness: Treasure Hunt, one Litecoin hunt by Justin Patterson. */
+export class PathToGreatnessCollection extends SingletonCollection {
+  /** Stable collection key used in puzzle identifiers. */
+  static readonly key = "path-to-greatness";
+
+  /** Who published the puzzle. */
+  static readonly author = party("Justin Patterson", {
+    key: "justin-patterson",
+    kind: PartyKind.Person,
+    aliases: ["jpatt94"],
+    about:
+      "Game developer who hid a Litecoin treasure hunt in the gameplay demo of Path to Greatness, the 3D platformer he builds on his own, and signs the hunt's page as jpatt94.",
+    profiles: [profile("website", SITE), profile("twitter", "https://x.com/jpatt94")],
+    facts: [
+      fact(
+        "Develops Path to Greatness, a 3D platformer about parkour movement, on his own, and wrote that donations would help him hire a level designer.",
+        GAME,
+      ),
+      fact(
+        "Released the treasure hunt with a free gameplay demo of Path to Greatness and asked for donations to a second Litecoin address, half for the game and half for the prize.",
+        CAPTURE,
+      ),
+    ],
+  });
+
+  /** Every puzzle in this collection. */
+  static readonly puzzles = [treasureHunt];
+
+  /** Builds the canonical collection. */
+  constructor() {
+    super(
+      PathToGreatnessCollection.key,
+      PathToGreatnessCollection.author,
+      PathToGreatnessCollection.puzzles,
+    );
+  }
+}
+
+/** Canonical collection instance. */
+export const pathToGreatness = new PathToGreatnessCollection();

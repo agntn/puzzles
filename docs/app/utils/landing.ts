@@ -36,6 +36,7 @@ export const WALK: readonly string[] = [
   "teikhos/4",
   "brave-new-world",
   "wealth-in-poetry",
+  "path-to-greatness",
 ];
 
 /* generated:landing-fixtures:start */
@@ -971,14 +972,42 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 2,
     tool: "wealth-in-poetry\tunsolved\t0.03050269 BTC\t1K4ezpLybootYF23TM4a8Y4NyP7auysnRo\nchain: bitcoin  address kind: p2pkh\nhash160: c6233aeb3a50a70b82fcd88d69b5f1a3ec6e355a\npublic key: unknown\nprivate key: unknown\nstarted: 2019-02-11 15:34:04\ntransactions: 2\n\tfunding\t2019-02-10 14:47:11\t0.03050269 BTC\t0a9ddd15961d507d77cd281c230151ea5980be24e4a22ceb38f3c78737f9f60c\n\tincrease\t2019-04-08 17:37:36\t0.00074361 BTC\tb3c9d8cc52234419642edf6824b1d004e0873432cd4b9e127bf557cfc9990dcf\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/wealth-in-poetry/puzzle.txt\nasset source: https://web.archive.org/web/20190211203952/https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\nhints: 1\n\tofficial\t-\tThe beauty of trithemian seeds is that they hide in plain sight. If you’ve read this far, you’ve read every word required to access a wallet with .03 BTC. Good luck!\tsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\nexplorer: https://blockstream.info/address/1K4ezpLybootYF23TM4a8Y4NyP7auysnRo\nsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254",
   },
+  {
+    id: "path-to-greatness",
+    collection: "path-to-greatness",
+    chain: "litecoin",
+    status: "unsolved",
+    address: "LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS",
+    kind: "p2pkh",
+    hash160: "69fb2ecbe0eed5feeb7e410b279048cd3891b789",
+    redeemScript: undefined,
+    prize: "3.02608794 LTC",
+    prizeAmount: 3.02608794,
+    currency: undefined,
+    startedAt: "2021-02-02 14:57:06",
+    solvedAt: undefined,
+    solveTime: undefined,
+    bits: undefined,
+    range: undefined,
+    pubkey: undefined,
+    pubkeyFormat: undefined,
+    secret: "none",
+    keyLiteral: undefined,
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://litecoinspace.org/address/LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS",
+    source: "https://p2gtreasure.com/",
+    transactions: 8,
+    tool: "path-to-greatness\tunsolved\t3.02608794 LTC\tLUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS\nchain: litecoin  address kind: p2pkh\nhash160: 69fb2ecbe0eed5feeb7e410b279048cd3891b789\npublic key: unknown\nprivate key: unknown\nstarted: 2021-02-02 14:57:06\ntransactions: 8\n\tfunding\t2021-02-02 14:57:06\t0.03477051 LTC\t7f7a13c612ccc937fede4802b24861c00b386fc116a3a57d6a4e386e93f45f21\n\tincrease\t2021-02-05 15:53:48\t0.06420958 LTC\t1e2e74c76942b40b4f79a9d98c5ba00eda553e4f8ea60e2fb15b9a85fdd039f0\n\tincrease\t2021-02-05 15:53:48\t0.57788622 LTC\taf864bcaa7e86a3c1de5e33dc22d8d528a07e79c349a74244358b0f647be0666\n\tincrease\t2021-02-05 16:05:38\t0.07233959 LTC\tcb2462b981de7768245bc1951575c163010e0ce6dc3d3f80499fe3fe5f551458\n\tincrease\t2021-02-12 18:14:43\t0.06348393 LTC\t37319ffe3ac77c1a9c413e411347938e973400761cea3c7890dfe2f9d65dc834\n\tincrease\t2021-05-15 22:54:29\t0.15546076 LTC\tebe20c79330a96bfd789b716bfa0f579088fafbb62c877bb6395ec2f25c92b86\n\tincrease\t2021-05-22 23:08:52\t0.15794155 LTC\t16abed94cd0641bda707b21fcb6a9caf614524ff3590645af104d075bca10638\n\tincrease\t2021-07-22 18:02:39\t1.8999958 LTC\tb83f8e1037bd07d8e82b1c4c35a3727b2919e709eecd570f83ecb743c8fa2711\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/computer-screen.jpg\nhint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue1-imagine.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue2-scramble.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue3-wasd.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue4-chess.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue5-wonders.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/00111111.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/qr1.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/qr2.jpg\nasset source: https://p2gtreasure.com/Clues/p2g_clues.zip\nhints: 3\n\tofficial\t-\tClues can be found inside the demo, and will lead you to a Litecoin wallet's private key.\tsource: https://p2gtreasure.com/old/index.html\tconfirmation: https://web.archive.org/web/20210205193730/https://www.p2gtreasure.com/ (Wayback capture of the first site, February 2021)\n\tofficial\t-\tThe first and last steps are the only steps I will ever provide.\tsource: https://p2gtreasure.com/old/rules.html\n\tofficial\t-\tThe clues above will lead to a Litecoin wallet's private key.\tsource: https://p2gtreasure.com/\tconfirmation: https://web.archive.org/web/20210516142206/https://www.p2gtreasure.com/ (Wayback capture of the site with the clue images, May 2021)\nexplorer: https://litecoinspace.org/address/LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS\nsource: https://p2gtreasure.com/",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "c63149527c6a",
-  total: 441,
+  dataVersion: "72ae792b99cd",
+  total: 442,
   solved: 229,
-  unsolved: 101,
+  unsolved: 102,
   claimed: 12,
   swept: 96,
   expired: 3,
@@ -987,6 +1016,7 @@ export const STATS_STATIC = {
     AR: 1900,
     ETH: 12.612541554256945,
     BTC: 909.10625212,
+    LTC: 3.02608794,
   },
   totalPrize: {
     BTC: 1065.1847923,
@@ -994,7 +1024,7 @@ export const STATS_STATIC = {
     ETH: 26.246241554256944,
     DAI: 100,
     BCH: 5.1,
-    LTC: 230.8255,
+    LTC: 233.85158794,
     DCR: 460,
   },
 } as const;
@@ -1431,6 +1461,28 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "path-to-greatness",
+    author: "Justin Patterson",
+    authorKey: "justin-patterson",
+    authorUrl: "https://p2gtreasure.com/",
+    total: 1,
+    statuses: {
+      unsolved: 1,
+    },
+    chains: ["litecoin"],
+    prize: {
+      LTC: 3.02608794,
+    },
+    unsolvedPrize: {
+      LTC: 3.02608794,
+    },
+    withPubkey: 0,
+    withKey: 0,
+    firstStarted: "2021-02-02 14:57:06",
+    lastStarted: "2021-02-02 14:57:06",
+    hints: [],
+  },
+  {
     key: "picture-puzzle",
     author: "givesadvice4bitcoin",
     authorKey: "givesadvice4bitcoin",
@@ -1825,6 +1877,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     about:
       "Pseudonymous puzzle maker who signs the movie frames as @cryptop1r4t3 and keeps a Nostr key as the only contact.",
     collections: ["movie-enigma"],
+    puzzles: 1,
+  },
+  {
+    key: "justin-patterson",
+    to: "/authors/justin-patterson",
+    name: "Justin Patterson",
+    kind: "person",
+    about:
+      "Game developer who hid a Litecoin treasure hunt in the gameplay demo of Path to Greatness, the 3D platformer he builds on his own, and signs the hunt's page as jpatt94.",
+    collections: ["path-to-greatness"],
     puzzles: 1,
   },
   {
