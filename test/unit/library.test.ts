@@ -541,8 +541,16 @@ describe("lazy collection registry", () => {
       "Unknown author: peter_todd. Did you mean peter-todd?",
     );
 
-    /* A number one digit off is another puzzle, and a name several collections share is a tie. */
-    for (const id of ["b1000/999", "b1000/071", "1", "nope/1"]) {
+    /* A name several collections share names each of them, in registry order. */
+    await expect(miss(requirePuzzle("71"))).resolves.toBe(
+      "Puzzle not found: 71. Did you mean b1000/71 or quizchain/71?",
+    );
+    await expect(miss(requirePuzzle("1"))).resolves.toBe(
+      "Puzzle not found: 1. Did you mean b1000/1, mini/1, quizchain/1, rushwallet/1 or teikhos/1?",
+    );
+
+    /* A number one digit off is another puzzle, and an unknown collection holds no name. */
+    for (const id of ["b1000/999", "b1000/071", "nope/1"]) {
       await expect(miss(requirePuzzle(id))).resolves.toBe(`Puzzle not found: ${id}.`);
     }
     await expect(miss(requireCollection("bitcoin"))).resolves.toBe("Unknown collection: bitcoin.");
