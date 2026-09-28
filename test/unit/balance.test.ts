@@ -294,11 +294,35 @@ describe("Puzzle.balance", () => {
     expect(urls).toEqual([]);
   });
 
-  it("requires an API key for Ethereum before any request", async () => {
-    const urls = stubFetch(() => json({}));
+  it("reads an Ethereum balance through Blockscout when there is no key", async () => {
+    const urls = stubFetch(() => json({ coin_balance: "1234567890123456789" }));
 
-    await expect(ethereum.balance()).rejects.toThrow(/API key/);
-    expect(urls).toEqual([]);
+    const balance = await ethereum.balance();
+
+    expect(urls).toEqual([
+      "https://eth.blockscout.com/api/v2/addresses/0x0000000000000000000000000000000000000000",
+    ]);
+    expect(balance.confirmed).toBe(1234567890123456789n);
+    expect(balance.unconfirmed).toBe(0n);
+  });
+
+  it("takes an empty key as no key", async () => {
+    const urls = stubFetch(() => json({ coin_balance: null }));
+
+    const balance = await ethereum.balance({ apiKey: "" });
+
+    expect(urls[0]).toMatch(/^https:\/\/eth\.blockscout\.com\//u);
+    expect(balance.confirmed).toBe(0n);
+  });
+
+  it("sends a keyless Ethereum lookup to the given base URL", async () => {
+    const urls = stubFetch(() => json({ coin_balance: "5" }));
+
+    await ethereum.balance({ baseUrl: "https://blockscout.example.test" });
+
+    expect(urls).toEqual([
+      "https://blockscout.example.test/api/v2/addresses/0x0000000000000000000000000000000000000000",
+    ]);
   });
 
   it("redacts API keys from transport failures", async () => {

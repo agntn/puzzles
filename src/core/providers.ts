@@ -8,6 +8,7 @@ import {
 } from "@agntn/explorers";
 import { Arweave } from "@agntn/explorers/providers/arweave";
 import { Blockchair } from "@agntn/explorers/providers/blockchair";
+import { Blockscout } from "@agntn/explorers/providers/blockscout";
 import { Blockstream } from "@agntn/explorers/providers/blockstream";
 import { Dcrdata } from "@agntn/explorers/providers/dcrdata";
 import { Etherscan } from "@agntn/explorers/providers/etherscan";
@@ -31,13 +32,27 @@ import { Balance } from "./types.ts";
 
 type Lookup = (address: string, config: Readonly<ProviderConfig>) => Promise<Snapshot>;
 
+/**
+ * Ethereum goes to Etherscan when the caller has a key for it and to Blockscout, which needs none,
+ * when not. Blockscout gets the config without the key, so an Etherscan key never reaches it.
+ *
+ * @param {string} address - Address to look up.
+ * @param {Readonly<ProviderConfig>} config - Provider configuration.
+ * @returns {Promise<Snapshot>} The balance snapshot.
+ */
+function ethereumBalance(address: string, config: Readonly<ProviderConfig>): Promise<Snapshot> {
+  const { apiKey, ...keyless } = config;
+  return apiKey === undefined || apiKey.length === 0
+    ? new Blockscout({ ...keyless, defaultChain: "ethereum" }).getBalance(address, "ethereum")
+    : new Etherscan({ ...config, defaultChain: "ethereum" }).getBalance(address, "ethereum");
+}
+
 const lookups: Readonly<Record<Exclude<Chain, typeof Chain.Monero>, Lookup>> = {
   arweave: (address, config) => new Arweave(config).getBalance(address, "arweave"),
   bitcoin: (address, config) => new Mempool(config).getBalance(address, "bitcoin"),
   bitcoincash: (address, config) => new Blockchair(config).getBalance(address, "bitcoincash"),
   decred: (address, config) => new Dcrdata(config).getBalance(address, "decred"),
-  ethereum: (address, config) =>
-    new Etherscan({ ...config, defaultChain: "ethereum" }).getBalance(address, "ethereum"),
+  ethereum: ethereumBalance,
   litecoin: (address, config) => new Mempool(config).getBalance(address, "litecoin"),
 };
 
@@ -165,9 +180,6 @@ export async function lookupBalance(puzzle: Puzzle, options: BalanceOptions): Pr
   const chain = puzzle.chain();
   if (chain === Chain.Monero) {
     throw new UnsupportedChainError(`Unsupported balance chain: ${chain}`);
-  }
-  if (chain === Chain.Ethereum && (options.apiKey === undefined || options.apiKey.length === 0)) {
-    throw new BalanceProviderError("Ethereum balance lookup requires an Etherscan API key");
   }
   const address = puzzle.address().value;
   const config = defined<ProviderConfig>({

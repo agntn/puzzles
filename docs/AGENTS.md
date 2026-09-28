@@ -1,6 +1,6 @@
 # docs/
 
-Docus site for `@agntn/puzzles`. Markdown lives in `content/`. The playground and the puzzle pages are Vue pages that import the library into the browser. Two server routes answer at request time. `/api/balance/:id` exists because balances need an explorer and the Etherscan key has to stay on the worker. `/mcp` is the Docus MCP server with the twelve puzzle tools beside its own `list-pages` and `get-page`. `/api/changelog` and `/changelog.xml` are prerendered from the checkout's `CHANGELOG.md`.
+Docus site for `@agntn/puzzles`. Markdown lives in `content/`. The playground and the puzzle pages are Vue pages that import the library into the browser. Two server routes answer at request time. `/api/balance/:id` exists because balances need an explorer and an Etherscan key, when there is one, has to stay on the worker. `/mcp` is the Docus MCP server with the twelve puzzle tools beside its own `list-pages` and `get-page`. `/api/changelog` and `/changelog.xml` are prerendered from the checkout's `CHANGELOG.md`.
 
 ## Design
 
@@ -43,13 +43,13 @@ docs/
 
 ```bash
 pnpm install          # from docs/; the repo root needs neither an install nor a build
-pnpm dev              # http://localhost:3000; ETHERSCAN_API_KEY in the environment makes Ethereum balances work locally
+pnpm dev              # http://localhost:3000; ETHERSCAN_API_KEY in the environment sends local Ethereum balances to Etherscan instead of Blockscout
 pnpm build            # Cloudflare Workers output in .output/, content routes and every puzzle page prerendered
 pnpm deploy           # build, then wrangler deploy to puzzles.agntn.dev
 pnpm generate         # static output; the balance route needs the worker, so this is for a preview only
 ```
 
-Deployment: Nitro preset `cloudflare_module`. Nuxt Content wants a D1 binding named `DB`. `wrangler.jsonc` carries it plus the `NUXT_SITE_URL` var, and Nitro merges that into the generated `.output/server/wrangler.json`. Create the database once with `wrangler d1 create agntn-puzzles` and put the id in `wrangler.jsonc`. Until then the id is all zeros on purpose, `pnpm deploy` with zeros binds nothing, so don't run it before the id is real. The Etherscan key is a worker secret, `wrangler secret put NUXT_ETHERSCAN_API_KEY`, read through `runtimeConfig.etherscanApiKey` and passed to Ethereum lookups only, so Blockchair never sees it; without it Ethereum balances answer with the library's `BalanceProviderError` and every other chain still works. No KV binding: the five minute balance cache is Nitro's in-memory one, per isolate, plus the `Cache-Control` the route sends.
+Deployment: Nitro preset `cloudflare_module`. Nuxt Content wants a D1 binding named `DB`. `wrangler.jsonc` carries it plus the `NUXT_SITE_URL` var, and Nitro merges that into the generated `.output/server/wrangler.json`. Create the database once with `wrangler d1 create agntn-puzzles` and put the id in `wrangler.jsonc`. Until then the id is all zeros on purpose, `pnpm deploy` with zeros binds nothing, so don't run it before the id is real. The Etherscan key is a worker secret, `wrangler secret put NUXT_ETHERSCAN_API_KEY`, read through `runtimeConfig.etherscanApiKey` and passed to Ethereum lookups only, so Blockchair never sees it; without it Ethereum balances go to Blockscout, which needs no key. No KV binding: the five minute balance cache is Nitro's in-memory one, per isolate, plus the `Cache-Control` the route sends.
 
 `@agntn/puzzles` is an alias in `nuxt.config.ts` for `../src/index.ts`, and `@agntn/puzzles/tools` for `../src/tool-operations.ts`, so the playground, the puzzle pages and the tool panel run the real executors instead of a copy of their text. Vite and Nitro bundle the checkout's sources into the page and the worker, so `dist/` and the root `node_modules` are never touched. That is what Workers Builds needs: it installs `docs/` alone. The subgraph under `src/index.ts` imports from npm: `@agntn/chains`, `@agntn/explorers`, `@noble/curves`, `@noble/hashes`, `@scure/base`, `@scure/bip32` and `@scure/bip39`. Each one is a dependency of `docs/package.json`, pinned to the root's version, listed in `vite.resolve.dedupe`, and every subpath `src/` imports, the dynamic ones in `providers.ts` and `verify.ts` too, is in `vite.optimizeDeps.include`. A new bare import in `src/` needs all three lines and a check of both the browser bundle and the worker before anyone relies on it. `vite.server.fs.allow` names the repository root, not `src/`, because `src/version.ts` reads `../package.json`.
 
