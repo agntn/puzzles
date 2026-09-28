@@ -112,7 +112,8 @@ describe("puzzle list pagination", () => {
     const recased = await listTool({ address: "1bggz9tcn4rm9kbzdn7kprqz87sz26samh" });
 
     expect(stranger.details).toMatchObject({ matched: 0, returned: 0, ids: [] });
-    expect(stranger.content[0]?.text).toContain("(none)");
+    expect(stranger.details).not.toHaveProperty("outside");
+    expect(stranger.content[0]?.text).toBe("0 matching puzzles:\n(none)");
     expect(recased.details["ids"]).toEqual([]);
   });
 
@@ -128,6 +129,48 @@ describe("puzzle list pagination", () => {
 
     expect(wrongChain.details).toMatchObject({ matched: 0, ids: [] });
     expect(rightCollection.details["ids"]).toEqual(["b1000/1"]);
+  });
+
+  it("names the puzzle behind an address when the other filters left it out", async () => {
+    const address = "1crypto24HCr178iMcKd5iUi5D4rsg1nK";
+    const elsewhere = await listTool({
+      address,
+      collection: "b1000",
+      chain: "bitcoin",
+      status: "unsolved",
+      withPubkey: false,
+    });
+    const everything = await listTool({
+      address,
+      chain: "ethereum",
+      status: "solved",
+      withPubkey: true,
+    });
+
+    expect(elsewhere.content[0]?.text).toBe(
+      "0 matching puzzles:\n(none)\nzden/level-halv pays to this address, but its collection is zden (not b1000).",
+    );
+    expect(elsewhere.details).toMatchObject({
+      matched: 0,
+      ids: [],
+      outside: [{ id: "zden/level-halv", filters: ["collection"] }],
+    });
+    expect(everything.content[0]?.text).toContain(
+      "but its chain is bitcoin (not ethereum) and its status is unsolved (not solved) and it has no public key recorded.",
+    );
+    expect(everything.details["outside"]).toEqual([
+      { id: "zden/level-halv", filters: ["chain", "status", "withPubkey"] },
+    ]);
+  });
+
+  it("reads a collection alias as the collection it names", async () => {
+    const result = await listTool({
+      address: "37k7toV1Nv4DfmQbmZ8KuZDQCYK9x5KpzP",
+      collection: "peter_todd",
+      status: "unsolved",
+    });
+
+    expect(result.details["outside"]).toEqual([{ id: "hash-collision/sha1", filters: ["status"] }]);
   });
 
   it.each([-1, 0.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1])(
