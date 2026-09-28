@@ -44,7 +44,7 @@ const NOTES = [
     <span class="console-cross console-cross-br" aria-hidden="true">+</span>
     <header class="console-bar">
       <span class="console-title"><span class="console-tag">Start</span>{{ INSTALL }}</span>
-      <span class="console-meta">Node.js 24 or newer</span>
+      <span class="console-meta">Node.js 26 or newer</span>
       <span class="console-mark" aria-hidden="true" />
     </header>
     <div class="console-ruler" aria-hidden="true" />

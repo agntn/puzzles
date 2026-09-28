@@ -33,7 +33,7 @@ Docs, one page per puzzle and a live playground: [puzzles.agntn.dev](https://puz
 pnpm add @agntn/puzzles
 ```
 
-Node.js 24 or newer for the CLI.
+Node.js 26 or newer for the CLI.
 
 ## 🚀 First call
 

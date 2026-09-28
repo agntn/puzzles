@@ -12,7 +12,7 @@ metadata:
 pnpm add @agntn/puzzles
 ```
 
-Node.js 24 or newer, or any runtime that runs neutral ESM: browsers and edge workers too.
+Node.js 26 or newer, or any runtime that runs neutral ESM: browsers and edge workers too.
 
 ## Discover, don't hardcode
 
