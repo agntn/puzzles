@@ -37,8 +37,20 @@ export function toJson(value: unknown, compact = false): string {
   );
 }
 
-/** Writes an amount as a plain decimal, since `String(1e-8)` is `1e-8`. */
-const amounts = new Intl.NumberFormat("en-US", { maximumFractionDigits: 20, useGrouping: false });
+let amounts: Intl.NumberFormat | undefined;
+
+/**
+ * Writes an amount as a plain decimal, since `String(1e-8)` is `1e-8`. The formatter is built on
+ * first use, because the first `Intl` formatter in a process loads ICU data, and importing the
+ * package or printing `--help` formats no amount.
+ *
+ * @param {number} amount - The amount to write.
+ * @returns {string} Every digit of the amount, without an exponent or grouping.
+ */
+function decimal(amount: number): string {
+  amounts ??= new Intl.NumberFormat("en-US", { maximumFractionDigits: 20, useGrouping: false });
+  return amounts.format(amount);
+}
 
 /**
  * Formats a prize for display: `0.001 BTC`, or a dash when none is recorded.
@@ -48,7 +60,7 @@ const amounts = new Intl.NumberFormat("en-US", { maximumFractionDigits: 20, useG
  * @returns {string} The amount and currency, or `-`.
  */
 export function formatPrize(prize: number | undefined, currency: string): string {
-  return prize === undefined ? "-" : `${amounts.format(prize)} ${currency}`;
+  return prize === undefined ? "-" : `${decimal(prize)} ${currency}`;
 }
 
 /**
@@ -75,7 +87,7 @@ export function prizeTotals(puzzles: readonly Puzzle[]): Record<string, number> 
   for (const puzzle of puzzles) {
     const prize = puzzle.prize();
     if (prize === undefined) continue;
-    const [whole = "0", fraction = ""] = amounts.format(prize).split(".");
+    const [whole = "0", fraction = ""] = decimal(prize).split(".");
     const sum = (sums[puzzle.prizeCurrency()] ??= { units: 0n, places: 0 });
     const places = Math.max(sum.places, fraction.length);
     sum.units =
@@ -120,7 +132,7 @@ export function formatPrizeTotals(totals: Readonly<Record<string, number>>): str
   const entries = Object.entries(totals);
   return entries.length === 0
     ? "-"
-    : entries.map(([currency, amount]) => `${amounts.format(amount)} ${currency}`).join(", ");
+    : entries.map(([currency, amount]) => `${decimal(amount)} ${currency}`).join(", ");
 }
 
 /**
@@ -303,7 +315,7 @@ function formatTransactions(puzzle: Puzzle): string[] {
     `transactions: ${transactions.length}`,
     ...transactions.map(
       (item) =>
-        `\t${item.tx_type}\t${item.date}\t${amounts.format(item.amount)} ${currency}\t${item.txid}`,
+        `\t${item.tx_type}\t${item.date}\t${decimal(item.amount)} ${currency}\t${item.txid}`,
     ),
   ];
 }

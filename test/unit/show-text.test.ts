@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vite-plus/test";
+import { describe, expect, it, vi } from "vite-plus/test";
 import {
   answer,
   assets,
@@ -82,6 +82,30 @@ describe("puzzles_show text", () => {
     expect(formatPrizeTotals({ ETH: 1.5e-18, BTC: 1064.08158961 })).toBe(
       "0.0000000000000000015 ETH, 1064.08158961 BTC",
     );
+  });
+
+  it("builds the amount formatter on the first amount, not on import", async () => {
+    const NumberFormat = Intl.NumberFormat;
+    let built = 0;
+    Intl.NumberFormat = class extends NumberFormat {
+      constructor(locales?: string, options?: Readonly<Intl.NumberFormatOptions>) {
+        super(locales, options);
+        built += 1;
+      }
+    } as typeof NumberFormat;
+    vi.resetModules();
+    try {
+      const fresh = await import("../../src/core/utils.ts");
+      await import("../../src/index.ts");
+      expect(built).toBe(0);
+
+      expect(fresh.formatPrize(1e-8, "BTC")).toBe("0.00000001 BTC");
+      expect(fresh.formatPrizeTotals({ BTC: 1.5 })).toBe("1.5 BTC");
+      expect(built).toBe(1);
+    } finally {
+      Intl.NumberFormat = NumberFormat;
+      vi.resetModules();
+    }
   });
 
   it("prints the hint every b1000 record inherits from its author", async () => {
