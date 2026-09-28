@@ -87,24 +87,35 @@ const tools: readonly ToolDefinition[] = [
 ];
 
 /**
- * The first reason the arguments fail their schema. A key the tool does not declare is named
- * before anything else, because the typebox message for it says only that one exists. The key
- * comes from the client, so it is quoted.
+ * Every reason the arguments fail their schema, so one retry can fix them all. A key the tool does
+ * not declare comes first, with the keys it does take, and an enum miss names the values it takes:
+ * the typebox messages for both say only that the value is wrong. The key comes from the client,
+ * so it is quoted.
  *
  * @param {TSchema} schema - The tool's input schema.
  * @param {Readonly<Record<string, unknown>>} value - The arguments the client sent.
  * @returns {string} A one-line validation message for the client.
  */
 function validationError(schema: TSchema, value: Readonly<Record<string, unknown>>): string {
-  const declared: object = IsObject(schema) ? schema.properties : {};
-  const unknown = Object.keys(value).filter((key) => !Object.hasOwn(declared, key));
+  const declared = IsObject(schema) ? Object.keys(schema.properties) : [];
+  const unknown = Object.keys(value).filter((key) => !declared.includes(key));
+  const reasons: string[] = [];
   if (unknown.length > 0) {
-    return `Invalid arguments at /: unknown property ${unknown.map((key) => JSON.stringify(key)).join(", ")}`;
+    reasons.push(
+      `at /: unknown property ${unknown.map((key) => JSON.stringify(key)).join(", ")}, expected one of ${declared.toSorted().join(", ")}`,
+    );
   }
-  const first = Value.Errors(schema, value)[0];
-  return first === undefined
-    ? "Invalid arguments"
-    : `Invalid arguments at ${first.instancePath || "/"}: ${first.message}`;
+  for (const error of Value.Errors(schema, value)) {
+    if (error.keyword === "additionalProperties" || error.schemaPath === "#/additionalProperties") {
+      continue;
+    }
+    const reason =
+      error.keyword === "enum"
+        ? `expected one of ${error.params.allowedValues.join(", ")}`
+        : error.message;
+    reasons.push(`at ${error.instancePath || "/"}: ${reason}`);
+  }
+  return reasons.length === 0 ? "Invalid arguments" : `Invalid arguments ${reasons.join("; ")}`;
 }
 
 /**
