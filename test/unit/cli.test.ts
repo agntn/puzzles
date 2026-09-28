@@ -571,6 +571,52 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     );
   });
 
+  it("refuses an option the command does not take instead of running without it", async () => {
+    await expect(failure("verify", "b1000/1", "--key", "abc")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid option: unknown --key, expected one of --all, --quiet, --json\n",
+    });
+    await expect(failure("show", "b1000/1", "--jsn")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid option: unknown --jsn, expected one of --json\n",
+    });
+    await expect(failure("stats", "-x")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid option: unknown -x, expected one of --json\n",
+    });
+  });
+
+  it("names a misspelled flag rather than the value it left behind", async () => {
+    const result = await failure("list", "--limitt", "3");
+
+    expect(result.code).toBe(1);
+    expect(result.stderr).toMatch(/^Invalid option: unknown --limitt, expected one of /u);
+  });
+
+  it("refuses a positional argument the command has no place for", async () => {
+    await expect(failure("show", "b1000/1", "b1000/2")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: 'Invalid argument: unexpected "b1000/2", show takes ID\n',
+    });
+    await expect(failure("stats", "b1000")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: 'Invalid argument: unexpected "b1000", stats takes no positional argument\n',
+    });
+  });
+
+  it("still takes every spelling citty accepts for a declared option", async () => {
+    await expect(puzzles("verify", "b1000/1", "-q")).resolves.toBe("");
+    await expect(puzzles("verify", "b1000/1", "--no-json")).resolves.toBe("OK\tb1000/1");
+    await expect(
+      json<readonly unknown[]>("list", "--withPubkey", "--limit=1", "--json"),
+    ).resolves.toHaveLength(1);
+  });
+
   it("names the accepted statuses when the filter is not one", async () => {
     await expect(failure("list", "--status", "foo")).resolves.toEqual({
       code: 1,
