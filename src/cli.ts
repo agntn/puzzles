@@ -2,11 +2,23 @@
 import { existsSync } from "node:fs";
 import { sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type ArgsDef, type CommandDef, defineCommand, type Resolvable, runMain } from "citty";
+import type { ArgsDef, CommandDef, Resolvable } from "citty";
 import type McpCommand from "./commands/mcp.ts";
 import { printError } from "./commands/output.ts";
 import { InvalidArgumentError, PuzzlesError } from "./core/errors.ts";
 import { version } from "./version.ts";
+
+/**
+ * citty colors its usage and its errors even into a pipe, takes `NO_COLOR` only as `1`, and decides
+ * once, as it loads, so `puzzles --help | less`, a file or an agent's transcript gets the escapes.
+ * The terminal decides here, before citty loads: colors only when both streams citty writes to are
+ * terminals that take them, and `hasColors()` already honors any `NO_COLOR` and `TERM=dumb`.
+ */
+const { stderr, stdout } = process;
+if (!(stdout.isTTY && stdout.hasColors() && stderr.isTTY && stderr.hasColors())) {
+  process.env["NO_COLOR"] = "1";
+}
+const { defineCommand, runMain } = await import("citty");
 
 /** A closed pipe, `puzzles export | head`, ends the process quietly and keeps the exit code a command set. */
 process.stdout.on("error", (error: Readonly<NodeJS.ErrnoException>) => {
