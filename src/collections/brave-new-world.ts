@@ -25,7 +25,7 @@ const PICTURE = "https://i.redd.it/n1x7g8ceaur51.png";
  */
 export const braveNewWorldPuzzle = bitcoinPuzzle({
   id: "brave-new-world",
-  address: p2pkh("1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ", "bd031e54cde2a3189fd59bc49f731367a1779eb0"),
+  address: p2pkh("1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ", "ccbd031e54cde2a3189fd59bc49f731367a1779e"),
   sourceUrl: THREAD,
   startedAt: "2020-10-08 09:25:30",
   prize: 0.2,
