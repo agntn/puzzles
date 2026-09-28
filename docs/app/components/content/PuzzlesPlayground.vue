@@ -113,7 +113,7 @@ const NOTES: Readonly<Record<Operation, string>> = {
   show: "",
   verify: "",
   balance:
-    "The worker asks the chain's explorer and caches the answer for five minutes. Ethereum needs the Etherscan key the worker holds. The CLI reads yours from ETHERSCAN_API_KEY.",
+    "The worker asks the chain's explorer and caches the answer for five minutes. Ethereum needs no key, Blockscout answers. The CLI moves to Etherscan once ETHERSCAN_API_KEY holds yours.",
   list: `A page holds ${facts.parameters.limit.maximum} puzzles at most. Ask for more and the tool says no, same as its schema.`,
   collections:
     "The rows puzzles collections prints. One per collection, with the author and a count per status.",

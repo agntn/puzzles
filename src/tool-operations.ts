@@ -163,7 +163,7 @@ export const facts = {
       promptSnippet: "Use puzzles_balance for the live balance of a puzzle address.",
       promptGuidelines: [
         "This call reaches a public block explorer.",
-        "Ethereum needs an Etherscan key through apiKey or ETHERSCAN_API_KEY.",
+        "Ethereum reads Blockscout, or Etherscan once apiKey or ETHERSCAN_API_KEY holds its key.",
         "It counts the chain's own coin, so a prize paid in a token such as DAI is not in it.",
       ],
       openWorld: true,

@@ -59,6 +59,13 @@ describe("Puzzle.balance, live", () => {
     expect(balance.confirmed).toBeGreaterThanOrEqual(0n);
   });
 
+  it("reads an Ethereum balance through Blockscout without a key", async () => {
+    const balance = await (await requirePuzzle("arweave/weave11")).balance();
+
+    expect(balance.chain).toBe("ethereum");
+    expect(balance.confirmed).toBeGreaterThanOrEqual(0n);
+  });
+
   it.skipIf(etherscanKey === undefined)("reads an Ethereum balance through Etherscan", async () => {
     const balance = await (
       await requirePuzzle("arweave/weave11")

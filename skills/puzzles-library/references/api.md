@@ -134,7 +134,7 @@ class Balance {
 }
 
 interface BalanceOptions {
-  apiKey?: string; // Etherscan requires one
+  apiKey?: string; // Etherscan on Ethereum, Blockchair on Bitcoin Cash; Ethereum without one reads Blockscout
   baseUrl?: string; // override the provider endpoint; Bitcoin then skips its Blockstream fallback
   timeout?: number; // milliseconds, provider default 15 s
 }

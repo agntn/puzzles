@@ -20,6 +20,7 @@ const libraryEntries = [
   "@agntn/explorers",
   "@agntn/explorers/providers/arweave",
   "@agntn/explorers/providers/blockchair",
+  "@agntn/explorers/providers/blockscout",
   "@agntn/explorers/providers/blockstream",
   "@agntn/explorers/providers/dcrdata",
   "@agntn/explorers/providers/etherscan",

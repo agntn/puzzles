@@ -1,6 +1,6 @@
 /** Options for an online balance lookup through `@agntn/explorers`. */
 export interface BalanceOptions {
-  /** API key for providers that require one, such as Etherscan. */
+  /** API key for the chain's provider. On Ethereum it picks Etherscan over Blockscout. */
   readonly apiKey?: string | undefined;
 
   /** Overrides the provider's default base URL. */

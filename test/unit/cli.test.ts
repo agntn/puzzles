@@ -26,15 +26,11 @@ interface Failure {
 
 /*
  * A failed command rejects with its streams attached, so the test reads what a script would see.
- * The child has no fetch stub, so the Etherscan key is blanked and the balance case fails before
- * any request.
+ * The child has no fetch stub, so none of its commands may reach a balance lookup.
  */
 async function failure(...args: readonly string[]): Promise<Failure> {
   try {
-    await execute(process.execPath, ["src/cli.ts", ...args], {
-      cwd: process.cwd(),
-      env: { ...process.env, ETHERSCAN_API_KEY: "" },
-    });
+    await execute(process.execPath, ["src/cli.ts", ...args], { cwd: process.cwd() });
   } catch (error) {
     const { code, stderr, stdout } = error as Failure;
     return { code, stderr, stdout };
@@ -44,14 +40,18 @@ async function failure(...args: readonly string[]): Promise<Failure> {
 
 /*
  * Runs the CLI with `test/support/fetch-stub.ts` in place of the network, so a balance pass is read
- * the way a script reads it: both streams and the exit code, whether it failed or not.
+ * the way a script reads it: both streams and the exit code, whether it failed or not. The
+ * Etherscan key is blanked, so Ethereum asks Blockscout whatever the shell holds.
  */
 async function stubbed(failing: string, ...args: readonly string[]): Promise<Failure> {
   try {
     const { stderr, stdout } = await execute(
       process.execPath,
       ["--import", "./test/support/fetch-stub.ts", "src/cli.ts", ...args],
-      { cwd: process.cwd(), env: { ...process.env, PUZZLES_FETCH_FAIL: failing } },
+      {
+        cwd: process.cwd(),
+        env: { ...process.env, ETHERSCAN_API_KEY: "", PUZZLES_FETCH_FAIL: failing },
+      },
     );
     return { code: 0, stderr, stdout };
   } catch (error) {
@@ -620,12 +620,31 @@ describe.concurrent("puzzles CLI", () => {
     });
   });
 
-  it("reports a balance the library refuses without a stack", async () => {
-    await expect(failure("balance", "arweave/weave7")).resolves.toEqual({
+  it("reports a failed balance lookup without a stack", async () => {
+    const address = "0x13f968d3bb996f39838ade86109b8150ba890d7e";
+    const url = `https://eth.blockscout.com/api/v2/addresses/${address}`;
+
+    await expect(stubbed(address, "balance", "arweave/weave7")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: "Ethereum balance lookup requires an Etherscan API key\n",
+      stderr: `fetch ${url}\nBalance lookup failed: No response from blockscout (fetch failed): ${url}\n`,
     });
+  });
+
+  it("reads Ethereum through Blockscout without a key and through Etherscan with one", async () => {
+    const run = async (key: string): Promise<string> => {
+      const { stderr } = await execute(
+        process.execPath,
+        ["--import", "./test/support/fetch-stub.ts", "src/cli.ts", "balance", "arweave/weave7"],
+        { cwd: process.cwd(), env: { ...process.env, ETHERSCAN_API_KEY: key } },
+      ).catch((error: unknown) => error as Failure);
+      return stderr;
+    };
+
+    expect(await run("")).toMatch(/^fetch https:\/\/eth\.blockscout\.com\/api\/v2\/addresses\//u);
+    const keyed = await run("etherscan-secret");
+    expect(keyed).toMatch(/^fetch https:\/\/api\.etherscan\.io\//u);
+    expect(keyed).not.toContain("blockscout");
   });
 
   it("checks every filtered puzzle in turn and keeps going past a failed lookup", async () => {
