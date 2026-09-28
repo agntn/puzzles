@@ -984,7 +984,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     prize: "3.02608794 LTC",
     prizeAmount: 3.02608794,
     currency: undefined,
-    startedAt: "2021-02-02 14:57:06",
+    startedAt: "2021-02-05 19:02:37",
     solvedAt: undefined,
     solveTime: undefined,
     bits: undefined,
@@ -998,13 +998,13 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://litecoinspace.org/address/LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS",
     source: "https://p2gtreasure.com/",
     transactions: 8,
-    tool: "path-to-greatness\tunsolved\t3.02608794 LTC\tLUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS\nchain: litecoin  address kind: p2pkh\nhash160: 69fb2ecbe0eed5feeb7e410b279048cd3891b789\npublic key: unknown\nprivate key: unknown\nstarted: 2021-02-02 14:57:06\ntransactions: 8\n\tfunding\t2021-02-02 14:57:06\t0.03477051 LTC\t7f7a13c612ccc937fede4802b24861c00b386fc116a3a57d6a4e386e93f45f21\n\tincrease\t2021-02-05 15:53:48\t0.06420958 LTC\t1e2e74c76942b40b4f79a9d98c5ba00eda553e4f8ea60e2fb15b9a85fdd039f0\n\tincrease\t2021-02-05 15:53:48\t0.57788622 LTC\taf864bcaa7e86a3c1de5e33dc22d8d528a07e79c349a74244358b0f647be0666\n\tincrease\t2021-02-05 16:05:38\t0.07233959 LTC\tcb2462b981de7768245bc1951575c163010e0ce6dc3d3f80499fe3fe5f551458\n\tincrease\t2021-02-12 18:14:43\t0.06348393 LTC\t37319ffe3ac77c1a9c413e411347938e973400761cea3c7890dfe2f9d65dc834\n\tincrease\t2021-05-15 22:54:29\t0.15546076 LTC\tebe20c79330a96bfd789b716bfa0f579088fafbb62c877bb6395ec2f25c92b86\n\tincrease\t2021-05-22 23:08:52\t0.15794155 LTC\t16abed94cd0641bda707b21fcb6a9caf614524ff3590645af104d075bca10638\n\tincrease\t2021-07-22 18:02:39\t1.8999958 LTC\tb83f8e1037bd07d8e82b1c4c35a3727b2919e709eecd570f83ecb743c8fa2711\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/computer-screen.jpg\nhint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue1-imagine.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue2-scramble.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue3-wasd.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue4-chess.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue5-wonders.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/00111111.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/qr1.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/qr2.jpg\nasset source: https://p2gtreasure.com/Clues/p2g_clues.zip\nhints: 3\n\tofficial\t-\tClues can be found inside the demo, and will lead you to a Litecoin wallet's private key.\tsource: https://p2gtreasure.com/old/index.html\tconfirmation: https://web.archive.org/web/20210205193730/https://www.p2gtreasure.com/ (Wayback capture of the first site, February 2021)\n\tofficial\t-\tThe first and last steps are the only steps I will ever provide.\tsource: https://p2gtreasure.com/old/rules.html\n\tofficial\t-\tThe clues above will lead to a Litecoin wallet's private key.\tsource: https://p2gtreasure.com/\tconfirmation: https://web.archive.org/web/20210516142206/https://www.p2gtreasure.com/ (Wayback capture of the site with the clue images, May 2021)\nexplorer: https://litecoinspace.org/address/LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS\nsource: https://p2gtreasure.com/",
+    tool: "path-to-greatness\tunsolved\t3.02608794 LTC\tLUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS\nchain: litecoin  address kind: p2pkh\nhash160: 69fb2ecbe0eed5feeb7e410b279048cd3891b789\npublic key: unknown\nprivate key: unknown\nstarted: 2021-02-05 19:02:37\ntransactions: 8\n\tfunding\t2021-02-02 14:57:06\t0.03477051 LTC\t7f7a13c612ccc937fede4802b24861c00b386fc116a3a57d6a4e386e93f45f21\n\tincrease\t2021-02-05 15:53:48\t0.06420958 LTC\t1e2e74c76942b40b4f79a9d98c5ba00eda553e4f8ea60e2fb15b9a85fdd039f0\n\tincrease\t2021-02-05 15:53:48\t0.57788622 LTC\taf864bcaa7e86a3c1de5e33dc22d8d528a07e79c349a74244358b0f647be0666\n\tincrease\t2021-02-05 16:05:38\t0.07233959 LTC\tcb2462b981de7768245bc1951575c163010e0ce6dc3d3f80499fe3fe5f551458\n\tincrease\t2021-02-12 18:14:43\t0.06348393 LTC\t37319ffe3ac77c1a9c413e411347938e973400761cea3c7890dfe2f9d65dc834\n\tincrease\t2021-05-15 22:54:29\t0.15546076 LTC\tebe20c79330a96bfd789b716bfa0f579088fafbb62c877bb6395ec2f25c92b86\n\tincrease\t2021-05-22 23:08:52\t0.15794155 LTC\t16abed94cd0641bda707b21fcb6a9caf614524ff3590645af104d075bca10638\n\tincrease\t2021-07-22 18:02:39\t1.8999958 LTC\tb83f8e1037bd07d8e82b1c4c35a3727b2919e709eecd570f83ecb743c8fa2711\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/computer-screen.jpg\nhint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue1-imagine.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue2-scramble.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue3-wasd.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue4-chess.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue5-wonders.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/00111111.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/qr1.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/qr2.jpg\nasset source: https://p2gtreasure.com/Clues/p2g_clues.zip\nhints: 3\n\tofficial\t-\tClues can be found inside the demo, and will lead you to a Litecoin wallet's private key.\tsource: https://p2gtreasure.com/old/index.html\tconfirmation: https://web.archive.org/web/20210205193730/https://www.p2gtreasure.com/ (Wayback capture of the first site, February 2021)\n\tofficial\t-\tThe first and last steps are the only steps I will ever provide.\tsource: https://p2gtreasure.com/old/rules.html\n\tofficial\t-\tThe clues above will lead to a Litecoin wallet's private key.\tsource: https://p2gtreasure.com/\tconfirmation: https://web.archive.org/web/20210516142206/https://www.p2gtreasure.com/ (Wayback capture of the site with the clue images, May 2021)\nexplorer: https://litecoinspace.org/address/LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS\nsource: https://p2gtreasure.com/",
   },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "72ae792b99cd",
+  dataVersion: "a37872a3e2ed",
   total: 442,
   solved: 229,
   unsolved: 102,
@@ -1478,8 +1478,8 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     },
     withPubkey: 0,
     withKey: 0,
-    firstStarted: "2021-02-02 14:57:06",
-    lastStarted: "2021-02-02 14:57:06",
+    firstStarted: "2021-02-05 19:02:37",
+    lastStarted: "2021-02-05 19:02:37",
     hints: [],
   },
   {

@@ -31,6 +31,22 @@ const RULES = "https://p2gtreasure.com/old/rules.html";
 /** The page about the game the demo belongs to. */
 const GAME = "https://p2gtreasure.com/old/p2g.html";
 
+/** The 50 second announcement trailer on the game's YouTube channel, February 5, 2021. */
+const TRAILER = "https://www.youtube.com/watch?v=T98D6Otefgs";
+
+/** The author's post on r/ARG, July 25, 2021. */
+const ARG =
+  "https://www.reddit.com/r/ARG/comments/orgh1k/i_made_a_treasure_hunt_with_a_crypto_prize/";
+
+/** The author's reply under that post, a month later. */
+const ARG_REPLY = `${ARG}haakcwj/`;
+
+/** Seconds of Dream, the album Justin Patterson released on January 7, 2021. */
+const ALBUM = "https://music.apple.com/us/album/seconds-of-dream/1548289299";
+
+/** Seconds of Dream on the game's YouTube channel, posted in 2019 as the Path to Greatness soundtrack. */
+const SOUNDTRACK = "https://www.youtube.com/watch?v=EojQgdZeTyM";
+
 /**
  * Path to Greatness: Treasure Hunt. Clues inside a gameplay demo, later nine images on the site,
  * lead to the private key of a Litecoin wallet. The prize is whatever that wallet holds, and
@@ -40,7 +56,7 @@ export const treasureHunt = litecoinPuzzle({
   id: "path-to-greatness",
   address: p2pkh("LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS", "69fb2ecbe0eed5feeb7e410b279048cd3891b789"),
   sourceUrl: SITE,
-  startedAt: "2021-02-02 14:57:06",
+  startedAt: "2021-02-05 19:02:37",
   prize: 3.02608794,
   hints: [
     official(
@@ -125,7 +141,12 @@ export class PathToGreatnessCollection extends SingletonCollection {
     aliases: ["jpatt94"],
     about:
       "Game developer who hid a Litecoin treasure hunt in the gameplay demo of Path to Greatness, the 3D platformer he builds on his own, and signs the hunt's page as jpatt94.",
-    profiles: [profile("website", SITE), profile("twitter", "https://x.com/jpatt94")],
+    profiles: [
+      profile("website", SITE),
+      profile("youtube", "https://www.youtube.com/@pathtogreatness8690"),
+      profile("reddit", "https://www.reddit.com/user/jpatt94/"),
+      profile("twitter", "https://x.com/jpatt94"),
+    ],
     facts: [
       fact(
         "Develops Path to Greatness, a 3D platformer about parkour movement, on his own, and wrote that donations would help him hire a level designer.",
@@ -134,6 +155,31 @@ export class PathToGreatnessCollection extends SingletonCollection {
       fact(
         "Released the treasure hunt with a free gameplay demo of Path to Greatness and asked for donations to a second Litecoin address, half for the game and half for the prize.",
         CAPTURE,
+      ),
+      fact(
+        "Announced the treasure hunt in a 50 second trailer on the game's YouTube channel, pointing to p2gtreasure.com.",
+        TRAILER,
+        { date: "2021-02-05" },
+      ),
+      fact(
+        "Released Seconds of Dream, a 13 track album with Few and Far Between, Nocturnal Sugars and Seconds of Dream among its titles.",
+        ALBUM,
+        { date: "2021-01-07" },
+      ),
+      fact(
+        "Posted Seconds of Dream on the game's YouTube channel as the Path to Greatness soundtrack.",
+        SOUNDTRACK,
+        { date: "2019-03-18" },
+      ),
+      fact(
+        "Shared the hunt on r/ARG with 3 LTC in the wallet, about $375 at the time, because he was having a hard time finding a community that would enjoy solving it.",
+        ARG,
+        { date: "2021-07-25" },
+      ),
+      fact(
+        "Wrote a month later that he knew of no online community working on the hunt, only a few private efforts through DMs he got.",
+        ARG_REPLY,
+        { date: "2021-08-25" },
       ),
     ],
   });
