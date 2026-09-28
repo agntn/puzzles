@@ -734,6 +734,37 @@ describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
     });
   });
 
+  it("prints the usage and citty's errors without colors into a pipe", async () => {
+    const switches = new Set(["CI", "FORCE_COLOR", "NO_COLOR", "NODE_DISABLE_COLORS", "TEST"]);
+    const env = {
+      ...Object.fromEntries(Object.entries(process.env).filter(([key]) => !switches.has(key))),
+      TERM: "xterm-256color",
+    };
+    const run = async (...args: readonly string[]): Promise<Failure> => {
+      try {
+        const { stderr, stdout } = await execute(process.execPath, ["src/cli.ts", ...args], {
+          cwd: process.cwd(),
+          env,
+        });
+        return { code: 0, stderr, stdout };
+      } catch (error) {
+        const { code, stderr, stdout } = error as Failure;
+        return { code, stderr, stdout };
+      }
+    };
+
+    const help = await run("--help");
+    const usage = await run("verify", "--help");
+    const unknown = await run("nope");
+
+    expect(help.stdout).toContain("USAGE puzzles authors|balance|");
+    expect(usage.stdout).toContain("--all    Verify every puzzle");
+    expect(unknown).toMatchObject({ code: 1, stderr: "Unknown command nope\n" });
+    for (const output of [help, usage, unknown]) {
+      expect(output.stdout + output.stderr).not.toContain("\u001B");
+    }
+  });
+
   it("keeps an identifier with a line break and an escape on one line", async () => {
     await expect(failure("show", "nope\n\u001B[31mx")).resolves.toEqual({
       code: 1,
