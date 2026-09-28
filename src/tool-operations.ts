@@ -1,5 +1,6 @@
 import { apiKeyVariables } from "./core/balance.ts";
 import type { Chain } from "./core/chains.ts";
+import type { PuzzleQuery } from "./core/dataset.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/status.ts";
 
@@ -142,7 +143,7 @@ export const facts = {
       promptGuidelines: [
         "Prefer a collection, chain or status filter over listing everything.",
         "Almost every puzzle is on Bitcoin, so a chain filter is the way to find the few that are not.",
-        "Given an address, pass it as address instead of listing the dataset and reading every row; an empty result means no puzzle pays to it.",
+        "Given an address, pass it as address instead of listing the dataset and reading every row. An empty result means no puzzle pays to it, unless the answer names a puzzle the other filters left out.",
         "Follow the next offset with the same filters instead of raising limit and repeating earlier rows.",
       ],
       openWorld: false,
@@ -538,21 +539,68 @@ export async function hintsTool(id: string): Promise<ToolResult> {
   });
 }
 
+/** A puzzle an address lookup found but the other filters left out, with the filters that did. */
+interface OutsideMatch {
+  readonly id: string;
+  readonly filters: readonly string[];
+}
+
 /**
- * Lists puzzles filtered by collection, status, and public key availability.
+ * Explains an empty address lookup. An address belongs to one puzzle or very few, so looking it
+ * up again without the other filters adds a line or two, and it tells "no puzzle pays here"
+ * apart from "the collection, chain, status or key filter dropped the one that does".
  *
- * @param {ListParams} params - Validated tool parameters.
- * @returns {Promise<ToolResult>} One page, with a next offset only when more matches remain.
+ * @param {PuzzleQuery} query - The list query, already validated, with its address.
+ * @returns {Promise<{ lines: string[]; outside: OutsideMatch[] }>} One sentence per dropped puzzle.
  */
-export async function listTool(params: ListParams): Promise<ToolResult> {
+async function outsideFilters(
+  query: PuzzleQuery,
+): Promise<{ lines: string[]; outside: OutsideMatch[] }> {
   const {
     dataset: { selectPuzzles },
-    utils: { parseStatus, requireChain, formatPuzzle },
+    registry: { requireCollection },
   } = await loadCore();
-  assertArguments("list", params);
-  const limit = assertLimit(params.limit);
-  const offset = assertOffset(params.offset);
-  const filtered = await selectPuzzles({
+  const collection =
+    query.collection === undefined ? undefined : (await requireCollection(query.collection)).key;
+  const expected = { collection, chain: query.chain, status: query.status };
+  const lines: string[] = [];
+  const outside: OutsideMatch[] = [];
+  for (const puzzle of await selectPuzzles({ address: query.address })) {
+    const actual = {
+      collection: puzzle.collection(),
+      chain: puzzle.chain(),
+      status: puzzle.status(),
+    };
+    const reasons = Object.entries(expected)
+      .filter(
+        ([filter, value]) => value !== undefined && actual[filter as keyof typeof actual] !== value,
+      )
+      .map(([filter, value]): [string, string] => [
+        filter,
+        `its ${filter} is ${actual[filter as keyof typeof actual]} (not ${value})`,
+      ]);
+    if (query.withPubkey === true && !puzzle.hasPubkey()) {
+      reasons.push(["withPubkey", "it has no public key recorded"]);
+    }
+    lines.push(
+      `${puzzle.id()} pays to this address, but ${reasons.map(([, reason]) => reason).join(" and ")}.`,
+    );
+    outside.push({ id: puzzle.id(), filters: reasons.map(([filter]) => filter) });
+  }
+  return { lines, outside };
+}
+
+/**
+ * Checks the list filters the way the schema declares them and turns them into a dataset query.
+ *
+ * @param {ListParams} params - Tool parameters as the host sent them.
+ * @returns {Promise<PuzzleQuery>} The query `selectPuzzles` takes.
+ */
+async function listQuery(params: ListParams): Promise<PuzzleQuery> {
+  const {
+    utils: { parseStatus, requireChain },
+  } = await loadCore();
+  return {
     address:
       params.address === undefined
         ? undefined
@@ -564,7 +612,27 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
         : assertLength("collection", params.collection, facts.parameters.collection),
     status: parseStatus(params.status),
     withPubkey: params.withPubkey,
-  });
+  };
+}
+
+/**
+ * Lists puzzles filtered by collection, status, and public key availability. An address the
+ * other filters ruled out names the puzzle it belongs to, so an empty page never reads as an
+ * address the dataset does not know.
+ *
+ * @param {ListParams} params - Validated tool parameters.
+ * @returns {Promise<ToolResult>} One page, with a next offset only when more matches remain.
+ */
+export async function listTool(params: ListParams): Promise<ToolResult> {
+  const {
+    dataset: { selectPuzzles },
+    utils: { formatPuzzle },
+  } = await loadCore();
+  assertArguments("list", params);
+  const limit = assertLimit(params.limit);
+  const offset = assertOffset(params.offset);
+  const query = await listQuery(params);
+  const filtered = await selectPuzzles(query);
   const page = filtered.slice(offset, offset + limit);
   const end = offset + page.length;
   const count =
@@ -576,12 +644,17 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
   if (more) {
     lines.push(`Next page: offset=${end}. Keep the same filters.`);
   }
-  return text(lines.join("\n"), {
+  const { lines: notes, outside } =
+    filtered.length === 0 && query.address !== undefined
+      ? await outsideFilters(query)
+      : { lines: [], outside: [] };
+  return text([...lines, ...notes].join("\n"), {
     matched: filtered.length,
     returned: page.length,
     offset,
     ...(more ? { nextOffset: end } : {}),
     ids: page.map((puzzle) => puzzle.id()),
+    ...(outside.length > 0 ? { outside } : {}),
   });
 }
 
