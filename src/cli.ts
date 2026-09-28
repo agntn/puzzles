@@ -2,10 +2,10 @@
 import { existsSync } from "node:fs";
 import { sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type ArgsDef, type CommandDef, defineCommand, runMain } from "citty";
+import { type ArgsDef, type CommandDef, defineCommand, type Resolvable, runMain } from "citty";
 import type McpCommand from "./commands/mcp.ts";
 import { printError } from "./commands/output.ts";
-import { PuzzlesError } from "./core/errors.ts";
+import { InvalidArgumentError, PuzzlesError } from "./core/errors.ts";
 import { version } from "./version.ts";
 
 /** A closed pipe, `puzzles export | head`, ends the process quietly and keeps the exit code a command set. */
@@ -17,9 +17,78 @@ process.stdout.on("error", (error: Readonly<NodeJS.ErrnoException>) => {
 });
 
 /**
+ * Settles a command field citty lets be a value, a promise, or a function returning either.
+ *
+ * @param {Resolvable<T>} value - The field as the command declares it.
+ * @returns {Promise<T>} Its value.
+ */
+async function settle<T>(value: Resolvable<T>): Promise<T> {
+  return typeof value === "function" ? (value as () => T | Promise<T>)() : value;
+}
+
+/** The part of an argument definition the check reads, readonly all the way down. */
+type Declared = Readonly<{
+  type?: string | undefined;
+  alias?: string | readonly string[] | undefined;
+}>;
+
+/**
+ * The keys citty leaves in the parsed arguments for one declared option: its name, its aliases, and
+ * the camelCase spelling it accepts for a kebab-case name.
+ *
+ * @param {string} name - The option as the command declares it.
+ * @param {Declared} def - Its definition.
+ * @returns {string[]} Every key the option may parse to.
+ */
+function optionKeys(name: string, def: Declared): string[] {
+  const aliases = def.alias === undefined ? [] : [def.alias].flat();
+  return [
+    name,
+    name.replaceAll(/-([a-z0-9])/gu, (_, letter: string) => letter.toUpperCase()),
+    ...aliases,
+  ];
+}
+
+/**
+ * Rejects what the command does not declare, because citty parses without `strict` and would run
+ * `verify b1000/1 --key abc` as `verify b1000/1`, or read `list --limitt 3` as the collection `3`.
+ * A command that declares no arguments, `mcp`, stays open.
+ *
+ * @param {string} name - The command, for the message.
+ * @param {Readonly<Record<string, Declared>>} defs - The arguments it declares.
+ * @param {Readonly<Record<string, unknown>>} parsed - What citty parsed from the command line.
+ */
+function assertDeclared(
+  name: string,
+  defs: Readonly<Record<string, Declared>>,
+  parsed: Readonly<Record<string, unknown> & { _: readonly string[] }>,
+): void {
+  const entries = Object.entries(defs);
+  const positionals = entries.filter(([, def]) => def.type === "positional").map(([key]) => key);
+  const options = entries.filter(([, def]) => def.type !== "positional");
+  const known = new Set([...positionals, ...options.flatMap(([key, def]) => optionKeys(key, def))]);
+  const unknown = Object.keys(parsed).find((key) => key !== "_" && !known.has(key));
+  if (unknown !== undefined) {
+    throw new InvalidArgumentError(
+      "option",
+      `unknown ${unknown.length === 1 ? "-" : "--"}${unknown}, expected one of ${options.map(([key]) => `--${key}`).join(", ")}`,
+    );
+  }
+  const surplus = parsed._[positionals.length];
+  if (surplus !== undefined) {
+    const takes =
+      positionals.length === 0 ? "no positional argument" : positionals.join(" ").toUpperCase();
+    throw new InvalidArgumentError(
+      "argument",
+      `unexpected ${JSON.stringify(surplus)}, ${name} takes ${takes}`,
+    );
+  }
+}
+
+/**
  * Loads a subcommand and turns a `PuzzlesError`, an unknown puzzle or collection, a bad status, a
- * refused balance, into one line on stderr and exit code 1. Anything else keeps citty's stack,
- * because an unexpected error should be loud.
+ * refused balance, an argument the command does not take, into one line on stderr and exit code 1.
+ * Anything else keeps citty's stack, because an unexpected error should be loud.
  *
  * @param {() => Promise<{ readonly default: CommandDef<T> }>} load - Imports the command module.
  * @returns {Promise<CommandDef<T>>} The command, its `run` guarded.
@@ -36,6 +105,11 @@ async function command<T extends ArgsDef>(
     ...loaded,
     async run(context) {
       try {
+        const defs = loaded.args === undefined ? undefined : await settle(loaded.args);
+        const meta = loaded.meta === undefined ? undefined : await settle(loaded.meta);
+        if (defs !== undefined) {
+          assertDeclared(meta?.name ?? "the command", defs, context.args);
+        }
         await run(context);
       } catch (error) {
         if (!(error instanceof PuzzlesError)) {
