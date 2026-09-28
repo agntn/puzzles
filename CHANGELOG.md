@@ -1,3 +1,42 @@
+## v0.24.1
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.24.0...v0.24.1)
+
+### 🚀 Enhancements
+
+- **docs:** Filter the collections index ([#335](https://github.com/agntn/puzzles/pull/335))
+- **docs:** Serve the puzzle tools over MCP ([#336](https://github.com/agntn/puzzles/pull/336))
+- **balance:** Ethereum without an Etherscan key ([#348](https://github.com/agntn/puzzles/pull/348))
+- **collections:** Add path-to-greatness ([#351](https://github.com/agntn/puzzles/pull/351))
+
+### 🔥 Performance
+
+- **utils:** Skip the ICU load on import ([#350](https://github.com/agntn/puzzles/pull/350))
+
+### 🩹 Fixes
+
+- **tools:** Reject arguments a tool does not take ([#339](https://github.com/agntn/puzzles/pull/339))
+- **cli:** Fail on flags a command does not take ([#340](https://github.com/agntn/puzzles/pull/340))
+- **cli:** No color codes in piped help ([#341](https://github.com/agntn/puzzles/pull/341))
+- **docs:** Remote MCP rejects unknown arguments ([#343](https://github.com/agntn/puzzles/pull/343))
+- **mcp:** Name the allowed values in schema errors ([#345](https://github.com/agntn/puzzles/pull/345))
+- **tools:** Say which filter hid an address ([#347](https://github.com/agntn/puzzles/pull/347))
+- **errors:** Suggest each puzzle named 71 ([#349](https://github.com/agntn/puzzles/pull/349))
+- **collections:** Brave-new-world hash160 ([#354](https://github.com/agntn/puzzles/pull/354))
+
+### 🏡 Chore
+
+- Apply automated updates ([6e219ec](https://github.com/agntn/puzzles/commit/6e219ec))
+
+### ✅ Tests
+
+- One 30 s timeout for the whole suite ([#342](https://github.com/agntn/puzzles/pull/342))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.24.0
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.23.0...v0.24.0)
