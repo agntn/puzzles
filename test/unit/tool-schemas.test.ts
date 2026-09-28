@@ -11,6 +11,7 @@ import {
   showTool,
   stagesTool,
   solverTool,
+  toolArguments,
 } from "../../src/tool-operations.ts";
 
 const schemas = puzzleToolSchemas(facts);
@@ -138,6 +139,15 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(Value.Check(schemas.list, { withPubkey: true })).toBe(true);
   });
 
+  it("names the same arguments in the executors' table as in each schema", () => {
+    for (const [tool, schema] of Object.entries(schemas)) {
+      expect([...toolArguments[tool as keyof typeof toolArguments]].sort(), tool).toEqual(
+        Object.keys(schema.properties).sort(),
+      );
+    }
+    expect(Object.keys(toolArguments).sort()).toEqual(Object.keys(facts.tools).sort());
+  });
+
   it("tracks the facts, so a changed limit shows up in the schema", () => {
     /* Positive control for the guard above: a drifted table must produce a drifted schema. */
     const drifted = puzzleToolSchemas({
@@ -178,6 +188,11 @@ describe("tool schemas and executors share one argument contract", () => {
     await expect(listTool({ with_pubkey: true } as never)).rejects.toThrow(
       'Invalid arguments: unknown property "with_pubkey", expected one of address, chain, collection, limit, offset, status, withPubkey',
     );
+    for (const params of [null, "b1000", ["b1000"]]) {
+      await expect(listTool(params as never)).rejects.toThrow(
+        "Invalid arguments: expected an object",
+      );
+    }
     await expect(listTool({ collection: "gsmg", state: "solved" } as never)).rejects.toThrow(
       InvalidArgumentError,
     );

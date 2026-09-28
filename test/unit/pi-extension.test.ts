@@ -3,6 +3,7 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { createJiti } from "jiti/static";
 import { describe, expect, it } from "vite-plus/test";
 import puzzlesExtension from "../../packages/pi/extensions/puzzles.ts";
+import { InvalidArgumentError } from "../../src/core/errors.ts";
 import { facts } from "../../src/tool-operations.ts";
 
 interface RegisteredTool {
@@ -37,6 +38,29 @@ const toolNames = Object.values(facts.tools)
 describe("Pi extension", () => {
   it("registers every puzzle tool", async () => {
     expect([...(await registerTools()).keys()].sort()).toEqual(toolNames);
+  });
+
+  it("refuses a stray argument on every tool that takes some, when the host skips validation", async () => {
+    const tools = await registerTools();
+    const calls: Readonly<Record<string, Readonly<Record<string, unknown>>>> = {
+      puzzles_author: { key: "dug", name: "Dug" },
+      puzzles_solver: { key: "lia", name: "Lia" },
+      puzzles_show: { id: "b1000/71", name: "71" },
+      puzzles_hints: { id: "gsmg", name: "gsmg" },
+      puzzles_stages: { id: "gsmg", name: "gsmg" },
+      puzzles_list: { collection: "b1000", with_pubkey: true },
+      puzzles_verify: { id: "b1000/1", name: "1" },
+      puzzles_balance: { id: "b1000/71", api_key: "secret" },
+    };
+
+    for (const [name, params] of Object.entries(calls)) {
+      await expect(tools.get(name)?.execute("call-stray", params), name).rejects.toThrow(
+        InvalidArgumentError,
+      );
+    }
+    await expect(
+      tools.get("puzzles_stats")?.execute("call-open", { _: "" }),
+    ).resolves.toBeDefined();
   });
 
   it("executes the show tool against the library", async () => {

@@ -119,6 +119,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
       return line(`Show author ${args.key}`);
     },
     async execute(_toolCallId, params) {
+      tools.assertArguments("author", params);
       return tools.authorTool(params.key);
     },
   });
@@ -141,6 +142,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
       return line(`Show solver ${args.key}`);
     },
     async execute(_toolCallId, params) {
+      tools.assertArguments("solver", params);
       return tools.solverTool(params.key);
     },
   });
@@ -152,6 +154,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
       return line(`Show puzzle ${args.id}`);
     },
     async execute(_toolCallId, params) {
+      tools.assertArguments("show", params);
       return tools.showTool(params.id);
     },
   });
@@ -163,6 +166,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
       return line(`Hints for puzzle ${args.id}`);
     },
     async execute(_toolCallId, params) {
+      tools.assertArguments("hints", params);
       return tools.hintsTool(params.id);
     },
   });
@@ -174,6 +178,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
       return line(`Stages of puzzle ${args.id}`);
     },
     async execute(_toolCallId, params) {
+      tools.assertArguments("stages", params);
       return tools.stagesTool(params.id);
     },
   });
@@ -206,6 +211,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
       return line(`Verify puzzle ${args.id}`);
     },
     async execute(_toolCallId, params) {
+      tools.assertArguments("verify", params);
       return tools.verifyTool(params.id);
     },
   });
@@ -220,6 +226,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
       return line(`Balance of puzzle ${args.id}`);
     },
     async execute(_toolCallId, params) {
+      tools.assertArguments("balance", params);
       return tools.balanceTool(params.id, params.apiKey);
     },
   });

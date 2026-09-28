@@ -81,6 +81,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     ...registration(tools.facts.tools.author),
     parameters: schemas.author,
     async execute(_toolCallId, params): Promise<Result> {
+      tools.assertArguments("author", params);
       return agentResult(await tools.authorTool(params.key));
     },
   });
@@ -97,6 +98,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     ...registration(tools.facts.tools.solver),
     parameters: schemas.solver,
     async execute(_toolCallId, params): Promise<Result> {
+      tools.assertArguments("solver", params);
       return agentResult(await tools.solverTool(params.key));
     },
   });
@@ -105,6 +107,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     ...registration(tools.facts.tools.show),
     parameters: schemas.show,
     async execute(_toolCallId, params): Promise<Result> {
+      tools.assertArguments("show", params);
       return agentResult(await tools.showTool(params.id));
     },
   });
@@ -113,6 +116,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     ...registration(tools.facts.tools.hints),
     parameters: schemas.hints,
     async execute(_toolCallId, params): Promise<Result> {
+      tools.assertArguments("hints", params);
       return agentResult(await tools.hintsTool(params.id));
     },
   });
@@ -121,6 +125,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     ...registration(tools.facts.tools.stages),
     parameters: schemas.stages,
     async execute(_toolCallId, params): Promise<Result> {
+      tools.assertArguments("stages", params);
       return agentResult(await tools.stagesTool(params.id));
     },
   });
@@ -137,6 +142,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     ...registration(tools.facts.tools.verify),
     parameters: schemas.verify,
     async execute(_toolCallId, params): Promise<Result> {
+      tools.assertArguments("verify", params);
       return agentResult(await tools.verifyTool(params.id));
     },
   });
@@ -145,6 +151,7 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
     ...registration(tools.facts.tools.balance),
     parameters: schemas.balance,
     async execute(_toolCallId, params): Promise<Result> {
+      tools.assertArguments("balance", params);
       return agentResult(await tools.balanceTool(params.id, params.apiKey));
     },
   });
