@@ -518,7 +518,7 @@ export async function dataVersion(): Promise<string> {
 }
 
 /**
- * Web Crypto is global on Node 24, in browsers and in Workers, so the hash needs no dependency.
+ * Web Crypto is global on Node 26, in browsers and in Workers, so the hash needs no dependency.
  *
  * @param {readonly DatasetCollection[]} serialized The collections `dataset()` serializes.
  * @returns {Promise<string>} The first 12 hex characters of their SHA-256.
