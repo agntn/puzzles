@@ -60,12 +60,7 @@ async function stubbed(failing: string, ...args: readonly string[]): Promise<Fai
   }
 }
 
-/*
- * Every test here spawns the CLI, some of them four times, and the whole block runs at once. On a CI
- * runner the authors test took 4.8 s on main and then crossed the default 5 s, so the block gets the
- * live tests' 30 s.
- */
-describe.concurrent("puzzles CLI", { timeout: 30_000 }, () => {
+describe.concurrent("puzzles CLI", () => {
   it("prints machine-readable statistics", async () => {
     const result = await json<{ readonly total: number; readonly unsolved: number }>(
       "stats",
