@@ -63,20 +63,32 @@ export function closestKey(query: string, keys: readonly string[]): string | und
 }
 
 /**
+ * Every entry a miss could have meant, as one choice: `b1000/71 or quizchain/71`.
+ *
+ * @param {string[]} matches - The entries that qualified.
+ * @returns {string | undefined} The choice, or `undefined` when nothing qualified.
+ */
+function choice(matches: readonly string[]): string | undefined {
+  const last = matches.at(-1);
+  return matches.length < 2 ? last : `${matches.slice(0, -1).join(", ")} or ${last}`;
+}
+
+/**
  * The puzzle a mistyped name most likely meant, among puzzles of one or more collections. Only case
  * and separators fold here: names such as `71` and `72` sit one edit apart and are different
- * puzzles, so a typo in a number never becomes a suggestion.
+ * puzzles, so a typo in a number never becomes a suggestion. A name several collections share,
+ * such as `71` in `b1000` and `quizchain`, names every puzzle that has it, in registry order.
  *
  * @param {string} name - The name segment that missed, `level5` in `zden/level5`.
  * @param {readonly Puzzle[]} puzzles - The puzzles the name could belong to.
- * @returns {string | undefined} The identifier to suggest, when exactly one puzzle fits.
+ * @returns {string | undefined} The identifier to suggest, or the choice between the ones that fit.
  */
 export function closestPuzzle(name: string, puzzles: readonly Puzzle[]): string | undefined {
   const wanted = fold(name);
   if (wanted === "") {
     return undefined;
   }
-  return only(
+  return choice(
     puzzles
       .map((puzzle) => puzzle.id())
       .filter((id) => {

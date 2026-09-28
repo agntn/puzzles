@@ -421,8 +421,8 @@ export async function requirePuzzle(id: string): Promise<Puzzle> {
 /**
  * The puzzle an identifier whose collection segment missed most likely meant. A segment one typo
  * or a case away from a collection key reads as that key, with the name matched inside it; a
- * segment with no name behind it may instead be a puzzle name, which counts when exactly one
- * collection holds it.
+ * segment with no name behind it may instead be a puzzle name, and every collection holding it
+ * is named.
  *
  * @param {string | undefined} key - The collection key the segment most likely meant.
  * @param {string} prefix - The collection segment that missed.
