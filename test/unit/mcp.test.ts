@@ -4,6 +4,7 @@ import { beforeAll, describe, expect, it } from "vite-plus/test";
 import { createMcpServer } from "../../src/mcp.ts";
 import { facts } from "../../src/tool-operations.ts";
 import { ASSETS } from "../support/assets.ts";
+import { firstText } from "../support/mcp.ts";
 
 const toolNames = Object.values(facts.tools)
   .map((tool) => tool.name)
@@ -16,18 +17,6 @@ beforeAll(async () => {
   client = new Client({ name: "test", version: "0.0.0" });
   await Promise.all([createMcpServer().connect(serverTransport), client.connect(clientTransport)]);
 });
-
-function firstText(result: unknown): string {
-  if (typeof result !== "object" || result === null || !("content" in result)) {
-    return "";
-  }
-  const { content } = result;
-  if (!Array.isArray(content)) {
-    return "";
-  }
-  const first: unknown = content[0];
-  return typeof first === "object" && first !== null && "text" in first ? String(first.text) : "";
-}
 
 describe("puzzles MCP server", () => {
   it("advertises every read-only puzzle tool", async () => {
