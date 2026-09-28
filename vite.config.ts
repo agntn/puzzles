@@ -1,5 +1,6 @@
 import oxfmt from "@agntn/ox/oxfmt";
 import oxlint from "@agntn/ox/oxlint";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite-plus";
 
 const live = process.env["PUZZLES_LIVE"] === "1";
@@ -51,6 +52,8 @@ export default defineConfig({
     ignorePatterns: ["dist", "coverage"],
   },
   test: {
+    /* The docs server imports the library by name, through the alias its Nuxt config sets. */
+    alias: { "@agntn/puzzles/mcp": fileURLToPath(new URL("src/mcp.ts", import.meta.url)) },
     /* Unit tests stub fetch through test/unit/setup.ts. Live roundtrips opt in with PUZZLES_LIVE=1. */
     include: live ? ["test/live/**/*.test.ts"] : ["test/unit/**/*.test.ts"],
     setupFiles: live ? [] : ["test/unit/setup.ts"],
