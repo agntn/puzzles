@@ -233,9 +233,37 @@ describe("puzzles MCP server", () => {
     });
 
     expect(misspelled.isError).toBe(true);
-    expect(firstText(misspelled)).toBe('Invalid arguments at /: unknown property "with_pubkey"');
+    expect(firstText(misspelled)).toBe(
+      'Invalid arguments at /: unknown property "with_pubkey", expected one of address, chain, collection, limit, offset, status, withPubkey',
+    );
     expect(stray.isError).toBe(true);
-    expect(firstText(stray)).toBe('Invalid arguments at /: unknown property "name"');
+    expect(firstText(stray)).toBe(
+      'Invalid arguments at /: unknown property "name", expected one of id',
+    );
+  });
+
+  it("names the values an enum takes", async () => {
+    const result = await client.callTool({ name: "puzzles_list", arguments: { status: "open" } });
+
+    expect(result.isError).toBe(true);
+    expect(firstText(result)).toBe(
+      `Invalid arguments at /status: expected one of ${facts.statuses.join(", ")}`,
+    );
+  });
+
+  it("reports every invalid argument in one answer", async () => {
+    const result = await client.callTool({
+      name: "puzzles_list",
+      arguments: { colection: "b1000", status: "open", chain: "solana", limit: 0 },
+    });
+
+    expect(result.isError).toBe(true);
+    expect(firstText(result).split("; ")).toEqual([
+      'Invalid arguments at /: unknown property "colection", expected one of address, chain, collection, limit, offset, status, withPubkey',
+      `at /chain: expected one of ${facts.chains.join(", ")}`,
+      `at /status: expected one of ${facts.statuses.join(", ")}`,
+      "at /limit: must be >= 1",
+    ]);
   });
 
   it("leaves the tools without arguments open to a placeholder key", async () => {
