@@ -519,6 +519,13 @@ export abstract class BitcoinCashPuzzle extends Puzzle {
   }
 }
 
+/** A puzzle whose target address lives on eCash. */
+export abstract class ECashPuzzle extends Puzzle {
+  override chain(): Chain {
+    return Chain.ECash;
+  }
+}
+
 /** A puzzle whose target address lives on Ethereum. */
 export abstract class EthereumPuzzle extends Puzzle {
   override chain(): Chain {
@@ -680,6 +687,16 @@ export function bitcoinPuzzle(spec: PuzzleSpec): Puzzle {
  */
 export function bitcoinCashPuzzle(spec: PuzzleSpec): Puzzle {
   return new SpecPuzzle(Chain.BitcoinCash, spec);
+}
+
+/**
+ * Builds an eCash puzzle from its data record.
+ *
+ * @param {PuzzleSpec} spec - The puzzle's data record.
+ * @returns {Puzzle} The eCash puzzle.
+ */
+export function ecashPuzzle(spec: PuzzleSpec): Puzzle {
+  return new SpecPuzzle(Chain.ECash, spec);
 }
 
 /**

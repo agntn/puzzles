@@ -38,8 +38,8 @@ function keyText(derived: boolean): string {
   return derived ? "private key derived from the published recipe" : "private key published";
 }
 
-/** CashAddr's prefix is the same on every Bitcoin Cash row, so the short form drops it. */
-const CASHADDR_PREFIX = /^bitcoincash:/u;
+/** CashAddr's prefix is the same on every Bitcoin Cash or eCash row, so the short form drops it. */
+const CASHADDR_PREFIX = /^(?:bitcoincash|ecash):/u;
 
 /** How many puzzles a numbered collection needs before its rows turn into a grid of cells. */
 const GRID_FROM = 20;

@@ -52,6 +52,7 @@ const lookups: Readonly<Record<Exclude<Chain, typeof Chain.Monero>, Lookup>> = {
   bitcoin: (address, config) => new Mempool(config).getBalance(address, "bitcoin"),
   bitcoincash: (address, config) => new Blockchair(config).getBalance(address, "bitcoincash"),
   decred: (address, config) => new Dcrdata(config).getBalance(address, "decred"),
+  ecash: (address, config) => new Blockchair(config).getBalance(address, "ecash"),
   ethereum: ethereumBalance,
   litecoin: (address, config) => new Mempool(config).getBalance(address, "litecoin"),
 };

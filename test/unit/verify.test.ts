@@ -7,6 +7,7 @@ import { zden } from "../../src/collections/zden.ts";
 import {
   BitcoinPuzzle,
   bitcoinCashPuzzle,
+  ecashPuzzle,
   bitcoinPuzzle,
   compressed,
   decredPuzzle,
@@ -193,6 +194,29 @@ describe("Collection.verify", () => {
     }
   });
 
+  it("derives an eCash seed at Cashtab's path into CashAddr", async () => {
+    /* The Proof Of Writing seed, published once the prize was claimed. */
+    const phrase = "matter key easily slot maple two visa swamp subject friend robust trip";
+    const address = p2pkh("ecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z");
+
+    expect(
+      await verify(ecashPuzzle({ ...synthetic, address, key: seed(phrase, "m/44'/1899'/0'/0/0") })),
+    ).toMatchObject({
+      verified: true,
+      derivedAddress: "ecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z",
+    });
+    /* The Bitcoin Cash spelling of the same hash is another chain's address. */
+    expect(
+      await verify(
+        ecashPuzzle({
+          ...synthetic,
+          address: p2pkh("bitcoincash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qc2ylqzkf4"),
+          key: seed(phrase, "m/44'/1899'/0'/0/0"),
+        }),
+      ),
+    ).toMatchObject({ verified: false });
+  });
+
   it("derives the address at a seed's path", async () => {
     const result = await verify(
       bitcoinPuzzle({
@@ -246,7 +270,7 @@ describe("Collection.verify", () => {
     expect(result).toMatchObject({
       verified: false,
       unavailable: false,
-      error: "Invalid BIP39 mnemonic",
+      error: "Invalid BIP39 mnemonic: word 12 is not in the English list",
     });
   });
 

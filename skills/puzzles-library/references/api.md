@@ -30,7 +30,7 @@ abstract class Puzzle {
 }
 ```
 
-Per-chain bases fill in `chain()`: `BitcoinPuzzle`, `BitcoinCashPuzzle`, `EthereumPuzzle`, `LitecoinPuzzle`, `DecredPuzzle`, `ArweavePuzzle`, `MoneroPuzzle`.
+Per-chain bases fill in `chain()`: `BitcoinPuzzle`, `BitcoinCashPuzzle`, `ECashPuzzle`, `EthereumPuzzle`, `LitecoinPuzzle`, `DecredPuzzle`, `ArweavePuzzle`, `MoneroPuzzle`.
 
 ### Derived methods
 
@@ -103,6 +103,7 @@ const Chain: {
   Bitcoin: "bitcoin";
   BitcoinCash: "bitcoincash";
   Decred: "decred";
+  ECash: "ecash";
   Ethereum: "ethereum";
   Litecoin: "litecoin";
   Monero: "monero";
@@ -134,7 +135,7 @@ class Balance {
 }
 
 interface BalanceOptions {
-  apiKey?: string; // Etherscan on Ethereum, Blockchair on Bitcoin Cash; Ethereum without one reads Blockscout
+  apiKey?: string; // Etherscan on Ethereum, Blockchair on Bitcoin Cash and eCash; Ethereum without one reads Blockscout
   baseUrl?: string; // override the provider endpoint; Bitcoin then skips its Blockstream fallback
   timeout?: number; // milliseconds, provider default 15 s
 }

@@ -5,6 +5,7 @@ import {
   Balance,
   BalanceProviderError,
   bitcoinCashPuzzle,
+  ecashPuzzle,
   ethereumPuzzle,
   InvalidAddressError,
   moneroPuzzle,
@@ -98,6 +99,28 @@ describe("Puzzle.balance", () => {
     expect(balance.chain).toBe("bitcoincash");
     expect(balance.confirmed).toBe(0n);
     expect(balance.decimals).toBe(8);
+  });
+
+  it("reads an eCash balance through Blockchair in XEC's two decimals", async () => {
+    vi.stubEnv("BLOCKCHAIR_API_KEY", undefined);
+    const address = "ecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z";
+    const urls = stubFetch(() =>
+      json({
+        data: { [address]: { address: { balance: 546, received: 3006800640, spent: 3006800094 } } },
+        context: { state: 967400 },
+      }),
+    );
+
+    const balance = await ecashPuzzle({ ...bitcoinCash, address: p2pkh(address) }).balance({
+      baseUrl: "https://example.test",
+    });
+
+    expect(urls).toEqual([
+      `https://example.test/ecash/dashboards/address/${encodeURIComponent(address)}`,
+    ]);
+    expect(balance.chain).toBe("ecash");
+    expect(balance.confirmed).toBe(546n);
+    expect(balance.decimals).toBe(2);
   });
 
   it("names BLOCKCHAIR_API_KEY when Blockchair blocks a keyless caller", async () => {
