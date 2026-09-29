@@ -221,6 +221,42 @@ export const genesisBlock = bitcoinPuzzle({
       ),
       { date: "2026-09-26" },
     ),
+    official(
+      "1) Apps/Tools used to generate the 12 words: bitcoin-cli, cut, jq, tr, sha256sum, iancoleman/bip39, OogaBoogaX/entropylab; 2) Genesis block is extremely small. This will have to be uncovered via brute-force; 3) Pasted from bitcoin-cli and also from an explorer.",
+      "https://mempool.space/tx/dcd7d3990e9bc4407f2146fa77fff583c26b66c12eef7e0e0832fbbed062df51",
+      confirmation(
+        "https://blockstream.info/tx/dcd7d3990e9bc4407f2146fa77fff583c26b66c12eef7e0e0832fbbed062df51",
+        "OP_RETURN spending the 1k output that 68171cd7aa964213998ac8960940fc20df9a25d5ed6c06ca6de4e16442cf6886 paid to the author address. It answers that transaction's three questions: the app that made the 12 words, the entropy type and event count, and where the text was pasted from. Whitespace normalized.",
+      ),
+      { date: "2026-09-27" },
+    ),
+    official(
+      "1) N; 2) N.",
+      "https://mempool.space/tx/457fc560caded5b020ba8d1c3543ceec0269880e1ff88bdbda14008de4079023",
+      confirmation(
+        "https://blockstream.info/tx/457fc560caded5b020ba8d1c3543ceec0269880e1ff88bdbda14008de4079023",
+        "OP_RETURN spending the 1k output that 0774617b6bf04ba6723a1ddf1f77d4103a829117d972f4a98032420aa6159102 paid to the author address. It answers that transaction's two yes/no questions: whether the digest input is only the coinbase Times text, and whether it is exactly a tool's copy-pasted ASCII. Whitespace normalized.",
+      ),
+      { date: "2026-09-27" },
+    ),
+    official(
+      "Declined for the same reason as before. The puzzle wallet was built using secret components that are extremely weak on their own. Those components won't be disclosed or reduced to a searchable checksum. Revealing any one of them independently would turn part of the puzzle into an oracle for solving the others. So you'll have to recover the actual secret pieces and test them together. I won't provide any derived value that isolates any individual secret.",
+      "https://mempool.space/tx/d2758a2b6e2d01cb2ab5007f6340b88aa6d3b0ee31009c4c4df71be775e7ae3d",
+      confirmation(
+        "https://blockstream.info/tx/d2758a2b6e2d01cb2ab5007f6340b88aa6d3b0ee31009c4c4df71be775e7ae3d",
+        "OP_RETURN spending the 1k output that 67c1b1e4b8c3a220ffbe46fadb484685db7471ee74b3883146ed5b8df3ecb196 paid to the author address. It declines that transaction's request for the first 8 hex of the SHA-256 of the passphrase and of the 12 words. Whitespace normalized.",
+      ),
+      { date: "2026-09-28" },
+    ),
+    official(
+      "1) a; 2) b.",
+      "https://mempool.space/tx/9da63c9f600f8a91b9ef90327f71422e66da22c8900f9df1491b4e78b06f56a1",
+      confirmation(
+        "https://blockstream.info/tx/9da63c9f600f8a91b9ef90327f71422e66da22c8900f9df1491b4e78b06f56a1",
+        "OP_RETURN spending the 1k output that 4c6ef4099a2a4263e28bae8abf17246c6b26315e2b3a9da1e5b5e646d3cb7e8c paid to the author address. It picks from that transaction's options: 1a, jq, cut and tr changed the text before sha256sum; 2b, the first 32 hex of the digest went in as raw entropy, not through Ian Coleman's 12-word option. Whitespace normalized.",
+      ),
+      { date: "2026-09-28" },
+    ),
   ],
 });
 
