@@ -97,7 +97,7 @@ export default defineCommand({
     "api-key": {
       type: "string",
       description:
-        "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY, Bitcoin Cash to BLOCKCHAIR_API_KEY",
+        "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY, Bitcoin Cash and eCash to BLOCKCHAIR_API_KEY",
     },
     ...jsonArg,
   },

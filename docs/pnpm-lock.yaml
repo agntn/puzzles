@@ -15,8 +15,8 @@ importers:
         specifier: 0.5.7
         version: 0.5.7(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)
       '@agntn/keys':
-        specifier: 0.3.4
-        version: 0.3.4(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)
+        specifier: 0.3.5
+        version: 0.3.5(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)
       '@modelcontextprotocol/sdk':
         specifier: 1.30.1
         version: 1.30.1(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)
@@ -90,8 +90,8 @@ packages:
       typebox:
         optional: true
 
-  '@agntn/keys@0.3.4':
-    resolution: {integrity: sha512-dMZyoW8Djz8KFcJOxATyOx0nXn/HzrKudzAIVmdVEbkYG2D1Pb7IZCtfs9l/HqWpxyeljrbMdZA639EPfo9GVQ==}
+  '@agntn/keys@0.3.5':
+    resolution: {integrity: sha512-/tRxFh6u4f1ggG4fu1cyq41UXrYHIM2rlYJgcJZT8ksVeL7iSWub9nAtI9EpHWaNMpLNu+882ut8p5t3wMy4/A==}
     engines: {node: '>=24'}
     hasBin: true
 
@@ -7545,9 +7545,9 @@ snapshots:
       - '@cfworker/json-schema'
       - supports-color
 
-  '@agntn/keys@0.3.4(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)':
+  '@agntn/keys@0.3.5(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)':
     dependencies:
-      '@modelcontextprotocol/sdk': 1.30.0(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)
+      '@modelcontextprotocol/sdk': 1.30.1(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)
       '@noble/curves': 2.4.0
       '@noble/hashes': 2.4.0
       '@scure/base': 2.4.0
@@ -8763,11 +8763,11 @@ snapshots:
       eventsource-parser: 3.1.1
       jose: 6.2.12
       pkce-challenge: 5.0.1
-      zod: 4.4.3
+      zod: 4.6.5
 
   '@modelcontextprotocol/core@2.0.0':
     dependencies:
-      zod: 4.4.3
+      zod: 4.6.5
 
   '@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.4.3)':
     dependencies:
@@ -8868,7 +8868,7 @@ snapshots:
   '@modelcontextprotocol/server@2.0.0':
     dependencies:
       '@modelcontextprotocol/core': 2.0.0
-      zod: 4.4.3
+      zod: 4.6.5
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true

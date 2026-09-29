@@ -212,14 +212,23 @@ export const facts = {
     apiKey: {
       maxLength: 200,
       description:
-        "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY, Bitcoin Cash to BLOCKCHAIR_API_KEY",
+        "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY, Bitcoin Cash and eCash to BLOCKCHAIR_API_KEY",
     },
   },
   /**
    * Spelled out rather than imported, because `core/chains.ts` pulls in `@agntn/chains` and tool
    * discovery loads this table. `test/unit/tool-schemas.test.ts` pins the list to the library's.
    */
-  chains: ["arweave", "bitcoin", "bitcoincash", "decred", "ethereum", "litecoin", "monero"],
+  chains: [
+    "arweave",
+    "bitcoin",
+    "bitcoincash",
+    "decred",
+    "ecash",
+    "ethereum",
+    "litecoin",
+    "monero",
+  ],
   statuses: Object.values(Status),
 } as const satisfies {
   tools: Record<string, ToolFacts>;

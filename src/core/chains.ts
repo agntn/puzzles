@@ -4,6 +4,7 @@ import {
   BitcoinCash,
   type ChainKey,
   Decred,
+  Ecash,
   Ethereum,
   getChain,
   InvalidAddressError,
@@ -20,6 +21,7 @@ export const Chain = {
   Bitcoin: "bitcoin",
   BitcoinCash: "bitcoincash",
   Decred: "decred",
+  ECash: "ecash",
   Ethereum: "ethereum",
   Litecoin: "litecoin",
   Monero: "monero",
@@ -37,6 +39,7 @@ const metadata = Object.freeze({
   bitcoin: new Bitcoin(),
   bitcoincash: new BitcoinCash(),
   decred: new Decred(),
+  ecash: new Ecash(),
   ethereum: new Ethereum(),
   litecoin: new Litecoin(),
   monero: new Monero(),
@@ -168,7 +171,7 @@ const bech32Prefixes: Readonly<Partial<Record<Chain, readonly string[]>>> = Obje
 /**
  * Whether a chain writes this address in a case that carries no meaning. Ethereum hex is one
  * such case: EIP-55 spends letter case on a checksum, so the same address travels lowercased,
- * uppercased and mixed. Bech32 and Bitcoin Cash's CashAddr are defined in either case too.
+ * uppercased and mixed. Bech32 and CashAddr, on Bitcoin Cash and eCash, are defined in either case too.
  * Base58 and base64url are not: there a different case is a different string, and the checksum
  * would reject it anyway.
  *
@@ -177,7 +180,7 @@ const bech32Prefixes: Readonly<Partial<Record<Chain, readonly string[]>>> = Obje
  * @returns {boolean} `true` when letter case does not distinguish two addresses.
  */
 function caseFolds(chain: Chain, address: string): boolean {
-  if (chain === Chain.Ethereum || chain === Chain.BitcoinCash) {
+  if (chain === Chain.Ethereum || chain === Chain.BitcoinCash || chain === Chain.ECash) {
     return true;
   }
   const prefixes = bech32Prefixes[chain];
