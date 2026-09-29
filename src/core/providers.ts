@@ -20,7 +20,7 @@ import {
   UnsupportedChainError,
   type BalanceOptions,
 } from "./balance.ts";
-import { Chain } from "./chains.ts";
+import type { Chain } from "./chains.ts";
 import { defined } from "./parts.ts";
 import type { Puzzle } from "./puzzle.ts";
 import { Balance } from "./types.ts";
@@ -47,14 +47,17 @@ function ethereumBalance(address: string, config: Readonly<ProviderConfig>): Pro
     : new Etherscan({ ...config, defaultChain: "ethereum" }).getBalance(address, "ethereum");
 }
 
-const lookups: Readonly<Record<Exclude<Chain, typeof Chain.Monero>, Lookup>> = {
+/** Dogecoin and Monero have no provider in `@agntn/explorers` yet. */
+const lookups: Readonly<Record<Chain, Lookup | undefined>> = {
   arweave: (address, config) => new Arweave(config).getBalance(address, "arweave"),
   bitcoin: (address, config) => new Mempool(config).getBalance(address, "bitcoin"),
   bitcoincash: (address, config) => new Blockchair(config).getBalance(address, "bitcoincash"),
   decred: (address, config) => new Dcrdata(config).getBalance(address, "decred"),
+  dogecoin: undefined,
   ecash: (address, config) => new Blockchair(config).getBalance(address, "ecash"),
   ethereum: ethereumBalance,
   litecoin: (address, config) => new Mempool(config).getBalance(address, "litecoin"),
+  monero: undefined,
 };
 
 /**
@@ -179,7 +182,8 @@ async function fallBack(
  */
 export async function lookupBalance(puzzle: Puzzle, options: BalanceOptions): Promise<Balance> {
   const chain = puzzle.chain();
-  if (chain === Chain.Monero) {
+  const lookup = lookups[chain];
+  if (lookup === undefined) {
     throw new UnsupportedChainError(`Unsupported balance chain: ${chain}`);
   }
   const address = puzzle.address().value;
@@ -189,7 +193,7 @@ export async function lookupBalance(puzzle: Puzzle, options: BalanceOptions): Pr
     timeout: options.timeout,
   });
   try {
-    return toBalance(chain, await lookups[chain](address, config));
+    return toBalance(chain, await lookup(address, config));
   } catch (error) {
     return fallBack(chain, address, config, error);
   }

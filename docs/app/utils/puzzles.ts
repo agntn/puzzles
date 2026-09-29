@@ -283,6 +283,7 @@ export const CHAIN_ICONS: Readonly<Record<string, string>> = {
   bitcoin: "i-token-btc",
   bitcoincash: "i-token-bch",
   decred: "i-token-dcr",
+  dogecoin: "i-token-doge",
   ecash: "i-token-xec",
   ethereum: "i-token-eth",
   litecoin: "i-token-ltc",

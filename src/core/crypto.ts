@@ -2,6 +2,7 @@ import { type AbstractBlockchain, decodeWIF, encodeWIF, type WIFChain } from "@a
 import { Bitcoin } from "@agntn/keys/blockchains/bitcoin";
 import { BitcoinCash } from "@agntn/keys/blockchains/bitcoincash";
 import { Decred } from "@agntn/keys/blockchains/decred";
+import { Dogecoin } from "@agntn/keys/blockchains/dogecoin";
 import { ECash } from "@agntn/keys/blockchains/ecash";
 import { Ethereum } from "@agntn/keys/blockchains/ethereum";
 import { Litecoin } from "@agntn/keys/blockchains/litecoin";
@@ -14,12 +15,34 @@ import { AddressKind, PubkeyFormat } from "./parts.ts";
  * below this module touches a curve or a checksum.
  */
 
-const bitcoin = new Bitcoin();
-const bitcoinCash = new BitcoinCash();
-const ecash = new ECash();
-const litecoin = new Litecoin();
-const decred = new Decred();
-const ethereum = new Ethereum();
+/** Arweave and Monero have no key to address derivation here. */
+const wallets: Readonly<Record<Chain, AbstractBlockchain | undefined>> = {
+  arweave: undefined,
+  bitcoin: new Bitcoin(),
+  bitcoincash: new BitcoinCash(),
+  decred: new Decred(),
+  dogecoin: new Dogecoin(),
+  ecash: new ECash(),
+  ethereum: new Ethereum(),
+  litecoin: new Litecoin(),
+  monero: undefined,
+};
+
+/**
+ * The WIF version each chain writes. Bitcoin Cash kept Bitcoin's version byte when it forked, and
+ * eCash kept Bitcoin Cash's. Arweave, Ethereum and Monero have no WIF.
+ */
+const wifChains: Readonly<Record<Chain, WIFChain | undefined>> = {
+  arweave: undefined,
+  bitcoin: "bitcoin",
+  bitcoincash: "bitcoin",
+  decred: "decred",
+  dogecoin: "dogecoin",
+  ecash: "bitcoin",
+  ethereum: undefined,
+  litecoin: "litecoin",
+  monero: undefined,
+};
 
 /** Address derivation needs information beyond the record's private key. */
 export class UnsupportedAddressKindError extends TypeError {
@@ -27,40 +50,15 @@ export class UnsupportedAddressKindError extends TypeError {
 }
 
 function walletFor(chain: Chain): AbstractBlockchain | undefined {
-  switch (chain) {
-    case Chain.Bitcoin:
-      return bitcoin;
-    case Chain.BitcoinCash:
-      return bitcoinCash;
-    case Chain.Litecoin:
-      return litecoin;
-    case Chain.Decred:
-      return decred;
-    case Chain.ECash:
-      return ecash;
-    case Chain.Ethereum:
-      return ethereum;
-    case Chain.Arweave:
-    case Chain.Monero:
-      return undefined;
-  }
+  return wallets[chain];
 }
 
 function wifChain(chain: Chain): WIFChain {
-  switch (chain) {
-    case Chain.BitcoinCash:
-    case Chain.ECash:
-      // Bitcoin Cash kept Bitcoin's WIF version byte when it forked, and eCash kept Bitcoin Cash's.
-      return Chain.Bitcoin;
-    case Chain.Bitcoin:
-    case Chain.Litecoin:
-    case Chain.Decred:
-      return chain;
-    case Chain.Arweave:
-    case Chain.Ethereum:
-    case Chain.Monero:
-      throw new TypeError(`${chain} has no WIF encoding`);
+  const version = wifChains[chain];
+  if (version === undefined) {
+    throw new TypeError(`${chain} has no WIF encoding`);
   }
+  return version;
 }
 
 /**
@@ -93,7 +91,7 @@ function addressType(chain: Chain, kind: AddressKind): string | undefined {
  * Encodes a private key as the chain's mainnet WIF.
  *
  * @param {string} hexKey - Private key as 64 hex characters.
- * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Bitcoin Cash, eCash, Litecoin and Decred have one.
+ * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Bitcoin Cash, eCash, Litecoin, Decred and Dogecoin have one.
  * @param {boolean} compressed - Whether the public key is compressed.
  * @returns {string} The WIF string.
  */
@@ -105,7 +103,7 @@ export function privateKeyToWif(hexKey: string, chain: Chain, compressed: boolea
  * Decodes a mainnet WIF against the chain the record says it belongs to.
  *
  * @param {string} wif - Wallet Import Format key.
- * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Bitcoin Cash, eCash, Litecoin and Decred have one.
+ * @param {Chain} chain - Chain the WIF belongs to; Bitcoin, Bitcoin Cash, eCash, Litecoin, Decred and Dogecoin have one.
  * @returns {{ readonly compressed: boolean; readonly hex: string; }} The private key in hex and whether the WIF marks it compressed.
  */
 export function wifToPrivateKey(

@@ -328,8 +328,8 @@ export abstract class Puzzle {
    * Fetches the current native token balance of the target address.
    *
    * The `@agntn/explorers` provider for the chain loads on first use, so the
-   * package imports without any network code. Monero has no provider and
-   * rejects with `UnsupportedChainError`.
+   * package imports without any network code. Dogecoin and Monero have no
+   * provider and reject with `UnsupportedChainError`.
    *
    * @param {BalanceOptions} [options] - Lookup options.
    * @returns {Promise<Balance>} The current native token balance of the target address.
@@ -519,6 +519,13 @@ export abstract class BitcoinCashPuzzle extends Puzzle {
   }
 }
 
+/** A puzzle whose target address lives on Dogecoin. */
+export abstract class DogecoinPuzzle extends Puzzle {
+  override chain(): Chain {
+    return Chain.Dogecoin;
+  }
+}
+
 /** A puzzle whose target address lives on eCash. */
 export abstract class ECashPuzzle extends Puzzle {
   override chain(): Chain {
@@ -687,6 +694,16 @@ export function bitcoinPuzzle(spec: PuzzleSpec): Puzzle {
  */
 export function bitcoinCashPuzzle(spec: PuzzleSpec): Puzzle {
   return new SpecPuzzle(Chain.BitcoinCash, spec);
+}
+
+/**
+ * Builds a Dogecoin puzzle from its data record.
+ *
+ * @param {PuzzleSpec} spec - The puzzle's data record.
+ * @returns {Puzzle} The Dogecoin puzzle.
+ */
+export function dogecoinPuzzle(spec: PuzzleSpec): Puzzle {
+  return new SpecPuzzle(Chain.Dogecoin, spec);
 }
 
 /**

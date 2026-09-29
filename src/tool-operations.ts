@@ -224,6 +224,7 @@ export const facts = {
     "bitcoin",
     "bitcoincash",
     "decred",
+    "dogecoin",
     "ecash",
     "ethereum",
     "litecoin",

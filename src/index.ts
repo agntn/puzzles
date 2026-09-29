@@ -19,6 +19,8 @@ export {
   bitcoinPuzzle,
   DecredPuzzle,
   decredPuzzle,
+  DogecoinPuzzle,
+  dogecoinPuzzle,
   ECashPuzzle,
   ecashPuzzle,
   EthereumPuzzle,
