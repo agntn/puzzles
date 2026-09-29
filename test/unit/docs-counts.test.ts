@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vite-plus/test";
 import { WALK } from "../../docs/app/utils/landing.ts";
-import { collectionKeys, collections, all } from "../../src/index.ts";
+import { collectionKeys, collections, all, Status, type Puzzle } from "../../src/index.ts";
 import { chains } from "../../src/core/chains.ts";
 import { facts } from "../../src/tool-operations.ts";
 
@@ -49,6 +49,9 @@ function spellOut(count: number): string {
   return ones === 0 ? tens : `${tens}-${ONES[ones]}`;
 }
 
+/** The nouns a hint count stands in front of: hints, and the author's messages in OP_RETURN. */
+const HINTS = String.raw`(?:(?:official|community|public) )*hints?|(?:Bitcoin )?OP_RETURN (?:messages|replies)`;
+
 const numberWords = new Set(Array.from({ length: 100 }, (_, count) => spellOut(count)));
 
 /**
@@ -62,7 +65,7 @@ function countsIn(text: string, noun: string): string[] {
   const counts: string[] = [];
   const qualifier = noun === "tools" ? "(?: agent)?" : "";
   const pattern = new RegExp(
-    String.raw`\b([A-Za-z]+(?:-[A-Za-z]+)?|\d{1,2})${qualifier} ${noun}\b`,
+    String.raw`(?<!#)\b([A-Za-z]+(?:-[A-Za-z]+)?|\d{1,2})${qualifier} (?:${noun})\b`,
     "gi",
   );
   for (const match of text.matchAll(pattern)) {
@@ -98,8 +101,50 @@ function proseFiles(): string[] {
   ];
 }
 
+/**
+ * The pages about a puzzle that is still open: its collection page, its author's page and its story.
+ *
+ * @param {readonly Puzzle[]} puzzles - Every record in the registry.
+ * @returns {Promise<string[]>} Paths relative to the repository root.
+ */
+async function livePages(puzzles: readonly Puzzle[]): Promise<string[]> {
+  const open = puzzles.filter((puzzle) => puzzle.status() === Status.Unsolved);
+  const keys = new Set(open.map((puzzle) => puzzle.collection()));
+  const ids = new Set(open.map((puzzle) => puzzle.id()));
+  const authors = new Set(
+    (await collections())
+      .filter((collection) => keys.has(collection.key))
+      .map((collection) => collection.author.key),
+  );
+  const pages = (dir: string, keep: (key: string, text: string) => boolean) =>
+    readdirSync(path.join(root, dir), { recursive: true, encoding: "utf8" })
+      .filter((name) => name.endsWith(".md"))
+      .filter((name) =>
+        keep(name.slice(0, -".md".length), readFileSync(path.join(root, dir, name), "utf8")),
+      )
+      .map((name) => path.join(dir, name));
+  return [
+    ...pages("docs/content/2.collections", (name) => keys.has(name.replace(/^\d+\./, ""))),
+    ...pages("docs/content/3.authors", (_, text) =>
+      authors.has(/::author-facts\{author="([^"]+)"\}/.exec(text)?.[1]),
+    ),
+    ...pages("docs/stories", (name) => ids.has(name)),
+  ].sort();
+}
+
+/**
+ * A page without its fenced blocks, which quote a record the way its source file writes it.
+ *
+ * @param {string} text - Markdown.
+ * @returns {string} The prose around the blocks.
+ */
+function outsideFences(text: string): string {
+  return text.replaceAll(/^```[\s\S]*?^```/gm, "");
+}
+
 const files = proseFiles();
 const puzzles = await all();
+const live = await livePages(puzzles);
 const expected = {
   tools: spellOut(Object.keys(facts.tools).length),
   factories: spellOut(chains.length),
@@ -174,6 +219,17 @@ describe("the prose counts what the registry ships", () => {
       "eleven",
     ]);
     expect(countsIn("Twenty-six authors, puzzles authors", "authors")).toEqual(["twenty-six"]);
+    expect(
+      countsIn("22 Bitcoin OP_RETURN messages, two hints, Vault #2 hints, two replies", HINTS),
+    ).toEqual(["twenty-two", "two"]);
+    expect(
+      countsIn(
+        outsideFences('Four hints.\n```ts\nfact("one of the twelve hints")\n```\nOne hint.'),
+        HINTS,
+      ),
+    ).toEqual(["four", "one"]);
+    expect(live).toContain("docs/content/2.collections/15.genesis.md");
+    expect(live).toContain("docs/content/3.authors/09.genesis-author.md");
     const corpus = files.map((file) => readFileSync(path.join(root, file), "utf8"));
     for (const noun of ["tools", "factories"] as const) {
       expect(
@@ -205,5 +261,14 @@ describe("the prose counts what the registry ships", () => {
     expect(text, `puzzle total in ${file}`).not.toMatch(
       new RegExp(String.raw`(?<![\d.])${puzzles.length}(?![\d.])`),
     );
+  });
+
+  /*
+   * An open puzzle keeps gaining hints: Genesis answers in OP_RETURN every few days. Its collection page, its
+   * author's page and its story ask `:dataset-count{of="hints"}` for the number instead of spelling it out.
+   */
+  it.each(live)("%s quotes no hint count of an open puzzle", (file) => {
+    const text = outsideFences(readFileSync(path.join(root, file), "utf8"));
+    expect(countsIn(text, HINTS), `hints in ${file}`).toEqual([]);
   });
 });
