@@ -1,7 +1,6 @@
 import { createDecipheriv, scryptSync } from "node:crypto";
 import { secp256k1 } from "@noble/curves/secp256k1.js";
-import { sha256 } from "@noble/hashes/sha2.js";
-import { bytesToHex, concatBytes, hexToBytes, utf8ToBytes } from "@noble/hashes/utils.js";
+import { sha256 } from "@agntn/hashes";
 import { createBase58check } from "@scure/base";
 import { Chain } from "../../src/core/chains.ts";
 import { addressFromPrivateKey } from "../../src/core/crypto.ts";
@@ -25,6 +24,16 @@ export interface DecryptedBip38 {
   readonly compressed: boolean;
   /** Private key as 64 hex characters. */
   readonly privateKey: string;
+}
+
+function concatBytes(...parts: readonly Uint8Array[]): Uint8Array {
+  const joined = new Uint8Array(parts.reduce((length, part) => length + part.length, 0));
+  let offset = 0;
+  for (const part of parts) {
+    joined.set(part, offset);
+    offset += part.length;
+  }
+  return joined;
 }
 
 function sha256d(data: Uint8Array): Uint8Array {
@@ -55,7 +64,7 @@ function xor(left: Uint8Array, right: Uint8Array): Uint8Array {
 }
 
 function bytesToBigInt(bytes: Uint8Array): bigint {
-  return BigInt(`0x${bytesToHex(bytes)}`);
+  return BigInt(`0x${bytes.toHex()}`);
 }
 
 function decode(encrypted: string): Uint8Array | undefined {
@@ -107,7 +116,7 @@ function decryptMultiplied(payload: Uint8Array, password: Uint8Array, flag: numb
     tail.subarray(8, 16),
   );
   const scalar = (bytesToBigInt(passFactor) * bytesToBigInt(sha256d(seedB))) % CURVE_ORDER;
-  return hexToBytes(scalar.toString(16).padStart(64, "0"));
+  return Uint8Array.fromHex(scalar.toString(16).padStart(64, "0"));
 }
 
 /**
@@ -124,22 +133,22 @@ export function decryptBip38(encrypted: string, passphrase: string): DecryptedBi
   }
   const flag = payload[2] ?? 0;
   const compressed = (flag & 0x20) !== 0;
-  const password = utf8ToBytes(passphrase.normalize("NFC"));
+  const password = new TextEncoder().encode(passphrase.normalize("NFC"));
   const privateKey =
     payload[1] === 0x42
       ? decryptDirect(payload, password)
       : decryptMultiplied(payload, password, flag);
-  const hex = bytesToHex(privateKey);
+  const hex = privateKey.toHex();
   const address = addressFromPrivateKey(
     hex,
     Chain.Bitcoin,
     compressed ? PubkeyFormat.Compressed : PubkeyFormat.Uncompressed,
     AddressKind.P2PKH,
   );
-  const expectedHash = bytesToHex(payload.subarray(3, 7));
+  const expectedHash = payload.subarray(3, 7).toHex();
   if (
     address === undefined ||
-    bytesToHex(sha256d(utf8ToBytes(address)).subarray(0, 4)) !== expectedHash
+    sha256d(new TextEncoder().encode(address)).subarray(0, 4).toHex() !== expectedHash
   ) {
     throw new Error("BIP-38 address hash mismatch: wrong passphrase or corrupt payload");
   }

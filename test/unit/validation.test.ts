@@ -1,7 +1,6 @@
 import { existsSync } from "node:fs";
 import { resolve, sep } from "node:path";
-import { sha256 } from "@noble/hashes/sha2.js";
-import { bytesToHex } from "@noble/hashes/utils.js";
+import { sha256 } from "@agntn/hashes";
 import { bech32, createBase58check } from "@scure/base";
 import { describe, expect, it } from "vite-plus/test";
 import { isValidAddress, isValidTransactionId } from "../../src/core/chains.ts";
@@ -407,14 +406,12 @@ function encodedHash(address: string): string {
     const words = Array.from(address.slice(cashAddr[0].length, -8), (character) =>
       CASHADDR_CHARSET.indexOf(character),
     );
-    return bytesToHex(bech32.fromWords(words).slice(1));
+    return bech32.fromWords(words).slice(1).toHex();
   }
   if (/^(bc|ltc)1/u.test(address)) {
-    return bytesToHex(
-      bech32.fromWords(bech32.decode(address as `${string}1${string}`).words.slice(1)),
-    );
+    return bech32.fromWords(bech32.decode(address as `${string}1${string}`).words.slice(1)).toHex();
   }
-  return bytesToHex(base58check.decode(address).slice(1));
+  return base58check.decode(address).slice(1).toHex();
 }
 
 function hash160Problem(puzzle: Puzzle): string | undefined {
