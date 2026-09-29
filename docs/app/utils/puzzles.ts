@@ -127,10 +127,10 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Paul Jones’s two Bitcoin Vaults. The first solved, the second funded with 1 BTC.",
   },
-  cryptopuzzlers: {
+  "doges-gambit": {
     icon: "i-lucide-chess-knight",
-    title: "Crypto Puzzlers video puzzles",
-    sample: "cryptopuzzlers/doges-gambit-doge",
+    title: "Doge's Gambit",
+    sample: "doges-gambit/doge",
     chains: ["ethereum", "dogecoin"],
     blurb:
       "A chess board with coins for pieces, sixteen frames and two keys in one clip. The 10,000 DOGE went from about $50 to a few thousand dollars while nobody could read it.",

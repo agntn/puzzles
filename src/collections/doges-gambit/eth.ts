@@ -22,7 +22,7 @@ const SOLUTION = "https://www.youtube.com/watch?v=d-29rBeQXV4";
  * and 49 BOMB; both left it on April 23, 2021, the BOMB ten minutes before the ETH.
  */
 export const dogesGambitEth = ethereumPuzzle({
-  id: "cryptopuzzlers/doges-gambit-eth",
+  id: "doges-gambit/eth",
   address: standard("0x7777F6974BA9Ba3Bcfe75D2Aa52db8cE633e592F"),
   sourceUrl: VIDEO,
   startedAt: "2020-12-11 22:11:10",
@@ -67,8 +67,8 @@ export const dogesGambitEth = ethereumPuzzle({
     ),
   ],
   assets: assets({
-    puzzle: "doges-gambit/puzzle.jpg",
-    solution: "doges-gambit/eth-key.png",
+    puzzle: "puzzle.jpg",
+    solution: "eth-key.png",
     sourceUrl: VIDEO,
   }),
 });

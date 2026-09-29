@@ -80,7 +80,7 @@ describe("puzzle list pagination", () => {
         "arweave/weave9",
         "arweave/weave11",
         "arweave/weave13",
-        "cryptopuzzlers/doges-gambit-eth",
+        "doges-gambit/eth",
         "mineshop",
         "teikhos/0",
         "teikhos/1",
@@ -92,7 +92,7 @@ describe("puzzle list pagination", () => {
       ],
     });
     expect(narrowed.details["ids"]).toEqual([
-      "cryptopuzzlers/doges-gambit-eth",
+      "doges-gambit/eth",
       "teikhos/4",
       "zden/xixoio",
       "zden/codex-protocol",

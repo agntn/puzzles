@@ -11,7 +11,7 @@ import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { BookQuizCollection } from "../../src/collections/book-quiz.ts";
 import { BraveNewWorldCollection } from "../../src/collections/brave-new-world.ts";
 import { CoinArtistCollection } from "../../src/collections/coin-artist.ts";
-import { CryptoPuzzlersCollection } from "../../src/collections/cryptopuzzlers.ts";
+import { DogesGambitCollection } from "../../src/collections/doges-gambit.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
@@ -80,7 +80,7 @@ const concreteClasses = [
   BookQuizCollection,
   BraveNewWorldCollection,
   CoinArtistCollection,
-  CryptoPuzzlersCollection,
+  DogesGambitCollection,
   DugCollection,
   GenesisCollection,
   GsmgCollection,

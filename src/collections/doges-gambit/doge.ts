@@ -22,7 +22,7 @@ const SOLUTION = "https://www.youtube.com/watch?v=-7-m60jy1RU";
  * when the video went up and, by the author's count, five or six thousand dollars when it was claimed.
  */
 export const dogesGambitDoge = dogecoinPuzzle({
-  id: "cryptopuzzlers/doges-gambit-doge",
+  id: "doges-gambit/doge",
   address: p2pkh("DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq", "ddcbc240da19c87551a9182af0c2c77e3ebd20a4"),
   sourceUrl: VIDEO,
   startedAt: "2020-12-11 22:11:10",
@@ -62,8 +62,8 @@ export const dogesGambitDoge = dogecoinPuzzle({
     ),
   ],
   assets: assets({
-    puzzle: "doges-gambit/puzzle.jpg",
-    solution: "doges-gambit/doge-key.png",
+    puzzle: "puzzle.jpg",
+    solution: "doge-key.png",
     sourceUrl: VIDEO,
   }),
 });

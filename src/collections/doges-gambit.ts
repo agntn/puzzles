@@ -1,7 +1,7 @@
 import { NamedCollection } from "../core/collection.ts";
 import { fact, party, PartyKind, profile } from "../core/parts.ts";
-import { dogesGambitDoge } from "./cryptopuzzlers/doges-gambit-doge.ts";
-import { dogesGambitEth } from "./cryptopuzzlers/doges-gambit-eth.ts";
+import { dogesGambitDoge } from "./doges-gambit/doge.ts";
+import { dogesGambitEth } from "./doges-gambit/eth.ts";
 
 /** The r/dogecoin post that launched Doge's Gambit. */
 const LAUNCH =
@@ -14,10 +14,13 @@ const REPOST =
 /** The author's solution to the Dogecoin part of Doge's Gambit. */
 const DOGE_SOLUTION = "https://www.youtube.com/watch?v=-7-m60jy1RU";
 
-/** Video puzzles by Crypto Puzzlers, a private key hidden in the frames of a short clip. */
-export class CryptoPuzzlersCollection extends NamedCollection {
+/**
+ * Doge's Gambit by Crypto Puzzlers: one chess board video with an Ether key and a Dogecoin key in
+ * its frames, two puzzles and two records.
+ */
+export class DogesGambitCollection extends NamedCollection {
   /** Stable collection key used in puzzle identifiers. */
-  static readonly key = "cryptopuzzlers";
+  static readonly key = "doges-gambit";
 
   /** One person behind a YouTube channel and a Reddit account of the same name. */
   static readonly author = party("Crypto Puzzlers", {
@@ -54,13 +57,9 @@ export class CryptoPuzzlersCollection extends NamedCollection {
 
   /** Builds the canonical collection. */
   constructor() {
-    super(
-      CryptoPuzzlersCollection.key,
-      CryptoPuzzlersCollection.author,
-      CryptoPuzzlersCollection.puzzles,
-    );
+    super(DogesGambitCollection.key, DogesGambitCollection.author, DogesGambitCollection.puzzles);
   }
 }
 
 /** Canonical collection instance. */
-export const cryptoPuzzlers = new CryptoPuzzlersCollection();
+export const dogesGambit = new DogesGambitCollection();

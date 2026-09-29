@@ -132,7 +132,7 @@ const sources = [
     },
   },
   {
-    file: "cryptopuzzlers/cryptopuzzlers-2020-12-11",
+    file: "doges-gambit/cryptopuzzlers-2020-12-11",
     url: "https://www.reddit.com/r/dogecoin/comments/kbcptp/10000_doge_reward_new_cryptocurrency_video_puzzle/",
     author: "u/CryptoPuzzlers",
     date: "2020-12-11",
@@ -143,7 +143,7 @@ const sources = [
     },
   },
   {
-    file: "cryptopuzzlers/cryptopuzzlers-2021-01-29",
+    file: "doges-gambit/cryptopuzzlers-2021-01-29",
     url: "https://www.reddit.com/r/dogecoin/comments/l7foig/400_unsolved_dogecoin_video_puzzle_10000_doge/",
     author: "u/CryptoPuzzlers",
     date: "2021-01-29",

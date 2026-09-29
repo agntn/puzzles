@@ -11,7 +11,7 @@ screenshot_sha256: cde8ea4e68f55721d70be54c4392aedaac98e0fbd785d3ba2afca85ca397a
 
 # $400 Unsolved Dogecoin Video Puzzle - 10,000 Doge Reward!
 
-[Original thread](https://www.reddit.com/r/dogecoin/comments/l7foig/400_unsolved_dogecoin_video_puzzle_10000_doge/). The author's second post of Doge's Gambit on r/dogecoin, seven weeks after the first, and the source of the second fact on the [Crypto Puzzlers author record](../../../src/collections/cryptopuzzlers.ts). It prints the Dogecoin address and the rule that the puzzle stays unsolved while the 10,000 DOGE sit there. The post went up on January 29, 2021, at 01:48:07 UTC. Its only edit, at 01:55:19 UTC, added the second video link, the address line and the closing sentence. The author mentions the link in the thread.
+[Original thread](https://www.reddit.com/r/dogecoin/comments/l7foig/400_unsolved_dogecoin_video_puzzle_10000_doge/). The author's second post of Doge's Gambit on r/dogecoin, seven weeks after the first, and the source of the second fact on the [Crypto Puzzlers author record](../../../src/collections/doges-gambit.ts). It prints the Dogecoin address and the rule that the puzzle stays unsolved while the 10,000 DOGE sit there. The post went up on January 29, 2021, at 01:48:07 UTC. Its only edit, at 01:55:19 UTC, added the second video link, the address line and the closing sentence. The author mentions the link in the thread.
 
 ## Historical provenance
 

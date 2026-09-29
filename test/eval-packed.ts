@@ -85,7 +85,7 @@ const expectedCollections = [
   "book-quiz",
   "brave-new-world",
   "coin-artist",
-  "cryptopuzzlers",
+  "doges-gambit",
   "dug",
   "genesis",
   "gsmg",

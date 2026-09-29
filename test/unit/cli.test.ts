@@ -327,7 +327,7 @@ describe.concurrent("puzzles CLI", () => {
       "arweave/weave9",
       "arweave/weave11",
       "arweave/weave13",
-      "cryptopuzzlers/doges-gambit-eth",
+      "doges-gambit/eth",
       "mineshop",
       "teikhos/0",
       "teikhos/1",

@@ -11,7 +11,7 @@ screenshot_sha256: 20a555a37701b0af533de7161d905e5537cb365dbb525af9d8f85f9cd333b
 
 # 10,000 Doge Reward - New cryptocurrency video puzzle!
 
-[Original thread](https://www.reddit.com/r/dogecoin/comments/kbcptp/10000_doge_reward_new_cryptocurrency_video_puzzle/). The launch post of Doge's Gambit on r/dogecoin and the source of the first fact on the [Crypto Puzzlers author record](../../../src/collections/cryptopuzzlers.ts). The post went up on December 11, 2020, at 22:20:20 UTC, nine minutes after the puzzle video and 36 minutes after the Ether funding transaction. It was never edited. It names the three prizes but neither address; those are in the video description.
+[Original thread](https://www.reddit.com/r/dogecoin/comments/kbcptp/10000_doge_reward_new_cryptocurrency_video_puzzle/). The launch post of Doge's Gambit on r/dogecoin and the source of the first fact on the [Crypto Puzzlers author record](../../../src/collections/doges-gambit.ts). The post went up on December 11, 2020, at 22:20:20 UTC, nine minutes after the puzzle video and 36 minutes after the Ether funding transaction. It was never edited. It names the three prizes but neither address; those are in the video description.
 
 ## Historical provenance
 
