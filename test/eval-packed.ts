@@ -33,12 +33,26 @@ type OmpExtension = typeof import("../packages/omp/extensions/puzzles.ts");
 
 interface Manifest {
   readonly bin: Readonly<Record<string, string>>;
+  readonly dependencies: Readonly<Record<string, string>>;
   readonly exports: Readonly<Record<string, { readonly import: string }>>;
   readonly name: string;
   readonly omp: { readonly skills?: readonly string[] };
+  readonly peerDependencies: Readonly<Record<string, string>>;
   readonly pi: { readonly skills?: readonly string[] };
   readonly version: string;
 }
+
+/**
+ * Packages Pi hands its extensions. A copy in `dependencies` can bypass the host's module
+ * mapping, and Pi warns on every load of such a package.
+ */
+const hostProvidedPackages = [
+  "@earendil-works/pi-agent-core",
+  "@earendil-works/pi-ai",
+  "@earendil-works/pi-coding-agent",
+  "@earendil-works/pi-tui",
+  "typebox",
+];
 
 /** The slice of a registered tool the gate exercises; Pi and OMP differ beyond it. */
 interface RegisteredTool {
@@ -239,6 +253,12 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
   for (const entry of [".", "./collections/*", "./tools", "./mcp", "./package.json"]) {
     assert.ok(entry in manifest.exports, `export ${entry} is missing from the packed package.json`);
   }
+  assert.deepEqual(
+    hostProvidedPackages.filter((name) => name in manifest.dependencies),
+    [],
+    "Pi supplies these packages, so they belong in peerDependencies",
+  );
+  assert.equal(manifest.peerDependencies["typebox"], "*", "Pi asks for a * range on typebox");
   const files = await walk(packageRoot);
   assert.deepEqual(
     files.filter((file) => file.startsWith("src/")),
