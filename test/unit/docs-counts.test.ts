@@ -229,7 +229,7 @@ describe("the prose counts what the registry ships", () => {
       ),
     ).toEqual(["four", "one"]);
     expect(live).toContain("docs/content/2.collections/15.genesis.md");
-    expect(live).toContain("docs/content/3.authors/09.genesis-author.md");
+    expect(live).toContain("docs/content/3.authors/10.genesis-author.md");
     const corpus = files.map((file) => readFileSync(path.join(root, file), "utf8"));
     for (const noun of ["tools", "factories"] as const) {
       expect(

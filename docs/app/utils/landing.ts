@@ -39,6 +39,7 @@ export const WALK: readonly string[] = [
   "path-to-greatness",
   "proof-of-writing",
   "bitaddress",
+  "doges-gambit/doge",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1061,18 +1062,47 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 3,
     tool: "bitaddress\tunsolved\t0.005297 BTC\t1J7BVeP8JK4op2X3GN3Hy7xkTnGnQTMpou\nchain: bitcoin  address kind: p2pkh\nhash160: bba564d9113760ba944ffce28dc3126d07ffd6e3\npublic key: 04f7af13c4fda2f920dbd8ebc8d2cc87cdc6674a7beda95a402ab83dd7e952597aeebdb76b2b4bc15771c57eb48568b2a8fa83219f9fa53519aaef5cd75bac30ac (uncompressed)\nprivate key: 6PfQTphCYc1Fee19uPz2pmou5RVBDVgw8VcrPfGLos4ktUnARdiFLYhcNU (bip38)\nstarted: 2023-10-06 11:50:09\ntransactions: 3\n\tfunding\t2015-06-02 21:14:42\t0.01337 BTC\tcbba0edea0808f1a36a4f84663b9b0ef065939759f7257a80df2b14f773910ca\n\tincrease\t2015-06-02 21:14:42\t0.02999 BTC\tfd82c2f779c4cf8e56e10430d7ae45ace0025090600ae2fd3fd3d467d9ebf608\n\tdecrease\t2016-06-12 19:15:59\t0.038063 BTC\tfa938636d8b5f0f82a7f88af68dfaf0973436525cd0d524a823fe4409c17f3c9\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/bitaddress/puzzle.png\nasset source: https://i.imgur.com/3RSb8MH.png\nhints: 5\n\tofficial\t2023-10-06\tI suspect the passphrase is not more than 30 characters.\tsource: https://stacker.news/items/275973\n\tofficial\t2023-10-06\tWhich i generated on this site https://www.bitaddress.org/\tsource: https://stacker.news/items/275973\n\tofficial\t2023-10-06\tI don't remember, I have tested my passwords I used during that time, so probably it is not with special characters\tsource: https://stacker.news/items/276117\n\tofficial\t2023-10-06\tMost likely I did not use a passphrase of the length 30. But I remeber that I used to combine 3 different passwords to secure wallets which is about that length. I have withdrawn funds from the wallet once so it cannot be an imposible passpharse and most likely I did not used a password manager for it.\tsource: https://stacker.news/items/276305\n\tcommunity\t2023-10-06\tThe private key starts with '6Pf', though. That gives you some indication of the encryption algorithm used: EC multiply, no compression, no lot/sequence numbers, according to BIP38.\tsource: https://stacker.news/items/276026\nexplorer: https://blockstream.info/address/1J7BVeP8JK4op2X3GN3Hy7xkTnGnQTMpou\nsource: https://stacker.news/items/275973",
   },
+  {
+    id: "doges-gambit/doge",
+    collection: "doges-gambit",
+    chain: "dogecoin",
+    status: "solved",
+    address: "DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq",
+    kind: "p2pkh",
+    hash160: "ddcbc240da19c87551a9182af0c2c77e3ebd20a4",
+    redeemScript: undefined,
+    prize: "10000 DOGE",
+    prizeAmount: 10000,
+    currency: undefined,
+    startedAt: "2020-12-11 22:11:10",
+    solvedAt: "2021-05-09 00:28:06",
+    solveTime: "4mo 28d 2h 16m",
+    bits: undefined,
+    range: undefined,
+    pubkey:
+      "0488e79ff1f6aa637457d531c6d40c056230b8106290651054f67eb12e96a7ba35573300a4c2af9ec7597fe0dbf75f5214e34e3ae071321562d04e4766ad695766",
+    pubkeyFormat: "uncompressed",
+    secret: "wif",
+    keyLiteral: 'wif("6Je1sv5tRwXLFKpnor4yef6i4k73eJu2Kw9DEnRLY3BL9jVtPq3")',
+    verdict: "verified",
+    detail: "DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq",
+    explorer: "https://blockchair.com/dogecoin/address/DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq",
+    source: "https://www.youtube.com/watch?v=DieNZPwIUoQ",
+    transactions: 2,
+    tool: "doges-gambit/doge\tsolved\t10000 DOGE\tDRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq\nchain: dogecoin  address kind: p2pkh\nhash160: ddcbc240da19c87551a9182af0c2c77e3ebd20a4\npublic key: 0488e79ff1f6aa637457d531c6d40c056230b8106290651054f67eb12e96a7ba35573300a4c2af9ec7597fe0dbf75f5214e34e3ae071321562d04e4766ad695766 (uncompressed)\nprivate key: 6Je1sv5tRwXLFKpnor4yef6i4k73eJu2Kw9DEnRLY3BL9jVtPq3 (wif)\nstarted: 2020-12-11 22:11:10\nsolved: 2021-05-09 00:28:06 (4mo 28d 2h 16m)\ntransactions: 2\n\tfunding\t2020-12-11 21:53:40\t10000 DOGE\tf83597b8e239846eb61f42b0e8bcb932d2ccf206115c122e0c84bfb5d72f2503\n\tclaim\t2021-05-09 00:28:06\t9999 DOGE\tccc7f365a3b212a3d8320397cec9c3aa14684f4b54e0ee037fc0f76c1ee5d372\nclaim: https://blockchair.com/dogecoin/tx/ccc7f365a3b212a3d8320397cec9c3aa14684f4b54e0ee037fc0f76c1ee5d372\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/doges-gambit/puzzle.jpg\nsolution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/doges-gambit/doge-key.png\nasset source: https://www.youtube.com/watch?v=DieNZPwIUoQ\nhints: 1\n\tofficial\t2020-12-11\tThis is the first time I put two puzzles in one, any feedback is appreciated!\tsource: https://www.youtube.com/watch?v=DieNZPwIUoQ\tanswer: The same board, read the other way: order the sixteen frames by their number of pink squares, keep the yellow, green, blue and red squares a piece can move to, drop those that touch no blue square, diagonals included, and read the rest by how many blue squares each one touches. Each frame gives a few characters of the Dogecoin WIF, not always the same number.\tanswer source: https://www.youtube.com/watch?v=-7-m60jy1RU\tanswer date: 2021-05-11\nexplorer: https://blockchair.com/dogecoin/address/DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq\nsource: https://www.youtube.com/watch?v=DieNZPwIUoQ",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "d019e044fe3b",
-  total: 444,
-  solved: 230,
+  dataVersion: "2aa8e52b2417",
+  total: 446,
+  solved: 232,
   unsolved: 103,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 336,
+  withPubkey: 338,
   unsolvedPrize: {
     AR: 1900,
     ETH: 12.612541554256945,
@@ -1082,8 +1112,9 @@ export const STATS_STATIC = {
   totalPrize: {
     BTC: 1065.1900893,
     AR: 5550,
-    ETH: 26.246241554256944,
+    ETH: 26.256241554256945,
     DAI: 100,
+    DOGE: 10000,
     BCH: 5.1,
     LTC: 233.85158794,
     XEC: 30068000.94,
@@ -1324,6 +1355,27 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 1,
     firstStarted: "2015-04-03",
     lastStarted: "2015-04-03",
+    hints: [],
+  },
+  {
+    key: "doges-gambit",
+    author: "Crypto Puzzlers",
+    authorKey: "cryptopuzzlers",
+    authorUrl: "https://www.youtube.com/@cryptopuzzlers3890",
+    total: 2,
+    statuses: {
+      solved: 2,
+    },
+    chains: ["ethereum", "dogecoin"],
+    prize: {
+      ETH: 0.01,
+      DOGE: 10000,
+    },
+    unsolvedPrize: {},
+    withPubkey: 2,
+    withKey: 2,
+    firstStarted: "2020-12-11 22:11:10",
+    lastStarted: "2020-12-11 22:11:10",
     hints: [],
   },
   {
@@ -1893,6 +1945,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Crypto artist and game designer who painted TORCHED H34R7S with a wallet key inside, and later founded Blockade Games.",
     collections: ["coin-artist"],
     puzzles: 1,
+  },
+  {
+    key: "cryptopuzzlers",
+    to: "/authors/cryptopuzzlers",
+    name: "Crypto Puzzlers",
+    kind: "person",
+    about:
+      "YouTube channel and Reddit account that hid private keys in short video puzzles and paid the prizes in DOGE, ETH, BOMB and Banano.",
+    collections: ["doges-gambit"],
+    puzzles: 2,
   },
   {
     key: "dug",

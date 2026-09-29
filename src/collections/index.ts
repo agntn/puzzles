@@ -18,6 +18,7 @@ export const builtins = [
     load: () => import("./brave-new-world.ts").then((m) => m.braveNewWorld),
   },
   { key: "coin-artist", load: () => import("./coin-artist.ts").then((m) => m.coinArtist) },
+  { key: "doges-gambit", load: () => import("./doges-gambit.ts").then((m) => m.dogesGambit) },
   { key: "dug", load: () => import("./dug.ts").then((m) => m.dug) },
   { key: "genesis", load: () => import("./genesis.ts").then((m) => m.genesis) },
   { key: "gsmg", load: () => import("./gsmg.ts").then((m) => m.gsmg) },
