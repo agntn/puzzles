@@ -115,6 +115,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `bitimage`              | bitcoin                             | Seeds hashed from photographs              |
 | `luckylurker`           | bitcoin                             | Two Bitcoin Vault seed challenges          |
 | `iamabananaamaa`        | bitcoin                             | A ZIP in a GIF, then a fake Caesar         |
+| `cryptopuzzlers`        | ethereum, dogecoin                  | Two keys read off one chess board video    |
 | `bitaps`                | bitcoin                             | A 3 of 5 secret sharing scheme             |
 | `gsmg`                  | bitcoin                             | A multi phase image puzzle                 |
 | `movie-enigma`          | bitcoin                             | Film titles as seed words, solved 2026     |

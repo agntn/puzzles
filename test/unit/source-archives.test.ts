@@ -132,6 +132,28 @@ const sources = [
     },
   },
   {
+    file: "cryptopuzzlers/cryptopuzzlers-2020-12-11",
+    url: "https://www.reddit.com/r/dogecoin/comments/kbcptp/10000_doge_reward_new_cryptocurrency_video_puzzle/",
+    author: "u/CryptoPuzzlers",
+    date: "2020-12-11",
+    archive: {
+      url: "https://web.archive.org/web/20230621100631/https://old.reddit.com/r/dogecoin/comments/kbcptp/10000_doge_reward_new_cryptocurrency_video_puzzle/",
+      date: "2023-06-21T10:06:31Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "cryptopuzzlers/cryptopuzzlers-2021-01-29",
+    url: "https://www.reddit.com/r/dogecoin/comments/l7foig/400_unsolved_dogecoin_video_puzzle_10000_doge/",
+    author: "u/CryptoPuzzlers",
+    date: "2021-01-29",
+    archive: {
+      url: "https://web.archive.org/web/20260929192844/https://www.reddit.com/r/dogecoin/comments/l7foig/400_unsolved_dogecoin_video_puzzle_10000_doge/",
+      date: "2026-09-29T19:28:44Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "book-quiz/aoinakamoto-2019-04-06",
     url: "https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
     author: "u/AoiNakamoto",

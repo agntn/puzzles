@@ -11,6 +11,7 @@ import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { BookQuizCollection } from "../../src/collections/book-quiz.ts";
 import { BraveNewWorldCollection } from "../../src/collections/brave-new-world.ts";
 import { CoinArtistCollection } from "../../src/collections/coin-artist.ts";
+import { CryptoPuzzlersCollection } from "../../src/collections/cryptopuzzlers.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
@@ -79,6 +80,7 @@ const concreteClasses = [
   BookQuizCollection,
   BraveNewWorldCollection,
   CoinArtistCollection,
+  CryptoPuzzlersCollection,
   DugCollection,
   GenesisCollection,
   GsmgCollection,
@@ -836,19 +838,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(444);
+    expect(await all()).toHaveLength(446);
     expect(await stats()).toEqual({
-      total: 444,
+      total: 446,
       claimed: 12,
       expired: 3,
-      solved: 230,
+      solved: 232,
       swept: 96,
       unsolved: 103,
-      with_pubkey: 336,
+      with_pubkey: 338,
       total_prize: {
         AR: 5550,
-        ETH: 26.246241554256944,
+        ETH: 26.256241554256945,
         DAI: 100,
+        DOGE: 10000,
         BTC: 1065.1900893,
         BCH: 5.1,
         LTC: 233.85158794,
@@ -902,7 +905,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(444);
+    ).toBe(446);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -929,6 +932,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(230);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(232);
   });
 });
