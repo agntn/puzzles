@@ -100,6 +100,27 @@ const sources = [
     date: "2026-06-21",
   },
   {
+    file: "proof-of-writing/caincurrency-2026-04-14",
+    tweet: "2043911484040740939",
+    author: "caincurrency",
+    date: "2026-04-14",
+    archive: { date: "2026-04-14T04:37:26Z", content: "confirmed" },
+  },
+  {
+    file: "proof-of-writing/oritwoen-2026-08-27-2092957918186316275",
+    tweet: "2092957918186316275",
+    author: "oritwoen",
+    date: "2026-08-27",
+    archive: { date: "2026-08-27T12:50:27Z", content: "confirmed" },
+  },
+  {
+    file: "proof-of-writing/oritwoen-2026-08-27-2093029042454671607",
+    tweet: "2093029042454671607",
+    author: "oritwoen",
+    date: "2026-08-27",
+    archive: { date: "2026-08-27T17:33:04Z", content: "confirmed" },
+  },
+  {
     file: "book-quiz/aoinakamoto-2019-04-06",
     url: "https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
     author: "u/AoiNakamoto",

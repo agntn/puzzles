@@ -38,6 +38,10 @@ export const builtins = [
     key: "picture-puzzle",
     load: () => import("./picture-puzzle.ts").then((m) => m.picturePuzzle),
   },
+  {
+    key: "proof-of-writing",
+    load: () => import("./proof-of-writing.ts").then((m) => m.proofOfWriting),
+  },
   { key: "quizchain", load: () => import("./quizchain.ts").then((m) => m.quizchain) },
   { key: "rushwallet", load: () => import("./rushwallet.ts").then((m) => m.rushwallet) },
   {

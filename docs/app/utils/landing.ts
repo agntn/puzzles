@@ -37,6 +37,7 @@ export const WALK: readonly string[] = [
   "brave-new-world",
   "wealth-in-poetry",
   "path-to-greatness",
+  "proof-of-writing",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1000,18 +1001,48 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 8,
     tool: "path-to-greatness\tunsolved\t3.02608794 LTC\tLUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS\nchain: litecoin  address kind: p2pkh\nhash160: 69fb2ecbe0eed5feeb7e410b279048cd3891b789\npublic key: unknown\nprivate key: unknown\nstarted: 2021-02-05 19:02:37\ntransactions: 8\n\tfunding\t2021-02-02 14:57:06\t0.03477051 LTC\t7f7a13c612ccc937fede4802b24861c00b386fc116a3a57d6a4e386e93f45f21\n\tincrease\t2021-02-05 15:53:48\t0.06420958 LTC\t1e2e74c76942b40b4f79a9d98c5ba00eda553e4f8ea60e2fb15b9a85fdd039f0\n\tincrease\t2021-02-05 15:53:48\t0.57788622 LTC\taf864bcaa7e86a3c1de5e33dc22d8d528a07e79c349a74244358b0f647be0666\n\tincrease\t2021-02-05 16:05:38\t0.07233959 LTC\tcb2462b981de7768245bc1951575c163010e0ce6dc3d3f80499fe3fe5f551458\n\tincrease\t2021-02-12 18:14:43\t0.06348393 LTC\t37319ffe3ac77c1a9c413e411347938e973400761cea3c7890dfe2f9d65dc834\n\tincrease\t2021-05-15 22:54:29\t0.15546076 LTC\tebe20c79330a96bfd789b716bfa0f579088fafbb62c877bb6395ec2f25c92b86\n\tincrease\t2021-05-22 23:08:52\t0.15794155 LTC\t16abed94cd0641bda707b21fcb6a9caf614524ff3590645af104d075bca10638\n\tincrease\t2021-07-22 18:02:39\t1.8999958 LTC\tb83f8e1037bd07d8e82b1c4c35a3727b2919e709eecd570f83ecb743c8fa2711\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/computer-screen.jpg\nhint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue1-imagine.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue2-scramble.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue3-wasd.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue4-chess.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/clue5-wonders.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/00111111.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/qr1.jpg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/path-to-greatness/qr2.jpg\nasset source: https://p2gtreasure.com/Clues/p2g_clues.zip\nhints: 3\n\tofficial\t-\tClues can be found inside the demo, and will lead you to a Litecoin wallet's private key.\tsource: https://p2gtreasure.com/old/index.html\tconfirmation: https://web.archive.org/web/20210205193730/https://www.p2gtreasure.com/ (Wayback capture of the first site, February 2021)\n\tofficial\t-\tThe first and last steps are the only steps I will ever provide.\tsource: https://p2gtreasure.com/old/rules.html\n\tofficial\t-\tThe clues above will lead to a Litecoin wallet's private key.\tsource: https://p2gtreasure.com/\tconfirmation: https://web.archive.org/web/20210516142206/https://www.p2gtreasure.com/ (Wayback capture of the site with the clue images, May 2021)\nexplorer: https://litecoinspace.org/address/LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS\nsource: https://p2gtreasure.com/",
   },
+  {
+    id: "proof-of-writing",
+    collection: "proof-of-writing",
+    chain: "ecash",
+    status: "solved",
+    address: "ecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z",
+    kind: "p2pkh",
+    hash160: "2838bcec56ed7d1a9bb0023d388b8085a4947e06",
+    redeemScript: undefined,
+    prize: "30068000.94 XEC",
+    prizeAmount: 30068000.94,
+    currency: undefined,
+    startedAt: "2025-03-01 08:32:39",
+    solvedAt: "2026-08-26 23:41:30",
+    solveTime: "1y 5mo 28d 15h 8m",
+    bits: undefined,
+    range: undefined,
+    pubkey: "0257eaa8768dc793876213a92a510f607af70bd0adc946d1f8fdf48d31b7f48b6d",
+    pubkeyFormat: "compressed",
+    secret: "seed",
+    keyLiteral:
+      'seed("matter key easily slot maple two visa swamp subject friend robust trip", "m/44\'/1899\'/0\'/0/0")',
+    verdict: "verified",
+    detail: "ecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z",
+    explorer: "https://explorer.e.cash/address/ecash%3Aqq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z",
+    source:
+      "https://www.proofofwriting.com/posts/building-an-awesome-ecash-community-and-a-chance-to-win-15m-xec",
+    transactions: 7,
+    tool: "proof-of-writing\tsolved\t30068000.94 XEC\tecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z\nchain: ecash  address kind: p2pkh\nhash160: 2838bcec56ed7d1a9bb0023d388b8085a4947e06\npublic key: 0257eaa8768dc793876213a92a510f607af70bd0adc946d1f8fdf48d31b7f48b6d (compressed)\nprivate key: matter key easily slot maple two visa swamp subject friend robust trip (seed phrase)\nderivation path: m/44'/1899'/0'/0/0\nstarted: 2025-03-01 08:32:39\nsolved: 2026-08-26 23:41:30 (1y 5mo 28d 15h 8m)\nsolver: Ori (oritwoen), github https://github.com/oritwoen, twitter https://x.com/oritwoen, website https://oritwoen.dev\ntransactions: 7\n\tfunding\t2025-03-01 08:32:39\t5000000 XEC\t933e0f483b6402e7cafccfe065d185cacfdbe6bb0e359d9ac0c421ff495d0000\n\tdecrease\t2025-09-29 05:39:43\t5059096.41 XEC\t984c4638e2c433db79dd2bae3c8df0f2f6d90c15465dc0050c6468d102cc2816\n\tincrease\t2025-09-29 18:55:14\t5058997.76 XEC\t3dfd1db9bf95ffed63143997ce2276a873e195c689462e3aa2fcf3796484c97d\n\tincrease\t2026-04-14 04:35:26\t10000000 XEC\td9c2c9eeb3fd981bccb69df44c23c1cbf640044a6f49e5e565f2c97148822d39\n\tincrease\t2026-06-21 01:15:44\t10000000 XEC\t1c54e9b7dd7f72cd4c5f76287d5bde114fceb2905ad033250a375e3513a41763\n\tincrease\t2026-08-20 06:57:47\t5000000 XEC\te590bee4df615d735ffbd7923f0566599ac8f6ad6fbaab62827fc2bf9497353d\n\tclaim\t2026-08-26 23:41:30\t30067980.76 XEC\t8e729528b8091f19ca5371f3a6a56e3536d18d7514a1d2abdf3f2f889d189c30\nclaim: https://explorer.e.cash/tx/8e729528b8091f19ca5371f3a6a56e3536d18d7514a1d2abdf3f2f889d189c30\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/proof-of-writing/puzzle.txt\nasset source: https://web.archive.org/web/20250327234214/https://proofofwriting.com/building-an-awesome-ecash-community-and-a-chance-to-win-5m-xec/\nhints: 2\n\tofficial\t-\tRevelations 22:13\tsource: https://www.proofofwriting.com/posts/building-an-awesome-ecash-community-and-a-chance-to-win-15m-xec\tanswer: The clue \"Alpha and Omega\" defines paragraphs from matter to believe. From the next 12 paragraphs, I take words 1, 2, ... 12 and convert the three forms into the BIP39 dictionary. Cashtab Path1899 gives an exact match.\tanswer source: https://x.com/oritwoen/status/2093029042454671607\tanswer date: 2026-08-27\n\tofficial\t2026-04-14\tIt can be solved without ai or a computer\tsource: https://www.proofofwriting.com/posts/building-an-awesome-ecash-community-and-a-chance-to-win-15m-xec\nexplorer: https://explorer.e.cash/address/ecash%3Aqq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z\nsource: https://www.proofofwriting.com/posts/building-an-awesome-ecash-community-and-a-chance-to-win-15m-xec",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "6f2fb1ec81c2",
-  total: 442,
-  solved: 229,
+  dataVersion: "9d51fab5640b",
+  total: 443,
+  solved: 230,
   unsolved: 102,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 334,
+  withPubkey: 335,
   unsolvedPrize: {
     AR: 1900,
     ETH: 12.612541554256945,
@@ -1025,6 +1056,7 @@ export const STATS_STATIC = {
     DAI: 100,
     BCH: 5.1,
     LTC: 233.85158794,
+    XEC: 30068000.94,
     DCR: 460,
   },
 } as const;
@@ -1503,6 +1535,26 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "proof-of-writing",
+    author: "cain",
+    authorKey: "cain",
+    authorUrl: "https://x.com/caincurrency",
+    total: 1,
+    statuses: {
+      solved: 1,
+    },
+    chains: ["ecash"],
+    prize: {
+      XEC: 30068000.94,
+    },
+    unsolvedPrize: {},
+    withPubkey: 1,
+    withKey: 1,
+    firstStarted: "2025-03-01 08:32:39",
+    lastStarted: "2025-03-01 08:32:39",
+    hints: [],
+  },
+  {
     key: "quizchain",
     author: "AoiNakamoto",
     authorKey: "aoi-nakamoto",
@@ -1897,6 +1949,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     about:
       "Posted a picture puzzle on r/bitcoinpuzzles seven hours after the subreddit opened. Four pictures, 1 mBTC, marked easy, and a little harder than it looked.",
     collections: ["picture-puzzle"],
+    puzzles: 1,
+  },
+  {
+    key: "cain",
+    to: "/authors/cain",
+    name: "cain",
+    kind: "person",
+    about:
+      "Writer on Proof Of Writing, the eCash site that pays its writers in XEC, who hid a Cashtab seed in an essay about the eCash community and raised the prize from 5 to 30 million XEC.",
+    collections: ["proof-of-writing"],
     puzzles: 1,
   },
   {

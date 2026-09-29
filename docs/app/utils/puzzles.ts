@@ -190,6 +190,14 @@ const PRESENTATION: Readonly<
     blurb:
       "A directory, an eye, the letter O and a QR code: a page on directory.io and the 36th key down. Claimed five hours in.",
   },
+  "proof-of-writing": {
+    icon: "i-lucide-pen-line",
+    title: "Building an awesome eCash community",
+    sample: "proof-of-writing",
+    chains: ["ecash"],
+    blurb:
+      "An essay on what makes a crypto community, with a Cashtab seed on its diagonal: word one of one paragraph, word two of the next. 30 million XEC by the time it fell.",
+  },
   quizchain: {
     icon: "i-lucide-link",
     title: "Quizchain",
