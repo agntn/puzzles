@@ -166,6 +166,14 @@ const PRESENTATION: Readonly<
     blurb:
       "All of 2020 in one collage, runes included. Find the seed phrase, says the picture. Six years on, the 0.2 BTC is still there.",
   },
+  bitaddress: {
+    icon: "i-lucide-hammer",
+    title: "Brute force and the coins are yours",
+    sample: "bitaddress",
+    chains: ["bitcoin"],
+    blurb:
+      "A paper wallet whose owner forgot the BIP38 passphrase and gave the coins to whoever guesses it. Probably three old passwords glued together. Good luck, q didn't have any.",
+  },
   "wealth-in-poetry": {
     icon: "i-lucide-feather",
     title: "Securing Wealth in Poetry",

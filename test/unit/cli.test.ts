@@ -67,8 +67,8 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(443);
-    expect(result.unsolved).toBe(102);
+    expect(result.total).toBe(444);
+    expect(result.unsolved).toBe(103);
   });
 
   it("shows a puzzle by universal identifier", async () => {
@@ -431,13 +431,13 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result).toHaveLength(30);
+    expect(result).toHaveLength(31);
     expect(result.map((entry) => entry.key)).toContain("hash-collision");
   });
 
   it("lists authors and shows one, by author key or collection key", async () => {
     const rows = (await puzzles("authors")).split("\n");
-    expect(rows).toHaveLength(28);
+    expect(rows).toHaveLength(29);
     expect(rows).toContain("zden: Zden (person), 1 collection: zden, 16 puzzles");
 
     const record = (await puzzles("authors", "warp")).split("\n");
@@ -506,7 +506,7 @@ describe.concurrent("puzzles CLI", () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(30);
+    expect(result.collections).toHaveLength(31);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 

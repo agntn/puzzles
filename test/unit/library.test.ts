@@ -5,6 +5,7 @@ import { eightyBit, EightyBitCollection } from "../../src/collections/80-bit.ts"
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
+import { BitaddressCollection } from "../../src/collections/bitaddress.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
 import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { BookQuizCollection } from "../../src/collections/book-quiz.ts";
@@ -72,6 +73,7 @@ const concreteClasses = [
   ArweaveCollection,
   B1000Collection,
   BalletCollection,
+  BitaddressCollection,
   BitapsCollection,
   BitimageCollection,
   BookQuizCollection,
@@ -834,20 +836,20 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(443);
+    expect(await all()).toHaveLength(444);
     expect(await stats()).toEqual({
-      total: 443,
+      total: 444,
       claimed: 12,
       expired: 3,
       solved: 230,
       swept: 96,
-      unsolved: 102,
-      with_pubkey: 335,
+      unsolved: 103,
+      with_pubkey: 336,
       total_prize: {
         AR: 5550,
         ETH: 26.246241554256944,
         DAI: 100,
-        BTC: 1065.1847923,
+        BTC: 1065.1900893,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -856,7 +858,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1900,
         ETH: 12.612541554256945,
-        BTC: 909.10625212,
+        BTC: 909.11154912,
         LTC: 3.02608794,
       },
     });
@@ -900,7 +902,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(443);
+    ).toBe(444);
   });
 
   it("hands back the memoized views frozen through", async () => {

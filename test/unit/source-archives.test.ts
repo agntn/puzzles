@@ -121,6 +121,17 @@ const sources = [
     archive: { date: "2026-08-27T17:33:04Z", content: "confirmed" },
   },
   {
+    file: "bitaddress/q-2023-10-06",
+    url: "https://stacker.news/items/275973",
+    author: "q",
+    date: "2023-10-06",
+    archive: {
+      url: "https://web.archive.org/web/20260211205609/https://stacker.news/items/275973",
+      date: "2026-02-11T20:56:09Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "book-quiz/aoinakamoto-2019-04-06",
     url: "https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
     author: "u/AoiNakamoto",
