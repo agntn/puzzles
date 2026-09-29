@@ -9,6 +9,7 @@ export const builtins = [
   { key: "arweave", load: () => import("./arweave.ts").then((m) => m.arweave) },
   { key: "b1000", load: () => import("./b1000.ts").then((m) => m.b1000) },
   { key: "ballet", load: () => import("./ballet.ts").then((m) => m.ballet) },
+  { key: "bitaddress", load: () => import("./bitaddress.ts").then((m) => m.bitaddress) },
   { key: "bitaps", load: () => import("./bitaps.ts").then((m) => m.bitaps) },
   { key: "bitimage", load: () => import("./bitimage.ts").then((m) => m.bitimage) },
   { key: "book-quiz", load: () => import("./book-quiz.ts").then((m) => m.bookQuiz) },

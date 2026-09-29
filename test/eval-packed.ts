@@ -65,6 +65,7 @@ const expectedCollections = [
   "arweave",
   "b1000",
   "ballet",
+  "bitaddress",
   "bitaps",
   "bitimage",
   "book-quiz",

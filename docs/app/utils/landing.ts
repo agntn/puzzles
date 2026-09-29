@@ -38,6 +38,7 @@ export const WALK: readonly string[] = [
   "wealth-in-poetry",
   "path-to-greatness",
   "proof-of-writing",
+  "bitaddress",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1031,26 +1032,55 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 7,
     tool: "proof-of-writing\tsolved\t30068000.94 XEC\tecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z\nchain: ecash  address kind: p2pkh\nhash160: 2838bcec56ed7d1a9bb0023d388b8085a4947e06\npublic key: 0257eaa8768dc793876213a92a510f607af70bd0adc946d1f8fdf48d31b7f48b6d (compressed)\nprivate key: matter key easily slot maple two visa swamp subject friend robust trip (seed phrase)\nderivation path: m/44'/1899'/0'/0/0\nstarted: 2025-03-01 08:32:39\nsolved: 2026-08-26 23:41:30 (1y 5mo 28d 15h 8m)\nsolver: Ori (oritwoen), github https://github.com/oritwoen, twitter https://x.com/oritwoen, website https://oritwoen.dev\ntransactions: 7\n\tfunding\t2025-03-01 08:32:39\t5000000 XEC\t933e0f483b6402e7cafccfe065d185cacfdbe6bb0e359d9ac0c421ff495d0000\n\tdecrease\t2025-09-29 05:39:43\t5059096.41 XEC\t984c4638e2c433db79dd2bae3c8df0f2f6d90c15465dc0050c6468d102cc2816\n\tincrease\t2025-09-29 18:55:14\t5058997.76 XEC\t3dfd1db9bf95ffed63143997ce2276a873e195c689462e3aa2fcf3796484c97d\n\tincrease\t2026-04-14 04:35:26\t10000000 XEC\td9c2c9eeb3fd981bccb69df44c23c1cbf640044a6f49e5e565f2c97148822d39\n\tincrease\t2026-06-21 01:15:44\t10000000 XEC\t1c54e9b7dd7f72cd4c5f76287d5bde114fceb2905ad033250a375e3513a41763\n\tincrease\t2026-08-20 06:57:47\t5000000 XEC\te590bee4df615d735ffbd7923f0566599ac8f6ad6fbaab62827fc2bf9497353d\n\tclaim\t2026-08-26 23:41:30\t30067980.76 XEC\t8e729528b8091f19ca5371f3a6a56e3536d18d7514a1d2abdf3f2f889d189c30\nclaim: https://explorer.e.cash/tx/8e729528b8091f19ca5371f3a6a56e3536d18d7514a1d2abdf3f2f889d189c30\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/proof-of-writing/puzzle.txt\nasset source: https://web.archive.org/web/20250327234214/https://proofofwriting.com/building-an-awesome-ecash-community-and-a-chance-to-win-5m-xec/\nhints: 2\n\tofficial\t-\tRevelations 22:13\tsource: https://www.proofofwriting.com/posts/building-an-awesome-ecash-community-and-a-chance-to-win-15m-xec\tanswer: The clue \"Alpha and Omega\" defines paragraphs from matter to believe. From the next 12 paragraphs, I take words 1, 2, ... 12 and convert the three forms into the BIP39 dictionary. Cashtab Path1899 gives an exact match.\tanswer source: https://x.com/oritwoen/status/2093029042454671607\tanswer date: 2026-08-27\n\tofficial\t2026-04-14\tIt can be solved without ai or a computer\tsource: https://www.proofofwriting.com/posts/building-an-awesome-ecash-community-and-a-chance-to-win-15m-xec\nexplorer: https://explorer.e.cash/address/ecash%3Aqq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z\nsource: https://www.proofofwriting.com/posts/building-an-awesome-ecash-community-and-a-chance-to-win-15m-xec",
   },
+  {
+    id: "bitaddress",
+    collection: "bitaddress",
+    chain: "bitcoin",
+    status: "unsolved",
+    address: "1J7BVeP8JK4op2X3GN3Hy7xkTnGnQTMpou",
+    kind: "p2pkh",
+    hash160: "bba564d9113760ba944ffce28dc3126d07ffd6e3",
+    redeemScript: undefined,
+    prize: "0.005297 BTC",
+    prizeAmount: 0.005297,
+    currency: undefined,
+    startedAt: "2023-10-06 11:50:09",
+    solvedAt: undefined,
+    solveTime: undefined,
+    bits: undefined,
+    range: undefined,
+    pubkey:
+      "04f7af13c4fda2f920dbd8ebc8d2cc87cdc6674a7beda95a402ab83dd7e952597aeebdb76b2b4bc15771c57eb48568b2a8fa83219f9fa53519aaef5cd75bac30ac",
+    pubkeyFormat: "uncompressed",
+    secret: "encrypted",
+    keyLiteral: 'encryptedWif("6PfQTphCYc1Fee19uPz2pmou5RVBDVgw8VcrPfGLos4ktUnARdiFLYhcNU")',
+    verdict: "unavailable",
+    detail: "WIF is encrypted",
+    explorer: "https://blockstream.info/address/1J7BVeP8JK4op2X3GN3Hy7xkTnGnQTMpou",
+    source: "https://stacker.news/items/275973",
+    transactions: 3,
+    tool: "bitaddress\tunsolved\t0.005297 BTC\t1J7BVeP8JK4op2X3GN3Hy7xkTnGnQTMpou\nchain: bitcoin  address kind: p2pkh\nhash160: bba564d9113760ba944ffce28dc3126d07ffd6e3\npublic key: 04f7af13c4fda2f920dbd8ebc8d2cc87cdc6674a7beda95a402ab83dd7e952597aeebdb76b2b4bc15771c57eb48568b2a8fa83219f9fa53519aaef5cd75bac30ac (uncompressed)\nprivate key: 6PfQTphCYc1Fee19uPz2pmou5RVBDVgw8VcrPfGLos4ktUnARdiFLYhcNU (bip38)\nstarted: 2023-10-06 11:50:09\ntransactions: 3\n\tfunding\t2015-06-02 21:14:42\t0.01337 BTC\tcbba0edea0808f1a36a4f84663b9b0ef065939759f7257a80df2b14f773910ca\n\tincrease\t2015-06-02 21:14:42\t0.02999 BTC\tfd82c2f779c4cf8e56e10430d7ae45ace0025090600ae2fd3fd3d467d9ebf608\n\tdecrease\t2016-06-12 19:15:59\t0.038063 BTC\tfa938636d8b5f0f82a7f88af68dfaf0973436525cd0d524a823fe4409c17f3c9\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/bitaddress/puzzle.png\nasset source: https://i.imgur.com/3RSb8MH.png\nhints: 5\n\tofficial\t2023-10-06\tI suspect the passphrase is not more than 30 characters.\tsource: https://stacker.news/items/275973\n\tofficial\t2023-10-06\tWhich i generated on this site https://www.bitaddress.org/\tsource: https://stacker.news/items/275973\n\tofficial\t2023-10-06\tI don't remember, I have tested my passwords I used during that time, so probably it is not with special characters\tsource: https://stacker.news/items/276117\n\tofficial\t2023-10-06\tMost likely I did not use a passphrase of the length 30. But I remeber that I used to combine 3 different passwords to secure wallets which is about that length. I have withdrawn funds from the wallet once so it cannot be an imposible passpharse and most likely I did not used a password manager for it.\tsource: https://stacker.news/items/276305\n\tcommunity\t2023-10-06\tThe private key starts with '6Pf', though. That gives you some indication of the encryption algorithm used: EC multiply, no compression, no lot/sequence numbers, according to BIP38.\tsource: https://stacker.news/items/276026\nexplorer: https://blockstream.info/address/1J7BVeP8JK4op2X3GN3Hy7xkTnGnQTMpou\nsource: https://stacker.news/items/275973",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "93f9a723b123",
-  total: 443,
+  dataVersion: "d019e044fe3b",
+  total: 444,
   solved: 230,
-  unsolved: 102,
+  unsolved: 103,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 335,
+  withPubkey: 336,
   unsolvedPrize: {
     AR: 1900,
     ETH: 12.612541554256945,
-    BTC: 909.10625212,
+    BTC: 909.11154912,
     LTC: 3.02608794,
   },
   totalPrize: {
-    BTC: 1065.1847923,
+    BTC: 1065.1900893,
     AR: 5550,
     ETH: 26.246241554256944,
     DAI: 100,
@@ -1165,6 +1195,28 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 2,
     firstStarted: "2020-07-24 05:46:12",
     lastStarted: "2020-07-24 05:46:12",
+    hints: [],
+  },
+  {
+    key: "bitaddress",
+    author: "q",
+    authorKey: "q",
+    authorUrl: "https://stacker.news/q",
+    total: 1,
+    statuses: {
+      unsolved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.005297,
+    },
+    unsolvedPrize: {
+      BTC: 0.005297,
+    },
+    withPubkey: 1,
+    withKey: 1,
+    firstStarted: "2023-10-06 11:50:09",
+    lastStarted: "2023-10-06 11:50:09",
     hints: [],
   },
   {
@@ -1781,6 +1833,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Founder and CEO of Ballet, the physical wallet company, and before that co-founder and CEO of BTCC, the first Bitcoin exchange in China.",
     collections: ["ballet"],
     puzzles: 3,
+  },
+  {
+    key: "q",
+    to: "/authors/q",
+    name: "q",
+    kind: "person",
+    about:
+      "Stacker News account that gave away a paper wallet whose BIP38 passphrase it had forgotten, to whoever could brute force it.",
+    collections: ["bitaddress"],
+    puzzles: 1,
   },
   {
     key: "bitaps",
