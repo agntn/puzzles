@@ -82,6 +82,7 @@ const expectedCollections = [
   "movie-enigma",
   "path-to-greatness",
   "picture-puzzle",
+  "proof-of-writing",
   "quizchain",
   "rushwallet",
   "satoshi-birthday-quiz",

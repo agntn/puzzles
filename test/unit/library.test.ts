@@ -22,6 +22,7 @@ import { mini, MiniCollection } from "../../src/collections/mini.ts";
 import { MovieEnigmaCollection } from "../../src/collections/movie-enigma.ts";
 import { PathToGreatnessCollection } from "../../src/collections/path-to-greatness.ts";
 import { PicturePuzzleCollection } from "../../src/collections/picture-puzzle.ts";
+import { ProofOfWritingCollection } from "../../src/collections/proof-of-writing.ts";
 import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-birthday-quiz.ts";
@@ -88,6 +89,7 @@ const concreteClasses = [
   MovieEnigmaCollection,
   PathToGreatnessCollection,
   PicturePuzzleCollection,
+  ProofOfWritingCollection,
   QuizchainCollection,
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
@@ -830,15 +832,15 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(442);
+    expect(await all()).toHaveLength(443);
     expect(await stats()).toEqual({
-      total: 442,
+      total: 443,
       claimed: 12,
       expired: 3,
-      solved: 229,
+      solved: 230,
       swept: 96,
       unsolved: 102,
-      with_pubkey: 334,
+      with_pubkey: 335,
       total_prize: {
         AR: 5550,
         ETH: 26.246241554256944,
@@ -847,6 +849,7 @@ describe("lazy collection registry", () => {
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
+        XEC: 30068000.94,
       },
       unsolved_prize: {
         AR: 1900,
@@ -895,7 +898,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(442);
+    ).toBe(443);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -922,6 +925,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(229);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(230);
   });
 });

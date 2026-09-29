@@ -130,6 +130,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `brave-new-world`       | bitcoin                             | A seed phrase hidden in a 2020 collage   |
 | `wealth-in-poetry`      | bitcoin                             | Seed words hidden in a 2019 Medium essay |
 | `path-to-greatness`     | litecoin                            | Clues from a game demo, a Litecoin key   |
+| `proof-of-writing`      | ecash                               | A Cashtab seed on an essay's diagonal    |
 
 Identifiers are `collection/name`. A singleton, such as `gsmg`, `genesis` or `80-bit`, is just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 

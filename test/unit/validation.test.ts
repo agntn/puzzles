@@ -402,8 +402,9 @@ function mutablePartProblem(puzzle: Puzzle): string | undefined {
  * @returns {string} The encoded hash in hex.
  */
 function encodedHash(address: string): string {
-  if (address.startsWith("bitcoincash:")) {
-    const words = Array.from(address.slice("bitcoincash:".length, -8), (character) =>
+  const cashAddr = /^(?:bitcoincash|ecash):/u.exec(address);
+  if (cashAddr !== null) {
+    const words = Array.from(address.slice(cashAddr[0].length, -8), (character) =>
       CASHADDR_CHARSET.indexOf(character),
     );
     return bytesToHex(bech32.fromWords(words).slice(1));
