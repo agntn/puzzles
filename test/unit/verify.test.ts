@@ -11,6 +11,7 @@ import {
   bitcoinPuzzle,
   compressed,
   decredPuzzle,
+  dogecoinPuzzle,
   hex,
   litecoinPuzzle,
   p2pkh,
@@ -173,6 +174,32 @@ describe("Collection.verify", () => {
       verified: true,
       derivedAddress: "LTVsBSEBS8oCBdpE7b6SwwrguZzMUnjsWr",
     });
+  });
+
+  it("decodes a Dogecoin WIF against Dogecoin and keeps its compression", async () => {
+    const one = "0000000000000000000000000000000000000000000000000000000000000001";
+
+    for (const [key, address] of [
+      [
+        "QNcdLVw8fHkixm6NNyN6nVwxKek4u7qrioRbQmjxac5TVoTtZuot",
+        "DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE",
+      ],
+      ["6J8csdv3eDrnJcpSEb4shfjMh2JTiG9MKzC1Yfge4Y4GyUsjdM6", "DJRU7MLhcPwCTNRZ4e8gJzDebtG1H5M7pc"],
+    ] as const) {
+      expect(
+        await verify(dogecoinPuzzle({ ...synthetic, address: p2pkh(address), key: wif(key) })),
+      ).toMatchObject({ verified: true, derivedAddress: address, privateKey: one });
+    }
+    /* Bitcoin's WIF of the same key carries another version byte. */
+    expect(
+      await verify(
+        dogecoinPuzzle({
+          ...synthetic,
+          address: p2pkh("DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE"),
+          key: wif("KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn"),
+        }),
+      ),
+    ).toMatchObject({ verified: false });
   });
 
   it("derives a Bitcoin Cash key into CashAddr and reads its WIF the way Bitcoin writes it", async () => {

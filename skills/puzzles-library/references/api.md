@@ -30,7 +30,7 @@ abstract class Puzzle {
 }
 ```
 
-Per-chain bases fill in `chain()`: `BitcoinPuzzle`, `BitcoinCashPuzzle`, `ECashPuzzle`, `EthereumPuzzle`, `LitecoinPuzzle`, `DecredPuzzle`, `ArweavePuzzle`, `MoneroPuzzle`.
+Per-chain bases fill in `chain()`: `BitcoinPuzzle`, `BitcoinCashPuzzle`, `ECashPuzzle`, `EthereumPuzzle`, `LitecoinPuzzle`, `DogecoinPuzzle`, `DecredPuzzle`, `ArweavePuzzle`, `MoneroPuzzle`.
 
 ### Derived methods
 
@@ -103,6 +103,7 @@ const Chain: {
   Bitcoin: "bitcoin";
   BitcoinCash: "bitcoincash";
   Decred: "decred";
+  Dogecoin: "dogecoin";
   ECash: "ecash";
   Ethereum: "ethereum";
   Litecoin: "litecoin";
@@ -139,7 +140,7 @@ interface BalanceOptions {
   baseUrl?: string; // override the provider endpoint; Bitcoin then skips its Blockstream fallback
   timeout?: number; // milliseconds, provider default 15 s
 }
-// Errors: InvalidAddressError, UnsupportedChainError (Monero), BalanceProviderError; API keys are redacted.
+// Errors: InvalidAddressError, UnsupportedChainError (Dogecoin, Monero), BalanceProviderError; API keys are redacted.
 ```
 
 ## Verification

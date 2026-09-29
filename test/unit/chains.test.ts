@@ -22,6 +22,7 @@ describe("chain metadata", () => {
       ["bitcoin", "BTC", "Bitcoin", 8],
       ["bitcoincash", "BCH", "Bitcoin Cash", 8],
       ["decred", "DCR", "Decred", 8],
+      ["dogecoin", "DOGE", "Dogecoin", 8],
       ["ecash", "XEC", "eCash", 2],
       ["ethereum", "ETH", "Ethereum", 18],
       ["litecoin", "LTC", "Litecoin", 8],
@@ -34,6 +35,7 @@ describe("chain metadata", () => {
     expect(parseChain(" BTC ")).toBe(Chain.Bitcoin);
     expect(parseChain("Decred")).toBe(Chain.Decred);
     expect(parseChain("xmr")).toBe(Chain.Monero);
+    expect(parseChain("doge")).toBe(Chain.Dogecoin);
     expect(parseChain("mainnet")).toBe(Chain.Ethereum);
     expect(parseChain("sol")).toBeUndefined();
     expect(parseChain("")).toBeUndefined();
@@ -47,6 +49,9 @@ describe("chain metadata", () => {
       "https://blockstream.info/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
     );
     expect(transactionExplorerUrl(Chain.Ethereum, "0xabc")).toBe("https://etherscan.io/tx/0xabc");
+    expect(addressExplorerUrl(Chain.Dogecoin, "DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE")).toBe(
+      "https://blockchair.com/dogecoin/address/DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE",
+    );
     expect(addressExplorerUrl(Chain.Monero, "4A B")).toBe(
       "https://xmrchain.net/search?value=4A%20B",
     );
@@ -71,6 +76,9 @@ describe("chain metadata", () => {
     expect(
       isValidAddress(Chain.ECash, "bitcoincash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qc2ylqzkf4"),
     ).toBe(false);
+    /* Dogecoin writes base58 under its own version byte; Bitcoin's P2PKH of the same hash is not one. */
+    expect(isValidAddress(Chain.Dogecoin, "DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE")).toBe(true);
+    expect(isValidAddress(Chain.Dogecoin, "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH")).toBe(false);
     expect(isValidAddress(Chain.Arweave, "not base64url!")).toBe(false);
   });
 

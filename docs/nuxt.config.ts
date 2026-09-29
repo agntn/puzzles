@@ -30,6 +30,7 @@ const libraryEntries = [
   "@agntn/keys/blockchains/bitcoin",
   "@agntn/keys/blockchains/bitcoincash",
   "@agntn/keys/blockchains/decred",
+  "@agntn/keys/blockchains/dogecoin",
   "@agntn/keys/blockchains/ecash",
   "@agntn/keys/blockchains/ethereum",
   "@agntn/keys/blockchains/litecoin",

@@ -360,7 +360,7 @@ describe.concurrent("puzzles CLI", () => {
       code: 1,
       stdout: "",
       stderr:
-        "Invalid chain: expected one of arweave, bitcoin, bitcoincash, decred, ecash, ethereum, litecoin, monero\n",
+        "Invalid chain: expected one of arweave, bitcoin, bitcoincash, decred, dogecoin, ecash, ethereum, litecoin, monero\n",
     });
   });
 

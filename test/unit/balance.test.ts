@@ -5,6 +5,7 @@ import {
   Balance,
   BalanceProviderError,
   bitcoinCashPuzzle,
+  dogecoinPuzzle,
   ecashPuzzle,
   ethereumPuzzle,
   InvalidAddressError,
@@ -313,7 +314,16 @@ describe("Puzzle.balance", () => {
       startedAt: "2020-01-01 00:00:00",
     });
 
+    /* No @agntn/explorers provider reads Dogecoin yet. */
+    const dogecoin = dogecoinPuzzle({
+      id: "test/dogecoin",
+      address: p2pkh("DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE"),
+      sourceUrl: "https://example.com",
+      startedAt: "2020-01-01 00:00:00",
+    });
+
     await expect(monero.balance()).rejects.toBeInstanceOf(UnsupportedChainError);
+    await expect(dogecoin.balance()).rejects.toThrow("Unsupported balance chain: dogecoin");
     expect(urls).toEqual([]);
   });
 
