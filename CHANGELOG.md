@@ -21,7 +21,7 @@
 
 ### 🏡 Chore
 
-- ⚠️  Require Node.js 26 ([#356](https://github.com/agntn/puzzles/pull/356))
+- ⚠️ Require Node.js 26 ([#356](https://github.com/agntn/puzzles/pull/356))
 
 ### ✅ Tests
 
@@ -29,7 +29,7 @@
 
 #### ⚠️ Breaking Changes
 
-- ⚠️  Require Node.js 26 ([#356](https://github.com/agntn/puzzles/pull/356))
+- ⚠️ Require Node.js 26 ([#356](https://github.com/agntn/puzzles/pull/356))
 
 ### ❤️ Contributors
 
