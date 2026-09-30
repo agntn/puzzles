@@ -5,6 +5,7 @@ import { bitaps } from "../../src/collections/bitaps.ts";
 import { bitimage } from "../../src/collections/bitimage.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
+  basePuzzle,
   BitcoinPuzzle,
   bitcoinCashPuzzle,
   ecashPuzzle,
@@ -160,6 +161,19 @@ describe("Collection.verify", () => {
       });
     },
   );
+
+  it("derives a Base key into the same Keccak address Ethereum would, in any case", async () => {
+    const one = "0000000000000000000000000000000000000000000000000000000000000001";
+
+    for (const address of [
+      "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf",
+      "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
+    ]) {
+      expect(
+        await verify(basePuzzle({ ...synthetic, address: standard(address), key: hex(one) })),
+      ).toMatchObject({ verified: true, privateKey: one });
+    }
+  });
 
   it("decodes a Litecoin WIF against Litecoin, not Bitcoin", async () => {
     const result = await verify(

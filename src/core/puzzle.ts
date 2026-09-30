@@ -540,6 +540,13 @@ export abstract class EthereumPuzzle extends Puzzle {
   }
 }
 
+/** A puzzle whose target address lives on Base, the Ethereum layer 2. */
+export abstract class BasePuzzle extends Puzzle {
+  override chain(): Chain {
+    return Chain.Base;
+  }
+}
+
 /** A puzzle whose target address lives on Litecoin. */
 export abstract class LitecoinPuzzle extends Puzzle {
   override chain(): Chain {
@@ -724,6 +731,16 @@ export function ecashPuzzle(spec: PuzzleSpec): Puzzle {
  */
 export function ethereumPuzzle(spec: PuzzleSpec): Puzzle {
   return new SpecPuzzle(Chain.Ethereum, spec);
+}
+
+/**
+ * Builds a Base puzzle from its data record.
+ *
+ * @param {PuzzleSpec} spec - The puzzle's data record.
+ * @returns {Puzzle} The Base puzzle.
+ */
+export function basePuzzle(spec: PuzzleSpec): Puzzle {
+  return new SpecPuzzle(Chain.Base, spec);
 }
 
 /**

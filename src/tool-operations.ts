@@ -221,6 +221,7 @@ export const facts = {
    */
   chains: [
     "arweave",
+    "base",
     "bitcoin",
     "bitcoincash",
     "decred",

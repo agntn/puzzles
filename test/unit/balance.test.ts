@@ -3,6 +3,7 @@ import { b1000 } from "../../src/collections/b1000.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
   Balance,
+  basePuzzle,
   BalanceProviderError,
   bitcoinCashPuzzle,
   dogecoinPuzzle,
@@ -337,6 +338,25 @@ describe("Puzzle.balance", () => {
     ]);
     expect(balance.confirmed).toBe(1234567890123456789n);
     expect(balance.unconfirmed).toBe(0n);
+  });
+
+  it("reads a Base balance through Blockscout and keeps any key away from it", async () => {
+    const base = basePuzzle({
+      id: "test/base",
+      address: standard("0x0000000000000000000000000000000000000000"),
+      sourceUrl: "https://example.com",
+      startedAt: "2025-01-17 00:00:00",
+    });
+    const urls = stubFetch(() => json({ coin_balance: "552000000000000000" }));
+
+    const balance = await base.balance({ apiKey: "etherscan-key" });
+
+    /* Etherscan V2 serves Base only on paid plans, so a key does not move the lookup there. */
+    expect(urls).toEqual([
+      "https://base.blockscout.com/api/v2/addresses/0x0000000000000000000000000000000000000000",
+    ]);
+    expect(balance.confirmed).toBe(552000000000000000n);
+    expect(balance.decimals).toBe(18);
   });
 
   it("takes an empty key as no key", async () => {

@@ -19,6 +19,7 @@ describe("chain metadata", () => {
       chains.map((chain) => [chain, chainSymbol(chain), chainName(chain), chainDecimals(chain)]),
     ).toEqual([
       ["arweave", "AR", "Arweave", 12],
+      ["base", "ETH", "Base", 18],
       ["bitcoin", "BTC", "Bitcoin", 8],
       ["bitcoincash", "BCH", "Bitcoin Cash", 8],
       ["decred", "DCR", "Decred", 8],
@@ -37,6 +38,9 @@ describe("chain metadata", () => {
     expect(parseChain("xmr")).toBe(Chain.Monero);
     expect(parseChain("doge")).toBe(Chain.Dogecoin);
     expect(parseChain("mainnet")).toBe(Chain.Ethereum);
+    /* Base pays in ETH too, and the symbol stays Ethereum's. */
+    expect(parseChain("base")).toBe(Chain.Base);
+    expect(parseChain("ETH")).toBe(Chain.Ethereum);
     expect(parseChain("sol")).toBeUndefined();
     expect(parseChain("")).toBeUndefined();
     expect(parseChain("nope")).toBeUndefined();
@@ -49,6 +53,9 @@ describe("chain metadata", () => {
       "https://blockstream.info/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
     );
     expect(transactionExplorerUrl(Chain.Ethereum, "0xabc")).toBe("https://etherscan.io/tx/0xabc");
+    expect(addressExplorerUrl(Chain.Base, "0x635739254BDE27d28301f25aD57c3cAC3C3468f3")).toBe(
+      "https://basescan.org/address/0x635739254BDE27d28301f25aD57c3cAC3C3468f3",
+    );
     expect(addressExplorerUrl(Chain.Dogecoin, "DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE")).toBe(
       "https://blockchair.com/dogecoin/address/DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE",
     );
@@ -64,6 +71,8 @@ describe("chain metadata", () => {
     expect(isValidAddress(Chain.Bitcoin, "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh")).toBe(true);
     expect(isValidAddress(Chain.Bitcoin, "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")).toBe(false);
     expect(isValidAddress(Chain.Ethereum, "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")).toBe(true);
+    expect(isValidAddress(Chain.Base, "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")).toBe(true);
+    expect(isValidAddress(Chain.Base, "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH")).toBe(false);
     /* Bitcoin Cash takes CashAddr; the base58 spelling of the same hash is Bitcoin's. */
     expect(
       isValidAddress(Chain.BitcoinCash, "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez"),
@@ -89,6 +98,13 @@ describe("chain metadata", () => {
         Chain.Ethereum,
         "0x5d663791e869ca70c71e0a5f4cfd707f596265aa",
         "0x5D663791E869Ca70C71E0A5F4cfD707f596265aa",
+      ),
+    ).toBe(true);
+    expect(
+      sameAddress(
+        Chain.Base,
+        "0x635739254bde27d28301f25ad57c3cac3c3468f3",
+        "0x635739254BDE27d28301f25aD57c3cAC3C3468f3",
       ),
     ).toBe(true);
     /* Bech32 is defined in either case, and never in both at once. */

@@ -30,7 +30,7 @@ abstract class Puzzle {
 }
 ```
 
-Per-chain bases fill in `chain()`: `BitcoinPuzzle`, `BitcoinCashPuzzle`, `ECashPuzzle`, `EthereumPuzzle`, `LitecoinPuzzle`, `DogecoinPuzzle`, `DecredPuzzle`, `ArweavePuzzle`, `MoneroPuzzle`.
+Per-chain bases fill in `chain()`: `BitcoinPuzzle`, `BitcoinCashPuzzle`, `ECashPuzzle`, `EthereumPuzzle`, `BasePuzzle`, `LitecoinPuzzle`, `DogecoinPuzzle`, `DecredPuzzle`, `ArweavePuzzle`, `MoneroPuzzle`.
 
 ### Derived methods
 
@@ -100,6 +100,7 @@ interface Hint {
 ```ts
 const Chain: {
   Arweave: "arweave";
+  Base: "base";
   Bitcoin: "bitcoin";
   BitcoinCash: "bitcoincash";
   Decred: "decred";

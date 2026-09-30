@@ -47,9 +47,23 @@ function ethereumBalance(address: string, config: Readonly<ProviderConfig>): Pro
     : new Etherscan({ ...config, defaultChain: "ethereum" }).getBalance(address, "ethereum");
 }
 
+/**
+ * Base reads Blockscout alone: Etherscan V2 keeps Base behind its paid plans, so a free Etherscan
+ * key would only turn a working lookup into a refusal. The key stays out of the config here too.
+ *
+ * @param {string} address - Address to look up.
+ * @param {Readonly<ProviderConfig>} config - Provider configuration.
+ * @returns {Promise<Snapshot>} The balance snapshot.
+ */
+function baseBalance(address: string, config: Readonly<ProviderConfig>): Promise<Snapshot> {
+  const { apiKey: _, ...keyless } = config;
+  return new Blockscout({ ...keyless, defaultChain: "base" }).getBalance(address, "base");
+}
+
 /** Dogecoin and Monero have no provider in `@agntn/explorers` yet. */
 const lookups: Readonly<Record<Chain, Lookup | undefined>> = {
   arweave: (address, config) => new Arweave(config).getBalance(address, "arweave"),
+  base: baseBalance,
   bitcoin: (address, config) => new Mempool(config).getBalance(address, "bitcoin"),
   bitcoincash: (address, config) => new Blockchair(config).getBalance(address, "bitcoincash"),
   decred: (address, config) => new Dcrdata(config).getBalance(address, "decred"),
