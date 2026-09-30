@@ -22,6 +22,7 @@ abstract class Puzzle {
   solvedAt(): string | undefined;
   solveTime(): number | undefined; // seconds
   preGenesis(): boolean; // (false)
+  escrow(): Address | undefined; // contract that pays the prize to the target
   transactions(): readonly Transaction[]; // ([])
   solver(): Party | undefined;
   assets(): Assets | undefined;

@@ -153,6 +153,7 @@ describe("puzzle record factories", () => {
     expect(puzzle).toBeInstanceOf(Puzzle);
     expect(puzzle.chain()).toBe(chain);
     expect(puzzle.preGenesis()).toBe(false);
+    expect(puzzle.escrow()).toBeUndefined();
     expect(puzzle.transactions()).toEqual([]);
     expect(Object.isFrozen(puzzle.transactions())).toBe(true);
     expect(puzzle.assetLinks()).toEqual([]);

@@ -187,8 +187,32 @@ async function fallBack(
 }
 
 /**
- * Fetches a puzzle's native token balance through the provider registered for its chain, and once
- * through its fallback when that provider gets no answer through.
+ * Fetches one address through the chain's provider, and once through its fallback when that
+ * provider gets no answer through.
+ *
+ * @param {Chain} chain - Chain of the address.
+ * @param {Lookup} lookup - The chain's provider.
+ * @param {string} address - Address to look up.
+ * @param {Readonly<ProviderConfig>} config - Provider configuration.
+ * @returns {Promise<Balance>} The address's native token balance.
+ */
+async function lookupAddress(
+  chain: Chain,
+  lookup: Lookup,
+  address: string,
+  config: Readonly<ProviderConfig>,
+): Promise<Balance> {
+  try {
+    return toBalance(chain, await lookup(address, config));
+  } catch (error) {
+    return fallBack(chain, address, config, error);
+  }
+}
+
+/**
+ * Fetches a puzzle's native token balance through the provider registered for its chain. A puzzle
+ * with an escrow gets the sum of both addresses, and a failure of either fails the lookup, since
+ * half of the prize is not the prize.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @param {BalanceOptions} options - Lookup options.
@@ -200,15 +224,19 @@ export async function lookupBalance(puzzle: Puzzle, options: BalanceOptions): Pr
   if (lookup === undefined) {
     throw new UnsupportedChainError(`Unsupported balance chain: ${chain}`);
   }
-  const address = puzzle.address().value;
   const config = defined<ProviderConfig>({
     apiKey: options.apiKey,
     baseUrl: options.baseUrl,
     timeout: options.timeout,
   });
-  try {
-    return toBalance(chain, await lookup(address, config));
-  } catch (error) {
-    return fallBack(chain, address, config, error);
+  const escrow = puzzle.escrow();
+  const target = lookupAddress(chain, lookup, puzzle.address().value, config);
+  if (escrow === undefined) {
+    return target;
   }
+  const [own, held] = await Promise.all([
+    target,
+    lookupAddress(chain, lookup, escrow.value, config),
+  ]);
+  return new Balance(chain, own.confirmed + held.confirmed, own.unconfirmed + held.unconfirmed);
 }

@@ -27,6 +27,7 @@ export interface PuzzleData {
   readonly assets?: Assets;
   readonly chain: Chain;
   readonly currency?: string;
+  readonly escrow?: Address;
   readonly hints?: readonly Hint[];
   readonly id: string;
   readonly key?: KeyData;
@@ -136,6 +137,16 @@ export abstract class Puzzle {
 
   /** Page that documents the puzzle. */
   abstract sourceUrl(): string;
+
+  /**
+   * Contract that holds the prize and pays it out only to the target address, for a puzzle whose
+   * key opens a wallet that then has to claim the prize from somewhere else.
+   *
+   * @returns {Address | undefined} The escrow contract, when the prize doesn't sit at the target.
+   */
+  escrow(): Address | undefined {
+    return undefined;
+  }
 
   /** When the puzzle was funded or announced. */
   abstract startedAt(): string;
@@ -325,7 +336,8 @@ export abstract class Puzzle {
   }
 
   /**
-   * Fetches the current native token balance of the target address.
+   * Fetches the current native token balance of the target address, plus its escrow's when the
+   * prize waits in one: that sum is what the key would bring its finder.
    *
    * The `@agntn/explorers` provider for the chain loads on first use, so the
    * package imports without any network code. Dogecoin and Monero have no
@@ -485,6 +497,7 @@ export abstract class Puzzle {
       id: this.id(),
       chain: this.chain(),
       address: this.address(),
+      escrow: this.escrow(),
       status: this.status(),
       pubkey: this.pubkey(),
       key: this.keyData(),
@@ -584,6 +597,7 @@ export interface PuzzleSpec {
   readonly address: Address;
   readonly assets?: Assets;
   readonly currency?: string;
+  readonly escrow?: Address;
   readonly hints?: readonly Hint[];
   readonly id: string;
   readonly key?: Readonly<Key>;
@@ -620,6 +634,10 @@ class SpecPuzzle extends Puzzle {
 
   override address(): Address {
     return this.#spec.address;
+  }
+
+  override escrow(): Address | undefined {
+    return this.#spec.escrow;
   }
 
   override sourceUrl(): string {

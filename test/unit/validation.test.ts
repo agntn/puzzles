@@ -3,7 +3,7 @@ import { resolve, sep } from "node:path";
 import { sha256 } from "@agntn/hashes";
 import { bech32, createBase58check } from "@scure/base";
 import { describe, expect, it } from "vite-plus/test";
-import { isValidAddress, isValidTransactionId } from "../../src/core/chains.ts";
+import { isValidAddress, isValidTransactionId, sameAddress } from "../../src/core/chains.ts";
 import {
   addressesEqual,
   addressFromPrivateKey,
@@ -27,9 +27,10 @@ import {
   profile,
   PubkeyFormat,
   stage,
+  standard,
   TransactionType,
 } from "../../src/core/parts.ts";
-import { bitcoinPuzzle, type Puzzle, Status } from "../../src/core/puzzle.ts";
+import { bitcoinPuzzle, ethereumPuzzle, type Puzzle, Status } from "../../src/core/puzzle.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { TeikhosCollection } from "../../src/collections/teikhos.ts";
@@ -425,6 +426,30 @@ function hash160Problem(puzzle: Puzzle): string | undefined {
     : `${puzzle.id()}: hash160 ${hash160} is not the ${encoded} its address encodes`;
 }
 
+/**
+ * The target and the escrow in the chain's format, and the escrow somewhere else than the target:
+ * an escrow on the target itself would count the prize twice.
+ *
+ * @param {Puzzle} puzzle - The record to check.
+ * @returns {string[]} One line per problem.
+ */
+function addressProblems(puzzle: Puzzle): string[] {
+  const id = puzzle.id();
+  const chain = puzzle.chain();
+  const target = puzzle.address().value;
+  const escrow = puzzle.escrow()?.value;
+  const problems: string[] = [];
+  if (!isValidAddress(chain, target)) {
+    problems.push(`${id}: address does not match the ${chain} format`);
+  }
+  if (escrow !== undefined && !isValidAddress(chain, escrow)) {
+    problems.push(`${id}: escrow does not match the ${chain} format`);
+  } else if (escrow !== undefined && sameAddress(chain, target, escrow)) {
+    problems.push(`${id}: escrow is the target address`);
+  }
+  return problems;
+}
+
 function collect(check: (puzzle: Puzzle) => string | undefined): string[] {
   return puzzles.map((puzzle) => check(puzzle)).filter((problem) => problem !== undefined);
 }
@@ -460,14 +485,27 @@ describe("collection class data", () => {
     expect(problems).toEqual([]);
   });
 
-  it("keeps every address in its chain's format", () => {
-    expect(
-      collect((puzzle) =>
-        isValidAddress(puzzle.chain(), puzzle.address().value)
-          ? undefined
-          : `${puzzle.id()}: address does not match the ${puzzle.chain()} format`,
-      ),
-    ).toEqual([]);
+  it("keeps every address and escrow in its chain's format", () => {
+    expect(puzzles.flatMap((puzzle) => addressProblems(puzzle))).toEqual([]);
+  });
+
+  it("names every way an escrow can fail the data gate", () => {
+    const target = "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf";
+    const record = (escrow: string): Puzzle =>
+      ethereumPuzzle({
+        id: "fixture/escrow",
+        address: standard(target),
+        escrow: standard(escrow),
+        sourceUrl: "https://example.com/puzzle",
+        startedAt: "2026-01-01",
+      });
+
+    expect(addressProblems(record("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"))).toEqual([
+      "fixture/escrow: escrow does not match the ethereum format",
+    ]);
+    expect(addressProblems(record(target.toLowerCase()))).toEqual([
+      "fixture/escrow: escrow is the target address",
+    ]);
   });
 
   it("keeps every hash160 equal to the hash its address encodes", () => {

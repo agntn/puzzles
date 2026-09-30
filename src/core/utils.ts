@@ -499,6 +499,7 @@ export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = 
   return [
     formatPuzzle(puzzle),
     `chain: ${puzzle.chain()}  address kind: ${address.kind}`,
+    ...field("escrow", puzzle.escrow()?.value),
     ...field("hash160", address.hash160),
     ...field("redeem script", address.redeem_script, formatRedeemScript),
     `public key: ${formatPubkey(puzzle.pubkey())}`,

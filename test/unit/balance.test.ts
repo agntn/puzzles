@@ -359,6 +359,42 @@ describe("Puzzle.balance", () => {
     expect(balance.decimals).toBe(18);
   });
 
+  it("adds the escrow's balance to the target's", async () => {
+    const escrowed = ethereumPuzzle({
+      id: "test/escrowed",
+      address: standard("0x0000000000000000000000000000000000000000"),
+      escrow: standard("0x0000000000000000000000000000000000000001"),
+      sourceUrl: "https://example.com",
+      startedAt: "2025-01-10 18:56:07",
+    });
+    const urls = stubFetch((url) =>
+      json({ coin_balance: url.endsWith("0001") ? "553000000000000000" : "6404376568548341" }),
+    );
+
+    const balance = await escrowed.balance();
+
+    expect(urls.toSorted()).toEqual([
+      "https://eth.blockscout.com/api/v2/addresses/0x0000000000000000000000000000000000000000",
+      "https://eth.blockscout.com/api/v2/addresses/0x0000000000000000000000000000000000000001",
+    ]);
+    expect(balance.confirmed).toBe(559404376568548341n);
+  });
+
+  it("fails the whole lookup when the escrow fails, instead of printing half the prize", async () => {
+    const escrowed = ethereumPuzzle({
+      id: "test/escrowed",
+      address: standard("0x0000000000000000000000000000000000000000"),
+      escrow: standard("0x0000000000000000000000000000000000000001"),
+      sourceUrl: "https://example.com",
+      startedAt: "2025-01-10 18:56:07",
+    });
+    stubFetch((url) =>
+      url.endsWith("0001") ? json({ message: "down" }, 503) : json({ coin_balance: "5" }),
+    );
+
+    await expect(escrowed.balance()).rejects.toBeInstanceOf(BalanceProviderError);
+  });
+
   it("takes an empty key as no key", async () => {
     const urls = stubFetch(() => json({ coin_balance: null }));
 
