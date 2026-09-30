@@ -583,6 +583,7 @@ describe("collection class data", () => {
         "quizchain/75",
         "quizchain/77",
         "satoshi-birthday-quiz",
+        "trivia-brainwallet",
       ],
     );
   });

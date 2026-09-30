@@ -30,6 +30,7 @@ import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-birthday-quiz.ts";
 import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
+import { TriviaBrainwalletCollection } from "../../src/collections/trivia-brainwallet.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
 import { WealthInPoetryCollection } from "../../src/collections/wealth-in-poetry.ts";
 import { wickex, WickexCollection } from "../../src/collections/wickex.ts";
@@ -100,6 +101,7 @@ const concreteClasses = [
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
   TeikhosCollection,
+  TriviaBrainwalletCollection,
   WarpCollection,
   WealthInPoetryCollection,
   WickexCollection,
@@ -840,21 +842,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(447);
+    expect(await all()).toHaveLength(448);
     expect(await stats()).toEqual({
-      total: 447,
+      total: 448,
       claimed: 12,
       expired: 3,
-      solved: 232,
+      solved: 233,
       swept: 96,
       unsolved: 104,
-      with_pubkey: 339,
+      with_pubkey: 340,
       total_prize: {
         AR: 5550,
         ETH: 26.815651554256945,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1065.1900893,
+        BTC: 1065.2300893,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -907,7 +909,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(447);
+    ).toBe(448);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -934,6 +936,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(232);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(233);
   });
 });
