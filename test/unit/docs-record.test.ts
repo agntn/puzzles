@@ -6,6 +6,8 @@ import {
   solvedText,
   transactionTicks,
 } from "../../docs/app/utils/record.ts";
+import { factoryName } from "../../docs/app/utils/samples.ts";
+import { chains } from "../../src/index.ts";
 
 /**
  * The view of one record, the way the puzzle page and the playground read it.
@@ -69,5 +71,14 @@ describe("docs record helpers", () => {
       literal.replaceAll(/"[^"]*"/gu, '""'),
     );
     expect(tokens.find((token) => token.cls === "tok-fn")?.text).toBe("bitcoinPuzzle");
+  });
+
+  it("name a factory the library exports for every chain", async () => {
+    const library: Record<string, unknown> = await import("../../src/index.ts");
+
+    for (const chain of chains) {
+      expect(typeof library[factoryName(chain)], chain).toBe("function");
+    }
+    expect(recordLiteral(await viewOf("mini/1")).split("(")[0]).toBe("bitcoinCashPuzzle");
   });
 });
