@@ -16,7 +16,7 @@ registerHooks({
     return nextLoad(url, context);
   },
 });
-/* The packed build puts `Puzzle` in the collection chunk, so both names count as the dataset. */
+/** Modules that hold the dataset: the registry, its views, `Puzzle` and `Collection`. */
 const datasetModule =
   /\/(?:core|_chunks)\/(?:dataset|registry|puzzle|collection)\d*\.(?:ts|mjs)(?:[?#]|$)/u;
 const entry = (relative: string): string => pathToFileURL(path.join(root, relative)).href;

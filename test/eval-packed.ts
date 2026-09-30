@@ -278,6 +278,15 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
     [],
     "the packed package must not carry source maps",
   );
+  assert.ok(
+    files.includes("dist/THIRD-PARTY-LICENSES.md"),
+    "the bundled typebox has no license file",
+  );
+  assert.match(
+    await readFile(path.join(packageRoot, "dist/THIRD-PARTY-LICENSES.md"), "utf8"),
+    /^## typebox$[\s\S]*?Copyright \(c\) .* Haydn Paterson/mu,
+    "the license file lacks the typebox copyright notice",
+  );
   const collectionTarget = manifest.exports["./collections/*"]?.import ?? "";
   assert.notEqual(collectionTarget, "", "the collections export has no import target");
   for (const key of expectedCollections) {

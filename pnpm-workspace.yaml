@@ -30,6 +30,7 @@ minimumReleaseAgeExclude:
   - "@agntn/explorers@0.5.7"
   - "@agntn/hashes@0.4.0"
   - "@agntn/keys@0.3.5"
+  - obuild@0.4.43
 
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@0.3.3
