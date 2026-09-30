@@ -544,7 +544,9 @@ async function assertHelpStaysLight(binPath: string): Promise<void> {
     );
     assert.deepEqual(
       strings.filter(
-        (url) => url.startsWith(packageRootUrl) && /typebox|dist\/mcp\.mjs/u.test(url),
+        (url) =>
+          url.startsWith(packageRootUrl) &&
+          /typebox|dist\/mcp\.mjs/u.test(url.slice(packageRootUrl.length)),
       ),
       [],
       `${label} must not load the server entry or the tool schemas`,
