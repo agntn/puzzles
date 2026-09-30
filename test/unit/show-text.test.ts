@@ -6,10 +6,12 @@ import {
   bitcoinPuzzle,
   community,
   confirmation,
+  ethereumPuzzle,
   hex,
   official,
   p2pkh,
   seed,
+  standard,
 } from "../../src/index.ts";
 import {
   formatHintReport,
@@ -371,5 +373,22 @@ describe("puzzles_hints text", () => {
       "\tcommunity\t-\tThe top is a decoy.\tsource: https://example.com/thread\tconfirmation: https://archive.ph/thread",
       `hint assets: ${ASSETS}/assets/fixture/hint-1.png, ${ASSETS}/assets/fixture/hint-2.svg`,
     ]);
+  });
+
+  it("prints the escrow under the target and serializes it next to the address", () => {
+    const escrow = standard("0x0000000000000000000000000000000000000001");
+    const puzzle = ethereumPuzzle({
+      id: "fixture/escrowed",
+      address: standard("0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf"),
+      escrow,
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+    });
+
+    expect(formatPuzzleRecord(puzzle).split("\n").slice(1, 3)).toEqual([
+      "chain: ethereum  address kind: standard",
+      "escrow: 0x0000000000000000000000000000000000000001",
+    ]);
+    expect(puzzle.toJSON().escrow).toEqual(escrow);
   });
 });
