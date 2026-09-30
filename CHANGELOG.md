@@ -1,3 +1,41 @@
+## v0.25.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.24.1...v0.25.0)
+
+### 🚀 Enhancements
+
+- **chains:** Add eCash ([#358](https://github.com/agntn/puzzles/pull/358))
+- **collections:** Add proof-of-writing ([#359](https://github.com/agntn/puzzles/pull/359))
+- **collections:** Genesis toolchain replies ([#360](https://github.com/agntn/puzzles/pull/360))
+- **collections:** Add bitaddress ([#366](https://github.com/agntn/puzzles/pull/366))
+- **chains:** Dogecoin records and key checks ([#369](https://github.com/agntn/puzzles/pull/369))
+- **collections:** Add doges-gambit ([#370](https://github.com/agntn/puzzles/pull/370))
+- **chains:** Base records and balances ([#371](https://github.com/agntn/puzzles/pull/371))
+- **puzzle:** Prizes that wait in an escrow ([#372](https://github.com/agntn/puzzles/pull/372))
+- **collections:** Add powerful-moss ([#373](https://github.com/agntn/puzzles/pull/373))
+
+### 🩹 Fixes
+
+- **docs:** Count hints of open puzzles ([#363](https://github.com/agntn/puzzles/pull/363))
+- **deps:** Make typebox a host peer ([#367](https://github.com/agntn/puzzles/pull/367))
+
+### 🏡 Chore
+
+- ⚠️  Require Node.js 26 ([#356](https://github.com/agntn/puzzles/pull/356))
+
+### ✅ Tests
+
+- Hash with agntn/hashes instead of noble ([#364](https://github.com/agntn/puzzles/pull/364))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Require Node.js 26 ([#356](https://github.com/agntn/puzzles/pull/356))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.24.1
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.24.0...v0.24.1)
