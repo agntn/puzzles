@@ -201,6 +201,28 @@ const sources = [
     date: "2025-01-24",
   },
   {
+    file: "trivia-brainwallet/kierkegaard-soren-2017-10-19",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/77g5h7/meta_new_puzzle_in_development_005_btc_eta_is/",
+    author: "u/Kierkegaard_Soren",
+    date: "2017-10-19",
+    archive: {
+      url: "https://web.archive.org/web/20230612132032/https://old.reddit.com/r/bitcoinpuzzles/comments/77g5h7/meta_new_puzzle_in_development_005_btc_eta_is/",
+      date: "2023-06-12T13:20:32Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "trivia-brainwallet/kierkegaard-soren-2017-11-04",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/7asy51/brainwallet_puzzle_004_btc_reward/",
+    author: "u/Kierkegaard_Soren",
+    date: "2017-11-04",
+    archive: {
+      url: "https://web.archive.org/web/20230610055046/https://old.reddit.com/r/bitcoinpuzzles/comments/7asy51/brainwallet_puzzle_004_btc_reward/",
+      date: "2023-06-10T05:50:46Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "book-quiz/aoinakamoto-2019-04-06",
     url: "https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
     author: "u/AoiNakamoto",

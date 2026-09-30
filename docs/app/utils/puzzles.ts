@@ -238,6 +238,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Seven questions about Bitcoin history, hashed into a brainwallet. Swept five hours after it was funded.",
   },
+  "trivia-brainwallet": {
+    icon: "i-lucide-lightbulb",
+    title: "Brainwallet puzzle, 0.04 BTC",
+    sample: "trivia-brainwallet",
+    chains: ["bitcoin"],
+    blurb:
+      "Twelve riddles from patents to chess to a ham deal, typed into brainwallet.io as a passphrase and a salt. Swept six hours after the post.",
+  },
   teikhos: {
     icon: "i-lucide-shield",
     title: "TeikhosBounty",

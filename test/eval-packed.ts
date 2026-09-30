@@ -104,6 +104,7 @@ const expectedCollections = [
   "rushwallet",
   "satoshi-birthday-quiz",
   "teikhos",
+  "trivia-brainwallet",
   "warp",
   "wealth-in-poetry",
   "wickex",

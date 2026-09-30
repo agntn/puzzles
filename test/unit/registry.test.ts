@@ -167,9 +167,9 @@ describe("registry consistency", () => {
     expect(await lib.datasetCollections()).toHaveLength(originalData.length + 1);
     expect(await lib.dataVersion()).not.toBe(originalVersion);
     /* Snapshots handed out earlier stay intact. */
-    expect(originalPuzzles).toHaveLength(447);
-    expect(originalCollections).toHaveLength(33);
-    expect(originalData).toHaveLength(33);
+    expect(originalPuzzles).toHaveLength(448);
+    expect(originalCollections).toHaveLength(34);
+    expect(originalData).toHaveLength(34);
 
     const snapshot = await lib.dataset();
     expect(snapshot.data_version).toBe(
@@ -187,11 +187,11 @@ describe("registry consistency", () => {
     expect(await lib.get("fixture/first")).toBeUndefined();
     expect(await lib.get("fixture/second")).toBe(second);
     expect(await lib.getCollection("fixture")).toBe(replacement);
-    expect(await lib.collections()).toHaveLength(34);
-    expect(await lib.all()).toHaveLength(448);
+    expect(await lib.collections()).toHaveLength(35);
+    expect(await lib.all()).toHaveLength(449);
     expect(await lib.stats()).not.toBe(addedStats);
     expect(await lib.stats()).toEqual(addedStats);
-    expect(originalStats.total).toBe(447);
+    expect(originalStats.total).toBe(448);
     expect(await lib.dataVersion()).not.toBe(snapshot.data_version);
     expect((await lib.dataset()).collections.at(-1)?.puzzles[0]?.id).toBe("fixture/second");
 
