@@ -233,8 +233,19 @@ const { copied, copy } = useCopied();
         <p v-if="view.redeemScript" class="puzzle-script">
           redeem script {{ view.redeemScript.script }}
         </p>
+        <p v-if="view.escrow" class="puzzle-script">
+          escrow
+          <a :href="view.escrow.explorer" target="_blank" rel="noopener">{{
+            view.escrow.address
+          }}</a>
+        </p>
         <div class="puzzle-balance">
-          <span class="console-label">Balance <span aria-hidden="true">[ explorer ]</span></span>
+          <span class="console-label"
+            >Balance
+            <span aria-hidden="true"
+              >[ {{ view.escrow ? "address + escrow" : "explorer" }} ]</span
+            ></span
+          >
           <BalanceLine :id="view.id" :status="view.status" />
         </div>
       </div>

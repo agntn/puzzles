@@ -33,6 +33,22 @@ describe("docs record helpers", () => {
     expect(solvedText(view)).toBe(`${view.solvedAt?.slice(0, 10)} · ${view.solveTime}`);
   });
 
+  it("print the escrow beside the address, in the literal and with its explorer link", async () => {
+    const view = await viewOf("powerful-moss");
+
+    expect(view.escrow).toEqual({
+      address: "0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd",
+      kind: "standard",
+      explorer: "https://basescan.org/address/0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd",
+    });
+    expect(recordLiteral(view).split("\n").slice(0, 3)).toEqual([
+      "basePuzzle({",
+      '  address: standard("0x635739254BDE27d28301f25aD57c3cAC3C3468f3"),',
+      '  escrow: standard("0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd"),',
+    ]);
+    expect((await viewOf("b1000/71")).escrow).toBeUndefined();
+  });
+
   it("say `not yet` for an open puzzle", async () => {
     expect(solvedText(await viewOf("b1000/71"))).toBe("not yet");
   });

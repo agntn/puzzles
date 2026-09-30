@@ -98,6 +98,7 @@ const expectedCollections = [
   "movie-enigma",
   "path-to-greatness",
   "picture-puzzle",
+  "powerful-moss",
   "proof-of-writing",
   "quizchain",
   "rushwallet",

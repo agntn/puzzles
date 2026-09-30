@@ -42,14 +42,18 @@ export function recordSentence(view: PuzzleView): string {
 }
 
 /**
- * The record as its module writes it, in one line: the factory, the address builder, the status
- * when it is not the default and the key builder chain when the record has one.
+ * The record as its module writes it, in one line: the factory, the address builder, the escrow
+ * when the prize waits in one, the status when it is not the default and the key builder chain
+ * when the record has one.
  *
  * @param {PuzzleView} view - The record on screen.
  * @returns {string} The literal, shortened to what identifies the record.
  */
 export function recordLiteral(view: PuzzleView): string {
   const fields = [`address: ${addressLiteral(view)}`];
+  if (view.escrow !== undefined) {
+    fields.push(`escrow: ${view.escrow.kind}(${JSON.stringify(view.escrow.address)})`);
+  }
   if (view.status !== "unsolved") fields.push(`status: ${statusLiteral(view.status)}`);
   if (view.keyLiteral !== undefined) fields.push(`key: ${view.keyLiteral}`);
   return `${factoryName(view.chain)}({\n${fields.map((field) => `  ${field},`).join("\n")}\n})`;

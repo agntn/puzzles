@@ -40,6 +40,7 @@ export const WALK: readonly string[] = [
   "proof-of-writing",
   "bitaddress",
   "doges-gambit/doge",
+  "powerful-moss",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1091,28 +1092,57 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 2,
     tool: "doges-gambit/doge\tsolved\t10000 DOGE\tDRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq\nchain: dogecoin  address kind: p2pkh\nhash160: ddcbc240da19c87551a9182af0c2c77e3ebd20a4\npublic key: 0488e79ff1f6aa637457d531c6d40c056230b8106290651054f67eb12e96a7ba35573300a4c2af9ec7597fe0dbf75f5214e34e3ae071321562d04e4766ad695766 (uncompressed)\nprivate key: 6Je1sv5tRwXLFKpnor4yef6i4k73eJu2Kw9DEnRLY3BL9jVtPq3 (wif)\nstarted: 2020-12-11 22:11:10\nsolved: 2021-05-09 00:28:06 (4mo 28d 2h 16m)\ntransactions: 2\n\tfunding\t2020-12-11 21:53:40\t10000 DOGE\tf83597b8e239846eb61f42b0e8bcb932d2ccf206115c122e0c84bfb5d72f2503\n\tclaim\t2021-05-09 00:28:06\t9999 DOGE\tccc7f365a3b212a3d8320397cec9c3aa14684f4b54e0ee037fc0f76c1ee5d372\nclaim: https://blockchair.com/dogecoin/tx/ccc7f365a3b212a3d8320397cec9c3aa14684f4b54e0ee037fc0f76c1ee5d372\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/doges-gambit/puzzle.jpg\nsolution asset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/doges-gambit/doge-key.png\nasset source: https://www.youtube.com/watch?v=DieNZPwIUoQ\nhints: 1\n\tofficial\t2020-12-11\tThis is the first time I put two puzzles in one, any feedback is appreciated!\tsource: https://www.youtube.com/watch?v=DieNZPwIUoQ\tanswer: The same board, read the other way: order the sixteen frames by their number of pink squares, keep the yellow, green, blue and red squares a piece can move to, drop those that touch no blue square, diagonals included, and read the rest by how many blue squares each one touches. Each frame gives a few characters of the Dogecoin WIF, not always the same number.\tanswer source: https://www.youtube.com/watch?v=-7-m60jy1RU\tanswer date: 2021-05-11\nexplorer: https://blockchair.com/dogecoin/address/DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq\nsource: https://www.youtube.com/watch?v=DieNZPwIUoQ",
   },
+  {
+    id: "powerful-moss",
+    collection: "powerful-moss",
+    chain: "base",
+    status: "unsolved",
+    address: "0x635739254BDE27d28301f25aD57c3cAC3C3468f3",
+    kind: "standard",
+    hash160: undefined,
+    redeemScript: undefined,
+    prize: "0.55941 ETH",
+    prizeAmount: 0.55941,
+    currency: undefined,
+    startedAt: "2025-01-17 12:55:27",
+    solvedAt: undefined,
+    solveTime: undefined,
+    bits: undefined,
+    range: undefined,
+    pubkey:
+      "04d8e5d392cb30d9f69334a0bffe3075dff2667cabe758fc53a24aba2c3ed58a6c64bb13365e7faea54a217ab5681c998c0bd1c771e5925858a6657422a8da6604",
+    pubkeyFormat: "uncompressed",
+    secret: "none",
+    keyLiteral: undefined,
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://basescan.org/address/0x635739254BDE27d28301f25aD57c3cAC3C3468f3",
+    source: "https://logicbeach.xyz/powerfulmoss",
+    transactions: 24,
+    tool: "powerful-moss\tunsolved\t0.55941 ETH\t0x635739254BDE27d28301f25aD57c3cAC3C3468f3\nchain: base  address kind: standard\nescrow: 0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd\npublic key: 04d8e5d392cb30d9f69334a0bffe3075dff2667cabe758fc53a24aba2c3ed58a6c64bb13365e7faea54a217ab5681c998c0bd1c771e5925858a6657422a8da6604 (uncompressed)\nprivate key: unknown\nstarted: 2025-01-17 12:55:27\npre-genesis: yes\ntransactions: 24\n\tfunding\t2025-01-10 16:46:47\t0.01 ETH\t0x2b3699be2d3a43b3bf5b1035fcd3529e7ed5359c7e3abe00e31260f5f9e8ee19\n\tincrease\t2025-01-10 16:47:27\t0.00641 ETH\t0x7cf9f382f6fff6cbf25a018e17ac9b2af719e307672b1faa1c1d735118011d74\n\tdecrease\t2025-01-10 18:59:37\t0.01 ETH\t0x6ed9c642ee209cd5efa142089c5e2292fc94bbfe16790cdebe9a499d2e84dec2\n\tincrease\t2025-01-10 19:01:41\t0.01 ETH\t0x2f6b90921e8013338f18d79aef0e5decc6491c6fb5bfa0896ce14007a84b3f50\n\tdecrease\t2025-01-10 19:02:01\t0.01 ETH\t0xe50fb85b607fc388dcd6471ac1dc1bf9bdff6e995f5f6dae279dd989723c142d\n\tincrease\t2025-01-10 19:03:05\t0.25 ETH\t0x333cb186fa39bf3ab44ebdc4a7e22c61cd6faea0da0dccb6eefb34938063e652\n\tincrease\t2025-01-10 20:15:07\t0.03 ETH\t0x628c9bd30ba9fc08cb2813b7202d0834f204a6f07504d5eb032bd7f61a281ac2\n\tincrease\t2025-01-10 22:41:05\t0.1 ETH\t0x11ab0268ad68a30ca0b27bca80c901177b859d749735c7284b98c7548e78befa\n\tincrease\t2025-01-13 17:21:21\t0.05 ETH\t0x65c9c09dbcd76387f0f817aaebf877739b7410e183f5f736faa2f2e8d2de742e\n\tincrease\t2025-01-13 19:28:05\t0.01 ETH\t0xf3ee06c246a144d78ceb4d35a5e04f25f714a1c542afba04ecc3ea5cb56503e0\n\tincrease\t2025-01-18 11:40:53\t0.01 ETH\t0xa650bb8fa8b17dce5478c74fdb1974606c0dca61356bce6276470426db3d072c\n\tincrease\t2025-01-18 14:51:27\t0.01 ETH\t0xb560806046f81fe0b16979da5947c2b3fc955c9f9ad9cf7056ea58e53c4791fc\n\tincrease\t2025-01-18 18:31:59\t0.01 ETH\t0x900db6a641181bada1e43b9bf672c9dee46dbf23909c9eec1c018ec0323b6ae0\n\tincrease\t2025-01-20 21:21:07\t0.01 ETH\t0xcf3ec171a5ed31e0c736c9500955d51542d626f3ec0c69df08405fc78da91978\n\tincrease\t2025-01-22 23:24:19\t0.01 ETH\t0x680ba420b89c39c0573881a7157b70dcb8a48c3046b6db84c43c0b2c129bcd13\n\tincrease\t2025-01-27 21:38:01\t0.01 ETH\t0x6e8119f9fd76c6f6fb70c60f30d0a72a0f2032b48a056091be35d9599b276679\n\tincrease\t2025-02-04 03:18:49\t0.01 ETH\t0x34e85e454e4774e25e6dfcd157719494c2c5617915841149ca3d64d03db3a56a\n\tincrease\t2025-02-16 09:43:31\t0.01 ETH\t0xfece76e8397955ea5669ba5fe20dc661d09a982f3f5149dae295067bdd19a7ba\n\tincrease\t2025-09-26 12:01:27\t0.01 ETH\t0xda1214d7a4fe6c424987982d523754fce2107a99ebdc7cba5f370fff482d2147\n\tincrease\t2025-10-13 23:38:47\t0.01 ETH\t0x57b5d2be994cec47689c808f53c06481d7417172907e6e8fe8cd264cde8ae627\n\tincrease\t2026-07-10 03:46:37\t0.01 ETH\t0x7f8b08387f236fe4a72939076be97c3524cfd527fb7b1d714833ba50d6f5d210\n\tincrease\t2026-08-16 21:27:59\t0.001 ETH\t0x528970953d53f1fd2575268145ec39b6fcd65f819b63aff7d24886ac59df6581\n\tincrease\t2026-09-04 08:52:45\t0.001 ETH\t0xa4a6217a897790bfbb82cb320a5e19f97389e57685cbe8e1fa15e8e27f4304f0\n\tincrease\t2026-09-17 01:31:37\t0.001 ETH\t0x3ec0e9e6bb6c62c248e3ab28656c318d749f101ff1966079ab4d48229680de61\nstages: 2\n\tseed\tFind the twelve words hidden in the album and put them in order. The phrase derives the winner wallet.\n\t\tfull album video\thttps://www.youtube.com/watch?v=li4e7wyHMv0\n\t\tpuzzle page\thttps://logicbeach.xyz/powerfulmoss\n\twithdraw\tOnly the winner wallet may withdraw the prize from the contract. It starts at 0.25 ETH and grows to the whole contract balance over two months, and an early withdrawal forfeits the rest to the creator.\n\t\tpuzzle page\thttps://logicbeach.xyz/powerfulmoss\nhints: 9\n\tofficial\t2024-03-26\tUsing DonkeyKongCountry2 midi sound-fonts, iykyk ;] This will once again be released as a crypto puzzle with baffling concepts. I'm aiming to create a puzzle that requires uncommon knowledge, but won't take a genius, to solve.\tsource: https://farcaster.xyz/logic-beach/0x79eeff14\n\tofficial\t2024-04-14\tI'm working on the music still, but have a few of the 12 words already baked in ;)\tsource: https://farcaster.xyz/logic-beach/0x0a3431a4\n\tofficial\t2024-04-14\tIt'll be similar to this one https://cointelegraph.com/news/treasure-hunters-race-to-claim-btc-prize-hidden-in-new-music-album Solution: https://elronvhubbard.medium.com/logic-beach-bifurcations-album-puzzle-write-up-1e1094d41038\tsource: https://farcaster.xyz/logic-beach/0x7e781ad1\n\tofficial\t2024-09-02\tYa know, I've tried really hard in the past to make the puzzles technically difficult and it gets solved way too fast, so I am taking care to make this one more creative.\tsource: https://farcaster.xyz/logic-beach/0x6ac613af\n\tofficial\t-\tLike a clock, year, or seed phrase, this album has 12 of 'em. 12 songs... and all that implies. There's more waiting for those who pay attention and fall through the surface cracks.\tsource: https://logicbeach.xyz/powerfulmoss\tconfirmation: https://web.archive.org/web/20250303003748/https://logicbeach.xyz/powerfulmoss (Wayback capture of the puzzle page from March 2025)\n\tofficial\t-\tHidden across the tracks are 12 secret seed words, essential components of a cryptocurrency wallet.\tsource: https://logicbeach.xyz/powerfulmoss\tconfirmation: https://web.archive.org/web/20250303003748/https://logicbeach.xyz/powerfulmoss (Wayback capture of the puzzle page from March 2025)\n\tofficial\t-\tTo solve the puzzle, you must: Find all twelve words hidden in the album. Determine the correct order of these words.\tsource: https://logicbeach.xyz/powerfulmoss\tconfirmation: https://web.archive.org/web/20250303003748/https://logicbeach.xyz/powerfulmoss (Wayback capture of the puzzle page from March 2025)\n\tofficial\t-\tThe Puzzle will require the actual lossless .wav files so...\tsource: https://logicbeach.xyz/powerfulmoss\tconfirmation: https://web.archive.org/web/20250303003748/https://logicbeach.xyz/powerfulmoss (Wayback capture of the puzzle page from March 2025)\n\tofficial\t2025-01-24\t8 people have discovered the /poap This is a good sign ;]\tsource: https://farcaster.xyz/logic-beach/0x6179943b\nexplorer: https://basescan.org/address/0x635739254BDE27d28301f25aD57c3cAC3C3468f3\nsource: https://logicbeach.xyz/powerfulmoss",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "2aa8e52b2417",
-  total: 446,
+  dataVersion: "d4235f6f3634",
+  total: 447,
   solved: 232,
-  unsolved: 103,
+  unsolved: 104,
   claimed: 12,
   swept: 96,
   expired: 3,
-  withPubkey: 338,
+  withPubkey: 339,
   unsolvedPrize: {
     AR: 1900,
-    ETH: 12.612541554256945,
+    ETH: 13.171951554256944,
     BTC: 909.11154912,
     LTC: 3.02608794,
   },
   totalPrize: {
     BTC: 1065.1900893,
     AR: 5550,
-    ETH: 26.256241554256945,
+    ETH: 26.815651554256945,
     DAI: 100,
     DOGE: 10000,
     BCH: 5.1,
@@ -1639,6 +1669,28 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "powerful-moss",
+    author: "LogicBeach",
+    authorKey: "logicbeach",
+    authorUrl: "https://logicbeach.xyz/",
+    total: 1,
+    statuses: {
+      unsolved: 1,
+    },
+    chains: ["base"],
+    prize: {
+      ETH: 0.55941,
+    },
+    unsolvedPrize: {
+      ETH: 0.55941,
+    },
+    withPubkey: 1,
+    withKey: 0,
+    firstStarted: "2025-01-17 12:55:27",
+    lastStarted: "2025-01-17 12:55:27",
+    hints: [],
+  },
+  {
     key: "proof-of-writing",
     author: "cain",
     authorKey: "cain",
@@ -2073,6 +2125,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     about:
       "Posted a picture puzzle on r/bitcoinpuzzles seven hours after the subreddit opened. Four pictures, 1 mBTC, marked easy, and a little harder than it looked.",
     collections: ["picture-puzzle"],
+    puzzles: 1,
+  },
+  {
+    key: "logicbeach",
+    to: "/authors/logicbeach",
+    name: "LogicBeach",
+    kind: "person",
+    about:
+      "Electronic musician who releases albums as crypto puzzles, with a wallet seed hidden in the music.",
+    collections: ["powerful-moss"],
     puzzles: 1,
   },
   {

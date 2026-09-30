@@ -40,6 +40,7 @@ export const builtins = [
     key: "picture-puzzle",
     load: () => import("./picture-puzzle.ts").then((m) => m.picturePuzzle),
   },
+  { key: "powerful-moss", load: () => import("./powerful-moss.ts").then((m) => m.powerfulMoss) },
   {
     key: "proof-of-writing",
     load: () => import("./proof-of-writing.ts").then((m) => m.proofOfWriting),
