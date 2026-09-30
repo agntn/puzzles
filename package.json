@@ -58,19 +58,19 @@
     "access": "public"
   },
   "scripts": {
-    "build": "vp pack",
-    "dev": "vp pack --watch",
+    "build": "obuild",
+    "dev": "obuild --stub",
     "docs": "pnpm --dir docs dev",
     "fixtures": "node scripts/refresh-landing-fixtures.ts",
-    "lint": "vp pack && vp lint && vp fmt --check",
-    "lint:fix": "vp pack && vp lint --fix && vp fmt",
-    "typecheck": "vp pack && vp check --no-fmt --no-lint && tsc -p tsconfig.extensions.json",
+    "lint": "obuild && vp lint && vp fmt --check",
+    "lint:fix": "obuild && vp lint --fix && vp fmt",
+    "typecheck": "obuild && vp check --no-fmt --no-lint && tsc -p tsconfig.extensions.json",
     "test": "vp test",
     "test:live": "PUZZLES_LIVE=1 vp test",
     "test:packed": "node test/eval-packed.ts",
     "test:watch": "vp test watch",
-    "prepack": "vp pack",
-    "release": "vp test && vp pack && changelogen --release --push"
+    "prepack": "obuild",
+    "release": "vp test && obuild && changelogen --release --push"
   },
   "dependencies": {
     "@agntn/chains": "0.3.10",
@@ -90,6 +90,7 @@
     "@types/node": "26.6.3",
     "changelogen": "0.6.2",
     "jiti": "2.7.0",
+    "obuild": "0.4.43",
     "typebox": "1.3.34",
     "typescript": "7.0.2",
     "vite": "catalog:",

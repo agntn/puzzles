@@ -66,42 +66,4 @@ export default defineConfig({
     /* Files sharing a worker reuse the evaluated record modules. The registry test resets the graph. */
     isolate: false,
   },
-  /**
-   * One bundle, all inputs. The entries share the registry and core chunks, so nothing is
-   * embedded twice. Every collection module is its own input, so the manifest's `import()`
-   * resolves to a stable `dist/collections/<key>.mjs` that the `./collections/*` export also
-   * serves, and a new collection needs only its file and its manifest entry.
-   */
-  pack: {
-    entry: {
-      index: "src/index.ts",
-      cli: "src/cli.ts",
-      mcp: "src/mcp.ts",
-      "tool-operations": "src/tool-operations.ts",
-      "collections/*": ["src/collections/*.ts", "!src/collections/index.ts"],
-    },
-    /*
-     * No source maps. The dts plugin takes `declarationMap` from tsconfig and turns on maps for the
-     * runtime files too, over two thirds of the unpacked package, mostly the sources again in
-     * `sourcesContent`, while the declaration maps pointed at a src/ the tarball does not carry.
-     * The runtime files are not minified, so a stack trace reads without them.
-     */
-    dts: { sourcemap: false },
-    format: "esm",
-    platform: "node",
-    /* Shared chunks keep stable names under _chunks, where the tool loading probes look for them. */
-    hash: false,
-    outputOptions: {
-      chunkFileNames: "_chunks/[name].mjs",
-      /* JSDoc ships once, in the declarations; the runtime files keep only legal and annotation comments. */
-      comments: { jsdoc: false },
-    },
-    /* typebox stays inline. Parsing it from node_modules costs every MCP spawn more than the bundled copy. */
-    deps: {
-      onlyBundle: [/^typebox(?:\/|$)/u],
-      alwaysBundle: [/^typebox(?:\/|$)/u],
-    },
-    /* The inlined typebox carries no license header of its own, so its MIT notice ships beside it. */
-    copy: [{ from: "node_modules/typebox/license", rename: "typebox.LICENSE" }],
-  },
 });
