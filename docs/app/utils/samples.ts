@@ -227,14 +227,28 @@ export async function toSample(
   };
 }
 
+/** The chain factories by chain key; `bitcoincash` alone does not camelCase to its key plus `Puzzle`. */
+const FACTORIES: Readonly<Record<Chain, string>> = {
+  arweave: "arweavePuzzle",
+  base: "basePuzzle",
+  bitcoin: "bitcoinPuzzle",
+  bitcoincash: "bitcoinCashPuzzle",
+  decred: "decredPuzzle",
+  dogecoin: "dogecoinPuzzle",
+  ecash: "ecashPuzzle",
+  ethereum: "ethereumPuzzle",
+  litecoin: "litecoinPuzzle",
+  monero: "moneroPuzzle",
+};
+
 /**
- * The factory a chain's records are built with; every chain factory has this name.
+ * The factory a chain's records are built with.
  *
- * @param {string} chain - The chain key.
- * @returns {string} `bitcoinPuzzle` for `bitcoin`.
+ * @param {Chain} chain - The chain key.
+ * @returns {string} `bitcoinPuzzle` for `bitcoin`, `bitcoinCashPuzzle` for `bitcoincash`.
  */
-export function factoryName(chain: string): string {
-  return `${chain}Puzzle`;
+export function factoryName(chain: Chain): string {
+  return FACTORIES[chain];
 }
 
 /**
