@@ -27,6 +27,7 @@ const libraryEntries = [
   "@agntn/explorers/providers/mempool",
   "@agntn/keys",
   "@agntn/keys/bip39",
+  "@agntn/keys/blockchains/base",
   "@agntn/keys/blockchains/bitcoin",
   "@agntn/keys/blockchains/bitcoincash",
   "@agntn/keys/blockchains/decred",

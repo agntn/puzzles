@@ -288,6 +288,7 @@ export function collectionEntry(key: string): CollectionEntry | undefined {
 /** Chain icons come from the monochrome token set, the same as everywhere else in agntn. */
 export const CHAIN_ICONS: Readonly<Record<string, string>> = {
   arweave: "i-token-ar",
+  base: "i-token-base",
   bitcoin: "i-token-btc",
   bitcoincash: "i-token-bch",
   decred: "i-token-dcr",

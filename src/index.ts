@@ -13,6 +13,8 @@ export {
 export {
   ArweavePuzzle,
   arweavePuzzle,
+  BasePuzzle,
+  basePuzzle,
   BitcoinCashPuzzle,
   bitcoinCashPuzzle,
   BitcoinPuzzle,

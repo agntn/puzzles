@@ -2,6 +2,7 @@ import { describe, expect, it } from "vite-plus/test";
 import {
   artifact,
   arweavePuzzle,
+  basePuzzle,
   assets,
   BitcoinPuzzle,
   bitcoinCashPuzzle,
@@ -41,6 +42,7 @@ const required = {
 
 const factories = [
   [Chain.Arweave, arweavePuzzle],
+  [Chain.Base, basePuzzle],
   [Chain.Bitcoin, bitcoinPuzzle],
   [Chain.BitcoinCash, bitcoinCashPuzzle],
   [Chain.Decred, decredPuzzle],

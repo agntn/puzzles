@@ -1,4 +1,5 @@
 import { type AbstractBlockchain, decodeWIF, encodeWIF, type WIFChain } from "@agntn/keys";
+import { Base } from "@agntn/keys/blockchains/base";
 import { Bitcoin } from "@agntn/keys/blockchains/bitcoin";
 import { BitcoinCash } from "@agntn/keys/blockchains/bitcoincash";
 import { Decred } from "@agntn/keys/blockchains/decred";
@@ -18,6 +19,7 @@ import { AddressKind, PubkeyFormat } from "./parts.ts";
 /** Arweave and Monero have no key to address derivation here. */
 const wallets: Readonly<Record<Chain, AbstractBlockchain | undefined>> = {
   arweave: undefined,
+  base: new Base(),
   bitcoin: new Bitcoin(),
   bitcoincash: new BitcoinCash(),
   decred: new Decred(),
@@ -30,10 +32,11 @@ const wallets: Readonly<Record<Chain, AbstractBlockchain | undefined>> = {
 
 /**
  * The WIF version each chain writes. Bitcoin Cash kept Bitcoin's version byte when it forked, and
- * eCash kept Bitcoin Cash's. Arweave, Ethereum and Monero have no WIF.
+ * eCash kept Bitcoin Cash's. Arweave, Base, Ethereum and Monero have no WIF.
  */
 const wifChains: Readonly<Record<Chain, WIFChain | undefined>> = {
   arweave: undefined,
+  base: undefined,
   bitcoin: "bitcoin",
   bitcoincash: "bitcoin",
   decred: "decred",
@@ -47,6 +50,16 @@ const wifChains: Readonly<Record<Chain, WIFChain | undefined>> = {
 /** Address derivation needs information beyond the record's private key. */
 export class UnsupportedAddressKindError extends TypeError {
   override readonly name = "UnsupportedAddressKindError";
+}
+
+/**
+ * Ethereum and Base share the Keccak address, one shape for every key.
+ *
+ * @param {Chain} chain - Chain the address belongs to.
+ * @returns {boolean} Whether the chain writes Ethereum addresses.
+ */
+function isEvm(chain: Chain): boolean {
+  return chain === Chain.Ethereum || chain === Chain.Base;
 }
 
 function walletFor(chain: Chain): AbstractBlockchain | undefined {
@@ -70,7 +83,7 @@ function wifChain(chain: Chain): WIFChain {
  * @returns {string | undefined} The keys address type, or `undefined` where the wallet has one shape.
  */
 function addressType(chain: Chain, kind: AddressKind): string | undefined {
-  if (chain === Chain.Ethereum) {
+  if (isEvm(chain)) {
     return undefined;
   }
   switch (kind) {
@@ -179,5 +192,5 @@ export function addressFromPrivateKey(
  * @returns {boolean} Whether both addresses denote the same target.
  */
 export function addressesEqual(chain: Chain, left: string, right: string): boolean {
-  return chain === Chain.Ethereum ? left.toLowerCase() === right.toLowerCase() : left === right;
+  return isEvm(chain) ? left.toLowerCase() === right.toLowerCase() : left === right;
 }
