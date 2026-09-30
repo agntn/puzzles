@@ -1,3 +1,32 @@
+## v0.25.1
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.25.0...v0.25.1)
+
+### 🚀 Enhancements
+
+- **collections:** Add trivia-brainwallet ([#377](https://github.com/agntn/puzzles/pull/377))
+
+### 🩹 Fixes
+
+- **docs:** Name bitcoinCashPuzzle in the record ([#375](https://github.com/agntn/puzzles/pull/375))
+
+### 📦 Build
+
+- Bundle with obuild again ([#378](https://github.com/agntn/puzzles/pull/378))
+
+### 🏡 Chore
+
+- Apply automated updates ([70043c2](https://github.com/agntn/puzzles/commit/70043c2))
+
+### ✅ Tests
+
+- **packed:** Ignore the checkout path ([#379](https://github.com/agntn/puzzles/pull/379))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.25.0
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.24.1...v0.25.0)
