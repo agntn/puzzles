@@ -11,6 +11,7 @@ const PROVIDERS: Readonly<Record<string, string>> = {
   ecash: "blockchair.com",
   litecoin: "litecoinspace.org",
   ethereum: "etherscan.io",
+  base: "base.blockscout.com",
   decred: "dcrdata.decred.org",
   arweave: "arweave.net",
 };

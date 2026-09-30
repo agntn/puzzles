@@ -206,6 +206,14 @@ const PRESENTATION: Readonly<
     blurb:
       "A directory, an eye, the letter O and a QR code: a page on directory.io and the 36th key down. Claimed five hours in.",
   },
+  "powerful-moss": {
+    icon: "i-lucide-sprout",
+    title: "Powerful Moss",
+    sample: "powerful-moss",
+    chains: ["base"],
+    blurb:
+      "Twelve songs on Donkey Kong Country 2 soundfonts and a twelve-word seed somewhere in them. The prize waits in a contract on Base that opens only for the wallet the seed derives.",
+  },
   "proof-of-writing": {
     icon: "i-lucide-pen-line",
     title: "Building an awesome eCash community",

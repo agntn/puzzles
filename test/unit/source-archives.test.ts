@@ -154,6 +154,53 @@ const sources = [
     },
   },
   {
+    file: "powerful-moss/logicbeach-2025-01-17-page",
+    url: "https://logicbeach.xyz/powerfulmoss",
+    author: "LogicBeach",
+    date: "2025-01-17",
+    archive: {
+      url: "https://web.archive.org/web/20250303003748/https://logicbeach.xyz/powerfulmoss",
+      date: "2025-03-03T00:37:48Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "powerful-moss/logicbeach-2024-03-26",
+    url: "https://farcaster.xyz/logic-beach/0x79eeff14",
+    author: "logic-beach",
+    date: "2024-03-26",
+  },
+  {
+    file: "powerful-moss/logicbeach-2024-04-14-0x0a3431a4",
+    url: "https://farcaster.xyz/logic-beach/0x0a3431a4",
+    author: "logic-beach",
+    date: "2024-04-14",
+  },
+  {
+    file: "powerful-moss/logicbeach-2024-04-14-0x7e781ad1",
+    url: "https://farcaster.xyz/logic-beach/0x7e781ad1",
+    author: "logic-beach",
+    date: "2024-04-14",
+  },
+  {
+    file: "powerful-moss/logicbeach-2024-09-02",
+    url: "https://farcaster.xyz/logic-beach/0x6ac613af",
+    author: "logic-beach",
+    date: "2024-09-02",
+  },
+  {
+    file: "powerful-moss/logicbeach-2025-01-17-0x57ab427d",
+    url: "https://farcaster.xyz/logic-beach/0x57ab427d",
+    author: "logic-beach",
+    date: "2025-01-17",
+  },
+  {
+    file: "powerful-moss/logicbeach-2025-01-24",
+    url: "https://farcaster.xyz/logic-beach/0x6179943b",
+    author: "logic-beach",
+    date: "2025-01-24",
+  },
+  {
     file: "book-quiz/aoinakamoto-2019-04-06",
     url: "https://www.reddit.com/r/YangForPresidentHQ/comments/b9zg9p/7_million_book_quiz_challenge_to_this_subreddit/",
     author: "u/AoiNakamoto",

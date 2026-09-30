@@ -1,6 +1,6 @@
 # Archived sources
 
-Local reading copies of the pages the collection records cite and nobody else keeps: sixteen tweets, seventy-nine Reddit threads, one Reddit comment, seven Bitcointalk threads and one Stacker News thread, as of September 29, 2026. The archive keeps the Ballet announcement, Zden's two hints, the kitten image source used by Bitimage, the three announcements and four later posts the author records cite, the five posts the solver records cite, the two AoiNakamoto quiz threads, the seventy-three Quizchain threads for blocks 1 to 77, AoiNakamoto's question on r/Bitcoin before the birthday quiz, IAMABananaAMAA's Caesar riddle, q's BIP38 giveaway on Stacker News and the two r/dogecoin posts of Crypto Puzzlers' Doge's Gambit, each with every surviving comment. The one Reddit comment is the reply where AoiNakamoto names their Twitter feed, kept with the comment it answers. The quiz and riddle threads are where each answer key was published, for the book quiz the prize address too, for Quizchain most answers and many of the keys, for the riddle the key itself, and for RetiredCoder's seven mini-puzzles every hint, the key and, for #3, #4, #5 and #7, the author's own explanation. Tweets are archived as single posts: no replies, no quote tweets, no other post about the same puzzle.
+Local reading copies of the pages the collection records cite and nobody else keeps: sixteen tweets, seventy-nine Reddit threads, one Reddit comment, seven Bitcointalk threads, one Stacker News thread, six Farcaster casts and one web page, as of September 30, 2026. The archive keeps the Ballet announcement, Zden's two hints, the kitten image source used by Bitimage, the three announcements and four later posts the author records cite, the five posts the solver records cite, the two AoiNakamoto quiz threads, the seventy-three Quizchain threads for blocks 1 to 77, AoiNakamoto's question on r/Bitcoin before the birthday quiz, IAMABananaAMAA's Caesar riddle, q's BIP38 giveaway on Stacker News and the two r/dogecoin posts of Crypto Puzzlers' Doge's Gambit, each with every surviving comment. For Powerful Moss it keeps LogicBeach's puzzle page as it stood in March 2025, before most of its description was cut, and the six casts the record cites, each without the replies around it. The one Reddit comment is the reply where AoiNakamoto names their Twitter feed, kept with the comment it answers. The quiz and riddle threads are where each answer key was published, for the book quiz the prize address too, for Quizchain most answers and many of the keys, for the riddle the key itself, and for RetiredCoder's seven mini-puzzles every hint, the key and, for #3, #4, #5 and #7, the author's own explanation. Tweets are archived as single posts: no replies, no quote tweets, no other post about the same puzzle.
 
 - [Ballet bounty announcement](ballet/bobbyclee-2020-07-31.md)
 - [Bitimage's kitten image source](bitimage/aantonop-2015-05-27.md)
@@ -21,6 +21,13 @@ Local reading copies of the pages the collection records cite and nobody else ke
 - [Brute force and the coins are yours](bitaddress/q-2023-10-06.md)
 - [Doge's Gambit launch post](doges-gambit/cryptopuzzlers-2020-12-11.md)
 - [Doge's Gambit repost with the Dogecoin address](doges-gambit/cryptopuzzlers-2021-01-29.md)
+- [The Powerful Moss puzzle page](powerful-moss/logicbeach-2025-01-17-page.md)
+- [Powerful Moss announced](powerful-moss/logicbeach-2024-03-26.md)
+- [A few of the 12 words already baked in](powerful-moss/logicbeach-2024-04-14-0x0a3431a4.md)
+- [Similar to Bifurcations](powerful-moss/logicbeach-2024-04-14-0x7e781ad1.md)
+- [More creative this time](powerful-moss/logicbeach-2024-09-02.md)
+- [Powerful Moss launch](powerful-moss/logicbeach-2025-01-17-0x57ab427d.md)
+- [A week in, eight POAPs found](powerful-moss/logicbeach-2025-01-24.md)
 - [7 million book quiz thread](book-quiz/aoinakamoto-2019-04-06.md)
 - [Quizchain block 1 thread](quizchain/aoinakamoto-2019-04-07.md)
 - [Quizchain block 2 thread](quizchain/aoinakamoto-2019-04-07-badtpz.md)

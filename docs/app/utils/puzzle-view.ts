@@ -48,6 +48,10 @@ export interface HintRow extends Hint {
 export interface PuzzleView extends LandingSample {
   readonly name: string;
   readonly preGenesis: boolean;
+  /** The contract the prize waits in, when the key's wallet has to pull it out. */
+  readonly escrow:
+    | { readonly address: string; readonly kind: string; readonly explorer: string }
+    | undefined;
   /** No source printed the private key; the record rebuilt it from the published recipe. */
   readonly derived: boolean;
   readonly keyRows: readonly KeyRow[];
@@ -66,6 +70,7 @@ export interface PuzzleView extends LandingSample {
 
 /** The slice of the library a view needs; the transaction link builder is a library export too. */
 export interface ViewLibrary extends SampleLibrary {
+  readonly addressExplorerUrl: (chain: Chain, address: string) => string;
   readonly transactionExplorerUrl: (chain: Chain, txid: string) => string;
 }
 
@@ -202,7 +207,7 @@ function assetLinks(collection: string, assets: Assets | undefined): AssetLink[]
 /**
  * Reads one puzzle into everything its page renders. Plain data, safe for the Nuxt payload.
  *
- * @param {ViewLibrary} library - `secretOf`, `verify` and `transactionExplorerUrl`.
+ * @param {ViewLibrary} library - `secretOf`, `verify` and the two explorer URL builders.
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
  * @param {readonly Hint[]} shared - The hints of the puzzle's collection, listed ahead of its own.
@@ -217,10 +222,19 @@ export async function toPuzzleView(
   const sample = await toSample(library, puzzle, tool);
   const assets = puzzle.assets();
   const solver = puzzle.solver();
+  const escrow = puzzle.escrow();
   return {
     ...sample,
     name: puzzle.name(),
     preGenesis: puzzle.preGenesis(),
+    escrow:
+      escrow === undefined
+        ? undefined
+        : {
+            address: escrow.value,
+            kind: escrow.kind,
+            explorer: library.addressExplorerUrl(puzzle.chain(), escrow.value),
+          },
     derived: puzzle.hasDerivedKey(),
     keyRows: keyRows(puzzle.keyData()),
     transactionRows: puzzle.transactions().map((transaction) => ({
