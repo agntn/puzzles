@@ -18,7 +18,7 @@ jobs:
       # Installs the docs site too: its postinstall generates the Nuxt types the linter reads.
       - uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
         with:
-          node-version: 26
+          node-version: v26.10.0
           cache: true
           run-install: |
             - cwd: .
