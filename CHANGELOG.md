@@ -1,3 +1,29 @@
+## v0.26.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.25.1...v0.26.0)
+
+### 🚀 Enhancements
+
+- **balance:** Read Dogecoin through Blockchair ([#386](https://github.com/agntn/puzzles/pull/386))
+- **collections:** Add quizchain2 ([#388](https://github.com/agntn/puzzles/pull/388))
+
+### 🩹 Fixes
+
+- Serialize overlapping lazy imports ([#384](https://github.com/agntn/puzzles/pull/384))
+
+### 💅 Refactors
+
+- **tools:** ⚠️  Declare each tool once ([#381](https://github.com/agntn/puzzles/pull/381))
+
+#### ⚠️ Breaking Changes
+
+- **tools:** ⚠️  Declare each tool once ([#381](https://github.com/agntn/puzzles/pull/381))
+
+### ❤️ Contributors
+
+- Aeitwoen
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.25.1
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.25.0...v0.25.1)
