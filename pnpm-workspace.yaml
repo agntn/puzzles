@@ -26,11 +26,7 @@ minimumReleaseAgeExclude:
   - "@oh-my-pi/pi-utils@18.2.4"
   - "@oh-my-pi/pi-wire@18.2.4"
   - "@oh-my-pi/snapcompact@18.2.4"
-  - "@agntn/chains@0.3.6"
-  - "@agntn/explorers@0.5.7"
-  - "@agntn/hashes@0.4.0"
-  - "@agntn/keys@0.3.5"
-  - "@agntn/tools@0.0.0"
+  - "@agntn/*"
   - obuild@0.4.43
 
 catalog:
