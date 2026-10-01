@@ -174,4 +174,21 @@ describe("Pi host loader", () => {
       );
     }
   });
+
+  it.each([
+    ["puzzles_verify", "doges-gambit/eth", "doges-gambit/doge"],
+    ["puzzles_show", "b1000/1", "gsmg"],
+  ] as const)("answers two first %s calls that start together", async (name, ...ids) => {
+    const hosted = await registerThroughHostLoader();
+    const direct = await registerTools();
+    const results = await Promise.all(
+      ids.map(async (id) => hosted.get(name)?.execute("call-1", { id })),
+    );
+
+    for (const [index, id] of ids.entries()) {
+      expect(results[index]?.content[0]?.text, id).toEqual(
+        (await direct.get(name)?.execute("call-1", { id }))?.content[0]?.text,
+      );
+    }
+  });
 });

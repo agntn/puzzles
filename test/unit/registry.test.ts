@@ -344,6 +344,25 @@ describe("registry consistency", () => {
     expect(loads).toBe(1);
   });
 
+  it("starts a custom loader that awaits a built-in at once, beside built-in loads", async () => {
+    const lib = await freshLibrary();
+    lib.registerCollection({
+      key: "wrapper",
+      load: async () => {
+        const gsmg = await lib.requireCollection("gsmg");
+        return new lib.NamedCollection("wrapper", gsmg.author, gsmg.all());
+      },
+    });
+
+    const [wrapper, b1000] = await Promise.all([
+      lib.requireCollection("wrapper"),
+      lib.requireCollection("b1000"),
+    ]);
+
+    expect(wrapper.all()[0]?.id()).toBe("gsmg");
+    expect(b1000.key).toBe("b1000");
+  });
+
   it("does not resolve Object prototype properties as historical aliases", async () => {
     for (const name of ["constructor", "toString", "__proto__", "hasOwnProperty"]) {
       expect(hasCollection(name)).toBe(false);
