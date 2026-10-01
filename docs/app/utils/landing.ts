@@ -263,8 +263,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     kind: "p2wpkh",
     hash160: "249dd7ad2fccea67977d4078edad50d8603ff4ce",
     redeemScript: undefined,
-    prize: "1.00016404 BTC",
-    prizeAmount: 1.00016404,
+    prize: "1.00016775 BTC",
+    prizeAmount: 1.00016775,
     currency: undefined,
     startedAt: "2020-06-19 13:24:41",
     solvedAt: undefined,
@@ -280,8 +280,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     detail: "Puzzle has no private key",
     explorer: "https://blockstream.info/address/bc1qyjwa0tf0en4x09magpuwmt2smpsrlaxwn85lh6",
     source: "https://bitaps.com/mnemonic/challenge",
-    transactions: 4,
-    tool: 'bitaps\tunsolved\t1.00016404 BTC\tbc1qyjwa0tf0en4x09magpuwmt2smpsrlaxwn85lh6\nchain: bitcoin  address kind: p2wpkh\nhash160: 249dd7ad2fccea67977d4078edad50d8603ff4ce\npublic key: 0385a3a591451ed7ed6c90dae882db918107d6f906d270cf4728d168126e0e89aa (compressed)\nprivate key: unknown\nderivation path: m/84\'/0\'/0\'/0/0\nxpub: zpub6qdEDkv51FpxX6g1rpFGckmiL46vV8ccmtEgPAkj3qj8N4ZZHyXDRA9RwpTiFK2Kb8vRaDmSmwgX6rfB4t2K8Ktdq8ExQ6fumKpn2ndJCqL\nshares: 2 of 5 published, 3 needed: 1 "session cigar grape merry useful churn fatal thought very any arm unaware"; 2 "clock fresh security field caution effort gorilla speed plastic common tomato echo"\nstarted: 2020-06-19 13:24:41\ntransactions: 4\n\tfunding\t2020-06-19 13:24:41\t1 BTC\ta24e37411d1860c51a71a2f0c2bb1561ed40c7d8bb724f5faa3dfcb0a99925e6\n\tincrease\t2021-11-29 12:20:03\t0.00008781 BTC\tbb0b6c3198c7274469b68fd5e2a5031dd31ce4c82a0aa2688f76c53d7cc8f167\n\tincrease\t2022-02-05 20:43:56\t0.00002403 BTC\tfe3f6d1f4536bbea7a84c8b5947caf407d69e0740c789277272a185c402ec14d\n\tincrease\t2022-10-13 00:48:34\t0.0000522 BTC\t910c4c6af9bd8790645de7827ef33aa9a750b89b0353c749d1edbd5925a1b272\nexplorer: https://blockstream.info/address/bc1qyjwa0tf0en4x09magpuwmt2smpsrlaxwn85lh6\nsource: https://bitaps.com/mnemonic/challenge',
+    transactions: 5,
+    tool: 'bitaps\tunsolved\t1.00016775 BTC\tbc1qyjwa0tf0en4x09magpuwmt2smpsrlaxwn85lh6\nchain: bitcoin  address kind: p2wpkh\nhash160: 249dd7ad2fccea67977d4078edad50d8603ff4ce\npublic key: 0385a3a591451ed7ed6c90dae882db918107d6f906d270cf4728d168126e0e89aa (compressed)\nprivate key: unknown\nderivation path: m/84\'/0\'/0\'/0/0\nxpub: zpub6qdEDkv51FpxX6g1rpFGckmiL46vV8ccmtEgPAkj3qj8N4ZZHyXDRA9RwpTiFK2Kb8vRaDmSmwgX6rfB4t2K8Ktdq8ExQ6fumKpn2ndJCqL\nshares: 2 of 5 published, 3 needed: 1 "session cigar grape merry useful churn fatal thought very any arm unaware"; 2 "clock fresh security field caution effort gorilla speed plastic common tomato echo"\nstarted: 2020-06-19 13:24:41\ntransactions: 5\n\tfunding\t2020-06-19 13:24:41\t1 BTC\ta24e37411d1860c51a71a2f0c2bb1561ed40c7d8bb724f5faa3dfcb0a99925e6\n\tincrease\t2021-11-29 12:20:03\t0.00008781 BTC\tbb0b6c3198c7274469b68fd5e2a5031dd31ce4c82a0aa2688f76c53d7cc8f167\n\tincrease\t2022-02-05 20:43:56\t0.00002403 BTC\tfe3f6d1f4536bbea7a84c8b5947caf407d69e0740c789277272a185c402ec14d\n\tincrease\t2022-10-13 00:48:34\t0.0000522 BTC\t910c4c6af9bd8790645de7827ef33aa9a750b89b0353c749d1edbd5925a1b272\n\tincrease\t2026-02-01 14:34:35\t0.00000371 BTC\tc6178e55415c5b377068e366ff957c3d586c21659ef0c9904d497bcf7c943419\nexplorer: https://blockstream.info/address/bc1qyjwa0tf0en4x09magpuwmt2smpsrlaxwn85lh6\nsource: https://bitaps.com/mnemonic/challenge',
   },
   {
     id: "gsmg",
@@ -1187,7 +1187,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "3674c522978c",
+  dataVersion: "727567639f0b",
   total: 468,
   solved: 253,
   unsolved: 104,
@@ -1198,11 +1198,11 @@ export const STATS_STATIC = {
   unsolvedPrize: {
     AR: 1900,
     ETH: 13.171951554256944,
-    BTC: 909.11154912,
+    BTC: 909.11155283,
     LTC: 3.02608794,
   },
   totalPrize: {
-    BTC: 1065.6580893,
+    BTC: 1065.65809301,
     AR: 5550,
     ETH: 26.815651554256945,
     DAI: 100,
@@ -1353,10 +1353,10 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     },
     chains: ["bitcoin"],
     prize: {
-      BTC: 1.00016404,
+      BTC: 1.00016775,
     },
     unsolvedPrize: {
-      BTC: 1.00016404,
+      BTC: 1.00016775,
     },
     withPubkey: 1,
     withKey: 0,

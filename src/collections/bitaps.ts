@@ -34,7 +34,7 @@ export const bitapsPuzzle = bitcoinPuzzle({
         "clock fresh security field caution effort gorilla speed plastic common tomato echo",
       ),
     ]),
-  prize: 1.00016404,
+  prize: 1.00016775,
   transactions: [
     funding(
       "a24e37411d1860c51a71a2f0c2bb1561ed40c7d8bb724f5faa3dfcb0a99925e6",
@@ -55,6 +55,11 @@ export const bitapsPuzzle = bitcoinPuzzle({
       "910c4c6af9bd8790645de7827ef33aa9a750b89b0353c749d1edbd5925a1b272",
       "2022-10-13 00:48:34",
       0.0000522,
+    ),
+    increase(
+      "c6178e55415c5b377068e366ff957c3d586c21659ef0c9904d497bcf7c943419",
+      "2026-02-01 14:34:35",
+      0.00000371,
     ),
   ],
 });
