@@ -60,14 +60,14 @@ function baseBalance(address: string, config: Readonly<ProviderConfig>): Promise
   return new Blockscout({ ...keyless, defaultChain: "base" }).getBalance(address, "base");
 }
 
-/** Dogecoin and Monero have no provider in `@agntn/explorers` yet. */
+/** Monero has no provider in `@agntn/explorers` yet. */
 const lookups: Readonly<Record<Chain, Lookup | undefined>> = {
   arweave: (address, config) => new Arweave(config).getBalance(address, "arweave"),
   base: baseBalance,
   bitcoin: (address, config) => new Mempool(config).getBalance(address, "bitcoin"),
   bitcoincash: (address, config) => new Blockchair(config).getBalance(address, "bitcoincash"),
   decred: (address, config) => new Dcrdata(config).getBalance(address, "decred"),
-  dogecoin: undefined,
+  dogecoin: (address, config) => new Blockchair(config).getBalance(address, "dogecoin"),
   ecash: (address, config) => new Blockchair(config).getBalance(address, "ecash"),
   ethereum: ethereumBalance,
   litecoin: (address, config) => new Mempool(config).getBalance(address, "litecoin"),

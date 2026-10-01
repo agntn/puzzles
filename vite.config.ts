@@ -26,8 +26,8 @@ export default defineConfig({
        * rule cannot inspect, and `Readonly<Puzzle>` would drop that private brand
        * from every public signature; counting methods as readonly keeps both classes
        * acceptable in the library and in the docs site, which type checks them as
-       * files outside its own project. Nuxt Content's navigation tree and Vue's refs
-       * are not ours to freeze.
+       * files outside its own project. Nuxt Content's navigation tree, Vue's refs
+       * and the `AbortSignal` in the explorers' `ProviderConfig` are not ours to freeze.
        */
       "typescript/prefer-readonly-parameter-types": [
         severity,
@@ -36,7 +36,7 @@ export default defineConfig({
           treatMethodsAsReadonly: true,
           allow: [
             ...(options?.allow ?? []),
-            { from: "lib", name: "Uint8Array" },
+            { from: "lib", name: ["AbortSignal", "Uint8Array"] },
             { from: "package", name: "ContentNavigationItem", package: "@nuxt/content" },
             { from: "package", name: "Ref", package: "vue" },
             { from: "package", name: "Ref", package: "@vue/reactivity" },

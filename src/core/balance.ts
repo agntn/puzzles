@@ -20,6 +20,7 @@ import { PuzzlesError } from "./errors.ts";
  */
 export const apiKeyVariables: Readonly<Partial<Record<Chain, string>>> = Object.freeze({
   bitcoincash: "BLOCKCHAIR_API_KEY",
+  dogecoin: "BLOCKCHAIR_API_KEY",
   ecash: "BLOCKCHAIR_API_KEY",
   ethereum: "ETHERSCAN_API_KEY",
 });

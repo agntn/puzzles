@@ -12,8 +12,8 @@ importers:
         specifier: 0.3.10
         version: 0.3.10(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
       '@agntn/explorers':
-        specifier: 0.5.7
-        version: 0.5.7(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)
+        specifier: 0.5.9
+        version: 0.5.9(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)
       '@agntn/keys':
         specifier: 0.3.5
         version: 0.3.5(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)
@@ -74,8 +74,8 @@ packages:
       '@earendil-works/pi-coding-agent':
         optional: true
 
-  '@agntn/explorers@0.5.7':
-    resolution: {integrity: sha512-1JpBC9NHgUSeh4a8nendXtAU3e2pw153/mvrSvXkVoh0MbM7T58fETqlqMN9dgg3OE1l+TfKUY/1DoV2lSEpng==}
+  '@agntn/explorers@0.5.9':
+    resolution: {integrity: sha512-lfKjOmmeKmF0WhFDXf6CjSiLDrUKTkbNyJrs0tlTu3HXWY+k8tDroFOamnJlDn/tAfOSmKE1pIZF4HozzQTjRg==}
     engines: {node: '>=24'}
     hasBin: true
     peerDependencies:
@@ -7556,10 +7556,10 @@ snapshots:
       - supports-color
       - zod
 
-  '@agntn/explorers@0.5.7(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)':
+  '@agntn/explorers@0.5.9(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)':
     dependencies:
       '@agntn/chains': 0.3.10(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.4.3)
-      '@modelcontextprotocol/sdk': 1.30.0(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.4.3)
+      '@modelcontextprotocol/sdk': 1.30.1(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.4.3)
       citty: 0.2.2
       consola: 3.4.2
       ofetch: 1.5.1
