@@ -1,6 +1,7 @@
 import {
   answer,
   assets,
+  digest,
   claim,
   funding,
   official,
@@ -65,5 +66,17 @@ export const dogesGambitDoge = dogecoinPuzzle({
     puzzle: "puzzle.jpg",
     solution: "doge-key.png",
     sourceUrl: VIDEO,
+    digests: [
+      digest(
+        "puzzle.jpg",
+        "cfb83b47d08d68c27d6526e1b0d4e4b5318eb684de68298ee9cf2e53d4b443c9",
+        90980,
+      ),
+      digest(
+        "doge-key.png",
+        "30083983e7224836ef099a607f295994b2e5e2fcfdcc920de484f84ce01855b2",
+        77918,
+      ),
+    ],
   }),
 });

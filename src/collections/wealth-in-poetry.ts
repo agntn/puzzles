@@ -1,5 +1,15 @@
 import { SingletonCollection } from "../core/collection.ts";
-import { assets, fact, funding, increase, official, p2pkh, party, profile } from "../core/parts.ts";
+import {
+  assets,
+  digest,
+  fact,
+  funding,
+  increase,
+  official,
+  p2pkh,
+  party,
+  profile,
+} from "../core/parts.ts";
 import { bitcoinPuzzle } from "../core/puzzle.ts";
 
 /** The article: an essay on hiding seed phrases in prose, with the prize address at the end. */
@@ -45,7 +55,17 @@ export const wealthInPoetryPuzzle = bitcoinPuzzle({
       0.00074361,
     ),
   ],
-  assets: assets({ puzzle: "puzzle.txt", sourceUrl: CAPTURE }),
+  assets: assets({
+    puzzle: "puzzle.txt",
+    sourceUrl: CAPTURE,
+    digests: [
+      digest(
+        "puzzle.txt",
+        "d9d7cb69d8316f200f8a40c0154fa5f0bcf37e9a51fcf3bbec558164b2740e34",
+        15938,
+      ),
+    ],
+  }),
 });
 
 /** Securing Wealth in Poetry, one Medium article by Trithemius. */

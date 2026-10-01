@@ -1,6 +1,7 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
   assets,
+  digest,
   fact,
   funding,
   increase,
@@ -56,7 +57,22 @@ export const braveNewWorldPuzzle = bitcoinPuzzle({
       0.00005727,
     ),
   ],
-  assets: assets({ puzzle: "puzzle.png", sourceUrl: PICTURE }),
+  assets: assets({
+    puzzle: "puzzle.png",
+    sourceUrl: PICTURE,
+    digests: [
+      digest(
+        "puzzle.png",
+        "d0b04378f75d63997b8034ec2ef1bdd108178e4546de78237bd35abf4189a782",
+        2383395,
+        {
+          url: "https://i.redd.it/n1x7g8ceaur51.png",
+          archive:
+            "https://web.archive.org/web/20230620034345id_/https://i.redd.it/n1x7g8ceaur51.png",
+        },
+      ),
+    ],
+  }),
 });
 
 /** Brave New World, one picture puzzle by stsh_n. */

@@ -58,7 +58,7 @@ describe("Collection.verify", () => {
       hex: "5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbee5a9674dbfcf3ec",
     });
     expect(puzzle.hasPrivateKey()).toBe(true);
-    expect(puzzle.assets()).toEqual({
+    expect(puzzle.assets()).toMatchObject({
       puzzle: "codex-protocol/puzzle.png",
       solution: "codex-protocol/solution.md",
       hints: ["codex-protocol/hint-1.png", "codex-protocol/hint-2.png"],

@@ -1,6 +1,7 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
+  digest,
   claim,
   confirmation,
   decrease,
@@ -53,6 +54,18 @@ export const zdenPuzzle1bitcoinWhitePaper = bitcoinPuzzle({
   assets: assets({
     puzzle: "1bitcoin-white-paper/puzzle.png",
     sourceUrl: "https://ipfs.io/ipfs/Qmdm7SxhVGDVt9krbNpwAxkQGwH5a74FVW1sKNXxCjzmBq",
+    digests: [
+      digest(
+        "1bitcoin-white-paper/puzzle.png",
+        "5d3a6d707b653c0e95c9d192b6f5cf55ea54ae84ad6608fe0607a4e27896175e",
+        5994872,
+        {
+          url: "https://ipfs.io/ipfs/Qmdm7SxhVGDVt9krbNpwAxkQGwH5a74FVW1sKNXxCjzmBq",
+          archive:
+            "https://web.archive.org/web/20210520071838id_/https://ipfs.io/ipfs/Qmdm7SxhVGDVt9krbNpwAxkQGwH5a74FVW1sKNXxCjzmBq",
+        },
+      ),
+    ],
   }),
   hints: [
     official(

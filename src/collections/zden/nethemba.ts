@@ -1,5 +1,5 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, funding, p2pkh, uncompressed } from "../../core/parts.ts";
+import { assets, digest, claim, funding, p2pkh, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `zden/nethemba`. */
 export const zdenPuzzleNethemba = bitcoinPuzzle({
@@ -30,5 +30,22 @@ export const zdenPuzzleNethemba = bitcoinPuzzle({
     puzzle: "nethemba/puzzle.png",
     solution: "nethemba/solver.png",
     sourceUrl: "https://crypto.haluska.sk/crypto_nethemba.png",
+    digests: [
+      digest(
+        "nethemba/puzzle.png",
+        "0fd1519302bb2028d5f486ff027b1a5b2c58edc2cb75b1d39f131012df206c7c",
+        226786,
+        {
+          url: "https://crypto.haluska.sk/crypto_nethemba.png",
+          archive:
+            "https://web.archive.org/web/20250929202710id_/https://crypto.haluska.sk/crypto_nethemba.png",
+        },
+      ),
+      digest(
+        "nethemba/solver.png",
+        "81d7977df3f4f3200b9bb970ed7c64f464f7c8b0a8f7baba105cc4aaa8155854",
+        502693,
+      ),
+    ],
   }),
 });

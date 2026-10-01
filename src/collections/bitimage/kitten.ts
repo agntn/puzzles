@@ -1,6 +1,7 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
+  digest,
   claim,
   compressed,
   derivation,
@@ -46,5 +47,12 @@ export const bitimagePuzzleKitten = bitcoinPuzzle({
   assets: assets({
     puzzle: "kitten/puzzle.jpg",
     sourceUrl: "https://twitter.com/aantonop/status/603701870482300928",
+    digests: [
+      digest(
+        "kitten/puzzle.jpg",
+        "b988e0881a0211222e83f3e2a4bfac695c951bf96aa33ec112fab6992f5e7343",
+        265456,
+      ),
+    ],
   }),
 });

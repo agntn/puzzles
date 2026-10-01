@@ -1,4 +1,4 @@
-import { assets, claim, compressed, funding, p2wpkh, seed } from "../../core/parts.ts";
+import { assets, digest, claim, compressed, funding, p2wpkh, seed } from "../../core/parts.ts";
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 
 const source =
@@ -21,7 +21,17 @@ export const dug2025Index0 = bitcoinPuzzle({
     "m/84'/0'/0'/0/0",
   ),
   pubkey: compressed("0306b973c11d5a15de593a8906a02f689e51e19148acc91b586e69383ca5f610f1"),
-  assets: assets({ solution: "2025-solution.md", sourceUrl: source }),
+  assets: assets({
+    solution: "2025-solution.md",
+    sourceUrl: source,
+    digests: [
+      digest(
+        "2025-solution.md",
+        "43a6eb1ba1b81db1898d80f7ed1efa008d8b738f9ff7866d8b2534ca051fd534",
+        3887,
+      ),
+    ],
+  }),
   transactions: [
     funding(
       "58ae2f1560e9b72f4a35e892c50d9bedc7e6dec7b6474250d25440c8bc92feb5",

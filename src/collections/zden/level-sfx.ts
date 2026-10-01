@@ -1,5 +1,5 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, funding, increase, p2pkh, uncompressed } from "../../core/parts.ts";
+import { assets, digest, claim, funding, increase, p2pkh, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `zden/level-sfx`. */
 export const zdenPuzzleLevelSfx = bitcoinPuzzle({
@@ -40,5 +40,18 @@ export const zdenPuzzleLevelSfx = bitcoinPuzzle({
     puzzle: "level-sfx/puzzle.png",
     solution: "level-sfx/solver.png",
     sourceUrl: "https://crypto.haluska.sk/cryptoSFX.png",
+    digests: [
+      digest(
+        "level-sfx/puzzle.png",
+        "a0494fc9794b6ad8e9d1f76c043f4b1f21720f8399704d8ac0dff1750a403595",
+        108822,
+        { url: "https://crypto.haluska.sk/cryptoSFX.png" },
+      ),
+      digest(
+        "level-sfx/solver.png",
+        "fb4f9da4254f286250fc83feea84e79cae3f24ad98a710282c11b1006723da3a",
+        469281,
+      ),
+    ],
   }),
 });

@@ -1,6 +1,7 @@
 import {
   answer,
   assets,
+  digest,
   claim,
   community,
   compressed,
@@ -125,5 +126,19 @@ export const iAmABananaAmaaGif = bitcoinPuzzle({
       ),
     ],
   }),
-  assets: assets({ puzzle: "gif/puzzle.gif", sourceUrl: GIF }),
+  assets: assets({
+    puzzle: "gif/puzzle.gif",
+    sourceUrl: GIF,
+    digests: [
+      digest(
+        "gif/puzzle.gif",
+        "8e83a9822b24ee0965df5e3697e4f8c1974a6003283e22fa4b013bba462b62c1",
+        882285,
+        {
+          url: "http://i.imgur.com/7rXofNv.gif",
+          archive: "https://web.archive.org/web/20201112034442id_/https://i.imgur.com/7rXofNv.gif",
+        },
+      ),
+    ],
+  }),
 });

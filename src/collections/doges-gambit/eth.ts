@@ -1,6 +1,7 @@
 import {
   answer,
   assets,
+  digest,
   claim,
   funding,
   hex,
@@ -70,5 +71,17 @@ export const dogesGambitEth = ethereumPuzzle({
     puzzle: "puzzle.jpg",
     solution: "eth-key.png",
     sourceUrl: VIDEO,
+    digests: [
+      digest(
+        "puzzle.jpg",
+        "cfb83b47d08d68c27d6526e1b0d4e4b5318eb684de68298ee9cf2e53d4b443c9",
+        90980,
+      ),
+      digest(
+        "eth-key.png",
+        "06479cecbe1757b5cbf62309bc0d9e8c49002151eb300124c9fd978124ccbc7a",
+        78694,
+      ),
+    ],
   }),
 });

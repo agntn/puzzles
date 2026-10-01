@@ -2,6 +2,7 @@ import { SingletonCollection } from "../core/collection.ts";
 import {
   answer,
   assets,
+  digest,
   claim,
   community,
   fact,
@@ -132,7 +133,21 @@ export const picturePuzzleRecord = bitcoinPuzzle({
       ),
     ],
   }),
-  assets: assets({ puzzle: "puzzle.png", sourceUrl: PICTURE }),
+  assets: assets({
+    puzzle: "puzzle.png",
+    sourceUrl: PICTURE,
+    digests: [
+      digest(
+        "puzzle.png",
+        "96902280c3f621d35e4741bcc054a06d7472f7ca8b65dc2d76c10db734890a9e",
+        144716,
+        {
+          url: "https://i.imgur.com/Gm9ldPp.png",
+          archive: "https://web.archive.org/web/20230508085216id_/https://i.imgur.com/Gm9ldPp.png",
+        },
+      ),
+    ],
+  }),
 });
 
 /** The 1 mBTC picture puzzle, one puzzle by givesadvice4bitcoin. */

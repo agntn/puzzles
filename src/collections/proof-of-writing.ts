@@ -2,6 +2,7 @@ import { SingletonCollection } from "../core/collection.ts";
 import {
   answer,
   assets,
+  digest,
   claim,
   compressed,
   decrease,
@@ -129,7 +130,17 @@ export const ecashCommunity = ecashPuzzle({
       ),
     ],
   }),
-  assets: assets({ puzzle: "puzzle.txt", sourceUrl: CAPTURE }),
+  assets: assets({
+    puzzle: "puzzle.txt",
+    sourceUrl: CAPTURE,
+    digests: [
+      digest(
+        "puzzle.txt",
+        "e421d1f38196643c9c753cb9b3cffb160de499467e8861e1fa45d0818256e245",
+        4783,
+      ),
+    ],
+  }),
 });
 
 /** Building an awesome eCash community, one Proof Of Writing article by cain. */

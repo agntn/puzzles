@@ -1,4 +1,4 @@
-import { assets, claim, hex, p2pkh, uncompressed } from "../../core/parts.ts";
+import { assets, digest, claim, hex, p2pkh, uncompressed } from "../../core/parts.ts";
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 
 /** TORCHED H34R7S, the final painting in The Legend of Satoshi Nakamoto. */
@@ -26,5 +26,22 @@ export const torchedH34r7s = bitcoinPuzzle({
     solution: "torched-h34r7s/solution.md",
     sourceUrl:
       "https://raw.githubusercontent.com/ynohtna92/1FLAMEN6/64f6eff0cb6541f7a4209fc567a37dce33cb9039/The%20Legend%20of%20Satoshi%20Nakamoto.jpg",
+    digests: [
+      digest(
+        "torched-h34r7s/puzzle.jpg",
+        "9653ff4d7131db16186d004e90e6f1f7231e4b33a408aa962e6803a5ab1f662f",
+        1040730,
+        {
+          url: "https://raw.githubusercontent.com/ynohtna92/1FLAMEN6/64f6eff0cb6541f7a4209fc567a37dce33cb9039/The%20Legend%20of%20Satoshi%20Nakamoto.jpg",
+          archive:
+            "https://web.archive.org/web/20260926203254id_/https://raw.githubusercontent.com/ynohtna92/1FLAMEN6/64f6eff0cb6541f7a4209fc567a37dce33cb9039/The%20Legend%20of%20Satoshi%20Nakamoto.jpg",
+        },
+      ),
+      digest(
+        "torched-h34r7s/solution.md",
+        "b459f84e1e67a8abe97e358c3e94964d6ca8a039cc22655f3fc8126f86044846",
+        2878,
+      ),
+    ],
   }),
 });

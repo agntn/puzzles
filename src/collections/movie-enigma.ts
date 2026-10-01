@@ -1,6 +1,7 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
   assets,
+  digest,
   claim,
   compressed,
   fact,
@@ -88,6 +89,13 @@ export const movieEnigmaPuzzle = bitcoinPuzzle({
   assets: assets({
     solution: "solution.md",
     sourceUrl: "https://github.com/floflo777/open-crypto-puzzles/issues/24",
+    digests: [
+      digest(
+        "solution.md",
+        "53cd9f6e291a6ed137538d0be2c8d93720b7391f25b8e6927f9b28dda884ef3a",
+        2001,
+      ),
+    ],
   }),
 });
 

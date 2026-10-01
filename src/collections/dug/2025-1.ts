@@ -1,5 +1,6 @@
 import {
   assets,
+  digest,
   claim,
   compressed,
   fact,
@@ -54,7 +55,17 @@ export const dug2025Index1 = bitcoinPuzzle({
       ),
     ],
   }),
-  assets: assets({ solution: "2025-solution.md", sourceUrl: source }),
+  assets: assets({
+    solution: "2025-solution.md",
+    sourceUrl: source,
+    digests: [
+      digest(
+        "2025-solution.md",
+        "43a6eb1ba1b81db1898d80f7ed1efa008d8b738f9ff7866d8b2534ca051fd534",
+        3887,
+      ),
+    ],
+  }),
   transactions: [
     funding(
       "35a1c6c2c7b01a1f9b83ce72f4bc6c748464e3b9f193375d3b80d2f350f48da6",

@@ -1,5 +1,5 @@
 import { litecoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, compressed, funding, p2pkh } from "../../core/parts.ts";
+import { assets, digest, claim, compressed, funding, p2pkh } from "../../core/parts.ts";
 
 /** Puzzle `zden/litecoin-segwit`. */
 export const zdenPuzzleLitecoinSegwit = litecoinPuzzle({
@@ -57,5 +57,28 @@ export const zdenPuzzleLitecoinSegwit = litecoinPuzzle({
       "litecoin-segwit/hint-3.svg",
     ],
     sourceUrl: "https://crypto.haluska.sk/LitecoinSegWit.png",
+    digests: [
+      digest(
+        "litecoin-segwit/puzzle.png",
+        "ecda441c0bd620949561e0059e258c3d0aec7a2bc6175cd7d3f44e17eb280328",
+        1921458,
+        { url: "https://crypto.haluska.sk/LitecoinSegWit.png" },
+      ),
+      digest(
+        "litecoin-segwit/hint-1.svg",
+        "01c7dc6c2f6e8e579ba877f3824c2df93dcbc6eabdd8043267c005f925a01ae6",
+        44982,
+      ),
+      digest(
+        "litecoin-segwit/hint-2.svg",
+        "2a880103f5e600501a92b53b3b0f6c39ca9128239889283bf614c4127913f79c",
+        44982,
+      ),
+      digest(
+        "litecoin-segwit/hint-3.svg",
+        "0f2715576f1bd9b4f24679c6cf3807a99ddedfda43ec9d9228012103cf0539e9",
+        72803,
+      ),
+    ],
   }),
 });

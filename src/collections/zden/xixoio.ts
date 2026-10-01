@@ -1,6 +1,7 @@
 import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
+  digest,
   claim,
   confirmation,
   funding,
@@ -38,6 +39,23 @@ export const zdenPuzzleXixoio = ethereumPuzzle({
     puzzle: "xixoio/puzzle.png",
     solution: "xixoio/solver.png",
     sourceUrl: "https://crypto.haluska.sk/xixoio_puzzle.png",
+    digests: [
+      digest(
+        "xixoio/puzzle.png",
+        "2c06602dffe6398ea1fc46609c16c493e4f3b08f4f2a28a3f7fc620f4836bfc8",
+        40624,
+        {
+          url: "https://crypto.haluska.sk/xixoio_puzzle.png",
+          archive:
+            "https://web.archive.org/web/20250929202710id_/https://crypto.haluska.sk/xixoio_puzzle.png",
+        },
+      ),
+      digest(
+        "xixoio/solver.png",
+        "8500c68bfec5fb9dd3078104405a30d645c46c90a71d09e0827fcca99af6b099",
+        241224,
+      ),
+    ],
   }),
   hints: [
     official(

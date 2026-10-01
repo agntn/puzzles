@@ -1,5 +1,5 @@
 import { decredPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, fact, p2pkh, party, PartyKind, profile } from "../../core/parts.ts";
+import { assets, digest, fact, p2pkh, party, PartyKind, profile } from "../../core/parts.ts";
 
 /** Puzzle `zden/decred-autonomy`, whose archived page links the reward address. */
 export const zdenPuzzleDecredAutonomy = decredPuzzle({
@@ -30,5 +30,17 @@ export const zdenPuzzleDecredAutonomy = decredPuzzle({
   assets: assets({
     puzzle: "decred-autonomy/puzzle.jpg",
     sourceUrl: "https://crypto.haluska.sk/gate_full.jpg",
+    digests: [
+      digest(
+        "decred-autonomy/puzzle.jpg",
+        "71a594766a6dfd8f11159ccc1555bedc675632af22ec3d9878c85e4eca606dc8",
+        8489474,
+        {
+          url: "https://crypto.haluska.sk/gate_full.jpg",
+          archive:
+            "https://web.archive.org/web/20250929202710id_/https://crypto.haluska.sk/gate_full.jpg",
+        },
+      ),
+    ],
   }),
 });

@@ -1,5 +1,5 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, compressed, funding, hex, p2pkh } from "../../core/parts.ts";
+import { assets, digest, claim, compressed, funding, hex, p2pkh } from "../../core/parts.ts";
 
 /** Puzzle `ballet/AA007448`. */
 export const balletPuzzleAA007448 = bitcoinPuzzle({
@@ -32,5 +32,12 @@ export const balletPuzzleAA007448 = bitcoinPuzzle({
   assets: assets({
     puzzle: "AA007448/puzzle.jpg",
     sourceUrl: "https://x.com/bobbyclee/status/1289004702122643456",
+    digests: [
+      digest(
+        "AA007448/puzzle.jpg",
+        "a9c67224d255afd26494fae895d0cf7c501883d464beeeca3704b46d431f20c7",
+        726927,
+      ),
+    ],
   }),
 });
