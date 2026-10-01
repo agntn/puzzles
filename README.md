@@ -106,6 +106,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `rushwallet`            | bitcoin                             | Brainwallets from a 2014 contest            |
 | `zden`                  | bitcoin, ethereum, litecoin, decred | Zden's visual puzzles                       |
 | `arweave`               | arweave, ethereum                   | Tiamat's weave puzzles                      |
+| `quizchain2`            | bitcoin                             | Quizchain's second run, from May 2019       |
 | `mini`                  | bitcoin, bitcoincash                | RetiredCoder's seven mini-puzzles           |
 | `warp`                  | bitcoin                             | Keybase's scrypt brainwallet challenges     |
 | `hash-collision`        | bitcoin                             | Peter Todd's P2SH collision bounties        |

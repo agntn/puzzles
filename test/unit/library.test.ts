@@ -27,6 +27,7 @@ import { PicturePuzzleCollection } from "../../src/collections/picture-puzzle.ts
 import { PowerfulMossCollection } from "../../src/collections/powerful-moss.ts";
 import { ProofOfWritingCollection } from "../../src/collections/proof-of-writing.ts";
 import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.ts";
+import { Quizchain2Collection } from "../../src/collections/quizchain2.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-birthday-quiz.ts";
 import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
@@ -98,6 +99,7 @@ const concreteClasses = [
   PowerfulMossCollection,
   ProofOfWritingCollection,
   QuizchainCollection,
+  Quizchain2Collection,
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
   TeikhosCollection,
@@ -560,7 +562,7 @@ describe("lazy collection registry", () => {
       "Puzzle not found: 71. Did you mean b1000/71 or quizchain/71?",
     );
     await expect(miss(requirePuzzle("1"))).resolves.toBe(
-      "Puzzle not found: 1. Did you mean b1000/1, mini/1, quizchain/1, rushwallet/1 or teikhos/1?",
+      "Puzzle not found: 1. Did you mean b1000/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1 or teikhos/1?",
     );
 
     /* A number one digit off is another puzzle, and an unknown collection holds no name. */
@@ -691,8 +693,13 @@ describe("lazy collection registry", () => {
     expect(zden?.author.aliases).toContain("Zden Hlinka");
     expect(zden?.author.facts?.every((entry) => entry.source.startsWith("https://"))).toBe(true);
     const aoi = await getAuthor("aoi-nakamoto");
-    expect(aoi?.collections).toEqual(["book-quiz", "quizchain", "satoshi-birthday-quiz"]);
-    expect(aoi?.puzzles).toBe(79);
+    expect(aoi?.collections).toEqual([
+      "book-quiz",
+      "quizchain",
+      "quizchain2",
+      "satoshi-birthday-quiz",
+    ]);
+    expect(aoi?.puzzles).toBe(89);
     expect(await getAuthor("nobody")).toBeUndefined();
     expect(await getAuthor(7 as never)).toBeUndefined();
   });
@@ -842,21 +849,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(448);
+    expect(await all()).toHaveLength(458);
     expect(await stats()).toEqual({
-      total: 448,
+      total: 458,
       claimed: 12,
       expired: 3,
-      solved: 233,
+      solved: 243,
       swept: 96,
       unsolved: 104,
-      with_pubkey: 340,
+      with_pubkey: 350,
       total_prize: {
         AR: 5550,
         ETH: 26.815651554256945,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1065.2300893,
+        BTC: 1065.5170893,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -909,7 +916,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(448);
+    ).toBe(458);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -936,6 +943,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(233);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(243);
   });
 });
