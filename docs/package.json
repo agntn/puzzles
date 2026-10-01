@@ -25,9 +25,9 @@
   },
   "devDependencies": {
     "@iconify-json/lucide": "1.2.137",
-    "@iconify-json/simple-icons": "1.2.97",
+    "@iconify-json/simple-icons": "1.2.98",
     "@iconify-json/token": "1.2.41",
-    "@iconify-json/vscode-icons": "1.2.82",
+    "@iconify-json/vscode-icons": "1.2.83",
     "vue-tsc": "3.3.11",
     "wrangler": "4.135.0"
   },
