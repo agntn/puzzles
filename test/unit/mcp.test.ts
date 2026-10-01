@@ -164,8 +164,8 @@ describe("puzzles MCP server", () => {
     ).split("\n");
     const bare = await client.callTool({ name: "puzzles_stages", arguments: { id: "b1000/71" } });
 
-    expect(staged.slice(0, 2)).toEqual(["gsmg: 5 stages", "stages: 5"]);
-    expect(staged.filter((line) => line.startsWith("\t\tanswer: "))).toHaveLength(3);
+    expect(staged.slice(0, 2)).toEqual(["gsmg: 7 stages", "stages: 7"]);
+    expect(staged.filter((line) => line.startsWith("\t\tanswer: "))).toHaveLength(5);
     expect(staged).toContain("\t\tthe seed is planted\thttps://gsmg.io/theseedisplanted");
     expect(firstText(bare)).toBe("b1000/71: no stages recorded");
   });

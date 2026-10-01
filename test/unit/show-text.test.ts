@@ -137,18 +137,26 @@ describe("puzzles_show text", () => {
     const copy = `${ASSETS}/assets/gsmg`;
     const salphaseion =
       "https://gsmg.io/89727c598b9cd1cf8873f27cb7057f050645ddb6a7a157a110239ac0152f6a32";
-    const start = text.indexOf("stages: 5");
+    const start = text.indexOf("stages: 7");
     const block = text.slice(start + 1).filter((line) => line.startsWith("\t"));
 
     expect(start).toBeGreaterThan(-1);
     expect(
       block.filter((line) => /^\t[^\t]/u.test(line)).map((line) => line.split("\t")[1]),
-    ).toEqual(["phase 1", "phase 2", "phase 3", "SalPhaseIon", "Cosmic Duality"]);
+    ).toEqual([
+      "phase 1",
+      "phase 2",
+      "phase 3",
+      "phase 3.2.1",
+      "phase 3.2.2",
+      "SalPhaseIon",
+      "Cosmic Duality",
+    ]);
     expect(block).toContain(`\t\tpuzzle image\thttps://gsmg.io/puzzle\t${copy}/puzzle.png`);
     expect(block).toContain("\t\tthe seed is planted\thttps://gsmg.io/theseedisplanted");
     expect(block).toContain(`\t\tciphertext\t${choice}\t${copy}/phase3.txt`);
     expect(block).toContain(`\t\tciphertext\t${salphaseion}\t${copy}/cosmic-duality.txt`);
-    expect(block.filter((line) => line.startsWith("\t\tanswer: "))).toHaveLength(3);
+    expect(block.filter((line) => line.startsWith("\t\tanswer: "))).toHaveLength(5);
     expect(block.find((line) => line.startsWith("\t\tanswer: causality"))).toMatch(
       /\tanswer source: https:\/\/github\.com\/puzzlehunt\/.+\tanswer date: 2020-04-26$/u,
     );

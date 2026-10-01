@@ -94,6 +94,26 @@ export const gsmgPuzzle = bitcoinPuzzle({
       ),
     ),
     stage(
+      "phase 3.2.1",
+      "Inside phase 3.2 the Architect has been waiting for you. He's designed you a beautiful strategic position, one for one, four for one, and under that sits a line of 1539 box drawing characters. No key, no cipher name, just boxes.",
+      [artifact("ciphertext", CHOICE, "phase3.txt")],
+      answer(
+        "The boxes convert to 1539 letters, vtkvplmepphluwahtzmjp and on, and Beaufort with the key THEMATRIXHASYOU turns them into the Architect's speech: YOUR LIFE IS THE SUM OF A REMAINDER OF AN UNBALANCED EQUATION INHERENT TO THE PROGRAMMING OF THIS PUZZLE, down to I REALLY HOPE YOURE THE ONE CIAO BELLA O.",
+        `${WRITEUP}#3-httpsgsmgiochoiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself`,
+        { date: "2020-04-26" },
+      ),
+    ),
+    stage(
+      "phase 3.2.2",
+      "Right after the boxes, a 149 digit number and one sentence to go with it: a fubcd-king & oracle-queen, thingky mvps, on a sad board but as wide as the first one seen.",
+      [artifact("ciphertext", CHOICE, "phase3.txt")],
+      answer(
+        "A VIC straddling checkerboard with 1 and 4 as the blank digits, then a substitution solver over its letters, turns the number into IN CASE YOU MANAGE TO CRACK THIS THE PRIVATE KEYS BELONG TO HALF AND BETTER HALF AND THEY ALSO NEED FUNDS TO LIVE.",
+        `${WRITEUP}#3-httpsgsmgiochoiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself`,
+        { date: "2020-04-26" },
+      ),
+    ),
+    stage(
       "SalPhaseIon",
       "A back door in the first image. The page path is the SHA-256 of the text printed under the grid, and behind it sits one long line of mostly the letters a to i, with a few words mixed in and a base64 blob split into single characters. The blob opens with Salted__, which says OpenSSL made it, not which cipher or key derivation. Parts of the letters decode. The writeup has no password for the blob.",
       [artifact("letters and blob", SALPHASEION, "salphaseion.txt")],
