@@ -109,6 +109,7 @@ const expectedCollections = [
   "powerful-moss",
   "proof-of-writing",
   "quizchain",
+  "quizchain2",
   "rushwallet",
   "satoshi-birthday-quiz",
   "teikhos",

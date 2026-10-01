@@ -46,6 +46,7 @@ export const builtins = [
     load: () => import("./proof-of-writing.ts").then((m) => m.proofOfWriting),
   },
   { key: "quizchain", load: () => import("./quizchain.ts").then((m) => m.quizchain) },
+  { key: "quizchain2", load: () => import("./quizchain2.ts").then((m) => m.quizchain2) },
   { key: "rushwallet", load: () => import("./rushwallet.ts").then((m) => m.rushwallet) },
   {
     key: "satoshi-birthday-quiz",

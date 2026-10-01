@@ -230,6 +230,14 @@ const PRESENTATION: Readonly<
     blurb:
       "A quiz answer plus a piece of the previous block's key, hashed into a wallet. The chain ran from April to July 2019, one block at a time.",
   },
+  quizchain2: {
+    icon: "i-lucide-repeat",
+    title: "Quizchain2",
+    sample: "quizchain2/1",
+    chains: ["bitcoin"],
+    blurb:
+      "The quizchain's second run, from May 2019. Most blocks stand alone now, an answer and a TOMI field hashed with MD5, and by block 6 the thread is arguing about scripts versus humans.",
+  },
   "satoshi-birthday-quiz": {
     icon: "i-lucide-cake",
     title: "Satoshi birthday 7 million quiz",
