@@ -1,6 +1,5 @@
-import { Value } from "typebox/value";
+import { validateInput, type ToolDefinition } from "@agntn/tools";
 import { describe, expect, it } from "vite-plus/test";
-import { puzzleToolSchemas } from "../../packages/shared/puzzles-tool-schemas.ts";
 import { chains } from "../../src/core/chains.ts";
 import { InvalidArgumentError } from "../../src/core/errors.ts";
 import {
@@ -13,38 +12,49 @@ import {
   solverTool,
   toolArguments,
 } from "../../src/tool-operations.ts";
+import { puzzlesTools } from "../../src/tools.ts";
 
-const schemas = puzzleToolSchemas(facts);
+/** Each definition under the short name `facts.tools` and `toolArguments` use. */
+const schemas = Object.fromEntries(
+  Object.entries(facts.tools).map(([short, { name }]) => [
+    short,
+    puzzlesTools.find((tool) => tool.name === name) as ToolDefinition,
+  ]),
+) as Record<keyof typeof facts.tools, ToolDefinition>;
+
+/* Whether the core validation every surface runs accepts the arguments. */
+const check = (tool: keyof typeof facts.tools, args: unknown): boolean =>
+  validateInput(schemas[tool], args).ok;
 
 describe("tool schemas and executors share one argument contract", () => {
   it("accepts the limit range the facts declare and rejects everything else", () => {
-    expect(Value.Check(schemas.list, { limit: facts.parameters.limit.minimum })).toBe(true);
-    expect(Value.Check(schemas.list, { limit: facts.parameters.limit.maximum })).toBe(true);
-    expect(Value.Check(schemas.list, { limit: 0 })).toBe(false);
-    expect(Value.Check(schemas.list, { limit: facts.parameters.limit.maximum + 1 })).toBe(false);
-    expect(Value.Check(schemas.list, { limit: 1.5 })).toBe(false);
+    expect(check("list", { limit: facts.parameters.limit.minimum })).toBe(true);
+    expect(check("list", { limit: facts.parameters.limit.maximum })).toBe(true);
+    expect(check("list", { limit: 0 })).toBe(false);
+    expect(check("list", { limit: facts.parameters.limit.maximum + 1 })).toBe(false);
+    expect(check("list", { limit: 1.5 })).toBe(false);
   });
 
   it("accepts only nonnegative safe integer offsets", () => {
     for (const offset of [0, 50, Number.MAX_SAFE_INTEGER]) {
-      expect(Value.Check(schemas.list, { offset })).toBe(true);
+      expect(check("list", { offset })).toBe(true);
     }
     for (const offset of [-1, 0.5, Infinity, NaN, Number.MAX_SAFE_INTEGER + 1, "50", null]) {
-      expect(Value.Check(schemas.list, { offset })).toBe(false);
+      expect(check("list", { offset })).toBe(false);
     }
-    expect(schemas.list.properties.offset).toMatchObject(facts.parameters.offset);
+    expect(schemas.list.input.properties.offset).toMatchObject(facts.parameters.offset);
   });
 
   it("accepts exactly the statuses the library defines", () => {
     for (const status of facts.statuses) {
-      expect(Value.Check(schemas.list, { status })).toBe(true);
+      expect(check("list", { status })).toBe(true);
     }
-    expect(Value.Check(schemas.list, { status: "bogus" })).toBe(false);
-    expect(Value.Check(schemas.list, { status: "" })).toBe(false);
+    expect(check("list", { status: "bogus" })).toBe(false);
+    expect(check("list", { status: "" })).toBe(false);
   });
 
   it("publishes list status as one enum that says what each value means", () => {
-    const status = schemas.list.properties.status;
+    const status = schemas.list.input.properties.status;
 
     expect(status).toMatchObject({
       enum: [...facts.statuses],
@@ -60,11 +70,11 @@ describe("tool schemas and executors share one argument contract", () => {
     /* The facts spell the list out so tool discovery skips @agntn/chains; this is the pin. */
     expect(facts.chains).toEqual(chains);
     for (const chain of chains) {
-      expect(Value.Check(schemas.list, { chain })).toBe(true);
+      expect(check("list", { chain })).toBe(true);
     }
-    expect(Value.Check(schemas.list, { chain: "solana" })).toBe(false);
-    expect(Value.Check(schemas.list, { chain: "" })).toBe(false);
-    expect(schemas.list.properties.chain).toMatchObject({
+    expect(check("list", { chain: "solana" })).toBe(false);
+    expect(check("list", { chain: "" })).toBe(false);
+    expect(schemas.list.input.properties.chain).toMatchObject({
       enum: [...facts.chains],
       description: facts.parameters.chain.description,
     });
@@ -73,39 +83,37 @@ describe("tool schemas and executors share one argument contract", () => {
   it("takes an address as free text the executor bounds, not an enum", () => {
     const { address } = facts.parameters;
 
-    expect(Value.Check(schemas.list, { address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH" })).toBe(true);
-    expect(Value.Check(schemas.list, { address: "" })).toBe(false);
-    expect(Value.Check(schemas.list, { address: "x".repeat(address.maxLength + 1) })).toBe(false);
-    expect(Value.Check(schemas.list, { address: 42 })).toBe(false);
-    expect(schemas.list.properties.address).toMatchObject(address);
+    expect(check("list", { address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH" })).toBe(true);
+    expect(check("list", { address: "" })).toBe(false);
+    expect(check("list", { address: "x".repeat(address.maxLength + 1) })).toBe(false);
+    expect(check("list", { address: 42 })).toBe(false);
+    expect(schemas.list.input.properties.address).toMatchObject(address);
   });
 
   it("bounds identifiers and keys the same way on every tool", () => {
     const { id, collection, apiKey } = facts.parameters;
 
-    expect(Value.Check(schemas.show, { id: "" })).toBe(false);
-    expect(Value.Check(schemas.show, { id: "x".repeat(id.maxLength + 1) })).toBe(false);
-    expect(Value.Check(schemas.hints, { id: "" })).toBe(false);
-    expect(Value.Check(schemas.hints, { id: "warp/challenge-1" })).toBe(true);
-    expect(Value.Check(schemas.stages, { id: "" })).toBe(false);
-    expect(Value.Check(schemas.stages, { id: "gsmg" })).toBe(true);
-    expect(Value.Check(schemas.verify, { id: "b1000/1" })).toBe(true);
-    expect(Value.Check(schemas.list, { collection: "" })).toBe(false);
-    expect(Value.Check(schemas.list, { collection: "x".repeat(collection.maxLength + 1) })).toBe(
+    expect(check("show", { id: "" })).toBe(false);
+    expect(check("show", { id: "x".repeat(id.maxLength + 1) })).toBe(false);
+    expect(check("hints", { id: "" })).toBe(false);
+    expect(check("hints", { id: "warp/challenge-1" })).toBe(true);
+    expect(check("stages", { id: "" })).toBe(false);
+    expect(check("stages", { id: "gsmg" })).toBe(true);
+    expect(check("verify", { id: "b1000/1" })).toBe(true);
+    expect(check("list", { collection: "" })).toBe(false);
+    expect(check("list", { collection: "x".repeat(collection.maxLength + 1) })).toBe(false);
+    expect(check("balance", { id: "b1000/1", apiKey: "x".repeat(apiKey.maxLength + 1) })).toBe(
       false,
     );
-    expect(
-      Value.Check(schemas.balance, { id: "b1000/1", apiKey: "x".repeat(apiKey.maxLength + 1) }),
-    ).toBe(false);
   });
 
   it("bounds the author key like the executor does", async () => {
     const { author } = facts.parameters;
 
-    expect(Value.Check(schemas.author, { key: "" })).toBe(false);
-    expect(Value.Check(schemas.author, { key: "x".repeat(author.maxLength + 1) })).toBe(false);
-    expect(Value.Check(schemas.author, { key: "peter-todd" })).toBe(true);
-    expect(Value.Check(schemas.authors, {})).toBe(true);
+    expect(check("author", { key: "" })).toBe(false);
+    expect(check("author", { key: "x".repeat(author.maxLength + 1) })).toBe(false);
+    expect(check("author", { key: "peter-todd" })).toBe(true);
+    expect(check("authors", {})).toBe(true);
     await expect(authorTool("")).rejects.toBeInstanceOf(InvalidArgumentError);
     await expect(authorTool("x".repeat(author.maxLength + 1))).rejects.toBeInstanceOf(
       InvalidArgumentError,
@@ -115,10 +123,10 @@ describe("tool schemas and executors share one argument contract", () => {
   it("bounds the solver key like the executor does", async () => {
     const { solver } = facts.parameters;
 
-    expect(Value.Check(schemas.solver, { key: "" })).toBe(false);
-    expect(Value.Check(schemas.solver, { key: "x".repeat(solver.maxLength + 1) })).toBe(false);
-    expect(Value.Check(schemas.solver, { key: "retired-coder" })).toBe(true);
-    expect(Value.Check(schemas.solvers, {})).toBe(true);
+    expect(check("solver", { key: "" })).toBe(false);
+    expect(check("solver", { key: "x".repeat(solver.maxLength + 1) })).toBe(false);
+    expect(check("solver", { key: "retired-coder" })).toBe(true);
+    expect(check("solvers", {})).toBe(true);
     await expect(solverTool("")).rejects.toBeInstanceOf(InvalidArgumentError);
     await expect(solverTool("x".repeat(solver.maxLength + 1))).rejects.toBeInstanceOf(
       InvalidArgumentError,
@@ -127,36 +135,38 @@ describe("tool schemas and executors share one argument contract", () => {
 
   it("rejects a key no tool parameter declares, except on the tools that take none", () => {
     for (const [tool, schema] of Object.entries(schemas)) {
-      const declared = Object.keys(schema.properties);
+      const declared = Object.keys(schema.input.properties);
       if (declared.length === 0) {
-        expect(Value.Check(schema, { _: "" }), tool).toBe(true);
+        expect(check(tool as keyof typeof schemas, { _: "" }), tool).toBe(true);
       } else {
-        expect(schema, tool).toMatchObject({ additionalProperties: false });
-        expect(Value.Check(schema, { stray: true }), tool).toBe(false);
+        expect(schema.input, tool).toMatchObject({ additionalProperties: false });
+        expect(check(tool as keyof typeof schemas, { stray: true }), tool).toBe(false);
       }
     }
-    expect(Value.Check(schemas.list, { with_pubkey: true })).toBe(false);
-    expect(Value.Check(schemas.list, { withPubkey: true })).toBe(true);
+    expect(check("list", { with_pubkey: true })).toBe(false);
+    expect(check("list", { withPubkey: true })).toBe(true);
   });
 
   it("names the same arguments in the executors' table as in each schema", () => {
     for (const [tool, schema] of Object.entries(schemas)) {
       expect([...toolArguments[tool as keyof typeof toolArguments]].sort(), tool).toEqual(
-        Object.keys(schema.properties).sort(),
+        Object.keys(schema.input.properties).sort(),
       );
     }
     expect(Object.keys(toolArguments).sort()).toEqual(Object.keys(facts.tools).sort());
   });
 
-  it("tracks the facts, so a changed limit shows up in the schema", () => {
-    /* Positive control for the guard above: a drifted table must produce a drifted schema. */
-    const drifted = puzzleToolSchemas({
-      ...facts,
-      parameters: { ...facts.parameters, limit: { ...facts.parameters.limit, maximum: 600 } },
-    });
-
-    expect(Value.Check(drifted.list, { limit: 600 })).toBe(true);
-    expect(Value.Check(schemas.list, { limit: 600 })).toBe(false);
+  it("builds every parameter from its entry in the facts", () => {
+    for (const schema of Object.values(schemas)) {
+      for (const [parameter, property] of Object.entries(schema.input.properties)) {
+        const fact = parameter === "key" ? undefined : facts.parameters[parameter as "id"];
+        if (fact !== undefined) {
+          expect(property, `${schema.name} ${parameter}`).toMatchObject(fact);
+        }
+      }
+    }
+    expect(schemas.author.input.properties["key"]).toMatchObject(facts.parameters.author);
+    expect(schemas.solver.input.properties["key"]).toMatchObject(facts.parameters.solver);
   });
 
   it("enforces the same limits in the executors when a host skips validation", async () => {

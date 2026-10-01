@@ -1,56 +1,24 @@
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { stripVTControlCharacters } from "node:util";
 
-import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
+import { Text, type ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
+import { registerOmpTools, type OmpRenderers } from "@agntn/tools/omp";
 
-import type * as ToolsModule from "../../../src/tool-operations.ts";
+import type * as PuzzlesTools from "../../../src/tools.ts";
 
-const sourceModulePath = fileURLToPath(new URL("../../../src/tool-operations.ts", import.meta.url));
+const sourceModulePath = fileURLToPath(new URL("../../../src/tools.ts", import.meta.url));
 
 /**
- * Loads the tool executors shared with MCP and Pi. Both specifiers stay literal so OMP's compiled
- * loader, which rewrites only what it can see, keeps the dependencies.
+ * Loads the tool definitions, from `src/` in a checkout and `dist/` once installed.
  *
- * @returns {Promise<typeof ToolsModule>} The executors.
+ * @returns {Promise<typeof PuzzlesTools>} The tool definitions.
  */
-function loadTools(): Promise<typeof ToolsModule> {
+function loadTools(): Promise<typeof PuzzlesTools> {
   return (
     existsSync(sourceModulePath)
-      ? import("../../../src/tool-operations.ts")
-      : import("../../../dist/tool-operations.mjs")
-  ) as Promise<typeof ToolsModule>;
-}
-
-/**
- * One line of plain text for the terminal. Model arguments can carry ANSI escapes, raw control
- * bytes and Unicode separators, and the Text component passes them through, so they go. String()
- * first, because hostile JSON ignores the declared types.
- *
- * @param {unknown} value - The value to record.
- * @returns {string} The value as one line of plain text.
- */
-function sanitizeTerminalText(value: unknown): string {
-  return stripVTControlCharacters(String(value))
-    .replaceAll(/[\p{Cc}\p{Cf}\p{Zl}\p{Zp}]/gu, " ")
-    .replaceAll(/\s+/gu, " ")
-    .trim();
-}
-
-function registration(tool: ToolsModule.ToolFacts): {
-  name: string;
-  label: string;
-  description: string;
-  approval: "read";
-  loadMode: "essential";
-} {
-  return {
-    name: tool.name,
-    label: tool.title,
-    description: tool.description,
-    approval: "read",
-    loadMode: "essential",
-  };
+      ? import("../../../src/tools.ts")
+      : import("../../../dist/tools.mjs")
+  ) as Promise<typeof PuzzlesTools>;
 }
 
 /**
@@ -59,175 +27,20 @@ function registration(tool: ToolsModule.ToolFacts): {
  * @param {ExtensionAPI} pi - The host extension API.
  */
 export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> {
-  /** OMP validates with its own TypeBox build, so the schemas come from the host facade. */
-  const { Type } = pi.typebox;
-  const { Text } = pi.pi;
   pi.setLabel("Puzzles");
-
-  const tools = await loadTools();
-  const { chains, parameters, statuses } = tools.facts;
-  const puzzleId = Type.String(parameters.id);
-  /**
-   * Closed like the shared schemas. OMP drops its own `i` intent before it validates, so that key
-   * never reaches this check.
-   *
-   * @param {T} properties - The tool's parameters.
-   * @returns {ReturnType<typeof Type.Object<T>>} An object schema that takes no other key.
-   */
-  function closed<T extends Parameters<typeof Type.Object>[0]>(properties: T) {
-    return Type.Object(properties, { additionalProperties: false });
-  }
-  const line = (text: string) => new Text(sanitizeTerminalText(text), 0, 0);
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.stats),
-    parameters: Type.Object({}),
-    renderCall() {
-      return line("Puzzle statistics");
+  const { puzzlesTools, callSummaries } = await loadTools();
+  const renderers = Object.fromEntries(
+    Object.entries(callSummaries).map(([name, describeCall]): [string, OmpRenderers] => [
+      name,
+      { describeCall },
+    ]),
+  );
+  /** The adapter takes no `loadMode`, and OMP would make the tools discoverable without one. */
+  const host = Object.create(pi, {
+    registerTool: {
+      value: (tool: Parameters<ExtensionAPI["registerTool"]>[0]) =>
+        pi.registerTool({ ...tool, loadMode: "essential" }),
     },
-    async execute() {
-      return tools.statsTool();
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.collections),
-    parameters: Type.Object({}),
-    renderCall() {
-      return line("Puzzle collections");
-    },
-    async execute() {
-      return tools.collectionsTool();
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.authors),
-    parameters: Type.Object({}),
-    renderCall() {
-      return line("Puzzle authors");
-    },
-    async execute() {
-      return tools.authorsTool();
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.author),
-    parameters: closed({ key: Type.String(parameters.author) }),
-    renderCall(args) {
-      return line(`Show author ${args.key}`);
-    },
-    async execute(_toolCallId, params) {
-      tools.assertArguments("author", params);
-      return tools.authorTool(params.key);
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.solvers),
-    parameters: Type.Object({}),
-    renderCall() {
-      return line("Puzzle solvers");
-    },
-    async execute() {
-      return tools.solversTool();
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.solver),
-    parameters: closed({ key: Type.String(parameters.solver) }),
-    renderCall(args) {
-      return line(`Show solver ${args.key}`);
-    },
-    async execute(_toolCallId, params) {
-      tools.assertArguments("solver", params);
-      return tools.solverTool(params.key);
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.show),
-    parameters: closed({ id: puzzleId }),
-    renderCall(args) {
-      return line(`Show puzzle ${args.id}`);
-    },
-    async execute(_toolCallId, params) {
-      tools.assertArguments("show", params);
-      return tools.showTool(params.id);
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.hints),
-    parameters: closed({ id: puzzleId }),
-    renderCall(args) {
-      return line(`Hints for puzzle ${args.id}`);
-    },
-    async execute(_toolCallId, params) {
-      tools.assertArguments("hints", params);
-      return tools.hintsTool(params.id);
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.stages),
-    parameters: closed({ id: puzzleId }),
-    renderCall(args) {
-      return line(`Stages of puzzle ${args.id}`);
-    },
-    async execute(_toolCallId, params) {
-      tools.assertArguments("stages", params);
-      return tools.stagesTool(params.id);
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.list),
-    parameters: closed({
-      address: Type.Optional(Type.String(parameters.address)),
-      collection: Type.Optional(Type.String(parameters.collection)),
-      chain: Type.Optional(Type.Enum(chains, parameters.chain)),
-      status: Type.Optional(Type.Enum(statuses, parameters.status)),
-      withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
-      limit: Type.Optional(Type.Integer(parameters.limit)),
-      offset: Type.Optional(Type.Integer(parameters.offset)),
-    }),
-    renderCall(args) {
-      return line(
-        `List puzzles ${args.address ?? args.collection ?? args.chain ?? "all"}${args.status === undefined ? "" : ` ${args.status}`}`,
-      );
-    },
-    async execute(_toolCallId, params) {
-      return tools.listTool(params);
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.verify),
-    parameters: closed({ id: puzzleId }),
-    renderCall(args) {
-      return line(`Verify puzzle ${args.id}`);
-    },
-    async execute(_toolCallId, params) {
-      tools.assertArguments("verify", params);
-      return tools.verifyTool(params.id);
-    },
-  });
-
-  pi.registerTool({
-    ...registration(tools.facts.tools.balance),
-    parameters: closed({
-      id: puzzleId,
-      apiKey: Type.Optional(Type.String(parameters.apiKey)),
-    }),
-    renderCall(args) {
-      return line(`Balance of puzzle ${args.id}`);
-    },
-    async execute(_toolCallId, params) {
-      tools.assertArguments("balance", params);
-      return tools.balanceTool(params.id, params.apiKey);
-    },
-  });
+  }) as ExtensionAPI;
+  registerOmpTools(host, puzzlesTools, { Text, renderers });
 }

@@ -5,11 +5,11 @@ export default defineCommand({
     name: "mcp",
     description: "Run the puzzle data MCP server over stdio",
   },
-  /** citty resolves every subcommand to print usage, so the SDK loads here and `--help` stays light. */
+  /** citty resolves every subcommand for `--help`, so the server and the SDK load only here. */
   async run() {
     const [{ createMcpServer }, { StdioServerTransport }] = await Promise.all([
       import("../mcp.ts"),
-      import("@modelcontextprotocol/sdk/server/stdio.js"),
+      import("@modelcontextprotocol/server/stdio"),
     ]);
     await createMcpServer().connect(new StdioServerTransport());
   },

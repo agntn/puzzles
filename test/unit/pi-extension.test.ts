@@ -1,9 +1,9 @@
 import { fileURLToPath } from "node:url";
+import { ToolInputError } from "@agntn/tools";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { createJiti } from "jiti/static";
 import { describe, expect, it } from "vite-plus/test";
 import puzzlesExtension from "../../packages/pi/extensions/puzzles.ts";
-import { InvalidArgumentError } from "../../src/core/errors.ts";
 import { facts } from "../../src/tool-operations.ts";
 
 interface RegisteredTool {
@@ -40,7 +40,7 @@ describe("Pi extension", () => {
     expect([...(await registerTools()).keys()].sort()).toEqual(toolNames);
   });
 
-  it("refuses a stray argument on every tool that takes some, when the host skips validation", async () => {
+  it("refuses a stray argument on every tool that takes some, whatever the host checks", async () => {
     const tools = await registerTools();
     const calls: Readonly<Record<string, Readonly<Record<string, unknown>>>> = {
       puzzles_author: { key: "dug", name: "Dug" },
@@ -55,7 +55,7 @@ describe("Pi extension", () => {
 
     for (const [name, params] of Object.entries(calls)) {
       await expect(tools.get(name)?.execute("call-stray", params), name).rejects.toThrow(
-        InvalidArgumentError,
+        ToolInputError,
       );
     }
     await expect(
