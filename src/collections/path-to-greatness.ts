@@ -1,6 +1,7 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
   assets,
+  digest,
   confirmation,
   fact,
   funding,
@@ -126,6 +127,45 @@ export const treasureHunt = litecoinPuzzle({
       "qr2.jpg",
     ],
     sourceUrl: "https://p2gtreasure.com/Clues/p2g_clues.zip",
+    digests: [
+      digest(
+        "computer-screen.jpg",
+        "f14bdfc2a1bf532cdb7a2da6b30034bdd6d96478b37f664658d5678fb2d800f2",
+        478546,
+      ),
+      digest(
+        "clue1-imagine.jpg",
+        "787861023f2d1ee6cc6d4ab21f9344f13b275cc6d0c2a03ea02a38c42724db5c",
+        564308,
+      ),
+      digest(
+        "clue2-scramble.jpg",
+        "c6e07d7a53faafa17f2d57ee0971462da80494d79d0fcf3ebb39b9630dc92e5e",
+        537001,
+      ),
+      digest(
+        "clue3-wasd.jpg",
+        "15c5fae68f242e2dc23f51100fac2ca574528c5284e737bda3cd59707a6e678b",
+        556777,
+      ),
+      digest(
+        "clue4-chess.jpg",
+        "6603d1c29220e64b744d34704ec57f90560a6490d152fdb0ce8cc03a6da6a359",
+        575085,
+      ),
+      digest(
+        "clue5-wonders.jpg",
+        "d348d9b36dc010e32c1b3689698c0d88793e031faf581214369fd229a793e119",
+        609035,
+      ),
+      digest(
+        "00111111.jpg",
+        "91dfcca1727e3361c3d090a9ff4d90d97667dba0b7cf53263a9316510542e744",
+        506238,
+      ),
+      digest("qr1.jpg", "d5b6bd00e6c84f7d2c7b60de168db885fdf5e2e0d2ce964a62dd887460a162f4", 13569),
+      digest("qr2.jpg", "120d72fde754740493e42627bbb561d5e7176429a9e221f24eef268346c1c2e9", 14009),
+    ],
   }),
 });
 

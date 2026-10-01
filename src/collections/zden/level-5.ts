@@ -1,6 +1,7 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
+  digest,
   claim,
   confirmation,
   funding,
@@ -53,6 +54,18 @@ export const zdenPuzzleLevel5 = bitcoinPuzzle({
   assets: assets({
     puzzle: "level-5/puzzle.png",
     sourceUrl: "https://crypto.haluska.sk/crypto5fix.png",
+    digests: [
+      digest(
+        "level-5/puzzle.png",
+        "5a62843597f0fd545e19a343b750c6cdfa8010ba2cb5b52d4ad29c7016e57cc6",
+        6798,
+        {
+          url: "https://crypto.haluska.sk/crypto5fix.png",
+          archive:
+            "https://web.archive.org/web/20240729023037id_/https://crypto.haluska.sk/crypto5fix.png",
+        },
+      ),
+    ],
   }),
   hints: [
     official(

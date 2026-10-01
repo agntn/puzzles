@@ -5,6 +5,7 @@ import type { Balance } from "./types.ts";
 import {
   type Address,
   type Assets,
+  type Digest,
   defined,
   frozen,
   type Hint,
@@ -44,11 +45,15 @@ export interface PuzzleData {
   readonly transactions?: readonly Transaction[];
 }
 
-/** One file a puzzle ships: its role, its name under `assets/<collection>/`, and where it lives. */
+/** One file a puzzle ships: its role, its name, where it lives and what the record pins. */
 export interface AssetLink {
+  readonly archive?: string;
+  readonly bytes?: number;
   readonly file: string;
   readonly kind: "puzzle" | "hint" | "solution" | "artifact";
+  readonly origin?: string;
   readonly path: string;
+  readonly sha256?: string;
   readonly url: string;
 }
 
@@ -82,16 +87,44 @@ function assetUrlOf(path: string): string {
 }
 
 /**
+ * A file's digest as link fields, with its `url` as `origin` beside the repository copy's `url`.
+ *
+ * @param {string} file - The file name under the collection's asset directory.
+ * @param {readonly Digest[] | undefined} digests - The digests on the record.
+ * @returns {Pick<AssetLink, "archive" | "bytes" | "origin" | "sha256">} The fields the digest has.
+ */
+function pinned(
+  file: string,
+  digests: readonly Digest[] | undefined,
+): Pick<AssetLink, "archive" | "bytes" | "origin" | "sha256"> {
+  const found = digests?.find((item) => item.file === file);
+  return found === undefined
+    ? {}
+    : defined({
+        sha256: found.sha256,
+        bytes: found.bytes,
+        origin: found.url,
+        archive: found.archive,
+      });
+}
+
+/**
  * One hint or solution link under the collection's asset directory.
  *
  * @param {AssetLink["kind"]} kind - The file's role on the record.
  * @param {string} file - The file name under the directory.
  * @param {string} directory - The collection's asset directory from the repository root.
+ * @param {readonly Digest[] | undefined} digests - The digests on the record.
  * @returns {AssetLink} The link.
  */
-function assetLink(kind: AssetLink["kind"], file: string, directory: string): AssetLink {
+function assetLink(
+  kind: AssetLink["kind"],
+  file: string,
+  directory: string,
+  digests: readonly Digest[] | undefined,
+): AssetLink {
   const path = `${directory}/${file}`;
-  return { kind, file, path, url: assetUrlOf(path) };
+  return { kind, file, path, url: assetUrlOf(path), ...pinned(file, digests) };
 }
 
 /**
@@ -101,16 +134,37 @@ function assetLink(kind: AssetLink["kind"], file: string, directory: string): As
  * @param {string | undefined} file - The image file name on the record.
  * @param {string | undefined} path - What `assetPath()` answers.
  * @param {string | undefined} url - What `assetUrl()` answers.
+ * @param {readonly Digest[] | undefined} digests - The digests on the record.
  * @returns {readonly AssetLink[]} The link, or nothing when any of the three is missing.
  */
 function imageLink(
   file: string | undefined,
   path: string | undefined,
   url: string | undefined,
+  digests: readonly Digest[] | undefined,
 ): readonly AssetLink[] {
   return file === undefined || path === undefined || url === undefined
     ? []
-    : [{ kind: "puzzle", file, path, url }];
+    : [{ kind: "puzzle", file, path, url, ...pinned(file, digests) }];
+}
+
+/**
+ * The image, hint and solution links of a record that ships files, in that order.
+ *
+ * @param {Assets} assets - The record's assets.
+ * @param {string} directory - The collection's asset directory from the repository root.
+ * @param {readonly AssetLink[]} image - The puzzle image link, as `imageLink()` builds it.
+ * @returns {AssetLink[]} The links.
+ */
+function recordLinks(assets: Assets, directory: string, image: readonly AssetLink[]): AssetLink[] {
+  const { digests } = assets;
+  return [
+    ...image,
+    ...(assets.hints ?? []).map((hint) => assetLink("hint", hint, directory, digests)),
+    ...(assets.solution === undefined
+      ? []
+      : [assetLink("solution", assets.solution, directory, digests)]),
+  ];
 }
 
 const SOLVE_TIME_UNITS = [
@@ -444,19 +498,18 @@ export abstract class Puzzle {
    */
   assetLinks(): readonly AssetLink[] {
     const assets = this.assets();
+    const digests = assets?.digests;
     const directory = `assets/${this.collection()}`;
-    const links: AssetLink[] =
+    const links =
       assets === undefined
         ? []
-        : [
-            ...imageLink(assets.puzzle, this.assetPath(), this.assetUrl()),
-            ...(assets.hints ?? []).map((hint) => assetLink("hint", hint, directory)),
-            ...(assets.solution === undefined
-              ? []
-              : [assetLink("solution", assets.solution, directory)]),
-          ];
+        : recordLinks(
+            assets,
+            directory,
+            imageLink(assets.puzzle, this.assetPath(), this.assetUrl(), digests),
+          );
     for (const { file } of this.stages().flatMap((item) => item.artifacts)) {
-      const link = file === undefined ? undefined : assetLink("artifact", file, directory);
+      const link = file === undefined ? undefined : assetLink("artifact", file, directory, digests);
       if (link !== undefined && !links.some((other) => other.path === link.path)) {
         links.push(link);
       }

@@ -1,6 +1,7 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
   assets,
+  digest,
   community,
   decrease,
   encryptedWif,
@@ -90,7 +91,18 @@ export const bruteForce = bitcoinPuzzle({
       0.038063,
     ),
   ],
-  assets: assets({ puzzle: "puzzle.png", sourceUrl: PICTURE }),
+  assets: assets({
+    puzzle: "puzzle.png",
+    sourceUrl: PICTURE,
+    digests: [
+      digest(
+        "puzzle.png",
+        "07d729b09d2757cefff0a2f104ed3d7fc7e60d43822dc86038b122a68c81cc64",
+        215666,
+        { url: "https://i.imgur.com/3RSb8MH.png" },
+      ),
+    ],
+  }),
 });
 
 /** Brute force and the coins are yours, one bitaddress.org paper wallet by q. */

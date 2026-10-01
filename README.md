@@ -72,6 +72,7 @@ source: https://bitcointalk.org/index.php?topic=293382.0
 | `puzzles show <id>`         | One puzzle's record: key material, transactions, hints and links. `--json` for the data                                 |
 | `puzzles hints <id>`        | The collection's hints, the puzzle's own, then its hint files. `--json` for both                                        |
 | `puzzles stages <id>`       | The stages of a multi-stage puzzle with their pages, files and published answers. `--json` for the list                 |
+| `puzzles assets <id>`       | The files a puzzle ships with SHA-256 and size. `--check <dir>` hashes your copies, `--live` the author's URLs          |
 | `puzzles list [collection]` | One puzzle per line. `--address`, `--chain`, `--status` and `--with-pubkey` narrow it, `--limit` and `--offset` page it |
 | `puzzles verify [id]`       | A published key against its address. `--all` for every puzzle, exit 1 on a mismatch                                     |
 | `puzzles balance [id]`      | The live balance. The `list` filters check a whole set, one row each. `--api-key`, or one variable per chain            |
@@ -163,7 +164,7 @@ It doesn't solve anything. No scanner, no kangaroo, no brainwallet cracker, and 
 
 ## 🧩 Adding a puzzle
 
-One record file under `src/collections/<key>/` and one line in the collection module. Then `pnpm test` runs the data gate: unique ids, address and txid formats, key derivation, BIP38 payloads, asset paths, no nulls. The shape of a record is in [Puzzle records](https://puzzles.agntn.dev/guide/records) and the rules in [CONTRIBUTING.md](./CONTRIBUTING.md).
+One record file under `src/collections/<key>/` and one line in the collection module. Then `pnpm test` runs the data gate: unique ids, address and txid formats, key derivation, BIP38 payloads, asset paths and their SHA-256, no nulls. The shape of a record is in [Puzzle records](https://puzzles.agntn.dev/guide/records) and the rules in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## 🛠️ Development
 

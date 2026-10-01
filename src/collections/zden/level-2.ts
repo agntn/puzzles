@@ -1,5 +1,5 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, funding, hex, p2pkh, uncompressed } from "../../core/parts.ts";
+import { assets, digest, claim, funding, hex, p2pkh, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `zden/level-2`. */
 export const zdenPuzzleLevel2 = bitcoinPuzzle({
@@ -33,5 +33,22 @@ export const zdenPuzzleLevel2 = bitcoinPuzzle({
     puzzle: "level-2/puzzle.png",
     solution: "level-2/solver.png",
     sourceUrl: "https://crypto.haluska.sk/crypto2.png",
+    digests: [
+      digest(
+        "level-2/puzzle.png",
+        "d43ae2e2c6e50ed9a7ad486ba74a7c9065f7fb22cc1fcec1fc9d65b2469714f5",
+        120038,
+        {
+          url: "https://crypto.haluska.sk/crypto2.png",
+          archive:
+            "https://web.archive.org/web/20250929202710id_/https://crypto.haluska.sk/crypto2.png",
+        },
+      ),
+      digest(
+        "level-2/solver.png",
+        "389ee4e8668ca1e1f59333071b3216ddff53b8b1d77a7e3eeb43850a209ced27",
+        145160,
+      ),
+    ],
   }),
 });

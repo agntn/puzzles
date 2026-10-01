@@ -178,7 +178,7 @@ describe("lazy collection registry", () => {
     expect(puzzle.solver()?.facts?.[0]?.source).toBe(
       "https://steemit.com/bitcoin/@mmorsl/solution-of-the-bitcoin-crypto-puzzle-level-4-by-zden",
     );
-    expect(puzzle.assets()).toEqual({
+    expect(puzzle.assets()).toMatchObject({
       puzzle: "level-4/puzzle.png",
       solution: "level-4/solution.md",
       source_url: "https://crypto.haluska.sk/crypto4.png",

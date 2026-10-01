@@ -1,5 +1,5 @@
 import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { assets, funding, increase, p2pkh, passphrase } from "../../core/parts.ts";
+import { assets, digest, funding, increase, p2pkh, passphrase } from "../../core/parts.ts";
 
 /** Puzzle `ballet/AA012381`. */
 export const balletPuzzleAA012381 = bitcoinPuzzle({
@@ -29,5 +29,12 @@ export const balletPuzzleAA012381 = bitcoinPuzzle({
   assets: assets({
     puzzle: "AA012381/puzzle.jpg",
     sourceUrl: "https://x.com/bobbyclee/status/1289004702122643456",
+    digests: [
+      digest(
+        "AA012381/puzzle.jpg",
+        "c625162197b5bc59a796949dba3816f0e532a97d0a199ca492b5f5445584d320",
+        1372247,
+      ),
+    ],
   }),
 });

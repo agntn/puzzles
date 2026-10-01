@@ -1,6 +1,7 @@
 import { decredPuzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
+  digest,
   claim,
   compressed,
   confirmation,
@@ -62,6 +63,28 @@ export const zdenPuzzleDecredJanus = decredPuzzle({
     puzzle: "decred-janus/puzzle.svg",
     hints: ["decred-janus/hint.svg"],
     sourceUrl: "https://crypto.haluska.sk/decred_tree.svg",
+    digests: [
+      digest(
+        "decred-janus/puzzle.svg",
+        "f0252c5c79ed108139244978ec1c91bb06dd7efa2e95fc8336990ec716dcfee9",
+        22817,
+        {
+          url: "https://crypto.haluska.sk/decred_tree.svg",
+          archive:
+            "https://web.archive.org/web/20170515091103id_/http://crypto.haluska.sk:80/decred_tree.svg",
+        },
+      ),
+      digest(
+        "decred-janus/hint.svg",
+        "3f518b69e8c447565a8560edb87855d0a186ecc5f99b8c5811f366e51c81efc1",
+        22761,
+        {
+          url: "https://crypto.haluska.sk/decred_tree_hint.svg",
+          archive:
+            "https://web.archive.org/web/20181219152809id_/http://crypto.haluska.sk/decred_tree_hint.svg",
+        },
+      ),
+    ],
   }),
   hints: [
     official(

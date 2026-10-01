@@ -1,6 +1,7 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
+  digest,
   claim,
   confirmation,
   funding,
@@ -43,6 +44,18 @@ export const zdenPuzzleDemobit2018 = bitcoinPuzzle({
   assets: assets({
     puzzle: "demobit-2018/puzzle.png",
     sourceUrl: "https://crypto.haluska.sk/crypto_db18.png",
+    digests: [
+      digest(
+        "demobit-2018/puzzle.png",
+        "354f91405317761ac185bb41d9e734e3de433986758c58fb45a4c4594596b0ae",
+        81511,
+        {
+          url: "https://crypto.haluska.sk/crypto_db18.png",
+          archive:
+            "https://web.archive.org/web/20201109013648id_/http://crypto.haluska.sk/crypto_db18.png",
+        },
+      ),
+    ],
   }),
   hints: [
     official(

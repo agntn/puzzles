@@ -108,8 +108,18 @@ export interface PartyOptions {
   readonly profiles?: readonly Profile[];
 }
 
+/** A shipped file's SHA-256 and size, and the author's URL and capture that served those bytes. */
+export interface Digest {
+  readonly archive?: string;
+  readonly bytes: number;
+  readonly file: string;
+  readonly sha256: string;
+  readonly url?: string;
+}
+
 /** Files shipped with a puzzle. */
 export interface Assets {
+  readonly digests?: readonly Digest[];
   readonly hints?: readonly string[];
   readonly puzzle?: string;
   readonly solution?: string;
@@ -829,11 +839,12 @@ export function party(name?: string, options: PartyOptions = {}): Party {
 /**
  * The asset record of a puzzle.
  *
- * @param {Readonly<{ hints?: readonly string[]; puzzle?: string; solution?: string; sourceUrl?: string }>} options - File names under the collection's asset directory and their source.
+ * @param {Readonly<{ digests?: readonly Digest[]; hints?: readonly string[]; puzzle?: string; solution?: string; sourceUrl?: string }>} options - File names under the collection's asset directory, their digests and their source.
  * @returns {Assets} The asset record.
  */
 export function assets(
   options: Readonly<{
+    digests?: readonly Digest[];
     hints?: readonly string[];
     puzzle?: string;
     solution?: string;
@@ -845,7 +856,26 @@ export function assets(
     solution: options.solution,
     hints: options.hints,
     source_url: options.sourceUrl,
+    digests: options.digests,
   });
+}
+
+/**
+ * Pins the bytes of one file the record ships, a stage artifact's copy included.
+ *
+ * @param {string} file - The file name under the collection's asset directory.
+ * @param {string} sha256 - Its SHA-256 in lowercase hex.
+ * @param {number} bytes - Its size.
+ * @param {Readonly<{ archive?: string; url?: string }>} [origin] - The author's URL that served these bytes, and an archive capture of them.
+ * @returns {Digest} The digest.
+ */
+export function digest(
+  file: string,
+  sha256: string,
+  bytes: number,
+  origin: Readonly<{ archive?: string; url?: string }> = {},
+): Digest {
+  return defined({ file, sha256, bytes, url: origin.url, archive: origin.archive });
 }
 
 /**

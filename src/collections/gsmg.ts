@@ -3,6 +3,7 @@ import {
   answer,
   artifact,
   assets,
+  digest,
   decrease,
   fact,
   funding,
@@ -58,6 +59,38 @@ export const gsmgPuzzle = bitcoinPuzzle({
     puzzle: "puzzle.png",
     hints: ["follow-the-white-rabbit.png"],
     sourceUrl: "https://gsmg.io/puzzle",
+    digests: [
+      digest(
+        "puzzle.png",
+        "38125bbdf1ea58b9b30b075bc6bf71e4089d04bba37098317e47097e2f2a1830",
+        29931,
+        {
+          url: "https://gsmg.io/puzzle",
+          archive: "https://web.archive.org/web/20201112011308id_/https://gsmg.io/puzzle",
+        },
+      ),
+      digest(
+        "follow-the-white-rabbit.png",
+        "5e8d84b88f8f829428df5d2a8bf36c7268346f169b799ac7570b6223990d204f",
+        1958,
+      ),
+      digest("phase2.txt", "5e583d5b8626aa80f8a1ae61e7ad62fb2640bedb73fcc12ba68fa13b15dfa94d", 910),
+      digest(
+        "phase3.txt",
+        "d6767b282515485b6a52df4599e7b06e1428469596155ca18e4f5634ac2118ad",
+        5570,
+      ),
+      digest(
+        "salphaseion.txt",
+        "cc1bffaeebe34e79128617b41db5a5f14e29650ae53a16d8bd371a113fa93602",
+        2150,
+      ),
+      digest(
+        "cosmic-duality.txt",
+        "9a8172dd327273459f602517539ea30bbfa318d9d4338820f16d6c033260edf7",
+        1820,
+      ),
+    ],
   }),
   stages: [
     stage(

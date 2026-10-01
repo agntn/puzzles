@@ -1,4 +1,7 @@
 import { execFile } from "node:child_process";
+import { copyFileSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { promisify } from "node:util";
 import { describe, expect, it } from "vite-plus/test";
 import { collectionKeys } from "../../src/core/registry.ts";
@@ -114,6 +117,121 @@ describe.concurrent("puzzles CLI", () => {
     expect((await puzzles("stages", "b1000/71")).trim()).toBe("b1000/71: no stages recorded");
   });
 
+  it("lists the files a puzzle ships with the digests the record pins", async () => {
+    const { get } = await import("../../src/core/dataset.ts");
+    const listed = await json<{ readonly assets: readonly { readonly sha256: string }[] }>(
+      "assets",
+      "gsmg",
+      "--json",
+    );
+
+    const image = (await get("gsmg"))?.assetLinks()[0];
+
+    expect((await puzzles("assets", "gsmg")).split("\n")[0]).toBe(
+      `puzzle\tpuzzle.png\t29931\t38125bbdf1ea58b9b30b075bc6bf71e4089d04bba37098317e47097e2f2a1830\t${image?.url}`,
+    );
+    expect(listed.assets).toEqual((await get("gsmg"))?.assetLinks());
+    expect(await puzzles("assets", "b1000/71")).toBe("b1000/71: no assets recorded");
+  });
+
+  it("checks the repository's own copies and exits 0 when every file matches", async () => {
+    /* execFile rejects on a non-zero exit, so resolving proves the check passed. */
+    const output = await puzzles("assets", "zden/level-1", "--check", "assets/zden");
+
+    expect(output.split("\n").map((line) => line.split("\t")[0])).toEqual(["MATCH", "MATCH"]);
+  });
+
+  it("reports a changed or missing local copy and exits 1", async () => {
+    const directory = mkdtempSync(join(tmpdir(), "puzzles-assets-"));
+    try {
+      copyFileSync("assets/gsmg/puzzle.png", join(directory, "puzzle.png"));
+      writeFileSync(join(directory, "phase2.txt"), "not the page\n");
+      const result = await failure("assets", "gsmg", "--check", directory, "--json");
+      const checked = JSON.parse(result.stdout) as {
+        readonly assets: readonly {
+          readonly actual?: { readonly bytes: number };
+          readonly file: string;
+          readonly status: string;
+        }[];
+      };
+
+      expect(result.code).toBe(1);
+      expect(checked.assets.map(({ file, status }) => `${status} ${file}`)).toEqual([
+        "MATCH puzzle.png",
+        "MISSING follow-the-white-rabbit.png",
+        "MISMATCH phase2.txt",
+        "MISSING phase3.txt",
+        "MISSING salphaseion.txt",
+        "MISSING cosmic-duality.txt",
+      ]);
+      expect(checked.assets.map((asset) => asset.actual?.bytes)).toEqual([
+        undefined,
+        undefined,
+        13,
+        undefined,
+        undefined,
+        undefined,
+      ]);
+    } finally {
+      rmSync(directory, { recursive: true });
+    }
+  });
+
+  it("fetches each file from the author's URL with --live and keeps a failed fetch apart", async () => {
+    const live = async (reply: string, ...extra: readonly string[]): Promise<Failure> => {
+      try {
+        const { stderr, stdout } = await execute(
+          process.execPath,
+          [
+            "--import",
+            "./test/support/asset-fetch-stub.ts",
+            "src/cli.ts",
+            "assets",
+            "zden/level-1",
+            "--live",
+            ...extra,
+          ],
+          { cwd: process.cwd(), env: { ...process.env, PUZZLES_ASSET_REPLY: reply } },
+        );
+        return { code: 0, stderr, stdout };
+      } catch (error) {
+        const { code, stderr, stdout } = error as Failure;
+        return { code, stderr, stdout };
+      }
+    };
+    const statuses = (result: Failure): string[] =>
+      result.stdout
+        .trim()
+        .split("\n")
+        .map((line) => line.split("\t").slice(0, 2).join(" "));
+
+    const same = await live("file:assets/zden/level-1/puzzle.png");
+    const changed = await live("file:assets/zden/level-1/solver.png", "--json");
+    const gone = await live("status:404");
+    const down = await live("error");
+
+    expect(same.stderr).toBe("fetch https://crypto.haluska.sk/crypto1.png\n");
+    expect([same.code, ...statuses(same)]).toEqual([0, "MATCH puzzle", "NO_ORIGIN solution"]);
+    expect(changed.code).toBe(1);
+    expect(
+      (JSON.parse(changed.stdout) as { readonly assets: readonly { readonly actual?: unknown }[] })
+        .assets[0]?.actual,
+    ).toEqual({
+      sha256: "4390fc4163b5e39ce9207b4a8bddb2c094e425e70c2064c67742c0896ffe0ac5",
+      bytes: 33913,
+    });
+    expect([gone.code, ...statuses(gone)]).toEqual([0, "UNREACHABLE puzzle", "NO_ORIGIN solution"]);
+    expect(gone.stdout).toContain("HTTP 404");
+    expect(down.stdout).toContain("fetch failed");
+  });
+
+  it("refuses --check together with --live", async () => {
+    const result = await failure("assets", "gsmg", "--check", "assets/gsmg", "--live");
+
+    expect(result.code).toBe(1);
+    expect(result.stderr.trim()).toBe("Invalid check: pass either --check or --live, not both");
+  });
+
   it("prints the hints that hold for a puzzle as the tool does", async () => {
     const output = await puzzles("hints", "warp/challenge-1");
 
@@ -188,6 +306,11 @@ describe.concurrent("puzzles CLI", () => {
           file: "decred-janus/hint.svg",
           path: "assets/zden/decred-janus/hint.svg",
           url: `${ASSETS}/assets/zden/decred-janus/hint.svg`,
+          sha256: "3f518b69e8c447565a8560edb87855d0a186ecc5f99b8c5811f366e51c81efc1",
+          bytes: 22761,
+          origin: "https://crypto.haluska.sk/decred_tree_hint.svg",
+          archive:
+            "https://web.archive.org/web/20181219152809id_/http://crypto.haluska.sk/decred_tree_hint.svg",
         },
       ],
     });
@@ -280,6 +403,8 @@ describe.concurrent("puzzles CLI", () => {
           file: "follow-the-white-rabbit.png",
           path: "assets/gsmg/follow-the-white-rabbit.png",
           url: `${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
+          sha256: "5e8d84b88f8f829428df5d2a8bf36c7268346f169b799ac7570b6223990d204f",
+          bytes: 1958,
         },
       ],
     });
@@ -774,7 +899,7 @@ describe.concurrent("puzzles CLI", () => {
     const usage = await run("verify", "--help");
     const unknown = await run("nope");
 
-    expect(help.stdout).toContain("USAGE puzzles authors|balance|");
+    expect(help.stdout).toContain("USAGE puzzles assets|authors|balance|");
     expect(usage.stdout).toContain("--all    Verify every puzzle");
     expect(unknown).toMatchObject({ code: 1, stderr: "Unknown command nope\n" });
     for (const output of [help, usage, unknown]) {

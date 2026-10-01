@@ -1,6 +1,7 @@
 import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
+  digest,
   claim,
   fact,
   funding,
@@ -52,5 +53,22 @@ export const zdenPuzzleLevel4 = bitcoinPuzzle({
     puzzle: "level-4/puzzle.png",
     solution: "level-4/solution.md",
     sourceUrl: "https://crypto.haluska.sk/crypto4.png",
+    digests: [
+      digest(
+        "level-4/puzzle.png",
+        "763c4ae057800bbab03130cd1a73e0b47cb4afe84bfa2cc57ef446fe339e82cf",
+        91923,
+        {
+          url: "https://crypto.haluska.sk/crypto4.png",
+          archive:
+            "https://web.archive.org/web/20181224203405id_/http://crypto.haluska.sk/crypto4.png",
+        },
+      ),
+      digest(
+        "level-4/solution.md",
+        "5cdb68b30249f057ecc71a4858200a6f15580846407daa6422b089cd9676c447",
+        916,
+      ),
+    ],
   }),
 });

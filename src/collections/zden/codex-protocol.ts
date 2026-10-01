@@ -1,5 +1,5 @@
 import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, funding, hex, standard, uncompressed } from "../../core/parts.ts";
+import { assets, digest, claim, funding, hex, standard, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `zden/codex-protocol`. */
 export const zdenPuzzleCodexProtocol = ethereumPuzzle({
@@ -32,5 +32,28 @@ export const zdenPuzzleCodexProtocol = ethereumPuzzle({
     solution: "codex-protocol/solution.md",
     hints: ["codex-protocol/hint-1.png", "codex-protocol/hint-2.png"],
     sourceUrl: "https://crypto.haluska.sk/CodexPuzzle.png",
+    digests: [
+      digest(
+        "codex-protocol/puzzle.png",
+        "a3edc48e1abbcef2158f2c4b94d8157f3df93886167994d60278660cd3543f64",
+        20434999,
+        { url: "https://crypto.haluska.sk/CodexPuzzle.png" },
+      ),
+      digest(
+        "codex-protocol/hint-1.png",
+        "adae828a669377f415fe2b440047ef1bba81161d2ceec7431f0d6dda1707496c",
+        20491068,
+      ),
+      digest(
+        "codex-protocol/hint-2.png",
+        "b369586f13687dbc54e02c9da152df71fe22d8dcb25601947a7cb01dde1997be",
+        1053536,
+      ),
+      digest(
+        "codex-protocol/solution.md",
+        "f0a33c6e59006c6706b7133f507646b327fa7ee01f0acf3fc4ce478778dba08e",
+        722,
+      ),
+    ],
   }),
 });

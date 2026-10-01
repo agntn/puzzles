@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import { sha256 } from "@agntn/hashes";
 import { bech32, createBase58check } from "@scure/base";
@@ -16,6 +16,8 @@ import {
   artifact,
   assets,
   confirmation,
+  digest,
+  type Digest,
   fact,
   type Hint,
   type KeyData,
@@ -164,6 +166,59 @@ function assetProblems(puzzle: Puzzle): string[] {
     }
     return existsSync(target) ? [] : [`${puzzle.id()}: missing asset ${link.path}`];
   });
+}
+
+/** An archive of a file's exact bytes: a Wayback replay without the toolbar. */
+const WAYBACK_REPLAY = /^https:\/\/web\.archive\.org\/web\/\d{14}id_\/https?:\/\/\S+$/u;
+
+/** A pinned SHA-256: 64 lowercase hex digits. */
+const SHA256_HEX = /^[0-9a-f]{64}$/u;
+
+function digestFieldProblems(id: string, item: Digest): string[] {
+  return [
+    ...(SHA256_HEX.test(item.sha256)
+      ? []
+      : [`${id}: digest of ${item.file} is not lowercase SHA-256 hex`]),
+    ...(Number.isSafeInteger(item.bytes) && item.bytes >= 0
+      ? []
+      : [`${id}: digest of ${item.file} has no byte count`]),
+    ...(item.url === undefined || isWebUrl(item.url)
+      ? []
+      : [`${id}: digest of ${item.file} has no web URL for its origin`]),
+    ...(item.archive === undefined || WAYBACK_REPLAY.test(item.archive)
+      ? []
+      : [`${id}: digest of ${item.file} archive is not a Wayback id_ replay`]),
+  ];
+}
+
+function digestProblems(puzzle: Puzzle): string[] {
+  const links = puzzle.assetLinks();
+  const digests = puzzle.assets()?.digests ?? [];
+  const unpinned = links.flatMap((link) => {
+    if (link.sha256 === undefined || link.bytes === undefined) {
+      return [`${puzzle.id()}: asset ${link.file} has no digest`];
+    }
+    if (!existsSync(link.path)) {
+      return [];
+    }
+    const data = readFileSync(link.path);
+    const actual = sha256(new Uint8Array(data)).toHex();
+    return actual === link.sha256 && data.length === link.bytes
+      ? []
+      : [
+          `${puzzle.id()}: asset ${link.file} is ${actual} (${data.length} bytes), not ${link.sha256} (${link.bytes} bytes)`,
+        ];
+  });
+  const stray = digests.flatMap((item, index) => [
+    ...digestFieldProblems(puzzle.id(), item),
+    ...(links.some((link) => link.file === item.file)
+      ? []
+      : [`${puzzle.id()}: digest of ${item.file} names no file the record ships`]),
+    ...(digests.findIndex((other) => other.file === item.file) === index
+      ? []
+      : [`${puzzle.id()}: digest of ${item.file} repeats`]),
+  ]);
+  return [...unpinned, ...stray];
 }
 
 /** A hint date is the record's `YYYY-MM-DD HH:MM:SS`, or the day alone when the source has no time. */
@@ -610,6 +665,46 @@ describe("collection class data", () => {
 
   it("references only existing assets", () => {
     expect(puzzles.flatMap((puzzle) => assetProblems(puzzle))).toEqual([]);
+  });
+
+  it("pins the bytes of every asset to the repository copy", () => {
+    expect(puzzles.flatMap((puzzle) => digestProblems(puzzle))).toEqual([]);
+  });
+
+  it("names every way an asset digest can fail the data gate", () => {
+    const image = readFileSync("assets/gsmg/puzzle.png");
+    const pinned = bitcoinPuzzle({
+      id: "gsmg",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      assets: assets({
+        puzzle: "puzzle.png",
+        hints: ["follow-the-white-rabbit.png", "phase2.txt"],
+        digests: [
+          digest("puzzle.png", "0".repeat(64), image.length),
+          digest("follow-the-white-rabbit.png", "ABC", -1, {
+            url: "ftp://gsmg.io/rabbit.png",
+            archive: "https://archive.ph/rabbit",
+          }),
+          digest("gone.png", "0".repeat(64), 1),
+          digest("gone.png", "0".repeat(64), 1),
+        ],
+      }),
+    });
+
+    expect(digestProblems(pinned)).toEqual([
+      `gsmg: asset puzzle.png is 38125bbdf1ea58b9b30b075bc6bf71e4089d04bba37098317e47097e2f2a1830 (${image.length} bytes), not ${"0".repeat(64)} (${image.length} bytes)`,
+      "gsmg: asset follow-the-white-rabbit.png is 5e8d84b88f8f829428df5d2a8bf36c7268346f169b799ac7570b6223990d204f (1958 bytes), not ABC (-1 bytes)",
+      "gsmg: asset phase2.txt has no digest",
+      "gsmg: digest of follow-the-white-rabbit.png is not lowercase SHA-256 hex",
+      "gsmg: digest of follow-the-white-rabbit.png has no byte count",
+      "gsmg: digest of follow-the-white-rabbit.png has no web URL for its origin",
+      "gsmg: digest of follow-the-white-rabbit.png archive is not a Wayback id_ replay",
+      "gsmg: digest of gone.png names no file the record ships",
+      "gsmg: digest of gone.png names no file the record ships",
+      "gsmg: digest of gone.png repeats",
+    ]);
   });
 
   it("refuses an asset that resolves outside its collection directory", () => {

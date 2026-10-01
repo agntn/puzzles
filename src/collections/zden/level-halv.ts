@@ -1,5 +1,5 @@
 import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { assets, confirmation, funding, official, p2pkh } from "../../core/parts.ts";
+import { assets, digest, confirmation, funding, official, p2pkh } from "../../core/parts.ts";
 
 /** Puzzle `zden/level-halv`. */
 export const zdenPuzzleLevelHalv = bitcoinPuzzle({
@@ -18,6 +18,18 @@ export const zdenPuzzleLevelHalv = bitcoinPuzzle({
   assets: assets({
     puzzle: "level-halv/puzzle.png",
     sourceUrl: "https://crypto.haluska.sk/cryptoHALV.png",
+    digests: [
+      digest(
+        "level-halv/puzzle.png",
+        "3a487ebaeb4801137f09159a2d533046936cd395f4e2f7d115ac554607790e95",
+        61566,
+        {
+          url: "https://crypto.haluska.sk/cryptoHALV.png",
+          archive:
+            "https://web.archive.org/web/20250907231738id_/https://crypto.haluska.sk/cryptoHALV.png",
+        },
+      ),
+    ],
   }),
   hints: [
     official(

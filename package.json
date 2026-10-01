@@ -74,13 +74,13 @@
   "dependencies": {
     "@agntn/chains": "0.3.10",
     "@agntn/explorers": "0.5.9",
+    "@agntn/hashes": "0.4.0",
     "@agntn/keys": "0.3.5",
     "@agntn/tools": "0.0.0",
     "@modelcontextprotocol/server": "2.2.0",
     "citty": "0.2.2"
   },
   "devDependencies": {
-    "@agntn/hashes": "0.4.0",
     "@agntn/ox": "0.1.0",
     "@earendil-works/pi-coding-agent": "0.85.1",
     "@modelcontextprotocol/client": "2.2.0",
