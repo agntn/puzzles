@@ -30,6 +30,9 @@ export type VerifyResult = VerifySuccess | VerifyFailure;
 /** The decoders a secret needs, from the keys wallets that `verify` loads on its first call. */
 type Decoders = Pick<typeof import("./crypto.ts"), "privateKeyFromSeed" | "wifToPrivateKey">;
 
+/** One import shared by overlapping first calls, so Pi's loader can't evaluate it twice. */
+let wallets: Promise<typeof import("./crypto.ts")> | undefined;
+
 interface ResolvedKey {
   readonly format: PubkeyFormat;
   readonly hex: string;
@@ -130,7 +133,7 @@ function resolveKey(puzzle: Puzzle, decoders: Decoders): ResolvedKey | Unresolve
  * @returns {Promise<VerifyResult>} The outcome, with the derived address when a key was available.
  */
 export async function verify(puzzle: Puzzle): Promise<VerifyResult> {
-  const crypto = await import("./crypto.ts");
+  const crypto = await (wallets ??= import("./crypto.ts"));
   const id = puzzle.id();
   const chain = puzzle.chain();
   const address = puzzle.address();
