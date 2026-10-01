@@ -13,11 +13,11 @@
 
 ### 💅 Refactors
 
-- **tools:** ⚠️  Declare each tool once ([#381](https://github.com/agntn/puzzles/pull/381))
+- **tools:** ⚠️ Declare each tool once ([#381](https://github.com/agntn/puzzles/pull/381))
 
 #### ⚠️ Breaking Changes
 
-- **tools:** ⚠️  Declare each tool once ([#381](https://github.com/agntn/puzzles/pull/381))
+- **tools:** ⚠️ Declare each tool once ([#381](https://github.com/agntn/puzzles/pull/381))
 
 ### ❤️ Contributors
 
