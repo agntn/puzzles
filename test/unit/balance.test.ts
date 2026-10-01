@@ -125,6 +125,28 @@ describe("Puzzle.balance", () => {
     expect(balance.decimals).toBe(2);
   });
 
+  it("reads a Dogecoin balance through Blockchair", async () => {
+    vi.stubEnv("BLOCKCHAIR_API_KEY", undefined);
+    const address = "DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq";
+    const urls = stubFetch(() =>
+      json({
+        data: {
+          [address]: { address: { balance: 0, received: 1000000000000, spent: 1000000000000 } },
+        },
+        context: { state: 6397254 },
+      }),
+    );
+
+    const balance = await dogecoinPuzzle({ ...bitcoinCash, address: p2pkh(address) }).balance({
+      baseUrl: "https://example.test",
+    });
+
+    expect(urls).toEqual([`https://example.test/dogecoin/dashboards/address/${address}`]);
+    expect(balance.chain).toBe("dogecoin");
+    expect(balance.confirmed).toBe(0n);
+    expect(balance.decimals).toBe(8);
+  });
+
   it("names BLOCKCHAIR_API_KEY when Blockchair blocks a keyless caller", async () => {
     vi.stubEnv("BLOCKCHAIR_API_KEY", undefined);
     stubFetch(() =>
@@ -315,16 +337,8 @@ describe("Puzzle.balance", () => {
       startedAt: "2020-01-01 00:00:00",
     });
 
-    /* No @agntn/explorers provider reads Dogecoin yet. */
-    const dogecoin = dogecoinPuzzle({
-      id: "test/dogecoin",
-      address: p2pkh("DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE"),
-      sourceUrl: "https://example.com",
-      startedAt: "2020-01-01 00:00:00",
-    });
-
+    await expect(monero.balance()).rejects.toThrow("Unsupported balance chain: monero");
     await expect(monero.balance()).rejects.toBeInstanceOf(UnsupportedChainError);
-    await expect(dogecoin.balance()).rejects.toThrow("Unsupported balance chain: dogecoin");
     expect(urls).toEqual([]);
   });
 
@@ -486,6 +500,25 @@ describe("balanceTool", () => {
 
     await expect(failure).rejects.toThrow("REDACTED");
     await expect(failure).rejects.not.toThrow("blockchair-secret");
+    expect(urls[0]).toContain("key=blockchair-secret");
+  });
+
+  it("reads doges-gambit/doge with BLOCKCHAIR_API_KEY and answers in DOGE", async () => {
+    vi.resetModules();
+    const tools: typeof Tools = await import("../../src/tool-operations.ts");
+    vi.stubEnv("BLOCKCHAIR_API_KEY", "blockchair-secret");
+    const urls = stubFetch(() =>
+      json({
+        data: { DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq: { address: { balance: 0 } } },
+        context: { state: 6397254 },
+      }),
+    );
+
+    const result = await tools.balanceTool("doges-gambit/doge");
+
+    expect(result.content[0]?.text).toBe("doges-gambit/doge: 0 DOGE");
+    expect(urls).toHaveLength(1);
+    expect(urls[0]).toContain("/dogecoin/dashboards/address/DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq");
     expect(urls[0]).toContain("key=blockchair-secret");
   });
 });
