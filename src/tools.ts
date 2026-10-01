@@ -1,0 +1,164 @@
+/** The puzzle tools, declared once for MCP, Pi and OMP. The dataset loads on the first call. */
+
+import { defineTool, Type, type TProperties, type ToolDefinition } from "@agntn/tools";
+import {
+  authorsTool,
+  authorTool,
+  balanceTool,
+  collectionsTool,
+  facts,
+  hintsTool,
+  listTool,
+  showTool,
+  solversTool,
+  solverTool,
+  stagesTool,
+  statsTool,
+  verifyTool,
+  type ToolFacts,
+} from "./tool-operations.ts";
+
+const { chains, parameters, statuses } = facts;
+const puzzleId = Type.String(parameters.id);
+
+/**
+ * A closed object refuses a stray `with_pubkey` instead of listing every puzzle unfiltered.
+ *
+ * @param {T} properties - The tool's parameters.
+ * @returns {ReturnType<typeof Type.Object<T>>} An object schema that takes no other key.
+ */
+function closed<T extends TProperties>(properties: T) {
+  return Type.Object(properties, { additionalProperties: false });
+}
+
+/**
+ * The fields every definition takes from the facts table.
+ *
+ * @param {ToolFacts} tool - The tool's entry in `facts.tools`.
+ * @returns {object} The name, prose and effect for `defineTool`.
+ */
+function described(tool: ToolFacts) {
+  return {
+    name: tool.name,
+    title: tool.title,
+    description: tool.description,
+    snippet: tool.promptSnippet,
+    guidelines: tool.promptGuidelines,
+    effect: "read",
+    openWorld: tool.openWorld,
+  } as const;
+}
+
+export const statsToolDefinition = defineTool({
+  ...described(facts.tools.stats),
+  input: Type.Object({}),
+  execute: () => statsTool(),
+});
+
+export const collectionsToolDefinition = defineTool({
+  ...described(facts.tools.collections),
+  input: Type.Object({}),
+  execute: () => collectionsTool(),
+});
+
+export const authorsToolDefinition = defineTool({
+  ...described(facts.tools.authors),
+  input: Type.Object({}),
+  execute: () => authorsTool(),
+});
+
+export const authorToolDefinition = defineTool({
+  ...described(facts.tools.author),
+  input: closed({ key: Type.String(parameters.author) }),
+  execute: (params) => authorTool(params.key),
+});
+
+export const solversToolDefinition = defineTool({
+  ...described(facts.tools.solvers),
+  input: Type.Object({}),
+  execute: () => solversTool(),
+});
+
+export const solverToolDefinition = defineTool({
+  ...described(facts.tools.solver),
+  input: closed({ key: Type.String(parameters.solver) }),
+  execute: (params) => solverTool(params.key),
+});
+
+export const showToolDefinition = defineTool({
+  ...described(facts.tools.show),
+  input: closed({ id: puzzleId }),
+  execute: (params) => showTool(params.id),
+});
+
+export const hintsToolDefinition = defineTool({
+  ...described(facts.tools.hints),
+  input: closed({ id: puzzleId }),
+  execute: (params) => hintsTool(params.id),
+});
+
+export const stagesToolDefinition = defineTool({
+  ...described(facts.tools.stages),
+  input: closed({ id: puzzleId }),
+  execute: (params) => stagesTool(params.id),
+});
+
+export const listToolDefinition = defineTool({
+  ...described(facts.tools.list),
+  input: closed({
+    address: Type.Optional(Type.String(parameters.address)),
+    collection: Type.Optional(Type.String(parameters.collection)),
+    chain: Type.Optional(Type.Enum(chains, parameters.chain)),
+    status: Type.Optional(Type.Enum(statuses, parameters.status)),
+    withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
+    limit: Type.Optional(Type.Integer(parameters.limit)),
+    offset: Type.Optional(Type.Integer(parameters.offset)),
+  }),
+  execute: (params) => listTool(params),
+});
+
+export const verifyToolDefinition = defineTool({
+  ...described(facts.tools.verify),
+  input: closed({ id: puzzleId }),
+  execute: (params) => verifyTool(params.id),
+});
+
+export const balanceToolDefinition = defineTool({
+  ...described(facts.tools.balance),
+  input: closed({ id: puzzleId, apiKey: Type.Optional(Type.String(parameters.apiKey)) }),
+  execute: (params) => balanceTool(params.id, params.apiKey),
+});
+
+/** Every puzzle tool, in the order `tools/list` and the harnesses show them. */
+export const puzzlesTools: readonly ToolDefinition[] = [
+  statsToolDefinition,
+  collectionsToolDefinition,
+  authorsToolDefinition,
+  authorToolDefinition,
+  solversToolDefinition,
+  solverToolDefinition,
+  showToolDefinition,
+  hintsToolDefinition,
+  stagesToolDefinition,
+  listToolDefinition,
+  verifyToolDefinition,
+  balanceToolDefinition,
+];
+
+/** The argument a status line shows after the tool title, for the tools that take one. */
+export const callSummaries: Readonly<
+  Record<string, (args: Readonly<Record<string, unknown>>) => unknown>
+> = {
+  [facts.tools.author.name]: (args) => args["key"],
+  [facts.tools.solver.name]: (args) => args["key"],
+  [facts.tools.show.name]: (args) => args["id"],
+  [facts.tools.hints.name]: (args) => args["id"],
+  [facts.tools.stages.name]: (args) => args["id"],
+  [facts.tools.list.name]: (args) =>
+    [args["address"] ?? args["collection"] ?? args["chain"] ?? "all", args["status"]]
+      .filter((part) => part !== undefined)
+      .map((part) => (typeof part === "string" ? part : JSON.stringify(part)))
+      .join(" "),
+  [facts.tools.verify.name]: (args) => args["id"],
+  [facts.tools.balance.name]: (args) => args["id"],
+};

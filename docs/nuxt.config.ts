@@ -10,8 +10,8 @@ const libraryDependencies = [
   "@agntn/chains",
   "@agntn/explorers",
   "@agntn/keys",
-  "@modelcontextprotocol/sdk",
-  "typebox",
+  "@agntn/tools",
+  "@modelcontextprotocol/server",
 ];
 
 /** Every subpath src/ imports, dynamic ones too, so dev bundles them up front, not on demand. */

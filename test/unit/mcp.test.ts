@@ -1,5 +1,4 @@
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { Client, InMemoryTransport } from "@modelcontextprotocol/client";
 import { beforeAll, describe, expect, it } from "vite-plus/test";
 import { createMcpServer } from "../../src/mcp.ts";
 import { facts } from "../../src/tool-operations.ts";
@@ -234,12 +233,10 @@ describe("puzzles MCP server", () => {
 
     expect(misspelled.isError).toBe(true);
     expect(firstText(misspelled)).toBe(
-      'Invalid arguments at /: unknown property "with_pubkey", expected one of address, chain, collection, limit, offset, status, withPubkey',
+      'Invalid arguments: unknown property "with_pubkey"; takes address, collection, chain, status, withPubkey, limit, offset',
     );
     expect(stray.isError).toBe(true);
-    expect(firstText(stray)).toBe(
-      'Invalid arguments at /: unknown property "name", expected one of id',
-    );
+    expect(firstText(stray)).toBe('Invalid arguments: unknown property "name"; takes id');
   });
 
   it("names the values an enum takes", async () => {
@@ -247,7 +244,7 @@ describe("puzzles MCP server", () => {
 
     expect(result.isError).toBe(true);
     expect(firstText(result)).toBe(
-      `Invalid arguments at /status: expected one of ${facts.statuses.join(", ")}`,
+      `Invalid arguments at /status: must be one of ${facts.statuses.join(", ")}`,
     );
   });
 
@@ -258,11 +255,11 @@ describe("puzzles MCP server", () => {
     });
 
     expect(result.isError).toBe(true);
-    expect(firstText(result).split("; ")).toEqual([
-      'Invalid arguments at /: unknown property "colection", expected one of address, chain, collection, limit, offset, status, withPubkey',
-      `at /chain: expected one of ${facts.chains.join(", ")}`,
-      `at /status: expected one of ${facts.statuses.join(", ")}`,
-      "at /limit: must be >= 1",
+    expect(firstText(result).split("\n")).toEqual([
+      `Invalid arguments: unknown property "colection"; takes address, collection, chain, status, withPubkey, limit, offset`,
+      `Invalid arguments at /chain: must be one of ${facts.chains.join(", ")}`,
+      `Invalid arguments at /status: must be one of ${facts.statuses.join(", ")}`,
+      "Invalid arguments at /limit: must be >= 1",
     ]);
   });
 

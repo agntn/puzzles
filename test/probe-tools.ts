@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { registerHooks } from "node:module";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import type { ExtensionAPI as PiApi } from "@earendil-works/pi-coding-agent";
 import type { ExtensionAPI as OmpApi } from "@oh-my-pi/pi-coding-agent";
 
@@ -10,7 +10,14 @@ const root = path.resolve(process.argv[2] ?? ".");
 const surface = process.argv[3] ?? "pi";
 const layout = process.argv[4] ?? "src";
 const loaded: string[] = [];
+/** The OMP package root is TypeScript for Bun; the extension takes only `Text` from it. */
+const ompHost = pathToFileURL(fileURLToPath(new URL("support/omp-host.ts", import.meta.url))).href;
 registerHooks({
+  resolve(specifier, context, nextResolve) {
+    return specifier === "@oh-my-pi/pi-coding-agent"
+      ? { url: ompHost, shortCircuit: true }
+      : nextResolve(specifier, context);
+  },
   load(url, context, nextLoad) {
     loaded.push(url);
     return nextLoad(url, context);
@@ -28,8 +35,7 @@ if (surface === "mcp") {
   const { createMcpServer } = (await import(
     entry(layout === "src" ? "src/mcp.ts" : "dist/mcp.mjs")
   )) as typeof import("../src/mcp.ts");
-  const { Client } = await import("@modelcontextprotocol/sdk/client/index.js");
-  const { InMemoryTransport } = await import("@modelcontextprotocol/sdk/inMemory.js");
+  const { Client, InMemoryTransport } = await import("@modelcontextprotocol/client");
   const [a, b] = InMemoryTransport.createLinkedPair();
   const server = createMcpServer();
   const client = new Client({ name: "probe", version: "1" });
@@ -48,8 +54,7 @@ if (surface === "mcp") {
   const extra =
     surface === "omp"
       ? {
-          typebox: await import("@oh-my-pi/omptype/typebox"),
-          pi: { Text: class {} },
+          typebox: { Type: { Unsafe: (schema: unknown) => schema } },
           setLabel() {},
         }
       : {};

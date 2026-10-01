@@ -17,14 +17,13 @@ import assert from "node:assert/strict";
 import { execFile, execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { cp, mkdir, mkdtemp, readdir, readFile, rm, stat } from "node:fs/promises";
+import { registerHooks } from "node:module";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 import type { ExtensionAPI as PiExtensionApi } from "@earendil-works/pi-coding-agent";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { Client, InMemoryTransport } from "@modelcontextprotocol/client";
 import type { ExtensionAPI as OmpExtensionApi } from "@oh-my-pi/pi-coding-agent";
-import * as OmpTypeBox from "@oh-my-pi/omptype/typebox";
 
 type Library = typeof import("../src/index.ts");
 type McpEntry = typeof import("../src/mcp.ts");
@@ -61,7 +60,6 @@ interface RegisteredTool {
     params: Readonly<Record<string, unknown>>,
   ) => Promise<unknown>;
   readonly name: string;
-  readonly parameters?: { readonly safeParse?: (input: unknown) => { readonly success: boolean } };
   readonly renderCall?: (
     args: Readonly<Record<string, unknown>>,
     options: unknown,
@@ -72,6 +70,16 @@ interface RegisteredTool {
 type ModuleMatcher = (module: LoadedModule) => boolean;
 
 const root = path.resolve(import.meta.dirname, "..");
+
+/** The OMP package root is TypeScript for Bun; the extension takes only `Text` from it. */
+const ompHost = pathToFileURL(fileURLToPath(new URL("support/omp-host.ts", import.meta.url))).href;
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    return specifier === "@oh-my-pi/pi-coding-agent"
+      ? { url: ompHost, shortCircuit: true }
+      : nextResolve(specifier, context);
+  },
+});
 const execFileAsync = promisify(execFile);
 
 const expectedCollections = [
@@ -194,8 +202,7 @@ const otherCollections =
   (file: string): ModuleMatcher =>
   (module) =>
     collectionModule(module) && !collectionNamed(file)(module);
-const executors: ModuleMatcher = (module) =>
-  module.url === `${packageRootUrl}dist/tool-operations.mjs`;
+const toolDefinitions: ModuleMatcher = (module) => module.url === `${packageRootUrl}dist/tools.mjs`;
 /* Dependencies resolve from the checkout's node_modules, outside the packed root. */
 const verificationCryptoUrl = /\/node_modules\/(?:@agntn\/keys|@noble\/curves)\//u;
 const verificationCrypto: ModuleMatcher = (module) => verificationCryptoUrl.test(module.url);
@@ -211,13 +218,11 @@ function importPacked<T>(relative: string): Promise<T> {
   return import(`${packageRootUrl}${relative}?packed=${Date.now()}-${Math.random()}`) as Promise<T>;
 }
 
-class PackedText {
-  readonly text: string;
-
-  constructor(text: string) {
-    this.text = text;
-  }
-}
+/** A theme that writes its styling calls into the output. */
+const theme = {
+  fg: (color: string, text: string) => `${color}(${text})`,
+  styledSymbol: (symbol: string, color: string) => `${color}:${symbol}`,
+};
 
 async function registerPackedExtension(
   relative: string,
@@ -261,7 +266,11 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
     [],
     "Pi supplies these packages, so they belong in peerDependencies",
   );
-  assert.equal(manifest.peerDependencies["typebox"], "*", "Pi asks for a * range on typebox");
+  assert.equal(
+    typeof manifest.dependencies["@agntn/tools"],
+    "string",
+    "the extensions and the MCP server import @agntn/tools at runtime",
+  );
   const files = await walk(packageRoot);
   assert.deepEqual(
     files.filter((file) => file.startsWith("src/")),
@@ -278,14 +287,10 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
     [],
     "the packed package must not carry source maps",
   );
-  assert.ok(
-    files.includes("dist/THIRD-PARTY-LICENSES.md"),
-    "the bundled typebox has no license file",
-  );
-  assert.match(
-    await readFile(path.join(packageRoot, "dist/THIRD-PARTY-LICENSES.md"), "utf8"),
-    /^## typebox$[\s\S]*?Copyright \(c\) .* Haydn Paterson/mu,
-    "the license file lacks the typebox copyright notice",
+  assert.deepEqual(
+    files.filter((file) => /typebox/u.test(file)),
+    [],
+    "typebox comes bundled in @agntn/tools, not in a copy of its own",
   );
   const collectionTarget = manifest.exports["./collections/*"]?.import ?? "";
   assert.notEqual(collectionTarget, "", "the collections export has no import target");
@@ -296,11 +301,7 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
       `collection entry ${key} resolves to a missing file ${file}`,
     );
   }
-  for (const file of [
-    "packages/shared/puzzles-tool-schemas.ts",
-    "packages/pi/extensions/puzzles.ts",
-    "packages/omp/extensions/puzzles.ts",
-  ]) {
+  for (const file of ["packages/pi/extensions/puzzles.ts", "packages/omp/extensions/puzzles.ts"]) {
     assert.ok(files.includes(file), `${file} is missing from the packed package`);
   }
   await assertPackedSkills(manifest, files);
@@ -362,7 +363,7 @@ async function assertPackedLibrary(): Promise<void> {
 }
 
 /**
- * The MCP bundle is the only entry that carries the SDK and the inlined typebox,
+ * The MCP bundle is the only entry that imports the SDK and the `@agntn/tools` adapter,
  * so a chunk split or a missing dependency would surface here first.
  */
 async function assertPackedMcpServer(): Promise<void> {
@@ -380,7 +381,7 @@ async function assertPackedMcpServer(): Promise<void> {
     assert.match(
       firstText(rejected),
       /^Invalid arguments at \/id/u,
-      "the rejection must come from the bundled validator",
+      "the rejection must come from the @agntn/tools validator",
     );
 
     const shown = await client.callTool({ name: "puzzles_show", arguments: { id: "b1000/1" } });
@@ -406,16 +407,19 @@ async function assertPackedMcpServer(): Promise<void> {
 }
 
 async function assertPackedExtensions(): Promise<void> {
-  const ompApi = { typebox: OmpTypeBox, pi: { Text: PackedText }, setLabel() {} };
+  const ompApi = { typebox: { Type: { Unsafe: (schema: unknown) => schema } }, setLabel() {} };
   const [piTools, ompTools] = await Promise.all([
     registerPackedExtension("packages/pi/extensions/puzzles.ts", {}),
     registerPackedExtension("packages/omp/extensions/puzzles.ts", ompApi),
   ]);
-  assertLoaded(executors, "the extensions read the facts from the packed executors");
+  assertLoaded(toolDefinitions, "the extensions register the packed tool definitions");
   const piShow = requireTool(piTools, "puzzles_show");
   const ompShow = requireTool(ompTools, "puzzles_show");
   assert.ok(ompShow.renderCall !== undefined, "the OMP tool renders its call line");
-  assert.equal(ompShow.renderCall({ id: "b1000/1" }, {}, {}).text, "Show puzzle b1000/1");
+  assert.equal(
+    ompShow.renderCall({ id: "b1000/1" }, { isPartial: false }, theme).text,
+    "success:status.done accent(Show Puzzle): muted(b1000/1)",
+  );
   const result = await piShow.execute("packed-test", { id: "b1000/1" });
   assert.match(firstText(result), /b1000\/1/u);
   for (const tools of [piTools, ompTools]) {
@@ -427,10 +431,10 @@ async function assertPackedExtensions(): Promise<void> {
     assert.match(firstText(page), /^1 of 256 matching puzzles \(offset 255\):\nb1000\/256\t/u);
     assert.doesNotMatch(firstText(page), /Next page:/u);
   }
-  assert.equal(
-    ompShow.parameters?.safeParse?.({ id: "" }).success,
-    false,
-    "the OMP schema keeps the executors' limits",
+  await assert.rejects(
+    ompShow.execute("packed-empty", { id: "" }),
+    /^ToolInputError: Invalid arguments at \/id/u,
+    "the OMP tool checks the schema before the executor runs",
   );
 }
 
@@ -546,10 +550,15 @@ async function assertHelpStaysLight(binPath: string): Promise<void> {
       strings.filter(
         (url) =>
           url.startsWith(packageRootUrl) &&
-          /typebox|dist\/mcp\.mjs/u.test(url.slice(packageRootUrl.length)),
+          /dist\/(?:mcp|tools)\.mjs/u.test(url.slice(packageRootUrl.length)),
       ),
       [],
-      `${label} must not load the server entry or the tool schemas`,
+      `${label} must not load the server entry or the tool definitions`,
+    );
+    assert.deepEqual(
+      strings.filter((url) => url.includes("/node_modules/@agntn/tools/")),
+      [],
+      `${label} must not load the tool adapters`,
     );
     assert.deepEqual(
       strings.filter((url) => url.startsWith(`${packageRootUrl}dist/collections/`)),
