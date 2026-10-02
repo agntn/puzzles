@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 33 thread, with the question, the funding txid, the four hints and the solution. */
@@ -22,6 +31,7 @@ export const quizchain2Block33 = puzzle({
       source(THREAD, "MD5 of the number, TOMI and four items"),
     )
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: Can you find the answer?", THREAD, undefined, {

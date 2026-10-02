@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 77 were published. */
@@ -36,6 +45,7 @@ export const quizchainBlock77 = puzzle({
       ),
     )
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", AUTHOR_COMMENT)],
   prize: 0.077,
   hints: [
     official("Question: The solution is the puzzle.", THREAD, undefined, {

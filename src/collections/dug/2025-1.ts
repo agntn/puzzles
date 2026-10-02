@@ -9,6 +9,7 @@ import {
   PartyKind,
   profile,
   seed,
+  technique,
 } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
@@ -29,6 +30,7 @@ export const dug2025Index1 = puzzle({
     "profit general lava hover jar visa joy immense install first give kingdom",
     "m/84'/0'/0'/0/1",
   ),
+  techniques: [technique("hidden-seed-words", source)],
   pubkey: compressed("030349e3498e3abcd935bacdc117533b9e3ce3ec05b2958b4ecadde7c68c9c8e45"),
   solver: party("floflo777", {
     key: "floflo777",

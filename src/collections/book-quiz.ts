@@ -8,6 +8,7 @@ import {
   official,
   seed,
   source,
+  technique,
 } from "../core/parts.ts";
 import { puzzle, Status } from "../core/puzzle.ts";
 import { SatoshiBirthdayQuizCollection } from "./satoshi-birthday-quiz.ts";
@@ -40,6 +41,7 @@ export const bookQuizPuzzle = puzzle({
     "69b4809282a49a05138839a04aa87c7f20545ff060fc0c2a11e8b0e4cfda873b",
     source(THREAD, "SHA-256 of the seven answer sentences, joined by single spaces"),
   ),
+  techniques: [technique("sha256-to-bip39-entropy", THREAD)],
   prize: 0.07,
   hints: [
     official(

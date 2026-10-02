@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 39 thread, with the question, the funding txid, the hash digits and the hint. */
@@ -22,6 +31,7 @@ export const quizchain2Block39 = puzzle({
       source(PLAYER_COMMENT, "MD5 of the three words, TOMI and five items"),
     )
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", PLAYER_COMMENT)],
   prize: 0.007,
   hints: [
     official("Question: Ten words there are. Missing of them there are three.", THREAD, undefined, {

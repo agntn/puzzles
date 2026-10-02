@@ -12,6 +12,7 @@ import {
   party,
   PartyKind,
   profile,
+  technique,
   uncompressed,
 } from "../core/parts.ts";
 import { puzzle, Status } from "../core/puzzle.ts";
@@ -54,6 +55,7 @@ export const picturePuzzleRecord = puzzle({
     "0443363aa63ab32ed94309fbaf2783e6f4dc0878cc04b2f6c954b5345ade0c11da8be5ef87dfd13126fa6884bd7c7440a4f70be75af1d7fb1a9480608a3acbadcf",
   ),
   key: hex("00000000000000000000004804804824004000024020024124824824824123a3").derived(),
+  techniques: [technique("binary", THREAD), technique("qr", THREAD)],
   prize: 0.001,
   hints: [
     official(

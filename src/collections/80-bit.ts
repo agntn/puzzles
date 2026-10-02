@@ -11,6 +11,7 @@ import {
   party,
   PartyKind,
   profile,
+  technique,
 } from "../core/parts.ts";
 import { puzzle, Status } from "../core/puzzle.ts";
 
@@ -33,6 +34,7 @@ export const kTimesG80Bit = puzzle({
   status: Status.Solved,
   pubkey: compressed("03a61fc84b6429f07fc0edf25265ef7a0ced3cd9a0edea85e9f58b50b5d73f66e7"),
   key: hex("b40e7d34265ab9533a64622bd1a188fb8abb8829af545169abad49b46be5fe56"),
+  techniques: [technique("partial-key", RANGE)],
   prize: 0.005,
   hints: [
     official(

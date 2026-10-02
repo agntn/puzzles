@@ -10,6 +10,7 @@ import {
   PartyKind,
   profile,
   stage,
+  technique,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 
@@ -68,6 +69,7 @@ export const greatRiddleArtworks = puzzle({
   sourceUrl: PAGE,
   startedAt: "2024-02-26 14:17:17",
   preGenesis: true,
+  techniques: [technique("hidden-seed-words", PAGE)],
   prize: 0.00423871,
   stages: [
     stage(

@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid, both hints, the solution and the private key were published. */
@@ -28,6 +37,7 @@ export const quizchainBlock10 = puzzle({
       "SHA-256 of the solution with the last three characters of the block 9 key appended and the line break the author says was copied with it",
     ),
   ),
+  techniques: [technique("sha256-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official(

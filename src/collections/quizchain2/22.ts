@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 22 thread, with the question, the funding txid, the hash digits and the solution. */
@@ -17,6 +26,7 @@ export const quizchain2Block22 = puzzle({
   key: wif("KzjcAZSJijpZCKt51Hs8ah3Jowubx47LDrExCgr93mZNctWNAs88")
     .entropy("aa0e948775fa99561a0efd2f66b5500b", source(THREAD, "MD5 of the three words"))
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: https://en.m.wikipedia.org/wiki/Ninety-five_Theses", THREAD, undefined, {

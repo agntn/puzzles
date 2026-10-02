@@ -12,6 +12,7 @@ import {
   party,
   PartyKind,
   profile,
+  technique,
   uncompressed,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
@@ -47,6 +48,7 @@ export const bruteForce = puzzle({
     "04f7af13c4fda2f920dbd8ebc8d2cc87cdc6674a7beda95a402ab83dd7e952597aeebdb76b2b4bc15771c57eb48568b2a8fa83219f9fa53519aaef5cd75bac30ac",
   ),
   key: encryptedWif("6PfQTphCYc1Fee19uPz2pmou5RVBDVgw8VcrPfGLos4ktUnARdiFLYhcNU"),
+  techniques: [technique("bip38", THREAD)],
   prize: 0.005297,
   hints: [
     official("I suspect the passphrase is not more than 30 characters.", THREAD, undefined, {

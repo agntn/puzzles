@@ -1,5 +1,5 @@
 import { NamedCollection } from "../core/collection.ts";
-import { fact, party, PartyKind, profile } from "../core/parts.ts";
+import { fact, party, PartyKind, profile, technique } from "../core/parts.ts";
 import { zdenPuzzleLevel1 } from "./zden/level-1.ts";
 import { zdenPuzzleLevel2 } from "./zden/level-2.ts";
 import { zdenPuzzleLevel3 } from "./zden/level-3.ts";
@@ -77,9 +77,18 @@ export class ZdenCollection extends NamedCollection {
     zdenPuzzleDecredAutonomy,
   ];
 
+  /** Techniques every puzzle in this collection was built with. */
+  static readonly techniques = [technique("steganography", "https://crypto.haluska.sk/")];
+
   /** Builds the canonical collection. */
   constructor() {
-    super(ZdenCollection.key, ZdenCollection.author, ZdenCollection.puzzles);
+    super(
+      ZdenCollection.key,
+      ZdenCollection.author,
+      ZdenCollection.puzzles,
+      [],
+      ZdenCollection.techniques,
+    );
   }
 }
 

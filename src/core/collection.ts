@@ -1,6 +1,6 @@
 import type { BalanceOptions } from "./balance.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
-import { frozen, type Hint, type Party } from "./parts.ts";
+import { frozen, type Hint, type Party, type TechniqueTag } from "./parts.ts";
 import { Puzzle, Status } from "./puzzle.ts";
 import { closestPuzzle } from "./suggest.ts";
 import { type Balance } from "./types.ts";
@@ -8,8 +8,8 @@ import { countOf, filterPuzzles } from "./utils.ts";
 import { verify, type VerifyResult } from "./verify.ts";
 
 /**
- * A named set of puzzles. The subclass supplies identity, author, the list and the hints every
- * puzzle in it inherits. Everything a caller does with them is implemented once, here.
+ * A named set of puzzles. The subclass supplies identity, author, the list and the hints and
+ * techniques every puzzle in it inherits. Everything a caller does with them lives here, once.
  */
 export abstract class Collection<Query> {
   /** Collection author. */
@@ -21,14 +21,24 @@ export abstract class Collection<Query> {
   /** Stable collection key used in puzzle identifiers. */
   readonly key: string;
 
+  /** Techniques every puzzle in the collection was built with, ahead of a puzzle's own. */
+  readonly techniques: readonly TechniqueTag[];
+
   readonly #byId: ReadonlyMap<string, Puzzle>;
   readonly #puzzles: readonly Puzzle[];
 
-  /** Freezes the author, the hints and the puzzle list, then indexes the list by identifier. */
-  constructor(key: string, author: Party, puzzles: readonly Puzzle[], hints: readonly Hint[] = []) {
+  /** Freezes the author, the hints, the techniques and the puzzle list, then indexes the list. */
+  constructor(
+    key: string,
+    author: Party,
+    puzzles: readonly Puzzle[],
+    hints: readonly Hint[] = [],
+    techniques: readonly TechniqueTag[] = [],
+  ) {
     this.key = key;
     this.author = frozen(author);
     this.hints = frozen(hints);
+    this.techniques = frozen(techniques);
     this.#puzzles = Object.freeze([...puzzles]);
     this.#byId = new Map(this.#puzzles.map((puzzle) => [puzzle.id(), puzzle]));
   }
@@ -172,6 +182,31 @@ export abstract class Collection<Query> {
   }
 
   /**
+   * Every technique the selected puzzle was built with: collection, record, then stages.
+   *
+   * @param {Query} query - Query in the collection's own terms.
+   * @returns {readonly TechniqueTag[]} The techniques, or an empty list when none is recorded.
+   */
+  techniquesFor(query: Query): readonly TechniqueTag[] {
+    return this.techniquesById(this.#resolveId(query));
+  }
+
+  /**
+   * Every technique a puzzle was built with, through the universal identifier.
+   *
+   * @param {string} id - Universal puzzle identifier.
+   * @returns {readonly TechniqueTag[]} The collection's, the puzzle's own, then its stages'.
+   */
+  techniquesById(id: string): readonly TechniqueTag[] {
+    const puzzle = this.requireId(id);
+    return frozen([
+      ...this.techniques,
+      ...puzzle.techniques(),
+      ...puzzle.stages().flatMap((item) => item.techniques ?? []),
+    ]);
+  }
+
+  /**
    * Solved puzzles.
    *
    * @returns {readonly Puzzle[]} Solved puzzles.
@@ -270,8 +305,14 @@ export class NumericCollection extends Collection<number | string> {
 /** A collection holding one puzzle whose ID equals the collection key. */
 export class SingletonCollection extends Collection<void | string> {
   /** Builds a singleton collection and rejects anything that isn't one. */
-  constructor(key: string, author: Party, puzzles: readonly Puzzle[], hints?: readonly Hint[]) {
-    super(key, author, puzzles, hints);
+  constructor(
+    key: string,
+    author: Party,
+    puzzles: readonly Puzzle[],
+    hints?: readonly Hint[],
+    techniques?: readonly TechniqueTag[],
+  ) {
+    super(key, author, puzzles, hints, techniques);
     const only = this.all()[0];
     if (this.count() !== 1 || only?.id() !== key) {
       throw new TypeError(`Singleton collection ${key} must contain exactly its canonical puzzle`);

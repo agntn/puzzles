@@ -1,7 +1,7 @@
 import { version } from "../version.ts";
 import type { Chain } from "./chains.ts";
 import { PuzzleNotFoundError, UnknownAuthorError, UnknownSolverError } from "./errors.ts";
-import { defined, frozen, type Hint, type Party } from "./parts.ts";
+import { defined, frozen, type Hint, type Party, type TechniqueTag } from "./parts.ts";
 import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
 import {
   type AnyCollection,
@@ -12,6 +12,7 @@ import {
   requireCollection,
 } from "./registry.ts";
 import { closestKey, closestPuzzle } from "./suggest.ts";
+import { type Technique, techniques } from "./technique.ts";
 import { filterPuzzles, prizeTotals, statusCounts } from "./utils.ts";
 
 /** Aggregate puzzle statistics. */
@@ -20,6 +21,8 @@ export interface Stats {
   readonly expired: number;
   readonly solved: number;
   readonly swept: number;
+  /** How many puzzles use each technique, in vocabulary order, without the unused ones. */
+  readonly techniques: TechniqueCounts;
   readonly total: number;
   readonly total_prize: Readonly<Record<string, number>>;
   readonly unsolved: number;
@@ -27,12 +30,16 @@ export interface Stats {
   readonly with_pubkey: number;
 }
 
-/** One collection as it appears in a serialized dataset. Absent hints are omitted, never null. */
+/** How many puzzles use each technique. */
+export type TechniqueCounts = Readonly<Partial<Record<Technique, number>>>;
+
+/** One collection as it appears in a serialized dataset. Absent lists are omitted, never null. */
 export interface DatasetCollection {
   readonly author: Party;
   readonly hints?: readonly Hint[];
   readonly name: string;
   readonly puzzles: readonly PuzzleData[];
+  readonly techniques?: readonly TechniqueTag[];
 }
 
 /** Serializable snapshot of every registered collection. */
@@ -54,12 +61,13 @@ export interface CollectionSummary {
   readonly unsolved: number;
 }
 
-/** One author as the registry sees it: the record and the collections it published. */
+/** One author: the record, its collections and how many of their puzzles use each technique. */
 export interface AuthorEntry {
   readonly author: Party;
   readonly collections: readonly string[];
   readonly key: string;
   readonly puzzles: number;
+  readonly techniques: TechniqueCounts;
 }
 
 /** One puzzle on a solver's record, with what the puzzle says about the solve. */
@@ -92,6 +100,7 @@ export interface PuzzleQuery {
   readonly chain?: Chain | undefined;
   readonly collection?: string | undefined;
   readonly status?: Status | undefined;
+  readonly technique?: Technique | undefined;
   readonly withPubkey?: boolean | undefined;
 }
 
@@ -159,17 +168,62 @@ export async function collectionSummaries(): Promise<readonly CollectionSummary[
 export async function authors(): Promise<readonly AuthorEntry[]> {
   const [snapshot, record] = await views();
   if (record.authors === undefined) {
-    const entries = new Map<string, { author: Party; collections: string[]; puzzles: number }>();
+    const entries = new Map<
+      string,
+      { author: Party; collections: AnyCollection[]; puzzles: number }
+    >();
     for (const collection of snapshot) {
       const key = collection.author.key ?? collection.key;
       const entry = entries.get(key) ?? { author: collection.author, collections: [], puzzles: 0 };
-      entry.collections.push(collection.key);
+      entry.collections.push(collection);
       entry.puzzles += collection.count();
       entries.set(key, entry);
     }
-    record.authors = frozen([...entries].map(([key, entry]) => ({ key, ...entry })));
+    record.authors = frozen(
+      [...entries].map(([key, entry]) => ({
+        key,
+        author: entry.author,
+        collections: entry.collections.map((collection) => collection.key),
+        puzzles: entry.puzzles,
+        techniques: techniqueCounts(entry.collections),
+      })),
+    );
   }
   return record.authors;
+}
+
+/**
+ * The technique names a puzzle uses, once each, from its collection, its record and its stages.
+ *
+ * @param {AnyCollection} collection - The collection that holds the puzzle.
+ * @param {Puzzle} puzzle - The puzzle.
+ * @returns {ReadonlySet<Technique>} The names.
+ */
+function techniqueNames(collection: AnyCollection, puzzle: Puzzle): ReadonlySet<Technique> {
+  return new Set(collection.techniquesById(puzzle.id()).map((tag) => tag.name));
+}
+
+/**
+ * How many puzzles of the collections use each technique, in vocabulary order.
+ *
+ * @param {readonly AnyCollection[]} scope - The collections to count over.
+ * @returns {TechniqueCounts} The counts, without the techniques no puzzle uses.
+ */
+function techniqueCounts(scope: readonly AnyCollection[]): TechniqueCounts {
+  const counts = new Map<Technique, number>();
+  for (const collection of scope) {
+    for (const puzzle of collection.all()) {
+      for (const name of techniqueNames(collection, puzzle)) {
+        counts.set(name, (counts.get(name) ?? 0) + 1);
+      }
+    }
+  }
+  return Object.fromEntries(
+    techniques.flatMap((name) => {
+      const count = counts.get(name);
+      return count === undefined ? [] : [[name, count]];
+    }),
+  );
 }
 
 /**
@@ -349,12 +403,23 @@ export async function requireSolver(key: string): Promise<SolverEntry> {
 
 /**
  * Selects puzzles, optionally narrowed to one collection, a target address, a chain, a status,
- * or a known public key.
+ * a technique or a known public key.
  *
  * @param {PuzzleQuery} [query] - Query in the collection's own terms.
  * @returns {Promise<readonly Puzzle[]>} The puzzles that satisfy the query.
  */
 export async function selectPuzzles(query: PuzzleQuery = {}): Promise<readonly Puzzle[]> {
+  const { technique } = query;
+  if (technique !== undefined) {
+    const scope =
+      query.collection === undefined
+        ? await collections()
+        : [await requireCollection(query.collection)];
+    const source = scope.flatMap((collection) =>
+      collection.all().filter((puzzle) => techniqueNames(collection, puzzle).has(technique)),
+    );
+    return filterPuzzles(source, query);
+  }
   const source =
     query.collection === undefined
       ? await all()
@@ -476,6 +541,7 @@ export async function stats(): Promise<Stats> {
     with_pubkey: puzzles.filter((puzzle) => puzzle.hasPubkey()).length,
     total_prize: prizeTotals(puzzles),
     unsolved_prize: prizeTotals(filterPuzzles(puzzles, { status: Status.Unsolved })),
+    techniques: techniqueCounts(snapshot),
   });
   return record.stats;
 }
@@ -498,6 +564,7 @@ function serializeSnapshot(snapshot: readonly AnyCollection[]): readonly Dataset
         name: collection.key,
         author: collection.author,
         hints: collection.hints.length === 0 ? undefined : collection.hints,
+        techniques: collection.techniques.length === 0 ? undefined : collection.techniques,
         puzzles: collection.all().map((puzzle) => puzzle.toJSON()),
       }),
     ),

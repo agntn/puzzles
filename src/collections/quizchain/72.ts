@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 72 were published. */
@@ -27,6 +36,7 @@ export const quizchainBlock72 = puzzle({
     "a500b37a9661d9e7956773516edc22ba",
     source(THREAD, "MD5 of the word, TOMI, three words and the whole block 71 key"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.009,
   hints: [
     official("Question: After the block", THREAD, undefined, {

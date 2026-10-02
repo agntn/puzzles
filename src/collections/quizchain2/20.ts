@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 20 thread, with the question, the funding txid, the hash digits and the solution. */
@@ -19,6 +28,7 @@ export const quizchain2Block20 = puzzle({
   key: wif("Kz3J4BtaGup2TZTxH9h8y5wWCUmxL5KGsx6R9P8DY3z1NSuhWaWe")
     .entropy("497f112e67d5e049ee7f9a6d2fe6acf8", source(THREAD, "MD5 of the two words"))
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question : 1AndrewYangForPresident2o2o6zmPzd", THREAD, undefined, {

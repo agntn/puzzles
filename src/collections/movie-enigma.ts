@@ -11,6 +11,7 @@ import {
   PartyKind,
   profile,
   seed,
+  technique,
 } from "../core/parts.ts";
 import { puzzle, Status } from "../core/puzzle.ts";
 
@@ -30,6 +31,7 @@ export const movieEnigmaPuzzle = puzzle({
     "path mad alien apology escape spare miss goddess leopard crime visit clock start first blade guard close barrel term screen matrix toy ghost shine",
     "m/84'/0'/0'/0/0",
   ),
+  techniques: [technique("hidden-seed-words", "https://bitcoinmovieenigma.com/rules")],
   prize: 0.001,
   hints: [
     official(

@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 55 were published. */
@@ -28,6 +37,7 @@ export const quizchainBlock55 = puzzle({
       "MD5 of the word, the fixed text and the last seven characters of the block 54 key, without the TOMI the format asked for",
     ),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: Do you know another four letter word?", THREAD, undefined, {

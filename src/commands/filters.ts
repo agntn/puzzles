@@ -1,7 +1,8 @@
 import { chains } from "../core/chains.ts";
 import type { PuzzleQuery } from "../core/dataset.ts";
 import { Status } from "../core/puzzle.ts";
-import { parseStatus, requireChain } from "../core/utils.ts";
+import { techniques } from "../core/technique.ts";
+import { parseStatus, parseTechnique, requireChain } from "../core/utils.ts";
 
 /**
  * The pause between two lookups of a filtered pass. Fired at once, a pass over the unsolved
@@ -23,6 +24,10 @@ export const filterArgs = {
     type: "string",
     description: `Filter by status: ${Object.values(Status).join(", ")}`,
   },
+  technique: {
+    type: "string",
+    description: `Filter by technique: ${techniques.join(", ")}`,
+  },
   "with-pubkey": { type: "boolean", description: "Only puzzles with a known public key" },
 } as const;
 
@@ -32,6 +37,7 @@ type FilterFlags = Readonly<{
   chain?: string | undefined;
   collection?: string | undefined;
   status?: string | undefined;
+  technique?: string | undefined;
   "with-pubkey"?: boolean | undefined;
 }>;
 
@@ -47,6 +53,7 @@ export function hasFilter(args: FilterFlags): boolean {
     args.chain !== undefined ||
     args.collection !== undefined ||
     args.status !== undefined ||
+    args.technique !== undefined ||
     args["with-pubkey"] === true
   );
 }
@@ -63,6 +70,7 @@ export function filterQuery(args: FilterFlags): PuzzleQuery {
     chain: requireChain(args.chain),
     collection: args.collection,
     status: parseStatus(args.status),
+    technique: parseTechnique(args.technique),
     withPubkey: args["with-pubkey"],
   };
 }

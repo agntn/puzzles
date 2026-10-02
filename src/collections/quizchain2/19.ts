@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 19 thread, with the question, the funding txid, the hash digits and the solution. */
@@ -19,6 +28,7 @@ export const quizchain2Block19 = puzzle({
   key: wif("Kz96DNRR6XXACtfnDCoj8trAt69HcK9NGJy8F4pFeq6BVrPsP79P")
     .entropy("1470f0bd9262f71b15261cebc7d97aad", source(THREAD, "MD5 of the one word"))
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: Before Bitcoin", THREAD, undefined, {

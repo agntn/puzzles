@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 14 thread, with the question, the funding txid, the hints and the solution. */
@@ -19,6 +28,7 @@ export const quizchain2Block14 = puzzle({
   key: wif("L4QU6j4wVq6pgpnYiUboCCETaGGJVdjp1JYRJtDAqg42FVoV5WG8")
     .entropy("5f844f86af9217915e3764d92974b696", source(THREAD, "MD5 of the fourteen characters"))
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.077,
   hints: [
     official("Question: 14 from 7.", THREAD, undefined, {

@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 35 thread, with the question, the funding txid, both hints and the solution. */
@@ -22,6 +31,7 @@ export const quizchain2Block35 = puzzle({
       source(THREAD, "MD5 of the month and year, TOMI, a word and a number"),
     )
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: In what month will the first Grycoin be mined?", THREAD, undefined, {

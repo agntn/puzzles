@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid and the solution of block 5 were published. */
@@ -20,6 +29,7 @@ export const quizchain2Block5 = puzzle({
   key: wif("L1FbCRrq4fcMc7Lrk5avV3uGWUhtAZGyaTkqzWVdAc5NbYiyvrWJ")
     .entropy("e7a18731a7a9520baec7a428adbd50af", source(THREAD, "MD5 of the five words"))
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: Five words.", THREAD, undefined, {

@@ -62,10 +62,12 @@ import {
   party,
   puzzle,
   PuzzleNotFoundError,
+  type PuzzleQuery,
   requireAuthor,
   requireCollection,
   requirePuzzle,
   requireSolver,
+  selectPuzzles,
   SingletonCollection,
   solvers,
   stats,
@@ -728,6 +730,7 @@ describe("lazy collection registry", () => {
       author: { name: "Keyless" },
       collections: ["keyless"],
       puzzles: 1,
+      techniques: {},
     });
     vi.resetModules();
   });
@@ -856,6 +859,62 @@ describe("lazy collection registry", () => {
     vi.resetModules();
   });
 
+  it("joins a puzzle's techniques from its collection, its record and its stages", async () => {
+    const b1000 = await requireCollection("b1000");
+    expect(b1000.techniquesFor(71).map((tag) => tag.name)).toEqual(["masked-key-range"]);
+    expect((await requirePuzzle("b1000/71")).techniques()).toEqual([]);
+
+    const gsmg = await requireCollection("gsmg");
+    expect(gsmg.techniquesById("gsmg").map((tag) => tag.name)).toEqual([
+      "binary",
+      "openssl-salted-sha256",
+      "openssl-salted-sha256",
+      "beaufort",
+      "straddling-checkerboard",
+    ]);
+    expect(Object.isFrozen(gsmg.techniquesById("gsmg"))).toBe(true);
+
+    const block = await requirePuzzle("quizchain/58");
+    expect(block.toJSON().techniques?.map((tag) => tag.name)).toEqual([
+      "md5-to-bip39-entropy",
+      "atbash",
+    ]);
+    expect((await requirePuzzle("gsmg")).toJSON()).not.toHaveProperty("techniques");
+    const serialized = await datasetCollections();
+    expect(serialized.find((entry) => entry.name === "b1000")?.techniques).toEqual(
+      b1000.techniques,
+    );
+    expect(serialized.find((entry) => entry.name === "gsmg")).not.toHaveProperty("techniques");
+  });
+
+  it("selects puzzles by technique across collections and within one", async () => {
+    const ids = async (query: PuzzleQuery) =>
+      (await selectPuzzles(query)).map((puzzle) => puzzle.id());
+    expect(await ids({ technique: "beaufort" })).toEqual(["gsmg"]);
+    expect(await ids({ technique: "warpwallet", status: Status.Expired })).toEqual([
+      "warp/warp-challenge-1",
+      "warp/warp-challenge-2",
+    ]);
+    expect(await ids({ technique: "sha256-to-bip39-entropy", collection: "quizchain" })).toEqual(
+      Array.from({ length: 14 }, (_, index) => `quizchain/${index + 1}`),
+    );
+    expect(await ids({ technique: "xor", collection: "b1000" })).toEqual([]);
+  });
+
+  it("counts an author's techniques over every collection it published", async () => {
+    expect((await requireAuthor("aoi-nakamoto")).techniques).toEqual({
+      atbash: 11,
+      "md5-to-bip39-entropy": 103,
+      "sha256-to-bip39-entropy": 16,
+    });
+    expect((await requireAuthor("gsmg")).techniques).toEqual({
+      beaufort: 1,
+      binary: 1,
+      "openssl-salted-sha256": 1,
+      "straddling-checkerboard": 1,
+    });
+  });
+
   it("preserves the dataset statistics", async () => {
     expect(await all()).toHaveLength(489);
     expect(await stats()).toEqual({
@@ -882,6 +941,30 @@ describe("lazy collection registry", () => {
         ETH: 13.171951554256944,
         BTC: 909.1185194,
         LTC: 3.02608794,
+      },
+      techniques: {
+        aes: 1,
+        atbash: 11,
+        base64: 1,
+        beaufort: 1,
+        binary: 2,
+        bip38: 4,
+        "hash-collision": 5,
+        "hidden-seed-words": 13,
+        "masked-key-range": 256,
+        "md5-to-bip39-entropy": 103,
+        morse: 1,
+        "openssl-salted-sha256": 1,
+        "partial-key": 4,
+        qr: 1,
+        "scrypt-brainwallet": 1,
+        "sha256-brainwallet": 31,
+        "sha256-to-bip39-entropy": 19,
+        "shamir-shares": 1,
+        steganography: 21,
+        "straddling-checkerboard": 1,
+        warpwallet: 6,
+        xor: 6,
       },
     });
   });

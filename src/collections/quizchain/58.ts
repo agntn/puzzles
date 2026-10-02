@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 58 were published. */
@@ -21,6 +30,7 @@ export const quizchainBlock58 = puzzle({
     "1ebac638d0c815fc68f605377cd87eac",
     source(THREAD, "MD5 of the word, TOMI, the cipher and the link the post set"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD), technique("atbash", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: You all know this three letter word.", THREAD, undefined, {

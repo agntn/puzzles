@@ -12,6 +12,7 @@ import {
   profile,
   seed,
   source,
+  technique,
 } from "../core/parts.ts";
 import { puzzle, Status } from "../core/puzzle.ts";
 
@@ -44,6 +45,7 @@ export const satoshiBirthdayQuizPuzzle = puzzle({
       source(THREAD, "SHA-256 of the seven answer sentences, joined by single spaces"),
     )
     .derived(),
+  techniques: [technique("sha256-to-bip39-entropy", THREAD)],
   prize: 0.07,
   hints: [
     official(

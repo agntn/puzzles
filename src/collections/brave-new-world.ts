@@ -8,6 +8,7 @@ import {
   party,
   PartyKind,
   profile,
+  technique,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 
@@ -29,6 +30,7 @@ export const braveNewWorldPuzzle = puzzle({
   address: "1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ",
   sourceUrl: THREAD,
   startedAt: "2020-10-08 09:25:30",
+  techniques: [technique("hidden-seed-words", THREAD)],
   prize: 0.2,
   transactions: [
     funding(

@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 27 were published. */
@@ -27,6 +36,7 @@ export const quizchainBlock27 = puzzle({
       source(THREAD, "MD5 of the name, a space and the last three characters of the block 26 key"),
     )
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.009,
   hints: [
     official("Question: I am looking for the name of a gambler.", THREAD, undefined, {

@@ -1,5 +1,13 @@
 import { SingletonCollection } from "../core/collection.ts";
-import { confirmation, fact, funding, increase, official, party } from "../core/parts.ts";
+import {
+  confirmation,
+  fact,
+  funding,
+  increase,
+  official,
+  party,
+  technique,
+} from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 
 /** The Genesis block puzzle announced through Bitcoin OP_RETURN messages. */
@@ -11,6 +19,12 @@ export const genesisBlock = puzzle({
     "https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
   startedAt: "2026-08-22 19:45:38",
   preGenesis: true,
+  techniques: [
+    technique(
+      "sha256-to-bip39-entropy",
+      "https://mempool.space/tx/ae906bdebdf7cd2e9b2490a727d5d91eaa203c2ae68f8461ea62e07ffe3b9b1c",
+    ),
+  ],
   transactions: [
     funding(
       "e2aaa928a965ee02b9c9a76227383113a62f350701a18d7792372712ce501ac7",

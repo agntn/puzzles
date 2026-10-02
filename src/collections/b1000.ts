@@ -1,5 +1,13 @@
 import { NumericCollection } from "../core/collection.ts";
-import { confirmation, fact, official, party, PartyKind, profile } from "../core/parts.ts";
+import {
+  confirmation,
+  fact,
+  official,
+  party,
+  PartyKind,
+  profile,
+  technique,
+} from "../core/parts.ts";
 import { b1000Puzzle1 } from "./b1000/1.ts";
 import { b1000Puzzle2 } from "./b1000/2.ts";
 import { b1000Puzzle3 } from "./b1000/3.ts";
@@ -571,6 +579,14 @@ export class B1000Collection extends NumericCollection {
     b1000Puzzle256,
   ];
 
+  /** Techniques every puzzle in this collection was built with. */
+  static readonly techniques = [
+    technique(
+      "masked-key-range",
+      "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941",
+    ),
+  ];
+
   /** Builds the canonical collection. */
   constructor() {
     super(
@@ -578,6 +594,7 @@ export class B1000Collection extends NumericCollection {
       B1000Collection.author,
       B1000Collection.puzzles,
       B1000Collection.hints,
+      B1000Collection.techniques,
     );
   }
 }

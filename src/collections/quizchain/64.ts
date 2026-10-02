@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 64 were published. */
@@ -27,6 +36,7 @@ export const quizchainBlock64 = puzzle({
     "a1a274aed106c77c4105af798da54926",
     source(THREAD, "MD5 of the letter, TOMI, the cipher, the number and the whole block 63 key"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD), technique("atbash", SOLUTIONS)],
   prize: 0.007,
   hints: [
     official("Question: Looking for one capital letter out of two.", THREAD, undefined, {

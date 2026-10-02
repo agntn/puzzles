@@ -10,6 +10,7 @@ import {
   party,
   PartyKind,
   profile,
+  technique,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 
@@ -58,6 +59,7 @@ export const treasureHunt = puzzle({
   address: "LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS",
   sourceUrl: SITE,
   startedAt: "2021-02-05 19:02:37",
+  techniques: [technique("aes", "https://p2gtreasure.com/Clues/computer_screen.jpg")],
   prize: 3.02608794,
   hints: [
     official(

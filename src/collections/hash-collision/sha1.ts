@@ -1,5 +1,5 @@
 import { puzzle, Status } from "../../core/puzzle.ts";
-import { claim, funding, p2sh, redeemScript } from "../../core/parts.ts";
+import { claim, funding, p2sh, redeemScript, technique } from "../../core/parts.ts";
 
 /** Puzzle `hash-collision/sha1`. */
 export const hashCollisionPuzzleSha1 = puzzle({
@@ -13,6 +13,7 @@ export const hashCollisionPuzzleSha1 = puzzle({
   sourceUrl: "https://bitcointalk.org/index.php?topic=293382.0",
   startedAt: "2013-09-13 04:48:29",
   status: Status.Claimed,
+  techniques: [technique("hash-collision", "https://bitcointalk.org/index.php?topic=293382.0")],
   prize: 2.48,
   solvedAt: "2023-02-22 23:00:49",
   solveTime: 298059140,

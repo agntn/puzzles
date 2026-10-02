@@ -11,6 +11,7 @@ import {
   party,
   PartyKind,
   profile,
+  technique,
   wif,
 } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
@@ -50,6 +51,7 @@ export const iAmABananaAmaaGif = puzzle({
   status: Status.Solved,
   pubkey: compressed("03987951b3fa4a6f68ba76bd509a8ac4945b3cb1e14be1eadd5d3210f590313024"),
   key: wif("L21s1A2LjTL5WLEfWPJtuKxHKF3PcfJnyiEtjNtPUxwnSdqWBD66").derived(),
+  techniques: [technique("base64", THREAD), technique("steganography", THREAD)],
   prize: 0.001,
   hints: [
     official(

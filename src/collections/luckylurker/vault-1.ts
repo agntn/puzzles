@@ -1,4 +1,12 @@
-import { answer, claim, compressed, confirmation, hex, official } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  confirmation,
+  hex,
+  official,
+  technique,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Vault #1 uses an Electrum SegWit seed, not BIP39, at m/0'/0/1. */
@@ -11,6 +19,7 @@ export const luckyLurkerVault1 = puzzle({
   status: Status.Solved,
   solvedAt: "2026-08-17 18:08:09",
   key: hex("d82ce0eaffce690777d571b7943ca782a7c83f48a84269afd26148c3d5816a0a"),
+  techniques: [technique("hidden-seed-words", "https://luckylurker.com/bitcoin-vault/")],
   pubkey: compressed("024ad3b398bc9a95b4b8d44310e15a5355402dba3c784e60bf3b14821ca1622adb"),
   prize: 0.0008,
   hints: [

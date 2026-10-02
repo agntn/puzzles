@@ -9,6 +9,7 @@ import {
   PartyKind,
   profile,
   share,
+  technique,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 
@@ -31,6 +32,7 @@ export const bitapsPuzzle = puzzle({
         "clock fresh security field caution effort gorilla speed plastic common tomato echo",
       ),
     ]),
+  techniques: [technique("shamir-shares", "https://bitaps.com/mnemonic/challenge")],
   prize: 1.00016775,
   transactions: [
     funding(

@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 62 were published. */
@@ -21,6 +30,7 @@ export const quizchainBlock62 = puzzle({
     "ddd06ba8a5eebb2988a97be8d0b5b7c6",
     source(THREAD, "MD5 of the word, TOMI, the cipher and the whole block 61 key"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD), technique("atbash", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: Six letter word.", THREAD, undefined, {

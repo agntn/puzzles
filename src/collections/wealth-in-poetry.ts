@@ -8,6 +8,7 @@ import {
   official,
   party,
   profile,
+  technique,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 
@@ -36,6 +37,7 @@ export const wealthInPoetryPuzzle = puzzle({
   address: "1K4ezpLybootYF23TM4a8Y4NyP7auysnRo",
   sourceUrl: ARTICLE,
   startedAt: "2019-02-11 15:34:04",
+  techniques: [technique("hidden-seed-words", ARTICLE)],
   prize: 0.03050269,
   hints: [
     official(

@@ -12,6 +12,7 @@ import {
   PartyKind,
   profile,
   stage,
+  technique,
   uncompressed,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
@@ -19,6 +20,9 @@ import { puzzle } from "../core/puzzle.ts";
 /** The community writeup of every published step, pinned to the commit the answers cite. */
 const WRITEUP =
   "https://github.com/puzzlehunt/gsmgio-5btc-puzzle/blob/fb92dd15487c6e2d275adb8c923698b7166c328e/README.md";
+
+/** The writeup's section on the page with both ciphertexts and everything behind them. */
+const PHASE_3 = `${WRITEUP}#3-httpsgsmgiochoiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself`;
 
 /** The page that carries both ciphertexts, the one the phase 1 answer opens. */
 const CHOICE =
@@ -731,6 +735,7 @@ export const gsmgPuzzle = puzzle({
         `${WRITEUP}#1-httpsgsmgiopuzzle`,
         { date: "2020-04-26" },
       ),
+      [technique("binary", `${WRITEUP}#1-httpsgsmgiopuzzle`)],
     ),
     stage(
       "phase 2",
@@ -738,9 +743,10 @@ export const gsmgPuzzle = puzzle({
       [artifact("ciphertext", CHOICE, "phase2.txt")],
       answer(
         "causality, from the Merovingian in The Matrix Reloaded. Its SHA-256 in lowercase hex, eb3efb5151e6255994711fe8f2264427ceeebf88109e1d7fad5b0a8b6d07e5bf, is the OpenSSL password.",
-        `${WRITEUP}#3-httpsgsmgiochoiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself`,
+        PHASE_3,
         { date: "2020-04-26" },
       ),
+      [technique("openssl-salted-sha256", PHASE_3)],
     ),
     stage(
       "phase 3",
@@ -748,9 +754,10 @@ export const gsmgPuzzle = puzzle({
       [artifact("ciphertext", CHOICE, "phase3.txt")],
       answer(
         "causality, Safenet, Luna, HSM, 11110, 0x736B6E616220726F662074756F6C69616220646E6F63657320666F206B6E697262206E6F20726F6C6C65636E61684320393030322F6E614A2F33302073656D695420656854 and B5KR/1r5B/2R5/2b1p1p1/2P1k1P1/1p2P2p/1P2P2P/3N1N2 b - - 0 1, joined and hashed: 1a57c572caf3cf722e41f5f9cf99ffacff06728a43032dd44c481c77d2ec30d5. Inside is phase 3.1 and one more blob, phase 3.2, that opens with the SHA-256 of jacquefrescogiveitjustonesecondheisenbergsuncertaintyprinciple.",
-        `${WRITEUP}#3-httpsgsmgiochoiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself`,
+        PHASE_3,
         { date: "2020-04-26" },
       ),
+      [technique("openssl-salted-sha256", PHASE_3)],
     ),
     stage(
       "phase 3.2.1",
@@ -758,9 +765,10 @@ export const gsmgPuzzle = puzzle({
       [artifact("ciphertext", CHOICE, "phase3.txt")],
       answer(
         "The boxes convert to 1539 letters, vtkvplmepphluwahtzmjp and on, and Beaufort with the key THEMATRIXHASYOU turns them into the Architect's speech: YOUR LIFE IS THE SUM OF A REMAINDER OF AN UNBALANCED EQUATION INHERENT TO THE PROGRAMMING OF THIS PUZZLE, down to I REALLY HOPE YOURE THE ONE CIAO BELLA O.",
-        `${WRITEUP}#3-httpsgsmgiochoiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself`,
+        PHASE_3,
         { date: "2020-04-26" },
       ),
+      [technique("beaufort", PHASE_3)],
     ),
     stage(
       "phase 3.2.2",
@@ -768,9 +776,10 @@ export const gsmgPuzzle = puzzle({
       [artifact("ciphertext", CHOICE, "phase3.txt")],
       answer(
         "A VIC straddling checkerboard with 1 and 4 as the blank digits, then a substitution solver over its letters, turns the number into IN CASE YOU MANAGE TO CRACK THIS THE PRIVATE KEYS BELONG TO HALF AND BETTER HALF AND THEY ALSO NEED FUNDS TO LIVE.",
-        `${WRITEUP}#3-httpsgsmgiochoiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself`,
+        PHASE_3,
         { date: "2020-04-26" },
       ),
+      [technique("straddling-checkerboard", PHASE_3)],
     ),
     stage(
       "SalPhaseIon",

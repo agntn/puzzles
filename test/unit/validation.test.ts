@@ -30,8 +30,11 @@ import {
   PubkeyFormat,
   stage,
   standard,
+  technique,
+  type TechniqueTag,
   TransactionType,
 } from "../../src/core/parts.ts";
+import { type Technique, techniques } from "../../src/core/technique.ts";
 import { type Puzzle, puzzle, Status } from "../../src/core/puzzle.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
@@ -317,6 +320,63 @@ function answerProblems(value: Hint["answer"]): string[] {
       ? []
       : ["answer date is not a record date"]),
   ];
+}
+
+/**
+ * The problems of an owner's techniques: a vocabulary name, a web URL source, each name once.
+ *
+ * @param {string} owner - The puzzle, its stage or the collection the tags belong to.
+ * @param {readonly TechniqueTag[]} tags - The tags.
+ * @returns {string[]} One line per failed check.
+ */
+function techniqueProblems(owner: string, tags: readonly TechniqueTag[]): string[] {
+  return tags.flatMap((tag, index) => [
+    ...(techniques.includes(tag.name)
+      ? []
+      : [`${owner}: technique ${index + 1} is not in the vocabulary`]),
+    ...(isWebUrl(tag.source) ? [] : [`${owner}: technique ${index + 1} source is not a web URL`]),
+    ...(tags.findIndex((other) => other.name === tag.name) === index
+      ? []
+      : [`${owner}: technique ${index + 1} repeats ${tag.name}`]),
+  ]);
+}
+
+/**
+ * Every technique tag a collection carries, with the owner a problem names.
+ *
+ * @param {AnyCollection} collection - The collection.
+ * @returns {Array<readonly [string, readonly TechniqueTag[]]>} Each owner with its tags.
+ */
+function techniqueOwners(
+  collection: AnyCollection,
+): Array<readonly [string, readonly TechniqueTag[]]> {
+  return [
+    [collection.key, collection.techniques],
+    ...collection
+      .all()
+      .flatMap((item) => [
+        [item.id(), item.techniques()] as const,
+        ...item
+          .stages()
+          .map(
+            (entry, index) => [`${item.id()} stage ${index + 1}`, entry.techniques ?? []] as const,
+          ),
+      ]),
+  ];
+}
+
+/**
+ * The hash technique a BIP39 entropy recipe needs, read off the length of its hash.
+ *
+ * @param {string} hash - The entropy hash in hex.
+ * @returns {Technique | undefined} MD5 for 32 hex characters, SHA-256 for 64, nothing otherwise.
+ */
+function entropyTechnique(hash: string): Technique | undefined {
+  const byLength: Readonly<Record<number, Technique>> = {
+    32: "md5-to-bip39-entropy",
+    64: "sha256-to-bip39-entropy",
+  };
+  return byLength[hash.length];
 }
 
 /**
@@ -863,6 +923,67 @@ describe("collection class data", () => {
         }),
       ]),
     ).toEqual([]);
+  });
+
+  it("tags every technique from the vocabulary with a web source, each name once per owner", () => {
+    expect(
+      registered
+        .flatMap(techniqueOwners)
+        .flatMap(([owner, tags]) => techniqueProblems(owner, tags)),
+    ).toEqual([]);
+  });
+
+  it("names every way a technique can fail the data gate", () => {
+    expect(
+      techniqueProblems("fixture", [
+        technique("rot13" as Technique, "https://example.com/rules"),
+        technique("atbash", "ftp://example.com/rules"),
+        technique("atbash", "https://example.com/rules"),
+      ]),
+    ).toEqual([
+      "fixture: technique 1 is not in the vocabulary",
+      "fixture: technique 2 source is not a web URL",
+      "fixture: technique 3 repeats atbash",
+    ]);
+  });
+
+  it("tags every BIP39 entropy hash with the hash its length fits, and nothing else", () => {
+    const problems = registered.flatMap((collection) =>
+      collection.all().flatMap((item) => {
+        const hash = item.keyData()?.seed?.entropy?.hash;
+        if (hash === undefined) {
+          return [];
+        }
+        const tagged = collection
+          .techniquesById(item.id())
+          .map((tag) => tag.name)
+          .filter((name) => name.endsWith("-to-bip39-entropy"))
+          .join(", ");
+        return tagged === (entropyTechnique(hash) ?? "an unknown hash")
+          ? []
+          : [
+              `${item.id()}: entropy of ${hash.length} hex characters tagged ${tagged || "nothing"}`,
+            ];
+      }),
+    );
+    expect(problems).toEqual([]);
+  });
+
+  it("rebuilds every SHA-256 brainwallet key the record holds from its passphrase", () => {
+    const checked = registered.flatMap((collection) =>
+      collection.all().flatMap((item) => {
+        const key = item.keyData();
+        const phrase = key?.wif?.passphrase;
+        const tagged = collection
+          .techniquesById(item.id())
+          .some((tag) => tag.name === "sha256-brainwallet");
+        return tagged && key?.hex !== undefined && phrase !== undefined
+          ? [[item.id(), sha256(new TextEncoder().encode(phrase)).toHex() === key.hex] as const]
+          : [];
+      }),
+    );
+    expect(checked).toHaveLength(28);
+    expect(checked.filter(([, rebuilt]) => !rebuilt)).toEqual([]);
   });
 
   it("gives every author a page key, a kind and sourced facts", () => {

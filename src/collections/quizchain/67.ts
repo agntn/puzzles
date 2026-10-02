@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 67 were published. */
@@ -31,6 +40,7 @@ export const quizchainBlock67 = puzzle({
     "37a8385ca320b50afc0b35a731a973dc",
     source(THREAD, "MD5 of the three words, TOMI, the fixed text and the whole block 66 key"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD), technique("atbash", SOLUTIONS)],
   prize: 0.067,
   hints: [
     official("Question: Why Nakamoto?", THREAD, undefined, {

@@ -9,6 +9,7 @@ import {
   party,
   PartyKind,
   profile,
+  technique,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 
@@ -23,6 +24,7 @@ export const mineshopPuzzle = puzzle({
   address: "0x9C2F44EFAd0c1E852a09dF9939e6DaF061140CaF",
   sourceUrl: "https://www.youtube.com/watch?v=w4mpiuBP_aY",
   startedAt: "2020-02-12 13:17:25",
+  techniques: [technique("hidden-seed-words", "https://www.youtube.com/watch?v=w4mpiuBP_aY")],
   prize: 8.612541554256945,
   hints: [
     official(

@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the format, the funding txid and the author's account of the solution of block 2 were published. */
@@ -28,6 +37,7 @@ export const quizchain2Block2 = puzzle({
     "7b44cc11c866ab85b7078c43ad6795e1",
     source(WALKTHROUGH, "MD5 of the second key the Wattpad master string derives"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", WALKTHROUGH)],
   prize: 0.077,
   hints: [
     official(

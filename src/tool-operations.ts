@@ -3,6 +3,7 @@ import type { Chain } from "./core/chains.ts";
 import type { PuzzleQuery } from "./core/dataset.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/status.ts";
+import { type Technique, techniques } from "./core/technique.ts";
 
 /** Result shape shared by the MCP server and the Pi/OMP extensions. */
 export interface ToolResult {
@@ -33,7 +34,8 @@ export const facts = {
     stats: {
       name: "puzzles_stats",
       title: "Puzzle Statistics",
-      description: "Report totals, status counts, and prize sums across every puzzle collection.",
+      description:
+        "Report totals, status counts, prize sums, and how many puzzles use each technique across every puzzle collection.",
       promptSnippet: "Use puzzles_stats for dataset-wide crypto puzzle and bounty totals.",
       promptGuidelines: ["Call it before listing puzzles to know how large the dataset is."],
       openWorld: false,
@@ -64,12 +66,13 @@ export const facts = {
       name: "puzzles_author",
       title: "Show Author",
       description:
-        "Show one author's record: name, kind, aliases, collections, profiles, addresses and the sourced facts public pages state about them.",
+        "Show one author's record: name, kind, aliases, collections, profiles, addresses, the sourced facts public pages state about them, and how many of their puzzles use each technique.",
       promptSnippet:
         "Use puzzles_author for who is behind a collection and what public sources say about them, with the page that says it.",
       promptGuidelines: [
         "A fact is one sentence a public page states, with that page as its source; it is not a verified biography.",
         "A pseudonymous author is recorded under the handle; the record does not name the person behind it.",
+        "The technique counts say what the author tends to reuse; pass one to puzzles_list as technique for the puzzles behind a count.",
       ],
       openWorld: false,
     },
@@ -101,9 +104,13 @@ export const facts = {
     show: {
       name: "puzzles_show",
       title: "Show Puzzle",
-      description: "Show one puzzle's address, status, key material, hints, and explorer links.",
+      description:
+        "Show one puzzle's address, status, key material, techniques, hints, and explorer links.",
       promptSnippet: "Use puzzles_show to inspect a single puzzle by identifier.",
-      promptGuidelines: ["Identifiers are collection/name, for example b1000/90, or gsmg."],
+      promptGuidelines: [
+        "Identifiers are collection/name, for example b1000/90, or gsmg.",
+        "A technique says how the key or a stage was built, with the page that says so; an unsolved puzzle has one only where its author stated it.",
+      ],
       openWorld: false,
     },
     hints: {
@@ -137,7 +144,7 @@ export const facts = {
       name: "puzzles_list",
       title: "List Puzzles",
       description:
-        "List puzzles filtered by target address, collection, chain, status, and public key availability, in dataset order. When a next offset is returned, pass it as offset with the same filters to continue.",
+        "List puzzles filtered by target address, collection, chain, status, technique, and public key availability, in dataset order. When a next offset is returned, pass it as offset with the same filters to continue.",
       promptSnippet:
         "Use puzzles_list to browse puzzles by collection, chain or status, or to find the puzzle an address belongs to.",
       promptGuidelines: [
@@ -145,6 +152,7 @@ export const facts = {
         "Almost every puzzle is on Bitcoin, so a chain filter is the way to find the few that are not.",
         "Given an address, pass it as address instead of listing the dataset and reading every row. An empty result means no puzzle pays to it, unless the answer names a puzzle the other filters left out.",
         "Follow the next offset with the same filters instead of raising limit and repeating earlier rows.",
+        "A technique filter finds the puzzles built the same way, across collections; puzzles_stats counts each technique.",
       ],
       openWorld: false,
     },
@@ -237,6 +245,10 @@ export const facts = {
       description:
         "Lifecycle status: unsolved, solved, claimed (prize taken, key unpublished), swept (taken after the public key leaked), or expired (the author took it back)",
     },
+    technique: {
+      description:
+        "Only puzzles built with this technique, by their collection, their record or one of their stages, for example md5-to-bip39-entropy",
+    },
     withPubkey: { description: "Only puzzles with a known public key" },
     limit: {
       minimum: 1,
@@ -277,11 +289,13 @@ export const facts = {
     "monero",
   ],
   statuses: Object.values(Status),
+  techniques,
 } as const satisfies {
   tools: Record<string, ToolFacts>;
   parameters: Record<string, object>;
   chains: readonly Chain[];
   statuses: readonly Status[];
+  techniques: readonly Technique[];
 };
 
 /** Parameters accepted by the list tool. */
@@ -292,6 +306,7 @@ export interface ListParams {
   readonly limit?: number;
   readonly offset?: number;
   readonly status?: string;
+  readonly technique?: string;
   readonly withPubkey?: boolean;
 }
 
@@ -317,6 +332,7 @@ export const toolArguments = {
     "limit",
     "offset",
     "status",
+    "technique",
     "withPubkey",
   ] satisfies (keyof ListParams)[],
   verify: ["id"],
@@ -449,7 +465,7 @@ export async function statsTool(): Promise<ToolResult> {
   const {
     dataset: { stats, dataVersion },
     registry: { collectionKeys },
-    utils: { countOf, formatPrizeTotals },
+    utils: { countOf, formatPrizeTotals, formatTechniqueCounts },
   } = await loadCore();
   const [result, version] = await Promise.all([stats(), dataVersion()]);
   const lines = [
@@ -458,6 +474,7 @@ export async function statsTool(): Promise<ToolResult> {
     `With public key: ${result.with_pubkey}`,
     `Total prize: ${formatPrizeTotals(result.total_prize)}`,
     `Unsolved prize: ${formatPrizeTotals(result.unsolved_prize)}`,
+    `Techniques: ${formatTechniqueCounts(result.techniques)}`,
     `Data version: ${version}`,
   ];
   return text(lines.join("\n"), { ...result, data_version: version });
@@ -544,7 +561,7 @@ export async function solverTool(key: string): Promise<ToolResult> {
  * One puzzle's complete record for a model.
  *
  * @param {string} id - Universal puzzle identifier.
- * @returns {Promise<ToolResult>} The record as text, with the puzzle and every hint that holds for it in `details`.
+ * @returns {Promise<ToolResult>} The record as text; the puzzle, its hints and techniques in `details`.
  */
 export async function showTool(id: string): Promise<ToolResult> {
   const {
@@ -554,9 +571,10 @@ export async function showTool(id: string): Promise<ToolResult> {
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
-  return text(formatPuzzleRecord(puzzle, collection.hints), {
+  return text(formatPuzzleRecord(puzzle, collection.hints, collection.techniques), {
     puzzle,
     hints: collection.hintsById(puzzle.id()),
+    techniques: collection.techniquesById(puzzle.id()),
   });
 }
 
@@ -606,7 +624,7 @@ interface OutsideMatch {
 /**
  * Explains an empty address lookup. An address belongs to one puzzle or very few, so looking it
  * up again without the other filters adds a line or two, and it tells "no puzzle pays here"
- * apart from "the collection, chain, status or key filter dropped the one that does".
+ * apart from "the collection, chain, status, technique or key filter dropped the one that does".
  *
  * @param {PuzzleQuery} query - The list query, already validated, with its address.
  * @returns {Promise<{ lines: string[]; outside: OutsideMatch[] }>} One sentence per dropped puzzle.
@@ -640,6 +658,11 @@ async function outsideFilters(
     if (query.withPubkey === true && !puzzle.hasPubkey()) {
       reasons.push(["withPubkey", "it has no public key recorded"]);
     }
+    const { technique } = query;
+    const tags = (await requireCollection(puzzle.collection())).techniquesById(puzzle.id());
+    if (technique !== undefined && !tags.some((tag) => tag.name === technique)) {
+      reasons.push(["technique", `it records no ${technique} technique`]);
+    }
     lines.push(
       `${puzzle.id()} pays to this address, but ${reasons.map(([, reason]) => reason).join(" and ")}.`,
     );
@@ -656,7 +679,7 @@ async function outsideFilters(
  */
 async function listQuery(params: ListParams): Promise<PuzzleQuery> {
   const {
-    utils: { parseStatus, requireChain },
+    utils: { parseStatus, parseTechnique, requireChain },
   } = await loadCore();
   return {
     address:
@@ -669,6 +692,7 @@ async function listQuery(params: ListParams): Promise<PuzzleQuery> {
         ? undefined
         : assertLength("collection", params.collection, facts.parameters.collection),
     status: parseStatus(params.status),
+    technique: parseTechnique(params.technique),
     withPubkey: params.withPubkey,
   };
 }

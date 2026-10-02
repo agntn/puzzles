@@ -1,5 +1,6 @@
 import { base58, bech32 } from "@scure/base";
 import type { Chain } from "./chains.ts";
+import type { Technique } from "./technique.ts";
 
 /** Address encodings used by puzzle targets. */
 export const AddressKind = {
@@ -142,6 +143,13 @@ export interface Stage {
   readonly answer?: Answer;
   readonly artifacts: readonly Artifact[];
   readonly name: string;
+  readonly techniques?: readonly TechniqueTag[];
+}
+
+/** A technique from the vocabulary and the page that says it was used. */
+export interface TechniqueTag {
+  readonly name: Technique;
+  readonly source: string;
 }
 
 /** Who gave a hint: the puzzle's author, or someone else. */
@@ -981,6 +989,7 @@ export function artifact(name: string, url: string, file?: string): Artifact {
  * @param {string} about - What the stage puts in front of you, on one line, without its answer.
  * @param {readonly Artifact[]} artifacts - What the author published for it.
  * @param {Answer} [solution] - The published answer that gets you past it, with its own source.
+ * @param {readonly TechniqueTag[]} [used] - The techniques the stage was built with.
  * @returns {Stage} The stage.
  */
 export function stage(
@@ -988,8 +997,26 @@ export function stage(
   about: string,
   artifacts: readonly Artifact[],
   solution?: Answer,
+  used: readonly TechniqueTag[] = [],
 ): Stage {
-  return defined({ name, about, artifacts, answer: solution });
+  return defined({
+    name,
+    about,
+    artifacts,
+    answer: solution,
+    techniques: used.length === 0 ? undefined : used,
+  });
+}
+
+/**
+ * Records that a puzzle or a stage was built with a technique.
+ *
+ * @param {Technique} name - The technique, from the vocabulary.
+ * @param {string} source - The author's recipe or a published solution that says so.
+ * @returns {TechniqueTag} The tag.
+ */
+export function technique(name: Technique, source: string): TechniqueTag {
+  return { name, source };
 }
 
 /**

@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid and the solution of block 3 were published. */
@@ -25,6 +34,7 @@ export const quizchain2Block3 = puzzle({
     "5f6870da0f9c9553647e89c89d79f9a6",
     source(THREAD, "MD5 of the word, TOMI, two words and the whole block 76 key of the first run"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD), technique("atbash", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: dirty word with XA", THREAD, undefined, {

@@ -8,6 +8,7 @@ import {
   official,
   p2pkh,
   party,
+  technique,
 } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
@@ -33,6 +34,7 @@ export const mini1 = puzzle({
   status: Status.Solved,
   pubkey: compressed("02ceb6cbbcdbdf5ef7150682150f4ce2c6f4807b349827dcdbdd1f2efa885a2630"),
   key: hex("0000000000000000000000000000000000b10f22572c497a836ea187f2e1fc23", 120),
+  techniques: [technique("partial-key", THREAD)],
   prize: 1.2,
   hints: [
     official(

@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 73 were published. */
@@ -28,6 +37,7 @@ export const quizchainBlock73 = puzzle({
     "7debf7813cdfd613cdab9e619a8fe14a",
     source(THREAD, "MD5 of the number, TOMI, the name and the whole block 72 key"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.01,
   hints: [
     official("Question: Looking for a 10 digit number.", THREAD, undefined, {

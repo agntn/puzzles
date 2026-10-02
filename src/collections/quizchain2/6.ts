@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid and the method of block 6 were published. */
@@ -22,6 +31,7 @@ export const quizchain2Block6 = puzzle({
     "fb80ca6ac6ec967eeaece1e30d4a7654",
     source(THREAD, "MD5 of the first six words of the block 5 mnemonic"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: Six words.", THREAD, undefined, {

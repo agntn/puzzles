@@ -28,7 +28,8 @@ function count(argument: string, value: string | undefined, minimum: number): nu
 export default defineCommand({
   meta: {
     name: "list",
-    description: "List puzzles, optionally filtered by collection, address, chain and status",
+    description:
+      "List puzzles, optionally filtered by collection, address, chain, status and technique",
   },
   args: {
     collection: {

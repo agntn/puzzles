@@ -7,6 +7,7 @@ import {
   digest,
   funding,
   source,
+  technique,
 } from "../../core/parts.ts";
 
 /** Puzzle `bitimage/kitten`. */
@@ -26,6 +27,12 @@ export const bitimagePuzzleKitten = puzzle({
       "Antonopoulos kitten tweet (May 2015)",
     ),
   ),
+  techniques: [
+    technique(
+      "sha256-to-bip39-entropy",
+      "https://corey-lyle-phillips.medium.com/part-1-3-turn-your-photos-into-bitcoin-private-keys-addresses-57669771cf7a",
+    ),
+  ],
   prize: 0.00095133,
   solvedAt: "2019-07-09 21:26:12",
   solveTime: 585488,
