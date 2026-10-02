@@ -334,14 +334,17 @@ function bareAddress(chain: Chain, address: string): Address | undefined {
 }
 
 /**
- * The files and pages a puzzle hides its clues in, each once, and its key range.
+ * The files and pages a puzzle hides its clues in, each once, and its key range. Solutions aren't clues.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @returns {string[]} Asset and artifact URLs, then the range.
  */
 function carriers(puzzle: Puzzle): string[] {
   const urls = new Set([
-    ...puzzle.assetLinks().map((link) => link.url),
+    ...puzzle
+      .assetLinks()
+      .filter((link) => link.kind !== "solution")
+      .map((link) => link.url),
     ...puzzle.stages().flatMap((stage) => stage.artifacts.map((artifact) => artifact.url)),
   ]);
   const range = puzzle.keyRange();
@@ -414,7 +417,7 @@ async function recordFields(puzzle: Puzzle, states: readonly AddressState[]) {
     },
     missing: [
       ...(name === undefined ? ["author: the collection names no author"] : []),
-      ...(found.length === 0 ? ["carriers: the record links no file, page or key range"] : []),
+      ...(found.length === 0 ? ["carriers: the record links no clue file, page or key range"] : []),
     ],
   };
 }
@@ -477,11 +480,14 @@ export async function eligibility(
  * @returns {string} Balance, totals and where they came from.
  */
 function describeState(state: AddressState, chain: Chain): string {
-  const totals =
-    state.funded === undefined || state.spent === undefined
-      ? ""
-      : `, received ${amount(state.funded, chain)}, spent ${amount(state.spent, chain)}`;
-  return `${state.address} ${amount(state.confirmed, chain)} confirmed, ${amount(state.unconfirmed, chain)} unconfirmed${totals}, read from ${state.provider} at ${state.readAt}`;
+  const parts = [
+    `${state.address} ${amount(state.confirmed, chain)} confirmed`,
+    `${amount(state.unconfirmed, chain)} unconfirmed`,
+    ...(state.funded === undefined ? [] : [`received ${amount(state.funded, chain)}`]),
+    ...(state.spent === undefined ? [] : [`spent ${amount(state.spent, chain)}`]),
+    `read from ${state.provider} at ${state.readAt}`,
+  ];
+  return parts.join(", ");
 }
 
 /**

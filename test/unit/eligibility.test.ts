@@ -116,6 +116,33 @@ describe("eligibility", () => {
     ]);
   });
 
+  it("leaves a published solution out of the carriers", async () => {
+    stubExplorers(0, 0);
+
+    const record = await eligibility("movie-enigma");
+
+    expect(record.carriers.some((url) => url.endsWith("/solution.md"))).toBe(false);
+  });
+
+  it("prints the one lifetime total an explorer gave", () => {
+    const rows = formatEligibility({
+      query: "x",
+      chain: "bitcoin",
+      address: "x",
+      live: [
+        { address: "x", confirmed: 0n, unconfirmed: 0n, funded: 5n, provider: "p", readAt: "t" },
+      ],
+      evidence: [],
+      conflicts: [],
+      carriers: [],
+      missing: [],
+    });
+
+    expect(rows).toContain(
+      "live\tx 0 BTC confirmed, 0 BTC unconfirmed, received 0.00000005 BTC, read from p at t",
+    );
+  });
+
   it("turns a failed lookup into a missing row instead of an error", async () => {
     vi.stubGlobal("fetch", async () => {
       throw new TypeError("fetch failed");
