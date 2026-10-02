@@ -226,9 +226,73 @@ function configOf(options: BalanceOptions): ProviderConfig {
  * @param {Puzzle} puzzle - The puzzle.
  * @returns {string[]} The target address, then the escrow's.
  */
-function prizeAddresses(puzzle: Puzzle): string[] {
+export function prizeAddresses(puzzle: Puzzle): string[] {
   const escrow = puzzle.escrow();
   return escrow === undefined ? [puzzle.address().value] : [puzzle.address().value, escrow.value];
+}
+
+/** What one address holds and has moved, as its chain's explorer read it. */
+export interface AddressState {
+  /** The address read. */
+  readonly address: string;
+
+  /** Confirmed balance in base units. */
+  readonly confirmed: bigint;
+
+  /** Everything the address ever received, in base units, when the explorer counts it. */
+  readonly funded?: bigint;
+
+  /** The `@agntn/explorers` provider that answered, `mempool` or `blockstream` after a fallback. */
+  readonly provider: string;
+
+  /** When the provider completed the read, as ISO 8601. */
+  readonly readAt: string;
+
+  /** Everything the address ever spent, in base units, when the explorer counts it. */
+  readonly spent?: bigint;
+
+  /** Signed mempool delta in base units, zero when the explorer reports none. */
+  readonly unconfirmed: bigint;
+}
+
+/**
+ * A lifetime total, left unknown when unreadable, because a balance doesn't need it.
+ *
+ * @param {string | undefined} value - The total in base units, as the explorer wrote it.
+ * @returns {bigint | undefined} The total, when it reads as a non-negative integer.
+ */
+function total(value: string | undefined): bigint | undefined {
+  return value !== undefined && /^\d+$/u.test(value) ? BigInt(value) : undefined;
+}
+
+/**
+ * Reads one address: its balance, and the lifetime totals no history page cap cuts short.
+ *
+ * @param {Chain} chain - Chain of the address.
+ * @param {string} address - Address to read.
+ * @param {BalanceOptions} options - Lookup options.
+ * @returns {Promise<AddressState>} What the address holds and has moved.
+ */
+export async function lookupAddress(
+  chain: Chain,
+  address: string,
+  options: BalanceOptions,
+): Promise<AddressState> {
+  const config = configOf(options);
+  return ask(chain, "Balance", address, config, async (open) => {
+    const provider = open(config);
+    const snapshot = await provider.getBalance(address, chain);
+    const { confirmed, unconfirmed } = toBalance(chain, snapshot);
+    return defined<AddressState>({
+      address,
+      confirmed,
+      funded: total(snapshot.funded),
+      provider: provider.name,
+      readAt: snapshot.fetchedAt,
+      spent: total(snapshot.spent),
+      unconfirmed,
+    });
+  });
 }
 
 /**
@@ -242,17 +306,13 @@ function prizeAddresses(puzzle: Puzzle): string[] {
  */
 export async function lookupBalance(puzzle: Puzzle, options: BalanceOptions): Promise<Balance> {
   const chain = puzzle.chain();
-  const config = configOf(options);
-  const balances = await Promise.all(
-    prizeAddresses(puzzle).map((address) =>
-      ask(chain, "Balance", address, config, async (open) =>
-        toBalance(chain, await open(config).getBalance(address, chain)),
-      ),
-    ),
+  const states = await Promise.all(
+    prizeAddresses(puzzle).map((address) => lookupAddress(chain, address, options)),
   );
-  return balances.reduce(
-    (sum, part) =>
-      new Balance(chain, sum.confirmed + part.confirmed, sum.unconfirmed + part.unconfirmed),
+  return states.reduce(
+    (sum, state) =>
+      new Balance(chain, sum.confirmed + state.confirmed, sum.unconfirmed + state.unconfirmed),
+    new Balance(chain, 0n, 0n),
   );
 }
 

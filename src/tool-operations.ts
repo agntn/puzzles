@@ -183,6 +183,21 @@ export const facts = {
       ],
       openWorld: true,
     },
+    eligibility: {
+      name: "puzzles_eligibility",
+      title: "Puzzle Eligibility",
+      description:
+        "Gather what to check before working on a puzzle in one record: identity and source, chain, address and script type, a live read of every prize address with what it received and spent, the status with its evidence, the carriers, what counts as a solution, and every field nobody can fill. Takes an identifier, or an address no record holds.",
+      promptSnippet:
+        "Use puzzles_eligibility before working on a prize puzzle, instead of assembling the checklist from puzzles_show, puzzles_balance and an explorer.",
+      promptGuidelines: [
+        "This call reaches a block explorer.",
+        "A missing row is a field neither the record nor the explorer fills. It's never guessed, so treat it as unknown.",
+        "A conflict row means the record and the chain disagree, such as a prize the addresses no longer hold. puzzles_watch lists the transactions behind it.",
+        "An address that fits more than one chain, such as an Ethereum one that also reads on Base, needs chain.",
+      ],
+      openWorld: true,
+    },
   },
   parameters: {
     id: {
@@ -197,6 +212,15 @@ export const facts = {
         "The puzzle paying to this address. Case only matters where the chain says it does, so an EIP-55 Ethereum address and an uppercased bech32 one both resolve",
     },
     chain: { description: "Only puzzles on one blockchain" },
+    addressChain: {
+      description: "Chain of an address whose format fits more than one, for example base",
+    },
+    query: {
+      minLength: 1,
+      maxLength: 128,
+      description:
+        "Puzzle identifier, for example b1000/71, or an address, whether a record holds it or not",
+    },
     collection: { minLength: 1, maxLength: 50, description: "Collection key, for example b1000" },
     author: {
       minLength: 1,
@@ -298,6 +322,7 @@ export const toolArguments = {
   verify: ["id"],
   balance: ["id", "apiKey"],
   watch: ["id", "since", "apiKey"],
+  eligibility: ["query", "chain", "apiKey"],
 } as const satisfies Record<keyof typeof facts.tools, readonly string[]>;
 
 function text(value: string, details: Readonly<Record<string, unknown>>): ToolResult {
@@ -794,4 +819,46 @@ export async function watchTool(id: string, since?: string, apiKey?: string): Pr
     errors,
     truncated: report.truncated,
   });
+}
+
+/**
+ * Builds the eligibility record of a puzzle or an address, with a `missing` row per unknown field.
+ *
+ * @param {string} query - Puzzle identifier or address.
+ * @param {string} [chain] - Chain of an address whose format fits more than one.
+ * @param {string} [apiKey] - Provider API key, when the chain needs one.
+ * @returns {Promise<ToolResult>} A summary line and the record rows, with the record in `details`.
+ */
+export async function eligibilityTool(
+  query: string,
+  chain?: string,
+  apiKey?: string,
+): Promise<ToolResult> {
+  const checked = assertLength("query", query, facts.parameters.query);
+  const key =
+    apiKey === undefined ? undefined : assertLength("apiKey", apiKey, facts.parameters.apiKey);
+  const { eligibility, formatEligibility } = await import("./core/eligibility.ts");
+  const record = await eligibility(checked, {
+    apiKey: key,
+    apiKeyFor: (resolved) => keyFor(resolved, undefined),
+    chain,
+  });
+  const { missing } = record;
+  const summary =
+    missing.length === 0
+      ? "complete"
+      : `${missing.length} ${missing.length === 1 ? "field" : "fields"} missing`;
+  return text(
+    [`${record.id ?? record.address}: ${summary}`, ...formatEligibility(record)].join("\n"),
+    {
+      ...record,
+      live: record.live.map((state) => ({
+        ...state,
+        confirmed: state.confirmed.toString(),
+        unconfirmed: state.unconfirmed.toString(),
+        ...(state.funded === undefined ? {} : { funded: state.funded.toString() }),
+        ...(state.spent === undefined ? {} : { spent: state.spent.toString() }),
+      })),
+    },
+  );
 }

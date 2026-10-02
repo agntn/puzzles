@@ -885,6 +885,28 @@ describe.concurrent("puzzles CLI", () => {
     expect(failed.stdout).toMatch(/^FAIL\tballet\/AA009926\tTransaction history lookup failed: /u);
   });
 
+  it("exits 0 on a complete eligibility record and 1 while a field is missing", async () => {
+    const complete = await stubbed("unused", "eligibility", "gsmg");
+    expect(complete.code).toBe(0);
+    expect(complete.stdout).toMatch(
+      /^live\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe 0\.000011 BTC confirmed, 0 BTC unconfirmed, received 0\.000015 BTC, spent 0\.000004 BTC, read from mempool at /mu,
+    );
+    expect(complete.stdout).not.toMatch(/^missing\t/mu);
+
+    const bare = await stubbed(
+      "unused",
+      "eligibility",
+      "1BoatSLRHtKNngkdXEeobR76b53LETtpyT",
+      "--json",
+    );
+    expect(bare.code).toBe(1);
+    expect(JSON.parse(bare.stdout)).toMatchObject({
+      chain: "bitcoin",
+      kind: "p2pkh",
+      live: [{ confirmed: "1100", funded: "1500", spent: "400" }],
+    });
+  });
+
   it("rejects a since date before any lookup", async () => {
     await expect(failure("watch", "bitaps", "--since", "2026-13-01")).resolves.toEqual({
       code: 1,

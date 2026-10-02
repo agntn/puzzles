@@ -159,7 +159,10 @@ describe("tool schemas and executors share one argument contract", () => {
   it("builds every parameter from its entry in the facts", () => {
     for (const schema of Object.values(schemas)) {
       for (const [parameter, property] of Object.entries(schema.input.properties)) {
-        const fact = parameter === "key" ? undefined : facts.parameters[parameter as "id"];
+        const renamed =
+          parameter === "key" ||
+          (parameter === "chain" && schema.name === facts.tools.eligibility.name);
+        const fact = renamed ? undefined : facts.parameters[parameter as "id"];
         if (fact !== undefined) {
           expect(property, `${schema.name} ${parameter}`).toMatchObject(fact);
         }
@@ -167,6 +170,9 @@ describe("tool schemas and executors share one argument contract", () => {
     }
     expect(schemas.author.input.properties["key"]).toMatchObject(facts.parameters.author);
     expect(schemas.solver.input.properties["key"]).toMatchObject(facts.parameters.solver);
+    expect(schemas.eligibility.input.properties["chain"]).toMatchObject(
+      facts.parameters.addressChain,
+    );
   });
 
   it("enforces the same limits in the executors when a host skips validation", async () => {

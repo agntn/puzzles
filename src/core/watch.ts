@@ -160,7 +160,7 @@ async function unrecorded(puzzle: Puzzle, options: BalanceOptions): Promise<Unre
  * @param {Puzzle} puzzle - The puzzle.
  * @returns {number | undefined} The expected balance in whole units, when there is one.
  */
-function expectedPrize(puzzle: Puzzle): number | undefined {
+export function expectedPrize(puzzle: Puzzle): number | undefined {
   const prize = puzzle.prize();
   return puzzle.status() === Status.Unsolved && puzzle.currency() === undefined ? prize : undefined;
 }
@@ -173,7 +173,7 @@ function expectedPrize(puzzle: Puzzle): number | undefined {
  * @param {number} prize - The recorded prize, in whole units.
  * @returns {boolean} Whether the balance reads as the prize.
  */
-function holdsPrize(balance: Balance, prize: number): boolean {
+export function holdsPrize(balance: Balance, prize: number): boolean {
   return Number(balance.totalAmount()) === prize;
 }
 

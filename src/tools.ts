@@ -6,6 +6,7 @@ import {
   authorTool,
   balanceTool,
   collectionsTool,
+  eligibilityTool,
   facts,
   hintsTool,
   listTool,
@@ -140,6 +141,16 @@ export const watchToolDefinition = defineTool({
   execute: (params) => watchTool(params.id, params.since, params.apiKey),
 });
 
+export const eligibilityToolDefinition = defineTool({
+  ...described(facts.tools.eligibility),
+  input: closed({
+    query: Type.String(parameters.query),
+    chain: Type.Optional(Type.Enum(chains, parameters.addressChain)),
+    apiKey: Type.Optional(Type.String(parameters.apiKey)),
+  }),
+  execute: (params) => eligibilityTool(params.query, params.chain, params.apiKey),
+});
+
 /** Every puzzle tool, in the order `tools/list` and the harnesses show them. */
 export const puzzlesTools: readonly ToolDefinition[] = [
   statsToolDefinition,
@@ -155,6 +166,7 @@ export const puzzlesTools: readonly ToolDefinition[] = [
   verifyToolDefinition,
   balanceToolDefinition,
   watchToolDefinition,
+  eligibilityToolDefinition,
 ];
 
 /** The argument a status line shows after the tool title, for the tools that take one. */
@@ -174,4 +186,5 @@ export const callSummaries: Readonly<
   [facts.tools.verify.name]: (args) => args["id"],
   [facts.tools.balance.name]: (args) => args["id"],
   [facts.tools.watch.name]: (args) => args["id"],
+  [facts.tools.eligibility.name]: (args) => args["query"],
 };

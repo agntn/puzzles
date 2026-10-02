@@ -183,6 +183,7 @@ const main = defineCommand({
     authors: () => command(() => import("./commands/authors.ts")),
     balance: () => command(() => import("./commands/balance.ts")),
     collections: () => command(() => import("./commands/collections.ts")),
+    eligibility: () => command(() => import("./commands/eligibility.ts")),
     export: () => command(() => import("./commands/export.ts")),
     hints: () => command(() => import("./commands/hints.ts")),
     list: () => command(() => import("./commands/list.ts")),
