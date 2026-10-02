@@ -139,6 +139,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `bitaddress`            | bitcoin                             | A BIP38 wallet with a forgotten passphrase  |
 | `powerful-moss`         | base                                | A seed in an album, the prize in a contract |
 | `trivia-brainwallet`    | bitcoin                             | Twelve trivia riddles salted into scrypt    |
+| `great-riddle`          | bitcoin                             | Seed words hidden in ballpoint pen drawings |
 
 Identifiers are `collection/name`. A singleton, such as `gsmg`, `genesis` or `80-bit`, is just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 
