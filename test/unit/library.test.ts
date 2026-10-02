@@ -14,6 +14,7 @@ import { CoinArtistCollection } from "../../src/collections/coin-artist.ts";
 import { DogesGambitCollection } from "../../src/collections/doges-gambit.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
+import { GreatRiddleCollection } from "../../src/collections/great-riddle.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash-collision.ts";
 import { iAmABananaAmaa, IAmABananaAmaaCollection } from "../../src/collections/iamabananaamaa.ts";
@@ -86,6 +87,7 @@ const concreteClasses = [
   DogesGambitCollection,
   DugCollection,
   GenesisCollection,
+  GreatRiddleCollection,
   GsmgCollection,
   HashCollisionCollection,
   IAmABananaAmaaCollection,
@@ -855,21 +857,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(478);
+    expect(await all()).toHaveLength(479);
     expect(await stats()).toEqual({
-      total: 478,
+      total: 479,
       claimed: 12,
       expired: 3,
       solved: 263,
       swept: 96,
-      unsolved: 104,
+      unsolved: 105,
       with_pubkey: 370,
       total_prize: {
         AR: 5550,
         ETH: 26.815651554256945,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1065.73282087,
+        BTC: 1065.73705958,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -878,7 +880,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1900,
         ETH: 13.171951554256944,
-        BTC: 909.11428069,
+        BTC: 909.1185194,
         LTC: 3.02608794,
       },
     });
@@ -923,7 +925,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(478);
+    ).toBe(479);
   });
 
   it("hands back the memoized views frozen through", async () => {

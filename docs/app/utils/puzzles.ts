@@ -82,6 +82,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Two keys hidden in Genesis block data. Public clues, paid hints, still no verified solution.",
   },
+  "great-riddle": {
+    icon: "i-lucide-pen-tool",
+    title: "The Great Riddle",
+    sample: "great-riddle",
+    chains: ["bitcoin"],
+    blurb:
+      "A seed of 24 words hidden one by one in the original ballpoint drawings of the Genesis Collection. Prints carry nothing, and the 25th word comes from the artist.",
+  },
   gsmg: {
     icon: "i-lucide-rabbit",
     title: "GSMG.io puzzle",
