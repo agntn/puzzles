@@ -15,7 +15,7 @@ import {
  */
 async function viewOf(id: string) {
   const library = await import("../../src/index.ts");
-  return toPuzzleView(library, await library.requirePuzzle(id), "", []);
+  return toPuzzleView(library, await library.requirePuzzle(id), "", [], []);
 }
 
 describe("docs record helpers", () => {
@@ -81,5 +81,25 @@ describe("docs record helpers", () => {
     expect((await lines("hash-collision/sha1"))[2]).toMatch(
       /^ {2}address: p2sh\(".*redeemScript\(/u,
     );
+  });
+
+  it("list the collection's techniques first, then the record's, then each stage's", async () => {
+    const library = await import("../../src/index.ts");
+    const scoped = async (id: string) => {
+      const puzzle = await library.requirePuzzle(id);
+      const collection = await library.requireCollection(puzzle.collection());
+      const view = await toPuzzleView(library, puzzle, "", [], collection.techniques);
+      return view.techniques.map((row) => [row.scope, row.name]);
+    };
+
+    expect(await scoped("b1000/71")).toEqual([["collection", "masked-key-range"]]);
+    expect(await scoped("gsmg")).toEqual([
+      ["stage phase 1", "binary"],
+      ["stage phase 2", "openssl-salted-sha256"],
+      ["stage phase 3", "openssl-salted-sha256"],
+      ["stage phase 3.2.1", "beaufort"],
+      ["stage phase 3.2.2", "straddling-checkerboard"],
+    ]);
+    expect(await scoped("mini/3")).toEqual([]);
   });
 });

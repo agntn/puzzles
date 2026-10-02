@@ -397,6 +397,35 @@ const { copied, copy } = useCopied();
       </ol>
     </div>
 
+    <div v-if="view.techniques.length > 0" class="puzzle-transactions puzzle-techniques">
+      <p class="console-label console-rule-title">
+        <span
+          >Techniques <span aria-hidden="true">[ {{ view.techniques.length }} ]</span></span
+        >
+        <span class="console-mark" aria-hidden="true" />
+      </p>
+      <ol class="console-rows console-animate">
+        <li
+          v-for="(row, index) in view.techniques"
+          :key="index"
+          :style="{ animationDelay: `${Math.min(index * 30, 600)}ms` }"
+        >
+          <span class="puzzle-tx-type">{{ row.name }}</span>
+          <span class="puzzle-tx-date">{{ row.scope }}</span>
+          <span class="console-leader" aria-hidden="true" />
+          <UTooltip :text="row.source">
+            <a
+              :href="row.source"
+              target="_blank"
+              rel="noopener"
+              class="puzzle-tx-id puzzle-stage-url"
+              >{{ linkText(row.source) }}</a
+            >
+          </UTooltip>
+        </li>
+      </ol>
+    </div>
+
     <div v-if="view.hints.length > 0" class="console-band">
       <p class="console-label console-rule-title">
         <span
@@ -574,6 +603,9 @@ const { copied, copy } = useCopied();
 .puzzle-stages .console-rows li.puzzle-stage-head {
   grid-template-columns: 6.5rem minmax(0, 1fr);
 }
+.puzzle-techniques .console-rows li {
+  grid-template-columns: 11.5rem minmax(0, max-content) minmax(16px, 1fr) minmax(0, max-content);
+}
 .puzzle-stage-head + li,
 .puzzle-stages .console-rows li:not(.puzzle-stage-head) + li:not(.puzzle-stage-head) {
   border-top-style: dashed;
@@ -707,6 +739,17 @@ const { copied, copy } = useCopied();
   }
   .puzzle-stages .console-rows li.puzzle-stage-head {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .puzzle-techniques .console-rows li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+  }
+  .puzzle-techniques .console-rows .puzzle-tx-date {
+    white-space: nowrap;
+  }
+  .puzzle-techniques .console-rows .puzzle-tx-id.puzzle-stage-url {
+    flex-basis: 100%;
   }
   .puzzle-stages .console-rows li:not(.puzzle-stage-head) > span:first-child {
     display: none;

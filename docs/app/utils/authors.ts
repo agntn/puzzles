@@ -12,6 +12,12 @@ export interface AuthorCollectionRow {
   readonly firstStarted: string;
 }
 
+/** One technique on an author page and how many of the author's puzzles use it. */
+export interface AuthorTechniqueRow {
+  readonly name: string;
+  readonly count: number;
+}
+
 /** Everything an author page shows, as plain data for the Nuxt payload. */
 export interface AuthorFactsData {
   readonly key: string;
@@ -23,6 +29,8 @@ export interface AuthorFactsData {
   readonly addresses: readonly string[];
   readonly facts: readonly Fact[];
   readonly collections: readonly AuthorCollectionRow[];
+  /** Most used first, ties in vocabulary order. */
+  readonly techniques: readonly AuthorTechniqueRow[];
   readonly puzzles: number;
   readonly unsolved: number;
   readonly chains: readonly string[];
@@ -79,6 +87,9 @@ export function authorFacts(
         firstStarted: started[0] ?? "",
       };
     }),
+    techniques: Object.entries(entry.techniques)
+      .map(([name, count]) => ({ name, count }))
+      .toSorted((left, right) => right.count - left.count),
     puzzles: puzzles.length,
     unsolved: unsolved.length,
     chains: [...new Set(puzzles.map((puzzle) => puzzle.chain()))],
