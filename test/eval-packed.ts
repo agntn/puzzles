@@ -126,6 +126,7 @@ const expectedToolNames = [
   "puzzles_authors",
   "puzzles_balance",
   "puzzles_collections",
+  "puzzles_eligibility",
   "puzzles_hints",
   "puzzles_list",
   "puzzles_show",
