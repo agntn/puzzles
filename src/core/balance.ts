@@ -25,6 +25,9 @@ export const apiKeyVariables: Readonly<Partial<Record<Chain, string>>> = Object.
   ethereum: "ETHERSCAN_API_KEY",
 });
 
+/** Transactions read per address, the page cap of `@agntn/explorers`. */
+export const HISTORY_LIMIT = 100;
+
 /** Base error for balance lookups. */
 export class BalanceError extends PuzzlesError {
   override readonly name: string = "BalanceError";

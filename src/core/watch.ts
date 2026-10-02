@@ -1,4 +1,4 @@
-import { BalanceError, type BalanceOptions } from "./balance.ts";
+import { BalanceError, type BalanceOptions, HISTORY_LIMIT } from "./balance.ts";
 import { type Chain, chainDecimals, chainSymbol } from "./chains.ts";
 import { InvalidArgumentError, SourceLookupError } from "./errors.ts";
 import type { ChainTransaction } from "./providers.ts";
@@ -56,6 +56,9 @@ export interface WatchReport {
 
   /** Puzzle identifier. */
   readonly id: string;
+
+  /** Prize addresses with more transactions than one read takes; their older ones went unchecked. */
+  readonly truncated: readonly string[];
 }
 
 /** One puzzle's check within a watch pass, with an optional provider key for its chain. */
@@ -109,29 +112,45 @@ function chronological(left: Readonly<TransactionFinding>, right: Readonly<Trans
   );
 }
 
+/** What the record lacks among the transactions read, and the addresses read only in part. */
+interface Unrecorded {
+  readonly findings: TransactionFinding[];
+  readonly truncated: string[];
+}
+
 /**
  * The transactions on the prize addresses the record lacks. Incoming calls that move no coin stay
  * out; a spend always counts, since even an empty one can reveal the public key.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @param {BalanceOptions} options - Explorer options.
- * @returns {Promise<TransactionFinding[]>} The unrecorded transactions, oldest first.
+ * @returns {Promise<Unrecorded>} The unrecorded transactions, oldest first, and the cut addresses.
  */
-async function unrecorded(puzzle: Puzzle, options: BalanceOptions): Promise<TransactionFinding[]> {
+async function unrecorded(puzzle: Puzzle, options: BalanceOptions): Promise<Unrecorded> {
   const { lookupHistory } = await import("./providers.ts");
   const recorded = recordedTxids(puzzle);
   const kinds = { in: "deposit", out: "spend" } as const;
-  return (await lookupHistory(puzzle, options))
-    .filter(
-      (transaction) =>
-        !recorded.has(transaction.txid.toLowerCase()) &&
-        (transaction.direction === "out" || transaction.amount > 0n),
-    )
-    .map((transaction): TransactionFinding => ({
-      ...transaction,
-      kind: transaction.direction === undefined ? "transaction" : kinds[transaction.direction],
-    }))
-    .toSorted(chronological);
+  const history = await lookupHistory(puzzle, options);
+  const counts = new Map<string, number>();
+  for (const { address } of history) {
+    counts.set(address, (counts.get(address) ?? 0) + 1);
+  }
+  return {
+    findings: history
+      .filter(
+        (transaction) =>
+          !recorded.has(transaction.txid.toLowerCase()) &&
+          (transaction.direction === "out" || transaction.amount > 0n),
+      )
+      .map((transaction): TransactionFinding => ({
+        ...transaction,
+        kind: transaction.direction === undefined ? "transaction" : kinds[transaction.direction],
+      }))
+      .toSorted(chronological),
+    truncated: [...counts]
+      .filter(([, count]) => count >= HISTORY_LIMIT)
+      .map(([address]) => address),
+  };
 }
 
 /**
@@ -222,8 +241,9 @@ export function watcher(options: WatchOptions = {}): Watch {
   return async (puzzle, apiKey = options.apiKey) => {
     const explorer: BalanceOptions = { apiKey, baseUrl: options.baseUrl, timeout: options.timeout };
     const prize = expectedPrize(puzzle);
+    const history = await attempt(() => unrecorded(puzzle, explorer));
     const attempts = [
-      await attempt(() => unrecorded(puzzle, explorer)),
+      history.error === undefined ? { value: history.value.findings } : { error: history.error },
       prize === undefined
         ? undefined
         : await attempt(() => balanceFindings(puzzle, prize, explorer)),
@@ -236,6 +256,7 @@ export function watcher(options: WatchOptions = {}): Watch {
       chain: puzzle.chain(),
       findings: attempts.flatMap((done) => done.value ?? []),
       errors: attempts.flatMap((done) => (done.error === undefined ? [] : [done.error])),
+      truncated: history.value?.truncated ?? [],
     };
   };
 }
@@ -270,8 +291,8 @@ function describe(finding: Readonly<Finding>, chain: Chain): string {
 }
 
 /**
- * One report as the rows `puzzles watch` and `puzzles_watch` print: one per finding, `FAIL` per
- * failed check, `OK` when there's neither.
+ * One report as the rows `puzzles watch` and `puzzles_watch` print: one per finding, `PARTIAL` per
+ * address read only in part, `FAIL` per failed check, `OK` when there's none of them.
  *
  * @param {Readonly<WatchReport>} report - The report.
  * @returns {string[]} The rows, each on one line.
@@ -281,6 +302,10 @@ export function formatWatchReport(report: Readonly<WatchReport>): string[] {
     ...report.findings.map(
       (finding) =>
         `${finding.kind.toUpperCase()}\t${report.id}\t${oneLine(describe(finding, report.chain))}`,
+    ),
+    ...report.truncated.map(
+      (address) =>
+        `PARTIAL\t${report.id}\tonly the newest ${HISTORY_LIMIT} transactions at ${address} read, older ones unchecked`,
     ),
     ...report.errors.map((error) => `FAIL\t${report.id}\t${oneLine(error)}`),
   ];

@@ -18,6 +18,7 @@ import { Mempool } from "@agntn/explorers/providers/mempool";
 import {
   BalanceError,
   BalanceProviderError,
+  HISTORY_LIMIT,
   InvalidAddressError,
   UnsupportedChainError,
   type BalanceOptions,
@@ -278,9 +279,6 @@ export interface ChainTransaction {
   /** Transaction identifier. */
   readonly txid: string;
 }
-
-/** Transactions read per address, the page cap of `@agntn/explorers`. */
-export const HISTORY_LIMIT = 100;
 
 /** The fields of an explorer's transaction that a watch reads. */
 type Listed = Readonly<
