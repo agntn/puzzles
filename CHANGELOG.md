@@ -1,3 +1,24 @@
+## v0.26.1
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.26.0...v0.26.1)
+
+### 🚀 Enhancements
+
+- **collections:** Add quizchain2/11 to 20 ([#398](https://github.com/agntn/puzzles/pull/398))
+- **collections:** Add the 2026 bitaps deposit ([#399](https://github.com/agntn/puzzles/pull/399))
+- **collections:** Add gsmg phase 3.2 stages ([#400](https://github.com/agntn/puzzles/pull/400))
+- **puzzle:** Pin asset bytes with SHA-256 ([#401](https://github.com/agntn/puzzles/pull/401))
+- **collections:** Pin author URLs of 28 assets ([#403](https://github.com/agntn/puzzles/pull/403))
+
+### 🏡 Chore
+
+- Apply automated updates ([3ac2e7c](https://github.com/agntn/puzzles/commit/3ac2e7c))
+
+### ❤️ Contributors
+
+- Aeitwoen
+- Ori
+
 ## v0.26.0
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.25.1...v0.26.0)
