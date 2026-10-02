@@ -73,6 +73,11 @@ export const gsmgPuzzle = bitcoinPuzzle({
         "follow-the-white-rabbit.png",
         "5e8d84b88f8f829428df5d2a8bf36c7268346f169b799ac7570b6223990d204f",
         1958,
+        {
+          url: "https://gsmg.io/img/follow_the_white_rabbit.png",
+          archive:
+            "https://web.archive.org/web/20201115074715id_/https://gsmg.io/img/follow_the_white_rabbit.png",
+        },
       ),
       digest("phase2.txt", "5e583d5b8626aa80f8a1ae61e7ad62fb2640bedb73fcc12ba68fa13b15dfa94d", 910),
       digest(

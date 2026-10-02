@@ -52,6 +52,11 @@ export const bitimagePuzzleKitten = bitcoinPuzzle({
         "kitten/puzzle.jpg",
         "b988e0881a0211222e83f3e2a4bfac695c951bf96aa33ec112fab6992f5e7343",
         265456,
+        {
+          url: "https://pbs.twimg.com/media/CGDHoYiU0AEQXze.jpg",
+          archive:
+            "https://web.archive.org/web/20210520115853id_/https://pbs.twimg.com/media/CGDHoYiU0AEQXze.jpg",
+        },
       ),
     ],
   }),

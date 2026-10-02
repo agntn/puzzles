@@ -48,6 +48,11 @@ export const zdenPuzzleLevelXm17 = bitcoinPuzzle({
         "level-xm17/solver.png",
         "7532efab1506bd686135b96e0546cd3d1229702c55cc3b2e74c54773c24a9d0d",
         72267,
+        {
+          url: "https://crypto.haluska.sk/cryptoxm17solver.png",
+          archive:
+            "https://web.archive.org/web/20250818085420id_/http://crypto.haluska.sk/cryptoxm17solver.png",
+        },
       ),
     ],
   }),

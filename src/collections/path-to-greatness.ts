@@ -132,39 +132,82 @@ export const treasureHunt = litecoinPuzzle({
         "computer-screen.jpg",
         "f14bdfc2a1bf532cdb7a2da6b30034bdd6d96478b37f664658d5678fb2d800f2",
         478546,
+        {
+          url: "https://p2gtreasure.com/Clues/computer_screen.jpg",
+          archive:
+            "https://web.archive.org/web/20220420084754id_/http://p2gtreasure.com/Clues/computer_screen.jpg",
+        },
       ),
       digest(
         "clue1-imagine.jpg",
         "787861023f2d1ee6cc6d4ab21f9344f13b275cc6d0c2a03ea02a38c42724db5c",
         564308,
+        {
+          url: "https://p2gtreasure.com/Clues/clue1_imagine.jpg",
+          archive:
+            "https://web.archive.org/web/20220406031947id_/http://p2gtreasure.com/Clues/clue1_imagine.jpg",
+        },
       ),
       digest(
         "clue2-scramble.jpg",
         "c6e07d7a53faafa17f2d57ee0971462da80494d79d0fcf3ebb39b9630dc92e5e",
         537001,
+        {
+          url: "https://p2gtreasure.com/Clues/clue2_scramble.jpg",
+          archive:
+            "https://web.archive.org/web/20220309153614id_/http://p2gtreasure.com/Clues/clue2_scramble.jpg",
+        },
       ),
       digest(
         "clue3-wasd.jpg",
         "15c5fae68f242e2dc23f51100fac2ca574528c5284e737bda3cd59707a6e678b",
         556777,
+        {
+          url: "https://p2gtreasure.com/Clues/clue3_wasd.jpg",
+          archive:
+            "https://web.archive.org/web/20220403042134id_/http://p2gtreasure.com/Clues/clue3_wasd.jpg",
+        },
       ),
       digest(
         "clue4-chess.jpg",
         "6603d1c29220e64b744d34704ec57f90560a6490d152fdb0ce8cc03a6da6a359",
         575085,
+        {
+          url: "https://p2gtreasure.com/Clues/clue4_chess.jpg",
+          archive:
+            "https://web.archive.org/web/20220309152900id_/http://p2gtreasure.com/Clues/clue4_chess.jpg",
+        },
       ),
       digest(
         "clue5-wonders.jpg",
         "d348d9b36dc010e32c1b3689698c0d88793e031faf581214369fd229a793e119",
         609035,
+        {
+          url: "https://p2gtreasure.com/Clues/clue5_wonders.jpg",
+          archive:
+            "https://web.archive.org/web/20220502024511id_/http://p2gtreasure.com/Clues/clue5_wonders.jpg",
+        },
       ),
       digest(
         "00111111.jpg",
         "91dfcca1727e3361c3d090a9ff4d90d97667dba0b7cf53263a9316510542e744",
         506238,
+        {
+          url: "https://p2gtreasure.com/Clues/00111111.jpg",
+          archive:
+            "https://web.archive.org/web/20220318211629id_/http://p2gtreasure.com/Clues/00111111.jpg",
+        },
       ),
-      digest("qr1.jpg", "d5b6bd00e6c84f7d2c7b60de168db885fdf5e2e0d2ce964a62dd887460a162f4", 13569),
-      digest("qr2.jpg", "120d72fde754740493e42627bbb561d5e7176429a9e221f24eef268346c1c2e9", 14009),
+      digest("qr1.jpg", "d5b6bd00e6c84f7d2c7b60de168db885fdf5e2e0d2ce964a62dd887460a162f4", 13569, {
+        url: "https://p2gtreasure.com/Clues/qr1.jpg",
+        archive:
+          "https://web.archive.org/web/20220417012026id_/http://p2gtreasure.com/Clues/qr1.jpg",
+      }),
+      digest("qr2.jpg", "120d72fde754740493e42627bbb561d5e7176429a9e221f24eef268346c1c2e9", 14009, {
+        url: "https://p2gtreasure.com/Clues/qr2.jpg",
+        archive:
+          "https://web.archive.org/web/20220131185620id_/http://p2gtreasure.com/Clues/qr2.jpg",
+      }),
     ],
   }),
 });

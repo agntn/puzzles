@@ -54,6 +54,11 @@ export const zdenPuzzleXixoio = ethereumPuzzle({
         "xixoio/solver.png",
         "8500c68bfec5fb9dd3078104405a30d645c46c90a71d09e0827fcca99af6b099",
         241224,
+        {
+          url: "https://crypto.haluska.sk/xixoio_puzzle-solver.png",
+          archive:
+            "https://web.archive.org/web/20250929202710id_/https://crypto.haluska.sk/xixoio_puzzle-solver.png",
+        },
       ),
     ],
   }),

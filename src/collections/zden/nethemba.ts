@@ -45,6 +45,11 @@ export const zdenPuzzleNethemba = bitcoinPuzzle({
         "nethemba/solver.png",
         "81d7977df3f4f3200b9bb970ed7c64f464f7c8b0a8f7baba105cc4aaa8155854",
         502693,
+        {
+          url: "https://crypto.haluska.sk/crypto_nethemba_solver.png",
+          archive:
+            "https://web.archive.org/web/20250929202710id_/https://crypto.haluska.sk/crypto_nethemba_solver.png",
+        },
       ),
     ],
   }),

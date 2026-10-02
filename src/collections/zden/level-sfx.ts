@@ -51,6 +51,11 @@ export const zdenPuzzleLevelSfx = bitcoinPuzzle({
         "level-sfx/solver.png",
         "fb4f9da4254f286250fc83feea84e79cae3f24ad98a710282c11b1006723da3a",
         469281,
+        {
+          url: "https://crypto.haluska.sk/cryptoSFX_solver.png",
+          archive:
+            "https://web.archive.org/web/20250929202710id_/https://crypto.haluska.sk/cryptoSFX_solver.png",
+        },
       ),
     ],
   }),

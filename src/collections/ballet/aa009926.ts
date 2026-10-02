@@ -35,11 +35,17 @@ export const balletPuzzleAA009926 = bitcoinPuzzle({
         "AA009926/puzzle.jpg",
         "574c68aebff7673fa29024d0765056b8b204d27ff8d4bfc22aabd42bc7977560",
         1566737,
+        { url: "https://pbs.twimg.com/media/EeNwTlWU8AAYeMl.jpg?name=orig" },
       ),
       digest(
         "AA009926/revealed.jpg",
         "78d4c2b748d66e68c2d6226ecf8df338d6b15fb2141f4d57fe74424de44eb859",
         217605,
+        {
+          url: "https://pbs.twimg.com/media/EeNyXh-UwAAToEr.jpg",
+          archive:
+            "https://web.archive.org/web/20210506201027id_/https://pbs.twimg.com/media/EeNyXh-UwAAToEr.jpg",
+        },
       ),
     ],
   }),
