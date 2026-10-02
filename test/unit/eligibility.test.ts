@@ -109,8 +109,9 @@ describe("eligibility", () => {
     const record = await eligibility(address, { chain: "base" });
 
     expect(record.live).toMatchObject([{ confirmed: 10n ** 18n, provider: "blockscout" }]);
-    expect(record.missing.slice(-2)).toEqual([
-      `funded and spent: blockscout reports only the ETH balance of ${address}`,
+    expect(record.missing.slice(-3)).toEqual([
+      `funded: blockscout doesn't count the ETH ${address} ever received`,
+      `spent: blockscout doesn't count the ETH ${address} ever spent`,
       `verifier: the record doesn't say whether ${address} is a contract or a key on base`,
     ]);
   });
@@ -145,7 +146,7 @@ describe("puzzles_eligibility", () => {
 
     const result = await eligibilityTool("teikhos/0");
 
-    expect(result.content[0]?.text.split("\n")[0]).toBe("teikhos/0: 2 fields missing");
+    expect(result.content[0]?.text.split("\n")[0]).toBe("teikhos/0: 3 fields missing");
     expect(result.details).toMatchObject({
       id: "teikhos/0",
       live: [{ confirmed: "1000000000000000000", unconfirmed: "0", provider: "blockscout" }],

@@ -208,12 +208,15 @@ function liveGaps(chain: Chain, reading: Reading): string[] {
   if (reading.error !== undefined) {
     return [`live: ${reading.error}`];
   }
-  return reading.states
-    .filter((state) => state.funded === undefined || state.spent === undefined)
-    .map(
-      (state) =>
-        `funded and spent: ${state.provider} reports only the ${chainSymbol(chain)} balance of ${state.address}`,
-    );
+  const verbs = { funded: "received", spent: "spent" } as const;
+  return reading.states.flatMap((state) =>
+    (["funded", "spent"] as const)
+      .filter((total) => state[total] === undefined)
+      .map(
+        (total) =>
+          `${total}: ${state.provider} doesn't count the ${chainSymbol(chain)} ${state.address} ever ${verbs[total]}`,
+      ),
+  );
 }
 
 /**
