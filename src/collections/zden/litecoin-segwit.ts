@@ -68,16 +68,31 @@ export const zdenPuzzleLitecoinSegwit = litecoinPuzzle({
         "litecoin-segwit/hint-1.svg",
         "01c7dc6c2f6e8e579ba877f3824c2df93dcbc6eabdd8043267c005f925a01ae6",
         44982,
+        {
+          url: "https://crypto.haluska.sk/LitecoinSegWit_hint1.svg",
+          archive:
+            "https://web.archive.org/web/20170517135445id_/http://crypto.haluska.sk:80/LitecoinSegWit_hint1.svg",
+        },
       ),
       digest(
         "litecoin-segwit/hint-2.svg",
         "2a880103f5e600501a92b53b3b0f6c39ca9128239889283bf614c4127913f79c",
         44982,
+        {
+          url: "https://crypto.haluska.sk/LitecoinSegWit_hint2.svg",
+          archive:
+            "https://web.archive.org/web/20170530045506id_/http://crypto.haluska.sk/LitecoinSegWit_hint2.svg",
+        },
       ),
       digest(
         "litecoin-segwit/hint-3.svg",
         "0f2715576f1bd9b4f24679c6cf3807a99ddedfda43ec9d9228012103cf0539e9",
         72803,
+        {
+          url: "https://crypto.haluska.sk/LitecoinSegWit_hint3.svg",
+          archive:
+            "https://web.archive.org/web/20170530045509id_/http://crypto.haluska.sk/LitecoinSegWit_hint3.svg",
+        },
       ),
     ],
   }),

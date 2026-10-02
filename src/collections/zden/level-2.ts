@@ -48,6 +48,11 @@ export const zdenPuzzleLevel2 = bitcoinPuzzle({
         "level-2/solver.png",
         "389ee4e8668ca1e1f59333071b3216ddff53b8b1d77a7e3eeb43850a209ced27",
         145160,
+        {
+          url: "https://crypto.haluska.sk/crypto2solver.png",
+          archive:
+            "https://web.archive.org/web/20240928143533id_/https://crypto.haluska.sk/crypto2solver.png",
+        },
       ),
     ],
   }),

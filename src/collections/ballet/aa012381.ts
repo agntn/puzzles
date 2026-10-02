@@ -34,6 +34,7 @@ export const balletPuzzleAA012381 = bitcoinPuzzle({
         "AA012381/puzzle.jpg",
         "c625162197b5bc59a796949dba3816f0e532a97d0a199ca492b5f5445584d320",
         1372247,
+        { url: "https://pbs.twimg.com/media/EeNzYosU8AIj1h6.jpg?name=orig" },
       ),
     ],
   }),

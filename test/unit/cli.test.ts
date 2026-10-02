@@ -187,7 +187,7 @@ describe.concurrent("puzzles CLI", () => {
             "./test/support/asset-fetch-stub.ts",
             "src/cli.ts",
             "assets",
-            "zden/level-1",
+            "zden/level-4",
             "--live",
             ...extra,
           ],
@@ -205,20 +205,20 @@ describe.concurrent("puzzles CLI", () => {
         .split("\n")
         .map((line) => line.split("\t").slice(0, 2).join(" "));
 
-    const same = await live("file:assets/zden/level-1/puzzle.png");
-    const changed = await live("file:assets/zden/level-1/solver.png", "--json");
+    const same = await live("file:assets/zden/level-4/puzzle.png");
+    const changed = await live("file:assets/zden/level-4/solution.md", "--json");
     const gone = await live("status:404");
     const down = await live("error");
 
-    expect(same.stderr).toBe("fetch https://crypto.haluska.sk/crypto1.png\n");
+    expect(same.stderr).toBe("fetch https://crypto.haluska.sk/crypto4.png\n");
     expect([same.code, ...statuses(same)]).toEqual([0, "MATCH puzzle", "NO_ORIGIN solution"]);
     expect(changed.code).toBe(1);
     expect(
       (JSON.parse(changed.stdout) as { readonly assets: readonly { readonly actual?: unknown }[] })
         .assets[0]?.actual,
     ).toEqual({
-      sha256: "4390fc4163b5e39ce9207b4a8bddb2c094e425e70c2064c67742c0896ffe0ac5",
-      bytes: 33913,
+      sha256: "5cdb68b30249f057ecc71a4858200a6f15580846407daa6422b089cd9676c447",
+      bytes: 916,
     });
     expect([gone.code, ...statuses(gone)]).toEqual([0, "UNREACHABLE puzzle", "NO_ORIGIN solution"]);
     expect(gone.stdout).toContain("HTTP 404");
@@ -405,6 +405,9 @@ describe.concurrent("puzzles CLI", () => {
           url: `${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
           sha256: "5e8d84b88f8f829428df5d2a8bf36c7268346f169b799ac7570b6223990d204f",
           bytes: 1958,
+          origin: "https://gsmg.io/img/follow_the_white_rabbit.png",
+          archive:
+            "https://web.archive.org/web/20201115074715id_/https://gsmg.io/img/follow_the_white_rabbit.png",
         },
       ],
     });

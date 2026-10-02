@@ -43,11 +43,21 @@ export const zdenPuzzleCodexProtocol = ethereumPuzzle({
         "codex-protocol/hint-1.png",
         "adae828a669377f415fe2b440047ef1bba81161d2ceec7431f0d6dda1707496c",
         20491068,
+        {
+          url: "https://crypto.haluska.sk/CodexPuzzle-hint.png",
+          archive:
+            "https://web.archive.org/web/20250929202710id_/https://crypto.haluska.sk/CodexPuzzle-hint.png",
+        },
       ),
       digest(
         "codex-protocol/hint-2.png",
         "b369586f13687dbc54e02c9da152df71fe22d8dcb25601947a7cb01dde1997be",
         1053536,
+        {
+          url: "https://crypto.haluska.sk/CodexPuzzle-hint2.png",
+          archive:
+            "https://web.archive.org/web/20250929202710id_/https://crypto.haluska.sk/CodexPuzzle-hint2.png",
+        },
       ),
       digest(
         "codex-protocol/solution.md",
