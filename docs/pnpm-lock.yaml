@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@agntn/archives':
+        specifier: 0.7.0
+        version: 0.7.0(@cfworker/json-schema@4.1.1)(ai@7.0.103(zod@4.4.3))(chokidar@5.0.0)(db0@0.3.4(better-sqlite3@12.11.1))(dotenv@17.4.2)(giget@3.3.1)(ioredis@5.11.1(supports-color@10.2.2))(jiti@2.7.0)(magicast@0.5.5)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
       '@agntn/chains':
         specifier: 0.3.10
         version: 0.3.10(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
@@ -63,6 +66,22 @@ importers:
 
 packages:
 
+  '@agntn/archives@0.7.0':
+    resolution: {integrity: sha512-8NWm2+yRLRK8e3jc6EMpLmfafL3JrcjrMPMQEVf9BXltHPWckzLa6ZT6vpqDn+eE6y77NR5htu66BUXekPgm2w==}
+    engines: {node: '>=26'}
+    hasBin: true
+    peerDependencies:
+      '@earendil-works/pi-coding-agent': '>=0.99.0'
+      '@earendil-works/pi-tui': '*'
+      '@oh-my-pi/pi-coding-agent': '>=18.0.0 <19'
+    peerDependenciesMeta:
+      '@earendil-works/pi-coding-agent':
+        optional: true
+      '@earendil-works/pi-tui':
+        optional: true
+      '@oh-my-pi/pi-coding-agent':
+        optional: true
+
   '@agntn/chains@0.3.10':
     resolution: {integrity: sha512-PnYsLPWRXW2MvkxiFUq+rDpjaCUmcebqzEJxgYk7LX8IbfGQLhhtnF/I82hekL4DS2HIOint9Lq2+TzrlJRTFg==}
     engines: {node: '>=24'}
@@ -91,6 +110,28 @@ packages:
       '@oh-my-pi/pi-coding-agent':
         optional: true
       typebox:
+        optional: true
+
+  '@agntn/hashes@0.5.0':
+    resolution: {integrity: sha512-fM7oo9DbGM1KZaYwG3izqVVCc7BiRC2X7BG9aNX1zAahSPOd16angAZCoTGU1OjdrScpbVmi7xawT3s1gOPJKg==}
+    engines: {node: '>=26'}
+    hasBin: true
+    peerDependencies:
+      '@earendil-works/pi-coding-agent': '>=0.87.1 <1'
+      '@oh-my-pi/pi-coding-agent': '>=18.4.2 <19'
+      ai: '>=7.0.0'
+      typebox: '*'
+      zod: '>=4.0.0'
+    peerDependenciesMeta:
+      '@earendil-works/pi-coding-agent':
+        optional: true
+      '@oh-my-pi/pi-coding-agent':
+        optional: true
+      ai:
+        optional: true
+      typebox:
+        optional: true
+      zod:
         optional: true
 
   '@agntn/keys@0.3.5':
@@ -3824,6 +3865,26 @@ packages:
       magicast:
         optional: true
 
+  c12@4.0.0-beta.5:
+    resolution: {integrity: sha512-yWGCPCQGJeFq4R0mFg5HOhC3Rg+B0PCdM+ldXWUhughoGgeeq8/tjRmXh4/lmhKWyhf+KOFxB/JMXf0Yv1Fd5A==}
+    peerDependencies:
+      chokidar: ^5
+      dotenv: '*'
+      giget: '*'
+      jiti: '*'
+      magicast: '*'
+    peerDependenciesMeta:
+      chokidar:
+        optional: true
+      dotenv:
+        optional: true
+      giget:
+        optional: true
+      jiti:
+        optional: true
+      magicast:
+        optional: true
+
   cac@7.0.0:
     resolution: {integrity: sha512-tixWYgm5ZoOD+3g6UTea91eow5z6AAHaho3g0V9CNSNb45gM8SmflpAc+GRd1InC4AqN/07Unrgp56Y94N9hJQ==}
     engines: {node: '>=20.19.0'}
@@ -5843,6 +5904,9 @@ packages:
   ofetch@1.5.1:
     resolution: {integrity: sha512-2W4oUZlVaqAPAil6FUg/difl6YhqhUR7x2eZY4bQCko22UXg3hptq9KLQdqFClV+Wu85UX7hNtdGTngi/1BxcA==}
 
+  ohash@2.0.11:
+    resolution: {integrity: sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==}
+
   ohash@2.0.12:
     resolution: {integrity: sha512-65S/5gk9YSsaRjcyf7Nfa6h/d3E8/1gslpXfI4W7Dxn/oap8IKRuNT5VXkLQ1YFKIEg4apRY4Pj6aiwFzrDdmw==}
 
@@ -7534,6 +7598,50 @@ packages:
 
 snapshots:
 
+  '@agntn/archives@0.7.0(@cfworker/json-schema@4.1.1)(ai@7.0.103(zod@4.4.3))(chokidar@5.0.0)(db0@0.3.4(better-sqlite3@12.11.1))(dotenv@17.4.2)(giget@3.3.1)(ioredis@5.11.1(supports-color@10.2.2))(jiti@2.7.0)(magicast@0.5.5)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)':
+    dependencies:
+      '@agntn/hashes': 0.5.0(@cfworker/json-schema@4.1.1)(ai@7.0.103(zod@4.4.3))(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
+      '@agntn/tools': 0.0.0(@modelcontextprotocol/server@2.2.0)(ai@7.0.103(zod@4.4.3))
+      '@modelcontextprotocol/server': 2.2.0
+      c12: 4.0.0-beta.5(chokidar@5.0.0)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5)
+      citty: 0.2.2
+      consola: 3.4.2
+      diff: 8.0.4
+      ofetch: 1.5.1
+      ohash: 2.0.11
+      ufo: 1.6.4
+      unstorage: 1.17.5(db0@0.3.4(better-sqlite3@12.11.1))(ioredis@5.11.1(supports-color@10.2.2))
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@capacitor/preferences'
+      - '@cfworker/json-schema'
+      - '@deno/kv'
+      - '@netlify/blobs'
+      - '@planetscale/database'
+      - '@upstash/redis'
+      - '@vercel/blob'
+      - '@vercel/functions'
+      - '@vercel/kv'
+      - ai
+      - aws4fetch
+      - chokidar
+      - db0
+      - dotenv
+      - giget
+      - idb-keyval
+      - ioredis
+      - jiti
+      - magicast
+      - supports-color
+      - typebox
+      - uploadthing
+      - zod
+
   '@agntn/chains@0.3.10(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.4.3)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.30.0(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.4.3)
@@ -7566,6 +7674,18 @@ snapshots:
       zod: 4.4.3
     optionalDependencies:
       typebox: 1.3.34
+    transitivePeerDependencies:
+      - '@cfworker/json-schema'
+      - supports-color
+
+  '@agntn/hashes@0.5.0(@cfworker/json-schema@4.1.1)(ai@7.0.103(zod@4.4.3))(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)':
+    dependencies:
+      '@modelcontextprotocol/sdk': 1.30.1(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)
+      citty: 0.2.2
+    optionalDependencies:
+      ai: 7.0.103(zod@4.4.3)
+      typebox: 1.3.34
+      zod: 4.6.5
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - supports-color
@@ -11466,6 +11586,21 @@ snapshots:
     optionalDependencies:
       magicast: 0.5.5
 
+  c12@4.0.0-beta.5(chokidar@5.0.0)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5):
+    dependencies:
+      confbox: 0.2.4
+      defu: 6.1.7
+      exsolve: 1.1.1
+      pathe: 2.0.3
+      pkg-types: 2.3.3
+      rc9: 3.1.0
+    optionalDependencies:
+      chokidar: 5.0.0
+      dotenv: 17.4.2
+      giget: 3.3.1
+      jiti: 2.7.0
+      magicast: 0.5.5
+
   cac@7.0.0: {}
 
   cacheable@2.5.0:
@@ -14239,6 +14374,8 @@ snapshots:
       destr: 2.0.5
       node-fetch-native: 1.6.7
       ufo: 1.6.4
+
+  ohash@2.0.11: {}
 
   ohash@2.0.12: {}
 

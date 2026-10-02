@@ -7,6 +7,7 @@ const librarySource = resolve(repoRoot, "src");
 
 /** Runtime deps under src/index.ts and src/mcp.ts, installed here so they resolve from docs/node_modules. */
 const libraryDependencies = [
+  "@agntn/archives",
   "@agntn/chains",
   "@agntn/explorers",
   "@agntn/keys",
@@ -16,6 +17,7 @@ const libraryDependencies = [
 
 /** Every subpath src/ imports, dynamic ones too, so dev bundles them up front, not on demand. */
 const libraryEntries = [
+  "@agntn/archives",
   "@agntn/chains",
   "@agntn/explorers",
   "@agntn/explorers/providers/arweave",
@@ -261,6 +263,11 @@ export default defineNuxtConfig({
         "node_modules/@modelcontextprotocol/sdk/dist/esm",
       ),
     },
+    /**
+     * Nitro 2 stubs `node:fs` for workerd, which has run it natively since 2025-09-01 under
+     * `nodejs_compat`. `@agntn/archives` reads its config through it on every archive read.
+     */
+    unenv: { external: ["node:fs"], alias: { fs: "node:fs", "node:fs": "node:fs" } },
     compatibilityDate: "2026-09-03",
     esbuild: { options: { target: "es2022" } },
     /** The puzzle images and hints, served from the checkout's assets/ under /assets. */

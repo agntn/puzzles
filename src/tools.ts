@@ -15,6 +15,7 @@ import {
   stagesTool,
   statsTool,
   verifyTool,
+  watchTool,
   type ToolFacts,
 } from "./tool-operations.ts";
 
@@ -129,6 +130,16 @@ export const balanceToolDefinition = defineTool({
   execute: (params) => balanceTool(params.id, params.apiKey),
 });
 
+export const watchToolDefinition = defineTool({
+  ...described(facts.tools.watch),
+  input: closed({
+    id: puzzleId,
+    since: Type.Optional(Type.String(parameters.since)),
+    apiKey: Type.Optional(Type.String(parameters.apiKey)),
+  }),
+  execute: (params) => watchTool(params.id, params.since, params.apiKey),
+});
+
 /** Every puzzle tool, in the order `tools/list` and the harnesses show them. */
 export const puzzlesTools: readonly ToolDefinition[] = [
   statsToolDefinition,
@@ -143,6 +154,7 @@ export const puzzlesTools: readonly ToolDefinition[] = [
   listToolDefinition,
   verifyToolDefinition,
   balanceToolDefinition,
+  watchToolDefinition,
 ];
 
 /** The argument a status line shows after the tool title, for the tools that take one. */
@@ -161,4 +173,5 @@ export const callSummaries: Readonly<
       .join(" "),
   [facts.tools.verify.name]: (args) => args["id"],
   [facts.tools.balance.name]: (args) => args["id"],
+  [facts.tools.watch.name]: (args) => args["id"],
 };

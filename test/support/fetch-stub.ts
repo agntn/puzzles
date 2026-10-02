@@ -2,8 +2,9 @@ import { setTimeout as sleep } from "node:timers/promises";
 
 /*
  * Loaded with `node --import` into a CLI child, which a test cannot stub from the outside. Every
- * address answers a funded Esplora record, except the one in `PUZZLES_FETCH_FAIL`, whose requests
- * fail the way an unreachable host does, at mempool.space and at Blockstream alike. Every URL is
+ * address answers a funded Esplora record and an empty transaction history, except the one in
+ * `PUZZLES_FETCH_FAIL`, whose requests fail the way an unreachable host does, at mempool.space and
+ * at Blockstream alike. Every URL is
  * logged to stderr in request order, and a request sent while another is still open is logged as
  * `overlap`.
  */
@@ -16,8 +17,11 @@ globalThis.fetch = async (input: unknown) => {
   open += 1;
   await sleep(20);
   open -= 1;
-  if (failing !== undefined && url.endsWith(`/${failing}`)) {
+  if (failing !== undefined && url.includes(`/${failing}`)) {
     throw new TypeError("fetch failed");
+  }
+  if (url.includes("/txs")) {
+    return new Response("[]", { headers: { "content-type": "application/json" } });
   }
   return new Response(
     JSON.stringify({

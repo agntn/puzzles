@@ -28,6 +28,7 @@ const datasetModule =
   /\/(?:core|_chunks)\/(?:dataset|registry|puzzle|collection)\d*\.(?:ts|mjs)(?:[?#]|$)/u;
 const entry = (relative: string): string => pathToFileURL(path.join(root, relative)).href;
 const started = performance.now();
+let listed: number;
 let call: (name: string, args: Readonly<Record<string, unknown>>) => Promise<unknown>;
 let close = async (): Promise<void> => {};
 
@@ -40,7 +41,7 @@ if (surface === "mcp") {
   const server = createMcpServer();
   const client = new Client({ name: "probe", version: "1" });
   await Promise.all([server.connect(a), client.connect(b)]);
-  assert.equal((await client.listTools()).tools.length, 12);
+  listed = (await client.listTools()).tools.length;
   call = (name, args) => client.callTool({ name, arguments: args });
   close = async () => {
     await Promise.all([client.close(), server.close()]);
@@ -70,7 +71,7 @@ if (surface === "mcp") {
       tools.set(tool.name, tool);
     },
   } as unknown as PiApi & OmpApi);
-  assert.equal(tools.size, 12);
+  listed = tools.size;
   call = (name, args) => {
     const tool = tools.get(name);
     assert.ok(tool);
@@ -92,6 +93,10 @@ try {
       "tool discovery must not load the dataset or chain implementations",
     );
   }
+  const { facts } = (await import(
+    entry(layout === "src" ? "src/tool-operations.ts" : "dist/tool-operations.mjs")
+  )) as typeof import("../src/tool-operations.ts");
+  assert.equal(listed, Object.keys(facts.tools).length);
   const firstStart = performance.now();
   const shown = await call("puzzles_show", { id: "b1000/1" });
   assert.match(JSON.stringify(shown), /1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH/u);
