@@ -1,3 +1,28 @@
+## v0.27.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.26.1...v0.27.0)
+
+### 🚀 Enhancements
+
+- **cli:** Watch chain and source changes ([#405](https://github.com/agntn/puzzles/pull/405))
+- **collections:** Add the gsmg deposits ([#406](https://github.com/agntn/puzzles/pull/406))
+- **puzzle:** ⚠️  Build every record with puzzle() ([#410](https://github.com/agntn/puzzles/pull/410))
+- **collections:** Add quizchain2/21 to 30 ([#411](https://github.com/agntn/puzzles/pull/411))
+- **collections:** Add great-riddle ([#412](https://github.com/agntn/puzzles/pull/412))
+
+### 🩹 Fixes
+
+- **cli:** Flag watch histories cut at 100 ([#409](https://github.com/agntn/puzzles/pull/409))
+
+#### ⚠️ Breaking Changes
+
+- **puzzle:** ⚠️  Build every record with puzzle() ([#410](https://github.com/agntn/puzzles/pull/410))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.26.1
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.26.0...v0.26.1)
