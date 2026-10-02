@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 76 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bk27y7/
  * key, hashed with MD5 into BIP39 entropy, for 76 mBTC. The author's Wattpad copy of the second run
  * prints the WIF as the link inside a later block's string.
  */
-export const quizchainBlock76 = bitcoinPuzzle({
+export const quizchainBlock76 = puzzle({
   id: "quizchain/76",
-  address: p2pkh("1LZZtbS91P4h5QYdTiTm8dChfLcb1gtwRe", "d69327cd82908fa5da1ab6cd190e1b5b6ca7bd18"),
+  chain: "bitcoin",
+  address: "1LZZtbS91P4h5QYdTiTm8dChfLcb1gtwRe",
   sourceUrl: THREAD,
   startedAt: "2019-05-03 00:42:41",
   status: Status.Solved,

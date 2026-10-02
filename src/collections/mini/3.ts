@@ -9,7 +9,7 @@ import {
   p2pkh,
   party,
 } from "../../core/parts.ts";
-import { bitcoinCashPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the signed message, the hints, the author's explanation and the key were posted. */
 const THREAD = "https://bitcointalk.org/index.php?topic=5522785";
@@ -20,8 +20,9 @@ const THREAD = "https://bitcointalk.org/index.php?topic=5522785";
  * the CashAddr; the post names the puzzle. The key is puzzle #130's own, printed in the thread
  * after the claim.
  */
-export const mini3 = bitcoinCashPuzzle({
+export const mini3 = puzzle({
   id: "mini/3",
+  chain: "bitcoincash",
   address: p2pkh(
     "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez",
     "a24922852051a9002ebf4c864a55acb75bb4cf75",

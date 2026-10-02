@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 77 were published. */
 const THREAD =
@@ -28,9 +19,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bkeggn/
  * 2019 and the author confirmed them. The claim had confirmed four minutes before that comment. No
  * source printed the hash or the key.
  */
-export const quizchainBlock77 = bitcoinPuzzle({
+export const quizchainBlock77 = puzzle({
   id: "quizchain/77",
-  address: p2pkh("1FAAKpzFc2CGU6Yt51kAZv5f6dXZckRsMP", "9b4d49d5f8b33a08ebe2d848ed0e4b05eaa20b92"),
+  chain: "bitcoin",
+  address: "1FAAKpzFc2CGU6Yt51kAZv5f6dXZckRsMP",
   sourceUrl: THREAD,
   startedAt: "2019-04-29 05:24:39",
   status: Status.Solved,

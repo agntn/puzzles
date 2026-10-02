@@ -5,12 +5,11 @@ import {
   fact,
   funding,
   increase,
-  p2pkh,
   party,
   PartyKind,
   profile,
 } from "../core/parts.ts";
-import { bitcoinPuzzle } from "../core/puzzle.ts";
+import { puzzle } from "../core/puzzle.ts";
 
 /** The post: a title and one picture, with the prize address along its left edge. */
 const THREAD = "https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/";
@@ -24,9 +23,10 @@ const PICTURE = "https://i.redd.it/n1x7g8ceaur51.png";
  * address is written up the left edge. The post has a title and nothing else, so the picture is the
  * whole puzzle.
  */
-export const braveNewWorldPuzzle = bitcoinPuzzle({
+export const braveNewWorldPuzzle = puzzle({
   id: "brave-new-world",
-  address: p2pkh("1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ", "ccbd031e54cde2a3189fd59bc49f731367a1779e"),
+  chain: "bitcoin",
+  address: "1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ",
   sourceUrl: THREAD,
   startedAt: "2020-10-08 09:25:30",
   prize: 0.2,

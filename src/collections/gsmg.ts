@@ -3,19 +3,18 @@ import {
   answer,
   artifact,
   assets,
-  digest,
   decrease,
+  digest,
   fact,
   funding,
   increase,
-  p2pkh,
   party,
   PartyKind,
   profile,
   stage,
   uncompressed,
 } from "../core/parts.ts";
-import { bitcoinPuzzle } from "../core/puzzle.ts";
+import { puzzle } from "../core/puzzle.ts";
 
 /** The community writeup of every published step, pinned to the commit the answers cite. */
 const WRITEUP =
@@ -30,9 +29,10 @@ const SALPHASEION =
   "https://gsmg.io/89727c598b9cd1cf8873f27cb7057f050645ddb6a7a157a110239ac0152f6a32";
 
 /** GSMG.IO multi-phase cryptographic challenge. */
-export const gsmgPuzzle = bitcoinPuzzle({
+export const gsmgPuzzle = puzzle({
   id: "gsmg",
-  address: p2pkh("1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe", "a9553269572a317e39f0f518cb87c1a0ee1dbae4"),
+  chain: "bitcoin",
+  address: "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
   sourceUrl: "https://gsmg.io/puzzle",
   startedAt: "2019-04-13 16:32:40",
   pubkey: uncompressed(

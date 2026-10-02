@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 22 were published. */
 const THREAD =
@@ -19,9 +10,10 @@ const THREAD =
  * block 21 key, hashed with MD5 into BIP39 entropy. The author again sent the previous tail to the
  * commenter with the committed answer. No source printed the hash or the key.
  */
-export const quizchainBlock22 = bitcoinPuzzle({
+export const quizchainBlock22 = puzzle({
   id: "quizchain/22",
-  address: p2pkh("162P5AFJRMiYB68axzGM9BWQ3UHVxJJpax", "371b782be5f976068a4fc5ac6b808bd2b5a7fc6c"),
+  chain: "bitcoin",
+  address: "162P5AFJRMiYB68axzGM9BWQ3UHVxJJpax",
   sourceUrl: THREAD,
   startedAt: "2019-04-11 01:52:50",
   status: Status.Solved,

@@ -1,13 +1,14 @@
-import { artifact, funding, stage, standard } from "../../core/parts.ts";
-import { ethereumPuzzle } from "../../core/puzzle.ts";
+import { artifact, funding, stage } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
 
 const address = "0x973c2178b09225d1de3ab037d40b3f24af696255";
 const source = `https://etherscan.io/address/${address}#code`;
 
 /** The first commit and reveal TeikhosBounty, which masks with the Keccak-512 of the key. */
-export const teikhos3 = ethereumPuzzle({
+export const teikhos3 = puzzle({
   id: "teikhos/3",
-  address: standard(address),
+  chain: "ethereum",
+  address,
   sourceUrl: source,
   startedAt: "2018-03-14 01:26:29",
   prize: 0.5,

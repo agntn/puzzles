@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 53 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bf6fya/7_mbtc_quizchain_block_53/";
@@ -26,9 +17,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bf6fya/
  * this address. The first 7 mBTC went by private message to the first correct comment. No source
  * printed the hash or the key of this address.
  */
-export const quizchainBlock53 = bitcoinPuzzle({
+export const quizchainBlock53 = puzzle({
   id: "quizchain/53",
-  address: p2pkh("1MtpindsWeZF4PT8haVzYjA47c7ucX2tv7", "e52f90944b3ed3c26bd6f91a48ab694f0d87dea4"),
+  chain: "bitcoin",
+  address: "1MtpindsWeZF4PT8haVzYjA47c7ucX2tv7",
   sourceUrl: THREAD,
   startedAt: "2019-04-20 12:47:04",
   status: Status.Solved,

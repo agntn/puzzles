@@ -1,13 +1,14 @@
-import { artifact, funding, stage, standard } from "../../core/parts.ts";
-import { ethereumPuzzle } from "../../core/puzzle.ts";
+import { artifact, funding, stage } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
 
 const address = "0xd7c6d542f3dcdceda845112b8fd567b8f8655805";
 const source = `https://etherscan.io/address/${address}#code`;
 
 /** The TeikhosBounty with a second mask: the public key first unlocks a symmetric key. */
-export const teikhos2 = ethereumPuzzle({
+export const teikhos2 = puzzle({
   id: "teikhos/2",
-  address: standard(address),
+  chain: "ethereum",
+  address,
   sourceUrl: source,
   startedAt: "2018-02-27 15:57:38",
   prize: 0.5,

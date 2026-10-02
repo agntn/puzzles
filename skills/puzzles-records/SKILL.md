@@ -8,7 +8,7 @@ metadata:
 
 # puzzles-records
 
-A record is one `PuzzleSpec` literal handed to the factory for its chain: `bitcoinPuzzle`, `bitcoinCashPuzzle`, `ecashPuzzle`, `ethereumPuzzle`, `basePuzzle`, `litecoinPuzzle`, `dogecoinPuzzle`, `decredPuzzle`, `arweavePuzzle` or `moneroPuzzle`. The collection modules are the only copy of the data. There is no JSON to regenerate.
+A record is one `PuzzleSpec` literal handed to `puzzle()`, with a required `chain` and the address as a plain string the factory reads on that chain. The collection modules are the only copy of the data. There is no JSON to regenerate.
 
 The repository's `AGENTS.md` and `CONTRIBUTING.md` own the invariants. This skill is the path through them.
 
@@ -25,12 +25,13 @@ A field goes in only when a citable source states it. Do not run a solver, a dec
 3. Import it in `src/collections/<key>.ts` and append it to `static readonly puzzles`.
 
 ```ts
-import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { funding, official, p2pkh } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
+import { funding, official, puzzle } from "../../core/parts.ts";
 
-export const exampleLevel1 = bitcoinPuzzle({
+export const exampleLevel1 = puzzle({
   id: "example/level-1",
-  address: p2pkh("1…"),
+  chain: "bitcoin",
+  address: "1…",
   sourceUrl: "https://…",
   startedAt: "2026-01-01 00:00:00",
   transactions: [funding("txid…", "2026-01-01 00:00:00", 0.5)],

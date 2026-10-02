@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 43 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bddijl/7_mbtc_quizchain_block_43/";
@@ -23,9 +14,10 @@ const SOLUTIONS = "https://www.wattpad.com/720895205-second-complete-quizchain";
  * whole first run. Someone brute forced the link and claimed it three days before block 42 fell. No
  * source printed the hash or the key.
  */
-export const quizchainBlock43 = bitcoinPuzzle({
+export const quizchainBlock43 = puzzle({
   id: "quizchain/43",
-  address: p2pkh("1MVWYyiyJVmNJRiEkyzcxp1gc5zmmftqrK", "e0c6d4b1024148cee5ef15183b623763c580669d"),
+  chain: "bitcoin",
+  address: "1MVWYyiyJVmNJRiEkyzcxp1gc5zmmftqrK",
   sourceUrl: THREAD,
   startedAt: "2019-04-15 07:01:42",
   status: Status.Solved,

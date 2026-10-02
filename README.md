@@ -18,7 +18,7 @@ Docs, one page per puzzle and a live playground: [puzzles.agntn.dev](https://puz
 
 ## ✨ Features
 
-- 🧾 **Data as code.** One `PuzzleSpec` literal per puzzle, built by a factory for its chain. No JSON, no build step.
+- 🧾 **Data as code.** One `PuzzleSpec` literal per puzzle, built by one `puzzle()` factory for every chain. No JSON, no build step.
 - 🕳️ **Absent means absent.** A puzzle without a solver or a prize has no such key. Nothing serializes as null.
 - 🔑 **Key material in every shape.** Hex, WIF, a BIP38 payload, a seed phrase, secret shares, or just a bit width. One builder.
 - 💤 **Lazy registry.** Importing the package loads no records. `get("b1000/71")` imports one collection module.

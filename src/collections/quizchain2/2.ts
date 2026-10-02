@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the format, the funding txid and the author's account of the solution of block 2 were published. */
 const THREAD =
@@ -25,9 +16,10 @@ const WALKTHROUGH = "https://www.reddit.com/r/bitcoinpuzzles/comments/bnj24w/com
  * `"BaSCifCatfAaa1i"Metamon` seeds through MD5, used whole as the solution and hashed with MD5
  * again into BIP39 entropy, for 77 mBTC. A player printed both hashes and the block key.
  */
-export const quizchain2Block2 = bitcoinPuzzle({
+export const quizchain2Block2 = puzzle({
   id: "quizchain2/2",
-  address: p2pkh("13qUHVzMYAneyyBGYvEey4SHy2iMSz3Jzh", "1f1afe612677b8168b10d470c1bacc26ecf732d8"),
+  chain: "bitcoin",
+  address: "13qUHVzMYAneyyBGYvEey4SHy2iMSz3Jzh",
   sourceUrl: THREAD,
   startedAt: "2019-05-12 00:29:20",
   status: Status.Solved,

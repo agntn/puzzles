@@ -1,21 +1,11 @@
-import {
-  answer,
-  claim,
-  compressed,
-  confirmation,
-  hex,
-  official,
-  p2wpkh,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, confirmation, hex, official } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Vault #1 uses an Electrum SegWit seed, not BIP39, at m/0'/0/1. */
-export const luckyLurkerVault1 = bitcoinPuzzle({
+export const luckyLurkerVault1 = puzzle({
   id: "luckylurker/vault-1",
-  address: p2wpkh(
-    "bc1q32e3dxcd0n2tlzdmchraf2057d0ax4xdwrk3jq",
-    "8ab3169b0d7cd4bf89bbc5c7d4a9f4f35fd354cd",
-  ),
+  chain: "bitcoin",
+  address: "bc1q32e3dxcd0n2tlzdmchraf2057d0ax4xdwrk3jq",
   sourceUrl: "https://luckylurker.com/bitcoin-vault/",
   startedAt: "2026-03-16 17:54:03",
   status: Status.Solved,

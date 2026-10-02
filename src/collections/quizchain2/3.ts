@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid and the solution of block 3 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bnj8ew/7_mbtc_quizchain2_block_3/";
@@ -22,9 +13,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bnj8ew/
  * winner printed the key. The entropy hash is not printed; it is the post's recipe run on the
  * published solution, and it derives that key.
  */
-export const quizchain2Block3 = bitcoinPuzzle({
+export const quizchain2Block3 = puzzle({
   id: "quizchain2/3",
-  address: p2pkh("1FsYtK22FBG7Ps3K7KZUYDQRs6gDxXjwQX", "a3212ccf8438536aa212e5a1adbca17de7713b58"),
+  chain: "bitcoin",
+  address: "1FsYtK22FBG7Ps3K7KZUYDQRs6gDxXjwQX",
   sourceUrl: THREAD,
   startedAt: "2019-05-12 00:45:26",
   status: Status.Solved,

@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 56 were published. */
 const THREAD =
@@ -26,9 +17,10 @@ const AUTHOR_COMMENT_2 = "https://www.reddit.com/r/bitcoinpuzzles/comments/bfiy4
  * the author published the answer and the stray word. The claim came 36 minutes later. No source
  * printed the hash or the key.
  */
-export const quizchainBlock56 = bitcoinPuzzle({
+export const quizchainBlock56 = puzzle({
   id: "quizchain/56",
-  address: p2pkh("1BzcsBweoKC8ZB41eDiY2zDtvWNf3Q6xvJ", "7896e811ddebf1f743fb9c5534dbb6ab19cd9c27"),
+  chain: "bitcoin",
+  address: "1BzcsBweoKC8ZB41eDiY2zDtvWNf3Q6xvJ",
   sourceUrl: THREAD,
   startedAt: "2019-04-21 00:21:04",
   status: Status.Solved,

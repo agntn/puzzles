@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 45 were published. */
 const THREAD =
@@ -23,9 +14,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bdrcj7/
  * the author set the link instead: `Da6Sn4J` sits in the block 44 key three characters before its
  * end. First of three blocks in one post. No source printed the hash or the key.
  */
-export const quizchainBlock45 = bitcoinPuzzle({
+export const quizchainBlock45 = puzzle({
   id: "quizchain/45",
-  address: p2pkh("1KDnYd2LJwBfm74vv7VVP6kX3G74mUn2cP", "c7dd465d4035e9f23827d4c10351508045f3993d"),
+  chain: "bitcoin",
+  address: "1KDnYd2LJwBfm74vv7VVP6kX3G74mUn2cP",
   sourceUrl: THREAD,
   startedAt: "2019-04-16 00:24:33",
   status: Status.Solved,

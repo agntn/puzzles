@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 62 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bgo23n/7_mbtc_quizchain_block_62/";
@@ -18,9 +9,10 @@ const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bgo23n/7_mbtc_q
  * BIP39 entropy. A player printed the WIF in the block 63 thread, and the author's Wattpad chapter
  * prints it inside block 63's string.
  */
-export const quizchainBlock62 = bitcoinPuzzle({
+export const quizchainBlock62 = puzzle({
   id: "quizchain/62",
-  address: p2pkh("1Apq1oxG8njoK2opp1PWBxWghc1TnQWnEq", "6bc4c32586644f739f5553c9003f6ba38985e5d5"),
+  chain: "bitcoin",
+  address: "1Apq1oxG8njoK2opp1PWBxWghc1TnQWnEq",
   sourceUrl: THREAD,
   startedAt: "2019-04-24 00:39:38",
   status: Status.Solved,

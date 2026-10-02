@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 11 were published. */
 const THREAD =
@@ -20,9 +11,10 @@ const THREAD =
  * the author's update gives the string away. The update misspells whatsoever. The funded hash does
  * not. A player printed the WIF in the block 21 thread.
  */
-export const quizchainBlock11 = bitcoinPuzzle({
+export const quizchainBlock11 = puzzle({
   id: "quizchain/11",
-  address: p2pkh("1156YWRc9MYTEcZBkz91FyjNdN6QyRtmvJ", "00c64a85abeebf648e4538b5c9148566d76cd372"),
+  chain: "bitcoin",
+  address: "1156YWRc9MYTEcZBkz91FyjNdN6QyRtmvJ",
   sourceUrl: THREAD,
   startedAt: "2019-04-09 03:04:33",
   status: Status.Solved,

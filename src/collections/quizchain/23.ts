@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 23 were published. */
 const THREAD =
@@ -23,9 +14,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bbv6er/
  * block 13 it was unsolvable on purpose, and the post printed this key's tail, `mph`, to keep the
  * chain going. It fell in July 2019. A player then printed the string, the hash and the WIF.
  */
-export const quizchainBlock23 = bitcoinPuzzle({
+export const quizchainBlock23 = puzzle({
   id: "quizchain/23",
-  address: p2pkh("1Ee9S6mv2XWhfzTmocc3twpo6kyuS3BsXz", "95a010a92bf203c63344f7e8a8c46dd9d6e3313b"),
+  chain: "bitcoin",
+  address: "1Ee9S6mv2XWhfzTmocc3twpo6kyuS3BsXz",
   sourceUrl: THREAD,
   startedAt: "2019-04-11 02:55:35",
   status: Status.Solved,

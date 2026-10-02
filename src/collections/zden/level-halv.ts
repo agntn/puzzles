@@ -1,10 +1,11 @@
-import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { assets, digest, confirmation, funding, official, p2pkh } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
+import { assets, confirmation, digest, funding, official } from "../../core/parts.ts";
 
 /** Puzzle `zden/level-halv`. */
-export const zdenPuzzleLevelHalv = bitcoinPuzzle({
+export const zdenPuzzleLevelHalv = puzzle({
   id: "zden/level-halv",
-  address: p2pkh("1crypto24HCr178iMcKd5iUi5D4rsg1nK", "06c84797d1f468b9d5773a61c80073b344df7470"),
+  chain: "bitcoin",
+  address: "1crypto24HCr178iMcKd5iUi5D4rsg1nK",
   sourceUrl: "https://crypto.haluska.sk/cryptoHALV.png",
   startedAt: "2024-04-18 10:59:41",
   prize: 0.003125,

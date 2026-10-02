@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 29 were published. */
 const THREAD =
@@ -20,9 +11,10 @@ const THREAD =
  * into BIP39 entropy. The string keeps the draft's line feeds, 1,360 bytes in all. The funding sent
  * 7.7 mBTC by mistake. No source printed the hash or the key.
  */
-export const quizchainBlock29 = bitcoinPuzzle({
+export const quizchainBlock29 = puzzle({
   id: "quizchain/29",
-  address: p2pkh("1BQiU45feRw5UKdCUbXuoNfuK5WRzTpa4P", "722d707c1fd748e7bd58c31d1f120b99436fa775"),
+  chain: "bitcoin",
+  address: "1BQiU45feRw5UKdCUbXuoNfuK5WRzTpa4P",
   sourceUrl: THREAD,
   startedAt: "2019-04-11 23:41:59",
   status: Status.Solved,

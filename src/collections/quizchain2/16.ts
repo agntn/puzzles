@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 16 thread, with the question, the funding txid, the hash digits and the hint. */
 const THREAD = "https://www.reddit.com/r/Grycoin/comments/bsccmw/7_mbtc_quizchain_2_block_16/";
@@ -17,9 +8,10 @@ const THREAD = "https://www.reddit.com/r/Grycoin/comments/bsccmw/7_mbtc_quizchai
 const PLAYER_COMMENT = "https://www.reddit.com/r/Grycoin/comments/bsccmw/comment/eopmxex/";
 
 /** Quizchain2 block 16: `ELiZABETH` and the rest of its 2012 vanity address, TOMI between. */
-export const quizchain2Block16 = bitcoinPuzzle({
+export const quizchain2Block16 = puzzle({
   id: "quizchain2/16",
-  address: p2pkh("1JVXDyfoZMYaKPu2XYZpWVk9K8bGbFQLTU", "bfdf03c78fcfda2483b42e5b14bf7804e23d4093"),
+  chain: "bitcoin",
+  address: "1JVXDyfoZMYaKPu2XYZpWVk9K8bGbFQLTU",
   sourceUrl: THREAD,
   startedAt: "2019-05-24 01:49:56",
   status: Status.Solved,

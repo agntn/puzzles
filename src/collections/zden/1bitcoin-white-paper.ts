@@ -1,22 +1,22 @@
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
-  digest,
   claim,
   confirmation,
   decrease,
+  digest,
   funding,
   hex,
   increase,
   official,
-  p2pkh,
   uncompressed,
 } from "../../core/parts.ts";
 
 /** Puzzle `zden/1bitcoin-white-paper`. */
-export const zdenPuzzle1bitcoinWhitePaper = bitcoinPuzzle({
+export const zdenPuzzle1bitcoinWhitePaper = puzzle({
   id: "zden/1bitcoin-white-paper",
-  address: p2pkh("1BiTCoiNsuFnkCFGkv6AGgwWxN31GUwY6W", "75882f9639449778bb4cc2d242ed35dd2cca6f3e"),
+  chain: "bitcoin",
+  address: "1BiTCoiNsuFnkCFGkv6AGgwWxN31GUwY6W",
   sourceUrl: "https://ipfs.io/ipfs/Qmdm7SxhVGDVt9krbNpwAxkQGwH5a74FVW1sKNXxCjzmBq",
   startedAt: "2021-04-11 01:46:31",
   status: Status.Solved,

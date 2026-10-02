@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 36 were published. */
 const THREAD =
@@ -20,9 +11,10 @@ const THREAD =
  * before the post. The winner told the author it was done by hand. No source printed the hash or
  * the key.
  */
-export const quizchainBlock36 = bitcoinPuzzle({
+export const quizchainBlock36 = puzzle({
   id: "quizchain/36",
-  address: p2pkh("17CaBqDJGm4pr8Bijb6PeGaaU9APAL5Jwk", "4401087ea4b4f0c3b5f24679d38d53a75152482f"),
+  chain: "bitcoin",
+  address: "17CaBqDJGm4pr8Bijb6PeGaaU9APAL5Jwk",
   sourceUrl: THREAD,
   startedAt: "2019-04-14 00:33:27",
   status: Status.Solved,

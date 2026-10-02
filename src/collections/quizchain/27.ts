@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 27 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const SOLUTIONS = "https://www.wattpad.com/720895205-second-complete-quizchain";
  * hashed with MD5 into BIP39 entropy. The 9 mBTC went in 24 minutes and the author suspected brute
  * force. The name is in the Wattpad solutions. No source printed the hash or the key.
  */
-export const quizchainBlock27 = bitcoinPuzzle({
+export const quizchainBlock27 = puzzle({
   id: "quizchain/27",
-  address: p2pkh("1AmV6X4XUpekJPqp3smcCN9HAcdcLMsviw", "6b22e3138b4b733a89c7f43913d0ab07fe973f6e"),
+  chain: "bitcoin",
+  address: "1AmV6X4XUpekJPqp3smcCN9HAcdcLMsviw",
   sourceUrl: THREAD,
   startedAt: "2019-04-11 11:42:08",
   status: Status.Solved,

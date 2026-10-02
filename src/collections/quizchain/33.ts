@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 33 were published. */
 const THREAD =
@@ -28,9 +19,10 @@ const AUTHOR_COMMENT_2 = "https://www.reddit.com/r/bitcoinpuzzles/comments/bcmgq
  * from block 35's answer and the last three characters of the block 32 key, hashed with MD5 into
  * BIP39 entropy. The subtraction was misdirection. No source printed the hash or the key.
  */
-export const quizchainBlock33 = bitcoinPuzzle({
+export const quizchainBlock33 = puzzle({
   id: "quizchain/33",
-  address: p2pkh("137SFKp9MPjymMQVk85oarHoaxUd9QyeiA", "1727d28c037b573e4bc8d239e0130fc252b6c65a"),
+  chain: "bitcoin",
+  address: "137SFKp9MPjymMQVk85oarHoaxUd9QyeiA",
   sourceUrl: THREAD,
   startedAt: "2019-04-13 03:17:45",
   status: Status.Solved,

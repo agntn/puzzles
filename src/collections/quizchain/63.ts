@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 63 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bgqkw5/7_mbtc_quizchain_block_63/";
@@ -22,9 +13,10 @@ const WELCOME = "https://www.wattpad.com/717956015-second-welcome-to-the-quizcha
  * entropy. The author's Wattpad chapter Welcome to the Quizchain prints the whole string. No source
  * printed the hash or the key.
  */
-export const quizchainBlock63 = bitcoinPuzzle({
+export const quizchainBlock63 = puzzle({
   id: "quizchain/63",
-  address: p2pkh("1Q92bSL9p69qBf3QP4W9AgHgXGmB2AvTcP", "fdcf8d1541732117871b3ffc4bda1b94bf521240"),
+  chain: "bitcoin",
+  address: "1Q92bSL9p69qBf3QP4W9AgHgXGmB2AvTcP",
   sourceUrl: THREAD,
   startedAt: "2019-04-24 04:59:50",
   status: Status.Solved,

@@ -5,26 +5,20 @@ import { bitaps } from "../../src/collections/bitaps.ts";
 import { bitimage } from "../../src/collections/bitimage.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
-  basePuzzle,
+  type Address,
   BitcoinPuzzle,
-  bitcoinCashPuzzle,
-  ecashPuzzle,
-  bitcoinPuzzle,
   compressed,
-  decredPuzzle,
-  dogecoinPuzzle,
   hex,
-  litecoinPuzzle,
+  type Key,
   p2pkh,
   p2sh,
   p2wpkh,
   p2wsh,
+  puzzle,
   seed,
   standard,
   verify,
   wif,
-  type Address,
-  type Key,
 } from "../../src/index.ts";
 
 /** The fields every synthetic record below shares; the dataset never exercises these branches. */
@@ -93,8 +87,9 @@ describe("Collection.verify", () => {
 
   it("derives the address from a WIF alone", async () => {
     const result = await verify(
-      bitcoinPuzzle({
+      puzzle({
         ...synthetic,
+        chain: "bitcoin",
         address: p2pkh("1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj"),
         key: wif("5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF"),
       }),
@@ -109,10 +104,11 @@ describe("Collection.verify", () => {
   it("keeps WIF compression when the same key is also recorded as hex", async () => {
     const key = wif("5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF");
     const spec = { ...synthetic, address: p2pkh("1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj") };
-    const original = await verify(bitcoinPuzzle({ ...spec, key }));
+    const original = await verify(puzzle({ ...spec, chain: "bitcoin", key }));
     const enriched = await verify(
-      bitcoinPuzzle({
+      puzzle({
         ...spec,
+        chain: "bitcoin",
         key: key.hex("E9873D79C6D87DC0FB6A5778633389F4453213303DA61F20BD67FC233AA33262"),
       }),
     );
@@ -127,8 +123,9 @@ describe("Collection.verify", () => {
 
   it("prefers the declared public key format over a matching WIF for hex", async () => {
     const result = await verify(
-      bitcoinPuzzle({
+      puzzle({
         ...synthetic,
+        chain: "bitcoin",
         address: p2pkh("19GuvDvMMUZ8vq84wT79fvnvhMd5MnfTkR"),
         pubkey: compressed("02588d202afcc1ee4ab5254c7847ec25b9a135bbda0f2bc69ee1a714749fd77dc9"),
         key: hex("e9873d79c6d87dc0fb6a5778633389f4453213303da61f20bd67fc233aa33262").wif(
@@ -147,8 +144,9 @@ describe("Collection.verify", () => {
     "ignores a WIF that cannot describe the hex key: %s",
     async (encoded) => {
       const result = await verify(
-        bitcoinPuzzle({
+        puzzle({
           ...synthetic,
+          chain: "bitcoin",
           address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
           key: hex("0000000000000000000000000000000000000000000000000000000000000001").wif(encoded),
         }),
@@ -170,15 +168,18 @@ describe("Collection.verify", () => {
       "0x7e5f4552091a69125d5dfcb7b8c2659029395bdf",
     ]) {
       expect(
-        await verify(basePuzzle({ ...synthetic, address: standard(address), key: hex(one) })),
+        await verify(
+          puzzle({ ...synthetic, chain: "base", address: standard(address), key: hex(one) }),
+        ),
       ).toMatchObject({ verified: true, privateKey: one });
     }
   });
 
   it("decodes a Litecoin WIF against Litecoin, not Bitcoin", async () => {
     const result = await verify(
-      litecoinPuzzle({
+      puzzle({
         ...synthetic,
+        chain: "litecoin",
         address: p2pkh("LTVsBSEBS8oCBdpE7b6SwwrguZzMUnjsWr"),
         key: wif("TAsve34b6yMQn1hBGTc472BfW8kvEoct5MhZrxADHEB7oZgBbky4"),
       }),
@@ -201,14 +202,17 @@ describe("Collection.verify", () => {
       ["6J8csdv3eDrnJcpSEb4shfjMh2JTiG9MKzC1Yfge4Y4GyUsjdM6", "DJRU7MLhcPwCTNRZ4e8gJzDebtG1H5M7pc"],
     ] as const) {
       expect(
-        await verify(dogecoinPuzzle({ ...synthetic, address: p2pkh(address), key: wif(key) })),
+        await verify(
+          puzzle({ ...synthetic, chain: "dogecoin", address: p2pkh(address), key: wif(key) }),
+        ),
       ).toMatchObject({ verified: true, derivedAddress: address, privateKey: one });
     }
     /* Bitcoin's WIF of the same key carries another version byte. */
     expect(
       await verify(
-        dogecoinPuzzle({
+        puzzle({
           ...synthetic,
+          chain: "dogecoin",
           address: p2pkh("DFpN6QqFfUm3gKNaxN6tNcab1FArL9cZLE"),
           key: wif("KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn"),
         }),
@@ -226,7 +230,7 @@ describe("Collection.verify", () => {
       wif("KwDiBf89QgGbjEhKnhXJuH8DvUBxVmJ3761ahfZuohBr53Zh9M3t"),
     ]) {
       expect(
-        await verify(bitcoinCashPuzzle({ ...synthetic, address, key: material })),
+        await verify(puzzle({ ...synthetic, chain: "bitcoincash", address, key: material })),
       ).toMatchObject({
         verified: true,
         derivedAddress: "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez",
@@ -241,7 +245,9 @@ describe("Collection.verify", () => {
     const address = p2pkh("ecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z");
 
     expect(
-      await verify(ecashPuzzle({ ...synthetic, address, key: seed(phrase, "m/44'/1899'/0'/0/0") })),
+      await verify(
+        puzzle({ ...synthetic, chain: "ecash", address, key: seed(phrase, "m/44'/1899'/0'/0/0") }),
+      ),
     ).toMatchObject({
       verified: true,
       derivedAddress: "ecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z",
@@ -249,8 +255,9 @@ describe("Collection.verify", () => {
     /* The Bitcoin Cash spelling of the same hash is another chain's address. */
     expect(
       await verify(
-        ecashPuzzle({
+        puzzle({
           ...synthetic,
+          chain: "ecash",
           address: p2pkh("bitcoincash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qc2ylqzkf4"),
           key: seed(phrase, "m/44'/1899'/0'/0/0"),
         }),
@@ -260,8 +267,9 @@ describe("Collection.verify", () => {
 
   it("derives the address at a seed's path", async () => {
     const result = await verify(
-      bitcoinPuzzle({
+      puzzle({
         ...synthetic,
+        chain: "bitcoin",
         address: p2pkh("1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7"),
         key: seed(
           "since desk thrive carbon zone prison leaf depart hobby practice ivory luggage",
@@ -279,8 +287,9 @@ describe("Collection.verify", () => {
   it("derives a seed whose BIP39 checksum fails, the way the Bitcoin Movie Enigma phrase does", async () => {
     /* The phrase, the address and the compressed key it spent with are all on chain. */
     const result = await verify(
-      bitcoinPuzzle({
+      puzzle({
         ...synthetic,
+        chain: "bitcoin",
         address: p2wpkh("bc1q94ecsn0qk8lap2gefrycnms3ruepy889z969a6"),
         key: seed(
           "path mad alien apology escape spare miss goddess leopard crime visit clock start first blade guard close barrel term screen matrix toy ghost shine",
@@ -298,8 +307,9 @@ describe("Collection.verify", () => {
 
   it("fails a seed with a word outside the BIP39 list", async () => {
     const result = await verify(
-      bitcoinPuzzle({
+      puzzle({
         ...synthetic,
+        chain: "bitcoin",
         address: p2pkh("1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7"),
         key: seed(
           "since desk thrive carbon zone prison leaf depart hobby practice ivory nope",
@@ -317,8 +327,9 @@ describe("Collection.verify", () => {
 
   it("marks a Decred seed as unavailable, because keys derives no Decred HD wallet", async () => {
     const result = await verify(
-      decredPuzzle({
+      puzzle({
         ...synthetic,
+        chain: "decred",
         address: p2pkh("DsmcYVbP1Nmag2H4AS17UTvmWXmGeA7nLDx"),
         key: seed(
           "since desk thrive carbon zone prison leaf depart hobby practice ivory luggage",
@@ -346,8 +357,9 @@ describe("Collection.verify", () => {
     p2wsh("bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj"),
   ])("marks unsupported $kind derivation as unavailable", async (address) => {
     const result = await verify(
-      bitcoinPuzzle({
+      puzzle({
         ...synthetic,
+        chain: "bitcoin",
         address,
         key: hex("0000000000000000000000000000000000000000000000000000000000000001"),
       }),
@@ -366,8 +378,9 @@ describe("Collection.verify", () => {
 
   it("keeps invalid private keys as failures", async () => {
     const result = await verify(
-      bitcoinPuzzle({
+      puzzle({
         ...synthetic,
+        chain: "bitcoin",
         address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
         key: hex("0000000000000000000000000000000000000000000000000000000000000000"),
       }),

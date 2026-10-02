@@ -1,10 +1,11 @@
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, digest, claim, funding, p2pkh, uncompressed } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { assets, claim, digest, funding, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `zden/nethemba`. */
-export const zdenPuzzleNethemba = bitcoinPuzzle({
+export const zdenPuzzleNethemba = puzzle({
   id: "zden/nethemba",
-  address: p2pkh("1cryptoP5yMdKcz1bjzUqnbs3LsasVRX6", "06c84797d267472edfe262ab43b2d6844e8bac9b"),
+  chain: "bitcoin",
+  address: "1cryptoP5yMdKcz1bjzUqnbs3LsasVRX6",
   sourceUrl: "https://crypto.haluska.sk/crypto_nethemba.png",
   startedAt: "2016-08-06 12:05:26",
   status: Status.Solved,

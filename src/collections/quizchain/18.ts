@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 18 were published. */
 const THREAD =
@@ -21,9 +12,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bbij0e/
  * Quizchain block 18: the name behind Kerckhoffs's principle, a space and the last three characters
  * of the block 17 key, hashed with MD5 into BIP39 entropy. No source printed the hash or the key.
  */
-export const quizchainBlock18 = bitcoinPuzzle({
+export const quizchainBlock18 = puzzle({
   id: "quizchain/18",
-  address: p2pkh("16Cn1vy7wEGzy3TWgwCzrcLd91n856Myn5", "3912c8310f999eaa93c474ee6d8045c1551aecae"),
+  chain: "bitcoin",
+  address: "16Cn1vy7wEGzy3TWgwCzrcLd91n856Myn5",
   sourceUrl: THREAD,
   startedAt: "2019-04-10 05:56:12",
   status: Status.Solved,

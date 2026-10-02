@@ -5,16 +5,15 @@ import {
   confirmation,
   fact,
   funding,
-  type Hint,
   hex,
+  type Hint,
   official,
-  p2pkh,
   party,
   PartyKind,
   profile,
   uncompressed,
 } from "../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../core/puzzle.ts";
+import { puzzle, Status } from "../core/puzzle.ts";
 
 /** Where the rules, the twelve clues and, in the comments, every answer were published. */
 const THREAD =
@@ -61,9 +60,10 @@ function clue(text: string, solution: string): Hint {
  * brainwallet.io generic tab, which runs scrypt and hashes the hex result into an uncompressed key.
  * The winner swept the address six hours after the post and published every answer.
  */
-export const triviaBrainwalletRiddles = bitcoinPuzzle({
+export const triviaBrainwalletRiddles = puzzle({
   id: "trivia-brainwallet",
-  address: p2pkh("1E3NARnUX25UgMvZd5EZTutD9yVHTVGDNC", "8f0c21f95e718fbea2a5dfd417fa1338633d03ac"),
+  chain: "bitcoin",
+  address: "1E3NARnUX25UgMvZd5EZTutD9yVHTVGDNC",
   sourceUrl: THREAD,
   startedAt: "2017-11-04 20:05:55",
   preGenesis: true,

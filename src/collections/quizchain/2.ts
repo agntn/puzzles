@@ -5,11 +5,10 @@ import {
   confirmation,
   funding,
   official,
-  p2pkh,
   source,
   wif,
 } from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid, the solution and the private key of block 2 were published. */
 const THREAD =
@@ -26,9 +25,10 @@ const CAPTURE =
  * the address, and the author edited the solution and the private key into it. The entropy hash
  * is not printed; it is the post's recipe run on the published solution, and it derives that key.
  */
-export const quizchainBlock2 = bitcoinPuzzle({
+export const quizchainBlock2 = puzzle({
   id: "quizchain/2",
-  address: p2pkh("1JP2qF74zzgz6FMzsmk7nxUeYd7aYCAMHc", "bea4d18e2d7861e23df06c8d4a7ab51a05a12a48"),
+  chain: "bitcoin",
+  address: "1JP2qF74zzgz6FMzsmk7nxUeYd7aYCAMHc",
   sourceUrl: THREAD,
   startedAt: "2019-04-07 06:57:24",
   status: Status.Solved,

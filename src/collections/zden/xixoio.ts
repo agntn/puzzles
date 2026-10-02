@@ -1,19 +1,19 @@
-import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
-  digest,
   claim,
   confirmation,
+  digest,
   funding,
   official,
-  standard,
   uncompressed,
 } from "../../core/parts.ts";
 
 /** Puzzle `zden/xixoio`. */
-export const zdenPuzzleXixoio = ethereumPuzzle({
+export const zdenPuzzleXixoio = puzzle({
   id: "zden/xixoio",
-  address: standard("0x5d663791e869ca70c71e0a5f4cfd707f596265aa"),
+  chain: "ethereum",
+  address: "0x5d663791e869ca70c71e0a5f4cfd707f596265aa",
   sourceUrl: "https://crypto.haluska.sk/xixoio_puzzle.png",
   startedAt: "2018-10-24 20:00:18",
   status: Status.Solved,

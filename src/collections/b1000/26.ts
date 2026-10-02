@@ -1,10 +1,11 @@
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { claim, compressed, funding, hex, p2pkh } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { claim, compressed, funding, hex } from "../../core/parts.ts";
 
 /** Puzzle `b1000/26`. */
-export const b1000Puzzle26 = bitcoinPuzzle({
+export const b1000Puzzle26 = puzzle({
   id: "b1000/26",
-  address: p2pkh("1JVnST957hGztonaWK6FougdtjxzHzRMMg", "bfebb73562d4541b32a02ba664d140b5a574792f"),
+  chain: "bitcoin",
+  address: "1JVnST957hGztonaWK6FougdtjxzHzRMMg",
   sourceUrl: "https://bitcointalk.org/index.php?topic=5218972",
   startedAt: "2015-01-15 18:07:14",
   status: Status.Solved,

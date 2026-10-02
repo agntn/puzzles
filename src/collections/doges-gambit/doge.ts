@@ -1,15 +1,14 @@
 import {
   answer,
   assets,
-  digest,
   claim,
+  digest,
   funding,
   official,
-  p2pkh,
   uncompressed,
   wif,
 } from "../../core/parts.ts";
-import { dogecoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The puzzle video, whose description lists both prizes and both addresses. */
 const VIDEO = "https://www.youtube.com/watch?v=DieNZPwIUoQ";
@@ -22,9 +21,10 @@ const SOLUTION = "https://www.youtube.com/watch?v=-7-m60jy1RU";
  * piece can reach, and only those that touch a blue square. The address held 10,000 DOGE, about $50
  * when the video went up and, by the author's count, five or six thousand dollars when it was claimed.
  */
-export const dogesGambitDoge = dogecoinPuzzle({
+export const dogesGambitDoge = puzzle({
   id: "doges-gambit/doge",
-  address: p2pkh("DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq", "ddcbc240da19c87551a9182af0c2c77e3ebd20a4"),
+  chain: "dogecoin",
+  address: "DRMqy4bGAnWpaShBFtTUoHEiBWj4HoiSfq",
   sourceUrl: VIDEO,
   startedAt: "2020-12-11 22:11:10",
   status: Status.Solved,

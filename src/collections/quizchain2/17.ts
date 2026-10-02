@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 17 thread, with the question, the funding txid, the hash digits and the solution. */
 const THREAD = "https://www.reddit.com/r/Grycoin/comments/bsnke3/7_mbtc_quizchain2_block_17/";
@@ -17,9 +8,10 @@ const THREAD = "https://www.reddit.com/r/Grycoin/comments/bsnke3/7_mbtc_quizchai
 const PLAYER_COMMENT = "https://www.reddit.com/r/Grycoin/comments/bsnke3/comment/eooiqyb/";
 
 /** Quizchain2 block 17: `LV TOMI Mona Lisa`, for 8 mBTC, the cross sum of 17. */
-export const quizchain2Block17 = bitcoinPuzzle({
+export const quizchain2Block17 = puzzle({
   id: "quizchain2/17",
-  address: p2pkh("19XZ9YAN4GHdktoWU6W6mZKLQZUoUFeFfb", "5d8851fbeb898ca8868bfe5254de2d33139c0fd0"),
+  chain: "bitcoin",
+  address: "19XZ9YAN4GHdktoWU6W6mZKLQZUoUFeFfb",
   sourceUrl: THREAD,
   startedAt: "2019-05-24 12:23:12",
   status: Status.Solved,

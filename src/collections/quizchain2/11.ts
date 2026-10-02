@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 11 thread, with the format, the funding txid, the hash digits and the solution. */
 const THREAD =
@@ -18,9 +9,10 @@ const THREAD =
 const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bqqiot/comment/eobz5fy/";
 
 /** Quizchain2 block 11: one space, TOMI and `one space`. Nobody printed the hash or the key. */
-export const quizchain2Block11 = bitcoinPuzzle({
+export const quizchain2Block11 = puzzle({
   id: "quizchain2/11",
-  address: p2pkh("14wH4M6Ej19LM5h6BxAQMVdD1ba86SPSsv", "2b2c3e5b1ce846ed38f87a54ded489be1d60b03a"),
+  chain: "bitcoin",
+  address: "14wH4M6Ej19LM5h6BxAQMVdD1ba86SPSsv",
   sourceUrl: THREAD,
   startedAt: "2019-05-19 12:52:01",
   status: Status.Solved,

@@ -3,13 +3,12 @@ import {
   answer,
   assets,
   BitcoinPuzzle,
-  bitcoinPuzzle,
   community,
   confirmation,
-  ethereumPuzzle,
   hex,
   official,
   p2pkh,
+  puzzle,
   seed,
   standard,
 } from "../../src/index.ts";
@@ -46,14 +45,15 @@ describe("puzzles_show text", () => {
         answer: answer("Published answer", "https://example.com/answer", { date: "2026-04-01" }),
       },
     );
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       id: "fixture/answer",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/clue",
       startedAt: "2026-01-01",
       hints: [hint],
     });
-    for (const text of [formatPuzzleRecord(puzzle), formatHintReport(puzzle, []).join("\n")]) {
+    for (const text of [formatPuzzleRecord(record), formatHintReport(record, []).join("\n")]) {
       expect(text).toContain("\tOriginal clue\tsource: https://example.com/clue");
       expect(text).toContain(
         "\tanswer: Published answer\tanswer source: https://example.com/answer\tanswer date: 2026-04-01",
@@ -188,8 +188,9 @@ describe("puzzles_show text", () => {
 
   it("prints hints without confirmations and keeps their dates and answers", () => {
     const shared = official("Start at the top.", "https://example.com/rules");
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       id: "fixture/hinted",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -206,15 +207,16 @@ describe("puzzles_show text", () => {
       "hints: 1",
       "\tcommunity\t2026-01-03\tThe top is a decoy.\tsource: https://example.com/thread\tanswer: Start below.\tanswer source: https://example.com/answer",
     ];
-    expect(formatHintReport(puzzle, [shared])).toEqual(["fixture/hinted: 2 hints", ...expected]);
-    const text = formatPuzzleRecord(puzzle, [shared]);
+    expect(formatHintReport(record, [shared])).toEqual(["fixture/hinted: 2 hints", ...expected]);
+    const text = formatPuzzleRecord(record, [shared]);
     expect(text).toContain(expected.join("\n"));
     expect(text).not.toContain("confirmation:");
   });
 
   it("dates a hint and leaves out a confirmation note it does not have", () => {
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       id: "fixture/hinted",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -227,7 +229,7 @@ describe("puzzles_show text", () => {
         ),
       ],
     });
-    const text = formatPuzzleRecord(puzzle).split("\n");
+    const text = formatPuzzleRecord(record).split("\n");
 
     expect(text).toContain("hints: 1");
     expect(text).toContain(
@@ -237,8 +239,9 @@ describe("puzzles_show text", () => {
   });
 
   it("prints the hints a collection shares under their own label", () => {
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       id: "fixture/plain",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -248,7 +251,7 @@ describe("puzzles_show text", () => {
       "https://example.com/puzzle",
       confirmation("https://web.archive.org/web/2026/https://example.com/puzzle"),
     );
-    const text = formatPuzzleRecord(puzzle, [shared]).split("\n");
+    const text = formatPuzzleRecord(record, [shared]).split("\n");
 
     expect(text).toContain("collection hints: 1");
     expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
@@ -291,8 +294,9 @@ describe("puzzles_show text", () => {
   });
 
   it("keeps the seed phrase when a WIF outranks it", () => {
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       id: "fixture/seed",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -300,7 +304,7 @@ describe("puzzles_show text", () => {
         "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn",
       ),
     });
-    const text = formatPuzzleRecord(puzzle).split("\n");
+    const text = formatPuzzleRecord(record).split("\n");
 
     expect(text).toContain(
       "private key: KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn (wif)",
@@ -310,16 +314,17 @@ describe("puzzles_show text", () => {
   });
 
   it("says when the record derived the private key instead of quoting it", () => {
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       id: "fixture/derived",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
       key: hex("1".padStart(64, "0")).derived(),
     });
 
-    expect(puzzle.hasDerivedKey()).toBe(true);
-    expect(formatPuzzleRecord(puzzle).split("\n")).toContain(
+    expect(record.hasDerivedKey()).toBe(true);
+    expect(formatPuzzleRecord(record).split("\n")).toContain(
       `private key: ${"1".padStart(64, "0")} (hex, derived from the published recipe)`,
     );
   });
@@ -358,8 +363,9 @@ describe("puzzles_hints text", () => {
       "https://example.com/puzzle",
       confirmation("https://web.archive.org/web/2026/https://example.com/puzzle"),
     );
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       id: "fixture/both",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -373,7 +379,7 @@ describe("puzzles_hints text", () => {
       ],
     });
 
-    expect(formatHintReport(puzzle, [shared])).toEqual([
+    expect(formatHintReport(record, [shared])).toEqual([
       "fixture/both: 2 hints, 2 hint assets",
       "collection hints: 1",
       "\tofficial\t-\tStart at the top.\tsource: https://example.com/puzzle\tconfirmation: https://web.archive.org/web/2026/https://example.com/puzzle",
@@ -385,18 +391,19 @@ describe("puzzles_hints text", () => {
 
   it("prints the escrow under the target and serializes it next to the address", () => {
     const escrow = standard("0x0000000000000000000000000000000000000001");
-    const puzzle = ethereumPuzzle({
+    const record = puzzle({
       id: "fixture/escrowed",
+      chain: "ethereum",
       address: standard("0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf"),
       escrow,
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
     });
 
-    expect(formatPuzzleRecord(puzzle).split("\n").slice(1, 3)).toEqual([
+    expect(formatPuzzleRecord(record).split("\n").slice(1, 3)).toEqual([
       "chain: ethereum  address kind: standard",
       "escrow: 0x0000000000000000000000000000000000000001",
     ]);
-    expect(puzzle.toJSON().escrow).toEqual(escrow);
+    expect(record.toJSON().escrow).toEqual(escrow);
   });
 });

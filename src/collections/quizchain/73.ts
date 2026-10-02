@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 73 were published. */
 const THREAD =
@@ -25,9 +16,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bjezpd/
  * number, then TOMI, `Fibonacci` and the whole block 72 key, hashed with MD5 into BIP39 entropy,
  * for 10 mBTC. A player printed the WIF in the block 74 thread.
  */
-export const quizchainBlock73 = bitcoinPuzzle({
+export const quizchainBlock73 = puzzle({
   id: "quizchain/73",
-  address: p2pkh("1FcQC5gHcSwaEYTV1C8t73gpBhv31WYPpt", "a043adb527b93010adfe376cc07424b94f5f0383"),
+  chain: "bitcoin",
+  address: "1FcQC5gHcSwaEYTV1C8t73gpBhv31WYPpt",
   sourceUrl: THREAD,
   startedAt: "2019-05-01 09:20:30",
   status: Status.Solved,

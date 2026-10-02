@@ -1,20 +1,20 @@
-import { decredPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
-  digest,
   claim,
   compressed,
   confirmation,
+  digest,
   funding,
   increase,
   official,
-  p2pkh,
 } from "../../core/parts.ts";
 
 /** Puzzle `zden/decred-janus`. */
-export const zdenPuzzleDecredJanus = decredPuzzle({
+export const zdenPuzzleDecredJanus = puzzle({
   id: "zden/decred-janus",
-  address: p2pkh("DsRaAja82UvgnqYaBHYFuyCKURFX2rCyEJ8"),
+  chain: "decred",
+  address: "DsRaAja82UvgnqYaBHYFuyCKURFX2rCyEJ8",
   sourceUrl: "https://crypto.haluska.sk/decred_tree.svg",
   startedAt: "2017-03-07 04:20:56",
   status: Status.Solved,

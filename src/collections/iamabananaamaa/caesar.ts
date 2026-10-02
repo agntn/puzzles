@@ -5,10 +5,9 @@ import {
   confirmation,
   funding,
   official,
-  p2pkh,
   wif,
 } from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The post: four lines of text, a verse signed by Caesar, the address and the prize. */
 const THREAD =
@@ -27,9 +26,10 @@ const EXPLANATION = "https://www.reddit.com/r/bitcoinpuzzles/comments/1ticec/com
  * WIF: it derives the address and the public key in the claim's input script. The solvers'
  * comments are deleted and the claim names no one, so the record has no solver.
  */
-export const iAmABananaAmaaCaesar = bitcoinPuzzle({
+export const iAmABananaAmaaCaesar = puzzle({
   id: "iamabananaamaa/caesar",
-  address: p2pkh("1wkQxZaewFqYrDJeVnxqrfMKfJykdRfr5", "0a5ab38b15e06067b9ad40237c699694636eadc6"),
+  chain: "bitcoin",
+  address: "1wkQxZaewFqYrDJeVnxqrfMKfJykdRfr5",
   sourceUrl: THREAD,
   startedAt: "2013-12-23 04:53:59",
   status: Status.Solved,

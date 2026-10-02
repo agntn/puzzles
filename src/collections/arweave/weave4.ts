@@ -1,10 +1,11 @@
-import { arweavePuzzle, Status } from "../../core/puzzle.ts";
-import { claim, fact, funding, party, PartyKind, profile, standard } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { claim, fact, funding, party, PartyKind, profile } from "../../core/parts.ts";
 
 /** Puzzle `arweave/weave4`. */
-export const arweavePuzzleWeave4 = arweavePuzzle({
+export const arweavePuzzleWeave4 = puzzle({
   id: "arweave/weave4",
-  address: standard("2pwE_LEzD0z6m_ENCDIta9YTBKXW9FFCURrx1yJoO7w"),
+  chain: "arweave",
+  address: "2pwE_LEzD0z6m_ENCDIta9YTBKXW9FFCURrx1yJoO7w",
   sourceUrl:
     "https://ojducxyzj2dirbt7xt2jod7dkwfqolxjre6tzp63fycuq5477vta.arweave.net/ckdBXxlOhoiGf7z0lw_jVYsHLumJPTy_2y4FSHef_WY#instructions",
   startedAt: "2019-05-25 15:39:57",

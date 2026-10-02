@@ -4,6 +4,7 @@ import { addressExplorerUrl, Chain, chainSymbol, transactionExplorerUrl } from "
 import type { Balance } from "./types.ts";
 import {
   type Address,
+  addressOn,
   type Assets,
   type Digest,
   defined,
@@ -647,10 +648,11 @@ export abstract class MoneroPuzzle extends Puzzle {
  * every accessor hands back the data as written and no caller can rewrite it for everyone else.
  */
 export interface PuzzleSpec {
-  readonly address: Address;
+  readonly address: string | Address;
   readonly assets?: Assets;
+  readonly chain: Chain;
   readonly currency?: string;
-  readonly escrow?: Address;
+  readonly escrow?: string | Address;
   readonly hints?: readonly Hint[];
   readonly id: string;
   readonly key?: Readonly<Key>;
@@ -667,14 +669,29 @@ export interface PuzzleSpec {
   readonly transactions?: readonly Transaction[];
 }
 
-class SpecPuzzle extends Puzzle {
-  readonly #chain: Chain;
-  readonly #spec: PuzzleSpec;
+/** A spec with its addresses read into records. */
+interface ResolvedSpec extends PuzzleSpec {
+  readonly address: Address;
+  readonly escrow?: Address;
+}
 
-  constructor(chain: Chain, spec: PuzzleSpec) {
+function resolved(chain: Chain, value: string | Address): Address {
+  return typeof value === "string" ? addressOn(chain, value) : value;
+}
+
+class SpecPuzzle extends Puzzle {
+  readonly #spec: ResolvedSpec;
+
+  constructor(spec: PuzzleSpec) {
     super();
-    this.#chain = chain;
-    this.#spec = frozen(spec);
+    const { chain } = spec;
+    this.#spec = frozen(
+      defined<ResolvedSpec>({
+        ...spec,
+        address: resolved(chain, spec.address),
+        escrow: spec.escrow === undefined ? undefined : resolved(chain, spec.escrow),
+      }),
+    );
   }
 
   override id(): string {
@@ -682,7 +699,7 @@ class SpecPuzzle extends Puzzle {
   }
 
   override chain(): Chain {
-    return this.#chain;
+    return this.#spec.chain;
   }
 
   override address(): Address {
@@ -755,101 +772,12 @@ class SpecPuzzle extends Puzzle {
 }
 
 /**
- * Builds a Bitcoin puzzle from its data record.
+ * Builds a puzzle from its data record, reading a string address on the record's chain.
  *
  * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The Bitcoin puzzle.
+ * @returns {Puzzle} The puzzle.
+ * @throws {TypeError} When an address is not one the chain encodes.
  */
-export function bitcoinPuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.Bitcoin, spec);
-}
-
-/**
- * Builds a Bitcoin Cash puzzle from its data record.
- *
- * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The Bitcoin Cash puzzle.
- */
-export function bitcoinCashPuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.BitcoinCash, spec);
-}
-
-/**
- * Builds a Dogecoin puzzle from its data record.
- *
- * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The Dogecoin puzzle.
- */
-export function dogecoinPuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.Dogecoin, spec);
-}
-
-/**
- * Builds an eCash puzzle from its data record.
- *
- * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The eCash puzzle.
- */
-export function ecashPuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.ECash, spec);
-}
-
-/**
- * Builds an Ethereum puzzle from its data record.
- *
- * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The Ethereum puzzle.
- */
-export function ethereumPuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.Ethereum, spec);
-}
-
-/**
- * Builds a Base puzzle from its data record.
- *
- * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The Base puzzle.
- */
-export function basePuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.Base, spec);
-}
-
-/**
- * Builds a Litecoin puzzle from its data record.
- *
- * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The Litecoin puzzle.
- */
-export function litecoinPuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.Litecoin, spec);
-}
-
-/**
- * Builds a Decred puzzle from its data record.
- *
- * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The Decred puzzle.
- */
-export function decredPuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.Decred, spec);
-}
-
-/**
- * Builds an Arweave puzzle from its data record.
- *
- * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The Arweave puzzle.
- */
-export function arweavePuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.Arweave, spec);
-}
-
-/**
- * Builds a Monero puzzle from its data record.
- *
- * @param {PuzzleSpec} spec - The puzzle's data record.
- * @returns {Puzzle} The Monero puzzle.
- */
-export function moneroPuzzle(spec: PuzzleSpec): Puzzle {
-  return new SpecPuzzle(Chain.Monero, spec);
+export function puzzle(spec: PuzzleSpec): Puzzle {
+  return new SpecPuzzle(spec);
 }

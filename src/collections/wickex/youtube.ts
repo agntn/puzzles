@@ -6,14 +6,13 @@ import {
   funding,
   increase,
   official,
-  p2pkh,
   party,
   PartyKind,
   profile,
   sweep,
   uncompressed,
 } from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The post: the address, 1 mBTC and a line of hex to start from. */
 const THREAD =
@@ -40,9 +39,10 @@ const METHOD = comment("ce87ss1");
  * IAMABananaAMAA swept first and sent the prize back in the same block. Someone took it again
  * nineteen minutes later, and the thread never says who.
  */
-export const wickexYouTube = bitcoinPuzzle({
+export const wickexYouTube = puzzle({
   id: "wickex/youtube",
-  address: p2pkh("1LhQZc57j9i3xofj5poayd6PnakN7xHwDA", "d80eb27236847fae88418ce952444a4657092259"),
+  chain: "bitcoin",
+  address: "1LhQZc57j9i3xofj5poayd6PnakN7xHwDA",
   sourceUrl: THREAD,
   startedAt: "2013-12-23 02:22:43",
   status: Status.Solved,

@@ -1,13 +1,14 @@
-import { artifact, funding, stage, standard } from "../../core/parts.ts";
-import { ethereumPuzzle } from "../../core/puzzle.ts";
+import { artifact, funding, stage } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
 
 const address = "0x17e5e0910b9185b0ede564dcbf074ca910ad56a4";
 const source = `https://etherscan.io/address/${address}#code`;
 
 /** The first TeikhosBounty that pays: the public key XORed straight into a signature. */
-export const teikhos1 = ethereumPuzzle({
+export const teikhos1 = puzzle({
   id: "teikhos/1",
-  address: standard(address),
+  chain: "ethereum",
+  address,
   sourceUrl: source,
   startedAt: "2018-02-26 02:44:42",
   prize: 1,

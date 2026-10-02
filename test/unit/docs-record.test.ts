@@ -6,8 +6,6 @@ import {
   solvedText,
   transactionTicks,
 } from "../../docs/app/utils/record.ts";
-import { factoryName } from "../../docs/app/utils/samples.ts";
-import { chains } from "../../src/index.ts";
 
 /**
  * The view of one record, the way the puzzle page and the playground read it.
@@ -43,10 +41,11 @@ describe("docs record helpers", () => {
       kind: "standard",
       explorer: "https://basescan.org/address/0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd",
     });
-    expect(recordLiteral(view).split("\n").slice(0, 3)).toEqual([
-      "basePuzzle({",
-      '  address: standard("0x635739254BDE27d28301f25aD57c3cAC3C3468f3"),',
-      '  escrow: standard("0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd"),',
+    expect(recordLiteral(view).split("\n").slice(0, 4)).toEqual([
+      "puzzle({",
+      '  chain: "base",',
+      '  address: "0x635739254BDE27d28301f25aD57c3cAC3C3468f3",',
+      '  escrow: "0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd",',
     ]);
     expect((await viewOf("b1000/71")).escrow).toBeUndefined();
   });
@@ -70,15 +69,17 @@ describe("docs record helpers", () => {
     expect(tokens.map((token) => token.text.replace(/"[^"]*"/u, '""')).join("")).toBe(
       literal.replaceAll(/"[^"]*"/gu, '""'),
     );
-    expect(tokens.find((token) => token.cls === "tok-fn")?.text).toBe("bitcoinPuzzle");
+    expect(tokens.find((token) => token.cls === "tok-fn")?.text).toBe("puzzle");
   });
 
-  it("name a factory the library exports for every chain", async () => {
-    const library: Record<string, unknown> = await import("../../src/index.ts");
+  it("write the address as a string unless a builder says more", async () => {
+    const lines = async (id: string) => recordLiteral(await viewOf(id)).split("\n");
 
-    for (const chain of chains) {
-      expect(typeof library[factoryName(chain)], chain).toBe("function");
-    }
-    expect(recordLiteral(await viewOf("mini/1")).split("(")[0]).toBe("bitcoinCashPuzzle");
+    expect((await lines("b1000/71"))[2]).toBe('  address: "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU",');
+    expect((await lines("mini/1"))[1]).toBe('  chain: "bitcoincash",');
+    expect((await lines("mini/1"))[2]).toMatch(/^ {2}address: p2pkh\("bitcoincash:q/u);
+    expect((await lines("hash-collision/sha1"))[2]).toMatch(
+      /^ {2}address: p2sh\(".*redeemScript\(/u,
+    );
   });
 });

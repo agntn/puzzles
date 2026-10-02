@@ -5,11 +5,10 @@ import {
   funding,
   increase,
   official,
-  p2pkh,
   source,
   wif,
 } from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, both funding txids, the hints and the solution of block 9 were published. */
 const THREAD =
@@ -21,9 +20,10 @@ const THREAD =
  * outputs went out in two claims thirteen minutes apart. A player printed the first ten
  * characters of the key; no source printed the hash or the whole key.
  */
-export const quizchain2Block9 = bitcoinPuzzle({
+export const quizchain2Block9 = puzzle({
   id: "quizchain2/9",
-  address: p2pkh("1E3aJRAUQcW26ZYSRjR41PWTkkzgbifRAf", "8f1643c9663e1fc9f1457e82747f3c863c4da292"),
+  chain: "bitcoin",
+  address: "1E3aJRAUQcW26ZYSRjR41PWTkkzgbifRAf",
   sourceUrl: THREAD,
   startedAt: "2019-05-16 22:51:06",
   status: Status.Solved,

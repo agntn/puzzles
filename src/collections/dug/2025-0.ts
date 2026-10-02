@@ -1,16 +1,14 @@
-import { assets, digest, claim, compressed, funding, p2wpkh, seed } from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { assets, claim, compressed, digest, funding, seed } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 const source =
   "https://github.com/floflo777/open-crypto-puzzles/tree/main/4-solved/dug-student-treasure-hunt-63ksats";
 
 /** Funded BIP84 address 0 of Dug's 2025 student treasure hunt. */
-export const dug2025Index0 = bitcoinPuzzle({
+export const dug2025Index0 = puzzle({
   id: "dug/2025-0",
-  address: p2wpkh(
-    "bc1qych2me6h85j38s3xmfwdkcvpqakpld3yr2y5ss",
-    "262eade7573d2513c226da5cdb6181076c1fb624",
-  ),
+  chain: "bitcoin",
+  address: "bc1qych2me6h85j38s3xmfwdkcvpqakpld3yr2y5ss",
   sourceUrl: source,
   startedAt: "2025-06-26 07:10:21",
   status: Status.Solved,

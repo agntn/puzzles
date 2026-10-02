@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 28 were published. */
 const THREAD =
@@ -23,9 +14,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bc3l0m/
  * should read `NM2`. The funded hash uses `MA2`, the actual tail of the block 27 key. No source
  * printed the hash or the key.
  */
-export const quizchainBlock28 = bitcoinPuzzle({
+export const quizchainBlock28 = puzzle({
   id: "quizchain/28",
-  address: p2pkh("19PEtVBuiFeAAKU5uhGyZ5NwsK6xwRBFpH", "5bf5c012f2955cad02529d0d9d6343da77363511"),
+  chain: "bitcoin",
+  address: "19PEtVBuiFeAAKU5uhGyZ5NwsK6xwRBFpH",
   sourceUrl: THREAD,
   startedAt: "2019-04-11 18:46:38",
   status: Status.Solved,

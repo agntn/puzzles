@@ -1,10 +1,11 @@
-import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, digest, claim, funding, hex, standard, uncompressed } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { assets, claim, digest, funding, hex, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `zden/codex-protocol`. */
-export const zdenPuzzleCodexProtocol = ethereumPuzzle({
+export const zdenPuzzleCodexProtocol = puzzle({
   id: "zden/codex-protocol",
-  address: standard("0x6b2560b34c7469c561a8fce581c88bfb8cce73b2"),
+  chain: "ethereum",
+  address: "0x6b2560b34c7469c561a8fce581c88bfb8cce73b2",
   sourceUrl: "https://crypto.haluska.sk/CodexPuzzle.png",
   startedAt: "2018-04-16 22:39:45",
   status: Status.Solved,

@@ -42,6 +42,9 @@ importers:
       '@modelcontextprotocol/server':
         specifier: 2.2.0
         version: 2.2.0
+      '@scure/base':
+        specifier: 2.4.0
+        version: 2.4.0
       citty:
         specifier: 0.2.2
         version: 0.2.2
@@ -64,9 +67,6 @@ importers:
       '@oh-my-pi/pi-coding-agent':
         specifier: 18.2.7
         version: 18.2.7
-      '@scure/base':
-        specifier: 2.4.0
-        version: 2.4.0
       '@types/node':
         specifier: 26.6.3
         version: 26.6.3

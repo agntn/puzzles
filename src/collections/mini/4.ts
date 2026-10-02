@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  hex,
-  official,
-  p2pkh,
-  party,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, hex, official, party } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the public key, the author's hints, the key and the explanation were posted. */
 const THREAD = "https://bitcointalk.org/index.php?topic=5526453";
@@ -19,9 +10,10 @@ const THREAD = "https://bitcointalk.org/index.php?topic=5526453";
  * 0.01 BTC sits on its address; a commenter printed the address, the compressed 1-address of that
  * key, and the funding and the claim went through it.
  */
-export const mini4 = bitcoinPuzzle({
+export const mini4 = puzzle({
   id: "mini/4",
-  address: p2pkh("1AH5pRZW4ZofEJhdb3muNZ1q88YNu3Rez7", "65c3cf1b54c179e6a2fee4fa3a148ed9b88b9970"),
+  chain: "bitcoin",
+  address: "1AH5pRZW4ZofEJhdb3muNZ1q88YNu3Rez7",
   sourceUrl: THREAD,
   startedAt: "2025-01-14 17:22:30",
   status: Status.Solved,

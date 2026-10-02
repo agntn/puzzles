@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 19 were published. */
 const THREAD =
@@ -23,9 +14,10 @@ const SOLUTIONS = "https://www.wattpad.com/720895205-second-complete-quizchain";
  * prize for whoever solves block 18, and it was claimed in the same block as 18. No source printed
  * the hash or the key.
  */
-export const quizchainBlock19 = bitcoinPuzzle({
+export const quizchainBlock19 = puzzle({
   id: "quizchain/19",
-  address: p2pkh("1MTh3kQjS14L9kvEUrFkYGiNdcWGDim1La", "e06ec2b3dde7c569313fa2b86395b596cfd86d06"),
+  chain: "bitcoin",
+  address: "1MTh3kQjS14L9kvEUrFkYGiNdcWGDim1La",
   sourceUrl: THREAD,
   startedAt: "2019-04-10 10:55:13",
   status: Status.Solved,

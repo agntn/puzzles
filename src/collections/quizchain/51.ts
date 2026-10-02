@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 51 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bexc8c/7_mbtc_quizchain_block_51/";
@@ -19,9 +10,10 @@ const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bexc8c/7_mbtc_q
  * field is called TOMI. The update says block 21, whose answer is not `Second`. Block 19's is. No
  * source printed the hash or the key.
  */
-export const quizchainBlock51 = bitcoinPuzzle({
+export const quizchainBlock51 = puzzle({
   id: "quizchain/51",
-  address: p2pkh("17mRF1q6ws8tZQj93KiKHjWRiXL5uSczbB", "4a374afc40d660131edb2b6749e99092e9173c23"),
+  chain: "bitcoin",
+  address: "17mRF1q6ws8tZQj93KiKHjWRiXL5uSczbB",
   sourceUrl: THREAD,
   startedAt: "2019-04-19 10:07:24",
   status: Status.Solved,

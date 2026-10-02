@@ -1,18 +1,17 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
   assets,
-  digest,
   confirmation,
+  digest,
   fact,
   funding,
   increase,
   official,
-  p2pkh,
   party,
   PartyKind,
   profile,
 } from "../core/parts.ts";
-import { litecoinPuzzle } from "../core/puzzle.ts";
+import { puzzle } from "../core/puzzle.ts";
 
 /** The hunt's page today: the clue images, the rules and the prize address. */
 const SITE = "https://p2gtreasure.com/";
@@ -53,9 +52,10 @@ const SOUNDTRACK = "https://www.youtube.com/watch?v=EojQgdZeTyM";
  * lead to the private key of a Litecoin wallet. The prize is whatever that wallet holds, and
  * donations to it raise the stakes.
  */
-export const treasureHunt = litecoinPuzzle({
+export const treasureHunt = puzzle({
   id: "path-to-greatness",
-  address: p2pkh("LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS", "69fb2ecbe0eed5feeb7e410b279048cd3891b789"),
+  chain: "litecoin",
+  address: "LUtL7qnm3gzxKjHcfVLSjydqhhinTVmTmS",
   sourceUrl: SITE,
   startedAt: "2021-02-05 19:02:37",
   prize: 3.02608794,

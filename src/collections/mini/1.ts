@@ -9,7 +9,7 @@ import {
   p2pkh,
   party,
 } from "../../core/parts.ts";
-import { bitcoinCashPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the mangled key, the author's replies and the corrected key were posted. */
 const THREAD = "https://bitcointalk.org/index.php?topic=5513047";
@@ -21,8 +21,9 @@ const THREAD = "https://bitcointalk.org/index.php?topic=5513047";
  * the #120 address and says the BCH sits there; this is the same HASH160 in Bitcoin Cash's
  * encoding.
  */
-export const mini1 = bitcoinCashPuzzle({
+export const mini1 = puzzle({
   id: "mini/1",
+  chain: "bitcoincash",
   address: p2pkh(
     "bitcoincash:qp95dcg22sdwa34787k8p8p9d7ma56fs3c39x022wu",
     "4b46e10a541aeec6be3fac709c256fb7da69308e",

@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  hex,
-  official,
-  p2pkh,
-  party,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, hex, official, party } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the public key, the masked key, the full key and the author's pointer were posted. */
 const THREAD = "https://bitcointalk.org/index.php?topic=5577390";
@@ -19,9 +10,10 @@ const THREAD = "https://bitcointalk.org/index.php?topic=5577390";
  * address, the compressed 1-address of that key. The key is the one a commenter posted after the
  * claim, and it matches the public key.
  */
-export const mini6 = bitcoinPuzzle({
+export const mini6 = puzzle({
   id: "mini/6",
-  address: p2pkh("1LsusxaEiGpTvWcXJA9ACRDKva8REjMokr", "da0b542c85494505cf55b882d1e478519148cc6b"),
+  chain: "bitcoin",
+  address: "1LsusxaEiGpTvWcXJA9ACRDKva8REjMokr",
   sourceUrl: THREAD,
   startedAt: "2026-03-14 17:14:11",
   status: Status.Solved,

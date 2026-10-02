@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 32 were published. */
 const THREAD =
@@ -19,9 +10,10 @@ const THREAD =
  * hint of four words from the Wattpad story and the last three characters of the block 31 key,
  * hashed with MD5 into BIP39 entropy. No source printed the hash or the key.
  */
-export const quizchainBlock32 = bitcoinPuzzle({
+export const quizchainBlock32 = puzzle({
   id: "quizchain/32",
-  address: p2pkh("1CGSo2jKDAVArPHSgmruQ3AECHMZKTHaAo", "7b95278bbdd4ca7ab4c8f3e92ef3d8c90403081b"),
+  chain: "bitcoin",
+  address: "1CGSo2jKDAVArPHSgmruQ3AECHMZKTHaAo",
   sourceUrl: THREAD,
   startedAt: "2019-04-13 01:57:23",
   status: Status.Solved,

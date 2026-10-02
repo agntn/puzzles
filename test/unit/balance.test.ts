@@ -3,18 +3,13 @@ import { b1000 } from "../../src/collections/b1000.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
   Balance,
-  basePuzzle,
   BalanceProviderError,
-  bitcoinCashPuzzle,
-  dogecoinPuzzle,
-  ecashPuzzle,
-  ethereumPuzzle,
   InvalidAddressError,
-  moneroPuzzle,
   p2pkh,
+  puzzle,
+  type PuzzleSpec,
   standard,
   UnsupportedChainError,
-  type PuzzleSpec,
 } from "../../src/index.ts";
 import type * as Library from "../../src/index.ts";
 import type * as Tools from "../../src/tool-operations.ts";
@@ -41,8 +36,9 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-const ethereum = ethereumPuzzle({
+const ethereum = puzzle({
   id: "test/ethereum",
+  chain: "ethereum",
   address: standard("0x0000000000000000000000000000000000000000"),
   sourceUrl: "https://example.com",
   startedAt: "2020-01-01 00:00:00",
@@ -52,6 +48,7 @@ const cashAddress = "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez";
 
 const bitcoinCash = {
   id: "test/bitcoincash",
+  chain: "bitcoincash",
   address: p2pkh(cashAddress),
   sourceUrl: "https://example.com",
   startedAt: "2024-12-14 16:22:32",
@@ -91,7 +88,7 @@ describe("Puzzle.balance", () => {
     vi.stubEnv("BLOCKCHAIR_API_KEY", undefined);
     const urls = stubFetch(() => blockchairAddress());
 
-    const balance = await bitcoinCashPuzzle(bitcoinCash).balance({
+    const balance = await puzzle(bitcoinCash).balance({
       baseUrl: "https://example.test",
     });
 
@@ -113,7 +110,11 @@ describe("Puzzle.balance", () => {
       }),
     );
 
-    const balance = await ecashPuzzle({ ...bitcoinCash, address: p2pkh(address) }).balance({
+    const balance = await puzzle({
+      ...bitcoinCash,
+      chain: "ecash",
+      address: p2pkh(address),
+    }).balance({
       baseUrl: "https://example.test",
     });
 
@@ -137,7 +138,11 @@ describe("Puzzle.balance", () => {
       }),
     );
 
-    const balance = await dogecoinPuzzle({ ...bitcoinCash, address: p2pkh(address) }).balance({
+    const balance = await puzzle({
+      ...bitcoinCash,
+      chain: "dogecoin",
+      address: p2pkh(address),
+    }).balance({
       baseUrl: "https://example.test",
     });
 
@@ -156,7 +161,7 @@ describe("Puzzle.balance", () => {
       ),
     );
 
-    const failure = bitcoinCashPuzzle(bitcoinCash).balance();
+    const failure = puzzle(bitcoinCash).balance();
 
     await expect(failure).rejects.toBeInstanceOf(BalanceProviderError);
     await expect(failure).rejects.toThrow("BLOCKCHAIR_API_KEY");
@@ -328,8 +333,9 @@ describe("Puzzle.balance", () => {
 
   it("rejects unsupported chains without touching the network", async () => {
     const urls = stubFetch(() => json({}));
-    const monero = moneroPuzzle({
+    const monero = puzzle({
       id: "test/monero",
+      chain: "monero",
       address: standard(
         "44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A",
       ),
@@ -355,8 +361,9 @@ describe("Puzzle.balance", () => {
   });
 
   it("reads a Base balance through Blockscout and keeps any key away from it", async () => {
-    const base = basePuzzle({
+    const base = puzzle({
       id: "test/base",
+      chain: "base",
       address: standard("0x0000000000000000000000000000000000000000"),
       sourceUrl: "https://example.com",
       startedAt: "2025-01-17 00:00:00",
@@ -374,8 +381,9 @@ describe("Puzzle.balance", () => {
   });
 
   it("adds the escrow's balance to the target's", async () => {
-    const escrowed = ethereumPuzzle({
+    const escrowed = puzzle({
       id: "test/escrowed",
+      chain: "ethereum",
       address: standard("0x0000000000000000000000000000000000000000"),
       escrow: standard("0x0000000000000000000000000000000000000001"),
       sourceUrl: "https://example.com",
@@ -395,8 +403,9 @@ describe("Puzzle.balance", () => {
   });
 
   it("fails the whole lookup when the escrow fails, instead of printing half the prize", async () => {
-    const escrowed = ethereumPuzzle({
+    const escrowed = puzzle({
       id: "test/escrowed",
+      chain: "ethereum",
       address: standard("0x0000000000000000000000000000000000000000"),
       escrow: standard("0x0000000000000000000000000000000000000001"),
       sourceUrl: "https://example.com",
@@ -462,7 +471,7 @@ describe("balanceTool", () => {
     const tools: typeof Tools = await import("../../src/tool-operations.ts");
     lib.registerCollection(
       new lib.NamedCollection("fixture", lib.party("Fixture"), [
-        lib.bitcoinCashPuzzle({ ...bitcoinCash, id: "fixture/cash" }),
+        lib.puzzle({ ...bitcoinCash, id: "fixture/cash" }),
       ]),
     );
     return tools;

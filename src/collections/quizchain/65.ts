@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 65 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bhloyj/
  * block 64 key, hashed with MD5 into BIP39 entropy. First of a series of three blocks funded in the
  * same Bitcoin block. No source printed the hash or the key.
  */
-export const quizchainBlock65 = bitcoinPuzzle({
+export const quizchainBlock65 = puzzle({
   id: "quizchain/65",
-  address: p2pkh("1PGv1YpL4zJMZHoXSUcNurjen5uitW6oHd", "f45541b982531cfcd1c6aa4918f861712bed3c8d"),
+  chain: "bitcoin",
+  address: "1PGv1YpL4zJMZHoXSUcNurjen5uitW6oHd",
   sourceUrl: THREAD,
   startedAt: "2019-04-26 12:21:11",
   status: Status.Solved,

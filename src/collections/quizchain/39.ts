@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 39 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bd2p5c/7_mbtc_quizchain_block_39/";
@@ -18,9 +9,10 @@ const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bd2p5c/7_mbtc_q
  * three characters of the block 38 key, hashed with MD5 into BIP39 entropy. It opened a chain of
  * three blocks, and a player printed the WIF when block 41 fell.
  */
-export const quizchainBlock39 = bitcoinPuzzle({
+export const quizchainBlock39 = puzzle({
   id: "quizchain/39",
-  address: p2pkh("1D35Unrf2cpiTZRwAWBYeGcdJNXm72BRNT", "84061490c3a1dcc8dd795dfb9b6704bfa5358e1e"),
+  chain: "bitcoin",
+  address: "1D35Unrf2cpiTZRwAWBYeGcdJNXm72BRNT",
   sourceUrl: THREAD,
   startedAt: "2019-04-14 12:54:32",
   status: Status.Solved,

@@ -20,8 +20,8 @@ const activeCollection = computed(() => current.value.collection);
       to="/guide/records"
       link="Puzzle records"
       :checks="[
-        'A record is a PuzzleSpec literal handed to a factory for its chain: bitcoinPuzzle, decredPuzzle, arweavePuzzle',
-        'Addresses, keys and transactions come from builders, so an absent field is absent, never null',
+        'A record is a PuzzleSpec literal handed to puzzle(), with its chain as a field',
+        'Keys and transactions come from builders, so an absent field is absent, never null',
         'Status is written down, not derived. A claim transaction plus a published key still means solved',
       ]"
     >

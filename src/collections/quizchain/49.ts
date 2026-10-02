@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 49 were published. */
 const THREAD =
@@ -25,9 +16,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bel75n/
  * last seven characters of the block 48 key, hashed with MD5 into BIP39 entropy. No source printed
  * the hash or the key.
  */
-export const quizchainBlock49 = bitcoinPuzzle({
+export const quizchainBlock49 = puzzle({
   id: "quizchain/49",
-  address: p2pkh("1A2Z5k5DE1e8baSYLfkvXHbymLxCfvgUoq", "6304541a6e69b02700eae720ac8b1206e5f741b7"),
+  chain: "bitcoin",
+  address: "1A2Z5k5DE1e8baSYLfkvXHbymLxCfvgUoq",
   sourceUrl: THREAD,
   startedAt: "2019-04-18 06:17:41",
   status: Status.Solved,

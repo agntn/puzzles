@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid and the solution of block 5 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/boil0p/7_mbtc_quizchain2_block_5/";
@@ -18,9 +9,10 @@ const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/boil0p/7_mbtc_q
  * transaction sat unconfirmed for nine hours and confirmed in the same block as the claim. No
  * source printed the hash or the key.
  */
-export const quizchain2Block5 = bitcoinPuzzle({
+export const quizchain2Block5 = puzzle({
   id: "quizchain2/5",
-  address: p2pkh("18ufPz33qyBDAHxhxtAMrze5yq3abJh39b", "56be8fe4f52f11097ac4d04a6baaf867a654cc1c"),
+  chain: "bitcoin",
+  address: "18ufPz33qyBDAHxhxtAMrze5yq3abJh39b",
   sourceUrl: THREAD,
   startedAt: "2019-05-14 21:58:48",
   status: Status.Solved,

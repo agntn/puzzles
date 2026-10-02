@@ -38,8 +38,8 @@ import { wickex, WickexCollection } from "../../src/collections/wickex.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
 import {
   all,
+  type AnyCollection,
   authors,
-  bitcoinPuzzle,
   builtins,
   Collection,
   collectionKeys,
@@ -59,6 +59,7 @@ import {
   official,
   p2pkh,
   party,
+  puzzle,
   PuzzleNotFoundError,
   requireAuthor,
   requireCollection,
@@ -68,7 +69,6 @@ import {
   solvers,
   stats,
   Status,
-  type AnyCollection,
 } from "../../src/index.ts";
 import { prizeTotals } from "../../src/core/utils.ts";
 
@@ -611,14 +611,16 @@ describe("lazy collection registry", () => {
       "https://example.com/thread#reply",
       confirmation("https://archive.ph/thread#reply"),
     );
-    const plain = bitcoinPuzzle({
+    const plain = puzzle({
       id: "fixture/1",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
     });
-    const hinted = bitcoinPuzzle({
+    const hinted = puzzle({
       id: "fixture/2",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -626,8 +628,9 @@ describe("lazy collection registry", () => {
     });
     const collection = new NamedCollection("fixture", party("Fixture"), [plain, hinted], [shared]);
     const bare = new NamedCollection("bare", party("Bare"), [
-      bitcoinPuzzle({
+      puzzle({
         id: "bare/1",
+        chain: "bitcoin",
         address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
         sourceUrl: "https://example.com/puzzle",
         startedAt: "2026-01-01",
@@ -646,8 +649,9 @@ describe("lazy collection registry", () => {
     expect(bare.hintsFor("1")).toEqual([]);
     expect(Object.isFrozen(bare.hintsFor("1"))).toBe(true);
     expect(() => collection.hintsFor("3")).toThrow(PuzzleNotFoundError);
-    const single = bitcoinPuzzle({
+    const single = puzzle({
       id: "single",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -707,8 +711,9 @@ describe("lazy collection registry", () => {
   it("files a keyless author under its collection key", async () => {
     vi.resetModules();
     const lib = await import("../../src/index.ts");
-    const puzzle = lib.bitcoinPuzzle({
+    const puzzle = lib.puzzle({
       id: "keyless/one",
+      chain: "bitcoin",
       address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -795,8 +800,9 @@ describe("lazy collection registry", () => {
     vi.resetModules();
     const lib = await import("../../src/index.ts");
     const solved = (name: string, solver: ReturnType<typeof lib.party>) =>
-      lib.bitcoinPuzzle({
+      lib.puzzle({
         id: `joined/${name}`,
+        chain: "bitcoin",
         address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
         sourceUrl: "https://example.com/puzzle",
         startedAt: "2026-01-01",
@@ -880,7 +886,8 @@ describe("lazy collection registry", () => {
 
   it("sums prizes to every place they were recorded with", async () => {
     const prized = (id: string, prize: number) =>
-      bitcoinPuzzle({
+      puzzle({
+        chain: "bitcoin",
         id,
         address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
         sourceUrl: "https://example.com/puzzle",

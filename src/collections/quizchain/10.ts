@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid, both hints, the solution and the private key were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const THREAD =
  * hash is not printed; it is the recipe run on the published solution with that line break, and
  * it derives that WIF.
  */
-export const quizchainBlock10 = bitcoinPuzzle({
+export const quizchainBlock10 = puzzle({
   id: "quizchain/10",
-  address: p2pkh("14zuee5qyQwypAcAjyexpTNZqaxY8K9NWj", "2bdc094b716e622d5547709afe7bae97f0ca2828"),
+  chain: "bitcoin",
+  address: "14zuee5qyQwypAcAjyexpTNZqaxY8K9NWj",
   sourceUrl: THREAD,
   startedAt: "2019-04-09 00:18:53",
   status: Status.Solved,

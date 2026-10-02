@@ -9,7 +9,7 @@ import {
   p2pkh,
   party,
 } from "../../core/parts.ts";
-import { bitcoinCashPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the signed message, the author's explanation and the key were posted. */
 const THREAD = "https://bitcointalk.org/index.php?topic=5589799";
@@ -20,8 +20,9 @@ const THREAD = "https://bitcointalk.org/index.php?topic=5589799";
  * this is the same HASH160 in Bitcoin Cash's encoding. The author printed the key in the thread
  * after the claim.
  */
-export const mini7 = bitcoinCashPuzzle({
+export const mini7 = puzzle({
   id: "mini/7",
+  chain: "bitcoincash",
   address: p2pkh(
     "bitcoincash:qqak7k98tf2tlkzar0rv2yvqlhrn9xfryctu7nrhlw",
     "3b6f58a75a54bfd85d1bc6c51180fdc732992326",

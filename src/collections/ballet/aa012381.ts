@@ -1,10 +1,11 @@
-import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { assets, digest, funding, increase, p2pkh, passphrase } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
+import { assets, digest, funding, increase, passphrase } from "../../core/parts.ts";
 
 /** Puzzle `ballet/AA012381`. */
-export const balletPuzzleAA012381 = bitcoinPuzzle({
+export const balletPuzzleAA012381 = puzzle({
   id: "ballet/AA012381",
-  address: p2pkh("1QGtbKxx6FKDD66LwnrzHCAHmyZ7mDHqC4", "ff4c32fbedc3e87a8f206d9b231baa2ef3781c9e"),
+  chain: "bitcoin",
+  address: "1QGtbKxx6FKDD66LwnrzHCAHmyZ7mDHqC4",
   sourceUrl: "https://x.com/bobbyclee/status/1289004702122643456",
   startedAt: "2020-07-24 05:46:12",
   key: passphrase("594Y-L2RW-4ME7-2XVX-9B41"),

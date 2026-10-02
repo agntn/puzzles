@@ -32,7 +32,7 @@ import {
   standard,
   TransactionType,
 } from "../../src/core/parts.ts";
-import { bitcoinPuzzle, ethereumPuzzle, type Puzzle, Status } from "../../src/core/puzzle.ts";
+import { type Puzzle, puzzle, Status } from "../../src/core/puzzle.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { TeikhosCollection } from "../../src/collections/teikhos.ts";
@@ -547,8 +547,9 @@ describe("collection class data", () => {
   it("names every way an escrow can fail the data gate", () => {
     const target = "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf";
     const record = (escrow: string): Puzzle =>
-      ethereumPuzzle({
+      puzzle({
         id: "fixture/escrow",
+        chain: "ethereum",
         address: standard(target),
         escrow: standard(escrow),
         sourceUrl: "https://example.com/puzzle",
@@ -673,8 +674,9 @@ describe("collection class data", () => {
 
   it("names every way an asset digest can fail the data gate", () => {
     const image = readFileSync("assets/gsmg/puzzle.png");
-    const pinned = bitcoinPuzzle({
+    const pinned = puzzle({
       id: "gsmg",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -708,8 +710,9 @@ describe("collection class data", () => {
   });
 
   it("refuses an asset that resolves outside its collection directory", () => {
-    const escaped = bitcoinPuzzle({
+    const escaped = puzzle({
       id: "fixture/escaped",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -722,8 +725,9 @@ describe("collection class data", () => {
   });
 
   it("refuses a stage artifact file that resolves outside its collection directory", () => {
-    const escaped = bitcoinPuzzle({
+    const escaped = puzzle({
       id: "fixture/escaped",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -742,8 +746,9 @@ describe("collection class data", () => {
   });
 
   it("names every way a stage can fail the data gate", () => {
-    const staged = bitcoinPuzzle({
+    const staged = puzzle({
       id: "fixture/staged",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -797,8 +802,9 @@ describe("collection class data", () => {
   });
 
   it("names every way a hint can fail the data gate", () => {
-    const hinted = bitcoinPuzzle({
+    const hinted = puzzle({
       id: "fixture/hinted",
+      chain: "bitcoin",
       address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -892,8 +898,9 @@ describe("collection class data", () => {
 
   it("names every way a solver can fail the data gate", () => {
     const solved = (solver: Party) =>
-      bitcoinPuzzle({
+      puzzle({
         id: "fixture/one",
+        chain: "bitcoin",
         address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
         sourceUrl: "https://example.com/puzzle",
         startedAt: "2026-01-01",
@@ -927,8 +934,9 @@ describe("collection class data", () => {
         facts: [fact("one\ntwo", "ftp://example.com", { date: "2026-02-30" })],
       }),
       [
-        bitcoinPuzzle({
+        puzzle({
           id: "fixture/one",
+          chain: "bitcoin",
           address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
           sourceUrl: "https://example.com/puzzle",
           startedAt: "2026-01-01",

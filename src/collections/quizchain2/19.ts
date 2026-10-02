@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 19 thread, with the question, the funding txid, the hash digits and the solution. */
 const THREAD = "https://www.reddit.com/r/Grycoin/comments/btjb8j/7_mbtc_quizchain2_block_19/";
@@ -17,9 +8,10 @@ const THREAD = "https://www.reddit.com/r/Grycoin/comments/btjb8j/7_mbtc_quizchai
 const PLAYER_COMMENT = "https://www.reddit.com/r/Grycoin/comments/btjb8j/comment/eoyvf87/";
 
 /** Quizchain2 block 19: `Cypherpunks`, with no TOMI field. */
-export const quizchain2Block19 = bitcoinPuzzle({
+export const quizchain2Block19 = puzzle({
   id: "quizchain2/19",
-  address: p2pkh("19HcFFX5iyW5y7FW8qQvsbsJjh6EnyFH7s", "5ae5155211e7264213d4a34b83439441bc5acb7c"),
+  chain: "bitcoin",
+  address: "19HcFFX5iyW5y7FW8qQvsbsJjh6EnyFH7s",
   sourceUrl: THREAD,
   startedAt: "2019-05-27 03:54:16",
   status: Status.Solved,

@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 15 were published. */
 const THREAD =
@@ -20,9 +11,10 @@ const THREAD =
  * The author's hashing app had reset to MD5, and the emergency update says so. Every block after
  * this one is MD5. No source printed the hash or the key.
  */
-export const quizchainBlock15 = bitcoinPuzzle({
+export const quizchainBlock15 = puzzle({
   id: "quizchain/15",
-  address: p2pkh("112Gm9cAaaLSPLBcRDaCyoyrUwAGwiM3mZ", "003d929e87cc54e232047622235f33e74450447b"),
+  chain: "bitcoin",
+  address: "112Gm9cAaaLSPLBcRDaCyoyrUwAGwiM3mZ",
   sourceUrl: THREAD,
   startedAt: "2019-04-09 13:03:51",
   status: Status.Solved,

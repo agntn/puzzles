@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid, the link and the solution of block 8 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bpjipk/7_mbtc_quizchain2_block_8/";
@@ -23,9 +14,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bpjipk/
  * Quizchain2 block 8: xkcd's `correct horse battery staple` twice and the whole block 6 key,
  * hashed with MD5 into BIP39 entropy. No source printed the hash or the key.
  */
-export const quizchain2Block8 = bitcoinPuzzle({
+export const quizchain2Block8 = puzzle({
   id: "quizchain2/8",
-  address: p2pkh("18AoFSmoTH34cbRy9QW4X4ZxCTdS1iwswD", "4ea33b1c17388c6769b9c3e958dab37a7ae5531e"),
+  chain: "bitcoin",
+  address: "18AoFSmoTH34cbRy9QW4X4ZxCTdS1iwswD",
   sourceUrl: THREAD,
   startedAt: "2019-05-16 11:57:33",
   status: Status.Solved,

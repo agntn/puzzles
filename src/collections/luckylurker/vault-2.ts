@@ -1,13 +1,11 @@
-import { confirmation, funding, official, p2wpkh } from "../../core/parts.ts";
-import { bitcoinPuzzle } from "../../core/puzzle.ts";
+import { confirmation, funding, official } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
 
 /** Vault #2 was announced in September; public hints are scheduled for October 12. */
-export const luckyLurkerVault2 = bitcoinPuzzle({
+export const luckyLurkerVault2 = puzzle({
   id: "luckylurker/vault-2",
-  address: p2wpkh(
-    "bc1qnepv9pcnqvndux9h9mcaxvk6u993rc0lew9fpp",
-    "9e42c287130326de18b72ef1d332dae14b11e1ff",
-  ),
+  chain: "bitcoin",
+  address: "bc1qnepv9pcnqvndux9h9mcaxvk6u993rc0lew9fpp",
   sourceUrl: "https://luckylurker.com/bitcoin-vault-2/",
   startedAt: "2026-09-11 16:42:56",
   prize: 1,

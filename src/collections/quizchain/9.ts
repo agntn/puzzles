@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid, the answer and the author's account of the broken hash were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const THREAD =
  * neither the hash nor the key: the record runs the recipe on the published answer with that line
  * break, and the key it derives matches the public key the claim revealed.
  */
-export const quizchainBlock9 = bitcoinPuzzle({
+export const quizchainBlock9 = puzzle({
   id: "quizchain/9",
-  address: p2pkh("19N9hWUEFt5PKsKrciP88QXFaDNKXrMdZd", "5bc100a66ab64d78bfde8877f29f56ae0a959ae7"),
+  chain: "bitcoin",
+  address: "19N9hWUEFt5PKsKrciP88QXFaDNKXrMdZd",
   sourceUrl: THREAD,
   startedAt: "2019-04-08 12:01:33",
   status: Status.Solved,

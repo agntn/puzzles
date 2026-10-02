@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 72 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bj25fm/9_mbtc_quizchain_block_72/";
@@ -24,9 +15,10 @@ const AUTHOR_COMMENT_2 = "https://www.reddit.com/r/bitcoinpuzzles/comments/bj25f
  * whole block 71 key, hashed with MD5 into BIP39 entropy, for 9 mBTC. A player printed the WIF in
  * the block 73 thread.
  */
-export const quizchainBlock72 = bitcoinPuzzle({
+export const quizchainBlock72 = puzzle({
   id: "quizchain/72",
-  address: p2pkh("1HYrKjBry5X252RWgeiijEg4hAsyn7Ya6a", "b588147cacdfc2374cf5bae28aac3c1d28a01609"),
+  chain: "bitcoin",
+  address: "1HYrKjBry5X252RWgeiijEg4hAsyn7Ya6a",
   sourceUrl: THREAD,
   startedAt: "2019-04-30 12:05:28",
   status: Status.Solved,

@@ -1,10 +1,11 @@
-import { arweavePuzzle } from "../../core/puzzle.ts";
-import { funding, standard } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
+import { funding } from "../../core/parts.ts";
 
 /** Puzzle `arweave/weave10`. */
-export const arweavePuzzleWeave10 = arweavePuzzle({
+export const arweavePuzzleWeave10 = puzzle({
   id: "arweave/weave10",
-  address: standard("bkjJGw3NLxs8OAyRxgTL-QFpiB3lBJqZ76kDhWdB-Rs"),
+  chain: "arweave",
+  address: "bkjJGw3NLxs8OAyRxgTL-QFpiB3lBJqZ76kDhWdB-Rs",
   sourceUrl: "https://arweave.net/1fLPMP_smP6ipdIYbYUAZtFPwO4crdYr4kMVf5uTivg",
   startedAt: "2020-04-14 09:17:16",
   prize: 500,

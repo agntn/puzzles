@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 21 were published. */
 const THREAD =
@@ -24,9 +15,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bbsqhh/
  * The comment the author accepted and the funded hash both say "Satoshi is an". No source printed
  * the hash or the key.
  */
-export const quizchainBlock21 = bitcoinPuzzle({
+export const quizchainBlock21 = puzzle({
   id: "quizchain/21",
-  address: p2pkh("12HDDSxU6F9crKJycdjWxKG1VaRRZS1ntA", "0e08fa38070945e94f7ef75e9717a62f2aadca28"),
+  chain: "bitcoin",
+  address: "12HDDSxU6F9crKJycdjWxKG1VaRRZS1ntA",
   sourceUrl: THREAD,
   startedAt: "2019-04-10 23:00:17",
   status: Status.Solved,

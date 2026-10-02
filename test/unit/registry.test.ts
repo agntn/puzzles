@@ -17,8 +17,9 @@ describe("registry consistency", () => {
 
   it("loads a lazy entry once, however many callers ask", async () => {
     const lib = await freshLibrary();
-    const puzzle = lib.bitcoinPuzzle({
+    const puzzle = lib.puzzle({
       id: "lazyfixture/one",
+      chain: "bitcoin",
       address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -50,8 +51,9 @@ describe("registry consistency", () => {
     const lib = await freshLibrary();
     const build = (name: string) =>
       new lib.NamedCollection("selffixture", lib.party(name), [
-        lib.bitcoinPuzzle({
+        lib.puzzle({
           id: `selffixture/${name}`,
+          chain: "bitcoin",
           address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
           sourceUrl: "https://example.com/puzzle",
           startedAt: "2026-01-01",
@@ -145,8 +147,9 @@ describe("registry consistency", () => {
     expect(Object.isFrozen(originalStats.total_prize)).toBe(true);
     expect(Object.isFrozen(originalStats.unsolved_prize)).toBe(true);
     const makePuzzle = (name: string): Library.Puzzle =>
-      lib.bitcoinPuzzle({
+      lib.puzzle({
         id: `fixture/${name}`,
+        chain: "bitcoin",
         address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
         sourceUrl: "https://example.com/puzzle",
         startedAt: "2026-01-01",
@@ -235,8 +238,9 @@ describe("registry consistency", () => {
     const lib = await freshLibrary();
     const original = await lib.stats();
     const pending = lib.stats();
-    const puzzle = lib.bitcoinPuzzle({
+    const puzzle = lib.puzzle({
       id: "fixture/prize",
+      chain: "bitcoin",
       address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -279,8 +283,9 @@ describe("registry consistency", () => {
       lib.confirmation("https://archive.ph/thread#reply"),
       { date: "2026-01-02" },
     );
-    const puzzle = lib.bitcoinPuzzle({
+    const puzzle = lib.puzzle({
       id: "hinted/one",
+      chain: "bitcoin",
       address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
@@ -327,8 +332,9 @@ describe("registry consistency", () => {
         loads += 1;
         return Promise.resolve(
           new lib.NamedCollection("lazy", lib.party("Lazy"), [
-            lib.bitcoinPuzzle({
+            lib.puzzle({
               id: "lazy/one",
+              chain: "bitcoin",
               address: lib.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
               sourceUrl: "https://example.com/puzzle",
               startedAt: "2026-01-01",

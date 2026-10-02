@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 13 were published. */
 const THREAD =
@@ -28,9 +19,10 @@ const SOLUTIONS = "https://www.wattpad.com/720895205-second-complete-quizchain";
  * chapter was final. A player posted the full string after the claim. No source printed the hash or
  * the key.
  */
-export const quizchainBlock13 = bitcoinPuzzle({
+export const quizchainBlock13 = puzzle({
   id: "quizchain/13",
-  address: p2pkh("1GJPyUZvBE8MewEZyRx999p5JbVy8wbmWE", "a7d422b66e5e79f0175b7fe9f8aebb3d4c617deb"),
+  chain: "bitcoin",
+  address: "1GJPyUZvBE8MewEZyRx999p5JbVy8wbmWE",
   sourceUrl: THREAD,
   startedAt: "2019-04-09 05:44:42",
   status: Status.Solved,

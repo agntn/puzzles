@@ -1,10 +1,11 @@
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { bits, compressed, funding, p2pkh, sweep } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { bits, compressed, funding, sweep } from "../../core/parts.ts";
 
 /** Puzzle `b1000/225`. */
-export const b1000Puzzle225 = bitcoinPuzzle({
+export const b1000Puzzle225 = puzzle({
   id: "b1000/225",
-  address: p2pkh("16YvGEYhAwjf2duwvH8jbFMfVCnY6XiQTq", "3ce1fc3304d09e7984c5766fd1134c1e8979821a"),
+  chain: "bitcoin",
+  address: "16YvGEYhAwjf2duwvH8jbFMfVCnY6XiQTq",
   sourceUrl: "https://bitcointalk.org/index.php?topic=5218972",
   startedAt: "2015-01-15 18:07:14",
   status: Status.Swept,

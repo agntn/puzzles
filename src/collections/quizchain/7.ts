@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the clues, the funding txid and the solution of block 7 were published. */
 const THREAD =
@@ -26,9 +17,10 @@ const BLOCK_6 =
  * record runs the post's recipe on the published solution, and the key it derives matches the
  * public key the claim revealed.
  */
-export const quizchainBlock7 = bitcoinPuzzle({
+export const quizchainBlock7 = puzzle({
   id: "quizchain/7",
-  address: p2pkh("1J7t9vhfXchLM58Ms2U4WrfRHmLU75hYZV", "bbc755d0b1c03ca82334d1188a5bba5aa2e2ad67"),
+  chain: "bitcoin",
+  address: "1J7t9vhfXchLM58Ms2U4WrfRHmLU75hYZV",
   sourceUrl: THREAD,
   startedAt: "2019-04-08 02:50:59",
   status: Status.Solved,

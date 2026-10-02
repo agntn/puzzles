@@ -9,7 +9,7 @@ import {
   p2pkh,
   party,
 } from "../../core/parts.ts";
-import { bitcoinCashPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the twelve pieces, the rebuilt key and the author's wrap-up were posted. */
 const THREAD = "https://bitcointalk.org/index.php?topic=5518896";
@@ -19,8 +19,9 @@ const THREAD = "https://bitcointalk.org/index.php?topic=5518896";
  * order. The prize is the Bitcoin Cash side of the #125 address; the post names the puzzle, not the
  * CashAddr, which is the same HASH160 in Bitcoin Cash's encoding.
  */
-export const mini2 = bitcoinCashPuzzle({
+export const mini2 = puzzle({
   id: "mini/2",
+  chain: "bitcoincash",
   address: p2pkh(
     "bitcoincash:qrms0yjk4gp8m3phew6nn724gujpvujleq9gkhh8fz",
     "f7079256aa027dc437cbb539f955472416725fc8",

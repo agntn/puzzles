@@ -1,10 +1,11 @@
-import { fact, p2pkh, party, PartyKind, seed } from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { fact, party, PartyKind, seed } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Scissors Secret Sharing, a 100-point CTF task rather than a Bitcoin bounty. */
-export const ledgerDonjonPuzzleScissorsSecretSharing = bitcoinPuzzle({
+export const ledgerDonjonPuzzleScissorsSecretSharing = puzzle({
   id: "ledger-donjon/scissors-secret-sharing",
-  address: p2pkh("1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7"),
+  chain: "bitcoin",
+  address: "1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7",
   sourceUrl: "https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup",
   startedAt: "2020-10-28",
   status: Status.Solved,

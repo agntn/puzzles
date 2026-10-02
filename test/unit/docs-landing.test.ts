@@ -56,8 +56,9 @@ describe("docs landing fixtures", () => {
 
   it("encodes file names in asset and stage links so a # or ? still reaches the file", async () => {
     const library = await import("../../src/index.ts");
-    const puzzle = library.bitcoinPuzzle({
+    const puzzle = library.puzzle({
       id: "fixture/odd",
+      chain: "bitcoin",
       address: library.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-01-01",
