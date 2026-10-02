@@ -29,7 +29,7 @@ export function usePuzzlePage(id: () => string) {
       const siblings = collection.all().map((row) => row.id());
       const position = siblings.indexOf(current);
       return {
-        view: await toPuzzleView(library, puzzle, tool, collection.hints),
+        view: await toPuzzleView(library, puzzle, tool, collection.hints, collection.techniques),
         previous: siblings[position - 1],
         next: siblings[position + 1],
         position: position + 1,

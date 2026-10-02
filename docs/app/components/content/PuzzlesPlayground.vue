@@ -232,7 +232,11 @@ async function computeShow(trimmed: string): Promise<ShowAnswer> {
   const [result, puzzle] = await Promise.all([showTool(trimmed), library.requirePuzzle(trimmed)]);
   const collection = await library.requireCollection(puzzle.collection());
   const text = firstText(result);
-  return { kind: "show", view: await toPuzzleView(library, puzzle, text, collection.hints), text };
+  return {
+    kind: "show",
+    view: await toPuzzleView(library, puzzle, text, collection.hints, collection.techniques),
+    text,
+  };
 }
 
 async function computeList(): Promise<ListAnswer> {

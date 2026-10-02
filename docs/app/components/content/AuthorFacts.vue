@@ -150,6 +150,32 @@ const log = computed(() =>
       </dl>
     </div>
 
+    <div v-if="data.techniques.length > 0" class="dossier-band">
+      <p class="console-label console-rule-title">
+        <span
+          >Techniques
+          <span class="author-dim" aria-hidden="true"
+            >[ how they build · {{ data.techniques.length }} ]</span
+          ></span
+        >
+        <span class="console-mark" aria-hidden="true" />
+      </p>
+      <ul class="author-techniques">
+        <li
+          v-for="(row, index) in data.techniques"
+          :key="row.name"
+          :style="{ animationDelay: `${Math.min(index * 30, 600)}ms` }"
+        >
+          <span class="author-technique">{{ row.name }}</span>
+          <span class="console-leader" aria-hidden="true" />
+          <span class="author-technique-count"
+            >{{ row.count }} of {{ data.puzzles }}
+            {{ data.puzzles === 1 ? "puzzle" : "puzzles" }}</span
+          >
+        </li>
+      </ul>
+    </div>
+
     <div class="dossier-band dossier-log">
       <p class="console-label console-rule-title dossier-log-title">
         <span
@@ -202,3 +228,59 @@ const log = computed(() =>
     </footer>
   </section>
 </template>
+
+<style scoped>
+.author-dim {
+  color: var(--ui-text-dimmed);
+}
+.author-techniques {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.author-techniques li {
+  display: grid;
+  grid-template-columns: auto minmax(1.5rem, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 0;
+  animation: author-row 360ms ease-out both;
+}
+.author-techniques li + li {
+  border-top: 1px dashed var(--console-line);
+}
+.author-techniques .console-leader {
+  display: block;
+}
+.author-technique {
+  color: var(--ui-text-highlighted);
+  font-size: 13px;
+}
+.author-technique-count {
+  color: var(--ui-text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+@media (width < 640px) {
+  .author-techniques li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .author-techniques .console-leader {
+    display: none;
+  }
+}
+@keyframes author-row {
+  from {
+    transform: translateX(-8px);
+  }
+  to {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .author-techniques li {
+    animation: none;
+  }
+}
+</style>

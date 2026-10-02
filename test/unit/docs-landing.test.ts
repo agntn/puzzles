@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vite-plus/test";
-import { authorRows } from "../../docs/app/utils/authors.ts";
+import { authorFacts, authorRows } from "../../docs/app/utils/authors.ts";
 import {
   collectionFacts,
   collectionFilterQuery,
@@ -40,7 +40,7 @@ describe("docs landing fixtures", () => {
   it("labels the solution file separately from its solver on the puzzle page", async () => {
     const library = await import("../../src/index.ts");
     const puzzle = await library.requirePuzzle("movie-enigma");
-    const view = await toPuzzleView(library, puzzle, "", []);
+    const view = await toPuzzleView(library, puzzle, "", [], []);
 
     expect(view.solverName).toBe("rabbidbird");
     expect(view.solverUrl).toBe("https://github.com/rabbidbird");
@@ -69,7 +69,7 @@ describe("docs landing fixtures", () => {
         ]),
       ],
     });
-    const view = await toPuzzleView(library, puzzle, "", []);
+    const view = await toPuzzleView(library, puzzle, "", [], []);
 
     expect(view.assets.map((asset) => asset.url)).toEqual([
       "/assets/fixture/grid%20%231.png",
@@ -220,6 +220,20 @@ describe("docs landing fixtures", () => {
     expect(facts.chains).toEqual(["bitcoin"]);
     expect(facts.withKey).toBe(0);
     expect(facts.hints).toEqual([]);
+  });
+
+  it("count an author's techniques, most used first", async () => {
+    const library = await import("../../src/index.ts");
+    const entry = await library.requireAuthor("aoi-nakamoto");
+    const collections = await Promise.all(entry.collections.map(library.requireCollection));
+    const facts = authorFacts(entry, collections);
+
+    expect(facts.techniques.map((row) => row.name)).toEqual([
+      "md5-to-bip39-entropy",
+      "sha256-to-bip39-entropy",
+      "atbash",
+    ]);
+    expect(facts.techniques.every((row) => row.count <= facts.puzzles)).toBe(true);
   });
 
   it("carry the hints every puzzle of the collection shares", () => {

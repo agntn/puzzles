@@ -1,4 +1,13 @@
-import type { Answer, Assets, Chain, Entropy, Hint, KeyData, Puzzle } from "../../../src/index.ts";
+import type {
+  Answer,
+  Assets,
+  Chain,
+  Entropy,
+  Hint,
+  KeyData,
+  Puzzle,
+  TechniqueTag,
+} from "../../../src/index.ts";
 import { formatPrize } from "./format.ts";
 import { toSample, type LandingSample, type SampleLibrary } from "./samples.ts";
 
@@ -44,6 +53,11 @@ export interface HintRow extends Hint {
   readonly shared: boolean;
 }
 
+/** One technique on the page: the tag and where it sits, the collection, the puzzle or a stage. */
+export interface TechniqueRow extends TechniqueTag {
+  readonly scope: string;
+}
+
 /** Everything a puzzle page shows: the landing sample plus the parts the panels leave out. */
 export interface PuzzleView extends LandingSample {
   readonly name: string;
@@ -60,6 +74,7 @@ export interface PuzzleView extends LandingSample {
   readonly assetSource: string | undefined;
   readonly stages: readonly StageRow[];
   readonly hints: readonly HintRow[];
+  readonly techniques: readonly TechniqueRow[];
   readonly solverName: string | undefined;
   /** The solver's page key, when the record names the solver. */
   readonly solverKey: string | undefined;
@@ -211,6 +226,7 @@ function assetLinks(collection: string, assets: Assets | undefined): AssetLink[]
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
  * @param {readonly Hint[]} shared - The hints of the puzzle's collection, listed ahead of its own.
+ * @param {readonly TechniqueTag[]} sharedTechniques - The collection's techniques, listed first.
  * @returns {Promise<PuzzleView>} The sample plus key rows, transactions, assets, hints, solver and the JSON.
  */
 export async function toPuzzleView(
@@ -218,6 +234,7 @@ export async function toPuzzleView(
   puzzle: Puzzle,
   tool: string,
   shared: readonly Hint[],
+  sharedTechniques: readonly TechniqueTag[],
 ): Promise<PuzzleView> {
   const sample = await toSample(library, puzzle, tool);
   const assets = puzzle.assets();
@@ -259,6 +276,15 @@ export async function toPuzzleView(
     hints: [
       ...shared.map((hint) => ({ ...hint, shared: true })),
       ...puzzle.hints().map((hint) => ({ ...hint, shared: false })),
+    ],
+    techniques: [
+      ...sharedTechniques.map((tag) => ({ ...tag, scope: "collection" })),
+      ...puzzle.techniques().map((tag) => ({ ...tag, scope: "puzzle" })),
+      ...puzzle
+        .stages()
+        .flatMap((stage) =>
+          (stage.techniques ?? []).map((tag) => ({ ...tag, scope: `stage ${stage.name}` })),
+        ),
     ],
     solverName: solver?.name,
     solverKey: solver?.key,
