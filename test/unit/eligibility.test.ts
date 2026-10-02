@@ -141,6 +141,17 @@ describe("puzzles_eligibility", () => {
     });
   });
 
+  it("rejects a chain that isn't text as an argument error", async () => {
+    const urls = stubExplorers(0, 0);
+
+    for (const chain of [null, 5, {}]) {
+      await expect(eligibilityTool("gsmg", chain as unknown as string)).rejects.toThrow(
+        InvalidArgumentError,
+      );
+    }
+    expect(urls).toEqual([]);
+  });
+
   it("rejects a query past its length limit before any lookup", async () => {
     const urls = stubExplorers(0, 0);
 

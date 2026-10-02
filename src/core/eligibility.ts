@@ -1,12 +1,5 @@
 import { BalanceError, type BalanceOptions } from "./balance.ts";
-import {
-  type Chain,
-  chainDecimals,
-  chains,
-  chainSymbol,
-  isValidAddress,
-  parseChain,
-} from "./chains.ts";
+import { type Chain, chainDecimals, chains, chainSymbol, isValidAddress } from "./chains.ts";
 import { get, requirePuzzle, selectPuzzles } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
 import { type Address, type AddressKind, addressOn, defined } from "./parts.ts";
@@ -16,7 +9,7 @@ import { requireCollection } from "./registry.ts";
 import { Status } from "./status.ts";
 import { oneLine } from "./text.ts";
 import { Balance, formatUnits } from "./types.ts";
-import { decimal } from "./utils.ts";
+import { decimal, requireChain } from "./utils.ts";
 import { expectedPrize, holdsPrize } from "./watch.ts";
 
 /** Options for `eligibility()`: the explorer options, plus the chain of a bare address. */
@@ -90,23 +83,6 @@ interface Target {
   readonly puzzle: Puzzle | undefined;
   /** The address as written. */
   readonly value: string;
-}
-
-/**
- * The chain a `chain` option names, rejected when it names none the dataset supports.
- *
- * @param {string | undefined} value - The option.
- * @returns {Chain | undefined} The chain, when one was given.
- */
-function chainOption(value: string | undefined): Chain | undefined {
-  if (value === undefined) {
-    return undefined;
-  }
-  const chain = parseChain(value);
-  if (chain === undefined) {
-    throw new InvalidArgumentError("chain", `expected one of ${chains.join(", ")}`);
-  }
-  return chain;
 }
 
 /**
@@ -456,7 +432,7 @@ export async function eligibility(
   query: string,
   options: EligibilityOptions = {},
 ): Promise<Eligibility> {
-  const target = await resolve(query, chainOption(options.chain));
+  const target = await resolve(query, requireChain(options.chain));
   const { chain, puzzle, value } = target;
   const { prizeAddresses } = await import("./providers.ts");
   const reading = await readAddresses(
