@@ -68,6 +68,17 @@ describe("eligibility", () => {
     expect(record.missing).toEqual([]);
   });
 
+  it("finds powerful-moss by its escrow and reads both prize addresses", async () => {
+    stubExplorers(0, 0);
+    const escrow = "0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd";
+
+    const record = await eligibility(escrow, { chain: "base" });
+
+    expect(record.id).toBe("powerful-moss");
+    expect(record.escrow?.toLowerCase()).toBe(escrow.toLowerCase());
+    expect(record.live).toHaveLength(2);
+  });
+
   it("reads a bare address and names every record field as missing", async () => {
     stubExplorers(1500, 400);
     const address = "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh";

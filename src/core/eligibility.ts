@@ -1,5 +1,12 @@
 import { BalanceError, type BalanceOptions } from "./balance.ts";
-import { type Chain, chainDecimals, chains, chainSymbol, isValidAddress } from "./chains.ts";
+import {
+  type Chain,
+  chainDecimals,
+  chains,
+  chainSymbol,
+  isValidAddress,
+  sameAddress,
+} from "./chains.ts";
 import { get, requirePuzzle, selectPuzzles } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
 import { type Address, type AddressKind, addressOn, defined } from "./parts.ts";
@@ -86,14 +93,18 @@ interface Target {
 }
 
 /**
- * The puzzle a catalogued address pays, or nothing when no record holds it.
+ * The puzzle a recorded prize address pays, its target or its escrow, or nothing when none does.
  *
  * @param {string} address - The address.
  * @param {Chain | undefined} chain - The chain it was given on, when any.
  * @returns {Promise<Puzzle | undefined>} The one puzzle paying to it.
  */
 async function puzzleAt(address: string, chain: Chain | undefined): Promise<Puzzle | undefined> {
-  const found = await selectPuzzles({ address, chain });
+  const found = (await selectPuzzles({ chain })).filter((puzzle) =>
+    [puzzle.address(), puzzle.escrow()].some(
+      (held) => held !== undefined && sameAddress(puzzle.chain(), held.value, address),
+    ),
+  );
   if (found.length > 1) {
     const ids = found.map((puzzle) => puzzle.id()).join(", ");
     throw new InvalidArgumentError("query", `${address} pays ${ids}. Pass one identifier`);
