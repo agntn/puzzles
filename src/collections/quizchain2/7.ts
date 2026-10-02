@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 7 were published. */
 const THREAD =
@@ -25,9 +16,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bp8jlh/
  * alphabetical order, hashed with MD5 into BIP39 entropy, for 77 mBTC. No source printed the hash
  * or the key.
  */
-export const quizchain2Block7 = bitcoinPuzzle({
+export const quizchain2Block7 = puzzle({
   id: "quizchain2/7",
-  address: p2pkh("1MgqS8ng87o9JVNkaKhtBFXigYG9KvJ1Ff", "e2eb2b16530d257f0a6599ce83ab109ae742e657"),
+  chain: "bitcoin",
+  address: "1MgqS8ng87o9JVNkaKhtBFXigYG9KvJ1Ff",
   sourceUrl: THREAD,
   startedAt: "2019-05-15 23:24:23",
   status: Status.Solved,

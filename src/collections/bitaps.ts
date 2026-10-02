@@ -5,21 +5,18 @@ import {
   fact,
   funding,
   increase,
-  p2wpkh,
   party,
   PartyKind,
   profile,
   share,
 } from "../core/parts.ts";
-import { bitcoinPuzzle } from "../core/puzzle.ts";
+import { puzzle } from "../core/puzzle.ts";
 
 /** Bitaps Shamir secret-sharing puzzle. */
-export const bitapsPuzzle = bitcoinPuzzle({
+export const bitapsPuzzle = puzzle({
   id: "bitaps",
-  address: p2wpkh(
-    "bc1qyjwa0tf0en4x09magpuwmt2smpsrlaxwn85lh6",
-    "249dd7ad2fccea67977d4078edad50d8603ff4ce",
-  ),
+  chain: "bitcoin",
+  address: "bc1qyjwa0tf0en4x09magpuwmt2smpsrlaxwn85lh6",
   sourceUrl: "https://bitaps.com/mnemonic/challenge",
   startedAt: "2020-06-19 13:24:41",
   pubkey: compressed("0385a3a591451ed7ed6c90dae882db918107d6f906d270cf4728d168126e0e89aa"),

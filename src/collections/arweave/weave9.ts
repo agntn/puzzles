@@ -1,10 +1,11 @@
-import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
-import { claim, funding, standard } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { claim, funding } from "../../core/parts.ts";
 
 /** Puzzle `arweave/weave9`. */
-export const arweavePuzzleWeave9 = ethereumPuzzle({
+export const arweavePuzzleWeave9 = puzzle({
   id: "arweave/weave9",
-  address: standard("0x6f85d220c70abb69a1205b96b566c1ed5d9c3831"),
+  chain: "ethereum",
+  address: "0x6f85d220c70abb69a1205b96b566c1ed5d9c3831",
   sourceUrl: "https://arweave.net/1--NRFY3naNwTlxBSRjzDPNUq-Cn1yLG2RmgGHZem9c",
   startedAt: "2020-01-08 11:15:41",
   status: Status.Claimed,

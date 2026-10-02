@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 34 were published. */
 const THREAD =
@@ -20,9 +11,10 @@ const THREAD =
  * The original post is gone. The author reposted it as it was on April 24, 2019, and that repost is
  * the source. No source printed the hash or the key.
  */
-export const quizchainBlock34 = bitcoinPuzzle({
+export const quizchainBlock34 = puzzle({
   id: "quizchain/34",
-  address: p2pkh("1G6wfwVAuKP3PEm1d1uxCnp5qp5icXhb8V", "a5a99a9ae96aef935750e66ac5bccb4e353ae895"),
+  chain: "bitcoin",
+  address: "1G6wfwVAuKP3PEm1d1uxCnp5qp5icXhb8V",
   sourceUrl: THREAD,
   startedAt: "2019-04-13 04:25:18",
   status: Status.Solved,

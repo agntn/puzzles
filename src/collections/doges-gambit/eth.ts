@@ -1,15 +1,14 @@
 import {
   answer,
   assets,
-  digest,
   claim,
+  digest,
   funding,
   hex,
   official,
-  standard,
   uncompressed,
 } from "../../core/parts.ts";
-import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The puzzle video, whose description lists both prizes and both addresses. */
 const VIDEO = "https://www.youtube.com/watch?v=DieNZPwIUoQ";
@@ -22,9 +21,10 @@ const SOLUTION = "https://www.youtube.com/watch?v=d-29rBeQXV4";
  * of the key in each, read from the coloured squares no piece can reach. The address held 0.01 ETH
  * and 49 BOMB; both left it on April 23, 2021, the BOMB ten minutes before the ETH.
  */
-export const dogesGambitEth = ethereumPuzzle({
+export const dogesGambitEth = puzzle({
   id: "doges-gambit/eth",
-  address: standard("0x7777F6974BA9Ba3Bcfe75D2Aa52db8cE633e592F"),
+  chain: "ethereum",
+  address: "0x7777F6974BA9Ba3Bcfe75D2Aa52db8cE633e592F",
   sourceUrl: VIDEO,
   startedAt: "2020-12-11 22:11:10",
   status: Status.Solved,

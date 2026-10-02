@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 12 were published. */
 const THREAD =
@@ -19,9 +10,10 @@ const THREAD =
  * 11 key, hashed with SHA-256 into BIP39 entropy. The author's update names the words. No source
  * printed the hash or the key.
  */
-export const quizchainBlock12 = bitcoinPuzzle({
+export const quizchainBlock12 = puzzle({
   id: "quizchain/12",
-  address: p2pkh("1H2yMvGS9AJcKCfGEYs8my7Vos5AmFDU5M", "afe179dc02e3f699c8536427051d3a3f1f2185f6"),
+  chain: "bitcoin",
+  address: "1H2yMvGS9AJcKCfGEYs8my7Vos5AmFDU5M",
   sourceUrl: THREAD,
   startedAt: "2019-04-09 04:24:36",
   status: Status.Solved,

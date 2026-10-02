@@ -151,8 +151,9 @@ describe("landing fixture refresh", () => {
     const { buildLandingFixtures, refreshLandingFixtures: refreshSyntheticFixtures } =
       await import("../../scripts/refresh-landing-fixtures.ts");
     const before = await buildLandingFixtures([]);
-    const puzzle = library.bitcoinPuzzle({
+    const puzzle = library.puzzle({
       id: "fixture/one",
+      chain: "bitcoin",
       address: library.p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
       sourceUrl: "https://example.com/puzzle",
       startedAt: "2026-09-21",

@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 14 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bb4ifd/
  * Reiwa, with the last three characters of the block 13 key the author printed, hashed with SHA-256
  * into BIP39 entropy. No source printed the hash or the key.
  */
-export const quizchainBlock14 = bitcoinPuzzle({
+export const quizchainBlock14 = puzzle({
   id: "quizchain/14",
-  address: p2pkh("172tqKBumVhmVs3RRkJJcrG5S3Euje3A1H", "422c704c8b2909c362e90d8239329abd016b8daa"),
+  chain: "bitcoin",
+  address: "172tqKBumVhmVs3RRkJJcrG5S3Euje3A1H",
   sourceUrl: THREAD,
   startedAt: "2019-04-09 06:30:15",
   status: Status.Solved,

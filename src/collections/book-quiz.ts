@@ -6,11 +6,10 @@ import {
   decrease,
   funding,
   official,
-  p2pkh,
   seed,
   source,
 } from "../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../core/puzzle.ts";
+import { puzzle, Status } from "../core/puzzle.ts";
 import { SatoshiBirthdayQuizCollection } from "./satoshi-birthday-quiz.ts";
 
 /** Where the rules, the questions, the deadline and the answer key were published. */
@@ -26,9 +25,10 @@ const CAPTURE =
  * answered by whatever the author personally felt was best, with one hour to sweep the address.
  * Nobody made the deadline and the author took the 7,000,000 satoshis back.
  */
-export const bookQuizPuzzle = bitcoinPuzzle({
+export const bookQuizPuzzle = puzzle({
   id: "book-quiz",
-  address: p2pkh("1PLa3c2xjtoP6YE1FvaLhsf4akSxvdv3Ta", "f5064148351fc664b483e20a58b0742312c0e03d"),
+  chain: "bitcoin",
+  address: "1PLa3c2xjtoP6YE1FvaLhsf4akSxvdv3Ta",
   sourceUrl: THREAD,
   startedAt: "2019-04-06 02:58:10",
   status: Status.Expired,

@@ -2,20 +2,19 @@ import { SingletonCollection } from "../core/collection.ts";
 import {
   answer,
   assets,
-  digest,
   claim,
   community,
+  digest,
   fact,
   funding,
   hex,
   official,
-  p2pkh,
   party,
   PartyKind,
   profile,
   uncompressed,
 } from "../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../core/puzzle.ts";
+import { puzzle, Status } from "../core/puzzle.ts";
 
 /** The post: the picture, the address, two edits with clues and, once it was claimed, the solution. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/1tifs1/easy_1mbtc_picture_puzzle/";
@@ -44,9 +43,10 @@ const SOLUTION =
  * at the page, so the key is the recipe run once. The digits only lead to the prize read as octal,
  * a page starts at key 128 * (page - 1), and its 36th row derives the uncompressed address below.
  */
-export const picturePuzzleRecord = bitcoinPuzzle({
+export const picturePuzzleRecord = puzzle({
   id: "picture-puzzle",
-  address: p2pkh("1MeQumbMGbTDPUNtBbLwzfyZqeeZzpRnex", "e275dd7b615b5dd80e4fd298255bcc9ff42692bc"),
+  chain: "bitcoin",
+  address: "1MeQumbMGbTDPUNtBbLwzfyZqeeZzpRnex",
   sourceUrl: THREAD,
   startedAt: "2013-12-23 05:40:33",
   status: Status.Solved,

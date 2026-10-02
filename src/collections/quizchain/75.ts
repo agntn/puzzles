@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 75 were published. */
 const THREAD =
@@ -25,9 +16,10 @@ const AUTHOR_COMMENT_2 = "https://www.reddit.com/r/bitcoinpuzzles/comments/bk220
  * block 74 key, hashed with MD5 into BIP39 entropy, for 12 mBTC. No source printed the hash or the
  * key.
  */
-export const quizchainBlock75 = bitcoinPuzzle({
+export const quizchainBlock75 = puzzle({
   id: "quizchain/75",
-  address: p2pkh("1FBj2afbHnqRwuZJNhaLfUtJBfoWvQSie", "02aec6a27ae490449fc98f3c949b34132a82fc20"),
+  chain: "bitcoin",
+  address: "1FBj2afbHnqRwuZJNhaLfUtJBfoWvQSie",
   sourceUrl: THREAD,
   startedAt: "2019-05-03 00:15:47",
   status: Status.Solved,

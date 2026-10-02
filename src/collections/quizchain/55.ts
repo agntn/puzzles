@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 55 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const SOLUTIONS = "https://www.wattpad.com/720895205-second-complete-quizchain";
  * hashed with MD5 into BIP39 entropy. The author dropped the word TOMI from the hash, and a player
  * claimed it anyway 66 minutes after funding. The author later printed the WIF in a comment.
  */
-export const quizchainBlock55 = bitcoinPuzzle({
+export const quizchainBlock55 = puzzle({
   id: "quizchain/55",
-  address: p2pkh("1FJxZ12FN54q8tKkSpBxtefbsmT3F5Zhi1", "9cf7345edfbf993bd146049efccbbe7a48744ae7"),
+  chain: "bitcoin",
+  address: "1FJxZ12FN54q8tKkSpBxtefbsmT3F5Zhi1",
   sourceUrl: THREAD,
   startedAt: "2019-04-20 23:36:31",
   status: Status.Solved,

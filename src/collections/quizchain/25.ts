@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 25 were published. */
 const THREAD =
@@ -19,9 +10,10 @@ const THREAD =
  * hashed with MD5 into BIP39 entropy. Claimed five minutes after funding. No source printed the
  * hash or the key.
  */
-export const quizchainBlock25 = bitcoinPuzzle({
+export const quizchainBlock25 = puzzle({
   id: "quizchain/25",
-  address: p2pkh("13ZuQHSeeJFYyyLN9CcYm1Lg9QJ65odk33", "1c294e0b8a3a833278275188871610b6cffc6a4a"),
+  chain: "bitcoin",
+  address: "13ZuQHSeeJFYyyLN9CcYm1Lg9QJ65odk33",
   sourceUrl: THREAD,
   startedAt: "2019-04-11 06:25:41",
   status: Status.Solved,

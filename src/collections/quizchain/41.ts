@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 41 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bd31hw/7_mbtc_quizchain_block_41/";
@@ -18,9 +9,10 @@ const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bd31hw/7_mbtc_q
  * hashed with MD5 into BIP39 entropy. The author's update misquotes the field as "next to no", then
  * prints the hash and the WIF from the journal and corrects it to "next after no".
  */
-export const quizchainBlock41 = bitcoinPuzzle({
+export const quizchainBlock41 = puzzle({
   id: "quizchain/41",
-  address: p2pkh("1MbB3CtYdhoix9j1SovN6jxzrpA9KKU8Qr", "e1d909a61c12068354a93aba8a64a1883ab4958a"),
+  chain: "bitcoin",
+  address: "1MbB3CtYdhoix9j1SovN6jxzrpA9KKU8Qr",
   sourceUrl: THREAD,
   startedAt: "2019-04-14 13:50:10",
   status: Status.Solved,

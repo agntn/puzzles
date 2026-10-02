@@ -227,37 +227,14 @@ export async function toSample(
   };
 }
 
-/** The chain factories by chain key; `bitcoincash` alone does not camelCase to its key plus `Puzzle`. */
-const FACTORIES: Readonly<Record<Chain, string>> = {
-  arweave: "arweavePuzzle",
-  base: "basePuzzle",
-  bitcoin: "bitcoinPuzzle",
-  bitcoincash: "bitcoinCashPuzzle",
-  decred: "decredPuzzle",
-  dogecoin: "dogecoinPuzzle",
-  ecash: "ecashPuzzle",
-  ethereum: "ethereumPuzzle",
-  litecoin: "litecoinPuzzle",
-  monero: "moneroPuzzle",
-};
-
 /**
- * The factory a chain's records are built with.
- *
- * @param {Chain} chain - The chain key.
- * @returns {string} `bitcoinPuzzle` for `bitcoin`, `bitcoinCashPuzzle` for `bitcoincash`.
- */
-export function factoryName(chain: Chain): string {
-  return FACTORIES[chain];
-}
-
-/**
- * The address builder that produced the record's address, by kind.
+ * The address as the record writes it: a plain string, or a builder for what a string can't carry.
  *
  * @param {LandingSample} sample - The sample whose address to write out.
- * @returns {string} A `p2pkh(...)`, `p2sh(...)`, `p2wpkh(...)`, `p2wsh(...)` or `standard(...)` call.
+ * @returns {string} A quoted address, or a `p2pkh(...)` or `p2sh(...)` call.
  */
 export function addressLiteral(sample: LandingSample): string {
+  if (!needsBuilder(sample)) return quote(sample.address);
   const args = [quote(sample.address)];
   if (sample.hash160 !== undefined) args.push(quote(sample.hash160));
   if (sample.redeemScript !== undefined) {
@@ -266,6 +243,16 @@ export function addressLiteral(sample: LandingSample): string {
     );
   }
   return `${sample.kind}(${args.join(", ")})`;
+}
+
+/**
+ * Whether the address needs a builder: a published redeem script, or a CashAddr.
+ *
+ * @param {LandingSample} sample - The sample whose address to check.
+ * @returns {boolean} True when a plain string would lose part of the address.
+ */
+export function needsBuilder(sample: LandingSample): boolean {
+  return sample.redeemScript !== undefined || sample.address.includes(":");
 }
 
 /**

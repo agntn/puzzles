@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 69 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bi6n0l/7_mbtc_quizchain_block_69/";
@@ -21,9 +12,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bi6n0l/
  * post's second sentence and the whole block 68 key, hashed with MD5 into BIP39 entropy. No source
  * printed the hash or the key.
  */
-export const quizchainBlock69 = bitcoinPuzzle({
+export const quizchainBlock69 = puzzle({
   id: "quizchain/69",
-  address: p2pkh("1FLmbVXZ7nZX9acH9dCt9XFgZprsPtJShn", "9d4ee3d824d7bb02d0d029e5e15fbe76eb869f73"),
+  chain: "bitcoin",
+  address: "1FLmbVXZ7nZX9acH9dCt9XFgZprsPtJShn",
   sourceUrl: THREAD,
   startedAt: "2019-04-28 02:35:05",
   status: Status.Solved,

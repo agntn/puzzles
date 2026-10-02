@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid and the solution of block 1 were published. */
 const THREAD =
@@ -31,9 +22,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bn5ucg/
  * block 76 key of the first run, hashed with MD5 into BIP39 entropy, for 77 mBTC. No source
  * printed the hash or the key.
  */
-export const quizchain2Block1 = bitcoinPuzzle({
+export const quizchain2Block1 = puzzle({
   id: "quizchain2/1",
-  address: p2pkh("15BbSHKqRsaH9oGk8zfTD5NZfRdXyySvMS", "2de1688bdbb6846a5f15f87fa71031d6cdcbec03"),
+  chain: "bitcoin",
+  address: "15BbSHKqRsaH9oGk8zfTD5NZfRdXyySvMS",
   sourceUrl: THREAD,
   startedAt: "2019-05-11 00:21:12",
   status: Status.Solved,

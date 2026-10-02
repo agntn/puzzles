@@ -1,10 +1,11 @@
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, digest, claim, funding, hex, p2pkh, uncompressed } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { assets, claim, digest, funding, hex, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `zden/level-xm17`. */
-export const zdenPuzzleLevelXm17 = bitcoinPuzzle({
+export const zdenPuzzleLevelXm17 = puzzle({
   id: "zden/level-xm17",
-  address: p2pkh("1cryptozWJAE7UzDZF1eSgsT7mVjUsu7g", "06c84797d328c065190a6768e20a84b7a17916c0"),
+  chain: "bitcoin",
+  address: "1cryptozWJAE7UzDZF1eSgsT7mVjUsu7g",
   sourceUrl: "https://crypto.haluska.sk/cryptoxm17.gif",
   startedAt: "2017-12-24 18:10:13",
   status: Status.Solved,

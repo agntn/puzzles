@@ -1,30 +1,27 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
   assets,
-  digest,
   claim,
   compressed,
+  digest,
   fact,
   funding,
   official,
-  p2wpkh,
   party,
   PartyKind,
   profile,
   seed,
 } from "../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../core/puzzle.ts";
+import { puzzle, Status } from "../core/puzzle.ts";
 
 /**
  * Bitcoin Movie Enigma: 34 film stills, each title turned into a BIP39 word, ten intruders to
  * drop. The 24 words that remain fail the BIP39 checksum and still derive the funded address.
  */
-export const movieEnigmaPuzzle = bitcoinPuzzle({
+export const movieEnigmaPuzzle = puzzle({
   id: "movie-enigma",
-  address: p2wpkh(
-    "bc1q94ecsn0qk8lap2gefrycnms3ruepy889z969a6",
-    "2d73884de0b1ffd0a91948c989ee111f32121ce5",
-  ),
+  chain: "bitcoin",
+  address: "bc1q94ecsn0qk8lap2gefrycnms3ruepy889z969a6",
   sourceUrl: "https://bitcoinmovieenigma.com/rules",
   startedAt: "2022-04-08 16:15:24",
   status: Status.Solved,

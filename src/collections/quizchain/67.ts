@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 67 were published. */
 const THREAD =
@@ -28,9 +19,10 @@ const AUTHOR_COMMENT_2 = "https://www.reddit.com/r/bitcoinpuzzles/comments/bhlq2
  * key, hashed with MD5 into BIP39 entropy, for 67 mBTC. The Wattpad solutions quote the winner's
  * explanation. A player printed the WIF in the block 68 thread.
  */
-export const quizchainBlock67 = bitcoinPuzzle({
+export const quizchainBlock67 = puzzle({
   id: "quizchain/67",
-  address: p2pkh("1KPY8mFdyCyBVxmzpCgkgLJvtosJnDUQ2G", "c9b5678cc6785b371ffd0bdb91ff5ac749ee976f"),
+  chain: "bitcoin",
+  address: "1KPY8mFdyCyBVxmzpCgkgLJvtosJnDUQ2G",
   sourceUrl: THREAD,
   startedAt: "2019-04-26 12:21:11",
   status: Status.Solved,

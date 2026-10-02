@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid, the key suffix and the solution of block 6 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const THREAD =
  * hash nor the key was ever printed: the record runs the post's recipe on the published words, and
  * the key it derives ends in `MQz` and matches the public key the claim revealed.
  */
-export const quizchainBlock6 = bitcoinPuzzle({
+export const quizchainBlock6 = puzzle({
   id: "quizchain/6",
-  address: p2pkh("1FNJM8cABfhCEgVGKneVT8dnhaFaNw85AB", "9d98fa0ef687dd2701fc392558a710ad07d72401"),
+  chain: "bitcoin",
+  address: "1FNJM8cABfhCEgVGKneVT8dnhaFaNw85AB",
   sourceUrl: THREAD,
   startedAt: "2019-04-07 16:18:11",
   status: Status.Solved,

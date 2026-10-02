@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 38 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const SOLUTIONS = "https://www.wattpad.com/720895205-second-complete-quizchain";
  * the last three characters of the block 37 key, hashed with MD5 into BIP39 entropy. Claimed eleven
  * and a half minutes after funding. No source printed the hash or the key.
  */
-export const quizchainBlock38 = bitcoinPuzzle({
+export const quizchainBlock38 = puzzle({
   id: "quizchain/38",
-  address: p2pkh("17ZWMrmzqah2HNVk7MqgdavJTj3WJ7fLiv", "47f692db616f9b7fe6a41b349e27f9bdff611aff"),
+  chain: "bitcoin",
+  address: "17ZWMrmzqah2HNVk7MqgdavJTj3WJ7fLiv",
   sourceUrl: THREAD,
   startedAt: "2019-04-14 07:37:59",
   status: Status.Solved,

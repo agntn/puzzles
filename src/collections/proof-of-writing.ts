@@ -2,10 +2,10 @@ import { SingletonCollection } from "../core/collection.ts";
 import {
   answer,
   assets,
-  digest,
   claim,
   compressed,
   decrease,
+  digest,
   fact,
   funding,
   increase,
@@ -16,7 +16,7 @@ import {
   profile,
   seed,
 } from "../core/parts.ts";
-import { ecashPuzzle, Status } from "../core/puzzle.ts";
+import { puzzle, Status } from "../core/puzzle.ts";
 
 /** The article as republished on the new Proof Of Writing, with the address, both hints and the solved note. */
 const ARTICLE =
@@ -40,8 +40,9 @@ const SOLUTION = "https://x.com/oritwoen/status/2093029042454671607";
  * community needs, and the 12 words of a Cashtab wallet sit on its diagonal. Paragraph n gives
  * its n-th word, from "Matter" to "trip".
  */
-export const ecashCommunity = ecashPuzzle({
+export const ecashCommunity = puzzle({
   id: "proof-of-writing",
+  chain: "ecash",
   address: p2pkh(
     "ecash:qq5r308v2mkh6x5mkqpr6wytszz6f9r7qcnfttev0z",
     "2838bcec56ed7d1a9bb0023d388b8085a4947e06",

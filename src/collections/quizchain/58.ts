@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 58 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bfz0oy/7_mbtc_quizchain_block_58/";
@@ -18,9 +9,10 @@ const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bfz0oy/7_mbtc_q
  * block 57 key, which the post gave, hashed with MD5 into BIP39 entropy. The block 59 post printed
  * the WIF.
  */
-export const quizchainBlock58 = bitcoinPuzzle({
+export const quizchainBlock58 = puzzle({
   id: "quizchain/58",
-  address: p2pkh("1J6ymES7FTdNGpPbMEyTVYSA53Pz8poqRy", "bb9b99e6bc36a3d608f2a48f0fd4335e3cfa0b29"),
+  chain: "bitcoin",
+  address: "1J6ymES7FTdNGpPbMEyTVYSA53Pz8poqRy",
   sourceUrl: THREAD,
   startedAt: "2019-04-22 07:03:25",
   status: Status.Solved,

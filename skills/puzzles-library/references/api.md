@@ -2,7 +2,7 @@
 
 ## Puzzle
 
-Every puzzle is a record built by a factory for its chain and read through the abstract `Puzzle` contract. Reads are methods, and a record only declares what the puzzle actually has.
+Every puzzle is a record built by `puzzle()` and read through the abstract `Puzzle` contract. Reads are methods, and a record only declares what the puzzle actually has.
 
 ```ts
 abstract class Puzzle {

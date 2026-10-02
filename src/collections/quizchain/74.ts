@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 74 were published. */
 const THREAD =
@@ -25,9 +16,10 @@ const AUTHOR_COMMENT_2 = "https://www.reddit.com/r/bitcoinpuzzles/comments/bjnzi
  * block 73 key, hashed with MD5 into BIP39 entropy, for 11 mBTC. The author printed the WIF as the
  * link for block 75.
  */
-export const quizchainBlock74 = bitcoinPuzzle({
+export const quizchainBlock74 = puzzle({
   id: "quizchain/74",
-  address: p2pkh("1HbUcHKfpkUSssNtcfS3vKzdTMue3EByMQ", "b6073394d3fd08f7ddac22508895535944c072bf"),
+  chain: "bitcoin",
+  address: "1HbUcHKfpkUSssNtcfS3vKzdTMue3EByMQ",
   sourceUrl: THREAD,
   startedAt: "2019-05-01 23:42:07",
   status: Status.Solved,

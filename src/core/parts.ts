@@ -1,3 +1,6 @@
+import { base58, bech32 } from "@scure/base";
+import type { Chain } from "./chains.ts";
+
 /** Address encodings used by puzzle targets. */
 export const AddressKind = {
   P2PKH: "p2pkh",
@@ -334,6 +337,87 @@ export function frozen<T>(value: T): T {
 
 function address(kind: AddressKind, value: string, hash160?: string): Address {
   return defined({ value, kind, hash160 });
+}
+
+/** Kinds behind the version byte of a base58 address, on chains that spend one byte on it. */
+const BASE58_KINDS: Readonly<Partial<Record<Chain, Readonly<Record<number, AddressKind>>>>> = {
+  bitcoin: { 0x00: AddressKind.P2PKH, 0x05: AddressKind.P2SH },
+  bitcoincash: { 0x00: AddressKind.P2PKH, 0x05: AddressKind.P2SH },
+  dogecoin: { 0x1e: AddressKind.P2PKH, 0x16: AddressKind.P2SH },
+  ecash: { 0x00: AddressKind.P2PKH, 0x05: AddressKind.P2SH },
+  litecoin: { 0x30: AddressKind.P2PKH, 0x32: AddressKind.P2SH, 0x05: AddressKind.P2SH },
+};
+
+/** Human-readable parts of the segwit addresses, per chain. */
+const SEGWIT_PREFIXES: Readonly<Partial<Record<Chain, string>>> = {
+  bitcoin: "bc",
+  litecoin: "ltc",
+};
+
+/** Decred keys its kinds by the two leading characters, and its hash is not a HASH160. */
+const DECRED_KINDS: Readonly<Record<string, AddressKind>> = {
+  Dc: AddressKind.P2SH,
+  Ds: AddressKind.P2PKH,
+};
+
+/** Chains whose addresses carry no Bitcoin script kind. */
+const STANDARD_CHAINS: ReadonlySet<Chain> = new Set(["arweave", "base", "ethereum", "monero"]);
+
+function segwitAddress(value: string): Address | undefined {
+  const { words } = bech32.decode(value as `${string}1${string}`);
+  const program = bech32.fromWords(words.slice(1));
+  if (words[0] !== 0) {
+    return undefined;
+  }
+  if (program.length === 20) {
+    return address(AddressKind.P2WPKH, value, program.toHex());
+  }
+  return program.length === 32 ? address(AddressKind.P2WSH, value) : undefined;
+}
+
+function base58Address(chain: Chain, value: string): Address | undefined {
+  const kinds = BASE58_KINDS[chain];
+  if (kinds === undefined) {
+    return undefined;
+  }
+  const payload = base58.decode(value);
+  const kind = kinds[payload[0] ?? -1];
+  if (kind === undefined || payload.length !== 25) {
+    return undefined;
+  }
+  return defined({ value, kind, hash160: payload.subarray(1, 21).toHex() });
+}
+
+/**
+ * Reads an encoded address on a chain into its kind and, where the encoding has one, its HASH160.
+ *
+ * @param {Chain} chain - Chain the address lives on.
+ * @param {string} value - Encoded address.
+ * @returns {Address} The address record.
+ * @throws {TypeError} When the address has no kind this dataset records on that chain.
+ */
+export function addressOn(chain: Chain, value: string): Address {
+  if (STANDARD_CHAINS.has(chain)) {
+    return standard(value);
+  }
+  const decred = chain === "decred" ? DECRED_KINDS[value.slice(0, 2)] : undefined;
+  if (decred !== undefined) {
+    return address(decred, value);
+  }
+  const prefix = SEGWIT_PREFIXES[chain];
+  let read: Address | undefined;
+  try {
+    read =
+      prefix !== undefined && value.toLowerCase().startsWith(`${prefix}1`)
+        ? segwitAddress(value)
+        : base58Address(chain, value);
+  } catch {
+    read = undefined;
+  }
+  if (read === undefined) {
+    throw new TypeError(`${value} is not a ${chain} address kind a record can hold`);
+  }
+  return read;
 }
 
 /**

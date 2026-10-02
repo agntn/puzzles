@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 17 were published. */
 const THREAD =
@@ -19,9 +10,10 @@ const THREAD =
  * last three characters of the block 16 key, hashed with MD5 into BIP39 entropy. The prize was 8
  * mBTC for the lucky number. No source printed the hash or the key.
  */
-export const quizchainBlock17 = bitcoinPuzzle({
+export const quizchainBlock17 = puzzle({
   id: "quizchain/17",
-  address: p2pkh("1FpiJm3JKsgAae5KtJhPDytgmYXrR7sQpY", "a297cab6d0d7b2bdc8fb4cbe9dd1fc27d5602d05"),
+  chain: "bitcoin",
+  address: "1FpiJm3JKsgAae5KtJhPDytgmYXrR7sQpY",
   sourceUrl: THREAD,
   startedAt: "2019-04-09 23:42:18",
   status: Status.Solved,

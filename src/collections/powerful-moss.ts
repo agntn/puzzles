@@ -11,10 +11,9 @@ import {
   PartyKind,
   profile,
   stage,
-  standard,
   uncompressed,
 } from "../core/parts.ts";
-import { basePuzzle } from "../core/puzzle.ts";
+import { puzzle } from "../core/puzzle.ts";
 
 /** The puzzle page: the album's description, the prize contract, the mint and the winner wallet. */
 const PAGE = "https://logicbeach.xyz/powerfulmoss";
@@ -56,10 +55,11 @@ const FIRST_WEEK = cast("0x6179943b");
  * contract went up on January 10, 2025, a week before the album. The two withdrawals that day
  * returned two test mints before the 0.25 ETH the page says the prize starts at.
  */
-export const powerfulMossAlbum = basePuzzle({
+export const powerfulMossAlbum = puzzle({
   id: "powerful-moss",
-  address: standard("0x635739254BDE27d28301f25aD57c3cAC3C3468f3"),
-  escrow: standard("0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd"),
+  chain: "base",
+  address: "0x635739254BDE27d28301f25aD57c3cAC3C3468f3",
+  escrow: "0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd",
   sourceUrl: PAGE,
   startedAt: "2025-01-17 12:55:27",
   preGenesis: true,

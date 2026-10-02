@@ -1,20 +1,20 @@
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
-  digest,
   claim,
+  digest,
   fact,
   funding,
-  p2pkh,
   party,
   profile,
   uncompressed,
 } from "../../core/parts.ts";
 
 /** Puzzle `zden/level-4`. */
-export const zdenPuzzleLevel4 = bitcoinPuzzle({
+export const zdenPuzzleLevel4 = puzzle({
   id: "zden/level-4",
-  address: p2pkh("1cryptoRMRnj7Q9fgToxTRvejLnx3QRPq", "06c84797d273a88bcbcf0a98fd675aeae0447b56"),
+  chain: "bitcoin",
+  address: "1cryptoRMRnj7Q9fgToxTRvejLnx3QRPq",
   sourceUrl: "https://crypto.haluska.sk/",
   startedAt: "2017-06-07 12:19:28",
   status: Status.Solved,

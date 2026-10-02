@@ -1,10 +1,11 @@
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import { claim, funding, hex, p2pkh, uncompressed } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { claim, funding, hex, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `rushwallet/15`. */
-export const rushwalletPuzzle15 = bitcoinPuzzle({
+export const rushwalletPuzzle15 = puzzle({
   id: "rushwallet/15",
-  address: p2pkh("17TF8fyceXiL81iJz4UhuT5sCiCJCPQSUz", "46c75de29b97b959d8f3b634ee7cd0c606d75c9b"),
+  chain: "bitcoin",
+  address: "17TF8fyceXiL81iJz4UhuT5sCiCJCPQSUz",
   sourceUrl: "https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
   startedAt: "2014-09-22 20:17:35",
   status: Status.Solved,

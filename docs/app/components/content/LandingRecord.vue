@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { addressLiteral, exportName, factoryName, statusLiteral } from "../../utils/samples";
+import { addressLiteral, exportName, needsBuilder, statusLiteral } from "../../utils/samples";
 import type { LandingSample } from "../../utils/samples";
 import { LANDING_STATIC } from "../../utils/landing";
 import { clip, shorten } from "../../utils/format";
@@ -44,13 +44,14 @@ const fileName = computed(
 );
 
 /**
- * The pieces a record imports: the factory, the address builder and the key builders it uses.
+ * The pieces a record imports: the factory, an address builder if needed and its key builders.
  *
  * @param {LandingSample} sample - The record on screen.
  * @returns {string} The names, sorted and joined as the import line lists them.
  */
 function importsOf(sample: LandingSample): string {
-  const names = new Set<string>([factoryName(sample.chain), sample.kind]);
+  const names = new Set<string>(["puzzle"]);
+  if (needsBuilder(sample)) names.add(sample.kind);
   if (sample.redeemScript !== undefined) names.add("redeemScript");
   if (sample.status !== "unsolved") names.add("Status");
   if (sample.pubkeyFormat !== undefined) names.add(sample.pubkeyFormat);
@@ -117,12 +118,13 @@ function linesOf(sample: LandingSample): Line[] {
         seg(" "),
         seg(exportName(sample.id), "", true),
         seg(" = "),
-        seg(factoryName(sample.chain), "tok-fn"),
+        seg("puzzle", "tok-fn"),
         seg("({"),
       ],
     },
     field("id", `"${sample.id}"`, "tok-str"),
-    field("address", short(address), "", address),
+    field("chain", `"${sample.chain}"`, "tok-str"),
+    field("address", short(address), needsBuilder(sample) ? "" : "tok-str", address),
     field("sourceUrl", `"${clip(sample.source, 44)}"`, "tok-str", source),
     field("startedAt", `"${sample.startedAt}"`, "tok-str"),
   ];

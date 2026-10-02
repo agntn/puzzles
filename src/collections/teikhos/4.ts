@@ -7,9 +7,8 @@ import {
   party,
   PartyKind,
   stage,
-  standard,
 } from "../../core/parts.ts";
-import { ethereumPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 const address = "0x735ba26f91e1275fa4b504649b19ef74739fe7e7";
 const source = `https://etherscan.io/address/${address}#code`;
@@ -17,9 +16,10 @@ const writeup =
   "https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/teikhos-bipedaljoe-solver-bounties-2eth";
 
 /** The revision of teikhos/3, solved in 2026 with a key a failed 2022 attempt left in calldata. */
-export const teikhos4 = ethereumPuzzle({
+export const teikhos4 = puzzle({
   id: "teikhos/4",
-  address: standard(address),
+  chain: "ethereum",
+  address,
   sourceUrl: source,
   startedAt: "2018-03-14 03:11:51",
   status: Status.Solved,

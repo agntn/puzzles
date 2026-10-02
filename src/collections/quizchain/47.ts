@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 47 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bdrcj7/
  * block 46 key, hashed with MD5 into BIP39 entropy, for 11 mBTC. It held five days. No source
  * printed the hash or the key.
  */
-export const quizchainBlock47 = bitcoinPuzzle({
+export const quizchainBlock47 = puzzle({
   id: "quizchain/47",
-  address: p2pkh("1J3sbaFiSpXgK49nBxonuLMqRw5H8K9wkk", "bb0534ab470c74869eea305e2a2f196bef73e13f"),
+  chain: "bitcoin",
+  address: "1J3sbaFiSpXgK49nBxonuLMqRw5H8K9wkk",
   sourceUrl: THREAD,
   startedAt: "2019-04-16 03:35:37",
   status: Status.Solved,

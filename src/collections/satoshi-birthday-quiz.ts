@@ -7,14 +7,13 @@ import {
   fact,
   funding,
   official,
-  p2pkh,
   party,
   PartyKind,
   profile,
   seed,
   source,
 } from "../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../core/puzzle.ts";
+import { puzzle, Status } from "../core/puzzle.ts";
 
 /** Where every question, hint and answer of this puzzle was published. */
 const THREAD = "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/";
@@ -28,9 +27,10 @@ const CAPTURE =
  * correct answer sentences joined by single spaces, and the SHA-256 of that text used as BIP39
  * entropy. The first address of the resulting wallet held the prize for five hours.
  */
-export const satoshiBirthdayQuizPuzzle = bitcoinPuzzle({
+export const satoshiBirthdayQuizPuzzle = puzzle({
   id: "satoshi-birthday-quiz",
-  address: p2pkh("1GNrvamE9WP4DL6hTicWy1aoqCUwFM2Jbz", "a8ac4bd83f5946f7e7b2452c1a9f28eba2bd13d2"),
+  chain: "bitcoin",
+  address: "1GNrvamE9WP4DL6hTicWy1aoqCUwFM2Jbz",
   sourceUrl: THREAD,
   startedAt: "2019-04-05 09:45:02",
   status: Status.Solved,

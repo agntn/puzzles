@@ -1,22 +1,19 @@
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
-  digest,
   claim,
   compressed,
   derivation,
+  digest,
   funding,
-  p2wpkh,
   source,
 } from "../../core/parts.ts";
 
 /** Puzzle `bitimage/kitten`. */
-export const bitimagePuzzleKitten = bitcoinPuzzle({
+export const bitimagePuzzleKitten = puzzle({
   id: "bitimage/kitten",
-  address: p2wpkh(
-    "bc1q57euh23y3qs2f9d5mtwpax5lqecfvrdkqce82a",
-    "a7b3cbaa248820a495b4dadc1e9a9f0670960db6",
-  ),
+  chain: "bitcoin",
+  address: "bc1q57euh23y3qs2f9d5mtwpax5lqecfvrdkqce82a",
   sourceUrl:
     "https://corey-lyle-phillips.medium.com/part-1-3-turn-your-photos-into-bitcoin-private-keys-addresses-57669771cf7a",
   startedAt: "2019-07-03 02:48:04",

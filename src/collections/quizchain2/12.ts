@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 12 thread, with the question, the funding txid, the hash digits and the solution. */
 const THREAD =
@@ -36,9 +27,10 @@ const RING = "https://www.reddit.com/r/bitcoinpuzzles/comments/br2rys/comment/eo
 const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/br2rys/comment/eoasr0u/";
 
 /** Quizchain2 block 12: `grycoin TOMI coy ring anagram`, after a wrong capitalization hint. */
-export const quizchain2Block12 = bitcoinPuzzle({
+export const quizchain2Block12 = puzzle({
   id: "quizchain2/12",
-  address: p2pkh("187Q5XNNezeyBYgwY8gL2swXUWtWvwyqZ6", "4dfea40b2e155b0c5aa593110305897070e73d55"),
+  chain: "bitcoin",
+  address: "187Q5XNNezeyBYgwY8gL2swXUWtWvwyqZ6",
   sourceUrl: THREAD,
   startedAt: "2019-05-20 12:28:07",
   status: Status.Solved,

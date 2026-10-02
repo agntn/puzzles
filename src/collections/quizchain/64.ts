@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 64 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bh52id/7_mbtc_quizchain_block_64/";
@@ -24,9 +15,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bh52id/
  * whole block 63 key, hashed with MD5 into BIP39 entropy. It held 28 hours. The author printed the
  * WIF as the link for block 65.
  */
-export const quizchainBlock64 = bitcoinPuzzle({
+export const quizchainBlock64 = puzzle({
   id: "quizchain/64",
-  address: p2pkh("15odDESGAo53neU94hqYfxwTWTBLYmykz2", "34b1dd5d68782984c0a0a69c0391ed0816a09678"),
+  chain: "bitcoin",
+  address: "15odDESGAo53neU94hqYfxwTWTBLYmykz2",
   sourceUrl: THREAD,
   startedAt: "2019-04-25 05:39:37",
   status: Status.Solved,

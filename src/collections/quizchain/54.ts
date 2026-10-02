@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 54 were published. */
 const THREAD =
@@ -26,9 +17,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bfckvs/
  * got the answer. Only the author's Wattpad list of first run solutions has it. No source printed
  * the hash or the key.
  */
-export const quizchainBlock54 = bitcoinPuzzle({
+export const quizchainBlock54 = puzzle({
   id: "quizchain/54",
-  address: p2pkh("1BeowfUYwrwqopnKzK36u4Birp2RGbfVDq", "74d7d582baee6939c40044b0489eeeed6460f3e1"),
+  chain: "bitcoin",
+  address: "1BeowfUYwrwqopnKzK36u4Birp2RGbfVDq",
   sourceUrl: THREAD,
   startedAt: "2019-04-20 14:34:50",
   status: Status.Solved,

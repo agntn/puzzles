@@ -1,18 +1,11 @@
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
-import {
-  claim,
-  confirmation,
-  funding,
-  hex,
-  official,
-  p2pkh,
-  uncompressed,
-} from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { claim, confirmation, funding, hex, official, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `warp/challenge-4`. */
-export const warpPuzzleChallenge4 = bitcoinPuzzle({
+export const warpPuzzleChallenge4 = puzzle({
   id: "warp/challenge-4",
-  address: p2pkh("1GXXH7FbY7nCJDRc72SMyYykgtEUi5GxfR", "aa4fa3e2be1fbf59edd4bc3702a08f715251e823"),
+  chain: "bitcoin",
+  address: "1GXXH7FbY7nCJDRc72SMyYykgtEUi5GxfR",
   sourceUrl: "https://keybase.io/warp",
   startedAt: "2013-11-19 20:12:25",
   status: Status.Solved,

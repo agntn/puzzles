@@ -1,13 +1,14 @@
-import { artifact, funding, increase, stage, standard } from "../../core/parts.ts";
-import { ethereumPuzzle } from "../../core/puzzle.ts";
+import { artifact, funding, increase, stage } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
 
 const address = "0xaec7e8c221c3fd24e75c996e32289235fd899ebf";
 const source = `https://etherscan.io/address/${address}#code`;
 
 /** The first TeikhosBounty, funded like the rest but with no way to pay anyone. */
-export const teikhos0 = ethereumPuzzle({
+export const teikhos0 = puzzle({
   id: "teikhos/0",
-  address: standard(address),
+  chain: "ethereum",
+  address,
   sourceUrl: source,
   startedAt: "2018-02-26 01:56:30",
   prize: 1,

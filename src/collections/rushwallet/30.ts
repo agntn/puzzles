@@ -1,10 +1,11 @@
-import { bitcoinPuzzle } from "../../core/puzzle.ts";
-import { decrease, funding, increase, p2pkh } from "../../core/parts.ts";
+import { puzzle } from "../../core/puzzle.ts";
+import { decrease, funding, increase } from "../../core/parts.ts";
 
 /** Puzzle `rushwallet/30`. */
-export const rushwalletPuzzle30 = bitcoinPuzzle({
+export const rushwalletPuzzle30 = puzzle({
   id: "rushwallet/30",
-  address: p2pkh("13Q8hJqagtd77ojTJcEZPjTz2sBFSsYxyj", "1a503dfb4e93103bd54218ba7d0e65a95bf397eb"),
+  chain: "bitcoin",
+  address: "13Q8hJqagtd77ojTJcEZPjTz2sBFSsYxyj",
   sourceUrl: "https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
   startedAt: "2014-09-22 20:48:06",
   transactions: [

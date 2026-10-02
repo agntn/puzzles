@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 52 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bexpni/7_mbtc_quizchain_block_52/";
@@ -18,9 +9,10 @@ const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bexpni/7_mbtc_q
  * last seven characters of the block 51 key, hashed with MD5 into BIP39 entropy. No source printed
  * the hash or the key.
  */
-export const quizchainBlock52 = bitcoinPuzzle({
+export const quizchainBlock52 = puzzle({
   id: "quizchain/52",
-  address: p2pkh("16LnoqUzQKzirZZHpLYAYgXKc8oxt4QcDh", "3a96c537b4fbd9eb93b5df1a9186ac2ab59b7ead"),
+  chain: "bitcoin",
+  address: "16LnoqUzQKzirZZHpLYAYgXKc8oxt4QcDh",
   sourceUrl: THREAD,
   startedAt: "2019-04-19 11:45:37",
   status: Status.Solved,

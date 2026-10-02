@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 44 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bddkxb/7_mbtc_quizchain_block_44/";
@@ -28,9 +19,10 @@ const AUTHOR_COMMENT_3 = "https://www.reddit.com/r/bitcoinpuzzles/comments/bddkx
  * string ends with the lyric. It held for 23 and a half days, until the final hint. The author
  * later printed the WIF as the link for block 77.
  */
-export const quizchainBlock44 = bitcoinPuzzle({
+export const quizchainBlock44 = puzzle({
   id: "quizchain/44",
-  address: p2pkh("188g3aB5WFUEB7AppVRtP8Bs3rXHmABtze", "4e3c6281ffa765d67b79030a09a8de45610c467e"),
+  chain: "bitcoin",
+  address: "188g3aB5WFUEB7AppVRtP8Bs3rXHmABtze",
   sourceUrl: THREAD,
   startedAt: "2019-04-15 07:55:58",
   status: Status.Solved,

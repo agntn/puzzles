@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 13 thread, with the question, the funding txid, the hash digits and the solution. */
 const THREAD = "https://www.reddit.com/r/Grycoin/comments/brogvu/7_mbtc_quizchain2_block_13/";
@@ -17,9 +8,10 @@ const THREAD = "https://www.reddit.com/r/Grycoin/comments/brogvu/7_mbtc_quizchai
 const PLAYER_COMMENT = "https://www.reddit.com/r/Grycoin/comments/brogvu/comment/eofcjjh/";
 
 /** Quizchain2 block 13: `Pizza`, Atbash of `Kraaz`, then TOMI and Laszlo Hanyecz's name. */
-export const quizchain2Block13 = bitcoinPuzzle({
+export const quizchain2Block13 = puzzle({
   id: "quizchain2/13",
-  address: p2pkh("1KZ2riUcEkAebmPrGYhSJwC4f9EZohZWkW", "cb81200a9aace112a6108585c435be9fd5f2174c"),
+  chain: "bitcoin",
+  address: "1KZ2riUcEkAebmPrGYhSJwC4f9EZohZWkW",
   sourceUrl: THREAD,
   startedAt: "2019-05-21 07:11:03",
   status: Status.Solved,

@@ -1,10 +1,11 @@
-import { litecoinPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, digest, claim, compressed, funding, p2pkh } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { assets, claim, compressed, digest, funding } from "../../core/parts.ts";
 
 /** Puzzle `zden/litecoin-segwit`. */
-export const zdenPuzzleLitecoinSegwit = litecoinPuzzle({
+export const zdenPuzzleLitecoinSegwit = puzzle({
   id: "zden/litecoin-segwit",
-  address: p2pkh("LartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS", "ab85f21bf9ca1126f3776f4686cf02737be7a2b7"),
+  chain: "litecoin",
+  address: "LartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS",
   sourceUrl: "https://crypto.haluska.sk/LitecoinSegWit.png",
   startedAt: "2017-05-10 05:46:11",
   status: Status.Solved,

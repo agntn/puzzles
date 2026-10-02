@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 20 thread, with the question, the funding txid, the hash digits and the solution. */
 const THREAD = "https://www.reddit.com/r/Grycoin/comments/btveri/7_mbtc_quizchain2_block_20/";
@@ -17,9 +8,10 @@ const THREAD = "https://www.reddit.com/r/Grycoin/comments/btveri/7_mbtc_quizchai
 const PLAYER_COMMENT = "https://www.reddit.com/r/Grycoin/comments/btveri/comment/ep33zng/";
 
 /** Quizchain2 block 20: `burn address`, for a vanity address that fails its checksum. */
-export const quizchain2Block20 = bitcoinPuzzle({
+export const quizchain2Block20 = puzzle({
   id: "quizchain2/20",
-  address: p2pkh("1FKbrfG7xgfYKVx9U9o3H9CViXsWrbZsFt", "9d165843464fa1da840d9a287f2a59a35093c8ad"),
+  chain: "bitcoin",
+  address: "1FKbrfG7xgfYKVx9U9o3H9CViXsWrbZsFt",
   sourceUrl: THREAD,
   startedAt: "2019-05-28 01:17:18",
   status: Status.Solved,

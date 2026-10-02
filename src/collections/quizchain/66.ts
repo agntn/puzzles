@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 66 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const SOLUTIONS = "https://www.wattpad.com/720895205-second-complete-quizchain";
  * hashed with MD5 into BIP39 entropy. The author called it a road block: nobody could claim it, or
  * block 67, before the tweet. The author printed the WIF after the claim.
  */
-export const quizchainBlock66 = bitcoinPuzzle({
+export const quizchainBlock66 = puzzle({
   id: "quizchain/66",
-  address: p2pkh("1NrRE3MtTWM91VsoRv8CKF7doSee35oMUE", "efb33ed6c5ae6a2d033befdb4bdd9d6eb15e18d0"),
+  chain: "bitcoin",
+  address: "1NrRE3MtTWM91VsoRv8CKF7doSee35oMUE",
   sourceUrl: THREAD,
   startedAt: "2019-04-26 12:21:11",
   status: Status.Solved,

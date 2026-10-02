@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 26 were published. */
 const THREAD =
@@ -19,9 +10,10 @@ const THREAD =
  * hashed with MD5 into BIP39 entropy. A player guessed the pattern and claimed it in the funding
  * block, before the post existed. The post only reports it. No source printed the hash or the key.
  */
-export const quizchainBlock26 = bitcoinPuzzle({
+export const quizchainBlock26 = puzzle({
   id: "quizchain/26",
-  address: p2pkh("1Kg9XZFE81j2SjXekrAVCpgAkzDjbTBXeD", "ccd99abd84b3d1cbf6d36445695c85ad66ce9933"),
+  chain: "bitcoin",
+  address: "1Kg9XZFE81j2SjXekrAVCpgAkzDjbTBXeD",
   sourceUrl: THREAD,
   startedAt: "2019-04-11 06:47:40",
   status: Status.Solved,

@@ -9,18 +9,18 @@ import {
   party,
   PartyKind,
   profile,
-  standard,
 } from "../core/parts.ts";
-import { ethereumPuzzle } from "../core/puzzle.ts";
+import { puzzle } from "../core/puzzle.ts";
 
 /**
  * The 10 ETH challenge: a twelve-word seed phrase split in half between a YouTube video and the
  * blog post it links to. The author still holds the key and spends from the wallet himself, so a
  * falling balance is not a solve.
  */
-export const mineshopPuzzle = ethereumPuzzle({
+export const mineshopPuzzle = puzzle({
   id: "mineshop",
-  address: standard("0x9C2F44EFAd0c1E852a09dF9939e6DaF061140CaF"),
+  chain: "ethereum",
+  address: "0x9C2F44EFAd0c1E852a09dF9939e6DaF061140CaF",
   sourceUrl: "https://www.youtube.com/watch?v=w4mpiuBP_aY",
   startedAt: "2020-02-12 13:17:25",
   prize: 8.612541554256945,

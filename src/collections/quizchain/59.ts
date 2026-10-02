@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 59 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bg96js/7_mbtc_quizchain_block_59/";
@@ -22,9 +13,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bg96js/
  * key. The post links the address instead of the funding transaction. A player printed the WIF in
  * the block 60 thread.
  */
-export const quizchainBlock59 = bitcoinPuzzle({
+export const quizchainBlock59 = puzzle({
   id: "quizchain/59",
-  address: p2pkh("1LFwAti63u7rxoEveRQnPkGtU8PHW6YxHY", "d33d6ec21b342c5e3a8d809095f54911a7d1f547"),
+  chain: "bitcoin",
+  address: "1LFwAti63u7rxoEveRQnPkGtU8PHW6YxHY",
   sourceUrl: THREAD,
   startedAt: "2019-04-22 23:41:53",
   status: Status.Solved,

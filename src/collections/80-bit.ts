@@ -8,12 +8,11 @@ import {
   hex,
   increase,
   official,
-  p2pkh,
   party,
   PartyKind,
   profile,
 } from "../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../core/puzzle.ts";
+import { puzzle, Status } from "../core/puzzle.ts";
 
 /** The announcement. Rules two weeks early, with a made-up range as the example. */
 const ANNOUNCEMENT = "https://bitcointalk.org/index.php?topic=1306983.msg64639847#msg64639847";
@@ -25,9 +24,10 @@ const RANGE = "https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64
 const STEPS = "https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64695204";
 
 /** 80 unknown bits in a 511-bit key, public key only in a pending spend. Taken 39 minutes in. */
-export const kTimesG80Bit = bitcoinPuzzle({
+export const kTimesG80Bit = puzzle({
   id: "80-bit",
-  address: p2pkh("1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q", "90b881be7044a596b0ac843d84ff31278ba92a12"),
+  chain: "bitcoin",
+  address: "1ECDLP8osCZHBB1LH5PVAUfFegeMgFb52q",
   sourceUrl: RANGE,
   startedAt: "2024-11-01 00:01:53",
   status: Status.Solved,

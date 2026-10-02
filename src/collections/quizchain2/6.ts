@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid and the method of block 6 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/boviny/7_mbtc_quizchain2_block_6/";
@@ -19,9 +10,10 @@ const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/boviny/7_mbtc_q
  * 8, but no source printed the six words or the hash: the record runs the method on the block 5
  * key, and those words derive that key.
  */
-export const quizchain2Block6 = bitcoinPuzzle({
+export const quizchain2Block6 = puzzle({
   id: "quizchain2/6",
-  address: p2pkh("1741oPqNwSvJuGw5Zv4CrTCSov5LtqdrNq", "4262ab99046eacfab2e33601309830f5e747c060"),
+  chain: "bitcoin",
+  address: "1741oPqNwSvJuGw5Zv4CrTCSov5LtqdrNq",
   sourceUrl: THREAD,
   startedAt: "2019-05-15 00:00:56",
   status: Status.Solved,

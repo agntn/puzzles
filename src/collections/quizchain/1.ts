@@ -5,11 +5,10 @@ import {
   confirmation,
   funding,
   official,
-  p2pkh,
   source,
   wif,
 } from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid and every hint of block 1 were published. */
 const THREAD =
@@ -27,9 +26,10 @@ const CAPTURE =
  * favorite address appended, hashed with SHA-256 into BIP39 entropy. The post names the funding
  * transaction, not the address, and the author published the key in the comments.
  */
-export const quizchainBlock1 = bitcoinPuzzle({
+export const quizchainBlock1 = puzzle({
   id: "quizchain/1",
-  address: p2pkh("16NLaozWwi4JSTRMnMfi3oCkBjXBWVFgYR", "3ae1b60c6a83290db2e9c228413750d96be80116"),
+  chain: "bitcoin",
+  address: "16NLaozWwi4JSTRMnMfi3oCkBjXBWVFgYR",
   sourceUrl: THREAD,
   startedAt: "2019-04-07 03:31:37",
   status: Status.Solved,

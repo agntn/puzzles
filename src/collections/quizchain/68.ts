@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 68 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bi593l/7_mbtc_quizchain_block_68/";
@@ -21,9 +12,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bi593l/
  * text and that whole key, hashed with MD5 into BIP39 entropy. A player posted the whole string,
  * and the author's update confirms the method. No source printed the hash or the key.
  */
-export const quizchainBlock68 = bitcoinPuzzle({
+export const quizchainBlock68 = puzzle({
   id: "quizchain/68",
-  address: p2pkh("1N4ELRkHz1VvPPvLTFCvrimB5Bpc5GeMgC", "e6f70552c2ddc9fa1be086fe8deafb5cf1583352"),
+  chain: "bitcoin",
+  address: "1N4ELRkHz1VvPPvLTFCvrimB5Bpc5GeMgC",
   sourceUrl: THREAD,
   startedAt: "2019-04-28 00:19:15",
   status: Status.Solved,

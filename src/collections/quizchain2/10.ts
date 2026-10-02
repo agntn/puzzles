@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid, the hints and the solution of block 10 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bqerv5/
  * three words, hashed with MD5 into BIP39 entropy. The question about words ending in "gry" was
  * a decoy. No source printed the hash or the key.
  */
-export const quizchain2Block10 = bitcoinPuzzle({
+export const quizchain2Block10 = puzzle({
   id: "quizchain2/10",
-  address: p2pkh("1BaxjCt2ejWghHGf41yic1mLmbFSnikAjP", "741d80f1fe790a1afd52302b98139e7079696b5a"),
+  chain: "bitcoin",
+  address: "1BaxjCt2ejWghHGf41yic1mLmbFSnikAjP",
   sourceUrl: THREAD,
   startedAt: "2019-05-18 04:25:51",
   status: Status.Solved,

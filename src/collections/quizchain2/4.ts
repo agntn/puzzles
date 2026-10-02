@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid and the method of block 4 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bo356q/7_mbtc_quizchain2_block_4/";
@@ -20,9 +11,10 @@ const PLAYER_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bo356q/
  * Quizchain2 block 4: `MasK`, the word inside the block 3 key, then TOMI and four words, hashed
  * with MD5 into BIP39 entropy. No source printed the hash or the key.
  */
-export const quizchain2Block4 = bitcoinPuzzle({
+export const quizchain2Block4 = puzzle({
   id: "quizchain2/4",
-  address: p2pkh("1C1e2wvP5p6JRyV4BtRHjprCuBcUXLudNQ", "78c84c353224ce0bfcbc9eab8f64201ab14935fd"),
+  chain: "bitcoin",
+  address: "1C1e2wvP5p6JRyV4BtRHjprCuBcUXLudNQ",
   sourceUrl: THREAD,
   startedAt: "2019-05-13 12:33:25",
   status: Status.Solved,

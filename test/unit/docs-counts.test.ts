@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vite-plus/test";
 import { WALK } from "../../docs/app/utils/landing.ts";
 import { collectionKeys, collections, all, Status, type Puzzle } from "../../src/index.ts";
-import { chains } from "../../src/core/chains.ts";
 import { facts } from "../../src/tool-operations.ts";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
@@ -147,7 +146,6 @@ const puzzles = await all();
 const live = await livePages(puzzles);
 const expected = {
   tools: spellOut(Object.keys(facts.tools).length),
-  factories: spellOut(chains.length),
 } as const;
 
 describe("the prose counts what the registry ships", () => {
@@ -231,20 +229,13 @@ describe("the prose counts what the registry ships", () => {
     expect(live).toContain("docs/content/2.collections/15.genesis.md");
     expect(live).toContain("docs/content/3.authors/10.genesis-author.md");
     const corpus = files.map((file) => readFileSync(path.join(root, file), "utf8"));
-    for (const noun of ["tools", "factories"] as const) {
-      expect(
-        corpus.flatMap((text) => countsIn(text, noun)),
-        noun,
-      ).not.toHaveLength(0);
-    }
+    expect(corpus.flatMap((text) => countsIn(text, "tools"))).not.toHaveLength(0);
   });
 
   it.each(files)("%s", (file) => {
     const text = readFileSync(path.join(root, file), "utf8");
-    for (const noun of ["tools", "factories"] as const) {
-      for (const count of countsIn(text, noun)) {
-        expect(count, `${noun} in ${file}`).toBe(expected[noun]);
-      }
+    for (const count of countsIn(text, "tools")) {
+      expect(count, `tools in ${file}`).toBe(expected.tools);
     }
   });
 

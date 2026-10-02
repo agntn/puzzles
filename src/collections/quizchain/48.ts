@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 48 were published. */
 const THREAD =
@@ -20,9 +11,10 @@ const THREAD =
  * into BIP39 entropy. The update spells the address with a lowercase `f` in `for`. The funded hash
  * uses the address itself, `ForPresident`. A player printed the WIF three days later.
  */
-export const quizchainBlock48 = bitcoinPuzzle({
+export const quizchainBlock48 = puzzle({
   id: "quizchain/48",
-  address: p2pkh("1AutjmfZNmdep7jFfrSEgEe4bx3qZ54k1q", "6cb9f345f6e24437685e8d8841cc7cde588e59b8"),
+  chain: "bitcoin",
+  address: "1AutjmfZNmdep7jFfrSEgEe4bx3qZ54k1q",
   sourceUrl: THREAD,
   startedAt: "2019-04-18 06:13:32",
   status: Status.Solved,

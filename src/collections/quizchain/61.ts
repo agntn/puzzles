@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 61 were published. */
 const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bgg9mx/7_mbtc_quizchain_block_61/";
@@ -19,9 +10,10 @@ const THREAD = "https://www.reddit.com/r/bitcoinpuzzles/comments/bgg9mx/7_mbtc_q
  * player pointed out. The funded hash uses them as given. Claimed in the funding block. No source
  * printed the hash or the key.
  */
-export const quizchainBlock61 = bitcoinPuzzle({
+export const quizchainBlock61 = puzzle({
   id: "quizchain/61",
-  address: p2pkh("17uboXEVcgijMjNZ4ZjRnhwWLot1ic3xHj", "4bc36fa02dea2fc03a0a8bdd258cb0c2b73dd10e"),
+  chain: "bitcoin",
+  address: "17uboXEVcgijMjNZ4ZjRnhwWLot1ic3xHj",
   sourceUrl: THREAD,
   startedAt: "2019-04-23 13:43:50",
   status: Status.Solved,

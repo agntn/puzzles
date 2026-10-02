@@ -1,10 +1,11 @@
-import { assets, digest, claim, hex, p2pkh, uncompressed } from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { assets, claim, digest, hex, uncompressed } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** TORCHED H34R7S, the final painting in The Legend of Satoshi Nakamoto. */
-export const torchedH34r7s = bitcoinPuzzle({
+export const torchedH34r7s = puzzle({
   id: "coin-artist/torched-h34r7s",
-  address: p2pkh("1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd", "9d3177de11e79cdfdc2f0c55aa4824d24a0c9184"),
+  chain: "bitcoin",
+  address: "1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd",
   sourceUrl: "https://bitcointalk.org/index.php?topic=766000.msg8633825#msg8633825",
   startedAt: "2015-04-03",
   status: Status.Solved,

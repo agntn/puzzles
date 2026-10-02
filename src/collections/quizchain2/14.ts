@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 14 thread, with the question, the funding txid, the hints and the solution. */
 const THREAD = "https://www.reddit.com/r/Grycoin/comments/bs06rg/77_mbtc_quizchain2_block_14/";
@@ -17,9 +8,10 @@ const THREAD = "https://www.reddit.com/r/Grycoin/comments/bs06rg/77_mbtc_quizcha
 const PLAYER_COMMENT = "https://www.reddit.com/r/Grycoin/comments/bs06rg/comment/eoprx9p/";
 
 /** Quizchain2 block 14: the genesis address cut to `A1zP1eP7DivfNa`, for 77 mBTC. */
-export const quizchain2Block14 = bitcoinPuzzle({
+export const quizchain2Block14 = puzzle({
   id: "quizchain2/14",
-  address: p2pkh("1JkKLAKSQ6BmC26DZbTgcpqBNUf91aeojd", "c2ab537ac168ebf8736e74597956a7cebb508a95"),
+  chain: "bitcoin",
+  address: "1JkKLAKSQ6BmC26DZbTgcpqBNUf91aeojd",
   sourceUrl: THREAD,
   startedAt: "2019-05-21 23:54:35",
   status: Status.Solved,

@@ -1,22 +1,14 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 15 thread, with the question, the funding txid and the solution. */
 const THREAD = "https://www.reddit.com/r/Grycoin/comments/bscc8b/7_mbtc_quizchain2_block_15/";
 
 /** Quizchain2 block 15: `TOMI` alone, funded two days before the post as a bot test. */
-export const quizchain2Block15 = bitcoinPuzzle({
+export const quizchain2Block15 = puzzle({
   id: "quizchain2/15",
-  address: p2pkh("1BQkqXXsrDrjbDk8KXkXoxzj8jjfUzvXD6", "722f6aff8d178d5390f2808d81d257f450e7d611"),
+  chain: "bitcoin",
+  address: "1BQkqXXsrDrjbDk8KXkXoxzj8jjfUzvXD6",
   sourceUrl: THREAD,
   startedAt: "2019-05-22 04:19:33",
   status: Status.Solved,

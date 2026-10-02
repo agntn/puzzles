@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 37 were published. */
 const THREAD =
@@ -18,9 +9,10 @@ const THREAD =
  * Quizchain block 37: `oo7`, BFUB, `0o` and the last three characters of the block 36 key, hashed
  * with MD5 into BIP39 entropy, for 10 mBTC. No source printed the hash or the key.
  */
-export const quizchainBlock37 = bitcoinPuzzle({
+export const quizchainBlock37 = puzzle({
   id: "quizchain/37",
-  address: p2pkh("18EmMJviXB6akqNftbufhxWcLbvgj2Mv7P", "4f634f444be3bac0061f5778d90288969149704c"),
+  chain: "bitcoin",
+  address: "18EmMJviXB6akqNftbufhxWcLbvgj2Mv7P",
   sourceUrl: THREAD,
   startedAt: "2019-04-14 03:07:20",
   status: Status.Solved,

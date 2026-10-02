@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 42 were published. */
 const THREAD = "https://www.reddit.com/r/u_AoiNakamoto/comments/bddbd5/7_mbtc_quizchain_block_42/";
@@ -22,9 +13,10 @@ const SOLUTIONS = "https://www.wattpad.com/720895205-second-complete-quizchain";
  * the author's profile, and the author wrote that Reddit had removed it. It held for three days. A
  * player printed the string and the WIF weeks later.
  */
-export const quizchainBlock42 = bitcoinPuzzle({
+export const quizchainBlock42 = puzzle({
   id: "quizchain/42",
-  address: p2pkh("18S29pV8hUTBJ8qeudtREvNqkFUNULSSj3", "51843dc0065ffca0a0e2e4215409424b26ceab5d"),
+  chain: "bitcoin",
+  address: "18S29pV8hUTBJ8qeudtREvNqkFUNULSSj3",
   sourceUrl: THREAD,
   startedAt: "2019-04-15 06:33:03",
   status: Status.Solved,

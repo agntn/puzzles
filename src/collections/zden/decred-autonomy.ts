@@ -1,10 +1,11 @@
-import { decredPuzzle, Status } from "../../core/puzzle.ts";
-import { assets, digest, fact, p2pkh, party, PartyKind, profile } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { assets, digest, fact, party, PartyKind, profile } from "../../core/parts.ts";
 
 /** Puzzle `zden/decred-autonomy`, whose archived page links the reward address. */
-export const zdenPuzzleDecredAutonomy = decredPuzzle({
+export const zdenPuzzleDecredAutonomy = puzzle({
   id: "zden/decred-autonomy",
-  address: p2pkh("DseEpHK49hHrTJhxwop3B86K1dryv4CYz8N"),
+  chain: "decred",
+  address: "DseEpHK49hHrTJhxwop3B86K1dryv4CYz8N",
   sourceUrl: "https://web.archive.org/web/20170430210807/https://decred.org/autonomy_puzzle/",
   startedAt: "2017-04-25",
   status: Status.Solved,

@@ -6,11 +6,10 @@ import {
   funding,
   increase,
   official,
-  p2pkh,
   party,
   profile,
 } from "../core/parts.ts";
-import { bitcoinPuzzle } from "../core/puzzle.ts";
+import { puzzle } from "../core/puzzle.ts";
 
 /** The article: an essay on hiding seed phrases in prose, with the prize address at the end. */
 const ARTICLE =
@@ -31,9 +30,10 @@ const PROFILE = "https://web.archive.org/web/20250902124612/https://medium.com/@
  * picked out by phone numbers or GPS digits. It closes by saying the reader has read every word
  * needed to open a wallet with .03 BTC, then prints that wallet's address.
  */
-export const wealthInPoetryPuzzle = bitcoinPuzzle({
+export const wealthInPoetryPuzzle = puzzle({
   id: "wealth-in-poetry",
-  address: p2pkh("1K4ezpLybootYF23TM4a8Y4NyP7auysnRo", "c6233aeb3a50a70b82fcd88d69b5f1a3ec6e355a"),
+  chain: "bitcoin",
+  address: "1K4ezpLybootYF23TM4a8Y4NyP7auysnRo",
   sourceUrl: ARTICLE,
   startedAt: "2019-02-11 15:34:04",
   prize: 0.03050269,

@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 16 were published. */
 const THREAD =
@@ -19,9 +10,10 @@ const THREAD =
  * lowercase, a space and the last three characters of the block 15 key, hashed with MD5 into BIP39
  * entropy. No source printed the hash or the key.
  */
-export const quizchainBlock16 = bitcoinPuzzle({
+export const quizchainBlock16 = puzzle({
   id: "quizchain/16",
-  address: p2pkh("12jpR4kuvZwYqyEFAwEVPq3KKgekFYtent", "13112d185509b2f3e7bee0a6768edd92e8cd8a6e"),
+  chain: "bitcoin",
+  address: "12jpR4kuvZwYqyEFAwEVPq3KKgekFYtent",
   sourceUrl: THREAD,
   startedAt: "2019-04-09 23:30:50",
   status: Status.Solved,

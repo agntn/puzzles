@@ -1,33 +1,29 @@
 import { describe, expect, it } from "vite-plus/test";
 import {
+  answer,
   artifact,
-  arweavePuzzle,
-  basePuzzle,
   assets,
   BitcoinPuzzle,
-  bitcoinCashPuzzle,
-  bitcoinPuzzle,
   Chain,
+  chains,
   claim,
   community,
   compressed,
   confirmation,
-  decredPuzzle,
-  dogecoinPuzzle,
-  ecashPuzzle,
   derivation,
-  ethereumPuzzle,
   hex,
-  litecoinPuzzle,
-  moneroPuzzle,
   official,
-  answer,
   p2pkh,
   party,
+  p2sh,
+  p2wpkh,
+  p2wsh,
   passphrase,
   Puzzle,
+  puzzle,
   type PuzzleSpec,
   stage,
+  standard,
   Status,
 } from "../../src/index.ts";
 import { formatStageReport } from "../../src/core/utils.ts";
@@ -35,58 +31,86 @@ import { ASSETS } from "../support/assets.ts";
 
 const required = {
   id: "fixture/1",
+  chain: Chain.Bitcoin,
   address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
   sourceUrl: "https://example.com/puzzle",
   startedAt: "2026-01-01",
 } satisfies PuzzleSpec;
 
-const factories = [
-  [Chain.Arweave, arweavePuzzle],
-  [Chain.Base, basePuzzle],
-  [Chain.Bitcoin, bitcoinPuzzle],
-  [Chain.BitcoinCash, bitcoinCashPuzzle],
-  [Chain.Decred, decredPuzzle],
-  [Chain.Dogecoin, dogecoinPuzzle],
-  [Chain.ECash, ecashPuzzle],
-  [Chain.Ethereum, ethereumPuzzle],
-  [Chain.Litecoin, litecoinPuzzle],
-  [Chain.Monero, moneroPuzzle],
+/** A real address of each kind the factory reads from a string, with the record it reads into. */
+const readable = [
+  [
+    Chain.Bitcoin,
+    "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+    p2pkh("1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe", "a9553269572a317e39f0f518cb87c1a0ee1dbae4"),
+  ],
+  [
+    Chain.Bitcoin,
+    "37k7toV1Nv4DfmQbmZ8KuZDQCYK9x5KpzP",
+    p2sh("37k7toV1Nv4DfmQbmZ8KuZDQCYK9x5KpzP", "4266fc6f2c2861d7fe229b279a79803afca7ba34"),
+  ],
+  [
+    Chain.Bitcoin,
+    "bc1qyjwa0tf0en4x09magpuwmt2smpsrlaxwn85lh6",
+    p2wpkh(
+      "bc1qyjwa0tf0en4x09magpuwmt2smpsrlaxwn85lh6",
+      "249dd7ad2fccea67977d4078edad50d8603ff4ce",
+    ),
+  ],
+  [
+    Chain.Bitcoin,
+    "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj",
+    p2wsh("bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj"),
+  ],
+  [
+    Chain.Litecoin,
+    "LartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS",
+    p2pkh("LartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS", "ab85f21bf9ca1126f3776f4686cf02737be7a2b7"),
+  ],
+  [
+    Chain.Decred,
+    "DsRaAja82UvgnqYaBHYFuyCKURFX2rCyEJ8",
+    p2pkh("DsRaAja82UvgnqYaBHYFuyCKURFX2rCyEJ8"),
+  ],
+  [
+    Chain.Ethereum,
+    "0x635739254BDE27d28301f25aD57c3cAC3C3468f3",
+    standard("0x635739254BDE27d28301f25aD57c3cAC3C3468f3"),
+  ],
 ] as const;
 
 describe("puzzle record factories", () => {
   it("exposes the documented passphrase-only key builder", () => {
-    const puzzle = bitcoinPuzzle({ ...required, key: passphrase("public fixture") });
-    expect(puzzle.keyData()).toEqual({ wif: { passphrase: "public fixture" } });
-    expect(puzzle.hasPrivateKey()).toBe(false);
+    const record = puzzle({ ...required, key: passphrase("public fixture") });
+    expect(record.keyData()).toEqual({ wif: { passphrase: "public fixture" } });
+    expect(record.hasPrivateKey()).toBe(false);
   });
 
   it("marks a derived key only when the record has a secret", () => {
-    expect(bitcoinPuzzle({ ...required, key: hex("1".padStart(64, "0")) }).hasDerivedKey()).toBe(
-      false,
-    );
-    const pathOnly = bitcoinPuzzle({ ...required, key: derivation("m/0").derived() });
+    expect(puzzle({ ...required, key: hex("1".padStart(64, "0")) }).hasDerivedKey()).toBe(false);
+    const pathOnly = puzzle({ ...required, key: derivation("m/0").derived() });
     expect(pathOnly.keyData()).toEqual({ seed: { path: "m/0" }, derived: true });
     expect(pathOnly.hasDerivedKey()).toBe(false);
   });
 
   it("hands back a key builder that leaves the record alone", () => {
     const key = hex("1".padStart(64, "0"), 1);
-    const puzzle = bitcoinPuzzle({ ...required, key });
+    const record = puzzle({ ...required, key });
     const wif = "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn";
 
-    const extended = puzzle.key()?.wif(wif);
+    const extended = record.key()?.wif(wif);
 
     expect(extended?.data()).toEqual({
       hex: "1".padStart(64, "0"),
       bits: 1,
       wif: { decrypted: wif },
     });
-    expect(puzzle.keyData()).toEqual({ hex: "1".padStart(64, "0"), bits: 1 });
-    expect(puzzle.key()).toBe(key);
+    expect(record.keyData()).toEqual({ hex: "1".padStart(64, "0"), bits: 1 });
+    expect(record.key()).toBe(key);
   });
 
   it("freezes the record it builds, nested parts included", () => {
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       ...required,
       key: hex("1".padStart(64, "0"), 1).wif(
         "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn",
@@ -95,20 +119,20 @@ describe("puzzle record factories", () => {
       transactions: [claim("0".repeat(64), "2026-01-02", 0)],
     });
     const parts = [
-      puzzle.address(),
-      puzzle.transactions(),
-      puzzle.transactions()[0],
-      puzzle.solver(),
-      puzzle.solver()?.addresses,
-      puzzle.keyData(),
-      puzzle.keyData()?.wif,
-      puzzle.toJSON(),
+      record.address(),
+      record.transactions(),
+      record.transactions()[0],
+      record.solver(),
+      record.solver()?.addresses,
+      record.keyData(),
+      record.keyData()?.wif,
+      record.toJSON(),
     ];
 
     expect(parts.map((part) => Object.isFrozen(part))).toEqual(parts.map(() => true));
-    expect(Reflect.set(puzzle.address(), "value", "1Mutated")).toBe(false);
-    expect(Reflect.set(puzzle.toJSON(), "status", Status.Solved)).toBe(false);
-    expect(puzzle.address().value).toBe(required.address.value);
+    expect(Reflect.set(record.address(), "value", "1Mutated")).toBe(false);
+    expect(Reflect.set(record.toJSON(), "status", Status.Solved)).toBe(false);
+    expect(record.address().value).toBe(required.address.value);
   });
 
   it("freezes through what a handwritten subclass hands to toJSON()", () => {
@@ -140,29 +164,29 @@ describe("puzzle record factories", () => {
 
   it("keeps freezing below a record the caller froze shallowly", () => {
     const transactions = [claim("0".repeat(64), "2026-01-02", 0)];
-    const puzzle = bitcoinPuzzle(Object.freeze({ ...required, transactions }));
+    const record = puzzle(Object.freeze({ ...required, transactions }));
 
-    expect(Object.isFrozen(puzzle.transactions())).toBe(true);
-    expect(Object.isFrozen(puzzle.transactions()[0])).toBe(true);
+    expect(Object.isFrozen(record.transactions())).toBe(true);
+    expect(Object.isFrozen(record.transactions()[0])).toBe(true);
     expect(Reflect.set(transactions, 0, undefined)).toBe(false);
   });
 
-  it.each(factories)("preserves the minimal Puzzle contract for %s", (chain, factory) => {
-    /* Factories assign chains. Address validation is a separate concern. */
-    const puzzle = factory(required);
-    expect(puzzle).toBeInstanceOf(Puzzle);
-    expect(puzzle.chain()).toBe(chain);
-    expect(puzzle.preGenesis()).toBe(false);
-    expect(puzzle.escrow()).toBeUndefined();
-    expect(puzzle.transactions()).toEqual([]);
-    expect(Object.isFrozen(puzzle.transactions())).toBe(true);
-    expect(puzzle.assetLinks()).toEqual([]);
-    expect(Object.isFrozen(puzzle.assetLinks())).toBe(true);
-    expect(puzzle.hints()).toEqual([]);
-    expect(Object.isFrozen(puzzle.hints())).toBe(true);
-    expect(puzzle.stages()).toEqual([]);
-    expect(Object.isFrozen(puzzle.stages())).toBe(true);
-    expect(puzzle.toJSON()).toEqual({
+  it.each(chains)("preserves the minimal Puzzle contract for %s", (chain) => {
+    /* An address record passes through as given, so any chain takes the fixture. */
+    const record = puzzle({ ...required, chain });
+    expect(record).toBeInstanceOf(Puzzle);
+    expect(record.chain()).toBe(chain);
+    expect(record.preGenesis()).toBe(false);
+    expect(record.escrow()).toBeUndefined();
+    expect(record.transactions()).toEqual([]);
+    expect(Object.isFrozen(record.transactions())).toBe(true);
+    expect(record.assetLinks()).toEqual([]);
+    expect(Object.isFrozen(record.assetLinks())).toBe(true);
+    expect(record.hints()).toEqual([]);
+    expect(Object.isFrozen(record.hints())).toBe(true);
+    expect(record.stages()).toEqual([]);
+    expect(Object.isFrozen(record.stages())).toBe(true);
+    expect(record.toJSON()).toEqual({
       id: required.id,
       address: required.address,
       source_url: required.sourceUrl,
@@ -172,8 +196,26 @@ describe("puzzle record factories", () => {
     });
   });
 
+  it.each(readable)("reads a %s address %s into its kind and HASH160", (chain, value, expected) => {
+    const read = puzzle({ ...required, chain, address: value, escrow: value });
+
+    expect(read.address()).toEqual(expected);
+    expect(read.escrow()).toEqual(expected);
+  });
+
+  it.each([
+    [Chain.Bitcoin, "0x635739254BDE27d28301f25aD57c3cAC3C3468f3"],
+    [Chain.Litecoin, "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe"],
+    [Chain.BitcoinCash, "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez"],
+    [Chain.Bitcoin, "bc1p5d7rjq7g6rdk2yhzks9smlaqtedr4dekq08ge8ztwac72sfr9rusxg3297"],
+  ])("refuses a %s record whose address is %s", (chain, value) => {
+    expect(() => puzzle({ ...required, chain, address: value })).toThrow(
+      new TypeError(`${value} is not a ${chain} address kind a record can hold`),
+    );
+  });
+
   it("lists each stage artifact file once, after the files the asset block names", () => {
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       ...required,
       assets: assets({ puzzle: "puzzle.png" }),
       stages: [
@@ -190,33 +232,33 @@ describe("puzzle record factories", () => {
       ],
     });
 
-    expect(puzzle.assetLinks().map((link) => [link.kind, link.path])).toEqual([
+    expect(record.assetLinks().map((link) => [link.kind, link.path])).toEqual([
       ["puzzle", "assets/fixture/puzzle.png"],
       ["artifact", "assets/fixture/phase2.txt"],
     ]);
-    expect(puzzle.stages()[0]?.artifacts[1]).toEqual({
+    expect(record.stages()[0]?.artifacts[1]).toEqual({
       name: "page",
       url: "https://example.com/next",
     });
-    expect(puzzle.toJSON().stages?.map((item) => item.name)).toEqual(["phase 1", "phase 2"]);
-    expect("answer" in (puzzle.stages()[0] ?? {})).toBe(false);
-    expect(puzzle.stages()[1]?.answer).toEqual({
+    expect(record.toJSON().stages?.map((item) => item.name)).toEqual(["phase 1", "phase 2"]);
+    expect("answer" in (record.stages()[0] ?? {})).toBe(false);
+    expect(record.stages()[1]?.answer).toEqual({
       text: "hunter2",
       source: "https://example.com/writeup",
       date: "2026-01-02",
     });
-    expect(Object.isFrozen(puzzle.stages()[1]?.artifacts[0])).toBe(true);
+    expect(Object.isFrozen(record.stages()[1]?.artifacts[0])).toBe(true);
   });
 
   it("links stage artifact files on a record without an asset block", () => {
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       ...required,
       stages: [
         stage("phase 1", "A blob.", [artifact("ciphertext", "https://example.com/a", "a.txt")]),
       ],
     });
 
-    expect(puzzle.assetLinks().map((link) => link.kind)).toEqual(["artifact"]);
+    expect(record.assetLinks().map((link) => link.kind)).toEqual(["artifact"]);
   });
 
   it("keeps a stage copy under the collection when the image path is overridden", () => {
@@ -262,24 +304,24 @@ describe("puzzle record factories", () => {
   });
 
   it("keeps the solver separate from the solution file in the serialized record", () => {
-    const puzzle = bitcoinPuzzle({
+    const record = puzzle({
       ...required,
       solver: party("Fixture"),
       assets: assets({ solution: "solution.md" }),
     });
 
-    expect(puzzle.solver()).toEqual({ name: "Fixture" });
-    expect(puzzle.assets()).toEqual({ solution: "solution.md" });
-    expect(puzzle.toJSON().solver).toEqual({ name: "Fixture" });
-    expect(puzzle.toJSON().assets).toEqual({ solution: "solution.md" });
+    expect(record.solver()).toEqual({ name: "Fixture" });
+    expect(record.assets()).toEqual({ solution: "solution.md" });
+    expect(record.toJSON().solver).toEqual({ name: "Fixture" });
+    expect(record.toJSON().assets).toEqual({ solution: "solution.md" });
     expect(assets({})).toEqual({});
   });
 
   it("encodes an asset file name for the URL and leaves the path alone", () => {
-    const puzzle = bitcoinPuzzle({ ...required, assets: assets({ solution: "notes #1?.md" }) });
+    const record = puzzle({ ...required, assets: assets({ solution: "notes #1?.md" }) });
 
-    expect(puzzle.assetUrl()).toBeUndefined();
-    expect(puzzle.assetLinks()).toEqual([
+    expect(record.assetUrl()).toBeUndefined();
+    expect(record.assetLinks()).toEqual([
       {
         kind: "solution",
         file: "notes #1?.md",
@@ -339,9 +381,9 @@ describe("puzzle record factories", () => {
         source: "https://example.com/answers",
         date: "2026-04-01",
       });
-      const puzzle = bitcoinPuzzle({ ...required, hints: [hint] });
-      expect(puzzle.toJSON().hints?.[0]?.answer).toEqual(solution);
-      expect(Object.isFrozen(puzzle.hints()[0]?.answer)).toBe(true);
+      const record = puzzle({ ...required, hints: [hint] });
+      expect(record.toJSON().hints?.[0]?.answer).toEqual(solution);
+      expect(Object.isFrozen(record.hints()[0]?.answer)).toBe(true);
     }
     expect(answer("visit", "https://example.com/answers")).not.toHaveProperty("date");
   });
@@ -363,10 +405,10 @@ describe("puzzle record factories", () => {
         date: "2026-01-01",
         answer: { text: "Top left.", source: "https://example.com/answer" },
       });
-      const puzzle = bitcoinPuzzle({ ...required, hints: [plain, dated] });
-      expect(puzzle.toJSON().hints).toEqual([plain, dated]);
-      expect(puzzle.hints().every((hint) => Object.isFrozen(hint))).toBe(true);
-      expect(JSON.stringify(puzzle.toJSON())).not.toContain('"confirmation"');
+      const record = puzzle({ ...required, hints: [plain, dated] });
+      expect(record.toJSON().hints).toEqual([plain, dated]);
+      expect(record.hints().every((hint) => Object.isFrozen(hint))).toBe(true);
+      expect(JSON.stringify(record.toJSON())).not.toContain('"confirmation"');
     }
   });
 
@@ -418,9 +460,9 @@ describe("puzzle record factories", () => {
       status: Status.Solved,
       transactions: [claim("0".repeat(64), "2026-01-02", 0)],
     } satisfies PuzzleSpec;
-    const puzzle = bitcoinPuzzle(spec);
+    const record = puzzle(spec);
 
-    expect(puzzle.toJSON()).toEqual({
+    expect(record.toJSON()).toEqual({
       id: spec.id,
       chain: Chain.Bitcoin,
       address: spec.address,
@@ -439,10 +481,10 @@ describe("puzzle record factories", () => {
       status: Status.Solved,
       transactions: spec.transactions,
     });
-    expect(puzzle.keyRange()).toEqual([1n, 1n]);
-    expect(puzzle.claimTransaction()).toEqual(spec.transactions[0]);
-    expect(puzzle.assetPath()).toBe("assets/fixture/puzzle.png");
-    expect(puzzle.assetLinks()).toEqual([
+    expect(record.keyRange()).toEqual([1n, 1n]);
+    expect(record.claimTransaction()).toEqual(spec.transactions[0]);
+    expect(record.assetPath()).toBe("assets/fixture/puzzle.png");
+    expect(record.assetLinks()).toEqual([
       {
         kind: "puzzle",
         file: "puzzle.png",
@@ -456,14 +498,14 @@ describe("puzzle record factories", () => {
         url: `${ASSETS}/assets/fixture/hint.txt`,
       },
     ]);
-    expect(Object.isFrozen(puzzle.assetLinks())).toBe(true);
-    expect(Object.isFrozen(puzzle.assetLinks()[0])).toBe(true);
-    expect(puzzle.hints()).toBe(spec.hints);
-    expect(Object.isFrozen(puzzle.hints())).toBe(true);
+    expect(Object.isFrozen(record.assetLinks())).toBe(true);
+    expect(Object.isFrozen(record.assetLinks()[0])).toBe(true);
+    expect(record.hints()).toBe(spec.hints);
+    expect(Object.isFrozen(record.hints())).toBe(true);
     expect(
-      puzzle.hints().map((hint) => [Object.isFrozen(hint), Object.isFrozen(hint.confirmation)]),
+      record.hints().map((hint) => [Object.isFrozen(hint), Object.isFrozen(hint.confirmation)]),
     ).toEqual([[true, true]]);
-    expect(puzzle.formattedSolveTime()).toBe("0s");
-    expect(puzzle.prizeCurrency()).toBe("TEST");
+    expect(record.formattedSolveTime()).toBe("0s");
+    expect(record.prizeCurrency()).toBe("TEST");
   });
 });

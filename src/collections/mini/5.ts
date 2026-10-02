@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  hex,
-  official,
-  p2pkh,
-  party,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, hex, official, party } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the public key, the hint, the winner's method and the author's confirmation were posted. */
 const THREAD = "https://bitcointalk.org/index.php?topic=5538285";
@@ -19,9 +10,10 @@ const THREAD = "https://bitcointalk.org/index.php?topic=5538285";
  * address, the compressed 1-address of that key. The key is the one the winner posted with the
  * method, which the author confirmed; an earlier key in the thread does not match the public key.
  */
-export const mini5 = bitcoinPuzzle({
+export const mini5 = puzzle({
   id: "mini/5",
-  address: p2pkh("1PGRtg6XjiYSB1VJAhsqLQc6hQeBqFGVPD", "f43dc8d9d15c823a5c0434f49ac8f271457c0d6d"),
+  chain: "bitcoin",
+  address: "1PGRtg6XjiYSB1VJAhsqLQc6hQeBqFGVPD",
   sourceUrl: THREAD,
   startedAt: "2025-04-16 08:03:44",
   status: Status.Solved,

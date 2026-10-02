@@ -1,20 +1,19 @@
 import {
   answer,
   assets,
-  digest,
   claim,
   community,
   compressed,
+  digest,
   fact,
   funding,
   official,
-  p2pkh,
   party,
   PartyKind,
   profile,
   wif,
 } from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The post: a title, a 1 mBTC prize and a link to the GIF, nothing else. */
 const THREAD =
@@ -42,9 +41,10 @@ const METHOD = comment("ce86ejm");
  * thread never printed the key: Wickex published the address and the recipe, the author confirmed
  * both, and the recipe run on the GIF gives the key recorded here.
  */
-export const iAmABananaAmaaGif = bitcoinPuzzle({
+export const iAmABananaAmaaGif = puzzle({
   id: "iamabananaamaa/gif",
-  address: p2pkh("1DprL7pbKGwjMKoJ4c6BEKrTmtbPB4AiNJ", "8cae3ce6d5497fa7a9b30e085efd2c972c6e0f81"),
+  chain: "bitcoin",
+  address: "1DprL7pbKGwjMKoJ4c6BEKrTmtbPB4AiNJ",
   sourceUrl: THREAD,
   startedAt: "2013-12-22 22:35:39",
   status: Status.Solved,

@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 30 were published. */
 const THREAD =
@@ -22,9 +13,10 @@ const AUTHOR_COMMENT = "https://www.reddit.com/r/bitcoinpuzzles/comments/bcbxb2/
  * words and the last three characters of the block 29 key, hashed with MD5 into BIP39 entropy. The
  * author printed the whole string and, in a comment, the whole hash. No source printed the key.
  */
-export const quizchainBlock30 = bitcoinPuzzle({
+export const quizchainBlock30 = puzzle({
   id: "quizchain/30",
-  address: p2pkh("1AuvqSGzUigkswAunNNiBFYVZh1L2Jv2ZB", "6cbbb38b5c49657bad3161ffb1fec6df8349b724"),
+  chain: "bitcoin",
+  address: "1AuvqSGzUigkswAunNNiBFYVZh1L2Jv2ZB",
   sourceUrl: THREAD,
   startedAt: "2019-04-12 10:29:44",
   status: Status.Solved,

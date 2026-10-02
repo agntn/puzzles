@@ -2,6 +2,8 @@
 
 The constructors in `src/core/parts.ts`, exported from the package root too. They keep optional fields absent instead of empty, so build every address, key, transaction, asset, stage, party and hint with them.
 
+An address is a string the factory reads on the record's `chain`. The builders below are for what a string can't carry: a published redeem script, or a CashAddr the factory doesn't decode.
+
 ```ts
 p2pkh(value, hash160?);
 p2wpkh(value, hash160?);

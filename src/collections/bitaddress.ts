@@ -1,21 +1,20 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
   assets,
-  digest,
   community,
   decrease,
+  digest,
   encryptedWif,
   fact,
   funding,
   increase,
   official,
-  p2pkh,
   party,
   PartyKind,
   profile,
   uncompressed,
 } from "../core/parts.ts";
-import { bitcoinPuzzle } from "../core/puzzle.ts";
+import { puzzle } from "../core/puzzle.ts";
 
 /** The post: the paper wallet, its encrypted key, the address and the passphrase left to find. */
 const THREAD = "https://stacker.news/items/275973";
@@ -38,9 +37,10 @@ function comment(id: string): string {
  * key and the address and gave the coins to whoever brute forces the passphrase. The payload is
  * the EC multiply kind, for an uncompressed key, and its address hash matches the address below.
  */
-export const bruteForce = bitcoinPuzzle({
+export const bruteForce = puzzle({
   id: "bitaddress",
-  address: p2pkh("1J7BVeP8JK4op2X3GN3Hy7xkTnGnQTMpou", "bba564d9113760ba944ffce28dc3126d07ffd6e3"),
+  chain: "bitcoin",
+  address: "1J7BVeP8JK4op2X3GN3Hy7xkTnGnQTMpou",
   sourceUrl: THREAD,
   startedAt: "2023-10-06 11:50:09",
   pubkey: uncompressed(

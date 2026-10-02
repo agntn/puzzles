@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 60 were published. */
 const THREAD =
@@ -19,9 +10,10 @@ const THREAD =
  * 59 key, hashed with MD5 into BIP39 entropy. The author's update puts a period after the six
  * words. The format says none, and the funded hash has none. No source printed the hash or the key.
  */
-export const quizchainBlock60 = bitcoinPuzzle({
+export const quizchainBlock60 = puzzle({
   id: "quizchain/60",
-  address: p2pkh("1LDUFfbWmgU2ht11mr8kpPDHiQ4JktqaeQ", "d2c62187299f8a2e1aad9d2932a58bbdbe2a24c9"),
+  chain: "bitcoin",
+  address: "1LDUFfbWmgU2ht11mr8kpPDHiQ4JktqaeQ",
   sourceUrl: THREAD,
   startedAt: "2019-04-23 01:33:59",
   status: Status.Solved,

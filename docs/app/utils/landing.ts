@@ -319,7 +319,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     status: "solved",
     address: "1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7",
     kind: "p2pkh",
-    hash160: undefined,
+    hash160: "91c2d123a7c0b390568f2f1358ead74ff7916ae4",
     redeemScript: undefined,
     prize: "-",
     prizeAmount: undefined,
@@ -339,7 +339,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7",
     source: "https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup",
     transactions: 0,
-    tool: "ledger-donjon/scissors-secret-sharing\tsolved\t-\t1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7\nchain: bitcoin  address kind: p2pkh\npublic key: unknown\nprivate key: since desk thrive carbon zone prison leaf depart hobby practice ivory luggage (seed phrase)\nderivation path: m/44'/0'/0'/0/0\nstarted: 2020-10-28\nsolver: joachim (joachim)\ntransactions: 0\nexplorer: https://blockstream.info/address/1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7\nsource: https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup",
+    tool: "ledger-donjon/scissors-secret-sharing\tsolved\t-\t1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7\nchain: bitcoin  address kind: p2pkh\nhash160: 91c2d123a7c0b390568f2f1358ead74ff7916ae4\npublic key: unknown\nprivate key: since desk thrive carbon zone prison leaf depart hobby practice ivory luggage (seed phrase)\nderivation path: m/44'/0'/0'/0/0\nstarted: 2020-10-28\nsolver: joachim (joachim)\ntransactions: 0\nexplorer: https://blockstream.info/address/1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7\nsource: https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup",
   },
   {
     id: "luckylurker/vault-1",
@@ -1187,7 +1187,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "c307b1e364d6",
+  dataVersion: "7886024bb5c8",
   total: 468,
   solved: 253,
   unsolved: 104,

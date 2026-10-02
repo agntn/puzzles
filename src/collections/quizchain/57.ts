@@ -1,14 +1,5 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 57 were published. */
 const THREAD =
@@ -19,9 +10,10 @@ const THREAD =
  * with MD5 into BIP39 entropy. Block 56 was stuck behind a bad hash, so the post gave the link. No
  * source printed the hash or the key.
  */
-export const quizchainBlock57 = bitcoinPuzzle({
+export const quizchainBlock57 = puzzle({
   id: "quizchain/57",
-  address: p2pkh("19Zrd7KSgGxcLuuQtSq3KLQbHSma6QH2F7", "5df7bd68d78feceb09e52ff94eb112887e13567f"),
+  chain: "bitcoin",
+  address: "19Zrd7KSgGxcLuuQtSq3KLQbHSma6QH2F7",
   sourceUrl: THREAD,
   startedAt: "2019-04-21 02:48:31",
   status: Status.Solved,

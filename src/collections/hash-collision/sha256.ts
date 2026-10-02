@@ -1,9 +1,10 @@
-import { bitcoinPuzzle } from "../../core/puzzle.ts";
+import { puzzle } from "../../core/puzzle.ts";
 import { funding, p2sh, redeemScript } from "../../core/parts.ts";
 
 /** Puzzle `hash-collision/sha256`. */
-export const hashCollisionPuzzleSha256 = bitcoinPuzzle({
+export const hashCollisionPuzzleSha256 = puzzle({
   id: "hash-collision/sha256",
+  chain: "bitcoin",
   address: p2sh(
     "35Snmmy3uhaer2gTboc81ayCip4m9DT4ko",
     "292fb39df7cd619a396069383928e6bfb74ebec5",

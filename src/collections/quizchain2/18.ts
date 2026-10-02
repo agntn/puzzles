@@ -1,22 +1,14 @@
-import {
-  answer,
-  claim,
-  compressed,
-  funding,
-  official,
-  p2pkh,
-  source,
-  wif,
-} from "../../core/parts.ts";
-import { bitcoinPuzzle, Status } from "../../core/puzzle.ts";
+import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 18 thread, with the question, the funding txid, the hash digits and the solution. */
 const THREAD = "https://www.reddit.com/r/Grycoin/comments/bt7mfm/7_mbtc_quizchain2_block_18/";
 
 /** Quizchain2 block 18: `6.25 TOMI Halvening` for the question `Third.` */
-export const quizchain2Block18 = bitcoinPuzzle({
+export const quizchain2Block18 = puzzle({
   id: "quizchain2/18",
-  address: p2pkh("1CoKBUPvFLYqveXHdDH9myVfy1JJUzhUKU", "816bb1b8fc6b6cd0f0c6af27d7e2e6e60159810b"),
+  chain: "bitcoin",
+  address: "1CoKBUPvFLYqveXHdDH9myVfy1JJUzhUKU",
   sourceUrl: THREAD,
   startedAt: "2019-05-25 12:15:21",
   status: Status.Solved,
