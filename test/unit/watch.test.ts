@@ -102,6 +102,25 @@ describe("watcher", () => {
     expect(findings[1]).toMatchObject({ pending: true, direction: "out" });
   });
 
+  it("names an address whose history fills a read instead of calling it OK", async () => {
+    const page = (size: number) =>
+      Array.from({ length: size }, (_, index) => ({
+        ...recorded,
+        txid: index.toString(16).padStart(64, "0"),
+        vout: [{ scriptpubkey_address: target, value: 0 }],
+      }));
+
+    stubBitcoin(page(99), 710022600);
+    expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual(["OK\tb1000/71"]);
+
+    stubBitcoin(page(100), 710022600);
+    const report = await watcher()(b1000.require(71));
+    expect(report).toMatchObject({ errors: [], findings: [], truncated: [target] });
+    expect(formatWatchReport(report)).toEqual([
+      `PARTIAL\tb1000/71\tonly the newest 100 transactions at ${target} read, older ones unchecked`,
+    ]);
+  });
+
   it("leaves out a contract call that moves no coin in", async () => {
     const contract = teikhos.require(0).address().value;
     vi.stubGlobal("fetch", async (input: unknown) => {
@@ -233,6 +252,7 @@ describe("puzzles_watch", () => {
         { kind: "balance", balance: "710023266" },
       ],
       errors: [],
+      truncated: [],
     });
     expect(JSON.stringify(result.details)).toContain('"amount":"666"');
   });
