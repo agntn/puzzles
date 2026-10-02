@@ -133,6 +133,7 @@ const expectedToolNames = [
   "puzzles_stages",
   "puzzles_stats",
   "puzzles_verify",
+  "puzzles_watch",
 ];
 
 function run(command: string, args: readonly string[]): string {

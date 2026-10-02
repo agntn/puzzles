@@ -1,0 +1,246 @@
+import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { b1000 } from "../../src/collections/b1000.ts";
+import { teikhos } from "../../src/collections/teikhos.ts";
+import { InvalidArgumentError } from "../../src/index.ts";
+import type * as Watch from "../../src/core/watch.ts";
+import { formatWatchReport, watcher } from "../../src/core/watch.ts";
+import { watchTool } from "../../src/tool-operations.ts";
+
+const target = "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU";
+
+/* Two transactions mempool.space returned for b1000/71, trimmed to the fields the provider reads. */
+const deposit = {
+  txid: "572001d88e5c3030a89fe119e62cf80892876b59dcb9efe91348dd38745147e1",
+  fee: 66,
+  status: { confirmed: true, block_height: 969213, block_time: 1790720331 },
+  vin: [{ prevout: { scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 19146 } }],
+  vout: [
+    { scriptpubkey_address: target, value: 666 },
+    { scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 18414 },
+  ],
+};
+const recorded = {
+  txid: "a2808acb455f636dc988186219d025e6507bd80640b0056b46583232aee7cfa5",
+  fee: 1581,
+  status: { confirmed: true, block_height: 927901, block_time: 1765747997 },
+  vin: [
+    {
+      prevout: { scriptpubkey_address: "bc1qtr5kjwc4l6cuzs4j87xx950qf62weq43evmdly", value: 12979 },
+    },
+  ],
+  vout: [
+    { scriptpubkey_address: target, value: 1 },
+    { scriptpubkey_address: "1PWo3JeB9jrGwfJqVT99iRyva6kzmAaxTh", value: 1 },
+    { scriptpubkey_address: "bc1qs0psa2j30hr2k45kama92kpsh7qt0j3kltez7p", value: 11396 },
+  ],
+};
+/* Made up: the prize leaving for another address, still in the mempool. */
+const spend = {
+  txid: "f".repeat(64),
+  fee: 1000,
+  status: { confirmed: false },
+  vin: [{ prevout: { scriptpubkey_address: target, value: 710022600 } }],
+  vout: [{ scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 710021600 }],
+};
+
+function json(body: unknown): Response {
+  return new Response(JSON.stringify(body), { headers: { "content-type": "application/json" } });
+}
+
+/* Answers mempool.space for b1000/71: its history, then an Esplora balance of `held` satoshis. */
+function stubBitcoin(history: readonly unknown[], held: number): string[] {
+  const urls: string[] = [];
+  vi.stubGlobal("fetch", async (input: unknown) => {
+    const url = String(input);
+    urls.push(url);
+    if (url.endsWith(`/address/${target}/txs`)) return json(history);
+    if (url.includes(`/address/${target}/txs/chain/`)) return json([]);
+    return json({
+      chain_stats: { funded_txo_sum: held, spent_txo_sum: 0 },
+      mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
+    });
+  });
+  return urls;
+}
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+describe("watcher", () => {
+  it("lists a deposit the record misses and the prize it moved", async () => {
+    stubBitcoin([deposit, recorded], 710022600 + 666);
+
+    const report = await watcher()(b1000.require(71));
+
+    expect(report.errors).toEqual([]);
+    expect(report.findings).toEqual([
+      {
+        kind: "deposit",
+        txid: deposit.txid,
+        address: target,
+        amount: 666n,
+        date: "2026-09-29T22:18:51.000Z",
+        direction: "in",
+        pending: false,
+      },
+      { kind: "balance", balance: 710023266n, prize: "7.100226" },
+    ]);
+    expect(formatWatchReport(report)).toEqual([
+      `DEPOSIT\tb1000/71\t${deposit.txid} 0.00000666 BTC 2026-09-29T22:18:51.000Z at ${target}`,
+      "BALANCE\tb1000/71\t7.10023266 BTC held, 7.100226 BTC recorded as the prize",
+    ]);
+  });
+
+  it("puts an unconfirmed spend last and reads OK when nothing else differs", async () => {
+    stubBitcoin([recorded], 710022600);
+    expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual(["OK\tb1000/71"]);
+
+    stubBitcoin([spend, deposit, recorded], 710022600);
+    const { findings } = await watcher()(b1000.require(71));
+    expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "spend"]);
+    expect(findings[1]).toMatchObject({ pending: true, direction: "out" });
+  });
+
+  it("leaves out a contract call that moves no coin in", async () => {
+    const contract = teikhos.require(0).address().value;
+    vi.stubGlobal("fetch", async (input: unknown) => {
+      const url = String(input);
+      if (url.includes("/transactions")) {
+        return json({
+          items: [
+            {
+              hash: `0x${"a".repeat(64)}`,
+              block_number: 5000000,
+              timestamp: "2018-02-26T01:51:37.000000Z",
+              from: { hash: "0xB171Cd18DECC9715e91998E0E33f4e0a2bc7EB79" },
+              to: { hash: contract },
+              value: "0",
+              status: "ok",
+              method: "authenticate",
+              transaction_types: ["contract_call"],
+            },
+          ],
+          next_page_params: null,
+        });
+      }
+      return json({ coin_balance: "1000000000000000000" });
+    });
+
+    const report = await watcher()(teikhos.require(0));
+
+    expect(report).toMatchObject({ errors: [], findings: [] });
+  });
+
+  it("turns a failed lookup into an error and still checks the balance", async () => {
+    vi.stubGlobal("fetch", async (input: unknown) => {
+      if (String(input).includes("/txs")) throw new TypeError("fetch failed");
+      return json({
+        chain_stats: { funded_txo_sum: 710022600, spent_txo_sum: 0 },
+        mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
+      });
+    });
+
+    const report = await watcher()(b1000.require(71));
+
+    expect(report.findings).toEqual([]);
+    expect(report.errors).toEqual([
+      expect.stringMatching(/^Transaction history lookup failed: No response from mempool /u),
+    ]);
+    expect(formatWatchReport(report)[0]).toMatch(/^FAIL\tb1000\/71\tTransaction history/u);
+  });
+
+  it("rejects a since it can't read before any lookup", () => {
+    for (const since of ["2026-13-01", "2026-02-30", "yesterday", "2026-09-01 12:00"]) {
+      expect(() => watcher({ since })).toThrow(InvalidArgumentError);
+    }
+    expect(() => watcher({ since: "2026-09-01T12:00:00Z" })).not.toThrow();
+  });
+});
+
+describe("watcher with since", () => {
+  /* `watch.ts` imports `sources.ts` on demand, so a fresh module graph lets a stub take its place. */
+  async function withSources(
+    sourceChange: (...args: readonly unknown[]) => Promise<unknown>,
+  ): Promise<typeof Watch> {
+    vi.resetModules();
+    vi.doMock("../../src/core/sources.ts", () => ({ sourceChange }));
+    return import("../../src/core/watch.ts");
+  }
+
+  afterEach(() => {
+    vi.doUnmock("../../src/core/sources.ts");
+    vi.resetModules();
+  });
+
+  it("reads a source page that two puzzles share once per pass", async () => {
+    stubBitcoin([recorded], 710022600);
+    const change = {
+      url: "https://privatekeys.pw/puzzles/bitcoin-puzzle-tx",
+      before: { timestamp: "2026-08-01T00:00:00Z", snapshot: "https://web.archive.org/web/1/x" },
+      after: { timestamp: "2026-09-20T00:00:00Z", snapshot: "https://web.archive.org/web/2/x" },
+      additions: 3,
+      deletions: 1,
+      partial: false,
+    };
+    const sourceChange = vi.fn(async () => change);
+    const { watcher: fresh } = await withSources(sourceChange);
+    const { b1000: fresh1000 } = await import("../../src/collections/b1000.ts");
+    const check = fresh({ since: "2026-09-01" });
+
+    const first = await check(fresh1000.require(71));
+    await check(fresh1000.require(71));
+
+    expect(sourceChange).toHaveBeenCalledTimes(1);
+    expect(sourceChange).toHaveBeenCalledWith(
+      fresh1000.require(71).sourceUrl(),
+      new Date("2026-09-01T00:00:00Z"),
+      undefined,
+    );
+    expect(first.findings).toEqual([{ kind: "source", ...change }]);
+  });
+
+  it("reports an archive failure as an error, not a finding", async () => {
+    stubBitcoin([recorded], 710022600);
+    const { watcher: fresh } = await withSources(async () => {
+      const { SourceLookupError } = await import("../../src/core/errors.ts");
+      throw new SourceLookupError("Source lookup failed: no capture");
+    });
+    const { b1000: fresh1000 } = await import("../../src/collections/b1000.ts");
+
+    const report = await fresh({ since: "2026-09-01" })(fresh1000.require(71));
+
+    expect(report).toMatchObject({ findings: [], errors: ["Source lookup failed: no capture"] });
+  });
+});
+
+describe("puzzles_watch", () => {
+  it("leads with the counts and says when the source page was left out", async () => {
+    stubBitcoin([deposit, recorded], 710022600 + 666);
+
+    const result = await watchTool("b1000/71");
+
+    expect(result.content[0]?.text.split("\n")).toEqual([
+      "b1000/71: 2 differences from the record",
+      `DEPOSIT\tb1000/71\t${deposit.txid} 0.00000666 BTC 2026-09-29T22:18:51.000Z at ${target}`,
+      "BALANCE\tb1000/71\t7.10023266 BTC held, 7.100226 BTC recorded as the prize",
+      "Source page not checked; pass since to compare its archive captures.",
+    ]);
+    expect(result.details).toMatchObject({
+      id: "b1000/71",
+      findings: [
+        { kind: "deposit", amount: "666" },
+        { kind: "balance", balance: "710023266" },
+      ],
+      errors: [],
+    });
+    expect(JSON.stringify(result.details)).toContain('"amount":"666"');
+  });
+
+  it("rejects a since outside its limits as an argument error", async () => {
+    await expect(watchTool("b1000/71", "2026")).rejects.toThrow(InvalidArgumentError);
+    await expect(watchTool("b1000/71", "2026-13-01")).rejects.toThrow(
+      "Invalid since: expected YYYY-MM-DD or an ISO 8601 date and time",
+    );
+  });
+});

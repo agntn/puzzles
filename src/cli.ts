@@ -192,6 +192,7 @@ const main = defineCommand({
     stages: () => command(() => import("./commands/stages.ts")),
     stats: () => command(() => import("./commands/stats.ts")),
     verify: () => command(() => import("./commands/verify.ts")),
+    watch: () => command(() => import("./commands/watch.ts")),
   },
 });
 

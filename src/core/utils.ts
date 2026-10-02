@@ -47,7 +47,7 @@ let amounts: Intl.NumberFormat | undefined;
  * @param {number} amount - The amount to write.
  * @returns {string} Every digit of the amount, without an exponent or grouping.
  */
-function decimal(amount: number): string {
+export function decimal(amount: number): string {
   amounts ??= new Intl.NumberFormat("en-US", { maximumFractionDigits: 20, useGrouping: false });
   return amounts.format(amount);
 }

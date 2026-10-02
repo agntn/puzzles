@@ -168,6 +168,21 @@ export const facts = {
       ],
       openWorld: true,
     },
+    watch: {
+      name: "puzzles_watch",
+      title: "Watch Puzzle",
+      description:
+        "Compare one puzzle with its chain, and with its source page when since is given, and list what the record misses: deposits and spends it doesn't record, an unsolved prize the address no longer holds, a source page that changed after since.",
+      promptSnippet:
+        "Use puzzles_watch to check whether a puzzle's record is still current before relying on its prize or transactions.",
+      promptGuidelines: [
+        "This call reaches a block explorer, and the Wayback Machine when since is given, which can take a minute.",
+        "A finding is a difference from the record for a person to review, not an edit: the tool never changes a record.",
+        "It reads the newest 100 transactions per address, and leaves out incoming calls that move no coin.",
+        "A FAIL row is a check that could not run, so the record is unconfirmed there, not confirmed.",
+      ],
+      openWorld: true,
+    },
   },
   parameters: {
     id: {
@@ -208,6 +223,12 @@ export const facts = {
       minimum: 0,
       maximum: Number.MAX_SAFE_INTEGER,
       description: "Number of matching puzzles to skip (default 0). Use the returned next offset.",
+    },
+    since: {
+      minLength: 10,
+      maxLength: 40,
+      description:
+        "Also compare the source page's newest Wayback capture with the last one up to this moment, YYYY-MM-DD or ISO 8601, usually the date of the previous check",
     },
     apiKey: {
       maxLength: 200,
@@ -276,6 +297,7 @@ export const toolArguments = {
   ] satisfies (keyof ListParams)[],
   verify: ["id"],
   balance: ["id", "apiKey"],
+  watch: ["id", "since", "apiKey"],
 } as const satisfies Record<keyof typeof facts.tools, readonly string[]>;
 
 function text(value: string, details: Readonly<Record<string, unknown>>): ToolResult {
@@ -703,17 +725,72 @@ export async function balanceTool(id: string, apiKey?: string): Promise<ToolResu
     utils: { formatBalance },
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
-  const key =
-    apiKey === undefined ? undefined : assertLength("apiKey", apiKey, facts.parameters.apiKey);
-  const variable = apiKeyVariables[puzzle.chain()];
-  const balance = await puzzle.balance({
-    apiKey: key ?? (variable === undefined ? undefined : globalThis.process?.env[variable]),
-  });
+  const balance = await puzzle.balance({ apiKey: keyFor(puzzle.chain(), apiKey) });
   return text(`${puzzle.id()}: ${formatBalance(balance)}`, {
     id: puzzle.id(),
     chain: balance.chain,
     confirmed: balance.confirmed.toString(),
     unconfirmed: balance.unconfirmed.toString(),
     decimals: balance.decimals,
+  });
+}
+
+/**
+ * The key for one puzzle's lookups: the caller's, or the variable its chain reads one from.
+ *
+ * @param {Chain} chain - Chain of the puzzle.
+ * @param {string | undefined} apiKey - The key the caller passed, when any.
+ * @returns {string | undefined} The key, already checked against the length limits.
+ */
+function keyFor(chain: Chain, apiKey: string | undefined): string | undefined {
+  const key =
+    apiKey === undefined ? undefined : assertLength("apiKey", apiKey, facts.parameters.apiKey);
+  const variable = apiKeyVariables[chain];
+  return key ?? (variable === undefined ? undefined : globalThis.process?.env[variable]);
+}
+
+/**
+ * Compares one puzzle with its chain, and its source page when `since` is given. A failed lookup
+ * is a `FAIL` row beside the rest, so a partial answer never reads as clean.
+ *
+ * @param {string} id - Universal puzzle identifier.
+ * @param {string} [since] - Cutoff for the source page check.
+ * @param {string} [apiKey] - Provider API key, when the chain needs one.
+ * @returns {Promise<ToolResult>} A summary line and the report rows, with the report in `details`.
+ */
+export async function watchTool(id: string, since?: string, apiKey?: string): Promise<ToolResult> {
+  const {
+    dataset: { requirePuzzle },
+  } = await loadCore();
+  const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
+  const cutoff =
+    since === undefined ? undefined : assertLength("since", since, facts.parameters.since);
+  const { formatWatchReport, watcher } = await import("./core/watch.ts");
+  const report = await watcher({ since: cutoff })(puzzle, keyFor(puzzle.chain(), apiKey));
+  const { findings, errors } = report;
+  const counts = [
+    `${findings.length} ${findings.length === 1 ? "difference" : "differences"} from the record`,
+    ...(errors.length === 0
+      ? []
+      : [`${errors.length} ${errors.length === 1 ? "check" : "checks"} failed`]),
+  ];
+  const lines = [
+    `${puzzle.id()}: ${counts.join(", ")}`,
+    ...formatWatchReport(report),
+    ...(cutoff === undefined
+      ? ["Source page not checked; pass since to compare its archive captures."]
+      : []),
+  ];
+  return text(lines.join("\n"), {
+    id: report.id,
+    chain: report.chain,
+    findings: findings.map((finding) =>
+      finding.kind === "balance"
+        ? { ...finding, balance: finding.balance.toString() }
+        : finding.kind === "source"
+          ? finding
+          : { ...finding, amount: finding.amount.toString() },
+    ),
+    errors,
   });
 }

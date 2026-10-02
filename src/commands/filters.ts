@@ -3,6 +3,12 @@ import type { PuzzleQuery } from "../core/dataset.ts";
 import { Status } from "../core/puzzle.ts";
 import { parseStatus, requireChain } from "../core/utils.ts";
 
+/**
+ * The pause between two lookups of a filtered pass. Fired at once, a pass over the unsolved
+ * puzzles lost 11 Bitcoin lookups to mempool.space in one burst.
+ */
+export const pause = 250;
+
 /** The filters `list` and `balance` both take, besides the collection each declares its own way. */
 export const filterArgs = {
   address: {

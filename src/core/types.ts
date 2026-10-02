@@ -9,7 +9,7 @@ import { type Chain, chainDecimals } from "./chains.ts";
  * @param {number} decimals - Base unit decimal places of the native token.
  * @returns {string} The amount in whole units, without an exponent.
  */
-function formatUnits(units: bigint, decimals: number): string {
+export function formatUnits(units: bigint, decimals: number): string {
   const sign = units < 0n ? "-" : "";
   const digits = (units < 0n ? -units : units).toString().padStart(decimals + 1, "0");
   const whole = digits.slice(0, digits.length - decimals);

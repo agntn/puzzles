@@ -1,6 +1,6 @@
 import { setTimeout as sleep } from "node:timers/promises";
 import { defineCommand } from "citty";
-import { filterArgs, filterQuery, hasFilter } from "./filters.ts";
+import { filterArgs, filterQuery, hasFilter, pause } from "./filters.ts";
 import { jsonArg, oneLine, printLine } from "./output.ts";
 import { apiKeyVariables, BalanceError, type BalanceOptions } from "../core/balance.ts";
 import { requirePuzzle, selectPuzzles } from "../core/dataset.ts";
@@ -8,12 +8,6 @@ import { InvalidArgumentError } from "../core/errors.ts";
 import type { Puzzle } from "../core/puzzle.ts";
 import type { Balance } from "../core/types.ts";
 import { formatBalance, toJson } from "../core/utils.ts";
-
-/**
- * The pause between two lookups of a filtered pass. Fired at once, a pass over the unsolved
- * puzzles lost 11 Bitcoin lookups to mempool.space in one burst.
- */
-const pause = 250;
 
 /** One puzzle of a filtered pass: its balance, or the error that took its place. */
 type Row = Readonly<

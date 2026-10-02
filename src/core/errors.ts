@@ -98,3 +98,8 @@ export class UnknownCollectionError extends PuzzlesError {
     this.collection = collection;
   }
 }
+
+/** Raised when the archive gave no capture of a source page to compare, or none it could read. */
+export class SourceLookupError extends PuzzlesError {
+  override readonly name = "SourceLookupError";
+}

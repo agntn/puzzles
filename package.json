@@ -72,6 +72,7 @@
     "release": "vp test && obuild && changelogen --release --push"
   },
   "dependencies": {
+    "@agntn/archives": "0.7.0",
     "@agntn/chains": "0.3.10",
     "@agntn/explorers": "0.5.9",
     "@agntn/hashes": "0.4.0",

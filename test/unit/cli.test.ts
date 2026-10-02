@@ -855,6 +855,44 @@ describe.concurrent("puzzles CLI", () => {
     ]);
   });
 
+  it("watches a pass and exits 1 on a finding, beside a failed lookup", async () => {
+    const result = await stubbed(
+      "1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+      "watch",
+      "--collection",
+      "ballet",
+    );
+
+    expect(result.code).toBe(1);
+    expect(result.stdout.split("\n")).toEqual([
+      "OK\tballet/AA007448",
+      "FAIL\tballet/AA009926\tTransaction history lookup failed: No response from mempool (fetch failed): https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m/txs; then No response from blockstream (fetch failed): https://blockstream.info/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m/txs",
+      "FAIL\tballet/AA009926\tBalance lookup failed: No response from mempool (fetch failed): https://mempool.space/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m; then No response from blockstream (fetch failed): https://blockstream.info/api/address/1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m",
+      "BALANCE\tballet/AA012381\t0.000011 BTC held, 1.00003877 BTC recorded as the prize",
+      "",
+    ]);
+  });
+
+  it("exits 0 when the chain matches the record and 2 when only lookups failed", async () => {
+    const failing = "1JxWyNrkgYvgsHu8hVQZqTXEB9RftRGP5m";
+
+    await expect(stubbed(failing, "watch", "ballet/AA007448")).resolves.toMatchObject({
+      code: 0,
+      stdout: "OK\tballet/AA007448\n",
+    });
+    const failed = await stubbed(failing, "watch", "ballet/AA009926");
+    expect(failed.code).toBe(2);
+    expect(failed.stdout).toMatch(/^FAIL\tballet\/AA009926\tTransaction history lookup failed: /u);
+  });
+
+  it("rejects a since date before any lookup", async () => {
+    await expect(failure("watch", "bitaps", "--since", "2026-13-01")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid since: expected YYYY-MM-DD or an ISO 8601 date and time\n",
+    });
+  });
+
   it("asks for an id or a filter before checking balances", async () => {
     await expect(failure("balance")).resolves.toEqual({
       code: 1,
