@@ -21,7 +21,7 @@ import { expectedPrize, holdsPrize } from "./watch.ts";
 
 /** Options for `eligibility()`: the explorer options, plus the chain of a bare address. */
 export interface EligibilityOptions extends BalanceOptions {
-  /** The provider key of a chain, asked once the query resolves and only when `apiKey` is absent. */
+  /** Provider key of a chain, asked once the query resolves and `apiKey` is absent. */
   readonly apiKeyFor?: ((chain: Chain) => string | undefined) | undefined;
 
   /** Chain to read a bare address on, when its format fits more than one. */
@@ -157,11 +157,11 @@ async function resolve(query: string, chain: Chain | undefined): Promise<Target>
   return { address, chain: puzzle.chain(), puzzle, value: address.value };
 }
 
-/** What a live read gave: every address, or the failure that took the place of all of them. */
-type Reading = Readonly<{ states: readonly AddressState[]; error?: string }>;
+/** What a live read gave: the addresses read, and the failure of each one that wasn't. */
+type Reading = Readonly<{ states: readonly AddressState[]; errors: readonly string[] }>;
 
 /**
- * Reads every prize address, turning an explorer failure into the reason the live state is missing.
+ * Reads each prize address on its own, so one explorer failure doesn't hide the other reads.
  *
  * @param {Chain} chain - Chain of the addresses.
  * @param {readonly string[]} addresses - The target, then the escrow.
@@ -174,16 +174,22 @@ async function readAddresses(
   options: BalanceOptions,
 ): Promise<Reading> {
   const { lookupAddress } = await import("./providers.ts");
-  try {
-    return {
-      states: await Promise.all(addresses.map((address) => lookupAddress(chain, address, options))),
-    };
-  } catch (error) {
-    if (!(error instanceof BalanceError)) {
-      throw error;
-    }
-    return { states: [], error: error.message };
-  }
+  const reads = await Promise.all(
+    addresses.map(async (address) => {
+      try {
+        return { state: await lookupAddress(chain, address, options) };
+      } catch (error) {
+        if (!(error instanceof BalanceError)) {
+          throw error;
+        }
+        return { error: error.message };
+      }
+    }),
+  );
+  return {
+    states: reads.flatMap((read) => (read.state === undefined ? [] : [read.state])),
+    errors: reads.flatMap((read) => (read.error === undefined ? [] : [read.error])),
+  };
 }
 
 /**
@@ -205,11 +211,8 @@ function amount(units: bigint, chain: Chain): string {
  * @returns {string[]} One `missing` line per gap.
  */
 function liveGaps(chain: Chain, reading: Reading): string[] {
-  if (reading.error !== undefined) {
-    return [`live: ${reading.error}`];
-  }
   const verbs = { funded: "received", spent: "spent" } as const;
-  return reading.states.flatMap((state) =>
+  const totals = reading.states.flatMap((state) =>
     (["funded", "spent"] as const)
       .filter((total) => state[total] === undefined)
       .map(
@@ -217,6 +220,7 @@ function liveGaps(chain: Chain, reading: Reading): string[] {
           `${total}: ${state.provider} doesn't count the ${chainSymbol(chain)} ${state.address} ever ${verbs[total]}`,
       ),
   );
+  return [...reading.errors.map((error) => `live: ${error}`), ...totals];
 }
 
 /**
@@ -334,7 +338,7 @@ function bareAddress(chain: Chain, address: string): Address | undefined {
 }
 
 /**
- * The files and pages a puzzle hides its clues in, each once, and its key range. Solutions aren't clues.
+ * The files and pages a puzzle hides its clues in, and its key range. Solutions aren't clues.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @returns {string[]} Asset and artifact URLs, then the range.
@@ -360,7 +364,7 @@ function carriers(puzzle: Puzzle): string[] {
  * The evidence for a puzzle's status, and a prize the addresses no longer hold as a conflict.
  *
  * @param {Puzzle} puzzle - The puzzle.
- * @param {readonly AddressState[]} states - The live read, empty when it failed.
+ * @param {readonly AddressState[]} states - Every prize address read, or none when one failed.
  * @returns {{ evidence: string[]; conflicts: string[] }} The two lists.
  */
 function statusEvidence(
@@ -395,10 +399,10 @@ function statusEvidence(
  * The record half of an eligibility check, from the puzzle and its collection.
  *
  * @param {Puzzle} puzzle - The puzzle.
- * @param {readonly AddressState[]} states - The live read, empty when it failed.
+ * @param {Reading} reading - The live read.
  * @returns {Promise<object>} The identity, status and carrier fields, and what they lack.
  */
-async function recordFields(puzzle: Puzzle, states: readonly AddressState[]) {
+async function recordFields(puzzle: Puzzle, reading: Reading) {
   const { author } = await requireCollection(puzzle.collection());
   const name = author.name ?? author.key;
   const found = carriers(puzzle);
@@ -413,7 +417,7 @@ async function recordFields(puzzle: Puzzle, states: readonly AddressState[]) {
       status,
       unclaimed: status === Status.Unsolved,
       carriers: found,
-      ...statusEvidence(puzzle, states),
+      ...statusEvidence(puzzle, reading.errors.length === 0 ? reading.states : []),
     },
     missing: [
       ...(name === undefined ? ["author: the collection names no author"] : []),
@@ -457,8 +461,7 @@ export async function eligibility(
     puzzle === undefined ? [value] : prizeAddresses(puzzle),
     { ...options, apiKey: options.apiKey ?? options.apiKeyFor?.(chain) },
   );
-  const record =
-    puzzle === undefined ? bareFields(value) : await recordFields(puzzle, reading.states);
+  const record = puzzle === undefined ? bareFields(value) : await recordFields(puzzle, reading);
   const solved = solution(target);
   return defined<Eligibility>({
     query,

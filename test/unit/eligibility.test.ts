@@ -116,6 +116,21 @@ describe("eligibility", () => {
     ]);
   });
 
+  it("keeps the escrow read when the target's lookup fails", async () => {
+    vi.stubGlobal("fetch", async (input: unknown) => {
+      if (String(input).includes("0x635739254BDE27d28301f25aD57c3cAC3C3468f3")) {
+        throw new TypeError("fetch failed");
+      }
+      return json({ coin_balance: "553000000000000000" });
+    });
+
+    const record = await eligibility("powerful-moss");
+
+    expect(record.live).toMatchObject([{ confirmed: 553000000000000000n }]);
+    expect(record.missing[0]).toMatch(/^live: Balance lookup failed: /u);
+    expect(record.evidence).toEqual(["record says unsolved"]);
+  });
+
   it("leaves a published solution out of the carriers", async () => {
     stubExplorers(0, 0);
 
