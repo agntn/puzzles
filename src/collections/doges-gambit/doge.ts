@@ -5,6 +5,7 @@ import {
   digest,
   funding,
   official,
+  technique,
   uncompressed,
   wif,
 } from "../../core/parts.ts";
@@ -32,6 +33,7 @@ export const dogesGambitDoge = puzzle({
     "0488e79ff1f6aa637457d531c6d40c056230b8106290651054f67eb12e96a7ba35573300a4c2af9ec7597fe0dbf75f5214e34e3ae071321562d04e4766ad695766",
   ),
   key: wif("6Je1sv5tRwXLFKpnor4yef6i4k73eJu2Kw9DEnRLY3BL9jVtPq3"),
+  techniques: [technique("steganography", VIDEO)],
   prize: 10000,
   solvedAt: "2021-05-09 00:28:06",
   solveTime: 12795416,

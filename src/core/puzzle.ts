@@ -16,6 +16,7 @@ import {
   type Pubkey,
   secretOf,
   type Stage,
+  type TechniqueTag,
   type Transaction,
   TransactionType,
 } from "./parts.ts";
@@ -43,6 +44,7 @@ export interface PuzzleData {
   readonly stages?: readonly Stage[];
   readonly start_date: string;
   readonly status: Status;
+  readonly techniques?: readonly TechniqueTag[];
   readonly transactions?: readonly Transaction[];
 }
 
@@ -69,6 +71,9 @@ const NO_STAGES: readonly Stage[] = Object.freeze([]);
 
 /** The hint list of a puzzle that recorded none. */
 const NO_HINTS: readonly Hint[] = Object.freeze([]);
+
+/** The technique list of a puzzle that recorded none. */
+const NO_TECHNIQUES: readonly TechniqueTag[] = Object.freeze([]);
 
 /**
  * Assets under the release tag of this package version, not `main`: a published record keeps
@@ -325,6 +330,15 @@ export abstract class Puzzle {
   }
 
   /**
+   * Techniques of this record alone; its stages and `Collection.techniques` hold their own.
+   *
+   * @returns {readonly TechniqueTag[]} The techniques, or an empty list when the record has none.
+   */
+  techniques(): readonly TechniqueTag[] {
+    return NO_TECHNIQUES;
+  }
+
+  /**
    * Collection segment of the identifier.
    *
    * @returns {string} Collection segment of the identifier.
@@ -547,6 +561,7 @@ export abstract class Puzzle {
     const transactions = this.transactions();
     const hints = this.hints();
     const stages = this.stages();
+    const techniques = this.techniques();
     const record = defined<PuzzleData>({
       id: this.id(),
       chain: this.chain(),
@@ -567,6 +582,7 @@ export abstract class Puzzle {
       assets: this.assets(),
       stages: stages.length === 0 ? undefined : stages,
       hints: hints.length === 0 ? undefined : hints,
+      techniques: techniques.length === 0 ? undefined : techniques,
     });
     return frozen(record);
   }
@@ -666,6 +682,7 @@ export interface PuzzleSpec {
   readonly stages?: readonly Stage[];
   readonly startedAt: string;
   readonly status?: Status;
+  readonly techniques?: readonly TechniqueTag[];
   readonly transactions?: readonly Transaction[];
 }
 
@@ -768,6 +785,10 @@ class SpecPuzzle extends Puzzle {
 
   override hints(): readonly Hint[] {
     return this.#spec.hints ?? NO_HINTS;
+  }
+
+  override techniques(): readonly TechniqueTag[] {
+    return this.#spec.techniques ?? NO_TECHNIQUES;
   }
 }
 

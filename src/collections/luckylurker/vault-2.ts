@@ -1,4 +1,4 @@
-import { confirmation, funding, official } from "../../core/parts.ts";
+import { confirmation, funding, official, technique } from "../../core/parts.ts";
 import { puzzle } from "../../core/puzzle.ts";
 
 /** Vault #2 was announced in September; public hints are scheduled for October 12. */
@@ -8,6 +8,7 @@ export const luckyLurkerVault2 = puzzle({
   address: "bc1qnepv9pcnqvndux9h9mcaxvk6u993rc0lew9fpp",
   sourceUrl: "https://luckylurker.com/bitcoin-vault-2/",
   startedAt: "2026-09-11 16:42:56",
+  techniques: [technique("hidden-seed-words", "https://luckylurker.com/bitcoin-vault-2/")],
   prize: 1,
   hints: [
     official(

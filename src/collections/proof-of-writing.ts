@@ -15,6 +15,7 @@ import {
   PartyKind,
   profile,
   seed,
+  technique,
 } from "../core/parts.ts";
 import { puzzle, Status } from "../core/puzzle.ts";
 
@@ -55,6 +56,7 @@ export const ecashCommunity = puzzle({
     "matter key easily slot maple two visa swamp subject friend robust trip",
     "m/44'/1899'/0'/0/0",
   ),
+  techniques: [technique("hidden-seed-words", ARTICLE)],
   prize: 30068000.94,
   hints: [
     official("Revelations 22:13", ARTICLE, undefined, {

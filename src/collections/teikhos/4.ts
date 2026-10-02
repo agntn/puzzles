@@ -7,6 +7,7 @@ import {
   party,
   PartyKind,
   stage,
+  technique,
 } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
@@ -23,6 +24,7 @@ export const teikhos4 = puzzle({
   sourceUrl: source,
   startedAt: "2018-03-14 03:11:51",
   status: Status.Solved,
+  techniques: [technique("xor", source)],
   prize: 0.5,
   stages: [
     stage(

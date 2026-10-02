@@ -1,5 +1,13 @@
 import { puzzle } from "../../core/puzzle.ts";
-import { assets, derivation, digest, funding, increase, source } from "../../core/parts.ts";
+import {
+  assets,
+  derivation,
+  digest,
+  funding,
+  increase,
+  source,
+  technique,
+} from "../../core/parts.ts";
 
 /** Puzzle `bitimage/kitten-passphrase`. */
 export const bitimagePuzzleKittenPassphrase = puzzle({
@@ -17,6 +25,12 @@ export const bitimagePuzzleKittenPassphrase = puzzle({
     ),
     "Required",
   ),
+  techniques: [
+    technique(
+      "sha256-to-bip39-entropy",
+      "https://corey-lyle-phillips.medium.com/part-1-3-turn-your-photos-into-bitcoin-private-keys-addresses-57669771cf7a",
+    ),
+  ],
   prize: 0.010019,
   transactions: [
     funding(

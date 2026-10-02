@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 11 were published. */
@@ -26,6 +35,7 @@ export const quizchainBlock11 = puzzle({
       "SHA-256 of the question as posted with the last three characters of the block 10 key appended",
     ),
   ),
+  techniques: [technique("sha256-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Can you find the solution with absolutely no hint whatsoever?", THREAD, undefined, {

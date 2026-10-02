@@ -1,4 +1,4 @@
-import { artifact, funding, stage } from "../../core/parts.ts";
+import { artifact, funding, stage, technique } from "../../core/parts.ts";
 import { puzzle } from "../../core/puzzle.ts";
 
 const address = "0x17e5e0910b9185b0ede564dcbf074ca910ad56a4";
@@ -11,6 +11,7 @@ export const teikhos1 = puzzle({
   address,
   sourceUrl: source,
   startedAt: "2018-02-26 02:44:42",
+  techniques: [technique("xor", source)],
   prize: 1,
   stages: [
     stage(

@@ -70,6 +70,7 @@ export {
   stage,
   standard,
   sweep,
+  technique,
   TransactionType,
   uncompressed,
   wif,
@@ -96,9 +97,12 @@ export {
   type Share,
   type Shares,
   type Stage,
+  type TechniqueTag,
   type Transaction,
   type Wif,
 } from "./core/parts.ts";
+
+export { Technique, techniques } from "./core/technique.ts";
 
 export {
   collectionKeys,
@@ -137,6 +141,7 @@ export {
   type DatasetCollection,
   type PuzzleQuery,
   type Stats,
+  type TechniqueCounts,
 } from "./core/dataset.ts";
 
 export {

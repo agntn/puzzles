@@ -6,11 +6,12 @@ import {
   fact,
   funding,
   hex,
-  type Hint,
   official,
   party,
   PartyKind,
   profile,
+  technique,
+  type Hint,
   uncompressed,
 } from "../core/parts.ts";
 import { puzzle, Status } from "../core/puzzle.ts";
@@ -78,6 +79,7 @@ export const triviaBrainwalletRiddles = puzzle({
     )
     .salt("mcdonnell 20")
     .derived(),
+  techniques: [technique("scrypt-brainwallet", THREAD)],
   prize: 0.04,
   hints: [
     official(

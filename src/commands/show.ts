@@ -20,6 +20,6 @@ export default defineCommand({
       return;
     }
     const collection = await requireCollection(puzzle.collection());
-    printLine(formatPuzzleRecord(puzzle, collection.hints));
+    printLine(formatPuzzleRecord(puzzle, collection.hints, collection.techniques));
   },
 });

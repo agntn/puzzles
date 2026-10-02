@@ -6,6 +6,7 @@ import {
   funding,
   hex,
   official,
+  technique,
   uncompressed,
 } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
@@ -32,6 +33,7 @@ export const dogesGambitEth = puzzle({
     "047646f5a4dbb6fa9cc47f1c446a63a95b9a7e8b7f14336ed3e573ee8277d54bb7b2d99d67a03a00f0d6543eac3faccd938e06b17aba5a139ec86cda70a0477bce",
   ),
   key: hex("78502de89b8db1c4af2392e34b78d47865c93b923a6eaac3671bdeafa400c206"),
+  techniques: [technique("steganography", VIDEO)],
   prize: 0.01,
   solvedAt: "2021-04-23 14:32:06",
   solveTime: 11463656,

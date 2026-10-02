@@ -202,7 +202,7 @@ describe("tool schemas and executors share one argument contract", () => {
     await expect(stagesTool("")).rejects.toThrow(/id/);
     await expect(stagesTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
     await expect(listTool({ with_pubkey: true } as never)).rejects.toThrow(
-      'Invalid arguments: unknown property "with_pubkey", expected one of address, chain, collection, limit, offset, status, withPubkey',
+      'Invalid arguments: unknown property "with_pubkey", expected one of address, chain, collection, limit, offset, status, technique, withPubkey',
     );
     for (const params of [null, "b1000", ["b1000"]]) {
       await expect(listTool(params as never)).rejects.toThrow(

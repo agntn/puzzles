@@ -65,23 +65,23 @@ source: https://bitcointalk.org/index.php?topic=293382.0
 
 ### Commands
 
-| Command                       | What it prints                                                                                                          |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `puzzles stats`               | Totals and status counts. `--json` adds the prize sums                                                                  |
-| `puzzles collections`         | One row per collection: key, counts, author                                                                             |
-| `puzzles authors [key]`       | One row per author, or one author's record with its sourced facts                                                       |
-| `puzzles solvers [key]`       | One row per named solver, or one solver's record: every solve, profiles and sourced facts                               |
-| `puzzles show <id>`           | One puzzle's record: key material, transactions, hints and links. `--json` for the data                                 |
-| `puzzles hints <id>`          | The collection's hints, the puzzle's own, then its hint files. `--json` for both                                        |
-| `puzzles stages <id>`         | The stages of a multi-stage puzzle with their pages, files and published answers. `--json` for the list                 |
-| `puzzles assets <id>`         | The files a puzzle ships with SHA-256 and size. `--check <dir>` hashes your copies, `--live` the author's URLs          |
-| `puzzles list [collection]`   | One puzzle per line. `--address`, `--chain`, `--status` and `--with-pubkey` narrow it, `--limit` and `--offset` page it |
-| `puzzles verify [id]`         | A published key against its address. `--all` for every puzzle, exit 1 on a mismatch                                     |
-| `puzzles balance [id]`        | The live balance. The `list` filters check a whole set, one row each. `--api-key`, or one variable per chain            |
-| `puzzles watch [id]`          | What the chain knows and the record doesn't. `--since` checks the source pages too, exit 1 on any finding               |
-| `puzzles eligibility <query>` | The checklist before working on a prize, by id or address. Exit 1 while any field is missing                            |
-| `puzzles export`              | The whole dataset with its `data_version`                                                                               |
-| `puzzles mcp`                 | The MCP server over stdio                                                                                               |
+| Command                       | What it prints                                                                                                                         |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `puzzles stats`               | Totals and status counts. `--json` adds the prize sums                                                                                 |
+| `puzzles collections`         | One row per collection: key, counts, author                                                                                            |
+| `puzzles authors [key]`       | One row per author, or one author's record with its sourced facts                                                                      |
+| `puzzles solvers [key]`       | One row per named solver, or one solver's record: every solve, profiles and sourced facts                                              |
+| `puzzles show <id>`           | One puzzle's record: key material, transactions, hints and links. `--json` for the data                                                |
+| `puzzles hints <id>`          | The collection's hints, the puzzle's own, then its hint files. `--json` for both                                                       |
+| `puzzles stages <id>`         | The stages of a multi-stage puzzle with their pages, files and published answers. `--json` for the list                                |
+| `puzzles assets <id>`         | The files a puzzle ships with SHA-256 and size. `--check <dir>` hashes your copies, `--live` the author's URLs                         |
+| `puzzles list [collection]`   | One puzzle per line. `--address`, `--chain`, `--status`, `--technique` and `--with-pubkey` narrow it, `--limit` and `--offset` page it |
+| `puzzles verify [id]`         | A published key against its address. `--all` for every puzzle, exit 1 on a mismatch                                                    |
+| `puzzles balance [id]`        | The live balance. The `list` filters check a whole set, one row each. `--api-key`, or one variable per chain                           |
+| `puzzles watch [id]`          | What the chain knows and the record doesn't. `--since` checks the source pages too, exit 1 on any finding                              |
+| `puzzles eligibility <query>` | The checklist before working on a prize, by id or address. Exit 1 while any field is missing                                           |
+| `puzzles export`              | The whole dataset with its `data_version`                                                                                              |
+| `puzzles mcp`                 | The MCP server over stdio                                                                                                              |
 
 `--json` is the same serializer everywhere, `bigint` as strings and absent fields left out. The flags and exit codes are in the [CLI guide](https://puzzles.agntn.dev/guide/cli).
 

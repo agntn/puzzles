@@ -10,6 +10,7 @@ import {
   PartyKind,
   profile,
   sweep,
+  technique,
   uncompressed,
 } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
@@ -49,6 +50,11 @@ export const wickexYouTube = puzzle({
   pubkey: uncompressed(
     "04f84646d641306db5209da72a4f7ce6386404fb4035a296b38467a39406a6bac7b85b541eab98b8b217245a7ba0f9dfca5549a659470d69abb3544d7772d5c684",
   ),
+  techniques: [
+    technique("morse", THREAD),
+    technique("sha256-brainwallet", THREAD),
+    technique("steganography", THREAD),
+  ],
   prize: 0.001,
   hints: [
     official(

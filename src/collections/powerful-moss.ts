@@ -11,6 +11,7 @@ import {
   PartyKind,
   profile,
   stage,
+  technique,
   uncompressed,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
@@ -66,6 +67,7 @@ export const powerfulMossAlbum = puzzle({
   pubkey: uncompressed(
     "04d8e5d392cb30d9f69334a0bffe3075dff2667cabe758fc53a24aba2c3ed58a6c64bb13365e7faea54a217ab5681c998c0bd1c771e5925858a6657422a8da6604",
   ),
+  techniques: [technique("hidden-seed-words", PAGE)],
   prize: 0.55941,
   stages: [
     stage(

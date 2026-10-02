@@ -41,10 +41,42 @@ describe("puzzles MCP server", () => {
     expect(status).not.toHaveProperty("anyOf");
   });
 
+  it("advertises the technique vocabulary as the list filter's enum", async () => {
+    const { tools } = await client.listTools();
+    const technique = tools.find((tool) => tool.name === "puzzles_list")?.inputSchema.properties?.[
+      "technique"
+    ];
+
+    expect(technique).toMatchObject({
+      enum: [...facts.techniques],
+      description: facts.parameters.technique.description,
+    });
+  });
+
+  it("lists the puzzles built with a technique and names one an address filter left out", async () => {
+    const result = await client.callTool({
+      name: "puzzles_list",
+      arguments: { technique: "beaufort" },
+    });
+    expect(firstText(result).split("\n")).toEqual([
+      "1 matching puzzles:",
+      "gsmg\tunsolved\t1.25636967 BTC\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+    ]);
+
+    const outside = await client.callTool({
+      name: "puzzles_list",
+      arguments: { technique: "xor", address: "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe" },
+    });
+    expect(firstText(outside).split("\n").at(-1)).toBe(
+      "gsmg pays to this address, but it records no xor technique.",
+    );
+  });
+
   it("reports dataset statistics", async () => {
     const result = await client.callTool({ name: "puzzles_stats", arguments: {} });
 
     expect(firstText(result)).toContain("Total: 489 puzzles in 36 collections");
+    expect(firstText(result)).toMatch(/^Techniques: aes 1, atbash 11, .*, xor 6$/mu);
   });
 
   it("lists collections with the same rows as the CLI", async () => {
@@ -79,7 +111,8 @@ describe("puzzles MCP server", () => {
     expect(byKey.some((line) => line.startsWith("\t2018-06-20\tSigned the Codex Protocol"))).toBe(
       true,
     );
-    expect(byKey.at(-1)).toMatch(/\tsource: https:\/\/crypto\.haluska\.sk\/$/u);
+    expect(byKey.at(-3)).toMatch(/\tsource: https:\/\/crypto\.haluska\.sk\/$/u);
+    expect(byKey.slice(-2)).toEqual(["techniques: 1", "\tsteganography\t16 puzzles"]);
 
     const byCollection = firstText(
       await client.callTool({ name: "puzzles_author", arguments: { key: "hash-collision" } }),
@@ -233,7 +266,7 @@ describe("puzzles MCP server", () => {
 
     expect(misspelled.isError).toBe(true);
     expect(firstText(misspelled)).toBe(
-      'Invalid arguments: unknown property "with_pubkey"; takes address, collection, chain, status, withPubkey, limit, offset',
+      'Invalid arguments: unknown property "with_pubkey"; takes address, collection, chain, status, technique, withPubkey, limit, offset',
     );
     expect(stray.isError).toBe(true);
     expect(firstText(stray)).toBe('Invalid arguments: unknown property "name"; takes id');
@@ -256,7 +289,7 @@ describe("puzzles MCP server", () => {
 
     expect(result.isError).toBe(true);
     expect(firstText(result).split("\n")).toEqual([
-      `Invalid arguments: unknown property "colection"; takes address, collection, chain, status, withPubkey, limit, offset`,
+      `Invalid arguments: unknown property "colection"; takes address, collection, chain, status, technique, withPubkey, limit, offset`,
       `Invalid arguments at /chain: must be one of ${facts.chains.join(", ")}`,
       `Invalid arguments at /status: must be one of ${facts.statuses.join(", ")}`,
       "Invalid arguments at /limit: must be >= 1",

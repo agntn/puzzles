@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 71 were published. */
@@ -27,6 +36,7 @@ export const quizchainBlock71 = puzzle({
     "d6afff13ce667d4ad13d0c3899b8cbeb",
     source(THREAD, "MD5 of the password, TOMI, the wizard and the whole block 70 key"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.008,
   hints: [
     official("Question: merry idea", THREAD, undefined, {

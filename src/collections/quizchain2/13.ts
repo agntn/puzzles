@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 13 thread, with the question, the funding txid, the hash digits and the solution. */
@@ -19,6 +28,7 @@ export const quizchain2Block13 = puzzle({
   key: wif("L2AH6wtNHQjdRftfuHd5VKXiGh3RB4HNm2tiBF8i9MKKzxLuYJTU")
     .entropy("b5e4cbfe80a8b7a927101b882ed00c91", source(THREAD, "MD5 of the word, TOMI and a name"))
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD), technique("atbash", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: Kraaz", THREAD, undefined, {

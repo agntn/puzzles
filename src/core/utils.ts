@@ -1,6 +1,6 @@
 import type { AuthorEntry, SolverEntry } from "./dataset.ts";
 import { type Chain, chains, chainSymbol, parseChain, sameAddress } from "./chains.ts";
-import type { CollectionSummary, Stats } from "./dataset.ts";
+import type { CollectionSummary, Stats, TechniqueCounts } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
 import {
   type Answer,
@@ -17,9 +17,11 @@ import {
   type Seed,
   secretOf,
   type Shares,
+  type TechniqueTag,
   type Wif,
 } from "./parts.ts";
 import { type AssetLink, type Puzzle, Status } from "./puzzle.ts";
+import { type Technique, techniques } from "./technique.ts";
 import type { Balance } from "./types.ts";
 
 /**
@@ -364,7 +366,37 @@ function formatStages(puzzle: Puzzle): string[] {
         return `\t\t${[item.name, item.url, ...(copy === undefined ? [] : [copy])].join("\t")}`;
       }),
       ...(stage.answer === undefined ? [] : [`\t\t${formatAnswer(stage.answer)}`]),
+      ...(stage.techniques ?? []).map((tag) => `\t\ttechnique: ${formatTechnique(tag)}`),
     ]),
+  ];
+}
+
+/**
+ * One technique as a record line prints it.
+ *
+ * @param {TechniqueTag} tag - The technique.
+ * @returns {string} `name\tsource: url`.
+ */
+function formatTechnique(tag: TechniqueTag): string {
+  return `${tag.name}\tsource: ${tag.source}`;
+}
+
+/**
+ * The collection's technique block, then the record's; a stage's print under the stage.
+ *
+ * @param {readonly TechniqueTag[]} inherited - The techniques of the puzzle's collection.
+ * @param {readonly TechniqueTag[]} own - The puzzle's own techniques.
+ * @returns {string[]} The lines, empty when neither list has a technique.
+ */
+function formatTechniqueBlocks(
+  inherited: readonly TechniqueTag[],
+  own: readonly TechniqueTag[],
+): string[] {
+  return [
+    ...(inherited.length === 0
+      ? []
+      : recordBlock("collection techniques", inherited, formatTechnique)),
+    ...(own.length === 0 ? [] : recordBlock("techniques", own, formatTechnique)),
   ];
 }
 
@@ -486,13 +518,19 @@ export function formatStageReport(puzzle: Puzzle): string[] {
 /**
  * Formats a puzzle as the lines `puzzles_show` prints: the summary row, then every field the
  * record has as `name: value`, so a client that only sees the text still has the record. The
- * hints the collection shares print as `collection hints` ahead of the puzzle's own.
+ * hints the collection shares print as `collection hints` ahead of the puzzle's own, and its
+ * techniques as `collection techniques`.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @param {readonly Hint[]} [inherited] - The hints of the puzzle's collection.
+ * @param {readonly TechniqueTag[]} [inheritedTechniques] - The collection's techniques.
  * @returns {string} The record as lines.
  */
-export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = []): string {
+export function formatPuzzleRecord(
+  puzzle: Puzzle,
+  inherited: readonly Hint[] = [],
+  inheritedTechniques: readonly TechniqueTag[] = [],
+): string {
   const address = puzzle.address();
   const key = puzzle.keyData();
   const bits = key?.bits;
@@ -514,6 +552,7 @@ export function formatPuzzleRecord(puzzle: Puzzle, inherited: readonly Hint[] = 
     ...field("claim", puzzle.claimExplorerUrl()),
     ...formatAssets(puzzle),
     ...formatStages(puzzle),
+    ...formatTechniqueBlocks(inheritedTechniques, puzzle.techniques()),
     ...formatHintBlocks(inherited, puzzle.hints()),
     `explorer: ${puzzle.explorerUrl()}`,
     `source: ${puzzle.sourceUrl()}`,
@@ -588,7 +627,25 @@ export function formatAuthorRecord(entry: AuthorEntry): string {
       author.facts,
       (item) => `${item.date ?? "-"}\t${item.text}\tsource: ${item.source}`,
     ),
+    ...recordBlock(
+      "techniques",
+      techniqueRows(entry.techniques),
+      ([name, count]) => `${name}\t${countOf(count, "puzzle")}`,
+    ),
   ].join("\n");
+}
+
+/**
+ * The technique counts as rows, in vocabulary order.
+ *
+ * @param {TechniqueCounts} counts - How many puzzles use each technique.
+ * @returns {Array<readonly [Technique, number]>} One row per technique a puzzle uses.
+ */
+function techniqueRows(counts: TechniqueCounts): Array<readonly [Technique, number]> {
+  return techniques.flatMap((name) => {
+    const count = counts[name];
+    return count === undefined ? [] : [[name, count] as const];
+  });
 }
 
 /**
@@ -649,7 +706,7 @@ export function formatCollection(summary: CollectionSummary): string {
  * Formats the aggregate statistics as the lines `puzzles stats` prints.
  *
  * @param {Stats} result - The statistics from `stats()`.
- * @returns {string[]} `Total: N`, one line per status, then `With pubkey: N`.
+ * @returns {string[]} `Total: N`, one line per status, `With pubkey: N`, then the technique counts.
  */
 export function formatStats(result: Stats): string[] {
   return [
@@ -660,7 +717,36 @@ export function formatStats(result: Stats): string[] {
     `Swept: ${result.swept}`,
     `Expired: ${result.expired}`,
     `With pubkey: ${result.with_pubkey}`,
+    `Techniques: ${formatTechniqueCounts(result.techniques)}`,
   ];
+}
+
+/**
+ * The technique counts on one line, in vocabulary order.
+ *
+ * @param {TechniqueCounts} counts - How many puzzles use each technique.
+ * @returns {string} `atbash 11, base64 1`, or `none` when no puzzle records one.
+ */
+export function formatTechniqueCounts(counts: TechniqueCounts): string {
+  const rows = techniqueRows(counts).map(([name, count]) => `${name} ${count}`);
+  return rows.length === 0 ? "none" : rows.join(", ");
+}
+
+/**
+ * Parses a technique filter, throwing on a name outside the vocabulary.
+ *
+ * @param {string | undefined} value - Technique text from a caller, when given.
+ * @returns {Technique | undefined} The technique filter.
+ */
+export function parseTechnique(value: string | undefined): Technique | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  const name = techniques.find((item) => item === value);
+  if (name === undefined) {
+    throw new InvalidArgumentError("technique", `expected one of ${techniques.join(", ")}`);
+  }
+  return name;
 }
 
 /**

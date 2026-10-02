@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, hex, official, party } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  hex,
+  official,
+  party,
+  technique,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the public key, the masked key, the full key and the author's pointer were posted. */
@@ -19,6 +28,7 @@ export const mini6 = puzzle({
   status: Status.Solved,
   pubkey: compressed("03bbf1aff1b753dfa4c58835c2c135d7d2c7cea8635d483d37a8997b666cc1fa61"),
   key: hex("1ba27fb025baf482573f6f34348ee6b14e9d8a3581c0b018dbecc642fa90d587"),
+  techniques: [technique("partial-key", THREAD)],
   prize: 0.01,
   hints: [
     official(

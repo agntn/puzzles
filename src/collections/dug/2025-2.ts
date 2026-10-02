@@ -1,4 +1,4 @@
-import { assets, claim, compressed, digest, funding, seed } from "../../core/parts.ts";
+import { assets, claim, compressed, digest, funding, seed, technique } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 const source =
@@ -18,6 +18,7 @@ export const dug2025Index2 = puzzle({
     "profit general lava hover jar visa joy immense install first give kingdom",
     "m/84'/0'/0'/0/2",
   ),
+  techniques: [technique("hidden-seed-words", source)],
   pubkey: compressed("03f505827081f5a8e74e554d1085c4e9b636aade0dc3a44e04a02e9d0a3d796afe"),
   assets: assets({
     solution: "2025-solution.md",

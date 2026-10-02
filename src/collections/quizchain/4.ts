@@ -6,6 +6,7 @@ import {
   funding,
   official,
   source,
+  technique,
   wif,
 } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
@@ -40,6 +41,7 @@ export const quizchainBlock4 = puzzle({
       "SHA-256 of the two words with the last three characters of the block 3 key appended",
     ),
   ),
+  techniques: [technique("sha256-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official(

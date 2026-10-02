@@ -1,5 +1,5 @@
 import { puzzle } from "../../core/puzzle.ts";
-import { funding, p2sh, redeemScript } from "../../core/parts.ts";
+import { funding, p2sh, redeemScript, technique } from "../../core/parts.ts";
 
 /** Puzzle `hash-collision/sha256`. */
 export const hashCollisionPuzzleSha256 = puzzle({
@@ -12,6 +12,7 @@ export const hashCollisionPuzzleSha256 = puzzle({
   ),
   sourceUrl: "https://bitcointalk.org/index.php?topic=293382.0",
   startedAt: "2013-09-13 05:59:09",
+  techniques: [technique("hash-collision", "https://bitcointalk.org/index.php?topic=293382.0")],
   prize: 0.277343,
   transactions: [
     funding(

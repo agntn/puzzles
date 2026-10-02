@@ -1,4 +1,4 @@
-import { fact, party, PartyKind, seed } from "../../core/parts.ts";
+import { fact, party, PartyKind, seed, technique } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Scissors Secret Sharing, a 100-point CTF task rather than a Bitcoin bounty. */
@@ -13,6 +13,12 @@ export const ledgerDonjonPuzzleScissorsSecretSharing = puzzle({
     "since desk thrive carbon zone prison leaf depart hobby practice ivory luggage",
     "m/44'/0'/0'/0/0",
   ),
+  techniques: [
+    technique(
+      "hidden-seed-words",
+      "https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup",
+    ),
+  ],
   solver: party("joachim", {
     key: "joachim",
     kind: PartyKind.Person,

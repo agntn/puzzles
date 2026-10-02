@@ -6,6 +6,7 @@ import {
   increase,
   official,
   source,
+  technique,
   wif,
 } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
@@ -34,6 +35,7 @@ export const quizchain2Block9 = puzzle({
       source(THREAD, "MD5 of the code, TOMI and two words"),
     )
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.014,
   hints: [
     official("Question: 11-9", THREAD, undefined, {

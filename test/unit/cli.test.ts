@@ -486,6 +486,29 @@ describe.concurrent("puzzles CLI", () => {
     ]);
   });
 
+  it("lists the puzzles built with one technique, from a stage or a collection too", async () => {
+    await expect(puzzles("list", "--technique", "beaufort")).resolves.toBe(
+      "gsmg\tunsolved\t1.25636967 BTC\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+    );
+    const atbash = await puzzles("list", "quizchain2", "--technique", "atbash");
+    expect(atbash.split("\n").map((line) => line.split("\t")[0])).toEqual([
+      "quizchain2/3",
+      "quizchain2/7",
+      "quizchain2/13",
+      "quizchain2/27",
+      "quizchain2/30",
+      "quizchain2/34",
+    ]);
+    const masked = await puzzles("list", "--technique", "masked-key-range");
+    expect(masked.split("\n")).toHaveLength(256);
+  });
+
+  it("names the techniques when the filter is not one", async () => {
+    const { code, stdout, stderr } = await failure("list", "--technique", "rot13");
+    expect({ code, stdout }).toEqual({ code: 1, stdout: "" });
+    expect(stderr).toMatch(/^Invalid technique: expected one of aes, atbash, .*, xor\n$/u);
+  });
+
   it("names the supported chains when the filter is not one", async () => {
     await expect(failure("list", "--chain", "solana")).resolves.toEqual({
       code: 1,

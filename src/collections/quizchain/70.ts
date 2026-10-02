@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 70 were published. */
@@ -24,6 +33,7 @@ export const quizchainBlock70 = puzzle({
     "a945917b956796976029e198881b3d68",
     source(THREAD, "MD5 of the address, TOMI, the fixed text and the whole block 69 key"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: Looking for yet another Bitcoin address.", THREAD, undefined, {

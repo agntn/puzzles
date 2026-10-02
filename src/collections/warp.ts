@@ -1,5 +1,5 @@
 import { NamedCollection } from "../core/collection.ts";
-import { fact, party, PartyKind, profile } from "../core/parts.ts";
+import { fact, party, PartyKind, profile, technique } from "../core/parts.ts";
 import { warpPuzzleChallenge1 } from "./warp/challenge-1.ts";
 import { warpPuzzleChallenge2 } from "./warp/challenge-2.ts";
 import { warpPuzzleChallenge3 } from "./warp/challenge-3.ts";
@@ -52,9 +52,18 @@ export class WarpCollection extends NamedCollection {
     warpPuzzleWarpChallenge2,
   ];
 
+  /** Techniques every puzzle in this collection was built with. */
+  static readonly techniques = [technique("warpwallet", "https://keybase.io/warp")];
+
   /** Builds the canonical collection. */
   constructor() {
-    super(WarpCollection.key, WarpCollection.author, WarpCollection.puzzles);
+    super(
+      WarpCollection.key,
+      WarpCollection.author,
+      WarpCollection.puzzles,
+      [],
+      WarpCollection.techniques,
+    );
   }
 }
 

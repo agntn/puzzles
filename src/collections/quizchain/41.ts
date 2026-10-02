@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 41 were published. */
@@ -24,6 +33,7 @@ export const quizchainBlock41 = puzzle({
       "MD5 of the letter, BFUB, the hint of three words and the last three characters of the block 40 key, which the author printed with the WIF",
     ),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official(

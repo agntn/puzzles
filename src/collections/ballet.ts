@@ -1,5 +1,5 @@
 import { NamedCollection } from "../core/collection.ts";
-import { fact, party, PartyKind, profile } from "../core/parts.ts";
+import { fact, party, PartyKind, profile, technique } from "../core/parts.ts";
 import { balletPuzzleAA007448 } from "./ballet/aa007448.ts";
 import { balletPuzzleAA009926 } from "./ballet/aa009926.ts";
 import { balletPuzzleAA012381 } from "./ballet/aa012381.ts";
@@ -44,9 +44,20 @@ export class BalletCollection extends NamedCollection {
   /** Every puzzle in this collection. */
   static readonly puzzles = [balletPuzzleAA007448, balletPuzzleAA009926, balletPuzzleAA012381];
 
+  /** Techniques every puzzle in this collection was built with. */
+  static readonly techniques = [
+    technique("bip38", "https://x.com/bobbyclee/status/1289004702122643456"),
+  ];
+
   /** Builds the canonical collection. */
   constructor() {
-    super(BalletCollection.key, BalletCollection.author, BalletCollection.puzzles);
+    super(
+      BalletCollection.key,
+      BalletCollection.author,
+      BalletCollection.puzzles,
+      [],
+      BalletCollection.techniques,
+    );
   }
 }
 

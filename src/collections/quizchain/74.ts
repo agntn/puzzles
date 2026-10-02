@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question and the funding txid of block 74 were published. */
@@ -28,6 +37,7 @@ export const quizchainBlock74 = puzzle({
     "0a7c902815f9dc9d26057280592b2553",
     source(THREAD, "MD5 of the victim, TOMI, the play and the whole block 73 key"),
   ),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.011,
   hints: [
     official("Question: Victim of the perfect murder.", THREAD, undefined, {

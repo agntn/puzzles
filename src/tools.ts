@@ -20,7 +20,7 @@ import {
   type ToolFacts,
 } from "./tool-operations.ts";
 
-const { chains, parameters, statuses } = facts;
+const { chains, parameters, statuses, techniques } = facts;
 const puzzleId = Type.String(parameters.id);
 
 /**
@@ -112,6 +112,7 @@ export const listToolDefinition = defineTool({
     collection: Type.Optional(Type.String(parameters.collection)),
     chain: Type.Optional(Type.Enum(chains, parameters.chain)),
     status: Type.Optional(Type.Enum(statuses, parameters.status)),
+    technique: Type.Optional(Type.Enum(techniques, parameters.technique)),
     withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
     limit: Type.Optional(Type.Integer(parameters.limit)),
     offset: Type.Optional(Type.Integer(parameters.offset)),
@@ -179,7 +180,11 @@ export const callSummaries: Readonly<
   [facts.tools.hints.name]: (args) => args["id"],
   [facts.tools.stages.name]: (args) => args["id"],
   [facts.tools.list.name]: (args) =>
-    [args["address"] ?? args["collection"] ?? args["chain"] ?? "all", args["status"]]
+    [
+      args["address"] ?? args["collection"] ?? args["chain"] ?? "all",
+      args["status"],
+      args["technique"],
+    ]
       .filter((part) => part !== undefined)
       .map((part) => (typeof part === "string" ? part : JSON.stringify(part)))
       .join(" "),

@@ -1,5 +1,5 @@
 import { NamedCollection } from "../core/collection.ts";
-import { confirmation, fact, official, party, profile } from "../core/parts.ts";
+import { confirmation, fact, official, party, profile, technique } from "../core/parts.ts";
 import { rushwalletPuzzle1 } from "./rushwallet/1.ts";
 import { rushwalletPuzzle2 } from "./rushwallet/2.ts";
 import { rushwalletPuzzle3 } from "./rushwallet/3.ts";
@@ -116,6 +116,14 @@ export class RushwalletCollection extends NamedCollection {
     ),
   ];
 
+  /** Techniques every puzzle in this collection was built with. */
+  static readonly techniques = [
+    technique(
+      "sha256-brainwallet",
+      "https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
+    ),
+  ];
+
   /** Builds the canonical collection. */
   constructor() {
     super(
@@ -123,6 +131,7 @@ export class RushwalletCollection extends NamedCollection {
       RushwalletCollection.author,
       RushwalletCollection.puzzles,
       RushwalletCollection.hints,
+      RushwalletCollection.techniques,
     );
   }
 }

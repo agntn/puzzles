@@ -1,4 +1,13 @@
-import { answer, claim, compressed, funding, official, source, wif } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Where the question, the funding txid, the link and the solution of block 8 were published. */
@@ -28,6 +37,7 @@ export const quizchain2Block8 = puzzle({
       source(THREAD, "MD5 of the eight words and the whole block 6 key"),
     )
     .derived(),
+  techniques: [technique("md5-to-bip39-entropy", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: Eight words.", THREAD, undefined, {
