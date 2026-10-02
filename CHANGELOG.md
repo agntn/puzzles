@@ -1,3 +1,20 @@
+## v0.27.1
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.27.0...v0.27.1)
+
+### 🚀 Enhancements
+
+- Build an eligibility record ([#413](https://github.com/agntn/puzzles/pull/413))
+- **collections:** Add quizchain2/31 to 40 ([#414](https://github.com/agntn/puzzles/pull/414))
+
+### 🏡 Chore
+
+- Apply automated updates ([48f7dea](https://github.com/agntn/puzzles/commit/48f7dea))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.27.0
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.26.1...v0.27.0)
