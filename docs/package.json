@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@agntn/archives": "0.7.0",
-    "@agntn/chains": "0.3.10",
+    "@agntn/chains": "0.3.11",
     "@agntn/explorers": "0.5.9",
     "@agntn/keys": "0.3.5",
     "@agntn/tools": "0.0.0",
