@@ -167,6 +167,14 @@ const PRESENTATION: Readonly<
     blurb:
       "34 film stills, one BIP39 word each, ten intruders. Solved in 2026 with a phrase whose checksum fails.",
   },
+  "natasha-otomoski": {
+    icon: "i-lucide-text-cursor-input",
+    title: "Natasha Otomoski puzzle, 1 BTC",
+    sample: "natasha-otomoski",
+    chains: ["bitcoin"],
+    blurb:
+      "One question, 32 characters of plain text as the private key. Someone typed the right eight words seven months later and never said how.",
+  },
   rushwallet: {
     icon: "i-lucide-brain",
     title: "RushWallet contest",
