@@ -113,6 +113,7 @@ const expectedCollections = [
   "quizchain2",
   "rushwallet",
   "satoshi-birthday-quiz",
+  "satoshi-maze",
   "teikhos",
   "trivia-brainwallet",
   "warp",

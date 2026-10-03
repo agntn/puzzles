@@ -254,6 +254,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Seven questions about Bitcoin history, hashed into a brainwallet. Swept five hours after it was funded.",
   },
+  "satoshi-maze": {
+    icon: "i-lucide-route",
+    title: "Satoshi-Maze, Phemex 2.1 BTC puzzle",
+    sample: "satoshi-maze",
+    chains: ["bitcoin"],
+    blurb:
+      "Satoshi drawn as a maze by an exchange. Nobody beat the deadline, so the designer published the key: a prime from e times two Base58 words read little endian.",
+  },
   "trivia-brainwallet": {
     icon: "i-lucide-lightbulb",
     title: "Brainwallet puzzle, 0.04 BTC",
