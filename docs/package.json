@@ -26,7 +26,7 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "1.2.137",
+    "@iconify-json/lucide": "1.2.138",
     "@iconify-json/simple-icons": "1.2.98",
     "@iconify-json/token": "1.2.41",
     "@iconify-json/vscode-icons": "1.2.83",
