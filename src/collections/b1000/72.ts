@@ -9,7 +9,7 @@ export const b1000Puzzle72 = puzzle({
   sourceUrl: "https://bitcointalk.org/index.php?topic=5218972",
   startedAt: "2015-01-15 18:07:14",
   key: bits(72),
-  prize: 7.200144,
+  prize: 7.20014379,
   transactions: [
     funding(
       "08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",

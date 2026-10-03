@@ -66,7 +66,7 @@ export function formatPrize(prize: number | undefined, currency: string): string
 }
 
 /**
- * Formats a balance with the chain's native symbol, `7.100226 BTC`. The symbol says which coin it
+ * Formats a balance with the chain's native symbol, `7.1002257 BTC`. The symbol says which coin it
  * counts, because a prize in another currency (`100 DAI`) is not part of it.
  *
  * @param {Balance} balance - The balance to format.

@@ -10,7 +10,7 @@ export const b1000Puzzle160 = puzzle({
   startedAt: "2015-01-15 18:07:14",
   pubkey: compressed("02e0a8b039282faf6fe0fd769cfbc4b6b4cf8758ba68220eac420e32b91ddfa673"),
   key: bits(160),
-  prize: 16.001191,
+  prize: 16.00119082,
   transactions: [
     funding(
       "08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",

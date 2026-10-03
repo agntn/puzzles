@@ -934,7 +934,7 @@ describe("lazy collection registry", () => {
         ETH: 26.815651554256945,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1067.98405958,
+        BTC: 1067.98587585,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -943,7 +943,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1900,
         ETH: 13.171951554256944,
-        BTC: 909.1185194,
+        BTC: 909.12033567,
         LTC: 3.02608794,
       },
       techniques: {

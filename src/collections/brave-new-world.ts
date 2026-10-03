@@ -31,7 +31,7 @@ export const braveNewWorldPuzzle = puzzle({
   sourceUrl: THREAD,
   startedAt: "2020-10-08 09:25:30",
   techniques: [technique("hidden-seed-words", THREAD)],
-  prize: 0.2,
+  prize: 0.20107284,
   transactions: [
     funding(
       "fcee21d44ee94c09869947c74b61669bf928358e9c2d1699fb075bb6ebf5d043",

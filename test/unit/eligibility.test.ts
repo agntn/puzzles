@@ -62,7 +62,7 @@ describe("eligibility", () => {
 
     expect(record.id).toBe("b1000/71");
     expect(record.conflicts).toEqual([
-      "addresses hold 7.1019168 BTC, the record says the prize is 7.100226 BTC",
+      "addresses hold 7.1019168 BTC, the record says the prize is 7.1002257 BTC",
     ]);
     expect(record.carriers).toEqual(["key range 0x400000000000000000 to 0x7fffffffffffffffff"]);
     expect(record.missing).toEqual([]);
