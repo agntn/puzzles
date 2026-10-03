@@ -31,6 +31,7 @@ import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.
 import { Quizchain2Collection } from "../../src/collections/quizchain2.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-birthday-quiz.ts";
+import { SatoshiMazeCollection } from "../../src/collections/satoshi-maze.ts";
 import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { TriviaBrainwalletCollection } from "../../src/collections/trivia-brainwallet.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
@@ -106,6 +107,7 @@ const concreteClasses = [
   Quizchain2Collection,
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
+  SatoshiMazeCollection,
   TeikhosCollection,
   TriviaBrainwalletCollection,
   WarpCollection,
@@ -916,21 +918,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(489);
+    expect(await all()).toHaveLength(490);
     expect(await stats()).toEqual({
-      total: 489,
+      total: 490,
       claimed: 12,
-      expired: 3,
+      expired: 4,
       solved: 273,
       swept: 96,
       unsolved: 105,
-      with_pubkey: 380,
+      with_pubkey: 381,
       total_prize: {
         AR: 5550,
         ETH: 26.815651554256945,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1065.81005958,
+        BTC: 1066.91005958,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -1008,7 +1010,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(489);
+    ).toBe(490);
   });
 
   it("hands back the memoized views frozen through", async () => {
