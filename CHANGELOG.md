@@ -1,3 +1,25 @@
+## v0.27.2
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.27.1...v0.27.2)
+
+### 🚀 Enhancements
+
+- Tag records with techniques ([#415](https://github.com/agntn/puzzles/pull/415))
+- **docs:** Show techniques in the dossiers ([#416](https://github.com/agntn/puzzles/pull/416))
+- **collections:** Add satoshi-maze ([#418](https://github.com/agntn/puzzles/pull/418))
+- **collections:** Add natasha-otomoski ([#419](https://github.com/agntn/puzzles/pull/419))
+- **collections:** Add quizchain2/41 to 50 ([#420](https://github.com/agntn/puzzles/pull/420))
+
+### 🩹 Fixes
+
+- **docs:** Fit author dossiers on a phone ([#417](https://github.com/agntn/puzzles/pull/417))
+- **collections:** Match prizes to balances ([#421](https://github.com/agntn/puzzles/pull/421))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.27.1
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.27.0...v0.27.1)
