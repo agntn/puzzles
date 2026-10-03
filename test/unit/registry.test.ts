@@ -170,7 +170,7 @@ describe("registry consistency", () => {
     expect(await lib.datasetCollections()).toHaveLength(originalData.length + 1);
     expect(await lib.dataVersion()).not.toBe(originalVersion);
     /* Snapshots handed out earlier stay intact. */
-    expect(originalPuzzles).toHaveLength(491);
+    expect(originalPuzzles).toHaveLength(501);
     expect(originalCollections).toHaveLength(38);
     expect(originalData).toHaveLength(38);
 
@@ -191,10 +191,10 @@ describe("registry consistency", () => {
     expect(await lib.get("fixture/second")).toBe(second);
     expect(await lib.getCollection("fixture")).toBe(replacement);
     expect(await lib.collections()).toHaveLength(39);
-    expect(await lib.all()).toHaveLength(492);
+    expect(await lib.all()).toHaveLength(502);
     expect(await lib.stats()).not.toBe(addedStats);
     expect(await lib.stats()).toEqual(addedStats);
-    expect(originalStats.total).toBe(491);
+    expect(originalStats.total).toBe(501);
     expect(await lib.dataVersion()).not.toBe(snapshot.data_version);
     expect((await lib.dataset()).collections.at(-1)?.puzzles[0]?.id).toBe("fixture/second");
 
