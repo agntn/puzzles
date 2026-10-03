@@ -3,7 +3,12 @@ import { resolve, sep } from "node:path";
 import { sha256 } from "@agntn/hashes";
 import { bech32, createBase58check } from "@scure/base";
 import { describe, expect, it } from "vite-plus/test";
-import { isValidAddress, isValidTransactionId, sameAddress } from "../../src/core/chains.ts";
+import {
+  chainDecimals,
+  isValidAddress,
+  isValidTransactionId,
+  sameAddress,
+} from "../../src/core/chains.ts";
 import {
   addressesEqual,
   addressFromPrivateKey,
@@ -16,10 +21,13 @@ import {
   artifact,
   assets,
   confirmation,
+  decrease,
   digest,
   type Digest,
   fact,
+  funding,
   type Hint,
+  increase,
   type KeyData,
   official,
   p2pkh,
@@ -36,6 +44,9 @@ import {
 } from "../../src/core/parts.ts";
 import { type Technique, techniques } from "../../src/core/technique.ts";
 import { type Puzzle, puzzle, Status } from "../../src/core/puzzle.ts";
+import { formatUnits } from "../../src/core/types.ts";
+import { decimal } from "../../src/core/utils.ts";
+import { expectedPrize } from "../../src/core/watch.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
 import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { TeikhosCollection } from "../../src/collections/teikhos.ts";
@@ -158,6 +169,35 @@ function transactionProblems(puzzle: Puzzle): string[] {
       (transaction) =>
         `${puzzle.id()}: ${transaction.tx_type} txid does not match the ${puzzle.chain()} format`,
     );
+}
+
+/* An amount in the base units of a chain with this many decimal places. */
+function baseUnits(amount: number, places: number): bigint {
+  const [whole = "0", fraction = ""] = decimal(amount).split(".");
+  return BigInt(whole + fraction.padEnd(places, "0"));
+}
+
+/* An open prize is its deposits summed; a record with a payout is skipped, since a payout leaves the fee out. */
+function prizeProblem(puzzle: Puzzle): string | undefined {
+  const prize = expectedPrize(puzzle);
+  const transactions = puzzle.transactions();
+  const inflow = (type: TransactionType): boolean =>
+    type === TransactionType.Funding || type === TransactionType.Increase;
+  if (
+    prize === undefined ||
+    transactions.length === 0 ||
+    !transactions.every((transaction) => inflow(transaction.tx_type))
+  ) {
+    return undefined;
+  }
+  const places = chainDecimals(puzzle.chain());
+  const units = transactions.reduce(
+    (sum, transaction) => sum + baseUnits(transaction.amount, places),
+    0n,
+  );
+  return units === baseUnits(prize, places)
+    ? undefined
+    : `${puzzle.id()}: prize ${decimal(prize)} is not the ${formatUnits(units, places)} its transactions bring in`;
 }
 
 function assetProblems(puzzle: Puzzle): string[] {
@@ -630,6 +670,33 @@ describe("collection class data", () => {
 
   it("keeps every transaction identifier in its chain's format", () => {
     expect(puzzles.flatMap((puzzle) => transactionProblems(puzzle))).toEqual([]);
+  });
+
+  it("keeps every open prize equal to what its transactions bring in", () => {
+    expect(collect(prizeProblem)).toEqual([]);
+  });
+
+  it("names a prize rounded away from its transactions", () => {
+    const record = (prize: number, payout = false): Puzzle =>
+      puzzle({
+        id: "fixture/prize",
+        chain: "bitcoin",
+        address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+        sourceUrl: "https://example.com/puzzle",
+        startedAt: "2026-01-01",
+        prize,
+        transactions: [
+          funding("a".repeat(64), "2026-01-01 00:00:00", 0.072),
+          increase("b".repeat(64), "2026-01-02 00:00:00", 0.00003779),
+          ...(payout ? [decrease("c".repeat(64), "2026-01-03 00:00:00", 0.05)] : []),
+        ],
+      });
+
+    expect(prizeProblem(record(0.072038))).toBe(
+      "fixture/prize: prize 0.072038 is not the 0.07203779 its transactions bring in",
+    );
+    expect(prizeProblem(record(0.07203779))).toBeUndefined();
+    expect(prizeProblem(record(0.022038, true))).toBeUndefined();
   });
 
   it("keeps encrypted WIF material consistent", () => {

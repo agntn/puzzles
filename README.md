@@ -50,7 +50,7 @@ puzzles show hash-collision/sha256
 ```
 
 ```text
-hash-collision/sha256	unsolved	0.277343 BTC	35Snmmy3uhaer2gTboc81ayCip4m9DT4ko
+hash-collision/sha256	unsolved	0.27734251 BTC	35Snmmy3uhaer2gTboc81ayCip4m9DT4ko
 chain: bitcoin  address kind: p2sh
 hash160: 292fb39df7cd619a396069383928e6bfb74ebec5
 redeem script: 6e879169a87ca887 (hash 292fb39df7cd619a396069383928e6bfb74ebec5)

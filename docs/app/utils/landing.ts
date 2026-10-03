@@ -92,8 +92,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     kind: "p2pkh",
     hash160: "f6f5431d25bbf7b12e8add9af5e3475c44a0a5b8",
     redeemScript: undefined,
-    prize: "7.100226 BTC",
-    prizeAmount: 7.100226,
+    prize: "7.1002257 BTC",
+    prizeAmount: 7.1002257,
     currency: undefined,
     startedAt: "2015-01-15 18:07:14",
     solvedAt: undefined,
@@ -109,7 +109,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU",
     source: "https://bitcointalk.org/index.php?topic=5218972",
     transactions: 17,
-    tool: "b1000/71\tunsolved\t7.100226 BTC\t1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU\nchain: bitcoin  address kind: p2pkh\nhash160: f6f5431d25bbf7b12e8add9af5e3475c44a0a5b8\npublic key: unknown\nprivate key: unknown\nstarted: 2015-01-15 18:07:14\ntransactions: 17\n\tfunding\t2015-01-15 18:07:14\t0.071 BTC\t08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15\n\tincrease\t2017-07-11 05:00:53\t0.639 BTC\t5d45587cfd1d5b0fb826805541da7d94c61fe432259e68ee26f4a04544384164\n\tincrease\t2023-04-16 06:29:48\t6.39 BTC\t12f34b58b04dfb0233ce889f674781c0e0c7ba95482cca469125af41a78d13b3\n\tincrease\t2023-09-25 15:00:17\t0.0000377 BTC\t5863063e1fdc2ef84cbb3cea03181faec9e62356a56dc330e7511f67ec50d610\n\tincrease\t2025-01-28 02:11:50\t0.000006 BTC\t8c75b040d6f335cd1965b205938435baa6bb1b8a2b00038f71d991fd3c7dc0b7\n\tincrease\t2025-05-03 09:59:35\t0.00001 BTC\tb30914607fed925b42a87004ed3b373bd413ac35302d007f28ffbb738c63245e\n\tincrease\t2025-05-19 18:56:09\t0.00000001 BTC\t076d820e3100580012a1bcca15987c0d8638cae912f1f4421f05e97cbcdec3b9\n\tincrease\t2025-05-21 10:01:44\t0.0000888 BTC\te29e1a2200867cbd886a42c8222f0dee1a53b83aa577df5e477d11e3fa9e90cc\n\tincrease\t2025-07-30 09:32:34\t0.00001 BTC\t72fa88fe21d2cb40c1af0a3022d4e5736ae1c66c6f1afe72463e1791706629c5\n\tincrease\t2025-08-22 06:05:53\t0.00001767 BTC\t966c854ce03054ef38f6fdf5ee9a746f03bb34d2ec86101e214d22b2f15b0f0f\n\tincrease\t2025-09-01 21:47:45\t0.0000071 BTC\tdc895ad8b1eb570560326bd0f9c8504304cf03f51c0ce2a753fc4cf29108d24b\n\tincrease\t2025-09-02 21:04:37\t0.00000898 BTC\tc03df28a719a110c50b51e92a0831c28433d6b12180a94e63c4c519b28654e1b\n\tincrease\t2025-09-03 02:48:52\t0.00001 BTC\t9540c7d4ca42c32cafa643f4dd3f0a4c3beca2fc3c585cd980f474acb6a0267c\n\tincrease\t2025-10-07 08:31:00\t0.00000002 BTC\t8aa20456d64c7969d0546cd819437275e78d9bcbc692e93b26129faa98de5cd7\n\tincrease\t2025-10-18 00:18:40\t0.00001 BTC\t2a18ccf613b076d633099a4da35fd7f72bc3c2a87a2f72a111176dc64271cc11\n\tincrease\t2025-12-13 13:35:31\t0.00001941 BTC\teefa0ac5426b7b6df98d7d85d172d7e42cb714c649ac8fb9629e5571ee7dd78f\n\tincrease\t2025-12-14 21:33:17\t0.00000001 BTC\ta2808acb455f636dc988186219d025e6507bd80640b0056b46583232aee7cfa5\ncollection techniques: 1\n\tmasked-key-range\tsource: https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941\ncollection hints: 1\n\tofficial\t2017-04-27 06:41:08\tThere is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).\tsource: https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941\tconfirmation: https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941 (Wayback capture of the thread page)\nexplorer: https://blockstream.info/address/1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU\nsource: https://bitcointalk.org/index.php?topic=5218972\nkey range: 400000000000000000..7fffffffffffffffff (hex, 71 bits)",
+    tool: "b1000/71\tunsolved\t7.1002257 BTC\t1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU\nchain: bitcoin  address kind: p2pkh\nhash160: f6f5431d25bbf7b12e8add9af5e3475c44a0a5b8\npublic key: unknown\nprivate key: unknown\nstarted: 2015-01-15 18:07:14\ntransactions: 17\n\tfunding\t2015-01-15 18:07:14\t0.071 BTC\t08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15\n\tincrease\t2017-07-11 05:00:53\t0.639 BTC\t5d45587cfd1d5b0fb826805541da7d94c61fe432259e68ee26f4a04544384164\n\tincrease\t2023-04-16 06:29:48\t6.39 BTC\t12f34b58b04dfb0233ce889f674781c0e0c7ba95482cca469125af41a78d13b3\n\tincrease\t2023-09-25 15:00:17\t0.0000377 BTC\t5863063e1fdc2ef84cbb3cea03181faec9e62356a56dc330e7511f67ec50d610\n\tincrease\t2025-01-28 02:11:50\t0.000006 BTC\t8c75b040d6f335cd1965b205938435baa6bb1b8a2b00038f71d991fd3c7dc0b7\n\tincrease\t2025-05-03 09:59:35\t0.00001 BTC\tb30914607fed925b42a87004ed3b373bd413ac35302d007f28ffbb738c63245e\n\tincrease\t2025-05-19 18:56:09\t0.00000001 BTC\t076d820e3100580012a1bcca15987c0d8638cae912f1f4421f05e97cbcdec3b9\n\tincrease\t2025-05-21 10:01:44\t0.0000888 BTC\te29e1a2200867cbd886a42c8222f0dee1a53b83aa577df5e477d11e3fa9e90cc\n\tincrease\t2025-07-30 09:32:34\t0.00001 BTC\t72fa88fe21d2cb40c1af0a3022d4e5736ae1c66c6f1afe72463e1791706629c5\n\tincrease\t2025-08-22 06:05:53\t0.00001767 BTC\t966c854ce03054ef38f6fdf5ee9a746f03bb34d2ec86101e214d22b2f15b0f0f\n\tincrease\t2025-09-01 21:47:45\t0.0000071 BTC\tdc895ad8b1eb570560326bd0f9c8504304cf03f51c0ce2a753fc4cf29108d24b\n\tincrease\t2025-09-02 21:04:37\t0.00000898 BTC\tc03df28a719a110c50b51e92a0831c28433d6b12180a94e63c4c519b28654e1b\n\tincrease\t2025-09-03 02:48:52\t0.00001 BTC\t9540c7d4ca42c32cafa643f4dd3f0a4c3beca2fc3c585cd980f474acb6a0267c\n\tincrease\t2025-10-07 08:31:00\t0.00000002 BTC\t8aa20456d64c7969d0546cd819437275e78d9bcbc692e93b26129faa98de5cd7\n\tincrease\t2025-10-18 00:18:40\t0.00001 BTC\t2a18ccf613b076d633099a4da35fd7f72bc3c2a87a2f72a111176dc64271cc11\n\tincrease\t2025-12-13 13:35:31\t0.00001941 BTC\teefa0ac5426b7b6df98d7d85d172d7e42cb714c649ac8fb9629e5571ee7dd78f\n\tincrease\t2025-12-14 21:33:17\t0.00000001 BTC\ta2808acb455f636dc988186219d025e6507bd80640b0056b46583232aee7cfa5\ncollection techniques: 1\n\tmasked-key-range\tsource: https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941\ncollection hints: 1\n\tofficial\t2017-04-27 06:41:08\tThere is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).\tsource: https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941\tconfirmation: https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941 (Wayback capture of the thread page)\nexplorer: https://blockstream.info/address/1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU\nsource: https://bitcointalk.org/index.php?topic=5218972\nkey range: 400000000000000000..7fffffffffffffffff (hex, 71 bits)",
   },
   {
     id: "warp/challenge-1",
@@ -963,8 +963,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     kind: "p2pkh",
     hash160: "ccbd031e54cde2a3189fd59bc49f731367a1779e",
     redeemScript: undefined,
-    prize: "0.2 BTC",
-    prizeAmount: 0.2,
+    prize: "0.20107284 BTC",
+    prizeAmount: 0.20107284,
     currency: undefined,
     startedAt: "2020-10-08 09:25:30",
     solvedAt: undefined,
@@ -980,7 +980,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ",
     source: "https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/",
     transactions: 5,
-    tool: "brave-new-world\tunsolved\t0.2 BTC\t1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nchain: bitcoin  address kind: p2pkh\nhash160: ccbd031e54cde2a3189fd59bc49f731367a1779e\npublic key: unknown\nprivate key: unknown\nstarted: 2020-10-08 09:25:30\ntransactions: 5\n\tfunding\t2020-05-10 08:01:46\t0.2 BTC\tfcee21d44ee94c09869947c74b61669bf928358e9c2d1699fb075bb6ebf5d043\n\tincrease\t2023-10-25 01:55:34\t0.00001 BTC\ta490266f12466f91c00546a4b744b5faea70835794b5b182d84e47e4294a33ee\n\tincrease\t2024-12-13 08:42:55\t0.001 BTC\t6ca136b078c61f530e3c7eb46eed0a23785840294fc59ef006df26e26f88fb53\n\tincrease\t2025-05-09 23:02:54\t0.00000557 BTC\t51b778b00ca5dc676e99da96545e5c1ae6cf68c4ca79d59879e77facac64a251\n\tincrease\t2025-06-02 05:48:21\t0.00005727 BTC\t6d1f46d1913c45de1cd515a9cdc4de64ff2abfc19102e2cf23840bb5e944f8f4\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/brave-new-world/puzzle.png\nasset source: https://i.redd.it/n1x7g8ceaur51.png\ntechniques: 1\n\thidden-seed-words\tsource: https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/\nexplorer: https://blockstream.info/address/1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nsource: https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/",
+    tool: "brave-new-world\tunsolved\t0.20107284 BTC\t1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nchain: bitcoin  address kind: p2pkh\nhash160: ccbd031e54cde2a3189fd59bc49f731367a1779e\npublic key: unknown\nprivate key: unknown\nstarted: 2020-10-08 09:25:30\ntransactions: 5\n\tfunding\t2020-05-10 08:01:46\t0.2 BTC\tfcee21d44ee94c09869947c74b61669bf928358e9c2d1699fb075bb6ebf5d043\n\tincrease\t2023-10-25 01:55:34\t0.00001 BTC\ta490266f12466f91c00546a4b744b5faea70835794b5b182d84e47e4294a33ee\n\tincrease\t2024-12-13 08:42:55\t0.001 BTC\t6ca136b078c61f530e3c7eb46eed0a23785840294fc59ef006df26e26f88fb53\n\tincrease\t2025-05-09 23:02:54\t0.00000557 BTC\t51b778b00ca5dc676e99da96545e5c1ae6cf68c4ca79d59879e77facac64a251\n\tincrease\t2025-06-02 05:48:21\t0.00005727 BTC\t6d1f46d1913c45de1cd515a9cdc4de64ff2abfc19102e2cf23840bb5e944f8f4\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/brave-new-world/puzzle.png\nasset source: https://i.redd.it/n1x7g8ceaur51.png\ntechniques: 1\n\thidden-seed-words\tsource: https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/\nexplorer: https://blockstream.info/address/1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ\nsource: https://www.reddit.com/user/stsh_n/comments/j79zvj/bitcoin_puzzle_2000/",
   },
   {
     id: "wealth-in-poetry",
@@ -991,8 +991,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     kind: "p2pkh",
     hash160: "c6233aeb3a50a70b82fcd88d69b5f1a3ec6e355a",
     redeemScript: undefined,
-    prize: "0.03050269 BTC",
-    prizeAmount: 0.03050269,
+    prize: "0.0312463 BTC",
+    prizeAmount: 0.0312463,
     currency: undefined,
     startedAt: "2019-02-11 15:34:04",
     solvedAt: undefined,
@@ -1008,7 +1008,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1K4ezpLybootYF23TM4a8Y4NyP7auysnRo",
     source: "https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254",
     transactions: 2,
-    tool: "wealth-in-poetry\tunsolved\t0.03050269 BTC\t1K4ezpLybootYF23TM4a8Y4NyP7auysnRo\nchain: bitcoin  address kind: p2pkh\nhash160: c6233aeb3a50a70b82fcd88d69b5f1a3ec6e355a\npublic key: unknown\nprivate key: unknown\nstarted: 2019-02-11 15:34:04\ntransactions: 2\n\tfunding\t2019-02-10 14:47:11\t0.03050269 BTC\t0a9ddd15961d507d77cd281c230151ea5980be24e4a22ceb38f3c78737f9f60c\n\tincrease\t2019-04-08 17:37:36\t0.00074361 BTC\tb3c9d8cc52234419642edf6824b1d004e0873432cd4b9e127bf557cfc9990dcf\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/wealth-in-poetry/puzzle.txt\nasset source: https://web.archive.org/web/20190211203952/https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\ntechniques: 1\n\thidden-seed-words\tsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\nhints: 1\n\tofficial\t-\tThe beauty of trithemian seeds is that they hide in plain sight. If you’ve read this far, you’ve read every word required to access a wallet with .03 BTC. Good luck!\tsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\nexplorer: https://blockstream.info/address/1K4ezpLybootYF23TM4a8Y4NyP7auysnRo\nsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254",
+    tool: "wealth-in-poetry\tunsolved\t0.0312463 BTC\t1K4ezpLybootYF23TM4a8Y4NyP7auysnRo\nchain: bitcoin  address kind: p2pkh\nhash160: c6233aeb3a50a70b82fcd88d69b5f1a3ec6e355a\npublic key: unknown\nprivate key: unknown\nstarted: 2019-02-11 15:34:04\ntransactions: 2\n\tfunding\t2019-02-10 14:47:11\t0.03050269 BTC\t0a9ddd15961d507d77cd281c230151ea5980be24e4a22ceb38f3c78737f9f60c\n\tincrease\t2019-04-08 17:37:36\t0.00074361 BTC\tb3c9d8cc52234419642edf6824b1d004e0873432cd4b9e127bf557cfc9990dcf\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/wealth-in-poetry/puzzle.txt\nasset source: https://web.archive.org/web/20190211203952/https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\ntechniques: 1\n\thidden-seed-words\tsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\nhints: 1\n\tofficial\t-\tThe beauty of trithemian seeds is that they hide in plain sight. If you’ve read this far, you’ve read every word required to access a wallet with .03 BTC. Good luck!\tsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254\nexplorer: https://blockstream.info/address/1K4ezpLybootYF23TM4a8Y4NyP7auysnRo\nsource: https://medium.com/coinmonks/securing-bitcoin-seed-phrases-in-stories-d8eb43a02254",
   },
   {
     id: "path-to-greatness",
@@ -1276,7 +1276,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "d51dc756be0f",
+  dataVersion: "597c0a84aca1",
   total: 501,
   solved: 284,
   unsolved: 105,
@@ -1287,11 +1287,11 @@ export const STATS_STATIC = {
   unsolvedPrize: {
     AR: 1900,
     ETH: 13.171951554256944,
-    BTC: 909.1185194,
+    BTC: 909.12033567,
     LTC: 3.02608794,
   },
   totalPrize: {
-    BTC: 1067.98405958,
+    BTC: 1067.98587585,
     AR: 5550,
     ETH: 26.815651554256945,
     DAI: 100,
@@ -1364,10 +1364,10 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     },
     chains: ["bitcoin"],
     prize: {
-      BTC: 1008.52911,
+      BTC: 1008.52911097,
     },
     unsolvedPrize: {
-      BTC: 903.015076,
+      BTC: 903.01507697,
     },
     withPubkey: 184,
     withKey: 83,
@@ -1507,10 +1507,10 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     },
     chains: ["bitcoin"],
     prize: {
-      BTC: 0.2,
+      BTC: 0.20107284,
     },
     unsolvedPrize: {
-      BTC: 0.2,
+      BTC: 0.20107284,
     },
     withPubkey: 0,
     withKey: 0,
@@ -1664,10 +1664,10 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     },
     chains: ["bitcoin"],
     prize: {
-      BTC: 3.07465,
+      BTC: 3.07464885,
     },
     unsolvedPrize: {
-      BTC: 0.59365,
+      BTC: 0.59364885,
     },
     withPubkey: 0,
     withKey: 0,
@@ -2089,10 +2089,10 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     },
     chains: ["bitcoin"],
     prize: {
-      BTC: 0.03050269,
+      BTC: 0.0312463,
     },
     unsolvedPrize: {
-      BTC: 0.03050269,
+      BTC: 0.0312463,
     },
     withPubkey: 0,
     withKey: 0,

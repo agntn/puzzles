@@ -38,7 +38,7 @@ export const wealthInPoetryPuzzle = puzzle({
   sourceUrl: ARTICLE,
   startedAt: "2019-02-11 15:34:04",
   techniques: [technique("hidden-seed-words", ARTICLE)],
-  prize: 0.03050269,
+  prize: 0.0312463,
   hints: [
     official(
       "The beauty of trithemian seeds is that they hide in plain sight. If you’ve read this far, you’ve read every word required to access a wallet with .03 BTC. Good luck!",

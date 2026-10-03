@@ -1,5 +1,5 @@
 import { puzzle } from "../../core/puzzle.ts";
-import { funding, p2sh, redeemScript, technique } from "../../core/parts.ts";
+import { funding, increase, p2sh, redeemScript, technique } from "../../core/parts.ts";
 
 /** Puzzle `hash-collision/hash160`. */
 export const hashCollisionPuzzleHash160 = puzzle({
@@ -13,12 +13,17 @@ export const hashCollisionPuzzleHash160 = puzzle({
   sourceUrl: "https://bitcointalk.org/index.php?topic=293382.0",
   startedAt: "2013-09-13 05:59:09",
   techniques: [technique("hash-collision", "https://bitcointalk.org/index.php?topic=293382.0")],
-  prize: 0.100269,
+  prize: 0.10026873,
   transactions: [
     funding(
       "397f12ee15f8a3d2ab25c0f6bb7d3c64d2038ca056af10dd8251b98ae0f076b0",
       "2013-09-13 05:59:09",
       0.1,
+    ),
+    increase(
+      "564f7eb6493e02c2542b0a5ccc6ac5043451ec8be35e590077ad667ade31aa01",
+      "2014-10-10 08:58:50",
+      0.00026873,
     ),
   ],
 });
