@@ -53,11 +53,17 @@ const log = computed(() =>
         ></span
       >
       <span class="console-meta"
-        >{{ data.kind ?? "kind unknown" }} · {{ data.collections.length }}
-        {{ data.collections.length === 1 ? "collection" : "collections" }} ·
-        {{ data.firstStarted.slice(0, 10)
-        }}<template v-if="data.lastStarted.slice(0, 10) !== data.firstStarted.slice(0, 10)">
-          → {{ data.lastStarted.slice(0, 10) }}</template
+        ><span class="dossier-nowrap">{{ data.kind ?? "kind unknown" }}</span> ·
+        <span class="dossier-nowrap"
+          >{{ data.collections.length }}
+          {{ data.collections.length === 1 ? "collection" : "collections" }}</span
+        >
+        ·
+        <span class="dossier-nowrap"
+          >{{ data.firstStarted.slice(0, 10)
+          }}<template v-if="data.lastStarted.slice(0, 10) !== data.firstStarted.slice(0, 10)">
+            → {{ data.lastStarted.slice(0, 10) }}</template
+          ></span
         ></span
       >
       <span class="console-mark" aria-hidden="true" />
@@ -216,14 +222,20 @@ const log = computed(() =>
         <li v-for="row in data.collections" :key="row.key">
           <NuxtLink :to="row.to"><span aria-hidden="true">→ </span>{{ row.title }}</NuxtLink>
           <span
-            >{{ row.total }} puzzles · {{ row.unsolved }} open · since
-            {{ row.firstStarted.slice(0, 10) }}</span
+            ><span class="dossier-nowrap"
+              >{{ row.total }} {{ row.total === 1 ? "puzzle" : "puzzles" }}</span
+            >
+            · <span class="dossier-nowrap">{{ row.unsolved }} open</span> ·
+            <span class="dossier-nowrap">since {{ row.firstStarted.slice(0, 10) }}</span></span
           >
         </li>
       </ul>
       <span class="console-meta"
-        >local dataset / no network · data {{ data.dataVersion.slice(0, 4) }}
-        {{ data.dataVersion.slice(4, 8) }} {{ data.dataVersion.slice(8, 12) }}</span
+        >local dataset / no network ·
+        <span class="dossier-nowrap"
+          >data {{ data.dataVersion.slice(0, 4) }} {{ data.dataVersion.slice(4, 8) }}
+          {{ data.dataVersion.slice(8, 12) }}</span
+        ></span
       >
     </footer>
   </section>

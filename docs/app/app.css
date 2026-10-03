@@ -1774,6 +1774,7 @@ html:has(.puzzles-landing) footer [data-slot="container"] {
 .console-aliases {
   display: flex;
   flex-wrap: wrap;
+  overflow-wrap: anywhere;
   align-items: center;
   gap: 4px 14px;
   margin: 0 0 10px;
@@ -2839,6 +2840,7 @@ button.console-lead:focus-visible {
 }
 .dossier-entry p {
   margin: 0 0 3px;
+  overflow-wrap: anywhere;
   font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.55;
@@ -2864,6 +2866,9 @@ button.console-lead:focus-visible {
 .dossier-footer > .console-meta {
   margin-left: auto;
 }
+.dossier-nowrap {
+  white-space: nowrap;
+}
 .dossier-collections {
   display: flex;
   flex-wrap: wrap;
@@ -2878,11 +2883,16 @@ button.console-lead:focus-visible {
 .dossier-collections a > span {
   color: var(--ui-text-dimmed);
 }
+.dossier-collections li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  min-width: 0;
+}
 .dossier-collections li > span {
-  margin-left: 10px;
   color: var(--ui-text-dimmed);
   font-size: 11px;
-  white-space: nowrap;
 }
 @media (width < 900px) {
   .dossier-trail {

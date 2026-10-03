@@ -50,12 +50,16 @@ const log = computed(() =>
         ></span
       >
       <span class="console-meta"
-        >{{ data.kind ?? "kind unknown" }} · {{ data.solves.length }}
-        {{ data.solves.length === 1 ? "solve" : "solves"
-        }}<template v-if="data.firstSolved">
-          · {{ data.firstSolved.slice(0, 10)
-          }}<template v-if="data.lastSolved.slice(0, 10) !== data.firstSolved.slice(0, 10)">
-            → {{ data.lastSolved.slice(0, 10) }}</template
+        ><span class="dossier-nowrap">{{ data.kind ?? "kind unknown" }}</span> ·
+        <span class="dossier-nowrap"
+          >{{ data.solves.length }} {{ data.solves.length === 1 ? "solve" : "solves" }}</span
+        ><template v-if="data.firstSolved">
+          ·
+          <span class="dossier-nowrap"
+            >{{ data.firstSolved.slice(0, 10)
+            }}<template v-if="data.lastSolved.slice(0, 10) !== data.firstSolved.slice(0, 10)">
+              → {{ data.lastSolved.slice(0, 10) }}</template
+            ></span
           ></template
         ></span
       >
@@ -215,8 +219,11 @@ const log = computed(() =>
         </li>
       </ul>
       <span class="console-meta"
-        >local dataset / no network · data {{ data.dataVersion.slice(0, 4) }}
-        {{ data.dataVersion.slice(4, 8) }} {{ data.dataVersion.slice(8, 12) }}</span
+        >local dataset / no network ·
+        <span class="dossier-nowrap"
+          >data {{ data.dataVersion.slice(0, 4) }} {{ data.dataVersion.slice(4, 8) }}
+          {{ data.dataVersion.slice(8, 12) }}</span
+        ></span
       >
     </footer>
   </section>
