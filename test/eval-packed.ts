@@ -105,6 +105,7 @@ const expectedCollections = [
   "mineshop",
   "mini",
   "movie-enigma",
+  "natasha-otomoski",
   "path-to-greatness",
   "picture-puzzle",
   "powerful-moss",

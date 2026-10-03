@@ -2,6 +2,8 @@
 export const Technique = {
   /** AES encryption under a key the solver has to assemble. */
   Aes: "aes",
+  /** Plain text whose ASCII bytes are the private key, read as one number. */
+  AsciiPrivateKey: "ascii-private-key",
   /** The Atbash substitution, A for Z, B for Y. */
   Atbash: "atbash",
   /** Base64, standard or with a shuffled alphabet. */

@@ -986,6 +986,27 @@ describe("collection class data", () => {
     expect(checked.filter(([, rebuilt]) => !rebuilt)).toEqual([]);
   });
 
+  it("reads every ASCII private key the record holds as a published answer", () => {
+    const checked = registered.flatMap((collection) =>
+      collection.all().flatMap((item) => {
+        const key = item.keyData()?.hex;
+        const tagged = collection
+          .techniquesById(item.id())
+          .some((tag) => tag.name === "ascii-private-key");
+        const answers = collection.hintsById(item.id()).map((entry) => entry.answer?.text);
+        return tagged && key !== undefined
+          ? [
+              [
+                item.id(),
+                answers.includes(new TextDecoder().decode(Uint8Array.fromHex(key))),
+              ] as const,
+            ]
+          : [];
+      }),
+    );
+    expect(checked).toEqual([["natasha-otomoski", true]]);
+  });
+
   it("gives every author a page key, a kind and sourced facts", () => {
     expect(registered.flatMap(authorProblems)).toEqual([]);
     const parties = new Map<string, unknown>();
