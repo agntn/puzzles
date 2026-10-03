@@ -1,6 +1,6 @@
 # Archived sources
 
-Local reading copies of the pages the collection records cite and nobody else keeps: sixteen tweets, one hundred and thirty-one Reddit threads, one Reddit comment, seven Bitcointalk threads, one Stacker News thread, six Farcaster casts and one web page, as of October 3, 2026. The archive keeps the Ballet announcement, Zden's two hints, the kitten image source used by Bitimage, the three announcements and four later posts the author records cite, the five posts the solver records cite, the two AoiNakamoto quiz threads, Kierkegaard_Soren's trivia brainwallet thread and its announcement, the seventy-three Quizchain threads for blocks 1 to 77, the fifty Quizchain2 threads for blocks 1 to 50, AoiNakamoto's question on r/Bitcoin before the birthday quiz, IAMABananaAMAA's Caesar riddle, q's BIP38 giveaway on Stacker News and the two r/dogecoin posts of Crypto Puzzlers' Doge's Gambit, each with every surviving comment. For Powerful Moss it keeps LogicBeach's puzzle page as it stood in March 2025, before most of its description was cut, and the six casts the record cites, each without the replies around it. The one Reddit comment is the reply where AoiNakamoto names their Twitter feed, kept with the comment it answers. The quiz and riddle threads are where each answer key was published, for the trivia brainwallet in the winner's comment, for the book quiz the prize address too, for Quizchain and Quizchain2 most answers and many of the keys, for the riddle the key itself, and for RetiredCoder's seven mini-puzzles every hint, the key and, for #3, #4, #5 and #7, the author's own explanation. Tweets are archived as single posts: no replies, no quote tweets, no other post about the same puzzle.
+Local reading copies of the pages the collection records cite and nobody else keeps: sixteen tweets, one hundred and forty-one Reddit threads, one Reddit comment, seven Bitcointalk threads, one Stacker News thread, six Farcaster casts and one web page, as of October 3, 2026. The archive keeps the Ballet announcement, Zden's two hints, the kitten image source used by Bitimage, the three announcements and four later posts the author records cite, the five posts the solver records cite, the two AoiNakamoto quiz threads, Kierkegaard_Soren's trivia brainwallet thread and its announcement, the seventy-three Quizchain threads for blocks 1 to 77, the sixty Quizchain2 threads for blocks 1 to 60, AoiNakamoto's question on r/Bitcoin before the birthday quiz, IAMABananaAMAA's Caesar riddle, q's BIP38 giveaway on Stacker News and the two r/dogecoin posts of Crypto Puzzlers' Doge's Gambit, each with every surviving comment. For Powerful Moss it keeps LogicBeach's puzzle page as it stood in March 2025, before most of its description was cut, and the six casts the record cites, each without the replies around it. The one Reddit comment is the reply where AoiNakamoto names their Twitter feed, kept with the comment it answers. The quiz and riddle threads are where each answer key was published, for the trivia brainwallet in the winner's comment, for the book quiz the prize address too, for Quizchain and Quizchain2 most answers and many of the keys, for the riddle the key itself, and for RetiredCoder's seven mini-puzzles every hint, the key and, for #3, #4, #5 and #7, the author's own explanation. Tweets are archived as single posts: no replies, no quote tweets, no other post about the same puzzle.
 
 - [Ballet bounty announcement](ballet/bobbyclee-2020-07-31.md)
 - [Bitimage's kitten image source](bitimage/aantonop-2015-05-27.md)
@@ -154,6 +154,16 @@ Local reading copies of the pages the collection records cite and nobody else ke
 - [Quizchain2 block 48 thread](quizchain2/aoinakamoto-2019-06-24-c4ndaa.md)
 - [Quizchain2 block 49 thread](quizchain2/aoinakamoto-2019-06-25-c54umz.md)
 - [Quizchain2 block 50 thread](quizchain2/aoinakamoto-2019-06-26-c5kst3.md)
+- [Quizchain2 block 51 thread](quizchain2/aoinakamoto-2019-06-26-c5xj38.md)
+- [Quizchain2 block 52 thread](quizchain2/aoinakamoto-2019-06-28-c6jvz5.md)
+- [Quizchain2 block 53 thread](quizchain2/aoinakamoto-2019-06-29-c6w965.md)
+- [Quizchain2 block 54 thread](quizchain2/aoinakamoto-2019-06-30-c78se0.md)
+- [Quizchain2 block 55 thread](quizchain2/aoinakamoto-2019-06-30-c7kv4m.md)
+- [Quizchain2 block 56 thread](quizchain2/aoinakamoto-2019-07-02-c88x4w.md)
+- [Quizchain2 block 57 thread](quizchain2/aoinakamoto-2019-07-03-c8lcsr.md)
+- [Quizchain2 block 58 thread](quizchain2/aoinakamoto-2019-07-04-c8xwgt.md)
+- [Quizchain2 block 59 thread](quizchain2/aoinakamoto-2019-07-04-c98uls.md)
+- [Quizchain2 block 60 thread](quizchain2/aoinakamoto-2019-07-06-c9tbo0.md)
 - [IAMABananaAMAA's Caesar riddle thread](iamabananaamaa/iamabananaamaa-2013-12-23.md)
 - [Mini-puzzle for puzzle #120](mini/retiredcoder-2024-10-14.md)
 - [Mini-puzzle for puzzle #125](mini/retiredcoder-2024-11-14.md)

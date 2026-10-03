@@ -70,7 +70,7 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(501);
+    expect(result.total).toBe(511);
     expect(result.unsolved).toBe(105);
   });
 
@@ -499,6 +499,8 @@ describe.concurrent("puzzles CLI", () => {
       "quizchain2/27",
       "quizchain2/30",
       "quizchain2/34",
+      "quizchain2/59",
+      "quizchain2/60",
     ]);
     const masked = await puzzles("list", "--technique", "masked-key-range");
     expect(masked.split("\n")).toHaveLength(256);

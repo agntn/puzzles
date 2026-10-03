@@ -711,7 +711,7 @@ describe("lazy collection registry", () => {
       "quizchain2",
       "satoshi-birthday-quiz",
     ]);
-    expect(aoi?.puzzles).toBe(129);
+    expect(aoi?.puzzles).toBe(139);
     expect(await getAuthor("nobody")).toBeUndefined();
     expect(await getAuthor(7 as never)).toBeUndefined();
   });
@@ -907,8 +907,8 @@ describe("lazy collection registry", () => {
 
   it("counts an author's techniques over every collection it published", async () => {
     expect((await requireAuthor("aoi-nakamoto")).techniques).toEqual({
-      atbash: 11,
-      "md5-to-bip39-entropy": 113,
+      atbash: 13,
+      "md5-to-bip39-entropy": 123,
       "sha256-to-bip39-entropy": 16,
     });
     expect((await requireAuthor("gsmg")).techniques).toEqual({
@@ -920,21 +920,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(501);
+    expect(await all()).toHaveLength(511);
     expect(await stats()).toEqual({
-      total: 501,
+      total: 511,
       claimed: 12,
       expired: 4,
-      solved: 284,
+      solved: 294,
       swept: 96,
       unsolved: 105,
-      with_pubkey: 392,
+      with_pubkey: 402,
       total_prize: {
         AR: 5550,
         ETH: 26.815651554256945,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1067.98587585,
+        BTC: 1068.19587585,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -949,7 +949,7 @@ describe("lazy collection registry", () => {
       techniques: {
         aes: 1,
         "ascii-private-key": 1,
-        atbash: 11,
+        atbash: 13,
         base64: 1,
         beaufort: 1,
         binary: 2,
@@ -957,7 +957,7 @@ describe("lazy collection registry", () => {
         "hash-collision": 5,
         "hidden-seed-words": 13,
         "masked-key-range": 256,
-        "md5-to-bip39-entropy": 113,
+        "md5-to-bip39-entropy": 123,
         morse: 1,
         "openssl-salted-sha256": 1,
         "partial-key": 4,
@@ -1013,7 +1013,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(501);
+    ).toBe(511);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -1040,6 +1040,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(284);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(294);
   });
 });
