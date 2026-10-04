@@ -86,7 +86,7 @@ describe("puzzles MCP server", () => {
     const rows = firstText(result).split("\n");
 
     expect(rows).toHaveLength(38);
-    expect(rows).toContain("weave: 12 puzzles, 0 solved, 4 unsolved, 8 claimed, by Tiamat");
+    expect(rows).toContain("weave: 12 puzzles, 0 solved, 3 unsolved, 9 claimed, by Tiamat");
     expect(rows).toContain(
       "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
     );

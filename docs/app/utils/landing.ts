@@ -1276,11 +1276,11 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "3bc928bc86d7",
+  dataVersion: "5330b9c48f8d",
   total: 511,
   solved: 294,
-  unsolved: 105,
-  claimed: 12,
+  unsolved: 104,
+  claimed: 13,
   swept: 96,
   expired: 4,
   withPubkey: 402,
@@ -1288,7 +1288,7 @@ export const STATS_STATIC = {
     BTC: 909.12202677,
     ETH: 13.171964034825493,
     LTC: 3.02608794,
-    AR: 1900.190574146237,
+    AR: 1500.188092936237,
   },
   totalPrize: {
     BTC: 1068.19756695,
@@ -2081,8 +2081,8 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     authorUrl: "https://chronobot.io/",
     total: 12,
     statuses: {
-      claimed: 8,
-      unsolved: 4,
+      claimed: 9,
+      unsolved: 3,
     },
     chains: ["arweave", "ethereum"],
     prize: {
@@ -2091,7 +2091,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
       DAI: 100,
     },
     unsolvedPrize: {
-      AR: 1900.190574146237,
+      AR: 1500.188092936237,
       ETH: 1,
     },
     withPubkey: 0,
