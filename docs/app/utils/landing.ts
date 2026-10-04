@@ -49,6 +49,7 @@ export const WALK: readonly string[] = [
   "move-over-brokers/en-easy-1",
   "walking-banks/2",
   "phy",
+  "seed-phrase",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1361,26 +1362,54 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 1,
     tool: "phy\tunsolved\t0.008 BTC\tbc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p\nchain: bitcoin  address kind: p2wpkh\nhash160: 1866a383a757092447cd64051779c1dc6c16e7a5\npublic key: 02425afdd1716149faf414b6fdb96d5e7afc8ce42496042f4df559c80a7c6650eb (compressed)\nprivate key: unknown\nstarted: 2026-06-05 19:15:46\ntransactions: 1\n\tfunding\t2026-06-21 18:08:38\t0.008 BTC\t2ba79d0b377ab2c41f3508e91e84d0b2aff771fd81b97b8e85c24788795964d3\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/phy/puzzle.png\nasset source: https://www.talkimg.com/images/2026/06/05/UrS0Mq.png\nhints: 18\n\tofficial\t2026-06-05\tlooks bad this bearish cycle around and no end is in sight, so here's a puzzle for everyone, no loose ends, no hashing.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg66802369#msg66802369\tconfirmation: https://web.archive.org/web/20260629174249/https://bitcointalk.org/index.php?topic=5584952.0 (Wayback capture of the first page from June 2026, signature still one character short)\n\tofficial\t2026-06-21\tThere is currently a missing char in the second code of the first post. I will fix it after/if someone figures it out.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg66860784#msg66860784\tconfirmation: https://web.archive.org/web/20260629174249/https://bitcointalk.org/index.php?topic=5584952.0 (Wayback capture of the first page from June 2026, signature still one character short)\tanswer: J\tanswer source: https://bitcointalk.org/index.php?topic=5584952.msg66990855#msg66990855\tanswer date: 2026-07-29\n\tofficial\t2026-06-21\tThe rest of the provided parts are all correct and complete, and there is a prize (as of today). If you reach a state where you believe \"this cannot be solved\", it means you are missing the direct and indirect clues along the way.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg66860784#msg66860784\tconfirmation: https://web.archive.org/web/20260629174249/https://bitcointalk.org/index.php?topic=5584952.0 (Wayback capture of the first page from June 2026, signature still one character short)\n\tofficial\t2026-06-21\tA final useful sign (the password's already mentioned). -----BEGIN PGP MESSAGE----- jA0ECQMKVwglgSLxlRn/0jcBn0f9h3kbilK/NDDWZCkuONpev7JZbbw+l6uVZC0N aJFXTLG6sbLXr6t0z3scptSM3vWBCmOU =D+ub -----END PGP MESSAGE-----\tsource: https://bitcointalk.org/index.php?topic=5584952.msg66860784#msg66860784\tconfirmation: https://web.archive.org/web/20260629174249/https://bitcointalk.org/index.php?topic=5584952.0 (Wayback capture of the first page from June 2026, signature still one character short)\n\tofficial\t2026-06-29\tCongrats on decoding the puzzle hint. But it's not the missing char.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg66888088#msg66888088\n\tofficial\t2026-07-23\tI don't know what to hint at, when the hints are already inside-out, and everyone seems to be stuck at the ASCII 8 cat incident, or don't want to share what they found.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg66971742#msg66971742\n\tofficial\t2026-07-29\tTo progress before wasting any compute power, the data speaks for itself, which creates some immediate conclusions, so no idea where it was ever hinted anything about using Kangaroo.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg66991304#msg66991304\n\tofficial\t2026-08-13\tWhy would you think the address is wrong, since the signature verifies?\tsource: https://bitcointalk.org/index.php?topic=5584952.msg67040416#msg67040416\n\tofficial\t2026-08-22\tYou got pretty close with 97% of the recoloring, nice, though a much easier and precise normalization than grayscale-to-tone exists, if some overall observations are made.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg67070333#msg67070333\n\tofficial\t2026-08-28\tIf you're referring to the extra LF, no, but I can't fix that for obvious reasons.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg67090189#msg67090189\n\tofficial\t2026-08-28\tGuys, stop sending DMs and LLM essays about the puzzle, everything required to solve is in the first post, and it's actually much easier to solve then I anticipated. I already gave too many hints as it is.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg67090189#msg67090189\n\tofficial\t2026-09-05\tmeta-clue to either wake up or confuse even more your LLMs, as they seem to have crossed off-road... gvonys fhelucrM kbZ\tsource: https://bitcointalk.org/index.php?topic=5584952.msg67116131#msg67116131\n\tofficial\t2026-09-06\tThere's no \"useless\" information added into the puzzle. If all of you are thinking some LLM will magically deduct information that's visible in plain sight by anyone, you should understand that LLMs can only understand data they were trained about, and this puzzle is not one of those things.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg67117836#msg67117836\n\tofficial\t2026-09-07\tOnly if you already know that the image was redrawn and requires to test the skin-tone to fix the image.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg67122008#msg67122008\n\tofficial\t2026-09-15\tThe third one helps as well. But anyway, all the clues I've given were already in the puzzle, since the puzzle is already self-explaining itself. The smart approach can find the correct solution in 4 milliseconds.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg67146555#msg67146555\n\tofficial\t2026-09-23\tThis is a hint.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg67170689#msg67170689\n\tcommunity\t2026-06-20\tPhyllotaxis ?\tsource: https://bitcointalk.org/index.php?topic=5584952.msg66855641#msg66855641\n\tcommunity\t2026-07-29\tThe signature signs the complete OP text with no trailing newline. It recovers the funded SegWit address bc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p, currently holding 800,000 sats.\tsource: https://bitcointalk.org/index.php?topic=5584952.msg66990855#msg66990855\nexplorer: https://blockstream.info/address/bc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p\nsource: https://bitcointalk.org/index.php?topic=5584952.msg66802369#msg66802369",
   },
+  {
+    id: "seed-phrase",
+    collection: "seed-phrase",
+    chain: "bitcoin",
+    status: "unsolved",
+    address: "bc1q7x3p3rkmkxgf20n3apkccqcmn5mdtsf8zx5227",
+    kind: "p2wpkh",
+    hash160: "f1a2188edbb190953e71e86d8c031b9d36d5c127",
+    redeemScript: undefined,
+    prize: "0.01 BTC",
+    prizeAmount: 0.01,
+    currency: undefined,
+    startedAt: "2024-07-12 20:06:29",
+    solvedAt: undefined,
+    solveTime: undefined,
+    bits: undefined,
+    range: undefined,
+    pubkey: undefined,
+    pubkeyFormat: undefined,
+    secret: "none",
+    keyLiteral: "derivation(\"m/84'/0'/0'/0/0\")",
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://blockstream.info/address/bc1q7x3p3rkmkxgf20n3apkccqcmn5mdtsf8zx5227",
+    source: "https://seed-phrase.com/",
+    transactions: 2,
+    tool: "seed-phrase\tunsolved\t0.01 BTC\tbc1q7x3p3rkmkxgf20n3apkccqcmn5mdtsf8zx5227\nchain: bitcoin  address kind: p2wpkh\nhash160: f1a2188edbb190953e71e86d8c031b9d36d5c127\npublic key: unknown\nprivate key: unknown\nderivation path: m/84'/0'/0'/0/0\nstarted: 2024-07-12 20:06:29\ntransactions: 2\n\tfunding\t2024-07-12 20:06:29\t0.005 BTC\t6cb3e4bab33a9086fbca6250c783c532fed985abc67f52f7205782797b398bac\n\tincrease\t2024-08-14 20:24:59\t0.005 BTC\t221f3d64a45a95d6cf05a3fe5a84fac292790d39b05929ed213a492e02177160\nhint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/bip-0039-wordlist-en-CN.pdf, https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/whatafeeling.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/SPfavicon-256x256.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/sumofwords.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/illusionsmichael.png\nasset source: https://seed-phrase.com/\ntechniques: 2\n\thidden-seed-words\tsource: https://seed-phrase.com/\n\taes\tsource: https://seed-phrase.com/\nhints: 14\n\tofficial\t2024-07-12\tSolve puzzles to uncover a secret recovery phrase that unlocks a Bitcoin wallet. The first person to decode the entire phrase will control its contents. Visit back here for additional clues and updates.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/cc31e9fb06560146aa80c066c1b9467f1de53e10 (The commit that added clue 2024071201 to the site)\n\tofficial\t2024-07-12\tThere will be red herrings.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/cc31e9fb06560146aa80c066c1b9467f1de53e10 (The commit that added clue 2024071201 to the site)\n\tofficial\t2024-07-12\tSpeed is critical. Be the first to discover the seed phrase and then control the 🏆 at the end of the 🌈.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/cc31e9fb06560146aa80c066c1b9467f1de53e10 (The commit that added clue 2024071201 to the site)\n\tofficial\t2024-07-12\tThese words will be useful:\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/8f6324332fd7a5251de39ef23cb915a86d0c300d (The commit that added clue 2024071202 to the site)\n\tofficial\t2024-07-14\tBeneath the surface, truths do sleep, In the dark, their secrets keep. Lift the veil, and you will see, To reveal, expose, and set them free. What word embodies this quest?\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/8e39e894d07fd7eec11215ea0c185ca2a5304dae (The commit that added clue 2024071401 to the site)\n\tofficial\t2024-07-14\tThe link to this clue will only open one time ever.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/061b99f1ae8f9d9e3e5a06a111dd62c6c3dfd1fe (The commit that added clue 2024071402 to the site)\n\tofficial\t2024-07-16\tPicture whatafeeling.png. Alt: You gotta see it to believe it. Title: Don't be shocked, it's a fake.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/22f5c1d32de572197c088512f80fec156d13bbc6 (The commit that added clue 2024071601 to the site)\n\tofficial\t2024-07-19\tThe month in which the world celebrates the harvest and prepares for the coming winter also saw the release of a transformative paper announcing a peer-to-peer electronic cash system.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/472b950d06da06d71dfef5339542d6ee5beb88fa (The commit that added clue 2024071901 to the site)\n\tofficial\t2024-07-20\tweb favorite icon\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/601bcdece6d7d100b989df252172483516760361 (The commit that added clue 2024072001 to the site)\n\tofficial\t2024-07-24\t🤢\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/4a7f6003d9f4ee15775fcd93dcb6100c9d5830d3 (The commit that added clue 2024072401 to the site)\n\tofficial\t2024-07-28\tSummation of x_i from i=1 to n equals 29,045, given that each x_i is between 1 and 2,048.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/15d33dff96bc4837d98ce77d36826cf2392facf1 (The commit that added clue 2024072801 to the site)\n\tofficial\t2024-07-30\tm/84'/0'/0'/0/0\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/b77ed999cf3596e9f621d41ee0da84294d2d9d5f (The commit that added clue 2024073001 to the site)\n\tofficial\t2024-08-09\tPicture illusionsmichael.png. Alt: Magician pulling back a large black cloth, mid-motion, revealing something hidden, while an astonished audience looks on in wonder. Title: Illusions Michael\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/77ce96e587a35b3a1deed9e45f97805a5a859380 (The commit that added clue 2024080901 to the site)\n\tofficial\t2024-08-14\tEncrypted Text: af12ff6a02e571eae376e579a00bfdd318afee92 IV: 4faf05ee74196a6062d383e6 Password: answer to 2024-07-19 clue (lc) Salt: salt\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/372f4df65f850606c9ccaa59b93840ce60f24c04 (The commit that added clue 2024081401 to the site)\nexplorer: https://blockstream.info/address/bc1q7x3p3rkmkxgf20n3apkccqcmn5mdtsf8zx5227\nsource: https://seed-phrase.com/",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "2a5ba770485b",
-  total: 536,
+  dataVersion: "196fcf26a952",
+  total: 537,
   solved: 310,
-  unsolved: 110,
+  unsolved: 111,
   claimed: 16,
   swept: 96,
   expired: 4,
   withPubkey: 424,
   unsolvedPrize: {
-    BTC: 909.14402677,
+    BTC: 909.15402677,
     ETH: 13.171964034825493,
     LTC: 3.02608794,
     AR: 1500.188092936237,
   },
   totalPrize: {
-    BTC: 1068.44756695,
+    BTC: 1068.45756695,
     ETH: 26.81566403482549,
     DOGE: 10000,
     BCH: 5.1,
@@ -2124,6 +2153,28 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "seed-phrase",
+    author: "MetaNeer Labs",
+    authorKey: "metaneer",
+    authorUrl: "https://github.com/metaneer",
+    total: 1,
+    statuses: {
+      unsolved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.01,
+    },
+    unsolvedPrize: {
+      BTC: 0.01,
+    },
+    withPubkey: 0,
+    withKey: 0,
+    firstStarted: "2024-07-12 20:06:29",
+    lastStarted: "2024-07-12 20:06:29",
+    hints: [],
+  },
+  {
     key: "teikhos",
     author: "Johan Nygren",
     authorKey: "johan-nygren",
@@ -2648,6 +2699,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     about:
       "Crypto derivatives exchange founded in 2019. It hid a key in Satoshi's portrait to show why private keys belong in cold storage.",
     collections: ["satoshi-maze"],
+    puzzles: 1,
+  },
+  {
+    key: "metaneer",
+    to: "/authors/metaneer",
+    name: "MetaNeer Labs",
+    kind: "organization",
+    about:
+      "Software studio of one developer whose GitHub organization publishes seed-phrase.com. Put 0.005 BTC behind a recovery phrase in July 2024, doubled it in August and has added no clue since.",
+    collections: ["seed-phrase"],
     puzzles: 1,
   },
   {

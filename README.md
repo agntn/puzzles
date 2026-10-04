@@ -148,6 +148,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `satoshi-maze`          | bitcoin                             | A prime from e times two Base58 words       |
 | `natasha-otomoski`      | bitcoin                             | Eight camel case words as raw key bytes     |
 | `phy`                   | bitcoin                             | A signed post and a spiral of grey emojis   |
+| `seed-phrase`           | bitcoin                             | Dated clues, then two years of silence      |
 
 Identifiers are `collection/name`. A singleton, such as `gsmg`, `genesis` or `80-bit`, is just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 

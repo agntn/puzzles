@@ -286,6 +286,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Satoshi drawn as a maze by an exchange. Nobody beat the deadline, so the designer published the key: a prime from e times two Base58 words read little endian.",
   },
+  "seed-phrase": {
+    icon: "i-lucide-calendar-days",
+    title: "seed-phrase.com",
+    sample: "seed-phrase",
+    chains: ["bitcoin"],
+    blurb:
+      "Clues every few days toward a recovery phrase: a poem, a JAZZ crowd, a nauseous emoji and a box that changes colour with the video speed. Then August 2024 ended and so did the clues. The 0.01 BTC is still waiting.",
+  },
   "trivia-brainwallet": {
     icon: "i-lucide-lightbulb",
     title: "Brainwallet puzzle, 0.04 BTC",
