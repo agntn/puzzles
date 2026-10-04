@@ -414,9 +414,7 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("says so when a puzzle has no hints and exits 0", async () => {
-    await expect(puzzles("hints", "arweave/weave1")).resolves.toBe(
-      "arweave/weave1: no hints recorded",
-    );
+    await expect(puzzles("hints", "weave/1")).resolves.toBe("weave/1: no hints recorded");
   });
 
   it("exits 1 on an unknown puzzle like show does", async () => {
@@ -425,7 +423,7 @@ describe.concurrent("puzzles CLI", () => {
     expect(result.code).toBe(1);
     expect(result.stdout).toBe("");
     expect(result.stderr).toMatch(
-      /^Puzzle not found: nope\/1\. Known collections: 80-bit, arweave, /u,
+      /^Puzzle not found: nope\/1\. Known collections: 80-bit, b1000, /u,
     );
   });
 
@@ -453,10 +451,6 @@ describe.concurrent("puzzles CLI", () => {
 
     expect(result.every((puzzle) => puzzle.chain === "ethereum")).toBe(true);
     expect(result.map((puzzle) => puzzle.id)).toEqual([
-      "arweave/weave7",
-      "arweave/weave9",
-      "arweave/weave11",
-      "arweave/weave13",
       "doges-gambit/eth",
       "mineshop",
       "teikhos/0",
@@ -464,6 +458,10 @@ describe.concurrent("puzzles CLI", () => {
       "teikhos/2",
       "teikhos/3",
       "teikhos/4",
+      "weave/7",
+      "weave/9",
+      "weave/11",
+      "weave/13",
       "zden/xixoio",
       "zden/codex-protocol",
     ]);
@@ -616,7 +614,9 @@ describe.concurrent("puzzles CLI", () => {
 
     const missing = await failure("authors", "nobody");
     expect(missing.code).toBe(1);
-    expect(missing.stderr).toMatch(/^Unknown author: nobody\. Known authors: ktimesg, tiamat, /u);
+    expect(missing.stderr).toMatch(
+      /^Unknown author: nobody\. Known authors: ktimesg, saatoshi-rising, /u,
+    );
   });
 
   it("lists solvers and shows one, by solver key or puzzle identifier", async () => {
@@ -642,7 +642,7 @@ describe.concurrent("puzzles CLI", () => {
     const missing = await failure("solvers", "b1000/66");
     expect(missing.code).toBe(1);
     expect(missing.stderr).toMatch(
-      /^Unknown solver: b1000\/66\. b1000\/66 knows its solver by address only\. Known solvers: pogo, /u,
+      /^Unknown solver: b1000\/66\. b1000\/66 knows its solver by address only\. Known solvers: retired-coder, /u,
     );
   });
 
@@ -783,7 +783,7 @@ describe.concurrent("puzzles CLI", () => {
     const address = "0x13f968d3bb996f39838ade86109b8150ba890d7e";
     const url = `https://eth.blockscout.com/api/v2/addresses/${address}`;
 
-    await expect(stubbed(address, "balance", "arweave/weave7")).resolves.toEqual({
+    await expect(stubbed(address, "balance", "weave/7")).resolves.toEqual({
       code: 1,
       stdout: "",
       stderr: `fetch ${url}\nBalance lookup failed: No response from blockscout (fetch failed): ${url}\n`,
@@ -794,7 +794,7 @@ describe.concurrent("puzzles CLI", () => {
     const run = async (key: string): Promise<string> => {
       const { stderr } = await execute(
         process.execPath,
-        ["--import", "./test/support/fetch-stub.ts", "src/cli.ts", "balance", "arweave/weave7"],
+        ["--import", "./test/support/fetch-stub.ts", "src/cli.ts", "balance", "weave/7"],
         { cwd: process.cwd(), env: { ...process.env, ETHERSCAN_API_KEY: key } },
       ).catch((error: unknown) => error as Failure);
       return stderr;

@@ -1,9 +1,9 @@
 import { puzzle } from "../../core/puzzle.ts";
 import { funding, increase } from "../../core/parts.ts";
 
-/** Puzzle `arweave/weave10`. */
-export const arweavePuzzleWeave10 = puzzle({
-  id: "arweave/weave10",
+/** Puzzle `weave/10`. */
+export const weave10 = puzzle({
+  id: "weave/10",
   chain: "arweave",
   address: "bkjJGw3NLxs8OAyRxgTL-QFpiB3lBJqZ76kDhWdB-Rs",
   sourceUrl: "https://arweave.net/1fLPMP_smP6ipdIYbYUAZtFPwO4crdYr4kMVf5uTivg",

@@ -169,7 +169,7 @@ describe("docs landing fixtures", () => {
         .map((row) => row.key);
 
     expect(keys({})).toEqual(rows.map((row) => row.key));
-    expect(keys({ chain: "arweave" })).toEqual(["arweave"]);
+    expect(keys({ chain: "arweave" })).toEqual(["weave"]);
     expect(keys({ chain: "ethereum" })).toContain("zden");
     expect(keys({ state: "open" })).toEqual(
       rows.filter((row) => row.open > 0).map((row) => row.key),
@@ -178,7 +178,7 @@ describe("docs landing fixtures", () => {
     expect(keys({ state: "closed" })).toContain("quizchain");
     expect(keys({ state: "open" }).length + keys({ state: "closed" }).length).toBe(rows.length);
     expect(keys({ text: "  ZDEN " })).toEqual(["zden"]);
-    expect(keys({ text: "zden arweave" })).toEqual([]);
+    expect(keys({ text: "zden weave" })).toEqual([]);
     expect(
       matchesCollection(
         { key: "warp", total: 1, open: 0, chains: ["bitcoin"], blurb: "A scrypt brainwallet" },

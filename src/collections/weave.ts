@@ -1,22 +1,22 @@
-import { NamedCollection } from "../core/collection.ts";
+import { NumericCollection } from "../core/collection.ts";
 import { fact, party, PartyKind, profile } from "../core/parts.ts";
-import { arweavePuzzleWeave1 } from "./arweave/weave1.ts";
-import { arweavePuzzleWeave2 } from "./arweave/weave2.ts";
-import { arweavePuzzleWeave3 } from "./arweave/weave3.ts";
-import { arweavePuzzleWeave4 } from "./arweave/weave4.ts";
-import { arweavePuzzleWeave5 } from "./arweave/weave5.ts";
-import { arweavePuzzleWeave7 } from "./arweave/weave7.ts";
-import { arweavePuzzleWeave8 } from "./arweave/weave8.ts";
-import { arweavePuzzleWeave9 } from "./arweave/weave9.ts";
-import { arweavePuzzleWeave10 } from "./arweave/weave10.ts";
-import { arweavePuzzleWeave11 } from "./arweave/weave11.ts";
-import { arweavePuzzleWeave12 } from "./arweave/weave12.ts";
-import { arweavePuzzleWeave13 } from "./arweave/weave13.ts";
+import { weave1 } from "./weave/1.ts";
+import { weave2 } from "./weave/2.ts";
+import { weave3 } from "./weave/3.ts";
+import { weave4 } from "./weave/4.ts";
+import { weave5 } from "./weave/5.ts";
+import { weave7 } from "./weave/7.ts";
+import { weave8 } from "./weave/8.ts";
+import { weave9 } from "./weave/9.ts";
+import { weave10 } from "./weave/10.ts";
+import { weave11 } from "./weave/11.ts";
+import { weave12 } from "./weave/12.ts";
+import { weave13 } from "./weave/13.ts";
 
-/** Tiamat's Arweave bounties. */
-export class ArweaveCollection extends NamedCollection {
+/** Tiamat's Puzzle Weave series, keyed by the number in each page's title. */
+export class WeaveCollection extends NumericCollection {
   /** Stable collection key used in puzzle identifiers. */
-  static readonly key = "arweave";
+  static readonly key = "weave";
 
   /** Who published the puzzles. */
   static readonly author = party("Tiamat", {
@@ -55,25 +55,25 @@ export class ArweaveCollection extends NamedCollection {
 
   /** Every puzzle in this collection. */
   static readonly puzzles = [
-    arweavePuzzleWeave1,
-    arweavePuzzleWeave2,
-    arweavePuzzleWeave3,
-    arweavePuzzleWeave4,
-    arweavePuzzleWeave5,
-    arweavePuzzleWeave7,
-    arweavePuzzleWeave8,
-    arweavePuzzleWeave9,
-    arweavePuzzleWeave10,
-    arweavePuzzleWeave11,
-    arweavePuzzleWeave12,
-    arweavePuzzleWeave13,
+    weave1,
+    weave2,
+    weave3,
+    weave4,
+    weave5,
+    weave7,
+    weave8,
+    weave9,
+    weave10,
+    weave11,
+    weave12,
+    weave13,
   ];
 
   /** Builds the canonical collection. */
   constructor() {
-    super(ArweaveCollection.key, ArweaveCollection.author, ArweaveCollection.puzzles);
+    super(WeaveCollection.key, WeaveCollection.author, WeaveCollection.puzzles);
   }
 }
 
 /** Canonical collection instance. */
-export const arweave = new ArweaveCollection();
+export const weave = new WeaveCollection();

@@ -82,7 +82,7 @@ const sources = [
     date: "2022-03-21",
   },
   {
-    file: "arweave/arpoxy-2019-11-10",
+    file: "weave/arpoxy-2019-11-10",
     tweet: "1193546824289832960",
     author: "Arpoxy",
     date: "2019-11-10",

@@ -53,14 +53,14 @@ describe("Puzzle.balance, live", () => {
   });
 
   it("reads an Arweave balance through the gateway", async () => {
-    const balance = await (await requirePuzzle("arweave/weave3")).balance();
+    const balance = await (await requirePuzzle("weave/3")).balance();
 
     expect(balance.chain).toBe("arweave");
     expect(balance.confirmed).toBeGreaterThanOrEqual(0n);
   });
 
   it("reads an Ethereum balance through Blockscout without a key", async () => {
-    const balance = await (await requirePuzzle("arweave/weave11")).balance();
+    const balance = await (await requirePuzzle("weave/11")).balance();
 
     expect(balance.chain).toBe("ethereum");
     expect(balance.confirmed).toBeGreaterThanOrEqual(0n);
@@ -68,7 +68,7 @@ describe("Puzzle.balance, live", () => {
 
   it.skipIf(etherscanKey === undefined)("reads an Ethereum balance through Etherscan", async () => {
     const balance = await (
-      await requirePuzzle("arweave/weave11")
+      await requirePuzzle("weave/11")
     ).balance({
       apiKey: etherscanKey,
     });

@@ -84,7 +84,6 @@ const execFileAsync = promisify(execFile);
 
 const expectedCollections = [
   "80-bit",
-  "arweave",
   "b1000",
   "ballet",
   "bitaddress",
@@ -119,6 +118,7 @@ const expectedCollections = [
   "trivia-brainwallet",
   "warp",
   "wealth-in-poetry",
+  "weave",
   "wickex",
   "zden",
 ];

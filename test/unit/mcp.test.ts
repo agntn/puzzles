@@ -86,7 +86,7 @@ describe("puzzles MCP server", () => {
     const rows = firstText(result).split("\n");
 
     expect(rows).toHaveLength(38);
-    expect(rows).toContain("arweave: 12 puzzles, 0 solved, 4 unsolved, 8 claimed, by Tiamat");
+    expect(rows).toContain("weave: 12 puzzles, 0 solved, 4 unsolved, 8 claimed, by Tiamat");
     expect(rows).toContain(
       "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
     );
@@ -124,7 +124,7 @@ describe("puzzles MCP server", () => {
     const missing = await client.callTool({ name: "puzzles_author", arguments: { key: "nobody" } });
     expect(missing.isError).toBe(true);
     expect(firstText(missing)).toMatch(
-      /^puzzles_author failed: Unknown author: nobody\. Known authors: ktimesg, tiamat, /u,
+      /^puzzles_author failed: Unknown author: nobody\. Known authors: ktimesg, saatoshi-rising, /u,
     );
   });
 
@@ -132,7 +132,7 @@ describe("puzzles MCP server", () => {
     const rows = firstText(await client.callTool({ name: "puzzles_solvers", arguments: {} })).split(
       "\n",
     );
-    expect(rows).toContain("pogo: pogo, 2 solves: arweave/weave1, arweave/weave2");
+    expect(rows).toContain("pogo: pogo, 2 solves: weave/1, weave/2");
 
     const byPuzzle = firstText(
       await client.callTool({ name: "puzzles_solver", arguments: { key: "movie-enigma" } }),
@@ -146,7 +146,7 @@ describe("puzzles MCP server", () => {
     const missing = await client.callTool({ name: "puzzles_solver", arguments: { key: "nobody" } });
     expect(missing.isError).toBe(true);
     expect(firstText(missing)).toMatch(
-      /^puzzles_solver failed: Unknown solver: nobody\. Known solvers: pogo, /u,
+      /^puzzles_solver failed: Unknown solver: nobody\. Known solvers: retired-coder, /u,
     );
   });
 
@@ -171,7 +171,7 @@ describe("puzzles MCP server", () => {
     const image = await client.callTool({ name: "puzzles_hints", arguments: { id: "gsmg" } });
     const bare = await client.callTool({
       name: "puzzles_hints",
-      arguments: { id: "arweave/weave1" },
+      arguments: { id: "weave/1" },
     });
 
     expect(firstText(hinted).split("\n")).toEqual([
@@ -190,7 +190,7 @@ describe("puzzles MCP server", () => {
       "gsmg: 1 hint asset",
       `hint assets: ${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
     ]);
-    expect(firstText(bare)).toBe("arweave/weave1: no hints recorded");
+    expect(firstText(bare)).toBe("weave/1: no hints recorded");
   });
 
   it("walks the stages of a puzzle with their pages and published answers", async () => {
