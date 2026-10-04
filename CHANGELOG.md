@@ -1,3 +1,34 @@
+## v0.28.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.27.2...v0.28.0)
+
+### 🚀 Enhancements
+
+- **collections:** Add quizchain2/51 to 60 ([#425](https://github.com/agntn/puzzles/pull/425))
+
+### 🩹 Fixes
+
+- Record the deposits watch still reports ([#426](https://github.com/agntn/puzzles/pull/426))
+- **docs:** Sanitize keys the remote MCP echoes ([#433](https://github.com/agntn/puzzles/pull/433))
+
+### 💅 Refactors
+
+- **collections:** ⚠️  Arweave becomes weave ([#432](https://github.com/agntn/puzzles/pull/432))
+
+### 🏡 Chore
+
+- **release:** V0.27.2 ([9009b36](https://github.com/agntn/puzzles/commit/9009b36))
+- **release:** V0.27.2 ([d644674](https://github.com/agntn/puzzles/commit/d644674))
+
+#### ⚠️ Breaking Changes
+
+- **collections:** ⚠️  Arweave becomes weave ([#432](https://github.com/agntn/puzzles/pull/432))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Aei ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.27.2
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.27.1...v0.27.2)
