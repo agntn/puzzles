@@ -1,5 +1,6 @@
 import { Client, InMemoryTransport } from "@modelcontextprotocol/client";
-import { beforeAll, describe, expect, it } from "vite-plus/test";
+import { readFileSync } from "node:fs";
+import { beforeAll, describe, expect, it, vi } from "vite-plus/test";
 import { createMcpServer } from "../../src/mcp.ts";
 import { facts } from "../../src/tool-operations.ts";
 import { ASSETS } from "../support/assets.ts";
@@ -203,6 +204,103 @@ describe("puzzles MCP server", () => {
     expect(staged.filter((line) => line.startsWith("\t\tanswer: "))).toHaveLength(5);
     expect(staged).toContain("\t\tthe seed is planted\thttps://gsmg.io/theseedisplanted");
     expect(firstText(bare)).toBe("b1000/71: no stages recorded");
+  });
+
+  it("lists a puzzle's files and the archived copies of the pages it cites", async () => {
+    const files = firstText(
+      await client.callTool({ name: "puzzles_assets", arguments: { id: "gsmg" } }),
+    ).split("\n");
+    const sources = firstText(
+      await client.callTool({ name: "puzzles_assets", arguments: { id: "quizchain2/34" } }),
+    ).split("\n");
+    const bare = await client.callTool({ name: "puzzles_assets", arguments: { id: "b1000/71" } });
+
+    expect(files[0]).toBe("gsmg: 6 files, 0 archived sources");
+    expect(files.map((line) => line.split("\t").slice(0, 2).join(" "))).toContain(
+      "artifact assets/gsmg/phase3.txt",
+    );
+    expect(sources.slice(0, 3)).toEqual([
+      "quizchain2/34: 0 files, 3 archived sources",
+      "source\tassets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.md\tpublished 2019-06-09\tcites https://www.reddit.com/r/Grycoin/comments/byqc7s/7_mbtc_quizchain2_block_34/",
+      "screenshot\tassets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.png",
+    ]);
+    expect(sources[3]).toMatch(/^source \(author\)\tassets\/sources\/satoshi-birthday-quiz\//);
+    expect(firstText(bare)).toBe("b1000/71: no files and no archived sources");
+  });
+
+  it("reads a file as text or as an image, only with the bytes the record pins", async () => {
+    const requested: string[] = [];
+    /* The tag copy of puzzle.png is gone, so the read has to fall back to the author's URL. */
+    vi.stubGlobal("fetch", async (input: unknown) => {
+      const url = String(input);
+      requested.push(url);
+      const path = /\/v[^/]+\/(assets\/.+)$/.exec(url)?.[1];
+      if (url === "https://gsmg.io/puzzle") {
+        return new Response(readFileSync("assets/gsmg/puzzle.png"));
+      }
+      return path === undefined || path === "assets/gsmg/puzzle.png"
+        ? new Response(null, { status: 404 })
+        : new Response(readFileSync(path));
+    });
+    const call = (id: string, file: string) =>
+      client.callTool({ name: "puzzles_assets", arguments: { id, file } });
+
+    const page = await call("gsmg", "assets/gsmg/phase2.txt");
+    const image = await call("gsmg", "assets/gsmg/puzzle.png");
+    const copy = await call(
+      "quizchain2/34",
+      "assets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.md",
+    );
+
+    expect(firstText(page)).toMatch(
+      /^assets\/gsmg\/phase2\.txt\t910 bytes\tsha256 5e583d5b\w+\tthe bytes the record pins\tfrom https:\/\/raw\.githubusercontent\.com\//,
+    );
+    expect(page.content[1]).toEqual({
+      type: "text",
+      text: readFileSync("assets/gsmg/phase2.txt", "utf8"),
+    });
+    expect(firstText(image)).toMatch(/\tfrom https:\/\/gsmg\.io\/puzzle$/);
+    expect(image.content[1]).toEqual({
+      type: "image",
+      mimeType: "image/png",
+      data: readFileSync("assets/gsmg/puzzle.png").toString("base64"),
+    });
+    expect(firstText(copy)).toMatch(/\tunpinned\tfrom https:\/\/raw\.githubusercontent\.com\//);
+    expect((copy.content as { text: string }[])[1]?.text).toContain(
+      "# [7 mbtc] Quizchain2 Block 34",
+    );
+    expect(
+      requested.filter((url) => url.endsWith("/puzzle.png") || url.endsWith("/puzzle")),
+    ).toHaveLength(2);
+  });
+
+  it("refuses a copy with other bytes, a path the listing lacks and a file too large to return", async () => {
+    const requested: string[] = [];
+    vi.stubGlobal("fetch", async (input: unknown) => {
+      requested.push(String(input));
+      return new Response("not the page\n");
+    });
+    const call = (id: string, file: string) =>
+      client.callTool({ name: "puzzles_assets", arguments: { id, file } });
+
+    const changed = await call("gsmg", "assets/gsmg/phase2.txt");
+    const unknown = await call("gsmg", "assets/gsmg/nope.txt");
+    const large = await call("zden/codex-protocol", "assets/zden/codex-protocol/puzzle.png");
+
+    expect(changed.isError).toBe(true);
+    expect(firstText(changed)).toContain(
+      "Could not read assets/gsmg/phase2.txt: https://raw.githubusercontent.com/agntn/puzzles/",
+    );
+    expect(firstText(changed)).toContain("holds other bytes, 13 with SHA-256 ");
+    expect(unknown.isError).toBe(true);
+    expect(firstText(unknown)).toBe(
+      'puzzles_assets failed: Invalid file: "assets/gsmg/nope.txt" is not a file of gsmg; call puzzles_assets without file for the list',
+    );
+    expect(large.isError).toBe(true);
+    expect(firstText(large)).toContain(
+      "20434999 bytes is more than the 3932160 a read returns, so download it from https://raw.githubusercontent.com/",
+    );
+    expect(requested.some((url) => url.includes("codex-protocol"))).toBe(false);
   });
 
   it("lists Movie Enigma's official hints without extra confirmation links", async () => {
