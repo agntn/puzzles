@@ -12,6 +12,7 @@ import {
   profile,
   stage,
   technique,
+  transfer,
   uncompressed,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
@@ -68,7 +69,7 @@ export const powerfulMossAlbum = puzzle({
     "04d8e5d392cb30d9f69334a0bffe3075dff2667cabe758fc53a24aba2c3ed58a6c64bb13365e7faea54a217ab5681c998c0bd1c771e5925858a6657422a8da6604",
   ),
   techniques: [technique("hidden-seed-words", PAGE)],
-  prize: 0.55941,
+  prize: 0.5594043765685484,
   stages: [
     stage(
       "seed",
@@ -136,6 +137,11 @@ export const powerfulMossAlbum = puzzle({
       "0x7cf9f382f6fff6cbf25a018e17ac9b2af719e307672b1faa1c1d735118011d74",
       "2025-01-10 16:47:27",
       0.00641,
+    ),
+    transfer(
+      "0xe802b2cc17aa2f9b57c505271f6c69759e27f5879868afec6f5903fb6ceee494",
+      "2025-01-10 18:58:23",
+      0.01,
     ),
     decrease(
       "0x6ed9c642ee209cd5efa142089c5e2292fc94bbfe16790cdebe9a499d2e84dec2",

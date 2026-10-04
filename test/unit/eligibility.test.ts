@@ -56,13 +56,13 @@ describe("eligibility", () => {
   });
 
   it("finds b1000/71 by its address and flags a prize the address no longer holds", async () => {
-    stubExplorers(710191680, 0);
+    stubExplorers(710192346, 0);
 
     const record = await eligibility(b1000);
 
     expect(record.id).toBe("b1000/71");
     expect(record.conflicts).toEqual([
-      "addresses hold 7.1019168 BTC, the record says the prize is 7.1002257 BTC",
+      "addresses hold 7.10192346 BTC, the record says the prize is 7.1019168 BTC",
     ]);
     expect(record.carriers).toEqual(["key range 0x400000000000000000 to 0x7fffffffffffffffff"]);
     expect(record.missing).toEqual([]);
