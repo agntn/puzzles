@@ -214,7 +214,7 @@ export const facts = {
       promptGuidelines: [
         "This call reaches a block explorer, and the Wayback Machine when since is given, which can take a minute.",
         "A finding is a difference from the record for a person to review, not an edit: the tool never changes a record.",
-        "It reads the newest 100 transactions per address, and leaves out incoming calls that move no coin. A PARTIAL row names an address with more, whose older transactions went unchecked.",
+        "It reads up to 1000 transactions per address, page by page, and leaves out incoming calls that move no coin. A PARTIAL row names an address with more, whose older transactions went unchecked.",
         "A FAIL row is a check that could not run, so the record is unconfirmed there, not confirmed.",
       ],
       openWorld: true,

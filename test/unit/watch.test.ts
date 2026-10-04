@@ -44,18 +44,37 @@ const spend = {
   vout: [{ scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 710190680 }],
 };
 
+/* `size` made up transactions on the target that move nothing, newest first. */
+function empty(size: number) {
+  return Array.from({ length: size }, (_, index) => ({
+    ...recorded,
+    txid: index.toString(16).padStart(64, "0"),
+    vout: [{ scriptpubkey_address: target, value: 0 }],
+  }));
+}
+
 function json(body: unknown): Response {
   return new Response(JSON.stringify(body), { headers: { "content-type": "application/json" } });
 }
 
-/* Answers mempool.space for b1000/71: its history, then an Esplora balance of `held` satoshis. */
-function stubBitcoin(history: readonly unknown[], held: number): string[] {
+/* mempool.space for b1000/71: 25 transactions a page like Esplora, 400 from `broken` on. */
+function stubBitcoin(
+  history: readonly Readonly<{ txid: string }>[],
+  held: number,
+  broken = Number.POSITIVE_INFINITY,
+): string[] {
   const urls: string[] = [];
   vi.stubGlobal("fetch", async (input: unknown) => {
     const url = String(input);
     urls.push(url);
-    if (url.endsWith(`/address/${target}/txs`)) return json(history);
-    if (url.includes(`/address/${target}/txs/chain/`)) return json([]);
+    if (url.endsWith(`/address/${target}/txs`)) return json(history.slice(0, 25));
+    const after = url.split(`/address/${target}/txs/chain/`)[1];
+    if (after !== undefined) {
+      const start = history.findIndex(({ txid }) => txid === after) + 1;
+      return start >= broken
+        ? new Response("Bad Request", { status: 400 })
+        : json(history.slice(start, start + 25));
+    }
     return json({
       chain_stats: { funded_txo_sum: held, spent_txo_sum: 0 },
       mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
@@ -103,23 +122,38 @@ describe("watcher", () => {
     expect(findings[1]).toMatchObject({ pending: true, direction: "out" });
   });
 
-  it("names an address whose history fills a read instead of calling it OK", async () => {
-    const page = (size: number) =>
-      Array.from({ length: size }, (_, index) => ({
-        ...recorded,
-        txid: index.toString(16).padStart(64, "0"),
-        vout: [{ scriptpubkey_address: target, value: 0 }],
-      }));
+  it("reads past the first 100 transactions to a deposit the record misses", async () => {
+    stubBitcoin([...empty(149), deposit], 710191680 + 666);
 
-    stubBitcoin(page(99), 710191680);
-    expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual(["OK\tb1000/71"]);
+    const { findings, truncated } = await watcher()(b1000.require(71));
 
-    stubBitcoin(page(100), 710191680);
+    expect(truncated).toEqual([]);
+    expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "balance"]);
+    expect(findings[0]).toMatchObject({ txid: deposit.txid, amount: 666n });
+  });
+
+  it("keeps the pages it read when a later one fails", async () => {
+    const history = empty(150);
+    history.splice(50, 1, deposit);
+    stubBitcoin(history, 710191680 + 666, 100);
+
     const report = await watcher()(b1000.require(71));
-    expect(report).toMatchObject({ errors: [], findings: [], truncated: [target] });
-    expect(formatWatchReport(report)).toEqual([
-      `PARTIAL\tb1000/71\tonly the newest 100 transactions at ${target} read, older ones unchecked`,
+
+    expect(report.truncated).toEqual([]);
+    expect(report.findings.map((finding) => finding.kind)).toEqual(["deposit", "balance"]);
+    expect(formatWatchReport(report).at(-1)).toBe(
+      `FAIL\tb1000/71\tTransaction history lookup failed: HTTP 400 from https://mempool.space/api/address/${target}/txs/chain/${history[99]?.txid}: Bad Request, past the newest 100 transactions at ${target}`,
+    );
+  });
+
+  it("names an address busier than 1000 transactions instead of calling it OK", async () => {
+    stubBitcoin(empty(1000), 710191680);
+    expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual([
+      `PARTIAL\tb1000/71\tonly the newest 1000 transactions at ${target} read, older ones unchecked`,
     ]);
+
+    stubBitcoin(empty(999), 710191680);
+    expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual(["OK\tb1000/71"]);
   });
 
   it("leaves out a contract call that moves no coin in and a deposit that reverted", async () => {

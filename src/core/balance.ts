@@ -25,8 +25,11 @@ export const apiKeyVariables: Readonly<Partial<Record<Chain, string>>> = Object.
   ethereum: "ETHERSCAN_API_KEY",
 });
 
-/** Transactions read per address, the page cap of `@agntn/explorers`. */
-export const HISTORY_LIMIT = 100;
+/** Transactions one history page holds, the page cap of `@agntn/explorers`. */
+export const HISTORY_PAGE = 100;
+
+/** Most transactions read per address: Esplora, Blockscout and Arweave page no further. */
+export const HISTORY_LIMIT = 1000;
 
 /** Base error for balance lookups. */
 export class BalanceError extends PuzzlesError {

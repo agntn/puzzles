@@ -74,7 +74,7 @@
   "dependencies": {
     "@agntn/archives": "0.7.0",
     "@agntn/chains": "0.3.11",
-    "@agntn/explorers": "0.5.9",
+    "@agntn/explorers": "0.5.10",
     "@agntn/hashes": "0.4.0",
     "@agntn/keys": "0.3.5",
     "@agntn/tools": "0.0.0",

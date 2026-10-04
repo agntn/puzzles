@@ -57,7 +57,7 @@ export interface WatchReport {
   /** Puzzle identifier. */
   readonly id: string;
 
-  /** Prize addresses with more transactions than one read takes; their older ones went unchecked. */
+  /** Prize addresses with more transactions than a watch reads; their older ones went unchecked. */
   readonly truncated: readonly string[];
 }
 
@@ -112,8 +112,9 @@ function chronological(left: Readonly<TransactionFinding>, right: Readonly<Trans
   );
 }
 
-/** What the record lacks among the transactions read, and the addresses read only in part. */
+/** What the record lacks among the transactions read, the addresses read only in part, and why. */
 interface Unrecorded {
+  readonly failures: string[];
   readonly findings: TransactionFinding[];
   readonly truncated: string[];
 }
@@ -130,13 +131,11 @@ async function unrecorded(puzzle: Puzzle, options: BalanceOptions): Promise<Unre
   const { lookupHistory } = await import("./providers.ts");
   const recorded = recordedTxids(puzzle);
   const kinds = { in: "deposit", out: "spend" } as const;
-  const history = await lookupHistory(puzzle, options);
-  const counts = new Map<string, number>();
-  for (const { address } of history) {
-    counts.set(address, (counts.get(address) ?? 0) + 1);
-  }
+  const histories = await lookupHistory(puzzle, options);
   return {
-    findings: history
+    failures: histories.flatMap(({ failure }) => (failure === undefined ? [] : [failure])),
+    findings: histories
+      .flatMap((history) => history.transactions)
       .filter(
         (transaction) =>
           !recorded.has(transaction.txid.toLowerCase()) &&
@@ -147,9 +146,9 @@ async function unrecorded(puzzle: Puzzle, options: BalanceOptions): Promise<Unre
         kind: transaction.direction === undefined ? "transaction" : kinds[transaction.direction],
       }))
       .toSorted(chronological),
-    truncated: [...counts]
-      .filter(([, count]) => count >= HISTORY_LIMIT)
-      .map(([address]) => address),
+    truncated: histories
+      .filter((history) => !history.complete && history.failure === undefined)
+      .map(({ address }) => address),
   };
 }
 
@@ -255,7 +254,10 @@ export function watcher(options: WatchOptions = {}): Watch {
       id: puzzle.id(),
       chain: puzzle.chain(),
       findings: attempts.flatMap((done) => done.value ?? []),
-      errors: attempts.flatMap((done) => (done.error === undefined ? [] : [done.error])),
+      errors: [
+        ...attempts.flatMap((done) => (done.error === undefined ? [] : [done.error])),
+        ...(history.value?.failures ?? []),
+      ],
       truncated: history.value?.truncated ?? [],
     };
   };
