@@ -19,6 +19,7 @@ import {
   BalanceError,
   BalanceProviderError,
   HISTORY_LIMIT,
+  HISTORY_PAGE,
   InvalidAddressError,
   UnsupportedChainError,
   type BalanceOptions,
@@ -371,28 +372,84 @@ function toChainTransaction(chain: Chain, address: string, transaction: Listed):
   });
 }
 
+/** One prize address's transactions, and whether they are all of them. */
+export interface AddressHistory {
+  /** The address read. */
+  readonly address: string;
+
+  /** Whether a short page ended the read, so no older transaction went unread. */
+  readonly complete: boolean;
+
+  /** Why a page after the first failed, when one did; the pages before it still count. */
+  readonly failure?: string;
+
+  /** Its transactions, newest first. */
+  readonly transactions: ChainTransaction[];
+}
+
 /**
- * Reads the newest transactions of a puzzle's target address, and of its escrow when it has one,
- * up to `HISTORY_LIMIT` per address, newest first.
+ * Reads one address a page at a time until a short page or `HISTORY_LIMIT`. A txid seen twice
+ * counts once, and only a failed first page fails the read.
+ *
+ * @param {Chain} chain - Chain of the address.
+ * @param {string} address - Address to read.
+ * @param {Readonly<ProviderConfig>} config - Provider configuration.
+ * @returns {Promise<AddressHistory>} The transactions read and whether that was all of them.
+ */
+async function readHistory(
+  chain: Chain,
+  address: string,
+  config: Readonly<ProviderConfig>,
+): Promise<AddressHistory> {
+  const transactions = new Map<string, ChainTransaction>();
+  const read = (complete: boolean, failure?: string): AddressHistory =>
+    defined<AddressHistory>({
+      address,
+      complete,
+      failure,
+      transactions: [...transactions.values()],
+    });
+  for (let page = 1; page * HISTORY_PAGE <= HISTORY_LIMIT; page += 1) {
+    let rows: ExplorerTransaction[];
+    try {
+      rows = await ask(chain, "Transaction history", address, config, async (open) =>
+        open(config).getTxHistory(address, chain, { limit: HISTORY_PAGE, page }),
+      );
+    } catch (error) {
+      if (page === 1 || !(error instanceof BalanceError)) {
+        throw error;
+      }
+      return read(
+        false,
+        `${error.message}, past the newest ${transactions.size} transactions at ${address}`,
+      );
+    }
+    for (const row of rows) {
+      const transaction = toChainTransaction(chain, address, row);
+      if (!transactions.has(transaction.txid)) {
+        transactions.set(transaction.txid, transaction);
+      }
+    }
+    if (rows.length < HISTORY_PAGE) {
+      return read(true);
+    }
+  }
+  return read(false);
+}
+
+/**
+ * Reads the transactions of a puzzle's target address, and of its escrow when it has one, up to
+ * `HISTORY_LIMIT` per address, newest first.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @param {BalanceOptions} options - Lookup options.
- * @returns {Promise<ChainTransaction[]>} The transactions of every prize address.
+ * @returns {Promise<AddressHistory[]>} The history of every prize address.
  */
 export async function lookupHistory(
   puzzle: Puzzle,
   options: BalanceOptions,
-): Promise<ChainTransaction[]> {
+): Promise<AddressHistory[]> {
   const chain = puzzle.chain();
   const config = configOf(options);
-  const histories = await Promise.all(
-    prizeAddresses(puzzle).map((address) =>
-      ask(chain, "Transaction history", address, config, async (open) =>
-        (await open(config).getTxHistory(address, chain, { limit: HISTORY_LIMIT })).map(
-          (transaction) => toChainTransaction(chain, address, transaction),
-        ),
-      ),
-    ),
-  );
-  return histories.flat();
+  return Promise.all(prizeAddresses(puzzle).map((address) => readHistory(chain, address, config)));
 }
