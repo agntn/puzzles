@@ -1,3 +1,26 @@
+## v0.28.1
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.28.0...v0.28.1)
+
+### 🚀 Enhancements
+
+- **collections:** Mark weave/12 claimed ([#435](https://github.com/agntn/puzzles/pull/435))
+- **collections:** Add genesis replies to cut -b ([#436](https://github.com/agntn/puzzles/pull/436))
+- **collections:** Add quizchain2/61 to 70 ([#438](https://github.com/agntn/puzzles/pull/438))
+- **collections:** Add move-over-brokers ([#439](https://github.com/agntn/puzzles/pull/439))
+
+### 🩹 Fixes
+
+- **docs:** Remote MCP reads no arguments as {} ([#437](https://github.com/agntn/puzzles/pull/437))
+
+### 🏡 Chore
+
+- Apply automated updates ([d917afe](https://github.com/agntn/puzzles/commit/d917afe))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.28.0
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.27.2...v0.28.0)
