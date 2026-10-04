@@ -46,6 +46,7 @@ export const WALK: readonly string[] = [
   "great-riddle",
   "satoshi-maze",
   "natasha-otomoski",
+  "move-over-brokers/en-easy-1",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1272,26 +1273,56 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 4,
     tool: "natasha-otomoski\tsolved\t1 BTC\t179sxfh6rw6bHSo5wVUhLP96k46QaEzVP\nchain: bitcoin  address kind: p2pkh\nhash160: 0129e842a3d00363fa818d3fde2b2f0879159801\npublic key: 042b0763e8ce0c77dc0ac7511a0cc5c2ae466c85fd7dcbfe297b47790914f3e10a7639afd881f0493e59e31120a5e7c005b63072a79f6ffbb447e7c0e363ab6f9a (uncompressed)\nprivate key: 536865486164546865496465615768696c65436f6d62696e6748657248616972 (hex)\nwif: 5JT281eare7tuC1v659kZRdJT91zyAR7XkuXsFibjpHa4BcSQRW\nstarted: 2019-01-12 10:33:13\nsolved: 2019-08-21 17:05:02 (7mo 11d 6h 31m)\nsolver: akkort (akkort), bitcointalk https://bitcointalk.org/index.php?action=profile;u=884731\npre-genesis: yes\ntransactions: 4\n\tfunding\t2019-01-12 09:32:43\t1 BTC\t39ae730abf9190f1985a3600e35b6451efc51bfb885bc9d1c3b91d502de3907d\n\tclaim\t2019-08-21 17:05:02\t0.99996681 BTC\tb01af713b3c43c7e60ed03ada26a64a92f68be2f561ecf17c67e22393c10da53\n\tincrease\t2026-05-26 10:16:52\t0.0000078 BTC\t7b6a8ac2ee01a5c696adc04102da0efb8f3d097fccabf447a686c15fba5ce258\n\tsweep\t2026-05-26 10:16:52\t0.0000033 BTC\t1718788379eb5d5d26cbe91f0a79c01a87a96305fb25bc2e2a91e94d4f8aa614\nclaim: https://blockstream.info/tx/b01af713b3c43c7e60ed03ada26a64a92f68be2f561ecf17c67e22393c10da53\ntechniques: 1\n\tascii-private-key\tsource: https://bitcointalk.org/index.php?topic=5096267.msg49190307#msg49190307\nhints: 4\n\tofficial\t2019-01-12\tWhyTheCombOfNatashaOtomoskiHas21Teeth?.txt\tsource: https://bitcointalk.org/index.php?topic=5096267.msg49190307#msg49190307\tanswer: SheHadTheIdeaWhileCombingHerHair\tanswer source: https://bitcointalk.org/index.php?topic=5096267.msg52231664#msg52231664\tanswer date: 2019-08-22\n\tofficial\t2019-01-12\tThe solution is a 32 characters long plain-text (the private key).\tsource: https://bitcointalk.org/index.php?topic=5096267.msg49190307#msg49190307\n\tofficial\t2019-01-12\tHint: 8 camel case english words, no special symbols\tsource: https://bitcointalk.org/index.php?topic=5096267.msg49190307#msg49190307\n\tcommunity\t2019-01-12\tObviously she isn't him, but 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 S A T O S H I N A K A M O T O 8 2 3 9 1 6 11 4 14 13 12 15 5 10 7 N A T A S H A O T O M O S K I\tsource: https://bitcointalk.org/index.php?topic=5096267.msg49196415#msg49196415\nexplorer: https://blockstream.info/address/179sxfh6rw6bHSo5wVUhLP96k46QaEzVP\nsource: https://bitcointalk.org/index.php?topic=5096267.0",
   },
+  {
+    id: "move-over-brokers/en-easy-1",
+    collection: "move-over-brokers",
+    chain: "bitcoin",
+    status: "solved",
+    address: "14aFhno96fkt7knLWMDQ4j8yh8v5hBF4n1",
+    kind: "p2pkh",
+    hash160: "273260b4f01b31f6cea8d064a3bbbfa7d1302e76",
+    redeemScript: undefined,
+    prize: "0.002 BTC",
+    prizeAmount: 0.002,
+    currency: undefined,
+    startedAt: "2020-11-28 16:24:07",
+    solvedAt: "2022-01-15 06:48:31",
+    solveTime: "1y 1mo 17d 14h 24m",
+    bits: undefined,
+    range: undefined,
+    pubkey:
+      "0479b1b086e28ab7c7f98efb60103b5e0cc01cee15f037dcc616dd49ffc17f9f2516d784f8414813247abeaefe6cd6388df2463cf5df99618aacc9e9c6cb219f1b",
+    pubkeyFormat: "uncompressed",
+    secret: "hex",
+    keyLiteral:
+      'hex("72048596fda6013a976c22ac4d0b1dbc29a3ca624f4740a64b195ad10f4e1b89").wif("5JgW1WrxCgC4275UqHQfTVpdnyEPJDaaSf76VPCC7Q6KX14Cunc").passphrase("221B Baker Street").derived()',
+    verdict: "verified",
+    detail: "14aFhno96fkt7knLWMDQ4j8yh8v5hBF4n1",
+    explorer: "https://blockstream.info/address/14aFhno96fkt7knLWMDQ4j8yh8v5hBF4n1",
+    source: "https://kf106.medium.com/everyone-loves-a-treasure-hunt-93885ae8d80a",
+    transactions: 2,
+    tool: 'move-over-brokers/en-easy-1\tsolved\t0.002 BTC\t14aFhno96fkt7knLWMDQ4j8yh8v5hBF4n1\nchain: bitcoin  address kind: p2pkh\nhash160: 273260b4f01b31f6cea8d064a3bbbfa7d1302e76\npublic key: 0479b1b086e28ab7c7f98efb60103b5e0cc01cee15f037dcc616dd49ffc17f9f2516d784f8414813247abeaefe6cd6388df2463cf5df99618aacc9e9c6cb219f1b (uncompressed)\nprivate key: 72048596fda6013a976c22ac4d0b1dbc29a3ca624f4740a64b195ad10f4e1b89 (hex, derived from the published recipe)\nwif: 5JgW1WrxCgC4275UqHQfTVpdnyEPJDaaSf76VPCC7Q6KX14Cunc\npassphrase: 221B Baker Street\nstarted: 2020-11-28 16:24:07\nsolved: 2022-01-15 06:48:31 (1y 1mo 17d 14h 24m)\nsolver: 19HBFLhjcoi49jNVe3r7T555rfzPGpeXN3\ntransactions: 2\n\tfunding\t2020-11-28 16:24:07\t0.002 BTC\tf26ecab737b701982a7a3d0f9b0ffb3c509225cbbefecc2a4fe2e73758ce8972\n\tclaim\t2022-01-15 06:48:31\t0.0019888 BTC\t5a4eb010ab4aa23a3946d50a602276551e160042862e95c793e384c5d8cf8011\nclaim: https://blockstream.info/tx/5a4eb010ab4aa23a3946d50a602276551e160042862e95c793e384c5d8cf8011\ntechniques: 1\n\ttriple-sha256-brainwallet\tsource: https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats\nhints: 3\n\tofficial\t-\tYou hold the source of each and every key in your hands... as long as you have a physical copy, that is. Note that there are plenty of red herrings too.\tsource: https://github.com/floflo777/open-crypto-puzzles/blob/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats/clues/author-posts.md\n\tofficial\t-\tIn many cases, you\'ll have to hash the answer three times.\tsource: https://github.com/floflo777/open-crypto-puzzles/blob/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats/clues/author-posts.md\n\tcommunity\t2026-08-16\tThe book plants the number 221 with a "check it on your calculator" nudge in one chapter and titles a section "Elementary, my dear Watson" in another.\tsource: https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats\tanswer: 221B Baker Street\tanswer source: https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats\tanswer date: 2026-08-16\nexplorer: https://blockstream.info/address/14aFhno96fkt7knLWMDQ4j8yh8v5hBF4n1\nsource: https://kf106.medium.com/everyone-loves-a-treasure-hunt-93885ae8d80a',
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "b85414f27752",
-  total: 521,
-  solved: 304,
-  unsolved: 104,
-  claimed: 13,
+  dataVersion: "3c2d673ff6ab",
+  total: 533,
+  solved: 310,
+  unsolved: 107,
+  claimed: 16,
   swept: 96,
   expired: 4,
-  withPubkey: 412,
+  withPubkey: 421,
   unsolvedPrize: {
-    BTC: 909.12202677,
+    BTC: 909.12802677,
     ETH: 13.171964034825493,
     LTC: 3.02608794,
     AR: 1500.188092936237,
   },
   totalPrize: {
-    BTC: 1068.40756695,
+    BTC: 1068.43156695,
     ETH: 26.81566403482549,
     DOGE: 10000,
     BCH: 5.1,
@@ -1751,6 +1782,30 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 7,
     firstStarted: "2024-10-14 13:48:32",
     lastStarted: "2026-07-29 15:40:33",
+    hints: [],
+  },
+  {
+    key: "move-over-brokers",
+    author: "Keir Finlow-Bates",
+    authorKey: "keir-finlow-bates",
+    authorUrl: "https://kf106.medium.com/",
+    total: 12,
+    statuses: {
+      solved: 6,
+      unsolved: 3,
+      claimed: 3,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.024,
+    },
+    unsolvedPrize: {
+      BTC: 0.006,
+    },
+    withPubkey: 9,
+    withKey: 6,
+    firstStarted: "2020-11-28 16:24:07",
+    lastStarted: "2021-09-11 09:28:09",
     hints: [],
   },
   {
@@ -2349,6 +2404,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Bitcoin puzzle solver and author of RCKangaroo who posted seven mini-puzzles on Bitcointalk: the Bitcoin Cash left on four solved puzzle addresses, and 0.01 BTC three times.",
     collections: ["mini"],
     puzzles: 7,
+  },
+  {
+    key: "keir-finlow-bates",
+    to: "/authors/keir-finlow-bates",
+    name: "Keir Finlow-Bates",
+    kind: "person",
+    about:
+      "Blockchain author and founder of Chainfrog who hid twelve Bitcoin keys in his own book and its Italian translation, then forgot them on purpose.",
+    collections: ["move-over-brokers"],
+    puzzles: 12,
   },
   {
     key: "klems",

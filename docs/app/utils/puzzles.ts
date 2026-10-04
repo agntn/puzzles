@@ -159,6 +159,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Seven small riddles on Bitcointalk. Four replay a solved puzzle key for the Bitcoin Cash still on its address, three put 0.01 BTC on a fresh key.",
   },
+  "move-over-brokers": {
+    icon: "i-lucide-book-open",
+    title: "Move Over Brokers treasure hunt",
+    sample: "move-over-brokers/en-easy-1",
+    chains: ["bitcoin"],
+    blurb:
+      "Twelve keys hidden in a blockchain book and its Italian translation. One answer is Sherlock Holmes's address, another is printed only on the back cover.",
+  },
   "movie-enigma": {
     icon: "i-lucide-clapperboard",
     title: "Bitcoin Movie Enigma",

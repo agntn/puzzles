@@ -31,6 +31,10 @@ export const builtins = [
   { key: "luckylurker", load: () => import("./luckylurker.ts").then((m) => m.luckyLurker) },
   { key: "mineshop", load: () => import("./mineshop.ts").then((m) => m.mineshop) },
   { key: "mini", load: () => import("./mini.ts").then((m) => m.mini) },
+  {
+    key: "move-over-brokers",
+    load: () => import("./move-over-brokers.ts").then((m) => m.moveOverBrokers),
+  },
   { key: "movie-enigma", load: () => import("./movie-enigma.ts").then((m) => m.movieEnigma) },
   {
     key: "natasha-otomoski",
