@@ -21,6 +21,7 @@ import { LedgerDonjonCollection } from "../../src/collections/ledger-donjon.ts";
 import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MineshopCollection } from "../../src/collections/mineshop.ts";
 import { mini, MiniCollection } from "../../src/collections/mini.ts";
+import { MoveOverBrokersCollection } from "../../src/collections/move-over-brokers.ts";
 import { MovieEnigmaCollection } from "../../src/collections/movie-enigma.ts";
 import { NatashaOtomoskiCollection } from "../../src/collections/natasha-otomoski.ts";
 import { PathToGreatnessCollection } from "../../src/collections/path-to-greatness.ts";
@@ -99,6 +100,7 @@ const concreteClasses = [
   LuckyLurkerCollection,
   MineshopCollection,
   MiniCollection,
+  MoveOverBrokersCollection,
   MovieEnigmaCollection,
   NatashaOtomoskiCollection,
   PathToGreatnessCollection,
@@ -932,21 +934,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(521);
+    expect(await all()).toHaveLength(533);
     expect(await stats()).toEqual({
-      total: 521,
-      claimed: 13,
+      total: 533,
+      claimed: 16,
       expired: 4,
-      solved: 304,
+      solved: 310,
       swept: 96,
-      unsolved: 104,
-      with_pubkey: 412,
+      unsolved: 107,
+      with_pubkey: 421,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1068.40756695,
+        BTC: 1068.43156695,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -955,7 +957,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1500.188092936237,
         ETH: 13.171964034825493,
-        BTC: 909.12202677,
+        BTC: 909.12802677,
         LTC: 3.02608794,
       },
       techniques: {
@@ -964,7 +966,7 @@ describe("lazy collection registry", () => {
         atbash: 14,
         base64: 1,
         beaufort: 1,
-        binary: 2,
+        binary: 3,
         bip38: 4,
         "hash-collision": 5,
         "hidden-seed-words": 13,
@@ -972,7 +974,7 @@ describe("lazy collection registry", () => {
         "md5-to-bip39-entropy": 133,
         morse: 1,
         "openssl-salted-sha256": 1,
-        "partial-key": 4,
+        "partial-key": 6,
         qr: 1,
         "scrypt-brainwallet": 1,
         "sha256-brainwallet": 31,
@@ -980,8 +982,9 @@ describe("lazy collection registry", () => {
         "shamir-shares": 1,
         steganography: 21,
         "straddling-checkerboard": 1,
+        "triple-sha256-brainwallet": 3,
         warpwallet: 6,
-        xor: 6,
+        xor: 7,
       },
     });
   });
@@ -1025,7 +1028,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(521);
+    ).toBe(533);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -1052,6 +1055,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(304);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(310);
   });
 });

@@ -103,6 +103,7 @@ const expectedCollections = [
   "luckylurker",
   "mineshop",
   "mini",
+  "move-over-brokers",
   "movie-enigma",
   "natasha-otomoski",
   "path-to-greatness",

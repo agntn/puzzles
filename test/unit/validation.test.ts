@@ -713,6 +713,8 @@ describe("collection class data", () => {
     expect(puzzles.filter((puzzle) => puzzle.hasDerivedKey()).map((puzzle) => puzzle.id())).toEqual(
       [
         "iamabananaamaa/gif",
+        "move-over-brokers/en-easy-1",
+        "move-over-brokers/en-easy-2",
         "picture-puzzle",
         "quizchain/6",
         "quizchain/7",
@@ -1081,6 +1083,31 @@ describe("collection class data", () => {
     );
     expect(checked).toHaveLength(28);
     expect(checked.filter(([, rebuilt]) => !rebuilt)).toEqual([]);
+  });
+
+  it("rebuilds every triple SHA-256 brainwallet key the record holds from its passphrase", () => {
+    const checked = registered.flatMap((collection) =>
+      collection.all().flatMap((item) => {
+        const key = item.keyData();
+        const phrase = key?.wif?.passphrase;
+        const tagged = collection
+          .techniquesById(item.id())
+          .some((tag) => tag.name === "triple-sha256-brainwallet");
+        return tagged && key?.hex !== undefined && phrase !== undefined
+          ? [
+              [
+                item.id(),
+                sha256(sha256(sha256(new TextEncoder().encode(phrase)))).toHex() === key.hex,
+              ] as const,
+            ]
+          : [];
+      }),
+    );
+    expect(checked).toEqual([
+      ["move-over-brokers/en-easy-1", true],
+      ["move-over-brokers/en-easy-2", true],
+      ["move-over-brokers/it-hard", true],
+    ]);
   });
 
   it("reads every ASCII private key the record holds as a published answer", () => {

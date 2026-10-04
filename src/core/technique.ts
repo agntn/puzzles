@@ -42,6 +42,8 @@ export const Technique = {
   Steganography: "steganography",
   /** A straddling checkerboard, digits for letters. */
   StraddlingCheckerboard: "straddling-checkerboard",
+  /** Three rounds of SHA-256 over a passphrase, each on the last digest, as the private key. */
+  TripleSha256Brainwallet: "triple-sha256-brainwallet",
   /** Keybase's WarpWallet, scrypt and PBKDF2 over a passphrase and a salt. */
   Warpwallet: "warpwallet",
   /** XOR with a mask. */

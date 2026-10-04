@@ -120,7 +120,11 @@ describe("Pi extension", () => {
 
     expect(result?.content[0]?.text.split("\n")[0]).toBe("floflo777\tfloflo777\tperson");
     expect(result?.details).toMatchObject({
-      solver: { key: "floflo777", collections: ["dug", "teikhos"], authored: [] },
+      solver: {
+        key: "floflo777",
+        collections: ["dug", "move-over-brokers", "teikhos"],
+        authored: [],
+      },
     });
   });
 
