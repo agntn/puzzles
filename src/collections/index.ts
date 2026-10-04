@@ -66,6 +66,7 @@ export const builtins = [
     key: "trivia-brainwallet",
     load: () => import("./trivia-brainwallet.ts").then((m) => m.triviaBrainwallet),
   },
+  { key: "walking-banks", load: () => import("./walking-banks.ts").then((m) => m.walkingBanks) },
   { key: "warp", load: () => import("./warp.ts").then((m) => m.warp) },
   {
     key: "wealth-in-poetry",

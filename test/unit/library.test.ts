@@ -35,6 +35,7 @@ import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-bir
 import { SatoshiMazeCollection } from "../../src/collections/satoshi-maze.ts";
 import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { TriviaBrainwalletCollection } from "../../src/collections/trivia-brainwallet.ts";
+import { WalkingBanksCollection } from "../../src/collections/walking-banks.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
 import { WealthInPoetryCollection } from "../../src/collections/wealth-in-poetry.ts";
 import { weave, WeaveCollection } from "../../src/collections/weave.ts";
@@ -114,6 +115,7 @@ const concreteClasses = [
   SatoshiMazeCollection,
   TeikhosCollection,
   TriviaBrainwalletCollection,
+  WalkingBanksCollection,
   WarpCollection,
   WealthInPoetryCollection,
   WeaveCollection,
@@ -584,7 +586,7 @@ describe("lazy collection registry", () => {
       "Puzzle not found: 71. Did you mean b1000/71 or quizchain/71?",
     );
     await expect(miss(requirePuzzle("1"))).resolves.toBe(
-      "Puzzle not found: 1. Did you mean b1000/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1 or weave/1?",
+      "Puzzle not found: 1. Did you mean b1000/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1, walking-banks/1 or weave/1?",
     );
 
     /* A number one digit off is another puzzle, and an unknown collection holds no name. */
@@ -934,21 +936,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(533);
+    expect(await all()).toHaveLength(535);
     expect(await stats()).toEqual({
-      total: 533,
+      total: 535,
       claimed: 16,
       expired: 4,
       solved: 310,
       swept: 96,
-      unsolved: 107,
-      with_pubkey: 421,
+      unsolved: 109,
+      with_pubkey: 423,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1068.43156695,
+        BTC: 1068.43956695,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -957,7 +959,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1500.188092936237,
         ETH: 13.171964034825493,
-        BTC: 909.12802677,
+        BTC: 909.13602677,
         LTC: 3.02608794,
       },
       techniques: {
@@ -969,7 +971,7 @@ describe("lazy collection registry", () => {
         binary: 3,
         bip38: 4,
         "hash-collision": 5,
-        "hidden-seed-words": 13,
+        "hidden-seed-words": 15,
         "masked-key-range": 256,
         "md5-to-bip39-entropy": 133,
         morse: 1,
@@ -1028,7 +1030,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(533);
+    ).toBe(535);
   });
 
   it("hands back the memoized views frozen through", async () => {

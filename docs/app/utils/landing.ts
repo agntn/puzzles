@@ -47,6 +47,7 @@ export const WALK: readonly string[] = [
   "satoshi-maze",
   "natasha-otomoski",
   "move-over-brokers/en-easy-1",
+  "walking-banks/1",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1303,26 +1304,54 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 2,
     tool: 'move-over-brokers/en-easy-1\tsolved\t0.002 BTC\t14aFhno96fkt7knLWMDQ4j8yh8v5hBF4n1\nchain: bitcoin  address kind: p2pkh\nhash160: 273260b4f01b31f6cea8d064a3bbbfa7d1302e76\npublic key: 0479b1b086e28ab7c7f98efb60103b5e0cc01cee15f037dcc616dd49ffc17f9f2516d784f8414813247abeaefe6cd6388df2463cf5df99618aacc9e9c6cb219f1b (uncompressed)\nprivate key: 72048596fda6013a976c22ac4d0b1dbc29a3ca624f4740a64b195ad10f4e1b89 (hex, derived from the published recipe)\nwif: 5JgW1WrxCgC4275UqHQfTVpdnyEPJDaaSf76VPCC7Q6KX14Cunc\npassphrase: 221B Baker Street\nstarted: 2020-11-28 16:24:07\nsolved: 2022-01-15 06:48:31 (1y 1mo 17d 14h 24m)\nsolver: 19HBFLhjcoi49jNVe3r7T555rfzPGpeXN3\ntransactions: 2\n\tfunding\t2020-11-28 16:24:07\t0.002 BTC\tf26ecab737b701982a7a3d0f9b0ffb3c509225cbbefecc2a4fe2e73758ce8972\n\tclaim\t2022-01-15 06:48:31\t0.0019888 BTC\t5a4eb010ab4aa23a3946d50a602276551e160042862e95c793e384c5d8cf8011\nclaim: https://blockstream.info/tx/5a4eb010ab4aa23a3946d50a602276551e160042862e95c793e384c5d8cf8011\ntechniques: 1\n\ttriple-sha256-brainwallet\tsource: https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats\nhints: 3\n\tofficial\t-\tYou hold the source of each and every key in your hands... as long as you have a physical copy, that is. Note that there are plenty of red herrings too.\tsource: https://github.com/floflo777/open-crypto-puzzles/blob/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats/clues/author-posts.md\n\tofficial\t-\tIn many cases, you\'ll have to hash the answer three times.\tsource: https://github.com/floflo777/open-crypto-puzzles/blob/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats/clues/author-posts.md\n\tcommunity\t2026-08-16\tThe book plants the number 221 with a "check it on your calculator" nudge in one chapter and titles a section "Elementary, my dear Watson" in another.\tsource: https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats\tanswer: 221B Baker Street\tanswer source: https://github.com/floflo777/open-crypto-puzzles/tree/main/2-mid-prizes/keir-finlow-bates-blockchain-book-600ksats\tanswer date: 2026-08-16\nexplorer: https://blockstream.info/address/14aFhno96fkt7knLWMDQ4j8yh8v5hBF4n1\nsource: https://kf106.medium.com/everyone-loves-a-treasure-hunt-93885ae8d80a',
   },
+  {
+    id: "walking-banks/1",
+    collection: "walking-banks",
+    chain: "bitcoin",
+    status: "unsolved",
+    address: "bc1q4qc24xk5cehc4t7vr264zldsms2kmxf86jqjau",
+    kind: "p2wpkh",
+    hash160: "a830aa9ad4c66f8aafcc1ab5517db0dc156d9927",
+    redeemScript: undefined,
+    prize: "0.007 BTC",
+    prizeAmount: 0.007,
+    currency: undefined,
+    startedAt: "2024-09-05 13:49:07",
+    solvedAt: undefined,
+    solveTime: undefined,
+    bits: undefined,
+    range: undefined,
+    pubkey: "0345a988db0b34ab48693b9d525ff227d98c67e8986c0664c1d9412f111e5afa3b",
+    pubkeyFormat: "compressed",
+    secret: "none",
+    keyLiteral: undefined,
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://blockstream.info/address/bc1q4qc24xk5cehc4t7vr264zldsms2kmxf86jqjau",
+    source: "https://web.archive.org/web/20250716082759/https://www.walkingbanks.com/",
+    transactions: 1,
+    tool: "walking-banks/1\tunsolved\t0.007 BTC\tbc1q4qc24xk5cehc4t7vr264zldsms2kmxf86jqjau\nchain: bitcoin  address kind: p2wpkh\nhash160: a830aa9ad4c66f8aafcc1ab5517db0dc156d9927\npublic key: 0345a988db0b34ab48693b9d525ff227d98c67e8986c0664c1d9412f111e5afa3b (compressed)\nprivate key: unknown\nstarted: 2024-09-05 13:49:07\ntransactions: 1\n\tfunding\t2024-09-05 13:49:07\t0.007 BTC\tad436eaaa66e31b59b763049dc6d59bb213cc3b9910b80b2e7424720e39b1533\ncollection techniques: 1\n\thidden-seed-words\tsource: https://njump.me/note15ys0tl7dyjy3lgah9n4n8360lamefqe40w2d7d9asdgmk3km5ngsxpzqrp\ncollection hints: 8\n\tofficial\t-\tNestled within the chapters of \"Walking Banks\" lie hints to a genuine bitcoin treasure, just waiting for a reader to uncover it.\tsource: https://www.walkingbanks.com/\tconfirmation: https://web.archive.org/web/20250716082759/https://www.walkingbanks.com/\n\tofficial\t-\tThe book holds information that, when pieced together, unveil a seed phrase to a wallet containing real bitcoin; 0.008 BTC, or 800,000 Satoshis to be precise.\tsource: https://www.walkingbanks.com/\tconfirmation: https://web.archive.org/web/20250716082759/https://www.walkingbanks.com/\n\tofficial\t2024-09-06\txiiithirdiiicrystaliiismalliiiadviceiiireflectxxxxxxcrystaliiismalliiiadviceiiireflectxxxxxxcrystaliiismalliiiadviceiiireflectiiithirdiiix\tsource: https://d.nostr.build/UlE0X93faO1XxD9l.pdf\n\tofficial\t2024-09-06\t“‘Crystal, small, advice, and reflect’ are words belonging to a list that is used to make up a bitcoin seed phrase which normally consists of twenty four words,” she said, pointing to the words on the screen. “And considering the context, I’d say they are to be entered as the third list of words in a longer seed phrase that will give you access to Liang Wei’s fortune stored on a wallet on the bitcoin blockchain.”\tsource: https://d.nostr.build/UlE0X93faO1XxD9l.pdf\n\tofficial\t2025-05-19\tIf your up for a treasure hunt, the book contains a real Bitcoin seed phrase hidden within the story. So if you can piece the right string of words together, it leads to a wallet with 800000 sats in it.\tsource: https://njump.me/note1vm2c020vsrkvg077m3tptta2n44j2qez20zk65j6eeh3ta652jysd69g2q\n\tofficial\t2025-05-19\tIt's 24 words...if the wallet is not emptied after some time, I'll start dropping some hints from time to time\tsource: https://njump.me/note1rmyu92ufwfl2nukzn2njlfynegu6jqyxhejc3207lztm5v3pugrsty535z\n\tofficial\t2025-11-21\tDid you know that word repetitions are actually allowed in a seed phrase?\tsource: https://njump.me/note1s29pn8p95u334wqspvyj2lm8naelfcel02zqxqk9h5t9kxmsq43q39zh0k\n\tofficial\t2026-03-16\tSo here some straightforward clues: the book contains the words to a 24-word see phrase in the right order.\tsource: https://njump.me/note15ys0tl7dyjy3lgah9n4n8360lamefqe40w2d7d9asdgmk3km5ngsxpzqrp\nexplorer: https://blockstream.info/address/bc1q4qc24xk5cehc4t7vr264zldsms2kmxf86jqjau\nsource: https://web.archive.org/web/20250716082759/https://www.walkingbanks.com/",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "3c2d673ff6ab",
-  total: 533,
+  dataVersion: "31d7c3a69ebe",
+  total: 535,
   solved: 310,
-  unsolved: 107,
+  unsolved: 109,
   claimed: 16,
   swept: 96,
   expired: 4,
-  withPubkey: 421,
+  withPubkey: 423,
   unsolvedPrize: {
-    BTC: 909.12802677,
+    BTC: 909.13602677,
     ETH: 13.171964034825493,
     LTC: 3.02608794,
     AR: 1500.188092936237,
   },
   totalPrize: {
-    BTC: 1068.43156695,
+    BTC: 1068.43956695,
     ETH: 26.81566403482549,
     DOGE: 10000,
     BCH: 5.1,
@@ -2087,6 +2116,81 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "walking-banks",
+    author: "AH White",
+    authorKey: "ah-white",
+    authorUrl: "https://njump.me/npub1c2rvx6ue9uewl452kczcfxz9w242sfzn64ul8dv2afd3t5dpktzs0kmmvf",
+    total: 2,
+    statuses: {
+      unsolved: 2,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.008,
+    },
+    unsolvedPrize: {
+      BTC: 0.008,
+    },
+    withPubkey: 2,
+    withKey: 0,
+    firstStarted: "2024-09-05 13:35:50",
+    lastStarted: "2024-09-05 13:49:07",
+    hints: [
+      {
+        kind: "official",
+        text: 'Nestled within the chapters of "Walking Banks" lie hints to a genuine bitcoin treasure, just waiting for a reader to uncover it.',
+        source: "https://www.walkingbanks.com/",
+        confirmation: {
+          url: "https://web.archive.org/web/20250716082759/https://www.walkingbanks.com/",
+        },
+      },
+      {
+        kind: "official",
+        text: "The book holds information that, when pieced together, unveil a seed phrase to a wallet containing real bitcoin; 0.008 BTC, or 800,000 Satoshis to be precise.",
+        source: "https://www.walkingbanks.com/",
+        confirmation: {
+          url: "https://web.archive.org/web/20250716082759/https://www.walkingbanks.com/",
+        },
+      },
+      {
+        kind: "official",
+        text: "xiiithirdiiicrystaliiismalliiiadviceiiireflectxxxxxxcrystaliiismalliiiadviceiiireflectxxxxxxcrystaliiismalliiiadviceiiireflectiiithirdiiix",
+        source: "https://d.nostr.build/UlE0X93faO1XxD9l.pdf",
+        date: "2024-09-06",
+      },
+      {
+        kind: "official",
+        text: "“‘Crystal, small, advice, and reflect’ are words belonging to a list that is used to make up a bitcoin seed phrase which normally consists of twenty four words,” she said, pointing to the words on the screen. “And considering the context, I’d say they are to be entered as the third list of words in a longer seed phrase that will give you access to Liang Wei’s fortune stored on a wallet on the bitcoin blockchain.”",
+        source: "https://d.nostr.build/UlE0X93faO1XxD9l.pdf",
+        date: "2024-09-06",
+      },
+      {
+        kind: "official",
+        text: "If your up for a treasure hunt, the book contains a real Bitcoin seed phrase hidden within the story. So if you can piece the right string of words together, it leads to a wallet with 800000 sats in it.",
+        source: "https://njump.me/note1vm2c020vsrkvg077m3tptta2n44j2qez20zk65j6eeh3ta652jysd69g2q",
+        date: "2025-05-19",
+      },
+      {
+        kind: "official",
+        text: "It's 24 words...if the wallet is not emptied after some time, I'll start dropping some hints from time to time",
+        source: "https://njump.me/note1rmyu92ufwfl2nukzn2njlfynegu6jqyxhejc3207lztm5v3pugrsty535z",
+        date: "2025-05-19",
+      },
+      {
+        kind: "official",
+        text: "Did you know that word repetitions are actually allowed in a seed phrase?",
+        source: "https://njump.me/note1s29pn8p95u334wqspvyj2lm8naelfcel02zqxqk9h5t9kxmsq43q39zh0k",
+        date: "2025-11-21",
+      },
+      {
+        kind: "official",
+        text: "So here some straightforward clues: the book contains the words to a 24-word see phrase in the right order.",
+        source: "https://njump.me/note15ys0tl7dyjy3lgah9n4n8360lamefqe40w2d7d9asdgmk3km5ngsxpzqrp",
+        date: "2026-03-16",
+      },
+    ],
+  },
+  {
     key: "warp",
     author: "Keybase",
     authorKey: "keybase",
@@ -2514,6 +2618,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Reddit user who tried to revive r/bitcoinpuzzles in 2017 with one funded trivia brainwallet.",
     collections: ["trivia-brainwallet"],
     puzzles: 1,
+  },
+  {
+    key: "ah-white",
+    to: "/authors/ah-white",
+    name: "AH White",
+    kind: "person",
+    about:
+      "Neurobiologist and bitcoiner who wrote a Bitcoin murder mystery, gave the PDF away on Nostr and hid a real seed phrase in the story.",
+    collections: ["walking-banks"],
+    puzzles: 2,
   },
   {
     key: "keybase",

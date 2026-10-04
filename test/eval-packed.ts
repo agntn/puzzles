@@ -117,6 +117,7 @@ const expectedCollections = [
   "satoshi-maze",
   "teikhos",
   "trivia-brainwallet",
+  "walking-banks",
   "warp",
   "wealth-in-poetry",
   "weave",
