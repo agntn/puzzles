@@ -294,6 +294,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Five Ethereum contracts that want a public key nobody published. Four can pay, and one did in 2026, with a key a failed attempt left on chain four years earlier.",
   },
+  "walking-banks": {
+    icon: "i-lucide-dna",
+    title: "Walking Banks seed hunt",
+    sample: "walking-banks/2",
+    chains: ["bitcoin"],
+    blurb:
+      "A thriller whose murder victims carry a seed phrase in their DNA, and a real one hidden in the book. Four words decode on page 122. The other twenty, and 800,000 sats, are still out there.",
+  },
   warp: {
     icon: "i-lucide-key-round",
     title: "WarpWallet challenges",
