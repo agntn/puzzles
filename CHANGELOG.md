@@ -1,3 +1,24 @@
+## v0.28.2
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.28.1...v0.28.2)
+
+### 🚀 Enhancements
+
+- **collections:** Add walking-banks ([#440](https://github.com/agntn/puzzles/pull/440))
+- **tools:** Hand agents the puzzle files ([#441](https://github.com/agntn/puzzles/pull/441))
+- **collections:** Add phy ([#442](https://github.com/agntn/puzzles/pull/442))
+- **collections:** Add seed-phrase ([#444](https://github.com/agntn/puzzles/pull/444))
+- **cli:** Read watch histories past 100 ([#450](https://github.com/agntn/puzzles/pull/450))
+
+### 🩹 Fixes
+
+- **release:** Leave the changelog to changelogen ([#445](https://github.com/agntn/puzzles/pull/445))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.28.1
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.28.0...v0.28.1)
