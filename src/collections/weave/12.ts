@@ -1,5 +1,5 @@
-import { puzzle } from "../../core/puzzle.ts";
-import { funding, increase } from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { claim, funding, increase } from "../../core/parts.ts";
 
 /** Puzzle `weave/12`. */
 export const weave12 = puzzle({
@@ -8,7 +8,10 @@ export const weave12 = puzzle({
   address: "XRGEfkMbCMHeTY9mZI9Lh6hf8EmA8RstmBFUjDm40fg",
   sourceUrl: "https://arweave.net/gymumAAsxGlzqPL5HzoEB8Xryu61o174j7vHwx21Qoo",
   startedAt: "2020-04-14 09:17:16",
+  status: Status.Claimed,
   prize: 400.00248121,
+  solvedAt: "2026-10-03 23:38:40",
+  solveTime: 204214884,
   transactions: [
     funding("BregUvA5IRkePHvH6G5fL54ZI-L4JF2TfO7NyRj6U-Y", "2020-04-14 09:17:16", 400),
     increase("gNIyLL2XvJJzofsHChbUVBzpmUYUgujT6mNqTyTLi_o", "2022-01-07 05:03:30", 0.0021863),
@@ -25,5 +28,7 @@ export const weave12 = puzzle({
     increase("AMMAbYCwdQTggJzvzTLNqZq2cEmZk2X7QBBEv7-Pl2w", "2025-08-14 13:52:38", 0.00002),
     increase("SjwOyjmk6hC0GasXt1Wa2fSNegim1FMRaDvFGtB8vds", "2025-08-27 16:23:06", 0.00002),
     increase("X-ub8iQZQneQHXxTaBrviAtDMD1sJNqF4XOKmodyU1E", "2025-09-26 18:02:37", 0.00000891),
+    claim("o2Zq39Y9YstAJRFJS18o2nXErM7NQ86HGDVRXlCior8", "2026-10-03 23:38:40", 1),
+    claim("gx0Ws1TPZhmgTRk6j6UjMuaHiX4vYvfoqjzzW6Os7wo", "2026-10-03 23:43:39", 398.751263406938),
   ],
 });

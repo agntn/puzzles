@@ -71,7 +71,7 @@ describe.concurrent("puzzles CLI", () => {
     );
 
     expect(result.total).toBe(511);
-    expect(result.unsolved).toBe(105);
+    expect(result.unsolved).toBe(104);
   });
 
   it("shows a puzzle by universal identifier", async () => {
