@@ -8,17 +8,18 @@ import { watchTool } from "../../src/tool-operations.ts";
 
 const target = "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU";
 
-/* Two transactions mempool.space returned for b1000/71, trimmed to the fields the provider reads. */
+/* Made up: a top-up of b1000/71 the record doesn't list. */
 const deposit = {
-  txid: "572001d88e5c3030a89fe119e62cf80892876b59dcb9efe91348dd38745147e1",
+  txid: "e".repeat(64),
   fee: 66,
-  status: { confirmed: true, block_height: 969213, block_time: 1790720331 },
+  status: { confirmed: true, block_height: 969500, block_time: 1790900000 },
   vin: [{ prevout: { scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 19146 } }],
   vout: [
     { scriptpubkey_address: target, value: 666 },
     { scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 18414 },
   ],
 };
+/* A transaction mempool.space returned for b1000/71, trimmed to the fields the provider reads. */
 const recorded = {
   txid: "a2808acb455f636dc988186219d025e6507bd80640b0056b46583232aee7cfa5",
   fee: 1581,
@@ -39,8 +40,8 @@ const spend = {
   txid: "f".repeat(64),
   fee: 1000,
   status: { confirmed: false },
-  vin: [{ prevout: { scriptpubkey_address: target, value: 710022570 } }],
-  vout: [{ scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 710021570 }],
+  vin: [{ prevout: { scriptpubkey_address: target, value: 710191680 } }],
+  vout: [{ scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 710190680 }],
 };
 
 function json(body: unknown): Response {
@@ -69,7 +70,7 @@ afterEach(() => {
 
 describe("watcher", () => {
   it("lists a deposit the record misses and the prize it moved", async () => {
-    stubBitcoin([deposit, recorded], 710022570 + 666);
+    stubBitcoin([deposit, recorded], 710191680 + 666);
 
     const report = await watcher()(b1000.require(71));
 
@@ -80,23 +81,23 @@ describe("watcher", () => {
         txid: deposit.txid,
         address: target,
         amount: 666n,
-        date: "2026-09-29T22:18:51.000Z",
+        date: "2026-10-02T00:13:20.000Z",
         direction: "in",
         pending: false,
       },
-      { kind: "balance", balance: 710023236n, prize: "7.1002257" },
+      { kind: "balance", balance: 710192346n, prize: "7.1019168" },
     ]);
     expect(formatWatchReport(report)).toEqual([
-      `DEPOSIT\tb1000/71\t${deposit.txid} 0.00000666 BTC 2026-09-29T22:18:51.000Z at ${target}`,
-      "BALANCE\tb1000/71\t7.10023236 BTC held, 7.1002257 BTC recorded as the prize",
+      `DEPOSIT\tb1000/71\t${deposit.txid} 0.00000666 BTC 2026-10-02T00:13:20.000Z at ${target}`,
+      "BALANCE\tb1000/71\t7.10192346 BTC held, 7.1019168 BTC recorded as the prize",
     ]);
   });
 
   it("puts an unconfirmed spend last and reads OK when nothing else differs", async () => {
-    stubBitcoin([recorded], 710022570);
+    stubBitcoin([recorded], 710191680);
     expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual(["OK\tb1000/71"]);
 
-    stubBitcoin([spend, deposit, recorded], 710022570);
+    stubBitcoin([spend, deposit, recorded], 710191680);
     const { findings } = await watcher()(b1000.require(71));
     expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "spend"]);
     expect(findings[1]).toMatchObject({ pending: true, direction: "out" });
@@ -110,10 +111,10 @@ describe("watcher", () => {
         vout: [{ scriptpubkey_address: target, value: 0 }],
       }));
 
-    stubBitcoin(page(99), 710022570);
+    stubBitcoin(page(99), 710191680);
     expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual(["OK\tb1000/71"]);
 
-    stubBitcoin(page(100), 710022570);
+    stubBitcoin(page(100), 710191680);
     const report = await watcher()(b1000.require(71));
     expect(report).toMatchObject({ errors: [], findings: [], truncated: [target] });
     expect(formatWatchReport(report)).toEqual([
@@ -121,7 +122,7 @@ describe("watcher", () => {
     ]);
   });
 
-  it("leaves out a contract call that moves no coin in", async () => {
+  it("leaves out a contract call that moves no coin in and a deposit that reverted", async () => {
     const contract = teikhos.require(0).address().value;
     vi.stubGlobal("fetch", async (input: unknown) => {
       const url = String(input);
@@ -139,11 +140,22 @@ describe("watcher", () => {
               method: "authenticate",
               transaction_types: ["contract_call"],
             },
+            {
+              hash: "0xdeabfc901da5066796edbfc2f3a942b3310ef0bf7f67ad13b63434851c3a9348",
+              block_number: 5157041,
+              timestamp: "2018-02-26T01:54:00.000000Z",
+              from: { hash: "0x4c5d24a7ca972aea90cc040da6770a13fc7d4d9a" },
+              to: { hash: contract },
+              value: "100000000000000000",
+              status: "error",
+              method: null,
+              transaction_types: ["coin_transfer"],
+            },
           ],
           next_page_params: null,
         });
       }
-      return json({ coin_balance: "1000000000000000000" });
+      return json({ coin_balance: "1000012026000000000" });
     });
 
     const report = await watcher()(teikhos.require(0));
@@ -155,7 +167,7 @@ describe("watcher", () => {
     vi.stubGlobal("fetch", async (input: unknown) => {
       if (String(input).includes("/txs")) throw new TypeError("fetch failed");
       return json({
-        chain_stats: { funded_txo_sum: 710022570, spent_txo_sum: 0 },
+        chain_stats: { funded_txo_sum: 710191680, spent_txo_sum: 0 },
         mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
       });
     });
@@ -193,7 +205,7 @@ describe("watcher with since", () => {
   });
 
   it("reads a source page that two puzzles share once per pass", async () => {
-    stubBitcoin([recorded], 710022570);
+    stubBitcoin([recorded], 710191680);
     const change = {
       url: "https://privatekeys.pw/puzzles/bitcoin-puzzle-tx",
       before: { timestamp: "2026-08-01T00:00:00Z", snapshot: "https://web.archive.org/web/1/x" },
@@ -220,7 +232,7 @@ describe("watcher with since", () => {
   });
 
   it("reports an archive failure as an error, not a finding", async () => {
-    stubBitcoin([recorded], 710022570);
+    stubBitcoin([recorded], 710191680);
     const { watcher: fresh } = await withSources(async () => {
       const { SourceLookupError } = await import("../../src/core/errors.ts");
       throw new SourceLookupError("Source lookup failed: no capture");
@@ -235,21 +247,21 @@ describe("watcher with since", () => {
 
 describe("puzzles_watch", () => {
   it("leads with the counts and says when the source page was left out", async () => {
-    stubBitcoin([deposit, recorded], 710022570 + 666);
+    stubBitcoin([deposit, recorded], 710191680 + 666);
 
     const result = await watchTool("b1000/71");
 
     expect(result.content[0]?.text.split("\n")).toEqual([
       "b1000/71: 2 differences from the record",
-      `DEPOSIT\tb1000/71\t${deposit.txid} 0.00000666 BTC 2026-09-29T22:18:51.000Z at ${target}`,
-      "BALANCE\tb1000/71\t7.10023236 BTC held, 7.1002257 BTC recorded as the prize",
+      `DEPOSIT\tb1000/71\t${deposit.txid} 0.00000666 BTC 2026-10-02T00:13:20.000Z at ${target}`,
+      "BALANCE\tb1000/71\t7.10192346 BTC held, 7.1019168 BTC recorded as the prize",
       "Source page not checked; pass since to compare its archive captures.",
     ]);
     expect(result.details).toMatchObject({
       id: "b1000/71",
       findings: [
         { kind: "deposit", amount: "666" },
-        { kind: "balance", balance: "710023236" },
+        { kind: "balance", balance: "710192346" },
       ],
       errors: [],
       truncated: [],

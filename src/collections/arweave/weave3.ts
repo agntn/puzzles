@@ -1,5 +1,5 @@
 import { puzzle } from "../../core/puzzle.ts";
-import { funding } from "../../core/parts.ts";
+import { funding, increase } from "../../core/parts.ts";
 
 /** Puzzle `arweave/weave3`. */
 export const arweavePuzzleWeave3 = puzzle({
@@ -8,10 +8,36 @@ export const arweavePuzzleWeave3 = puzzle({
   address: "wHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0",
   sourceUrl: "https://ur42unm2jhdm.arweave.net/VLJIGuTJewofKx8ad4JYQs93nEuGnkgjrIt_Sd2QPYw",
   startedAt: "2019-05-25 13:07:33",
-  prize: 1000,
+  prize: 1000.165838006237,
   transactions: [
     funding("hTB5Ouv5nY11pQiGFXCJQZxNOkVlgPAAJ9IYSRu8v0E", "2019-05-25 13:07:33", 250),
     funding("_Aa5au3qzhCSIPxj5RfLkF_eSUuxAcnqoWY3PeKTaRg", "2019-05-27 08:30:39", 500),
     funding("7-sWojFc0sG3mTr34YGBGssYDvXjOPZf-xik8v1Ct24", "2019-08-28 14:09:38", 250),
+    increase("2u0lD8wh91CYdWU0NiqSPC2K2MBo-1KdtKSREcSoyjc", "2021-12-21 01:58:12", 0.03062018),
+    increase("N3QK1FqFNCZiBcVxvxX1-cGt9Fe2diHRweNHkHGmMT4", "2021-12-21 02:08:30", 0.06062018),
+    increase("v5O2c17vpwEEfU95az3mOY7q6CYQVwccP6ete-r-ftA", "2022-01-07 04:59:21", 0.021819694228),
+    increase("FCsWS_dtojohiNk4kcbEpJY54D2V9SKSU_LPY2AjQSA", "2022-01-11 00:31:23", 0.01012021),
+    increase("wR8Pb5keY5BHc7Ec1V_lL12Bz44MnSJWZ0HaZr9Ceh4", "2022-01-11 10:13:36", 0.01012022),
+    increase("IGN3Z_wVZuWJb8QcfhfNDWu_kCQUYnaqffuNmE37l4A", "2022-01-12 05:32:00", 0.0001),
+    increase("u5iuFdT2lfxxTBktPAK8j0yMdsMlfwLuR1XLSdLE7hI", "2022-01-12 14:08:38", 0.02071986),
+    increase("SzNjPkNIbSLlfhiEW-qNoK7tSTc0HWz2aPrZPTiU5JI", "2022-01-12 16:49:18", 0.000001),
+    increase("-E_0Q3agm5Rc8fzxIvC0WW-8oOzN_EbzbGyRXgrEg3c", "2022-01-13 23:39:22", 0.01012011),
+    increase("HiEiUAjMN2NxCbjEhAnabMhbdGhcnUvkSXlRihxeoKc", "2022-01-18 01:06:01", 0.00002015),
+    increase("7eCtgsiOD_J55Uw1bAtBJFqG-gR1Tg2TVber2XHAdBY", "2023-01-22 13:50:10", 0.000022092009),
+    increase("qvXoXXJon5aJFS0qRxOvxk9W7WZ0FIQ-e2fy0H2s_cs", "2024-09-28 13:56:17", 0.0001),
+    increase("K8IFZ07jR_HizFcDcftaCbvudwAoV2BwK0akhze06bU", "2024-10-21 21:40:28", 0.000001),
+    increase("7tlLswfC_m4-uWdBZZUqf3jN0miBvxrBgI-Wcmw0NNs", "2024-10-29 00:16:41", 0.000001),
+    increase("dfEvjWidC-wmwGNH2VsNW306ig5gVxIjcaCN1_BdU9I", "2025-03-01 22:20:52", 0.00021863),
+    increase("60hxcT_CtksOSuomGPTBgJzQ4c7QLQB0VISaoviCV0A", "2025-03-01 22:20:52", 0.001),
+    increase("xYOOjZ0mwOvpX2S6fqor-sUaIZzzs7ZcSaaBhCxFBHM", "2025-04-02 21:03:42", 0.000001),
+    increase("YenAYAtdtHC5v3asuyHO-DKqsgH3AtmB8NSUg8gfADo", "2025-04-24 14:55:35", 0.000001),
+    increase("mQWtaEladqzF252FDZYIdlh4WN0pSUNcYw9c7WC3WqE", "2025-05-03 09:48:37", 0.000001),
+    increase("sIk1_tBf0IMyhQ_7M8yT6Hi5qpAk-DoRA3GCdGJj8j0", "2025-05-22 19:19:42", 0.000001),
+    increase("J6n8_SoC_D4xTM0SomeBgio4DhnfKkX7o4vF5GPCbzU", "2025-06-19 23:02:04", 0.00001),
+    increase("zJUm4DaKPDiZJpl3VYOCZoJnqA2mo3ZLwhc6Ofh-Q2U", "2025-07-07 19:27:19", 0.00001),
+    increase("GR--qQMYb1ZWqivHqduNLSJCgGwgVWFurlK5OGXHIfo", "2025-08-03 22:14:27", 0.00012),
+    increase("3C8irHSs55x5MLNcEpagTbco6pNSLZhBBZNttSJzeuE", "2025-08-14 15:04:00", 0.00002),
+    increase("4lAEn1ILSp83ZNOtJVbTgkodcOTlDjpD0jzHhSJScNM", "2025-08-27 15:46:14", 0.00002),
+    increase("2CmH16CxMGzfqLOyNrRuWNhyTwBXemmZE_l0b6hfwEQ", "2025-09-26 17:18:50", 0.00004968),
   ],
 });

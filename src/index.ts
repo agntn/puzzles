@@ -72,6 +72,7 @@ export {
   sweep,
   technique,
   TransactionType,
+  transfer,
   uncompressed,
   wif,
   type Address,

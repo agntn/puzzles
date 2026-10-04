@@ -324,7 +324,7 @@ export interface ChainTransaction {
   /** The address of the puzzle it touched: the target, or the escrow. */
   readonly address: string;
 
-  /** Base units moved to or from that address, as the explorer counts them. */
+  /** Base units moved to or from that address, zero when the transaction reverted. */
   readonly amount: bigint;
 
   /** When it confirmed, as ISO 8601; absent while it waits in the mempool. */
@@ -363,7 +363,7 @@ function toChainTransaction(chain: Chain, address: string, transaction: Listed):
   const pending = transaction.status === "pending";
   return defined<ChainTransaction>({
     address,
-    amount: baseUnits(transaction.value, "transaction"),
+    amount: transaction.status === "failed" ? 0n : baseUnits(transaction.value, "transaction"),
     date: pending ? undefined : transaction.timestamp,
     direction,
     pending,

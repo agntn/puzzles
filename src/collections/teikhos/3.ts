@@ -1,4 +1,4 @@
-import { artifact, funding, stage, technique } from "../../core/parts.ts";
+import { artifact, funding, increase, stage, technique } from "../../core/parts.ts";
 import { puzzle } from "../../core/puzzle.ts";
 
 const address = "0x973c2178b09225d1de3ab037d40b3f24af696255";
@@ -12,7 +12,7 @@ export const teikhos3 = puzzle({
   sourceUrl: source,
   startedAt: "2018-03-14 01:26:29",
   techniques: [technique("xor", source)],
-  prize: 0.5,
+  prize: 0.500002026,
   stages: [
     stage(
       "commit",
@@ -40,6 +40,11 @@ export const teikhos3 = puzzle({
       "0x92987048c9221675e133b7057a26c4420f5e77a59ff4e58b4df1ea535fa0c61b",
       "2018-03-14 01:26:29",
       0.5,
+    ),
+    increase(
+      "0xc811a055a12c3121c221e3d21effc1b8f598081cb70ea6e173968ac4f5d48882",
+      "2026-06-22 00:23:59",
+      0.000002026,
     ),
   ],
 });
