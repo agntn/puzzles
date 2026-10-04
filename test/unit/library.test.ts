@@ -25,6 +25,7 @@ import { MoveOverBrokersCollection } from "../../src/collections/move-over-broke
 import { MovieEnigmaCollection } from "../../src/collections/movie-enigma.ts";
 import { NatashaOtomoskiCollection } from "../../src/collections/natasha-otomoski.ts";
 import { PathToGreatnessCollection } from "../../src/collections/path-to-greatness.ts";
+import { PhyCollection } from "../../src/collections/phy.ts";
 import { PicturePuzzleCollection } from "../../src/collections/picture-puzzle.ts";
 import { PowerfulMossCollection } from "../../src/collections/powerful-moss.ts";
 import { ProofOfWritingCollection } from "../../src/collections/proof-of-writing.ts";
@@ -105,6 +106,7 @@ const concreteClasses = [
   MovieEnigmaCollection,
   NatashaOtomoskiCollection,
   PathToGreatnessCollection,
+  PhyCollection,
   PicturePuzzleCollection,
   PowerfulMossCollection,
   ProofOfWritingCollection,
@@ -936,21 +938,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(535);
+    expect(await all()).toHaveLength(536);
     expect(await stats()).toEqual({
-      total: 535,
+      total: 536,
       claimed: 16,
       expired: 4,
       solved: 310,
       swept: 96,
-      unsolved: 109,
-      with_pubkey: 423,
+      unsolved: 110,
+      with_pubkey: 424,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1068.43956695,
+        BTC: 1068.44756695,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -959,7 +961,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1500.188092936237,
         ETH: 13.171964034825493,
-        BTC: 909.13602677,
+        BTC: 909.14402677,
         LTC: 3.02608794,
       },
       techniques: {
@@ -1030,7 +1032,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(535);
+    ).toBe(536);
   });
 
   it("hands back the memoized views frozen through", async () => {

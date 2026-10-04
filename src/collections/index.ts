@@ -44,6 +44,7 @@ export const builtins = [
     key: "path-to-greatness",
     load: () => import("./path-to-greatness.ts").then((m) => m.pathToGreatness),
   },
+  { key: "phy", load: () => import("./phy.ts").then((m) => m.phy) },
   {
     key: "picture-puzzle",
     load: () => import("./picture-puzzle.ts").then((m) => m.picturePuzzle),

@@ -107,6 +107,7 @@ const expectedCollections = [
   "movie-enigma",
   "natasha-otomoski",
   "path-to-greatness",
+  "phy",
   "picture-puzzle",
   "powerful-moss",
   "proof-of-writing",

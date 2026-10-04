@@ -24,6 +24,9 @@ const RANGE = "https://bitcointalk.org/index.php?topic=1306983.msg64691846#msg64
 /** The post with the solve steps after the claim, where kTimesG looked back on it. */
 const STEPS = "https://bitcointalk.org/index.php?topic=1306983.msg64695204#msg64695204";
 
+/** The Phy Challenge post that pinned the missing J on the cat. */
+const CAT = "https://bitcointalk.org/index.php?topic=5584952.msg66991304#msg66991304";
+
 /** 80 unknown bits in a 511-bit key, public key only in a pending spend. Taken 39 minutes in. */
 export const kTimesG80Bit = puzzle({
   id: "80-bit",
@@ -95,7 +98,7 @@ export class EightyBitCollection extends SingletonCollection {
     key: "ktimesg",
     kind: PartyKind.Person,
     about:
-      "Writes on Bitcointalk about cracking Bitcoin keys. In 2024 offered 0.005 BTC to whoever cracked a key with 80 unknown bits before its transaction confirmed. Someone did, 39 minutes in.",
+      "Writes on Bitcointalk about cracking Bitcoin keys. In 2024 offered 0.005 BTC to whoever cracked a key with 80 unknown bits before its transaction confirmed. Someone did, 39 minutes in. In 2026 put 800,000 sat behind a signed post and a spiral of emojis, the Phy Challenge.",
     profiles: [
       profile("bitcointalk", "https://bitcointalk.org/index.php?action=profile;u=3610370"),
     ],
@@ -109,6 +112,11 @@ export class EightyBitCollection extends SingletonCollection {
         "Was disappointed it took 39 minutes to replace the spend. With a real 80-bit puzzle, nobody gets 40.",
         STEPS,
         { date: "2024-11-02" },
+      ),
+      fact(
+        "Spent 3 days building and checking the Phy Challenge, then published its signature one character short. Blamed the cat.",
+        CAT,
+        { date: "2026-07-29" },
       ),
     ],
   });
