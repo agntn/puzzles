@@ -20,6 +20,10 @@ export function puzzlesMcpTool(name: string): McpToolDefinitionListItem {
   /** Zod waves every object through, so a bad key meets `callTool` and leaves sanitized. */
   const schema = z.looseObject({});
   schema._zod.toJSONSchema = () => ({ ...listing.inputSchema });
+  /** The SDK hands Zod a missing `arguments` untouched, so read it as the `{}` stdio gets. */
+  const run = schema._zod.run.bind(schema._zod);
+  schema._zod.run = (payload, context) =>
+    run(payload.value === undefined ? { ...payload, value: {} } : payload, context);
   /** The toolkit types a raw shape only; the SDK behind it takes a whole object too. */
   const inputSchema = schema as unknown as NonNullable<McpToolDefinition["inputSchema"]>;
   return defineMcpTool({

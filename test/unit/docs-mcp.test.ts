@@ -81,6 +81,17 @@ describe("docs MCP tools", () => {
     expect(firstText(open)).toMatch(/^Total: /u);
   });
 
+  it("reads a call without arguments as `{}`, like `puzzles mcp`", async () => {
+    const client = await docsClient();
+    const served = await client.callTool({ name: "puzzles_stats" });
+    expect(served.isError).toBeFalsy();
+    expect(served.content).toEqual((await callTool("puzzles_stats", {})).content);
+
+    const required = await client.callTool({ name: "puzzles_show" });
+    expect(required.isError).toBe(true);
+    expect(required.content).toEqual((await callTool("puzzles_show", {})).content);
+  });
+
   it("refuses an unknown key in the words of `puzzles mcp`, sanitized", async () => {
     const client = await docsClient();
     const key = ["x", String.fromCodePoint(0x202e), "y", String.fromCodePoint(0x2028), "z"].join(
