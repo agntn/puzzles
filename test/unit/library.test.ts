@@ -2,7 +2,6 @@ import { createHash } from "node:crypto";
 import { readdirSync } from "node:fs";
 import { describe, expect, expectTypeOf, it, vi } from "vite-plus/test";
 import { eightyBit, EightyBitCollection } from "../../src/collections/80-bit.ts";
-import { ArweaveCollection } from "../../src/collections/arweave.ts";
 import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitaddressCollection } from "../../src/collections/bitaddress.ts";
@@ -37,6 +36,7 @@ import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { TriviaBrainwalletCollection } from "../../src/collections/trivia-brainwallet.ts";
 import { WarpCollection } from "../../src/collections/warp.ts";
 import { WealthInPoetryCollection } from "../../src/collections/wealth-in-poetry.ts";
+import { weave, WeaveCollection } from "../../src/collections/weave.ts";
 import { wickex, WickexCollection } from "../../src/collections/wickex.ts";
 import { ZdenCollection } from "../../src/collections/zden.ts";
 import {
@@ -59,6 +59,7 @@ import {
   getSolver,
   hasCollection,
   NamedCollection,
+  NumericCollection,
   official,
   p2pkh,
   party,
@@ -79,7 +80,6 @@ import { prizeTotals } from "../../src/core/utils.ts";
 
 const concreteClasses = [
   EightyBitCollection,
-  ArweaveCollection,
   B1000Collection,
   BalletCollection,
   BitaddressCollection,
@@ -114,6 +114,7 @@ const concreteClasses = [
   TriviaBrainwalletCollection,
   WarpCollection,
   WealthInPoetryCollection,
+  WeaveCollection,
   WickexCollection,
   ZdenCollection,
 ] as const;
@@ -510,6 +511,15 @@ describe("lazy collection registry", () => {
     expect(eightyBit.get("ktimesg/80-bit")).toBeUndefined();
     expect(hasCollection("ktimesg")).toBe(false);
 
+    expect(weave).toBeInstanceOf(NumericCollection);
+    expect([3, "3", "weave/3"].map((query) => weave.get(query)?.id())).toEqual([
+      "weave/3",
+      "weave/3",
+      "weave/3",
+    ]);
+    expect(weave.get("weave3")).toBeUndefined();
+    expect(hasCollection("arweave")).toBe(false);
+
     expect(["gif", "iamabananaamaa/gif"].map((query) => iAmABananaAmaa.get(query)?.id())).toEqual([
       "iamabananaamaa/gif",
       "iamabananaamaa/gif",
@@ -570,7 +580,7 @@ describe("lazy collection registry", () => {
       "Puzzle not found: 71. Did you mean b1000/71 or quizchain/71?",
     );
     await expect(miss(requirePuzzle("1"))).resolves.toBe(
-      "Puzzle not found: 1. Did you mean b1000/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1 or teikhos/1?",
+      "Puzzle not found: 1. Did you mean b1000/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1 or weave/1?",
     );
 
     /* A number one digit off is another puzzle, and an unknown collection holds no name. */

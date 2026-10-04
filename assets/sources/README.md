@@ -12,7 +12,7 @@ Local reading copies of the pages the collection records cite and nobody else ke
 - [Genesis puzzle pubkeys not yet exposed](genesis/caesrcd-2026-09-18.md)
 - [A white-hat on the Genesis puzzle](genesis/caesrcd-2026-09-24.md)
 - [Movie Enigma announcement](movie-enigma/cryptop1r4t3-2022-03-21.md)
-- [Weave 4 answer from its solver](arweave/arpoxy-2019-11-10.md)
+- [Weave 4 answer from its solver](weave/arpoxy-2019-11-10.md)
 - [HongCoin recovery announcement](dug/0xflorent-2026-05-31.md)
 - [TeikhosBounty solve](teikhos/0xflorent-2026-06-21.md)
 - [Proof Of Writing puzzle relaunch](proof-of-writing/caincurrency-2026-04-14.md)

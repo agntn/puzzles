@@ -172,7 +172,7 @@ describe("OMP extension", () => {
       "success:status.done accent(Show Solver): muted(lia)",
     );
     const result = await tool?.execute("call-solver", { key: "lia" });
-    expect(result?.content[0]?.text).toContain("\tarweave/weave8\tclaimed\t");
+    expect(result?.content[0]?.text).toContain("\tweave/8\tclaimed\t");
   });
 
   it("refuses a stray argument on every tool that takes some, whatever the host checks", async () => {

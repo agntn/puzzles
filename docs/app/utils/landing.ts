@@ -9,7 +9,7 @@ export const WALK: readonly string[] = [
   "warp/challenge-1",
   "hash-collision/sha1",
   "zden/decred-janus",
-  "arweave/weave3",
+  "weave/3",
   "ballet/AA007448",
   "bitaps",
   "gsmg",
@@ -20,7 +20,7 @@ export const WALK: readonly string[] = [
   "rushwallet/1",
   "b1000/135",
   "zden/litecoin-segwit",
-  "arweave/weave11",
+  "weave/11",
   "dug/2025-1",
   "genesis",
   "coin-artist/torched-h34r7s",
@@ -201,8 +201,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     tool: "zden/decred-janus\tsolved\t460 DCR\tDsRaAja82UvgnqYaBHYFuyCKURFX2rCyEJ8\nchain: decred  address kind: p2pkh\npublic key: 02278753666ec31c29b755a39421017bd80744d728204da0f7ff452846112b618b (compressed)\nprivate key: unknown\nstarted: 2017-03-07 04:20:56\nsolved: 2017-03-18 13:51:29 (11d 9h 30m)\ntransactions: 7\n\tfunding\t2017-03-07 04:20:56\t100 DCR\t900ed10e661c642f30ec39e09574fcccbb72f4b2ae0733994ffdc945ed4105f2\n\tincrease\t2017-03-07 04:31:20\t100 DCR\t47c3529f1bf28c40e7eb01de47a42b398071a4299dffb5f658b3d5366cba60c2\n\tincrease\t2017-03-07 04:48:32\t100 DCR\tf968a3d99702553bb5cd4243201359abf83e47a88bae318fce4fbd32ed986581\n\tincrease\t2017-03-07 20:38:42\t150 DCR\t2a06e23488d2f62ad117956f9d380dea3ef1402d4708ab11391668d0d1efe90e\n\tincrease\t2017-03-07 20:55:54\t5 DCR\t327a674df974e0a2cb0fc98489e513a34187f1bb1c35811cd5de7e89c58a4b13\n\tincrease\t2017-03-07 21:00:08\t5 DCR\t77f5c42e7bc1627bcc22099dc4a0d7a11d3e97144a9f87f62c324d272a7b4719\n\tclaim\t2017-03-18 13:51:29\t460 DCR\t2af40f17e32a42c18cdfa7ccb552da9201c50ef60db7c60e1ae87f19a74f5467\nclaim: https://dcrdata.decred.org/tx/2af40f17e32a42c18cdfa7ccb552da9201c50ef60db7c60e1ae87f19a74f5467\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred-janus/puzzle.svg\nhint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/decred-janus/hint.svg\nasset source: https://crypto.haluska.sk/decred_tree.svg\ncollection techniques: 1\n\tsteganography\tsource: https://crypto.haluska.sk/\nhints: 1\n\tofficial\t-\t33*bbb\tsource: https://crypto.haluska.sk/decred_tree_hint.svg\tconfirmation: https://web.archive.org/web/20181219152809/http://crypto.haluska.sk/decred_tree_hint.svg (Wayback capture of the hint SVG)\nexplorer: https://dcrdata.decred.org/address/DsRaAja82UvgnqYaBHYFuyCKURFX2rCyEJ8\nsource: https://crypto.haluska.sk/decred_tree.svg",
   },
   {
-    id: "arweave/weave3",
-    collection: "arweave",
+    id: "weave/3",
+    collection: "weave",
     chain: "arweave",
     status: "unsolved",
     address: "wHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0",
@@ -226,7 +226,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://viewblock.io/arweave/address/wHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0",
     source: "https://ur42unm2jhdm.arweave.net/VLJIGuTJewofKx8ad4JYQs93nEuGnkgjrIt_Sd2QPYw",
     transactions: 29,
-    tool: "arweave/weave3\tunsolved\t1000.165838006237 AR\twHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0\nchain: arweave  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2019-05-25 13:07:33\ntransactions: 29\n\tfunding\t2019-05-25 13:07:33\t250 AR\thTB5Ouv5nY11pQiGFXCJQZxNOkVlgPAAJ9IYSRu8v0E\n\tfunding\t2019-05-27 08:30:39\t500 AR\t_Aa5au3qzhCSIPxj5RfLkF_eSUuxAcnqoWY3PeKTaRg\n\tfunding\t2019-08-28 14:09:38\t250 AR\t7-sWojFc0sG3mTr34YGBGssYDvXjOPZf-xik8v1Ct24\n\tincrease\t2021-12-21 01:58:12\t0.03062018 AR\t2u0lD8wh91CYdWU0NiqSPC2K2MBo-1KdtKSREcSoyjc\n\tincrease\t2021-12-21 02:08:30\t0.06062018 AR\tN3QK1FqFNCZiBcVxvxX1-cGt9Fe2diHRweNHkHGmMT4\n\tincrease\t2022-01-07 04:59:21\t0.021819694228 AR\tv5O2c17vpwEEfU95az3mOY7q6CYQVwccP6ete-r-ftA\n\tincrease\t2022-01-11 00:31:23\t0.01012021 AR\tFCsWS_dtojohiNk4kcbEpJY54D2V9SKSU_LPY2AjQSA\n\tincrease\t2022-01-11 10:13:36\t0.01012022 AR\twR8Pb5keY5BHc7Ec1V_lL12Bz44MnSJWZ0HaZr9Ceh4\n\tincrease\t2022-01-12 05:32:00\t0.0001 AR\tIGN3Z_wVZuWJb8QcfhfNDWu_kCQUYnaqffuNmE37l4A\n\tincrease\t2022-01-12 14:08:38\t0.02071986 AR\tu5iuFdT2lfxxTBktPAK8j0yMdsMlfwLuR1XLSdLE7hI\n\tincrease\t2022-01-12 16:49:18\t0.000001 AR\tSzNjPkNIbSLlfhiEW-qNoK7tSTc0HWz2aPrZPTiU5JI\n\tincrease\t2022-01-13 23:39:22\t0.01012011 AR\t-E_0Q3agm5Rc8fzxIvC0WW-8oOzN_EbzbGyRXgrEg3c\n\tincrease\t2022-01-18 01:06:01\t0.00002015 AR\tHiEiUAjMN2NxCbjEhAnabMhbdGhcnUvkSXlRihxeoKc\n\tincrease\t2023-01-22 13:50:10\t0.000022092009 AR\t7eCtgsiOD_J55Uw1bAtBJFqG-gR1Tg2TVber2XHAdBY\n\tincrease\t2024-09-28 13:56:17\t0.0001 AR\tqvXoXXJon5aJFS0qRxOvxk9W7WZ0FIQ-e2fy0H2s_cs\n\tincrease\t2024-10-21 21:40:28\t0.000001 AR\tK8IFZ07jR_HizFcDcftaCbvudwAoV2BwK0akhze06bU\n\tincrease\t2024-10-29 00:16:41\t0.000001 AR\t7tlLswfC_m4-uWdBZZUqf3jN0miBvxrBgI-Wcmw0NNs\n\tincrease\t2025-03-01 22:20:52\t0.00021863 AR\tdfEvjWidC-wmwGNH2VsNW306ig5gVxIjcaCN1_BdU9I\n\tincrease\t2025-03-01 22:20:52\t0.001 AR\t60hxcT_CtksOSuomGPTBgJzQ4c7QLQB0VISaoviCV0A\n\tincrease\t2025-04-02 21:03:42\t0.000001 AR\txYOOjZ0mwOvpX2S6fqor-sUaIZzzs7ZcSaaBhCxFBHM\n\tincrease\t2025-04-24 14:55:35\t0.000001 AR\tYenAYAtdtHC5v3asuyHO-DKqsgH3AtmB8NSUg8gfADo\n\tincrease\t2025-05-03 09:48:37\t0.000001 AR\tmQWtaEladqzF252FDZYIdlh4WN0pSUNcYw9c7WC3WqE\n\tincrease\t2025-05-22 19:19:42\t0.000001 AR\tsIk1_tBf0IMyhQ_7M8yT6Hi5qpAk-DoRA3GCdGJj8j0\n\tincrease\t2025-06-19 23:02:04\t0.00001 AR\tJ6n8_SoC_D4xTM0SomeBgio4DhnfKkX7o4vF5GPCbzU\n\tincrease\t2025-07-07 19:27:19\t0.00001 AR\tzJUm4DaKPDiZJpl3VYOCZoJnqA2mo3ZLwhc6Ofh-Q2U\n\tincrease\t2025-08-03 22:14:27\t0.00012 AR\tGR--qQMYb1ZWqivHqduNLSJCgGwgVWFurlK5OGXHIfo\n\tincrease\t2025-08-14 15:04:00\t0.00002 AR\t3C8irHSs55x5MLNcEpagTbco6pNSLZhBBZNttSJzeuE\n\tincrease\t2025-08-27 15:46:14\t0.00002 AR\t4lAEn1ILSp83ZNOtJVbTgkodcOTlDjpD0jzHhSJScNM\n\tincrease\t2025-09-26 17:18:50\t0.00004968 AR\t2CmH16CxMGzfqLOyNrRuWNhyTwBXemmZE_l0b6hfwEQ\nexplorer: https://viewblock.io/arweave/address/wHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0\nsource: https://ur42unm2jhdm.arweave.net/VLJIGuTJewofKx8ad4JYQs93nEuGnkgjrIt_Sd2QPYw",
+    tool: "weave/3\tunsolved\t1000.165838006237 AR\twHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0\nchain: arweave  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2019-05-25 13:07:33\ntransactions: 29\n\tfunding\t2019-05-25 13:07:33\t250 AR\thTB5Ouv5nY11pQiGFXCJQZxNOkVlgPAAJ9IYSRu8v0E\n\tfunding\t2019-05-27 08:30:39\t500 AR\t_Aa5au3qzhCSIPxj5RfLkF_eSUuxAcnqoWY3PeKTaRg\n\tfunding\t2019-08-28 14:09:38\t250 AR\t7-sWojFc0sG3mTr34YGBGssYDvXjOPZf-xik8v1Ct24\n\tincrease\t2021-12-21 01:58:12\t0.03062018 AR\t2u0lD8wh91CYdWU0NiqSPC2K2MBo-1KdtKSREcSoyjc\n\tincrease\t2021-12-21 02:08:30\t0.06062018 AR\tN3QK1FqFNCZiBcVxvxX1-cGt9Fe2diHRweNHkHGmMT4\n\tincrease\t2022-01-07 04:59:21\t0.021819694228 AR\tv5O2c17vpwEEfU95az3mOY7q6CYQVwccP6ete-r-ftA\n\tincrease\t2022-01-11 00:31:23\t0.01012021 AR\tFCsWS_dtojohiNk4kcbEpJY54D2V9SKSU_LPY2AjQSA\n\tincrease\t2022-01-11 10:13:36\t0.01012022 AR\twR8Pb5keY5BHc7Ec1V_lL12Bz44MnSJWZ0HaZr9Ceh4\n\tincrease\t2022-01-12 05:32:00\t0.0001 AR\tIGN3Z_wVZuWJb8QcfhfNDWu_kCQUYnaqffuNmE37l4A\n\tincrease\t2022-01-12 14:08:38\t0.02071986 AR\tu5iuFdT2lfxxTBktPAK8j0yMdsMlfwLuR1XLSdLE7hI\n\tincrease\t2022-01-12 16:49:18\t0.000001 AR\tSzNjPkNIbSLlfhiEW-qNoK7tSTc0HWz2aPrZPTiU5JI\n\tincrease\t2022-01-13 23:39:22\t0.01012011 AR\t-E_0Q3agm5Rc8fzxIvC0WW-8oOzN_EbzbGyRXgrEg3c\n\tincrease\t2022-01-18 01:06:01\t0.00002015 AR\tHiEiUAjMN2NxCbjEhAnabMhbdGhcnUvkSXlRihxeoKc\n\tincrease\t2023-01-22 13:50:10\t0.000022092009 AR\t7eCtgsiOD_J55Uw1bAtBJFqG-gR1Tg2TVber2XHAdBY\n\tincrease\t2024-09-28 13:56:17\t0.0001 AR\tqvXoXXJon5aJFS0qRxOvxk9W7WZ0FIQ-e2fy0H2s_cs\n\tincrease\t2024-10-21 21:40:28\t0.000001 AR\tK8IFZ07jR_HizFcDcftaCbvudwAoV2BwK0akhze06bU\n\tincrease\t2024-10-29 00:16:41\t0.000001 AR\t7tlLswfC_m4-uWdBZZUqf3jN0miBvxrBgI-Wcmw0NNs\n\tincrease\t2025-03-01 22:20:52\t0.00021863 AR\tdfEvjWidC-wmwGNH2VsNW306ig5gVxIjcaCN1_BdU9I\n\tincrease\t2025-03-01 22:20:52\t0.001 AR\t60hxcT_CtksOSuomGPTBgJzQ4c7QLQB0VISaoviCV0A\n\tincrease\t2025-04-02 21:03:42\t0.000001 AR\txYOOjZ0mwOvpX2S6fqor-sUaIZzzs7ZcSaaBhCxFBHM\n\tincrease\t2025-04-24 14:55:35\t0.000001 AR\tYenAYAtdtHC5v3asuyHO-DKqsgH3AtmB8NSUg8gfADo\n\tincrease\t2025-05-03 09:48:37\t0.000001 AR\tmQWtaEladqzF252FDZYIdlh4WN0pSUNcYw9c7WC3WqE\n\tincrease\t2025-05-22 19:19:42\t0.000001 AR\tsIk1_tBf0IMyhQ_7M8yT6Hi5qpAk-DoRA3GCdGJj8j0\n\tincrease\t2025-06-19 23:02:04\t0.00001 AR\tJ6n8_SoC_D4xTM0SomeBgio4DhnfKkX7o4vF5GPCbzU\n\tincrease\t2025-07-07 19:27:19\t0.00001 AR\tzJUm4DaKPDiZJpl3VYOCZoJnqA2mo3ZLwhc6Ofh-Q2U\n\tincrease\t2025-08-03 22:14:27\t0.00012 AR\tGR--qQMYb1ZWqivHqduNLSJCgGwgVWFurlK5OGXHIfo\n\tincrease\t2025-08-14 15:04:00\t0.00002 AR\t3C8irHSs55x5MLNcEpagTbco6pNSLZhBBZNttSJzeuE\n\tincrease\t2025-08-27 15:46:14\t0.00002 AR\t4lAEn1ILSp83ZNOtJVbTgkodcOTlDjpD0jzHhSJScNM\n\tincrease\t2025-09-26 17:18:50\t0.00004968 AR\t2CmH16CxMGzfqLOyNrRuWNhyTwBXemmZE_l0b6hfwEQ\nexplorer: https://viewblock.io/arweave/address/wHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0\nsource: https://ur42unm2jhdm.arweave.net/VLJIGuTJewofKx8ad4JYQs93nEuGnkgjrIt_Sd2QPYw",
   },
   {
     id: "ballet/AA007448",
@@ -519,8 +519,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     tool: "zden/litecoin-segwit\tsolved\t230.8255 LTC\tLartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS\nchain: litecoin  address kind: p2pkh\nhash160: ab85f21bf9ca1126f3776f4686cf02737be7a2b7\npublic key: 03bc34c725e24d6159f3e2d3c01d455cf5fd48b83a7ca5eb4c7155044ec728ff11 (compressed)\nprivate key: unknown\nstarted: 2017-05-10 05:46:11\nsolved: 2017-05-24 01:38:16 (13d 19h 52m)\ntransactions: 7\n\tfunding\t2017-05-10 05:46:11\t100 LTC\tbc640bc1ab3756bf5163918e5ee4c7496fcdb2e17617515d17e1f134dabbd318\n\tfunding\t2017-05-10 05:54:31\t10 LTC\t593b72fc6cbe178c239fc6ce4f156c3063eff00e02c023acba4c09ea6be59cc9\n\tfunding\t2017-05-10 16:58:49\t100 LTC\tabb7074c2758e41e9a28ebdd096baae0c25c9453fbddb93d29edaf1ff2541c19\n\tfunding\t2017-05-10 17:36:16\t1.337 LTC\te260a3f11de536f9bb618e16b00f584e59b8695fa4bed4bdb6eded739375bcb5\n\tfunding\t2017-05-11 10:36:26\t18.4985 LTC\t9c9ee2b1ca0fb8517ab6328f2bd3016e717b36264afdc84f1cf22afecb270943\n\tfunding\t2017-05-13 05:56:37\t0.99 LTC\t17ee706bed97ffe9ac3762aa4d93b6d20bda3b04e334e6c1165a17bc2972a327\n\tclaim\t2017-05-24 01:38:16\t230.8255 LTC\tfb5260a9225cdbe0733874ac51e9391acbdec3a8e031fd9851e84d55ac57034c\nclaim: https://litecoinspace.org/tx/fb5260a9225cdbe0733874ac51e9391acbdec3a8e031fd9851e84d55ac57034c\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/puzzle.png\nhint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/hint-1.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/hint-2.svg, https://raw.githubusercontent.com/agntn/puzzles/main/assets/zden/litecoin-segwit/hint-3.svg\nasset source: https://crypto.haluska.sk/LitecoinSegWit.png\ncollection techniques: 1\n\tsteganography\tsource: https://crypto.haluska.sk/\nexplorer: https://litecoinspace.org/address/LartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS\nsource: https://crypto.haluska.sk/LitecoinSegWit.png",
   },
   {
-    id: "arweave/weave11",
-    collection: "arweave",
+    id: "weave/11",
+    collection: "weave",
     chain: "ethereum",
     status: "unsolved",
     address: "0xff2142e98e09b5344994f9beb9c56c95506b9f17",
@@ -544,7 +544,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://etherscan.io/address/0xff2142e98e09b5344994f9beb9c56c95506b9f17",
     source: "https://arweave.net/CzITHnEIlkQw9SbaX5futCzFrKk1qe_NwvWnIBmP2fY",
     transactions: 1,
-    tool: "arweave/weave11\tunsolved\t1 ETH\t0xff2142e98e09b5344994f9beb9c56c95506b9f17\nchain: ethereum  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2020-04-14 09:10:29\ntransactions: 1\n\tfunding\t2020-04-14 09:10:29\t1 ETH\t0x0d4738abf9d5c03c196eee4953feeb56ff06c385fa322bc9c76e105da38d7563\nexplorer: https://etherscan.io/address/0xff2142e98e09b5344994f9beb9c56c95506b9f17\nsource: https://arweave.net/CzITHnEIlkQw9SbaX5futCzFrKk1qe_NwvWnIBmP2fY",
+    tool: "weave/11\tunsolved\t1 ETH\t0xff2142e98e09b5344994f9beb9c56c95506b9f17\nchain: ethereum  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2020-04-14 09:10:29\ntransactions: 1\n\tfunding\t2020-04-14 09:10:29\t1 ETH\t0x0d4738abf9d5c03c196eee4953feeb56ff06c385fa322bc9c76e105da38d7563\nexplorer: https://etherscan.io/address/0xff2142e98e09b5344994f9beb9c56c95506b9f17\nsource: https://arweave.net/CzITHnEIlkQw9SbaX5futCzFrKk1qe_NwvWnIBmP2fY",
   },
   {
     id: "dug/2025-1",
@@ -1276,7 +1276,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "728348846a8f",
+  dataVersion: "3bc928bc86d7",
   total: 511,
   solved: 294,
   unsolved: 105,
@@ -1285,20 +1285,20 @@ export const STATS_STATIC = {
   expired: 4,
   withPubkey: 402,
   unsolvedPrize: {
-    AR: 1900.190574146237,
-    ETH: 13.171964034825493,
     BTC: 909.12202677,
+    ETH: 13.171964034825493,
     LTC: 3.02608794,
+    AR: 1900.190574146237,
   },
   totalPrize: {
     BTC: 1068.19756695,
-    AR: 5550.190574146237,
     ETH: 26.81566403482549,
-    DAI: 100,
     DOGE: 10000,
     BCH: 5.1,
     LTC: 233.85158794,
     XEC: 30068000.94,
+    AR: 5550.190574146237,
+    DAI: 100,
     DCR: 460,
   },
 } as const;
@@ -1323,32 +1323,6 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 1,
     firstStarted: "2024-11-01 00:01:53",
     lastStarted: "2024-11-01 00:01:53",
-    hints: [],
-  },
-  {
-    key: "arweave",
-    author: "Tiamat",
-    authorKey: "tiamat",
-    authorUrl: "https://chronobot.io/",
-    total: 12,
-    statuses: {
-      claimed: 8,
-      unsolved: 4,
-    },
-    chains: ["arweave", "ethereum"],
-    prize: {
-      AR: 5550.190574146237,
-      ETH: 5,
-      DAI: 100,
-    },
-    unsolvedPrize: {
-      AR: 1900.190574146237,
-      ETH: 1,
-    },
-    withPubkey: 0,
-    withKey: 0,
-    firstStarted: "2019-05-22 10:27:23",
-    lastStarted: "2020-05-18 23:53:09",
     hints: [],
   },
   {
@@ -2101,6 +2075,32 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "weave",
+    author: "Tiamat",
+    authorKey: "tiamat",
+    authorUrl: "https://chronobot.io/",
+    total: 12,
+    statuses: {
+      claimed: 8,
+      unsolved: 4,
+    },
+    chains: ["arweave", "ethereum"],
+    prize: {
+      AR: 5550.190574146237,
+      ETH: 5,
+      DAI: 100,
+    },
+    unsolvedPrize: {
+      AR: 1900.190574146237,
+      ETH: 1,
+    },
+    withPubkey: 0,
+    withKey: 0,
+    firstStarted: "2019-05-22 10:27:23",
+    lastStarted: "2020-05-18 23:53:09",
+    hints: [],
+  },
+  {
     key: "wickex",
     author: "Wickex",
     authorKey: "wickex",
@@ -2160,16 +2160,6 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Writes on Bitcointalk about cracking Bitcoin keys. In 2024 offered 0.005 BTC to whoever cracked a key with 80 unknown bits before its transaction confirmed. Someone did, 39 minutes in.",
     collections: ["80-bit"],
     puzzles: 1,
-  },
-  {
-    key: "tiamat",
-    to: "/authors/tiamat",
-    name: "Tiamat",
-    kind: "person",
-    about:
-      "Pseudonymous programmer behind the Arweave Puzzle Weave series and the Chronobot.io node monitor. Self-described as based in France. No other name known.",
-    collections: ["arweave"],
-    puzzles: 12,
   },
   {
     key: "saatoshi-rising",
@@ -2479,6 +2469,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Medium account, first @onesourgrape, that published one essay on hiding seed phrases in stories in February 2019, with 0.03 BTC on a wallet hidden in its own text.",
     collections: ["wealth-in-poetry"],
     puzzles: 1,
+  },
+  {
+    key: "tiamat",
+    to: "/authors/tiamat",
+    name: "Tiamat",
+    kind: "person",
+    about:
+      "Pseudonymous programmer behind the Arweave Puzzle Weave series and the Chronobot.io node monitor. Self-described as based in France. No other name known.",
+    collections: ["weave"],
+    puzzles: 12,
   },
   {
     key: "wickex",

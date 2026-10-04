@@ -6,7 +6,6 @@
  */
 export const builtins = [
   { key: "80-bit", load: () => import("./80-bit.ts").then((m) => m.eightyBit) },
-  { key: "arweave", load: () => import("./arweave.ts").then((m) => m.arweave) },
   { key: "b1000", load: () => import("./b1000.ts").then((m) => m.b1000) },
   { key: "ballet", load: () => import("./ballet.ts").then((m) => m.ballet) },
   { key: "bitaddress", load: () => import("./bitaddress.ts").then((m) => m.bitaddress) },
@@ -68,6 +67,7 @@ export const builtins = [
     key: "wealth-in-poetry",
     load: () => import("./wealth-in-poetry.ts").then((m) => m.wealthInPoetry),
   },
+  { key: "weave", load: () => import("./weave.ts").then((m) => m.weave) },
   { key: "wickex", load: () => import("./wickex.ts").then((m) => m.wickex) },
   { key: "zden", load: () => import("./zden.ts").then((m) => m.zden) },
 ] as const;

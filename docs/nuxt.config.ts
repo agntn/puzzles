@@ -250,6 +250,14 @@ export default defineNuxtConfig({
     "/collections/ktimesg": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
     "/collections/ktimesg/80_bit": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
     "/collections/ktimesg/80-bit": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
+    /** Tiamat's series under the chain's name, before it took the `Puzzle Weave` titles of its own pages. */
+    "/collections/arweave": { redirect: { to: "/collections/weave", statusCode: 301 } },
+    ...Object.fromEntries(
+      [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13].map((n) => [
+        `/collections/arweave/weave${n}`,
+        { redirect: { to: `/collections/weave/${n}`, statusCode: 301 } },
+      ]),
+    ),
   },
   nitro: {
     preset: "cloudflare_module",

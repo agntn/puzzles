@@ -17,10 +17,10 @@ const PRESENTATION: Readonly<
     }
   >
 > = {
-  arweave: {
+  weave: {
     icon: "i-token-ar",
-    title: "Arweave bounties",
-    sample: "arweave/weave3",
+    title: "Puzzle Weave",
+    sample: "weave/3",
     chains: ["arweave", "ethereum"],
     blurb: "Tiamat's weave puzzles. Prizes in AR and ETH. Four still open.",
   },
