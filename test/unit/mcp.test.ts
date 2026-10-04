@@ -76,9 +76,9 @@ describe("puzzles MCP server", () => {
   it("reports dataset statistics", async () => {
     const result = await client.callTool({ name: "puzzles_stats", arguments: {} });
 
-    expect(firstText(result)).toContain("Total: 536 puzzles in 41 collections");
+    expect(firstText(result)).toContain("Total: 537 puzzles in 42 collections");
     expect(firstText(result)).toMatch(
-      /^Techniques: aes 1, ascii-private-key 1, atbash 14, .*, xor 7$/mu,
+      /^Techniques: aes 2, ascii-private-key 1, atbash 14, .*, xor 7$/mu,
     );
   });
 
@@ -86,7 +86,7 @@ describe("puzzles MCP server", () => {
     const result = await client.callTool({ name: "puzzles_collections", arguments: {} });
     const rows = firstText(result).split("\n");
 
-    expect(rows).toHaveLength(41);
+    expect(rows).toHaveLength(42);
     expect(rows).toContain("weave: 12 puzzles, 0 solved, 3 unsolved, 9 claimed, by Tiamat");
     expect(rows).toContain(
       "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
@@ -99,7 +99,7 @@ describe("puzzles MCP server", () => {
     const rows = firstText(await client.callTool({ name: "puzzles_authors", arguments: {} })).split(
       "\n",
     );
-    expect(rows).toHaveLength(37);
+    expect(rows).toHaveLength(38);
     expect(rows).toContain(
       "peter-todd: Peter Todd (person), 1 collection: hash-collision, 6 puzzles",
     );

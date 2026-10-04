@@ -34,6 +34,7 @@ import { Quizchain2Collection } from "../../src/collections/quizchain2.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-birthday-quiz.ts";
 import { SatoshiMazeCollection } from "../../src/collections/satoshi-maze.ts";
+import { SeedPhraseCollection } from "../../src/collections/seed-phrase.ts";
 import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { TriviaBrainwalletCollection } from "../../src/collections/trivia-brainwallet.ts";
 import { WalkingBanksCollection } from "../../src/collections/walking-banks.ts";
@@ -115,6 +116,7 @@ const concreteClasses = [
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
   SatoshiMazeCollection,
+  SeedPhraseCollection,
   TeikhosCollection,
   TriviaBrainwalletCollection,
   WalkingBanksCollection,
@@ -938,21 +940,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(536);
+    expect(await all()).toHaveLength(537);
     expect(await stats()).toEqual({
-      total: 536,
+      total: 537,
       claimed: 16,
       expired: 4,
       solved: 310,
       swept: 96,
-      unsolved: 110,
+      unsolved: 111,
       with_pubkey: 424,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1068.44756695,
+        BTC: 1068.45756695,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -961,11 +963,11 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1500.188092936237,
         ETH: 13.171964034825493,
-        BTC: 909.14402677,
+        BTC: 909.15402677,
         LTC: 3.02608794,
       },
       techniques: {
-        aes: 1,
+        aes: 2,
         "ascii-private-key": 1,
         atbash: 14,
         base64: 1,
@@ -973,7 +975,7 @@ describe("lazy collection registry", () => {
         binary: 3,
         bip38: 4,
         "hash-collision": 5,
-        "hidden-seed-words": 15,
+        "hidden-seed-words": 16,
         "masked-key-range": 256,
         "md5-to-bip39-entropy": 133,
         morse: 1,
@@ -1032,7 +1034,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(536);
+    ).toBe(537);
   });
 
   it("hands back the memoized views frozen through", async () => {
