@@ -222,6 +222,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Clues hidden in a parkour game demo lead to a Litecoin key. Donations go straight into the prize, and nobody has taken it.",
   },
+  phy: {
+    icon: "i-lucide-flower",
+    title: "kTimesG's Phy Challenge",
+    sample: "phy",
+    chains: ["bitcoin"],
+    blurb:
+      "A signed forum post, a signature the author's cat cut one character short, and grey emojis spiralling around a gold coin. The signature gives up the address. The key behind it, and 800,000 sats, nobody has found yet.",
+  },
   "picture-puzzle": {
     icon: "i-lucide-scan-qr-code",
     title: "1 mBTC picture puzzle",

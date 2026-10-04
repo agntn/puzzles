@@ -70,8 +70,8 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(535);
-    expect(result.unsolved).toBe(109);
+    expect(result.total).toBe(536);
+    expect(result.unsolved).toBe(110);
   });
 
   it("shows a puzzle by universal identifier", async () => {
@@ -648,7 +648,7 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result).toHaveLength(40);
+    expect(result).toHaveLength(41);
     expect(result.map((entry) => entry.key)).toContain("hash-collision");
   });
 
@@ -725,7 +725,7 @@ describe.concurrent("puzzles CLI", () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(40);
+    expect(result.collections).toHaveLength(41);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 
