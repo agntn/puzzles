@@ -51,6 +51,7 @@ export const TransactionType = {
   Increase: "increase",
   PubkeyReveal: "pubkey_reveal",
   Sweep: "sweep",
+  Transfer: "transfer",
 } as const;
 
 /** A transaction role. */
@@ -878,6 +879,18 @@ export function claim(txid: string, date: string, amount: number): Transaction {
  */
 export function sweep(txid: string, date: string, amount: number): Transaction {
   return transaction(TransactionType.Sweep, txid, date, amount);
+}
+
+/**
+ * Records a move between two addresses of one prize, which leaves the prize as it was.
+ *
+ * @param {string} txid - Transaction identifier.
+ * @param {string} date - Transaction time as `YYYY-MM-DD HH:MM:SS`.
+ * @param {number} amount - Amount moved, in whole native units.
+ * @returns {Transaction} The transfer transaction.
+ */
+export function transfer(txid: string, date: string, amount: number): Transaction {
+  return transaction(TransactionType.Transfer, txid, date, amount);
 }
 
 /**
