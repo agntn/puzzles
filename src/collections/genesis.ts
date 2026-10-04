@@ -272,6 +272,60 @@ export const genesisBlock = puzzle({
       ),
       { date: "2026-09-28" },
     ),
+    official(
+      "1) N; 2) Y; 3) Y; 4) Y",
+      "https://mempool.space/tx/1f0f0af2aef408c25c3c813476a130cae171af2190498754c695f8d8e7b43bc2",
+      confirmation(
+        "https://blockstream.info/tx/1f0f0af2aef408c25c3c813476a130cae171af2190498754c695f8d8e7b43bc2",
+        "OP_RETURN spending the 1k output that 33736aa78237fe96f94edcf48f14fb3841ff0bf42bedc3688cb5803ee42315a3 paid to the author address. It answers that transaction's four yes/no questions: no, the two seeds did not come from two pastes, one from bitcoin-cli and one from an explorer; yes, both cosigners share the passphrase; yes, sha256sum read the pasted UTF-8 text, not bytes decoded from hex; yes, Ian Coleman's entropy type was Hex, fed the first 32 hex of the digest.",
+      ),
+      { date: "2026-09-30" },
+    ),
+    official(
+      "1) hex; 2) substring/cut; 3) N",
+      "https://mempool.space/tx/3678a0e393de3e664f5470580d7a504b981809d35f029f4bc592b8126a133446",
+      confirmation(
+        "https://blockstream.info/tx/3678a0e393de3e664f5470580d7a504b981809d35f029f4bc592b8126a133446",
+        "OP_RETURN spending the 1k output that faf44a9e7d572e65f0dfa96c4f32e7393e3fab600da3cdfdd5c758c9fe493218 paid to the author address. It answers that transaction's three questions: the hashed form was hex, not binary or decimal; it was a substring cut from a tool's field, not the whole value; no trailing newline reached sha256sum.",
+      ),
+      { date: "2026-09-30" },
+    ),
+    official(
+      "1) N; 2) genesis block; 3) Y; 4) Y",
+      "https://mempool.space/tx/41a68f4a564a4fc52a25dd52c3169aaa549dcbd9310e945a06114ea934752cda",
+      confirmation(
+        "https://blockstream.info/tx/41a68f4a564a4fc52a25dd52c3169aaa549dcbd9310e945a06114ea934752cda",
+        'OP_RETURN spending the 1k output that 759663153ca23f956b1f2b354550f9df547481df5b121a2a229e77d255685cef paid to the author address. It answers that transaction\'s four questions: no, the hex was not cut from the raw hex of getblock 0; the source, offered as the 80-byte header, the coinbase transaction hex or other, is "genesis block"; yes, the cut length is even; yes, both cosigners use the same cut length.',
+      ),
+      { date: "2026-10-01" },
+    ),
+    official(
+      "1) Y; 2) N (bitcoin-cli/explorer); 3) Y; 4) N",
+      "https://mempool.space/tx/b050d6450f7d12eef41fae3179791c572499b653ee24665ae25adb9fe46dfd49",
+      confirmation(
+        "https://blockstream.info/tx/b050d6450f7d12eef41fae3179791c572499b653ee24665ae25adb9fe46dfd49",
+        "OP_RETURN spending the 1k output that 734da7fc7a60f741074688d55344b70a1dbc5dc42a47e67a6353c5f2de49e770 paid to the author address. It answers that transaction's four questions: yes, the cosigner with master fingerprint 0852014c used Ian Coleman's Hex entropy type; to whether its hex came from bitcoin-cli rather than an explorer, N with both tools named; yes, the cut is at most 32 characters; no, it is not at most 16.",
+      ),
+      { date: "2026-10-01" },
+    ),
+    official(
+      "1) Y; cut -b N-M: it deleted everything outside the selected range. 2) Y. 3) Key question of the passphrase: Who received the first transaction? That's all I've got to say. 4) N.",
+      "https://mempool.space/tx/719623a4f2c94413b3f954e0864685aa5b7e6aead664b4f5b9efd868b7dcd7c7",
+      confirmation(
+        "https://blockstream.info/tx/719623a4f2c94413b3f954e0864685aa5b7e6aead664b4f5b9efd868b7dcd7c7",
+        "OP_RETURN spending the 1k output that d98ac606deeb8f2d9efdb11abafaabc505d8fccc7a026f0e876bda68f47429a4 paid to the author address. It answers that transaction's four questions about cosigner 0852014c: yes, a command removed hex digits before sha256sum, and it was cut -b; yes, one SHA-256 of the hex text, its first 32 hex digits as raw entropy, English BIP39, 12 words; to which first transaction, the passphrase's key question again; no, the passphrase has nothing but ASCII letters and spaces. Whitespace normalized.",
+      ),
+      { date: "2026-10-03" },
+    ),
+    official(
+      "1) Y; 2) Y; 3) ¬_¬",
+      "https://mempool.space/tx/d2ae17e2e91a18c78bcc9d9b99c153c5d6ff55dea217f925d438745c29e11042",
+      confirmation(
+        "https://blockstream.info/tx/d2ae17e2e91a18c78bcc9d9b99c153c5d6ff55dea217f925d438745c29e11042",
+        "OP_RETURN spending the 1k output that 8c1e0c1b1e70d70c00142310a89240f2669f349e62673bcc3b92f0ca9d7dc29c paid to the author address. It answers that transaction's three questions: yes, 0852014c is the fingerprint of the BIP32 master key from the 12 words with the passphrase applied; yes, both escrow keys sit at m/48h/0h/Xh/2h/c/i with c=0 and i up to 9 or c=1 and i up to 4; to how many spaces the passphrase holds, a sideways glance and no number.",
+      ),
+      { date: "2026-10-03" },
+    ),
   ],
 });
 
