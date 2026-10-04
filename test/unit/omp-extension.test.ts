@@ -183,6 +183,7 @@ describe("OMP extension", () => {
       puzzles_show: { id: "b1000/71", name: "71" },
       puzzles_hints: { id: "gsmg", name: "gsmg" },
       puzzles_stages: { id: "gsmg", name: "gsmg" },
+      puzzles_assets: { id: "gsmg", path: "assets/gsmg/phase2.txt" },
       puzzles_list: { collection: "b1000", with_pubkey: true },
       puzzles_verify: { id: "b1000/1", name: "1" },
       puzzles_balance: { id: "b1000/71", api_key: "secret" },

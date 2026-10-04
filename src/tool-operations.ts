@@ -3,11 +3,25 @@ import type { Chain } from "./core/chains.ts";
 import type { PuzzleQuery } from "./core/dataset.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/status.ts";
+import { oneLine } from "./core/text.ts";
 import { type Technique, techniques } from "./core/technique.ts";
 
-/** Result shape shared by the MCP server and the Pi/OMP extensions. */
-export interface ToolResult {
-  content: Array<{ type: "text"; text: string }>;
+/** A block of text, what every tool answers with. */
+export interface TextBlock {
+  type: "text";
+  text: string;
+}
+
+/** An image as base64 with its MIME type, what `puzzles_assets` answers with for an image file. */
+export interface ImageBlock {
+  type: "image";
+  data: string;
+  mimeType: string;
+}
+
+/** Result shape shared by the MCP server and the Pi/OMP extensions; `Block` widens for an image. */
+export interface ToolResult<Block extends TextBlock | ImageBlock = TextBlock> {
+  content: Block[];
   details: Record<string, unknown>;
 }
 
@@ -140,6 +154,20 @@ export const facts = {
       ],
       openWorld: false,
     },
+    assets: {
+      name: "puzzles_assets",
+      title: "Puzzle Files",
+      description:
+        "List the files a puzzle ships, its image, hint files, solution and stage artifacts, with the size and SHA-256 its record pins, and the repository's reading copies of the pages it cites, or read one of them by path: text comes back as text, an image as an image, and a pinned file only with the bytes the record pins.",
+      promptSnippet:
+        "Use puzzles_assets to read a puzzle's own files and the archived posts behind its hints and answers, instead of fetching pages that may have changed or vanished.",
+      promptGuidelines: [
+        "A read tries the repository copy under this release's tag, then for a pinned file the author's URL and the archive capture, and returns the first copy whose bytes match the record.",
+        "An archived source is a reading copy of a page the record cites, with its transcript and every comment that survived. Its screenshot is a recent render, not the original image, so analyze the puzzle's own files instead.",
+        "A file over 3.75 MiB, or neither an image nor UTF-8 text, can't come back inline. The error names the URL to download it from.",
+      ],
+      openWorld: true,
+    },
     list: {
       name: "puzzles_list",
       title: "List Puzzles",
@@ -212,6 +240,12 @@ export const facts = {
       minLength: 1,
       maxLength: 100,
       description: "Universal puzzle identifier, for example b1000/90 or gsmg",
+    },
+    file: {
+      minLength: 1,
+      maxLength: 200,
+      description:
+        "Path of one file to read, as the listing prints it, for example assets/gsmg/phase3.txt. Leave it out to list them",
     },
     address: {
       minLength: 1,
@@ -325,6 +359,7 @@ export const toolArguments = {
   show: ["id"],
   hints: ["id"],
   stages: ["id"],
+  assets: ["id", "file"],
   list: [
     "address",
     "chain",
@@ -591,6 +626,52 @@ export async function stagesTool(id: string): Promise<ToolResult> {
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   return text(formatStageReport(puzzle).join("\n"), { id: puzzle.id(), stages: puzzle.stages() });
+}
+
+/**
+ * The files of one puzzle and the reading copies of the pages it cites, or one of them read.
+ *
+ * @param {string} id - Universal puzzle identifier.
+ * @param {string} [file] - The path of the file to read; without it, the listing.
+ * @returns {Promise<ToolResult>} The listing as text, or the read line and the file's own block.
+ * @throws {InvalidArgumentError} When the path is not one the listing prints.
+ */
+export async function assetsTool(
+  id: string,
+  file?: string,
+): Promise<ToolResult<TextBlock | ImageBlock>> {
+  const {
+    dataset: { requirePuzzle },
+    registry: { requireCollection },
+  } = await loadCore();
+  const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
+  const wanted = file === undefined ? undefined : assertLength("file", file, facts.parameters.file);
+  const { citedArchivedSources } = await import("./core/archived-sources.ts");
+  const { fileBlock, formatFileRead, formatFileReport, puzzleFiles, readPuzzleFile } =
+    await import("./core/files.ts");
+  const collection = await requireCollection(puzzle.collection());
+  const files = puzzleFiles(puzzle.assetLinks(), citedArchivedSources(puzzle, collection));
+  if (wanted === undefined) {
+    return text(formatFileReport(puzzle.id(), files).join("\n"), { id: puzzle.id(), files });
+  }
+  const target = files.find((candidate) => candidate.path === wanted);
+  if (target === undefined) {
+    throw new InvalidArgumentError(
+      "file",
+      `${oneLine(JSON.stringify(wanted))} is not a file of ${puzzle.id()}; call ${facts.tools.assets.name} without file for the list`,
+    );
+  }
+  const content = await readPuzzleFile(target);
+  return {
+    content: [{ type: "text", text: formatFileRead(content) }, fileBlock(content)],
+    details: {
+      id: puzzle.id(),
+      file: target,
+      bytes: content.data.length,
+      sha256: content.sha256,
+      servedBy: content.servedBy,
+    },
+  };
 }
 
 /**

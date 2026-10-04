@@ -2,10 +2,19 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { sha256 } from "@agntn/hashes";
 import { defineCommand } from "citty";
-import { jsonArg, oneLine, printLine } from "./output.ts";
+import { jsonArg, oneLine, printError, printLine } from "./output.ts";
+import { citedArchivedSources } from "../core/archived-sources.ts";
 import { requirePuzzle } from "../core/dataset.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
-import type { AssetLink } from "../core/puzzle.ts";
+import {
+  fetchFailure,
+  formatFileRead,
+  formatFileReport,
+  puzzleFiles,
+  readPuzzleFile,
+} from "../core/files.ts";
+import type { AssetLink, Puzzle } from "../core/puzzle.ts";
+import { requireCollection } from "../core/registry.ts";
 import { toJson } from "../core/utils.ts";
 
 /** How long `--live` waits for one author URL. */
@@ -61,20 +70,6 @@ async function checkLocal(link: AssetLink, directory: string): Promise<CheckedAs
 }
 
 /**
- * Why a fetch failed, with the system code under it when there is one: `fetch failed (ENOTFOUND)`.
- *
- * @param {unknown} error - What `fetch` threw.
- * @returns {string} The reason on one line.
- */
-function fetchFailure(error: unknown): string {
-  if (!(error instanceof Error)) {
-    return oneLine(String(error));
-  }
-  const code = (error.cause as NodeJS.ErrnoException | undefined)?.code;
-  return oneLine(code === undefined ? error.message : `${error.message} (${code})`);
-}
-
-/**
  * Fetches the file from the author's URL. A failed request is UNREACHABLE, not a change.
  *
  * @param {AssetLink} link - The file as the record ships it.
@@ -91,7 +86,7 @@ async function checkLive(link: AssetLink): Promise<CheckedAsset> {
     }
     return compare(link, new Uint8Array(await response.arrayBuffer()));
   } catch (error) {
-    return { ...link, status: "UNREACHABLE", error: fetchFailure(error) };
+    return { ...link, status: "UNREACHABLE", error: oneLine(fetchFailure(error)) };
   }
 }
 
@@ -130,14 +125,94 @@ async function checkAll(
   return live ? Promise.all(links.map((link) => checkLive(link))) : links;
 }
 
+/**
+ * Writes one file's bytes to standard output untouched, so `> puzzle.png` keeps the image, and its
+ * size, digest and source to standard error.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {string} path - The file's path as the listing prints it.
+ * @returns {Promise<void>} Resolves once the bytes are written.
+ */
+async function read(puzzle: Puzzle, path: string): Promise<void> {
+  const collection = await requireCollection(puzzle.collection());
+  const files = puzzleFiles(puzzle.assetLinks(), citedArchivedSources(puzzle, collection));
+  const target = files.find((file) => file.path === path);
+  if (target === undefined) {
+    throw new InvalidArgumentError(
+      "read",
+      `${oneLine(JSON.stringify(path))} is not a file of ${puzzle.id()}; run puzzles assets ${puzzle.id()} for the list`,
+    );
+  }
+  const content = await readPuzzleFile(target, Number.POSITIVE_INFINITY);
+  printError(formatFileRead(content));
+  process.stdout.write(content.data);
+}
+
+/**
+ * The listing without a check: every file and every archived source, as `puzzles_assets` prints it.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {boolean} json - Whether to print JSON.
+ * @returns {Promise<void>} Resolves once the listing is printed.
+ */
+async function list(puzzle: Puzzle, json: boolean): Promise<void> {
+  const collection = await requireCollection(puzzle.collection());
+  const files = puzzleFiles(puzzle.assetLinks(), citedArchivedSources(puzzle, collection));
+  if (json) {
+    const sources = files.filter((file) => file.kind === "source" || file.kind === "screenshot");
+    printLine(toJson({ id: puzzle.id(), assets: puzzle.assetLinks(), sources }));
+    return;
+  }
+  for (const line of formatFileReport(puzzle.id(), files)) {
+    printLine(line);
+  }
+}
+
+/**
+ * Checks every file against local copies or author URLs; exit 1 on a missing or changed copy.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {string | undefined} directory - The directory of `--check`, if given.
+ * @param {boolean} live - Whether `--live` was given.
+ * @param {boolean} json - Whether to print JSON.
+ * @returns {Promise<void>} Resolves once the result is printed.
+ */
+async function check(
+  puzzle: Puzzle,
+  directory: string | undefined,
+  live: boolean,
+  json: boolean,
+): Promise<void> {
+  const files = await checkAll(puzzle.assetLinks(), directory, live);
+  if (files.some((file) => "status" in file && FAILED.has(file.status))) {
+    process.exitCode = 1;
+  }
+  if (json) {
+    printLine(toJson({ id: puzzle.id(), assets: files }));
+    return;
+  }
+  if (files.length === 0) {
+    printLine(`${puzzle.id()}: no assets recorded`);
+    return;
+  }
+  for (const file of files) {
+    printLine(formatLink(file, live));
+  }
+}
+
 export default defineCommand({
   meta: {
     name: "assets",
     description:
-      "List the files a puzzle ships with their SHA-256 and size, or check copies against them",
+      "List the files a puzzle ships and the archived copies of the pages it cites, read one, or check copies against the pinned SHA-256",
   },
   args: {
     id: { type: "positional", description: "Puzzle identifier, for example gsmg" },
+    read: {
+      type: "string",
+      description:
+        "Write one file to stdout, by the path the listing prints, once its bytes match the record",
+    },
     check: {
       type: "string",
       description:
@@ -150,24 +225,19 @@ export default defineCommand({
     ...jsonArg,
   },
   async run({ args }) {
-    if (args.check !== undefined && args.live === true) {
-      throw new InvalidArgumentError("check", "pass either --check or --live, not both");
+    const modes = [args.read !== undefined, args.check !== undefined, args.live === true];
+    if (modes.filter(Boolean).length > 1) {
+      throw new InvalidArgumentError("read", "pass one of --read, --check and --live");
     }
     const puzzle = await requirePuzzle(args.id ?? "");
-    const files = await checkAll(puzzle.assetLinks(), args.check, args.live === true);
-    if (files.some((file) => "status" in file && FAILED.has(file.status))) {
-      process.exitCode = 1;
-    }
-    if (args.json) {
-      printLine(toJson({ id: puzzle.id(), assets: files }));
+    if (args.read !== undefined) {
+      await read(puzzle, args.read);
       return;
     }
-    if (files.length === 0) {
-      printLine(`${puzzle.id()}: no assets recorded`);
+    if (args.check === undefined && args.live !== true) {
+      await list(puzzle, args.json === true);
       return;
     }
-    for (const file of files) {
-      printLine(formatLink(file, args.live === true));
-    }
+    await check(puzzle, args.check, args.live === true, args.json === true);
   },
 });

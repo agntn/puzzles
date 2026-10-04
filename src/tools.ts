@@ -2,6 +2,7 @@
 
 import { defineTool, Type, type TProperties, type ToolDefinition } from "@agntn/tools";
 import {
+  assetsTool,
   authorsTool,
   authorTool,
   balanceTool,
@@ -105,6 +106,12 @@ export const stagesToolDefinition = defineTool({
   execute: (params) => stagesTool(params.id),
 });
 
+export const assetsToolDefinition = defineTool({
+  ...described(facts.tools.assets),
+  input: closed({ id: puzzleId, file: Type.Optional(Type.String(parameters.file)) }),
+  execute: (params) => assetsTool(params.id, params.file),
+});
+
 export const listToolDefinition = defineTool({
   ...described(facts.tools.list),
   input: closed({
@@ -163,6 +170,7 @@ export const puzzlesTools: readonly ToolDefinition[] = [
   showToolDefinition,
   hintsToolDefinition,
   stagesToolDefinition,
+  assetsToolDefinition,
   listToolDefinition,
   verifyToolDefinition,
   balanceToolDefinition,
@@ -179,6 +187,7 @@ export const callSummaries: Readonly<
   [facts.tools.show.name]: (args) => args["id"],
   [facts.tools.hints.name]: (args) => args["id"],
   [facts.tools.stages.name]: (args) => args["id"],
+  [facts.tools.assets.name]: (args) => args["file"] ?? args["id"],
   [facts.tools.list.name]: (args) =>
     [
       args["address"] ?? args["collection"] ?? args["chain"] ?? "all",

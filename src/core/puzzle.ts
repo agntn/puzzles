@@ -88,7 +88,7 @@ const ASSET_ROOT = `https://raw.githubusercontent.com/agntn/puzzles/v${version}`
  * @param {string} path - The path from the repository root.
  * @returns {string} The URL.
  */
-function assetUrlOf(path: string): string {
+export function assetUrlOf(path: string): string {
   return `${ASSET_ROOT}/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 

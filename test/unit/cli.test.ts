@@ -125,13 +125,72 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    const image = (await get("gsmg"))?.assetLinks()[0];
-
-    expect((await puzzles("assets", "gsmg")).split("\n")[0]).toBe(
-      `puzzle\tpuzzle.png\t29931\t38125bbdf1ea58b9b30b075bc6bf71e4089d04bba37098317e47097e2f2a1830\t${image?.url}`,
-    );
+    expect((await puzzles("assets", "gsmg")).split("\n").slice(0, 2)).toEqual([
+      "gsmg: 6 files, 0 archived sources",
+      "puzzle\tassets/gsmg/puzzle.png\t29931 bytes\tsha256 38125bbdf1ea58b9b30b075bc6bf71e4089d04bba37098317e47097e2f2a1830\torigin https://gsmg.io/puzzle\tarchive https://web.archive.org/web/20201112011308id_/https://gsmg.io/puzzle",
+    ]);
     expect(listed.assets).toEqual((await get("gsmg"))?.assetLinks());
-    expect(await puzzles("assets", "b1000/71")).toBe("b1000/71: no assets recorded");
+    expect(await puzzles("assets", "b1000/71")).toBe("b1000/71: no files and no archived sources");
+  });
+
+  it("lists the archived copies of the pages a puzzle cites, its own before its author's", async () => {
+    const listed = await json<{
+      readonly sources: readonly { readonly citedBy: string; readonly path: string }[];
+    }>("assets", "quizchain2/34", "--json");
+
+    expect(listed.sources.map(({ citedBy, path }) => `${citedBy} ${path}`)).toEqual([
+      "puzzle assets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.md",
+      "puzzle assets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.png",
+      "author assets/sources/satoshi-birthday-quiz/aoinakamoto-2019-04-05-b9l37o.md",
+      "author assets/sources/satoshi-birthday-quiz/aoinakamoto-2019-04-05-b9l37o.png",
+      "author assets/sources/satoshi-birthday-quiz/aoinakamoto-2019-04-10-ekjcc1k.md",
+      "author assets/sources/satoshi-birthday-quiz/aoinakamoto-2019-04-10-ekjcc1k.png",
+    ]);
+  });
+
+  it("writes the bytes --read fetched to stdout and their digest to stderr", async () => {
+    const read = async (reply: string, path: string): Promise<Failure> => {
+      try {
+        const { stderr, stdout } = await execute(
+          process.execPath,
+          [
+            "--import",
+            "./test/support/asset-fetch-stub.ts",
+            "src/cli.ts",
+            "assets",
+            "gsmg",
+            "--read",
+            path,
+          ],
+          { cwd: process.cwd(), env: { ...process.env, PUZZLES_ASSET_REPLY: reply } },
+        );
+        return { code: 0, stderr, stdout };
+      } catch (error) {
+        const { code, stderr, stdout } = error as Failure;
+        return { code, stderr, stdout };
+      }
+    };
+
+    const page = await read("file:assets/gsmg/phase2.txt", "assets/gsmg/phase2.txt");
+    const other = await read(
+      "file:assets/zden/codex-protocol/solution.md",
+      "assets/gsmg/phase2.txt",
+    );
+    const larger = await read("file:assets/gsmg/phase3.txt", "assets/gsmg/phase2.txt");
+    const unknown = await failure("assets", "gsmg", "--read", "assets/gsmg/nope.txt");
+
+    expect(page.code).toBe(0);
+    expect(page.stdout).toMatch(/^U2FsdGVkX18GKGYS/);
+    expect(page.stderr).toContain(
+      "assets/gsmg/phase2.txt 910 bytes sha256 5e583d5b8626aa80f8a1ae61e7ad62fb2640bedb73fcc12ba68fa13b15dfa94d the bytes the record pins from https://raw.githubusercontent.com/agntn/puzzles/",
+    );
+    expect(other.code).toBe(1);
+    expect(other.stdout).toBe("");
+    expect(other.stderr).toContain("holds other bytes, 722 with SHA-256 ");
+    expect(larger.stderr).toContain("phase2.txt answered more than 910 bytes");
+    expect(unknown.stderr.trim()).toBe(
+      'Invalid read: "assets/gsmg/nope.txt" is not a file of gsmg; run puzzles assets gsmg for the list',
+    );
   });
 
   it("checks the repository's own copies and exits 0 when every file matches", async () => {
@@ -229,7 +288,7 @@ describe.concurrent("puzzles CLI", () => {
     const result = await failure("assets", "gsmg", "--check", "assets/gsmg", "--live");
 
     expect(result.code).toBe(1);
-    expect(result.stderr.trim()).toBe("Invalid check: pass either --check or --live, not both");
+    expect(result.stderr.trim()).toBe("Invalid read: pass one of --read, --check and --live");
   });
 
   it("prints the hints that hold for a puzzle as the tool does", async () => {

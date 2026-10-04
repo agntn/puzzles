@@ -126,6 +126,7 @@ const expectedCollections = [
 ];
 
 const expectedToolNames = [
+  "puzzles_assets",
   "puzzles_author",
   "puzzles_authors",
   "puzzles_balance",

@@ -103,3 +103,17 @@ export class UnknownCollectionError extends PuzzlesError {
 export class SourceLookupError extends PuzzlesError {
   override readonly name = "SourceLookupError";
 }
+
+/** Raised when no copy of a file answered with the bytes the record pins, or answered at all. */
+export class FileUnavailableError extends PuzzlesError {
+  override readonly name = "FileUnavailableError";
+
+  /** The file's path from the repository root. */
+  readonly path: string;
+
+  /** Constructs the error from the path and one reason per copy tried, each naming its URL. */
+  constructor(path: string, reasons: readonly string[]) {
+    super(`Could not read ${path}: ${reasons.join("; ")}`);
+    this.path = path;
+  }
+}
