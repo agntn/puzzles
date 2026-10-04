@@ -8,8 +8,8 @@ import {
   profile,
   technique,
 } from "../core/parts.ts";
-import { walkingBanks0 } from "./walking-banks/0.ts";
 import { walkingBanks1 } from "./walking-banks/1.ts";
+import { walkingBanks2 } from "./walking-banks/2.ts";
 
 const SITE = "https://www.walkingbanks.com/";
 const SITE_CAPTURE = "https://web.archive.org/web/20250716082759/https://www.walkingbanks.com/";
@@ -61,8 +61,8 @@ export class WalkingBanksCollection extends NamedCollection {
     ],
   });
 
-  /** One record per funded address of the seed, in derivation order. */
-  static readonly puzzles = [walkingBanks0, walkingBanks1];
+  /** One record per funded address of the seed, numbered from 1 in funding order. */
+  static readonly puzzles = [walkingBanks1, walkingBanks2];
 
   /** Both addresses open with the same 24 words, so every hint is shared. */
   static readonly hints = [

@@ -297,7 +297,7 @@ const PRESENTATION: Readonly<
   "walking-banks": {
     icon: "i-lucide-dna",
     title: "Walking Banks seed hunt",
-    sample: "walking-banks/1",
+    sample: "walking-banks/2",
     chains: ["bitcoin"],
     blurb:
       "A thriller whose murder victims carry a seed phrase in their DNA, and a real one hidden in the book. Four words decode on page 122. The other twenty, and 800,000 sats, are still out there.",

@@ -1,20 +1,20 @@
 import { compressed, funding } from "../../core/parts.ts";
 import { puzzle } from "../../core/puzzle.ts";
 
-/** The 700,000 sats lot at m/0/1 of the treasure wallet's published xpub. */
+/** The 100,000 sats lot at m/0/0 of the treasure wallet's published xpub. */
 export const walkingBanks1 = puzzle({
   id: "walking-banks/1",
   chain: "bitcoin",
-  address: "bc1q4qc24xk5cehc4t7vr264zldsms2kmxf86jqjau",
+  address: "bc1qxy4tf0s4n7x9w24rawf9qsxh2hyljrmvyrhwzt",
   sourceUrl: "https://web.archive.org/web/20250716082759/https://www.walkingbanks.com/",
-  startedAt: "2024-09-05 13:49:07",
-  prize: 0.007,
-  pubkey: compressed("0345a988db0b34ab48693b9d525ff227d98c67e8986c0664c1d9412f111e5afa3b"),
+  startedAt: "2024-09-05 13:35:50",
+  prize: 0.001,
+  pubkey: compressed("027b26f0973f7656d7405ebdc2d7500d855aee346ff4518d61507050254703d8a3"),
   transactions: [
     funding(
-      "ad436eaaa66e31b59b763049dc6d59bb213cc3b9910b80b2e7424720e39b1533",
-      "2024-09-05 13:49:07",
-      0.007,
+      "70efe537a71ccbf9fabb603210d732bc3e8da3300976d7a130e7b1766d6e2830",
+      "2024-09-05 13:35:50",
+      0.001,
     ),
   ],
 });
