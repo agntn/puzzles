@@ -13,7 +13,7 @@
 
 ### 💅 Refactors
 
-- **collections:** ⚠️  Arweave becomes weave ([#432](https://github.com/agntn/puzzles/pull/432))
+- **collections:** ⚠️ Arweave becomes weave ([#432](https://github.com/agntn/puzzles/pull/432))
 
 ### 🏡 Chore
 
@@ -22,7 +22,7 @@
 
 #### ⚠️ Breaking Changes
 
-- **collections:** ⚠️  Arweave becomes weave ([#432](https://github.com/agntn/puzzles/pull/432))
+- **collections:** ⚠️ Arweave becomes weave ([#432](https://github.com/agntn/puzzles/pull/432))
 
 ### ❤️ Contributors
 
