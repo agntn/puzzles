@@ -5,7 +5,7 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { describe, expect, it, vi } from "vite-plus/test";
-import { toolListings } from "../../src/mcp.ts";
+import { callTool, toolListings } from "../../src/mcp.ts";
 import { firstText } from "../support/mcp.ts";
 
 /*
@@ -58,13 +58,14 @@ describe("docs MCP tools", () => {
     }
   });
 
-  it("keeps a schema with parameters closed, so a misspelled filter fails", async () => {
+  /** The SDK stamps its own `$schema` on top, and `toEqual` reads an undefined key as absent. */
+  it("lists the schema `puzzles mcp` lists, so a misspelled filter fails", async () => {
     const client = await docsClient();
     const { tools } = await client.listTools();
     for (const listing of toolListings) {
       const served = tools.find((tool) => tool.name === listing.name);
-      expect(served?.inputSchema.additionalProperties === false, listing.name).toBe(
-        listing.inputSchema.additionalProperties === false,
+      expect({ ...served?.inputSchema, $schema: undefined }, listing.name).toEqual(
+        listing.inputSchema,
       );
     }
 
@@ -78,5 +79,20 @@ describe("docs MCP tools", () => {
     const open = await client.callTool({ name: "puzzles_stats", arguments: { _: "" } });
     expect(open.isError).toBeFalsy();
     expect(firstText(open)).toMatch(/^Total: /u);
+  });
+
+  it("refuses an unknown key in the words of `puzzles mcp`, sanitized", async () => {
+    const client = await docsClient();
+    const key = ["x", String.fromCodePoint(0x202e), "y", String.fromCodePoint(0x2028), "z"].join(
+      "",
+    );
+    const args = { [key]: 1 };
+
+    const served = await client.callTool({ name: "puzzles_list", arguments: args });
+    expect(served.isError).toBe(true);
+    expect(served.content).toEqual((await callTool("puzzles_list", args)).content);
+    for (const code of [0x202e, 0x2028]) {
+      expect(firstText(served)).not.toContain(String.fromCodePoint(code));
+    }
   });
 });

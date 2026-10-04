@@ -7,11 +7,7 @@ import {
 import { z } from "zod";
 
 /**
- * One puzzles tool for the Docus MCP server, served beside `list-pages` and `get-page`. The name,
- * prose, annotations and executor are the ones `puzzles mcp` lists. The toolkit takes Zod only, so
- * the shared TypeBox schema is read back through its JSON Schema and keeps every limit it declares.
- * The SDK gets the whole object, not its shape: a shape comes back as a plain `z.object()`, which
- * strips a key the tool does not take, so a misspelled filter would widen the answer.
+ * A `puzzles mcp` tool for Docus: its own schema in `tools/list`, its own checks on the call.
  *
  * @param {string} name - The tool's name, such as `puzzles_show`.
  * @returns {McpToolDefinitionListItem} The tool definition for `server/mcp/tools/`.
@@ -21,8 +17,10 @@ export function puzzlesMcpTool(name: string): McpToolDefinitionListItem {
   if (listing === undefined) {
     throw new Error(`Unknown puzzles tool: ${name}`);
   }
-  const schema = z.fromJSONSchema(listing.inputSchema as z.core.JSONSchema.JSONSchema);
-  // The toolkit types a raw shape only, while the SDK it hands the schema to takes an object too.
+  /** Zod waves every object through, so a bad key meets `callTool` and leaves sanitized. */
+  const schema = z.looseObject({});
+  schema._zod.toJSONSchema = () => ({ ...listing.inputSchema });
+  /** The toolkit types a raw shape only; the SDK behind it takes a whole object too. */
   const inputSchema = schema as unknown as NonNullable<McpToolDefinition["inputSchema"]>;
   return defineMcpTool({
     name: listing.name,
