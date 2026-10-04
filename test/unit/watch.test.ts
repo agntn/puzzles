@@ -122,7 +122,7 @@ describe("watcher", () => {
     ]);
   });
 
-  it("leaves out a contract call that moves no coin in", async () => {
+  it("leaves out a contract call that moves no coin in and a deposit that reverted", async () => {
     const contract = teikhos.require(0).address().value;
     vi.stubGlobal("fetch", async (input: unknown) => {
       const url = String(input);
@@ -139,6 +139,17 @@ describe("watcher", () => {
               status: "ok",
               method: "authenticate",
               transaction_types: ["contract_call"],
+            },
+            {
+              hash: "0xdeabfc901da5066796edbfc2f3a942b3310ef0bf7f67ad13b63434851c3a9348",
+              block_number: 5157041,
+              timestamp: "2018-02-26T01:54:00.000000Z",
+              from: { hash: "0x4c5d24a7ca972aea90cc040da6770a13fc7d4d9a" },
+              to: { hash: contract },
+              value: "100000000000000000",
+              status: "error",
+              method: null,
+              transaction_types: ["coin_transfer"],
             },
           ],
           next_page_params: null,
