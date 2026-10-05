@@ -1519,6 +1519,58 @@ export const archivedSources = [
     date: "2019-07-16",
   },
   {
+    file: "quizchain2/aoinakamoto-2019-07-16-ce4ixs",
+    url: "https://www.reddit.com/r/Grycoin/comments/ce4ixs/8_mbtc_quizchain2_block_71/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-16",
+  },
+  {
+    file: "quizchain2/aoinakamoto-2019-07-18-ces4vi",
+    url: "https://www.reddit.com/r/Grycoin/comments/ces4vi/9_mbtc_quizchain2_block_72/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-18",
+  },
+  {
+    file: "quizchain2/aoinakamoto-2019-07-19-cf4rnd",
+    url: "https://www.reddit.com/r/Grycoin/comments/cf4rnd/10_mbtc_quizchain2_block_73/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-19",
+  },
+  {
+    file: "quizchain2/aoinakamoto-2019-07-20-cfhi1e",
+    url: "https://www.reddit.com/r/Grycoin/comments/cfhi1e/11_mbtc_quizchain2_block_74/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-20",
+    archive: {
+      url: "https://web.archive.org/web/20200730020644/https://www.reddit.com/r/Grycoin/comments/cfhi1e/11_mbtc_quizchain2_block_74/eu9zuim/",
+      date: "2020-07-30T02:06:44Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "quizchain2/aoinakamoto-2019-07-20-cfs3ld",
+    url: "https://www.reddit.com/r/Grycoin/comments/cfs3ld/12_mbtc_quizchain2_block_75/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-20",
+  },
+  {
+    file: "quizchain2/aoinakamoto-2019-07-22-cgcv9i",
+    url: "https://www.reddit.com/r/Grycoin/comments/cgcv9i/77_mbtc_quizchain2_block_76/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-22",
+  },
+  {
+    file: "quizchain2/aoinakamoto-2019-07-07-ca6jxv",
+    url: "https://www.reddit.com/r/Grycoin/comments/ca6jxv/77_mbtc_quizchain2_block_77_stage_one/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-07",
+    archive: {
+      url: "https://web.archive.org/web/20200728154404/https://www.reddit.com/r/Grycoin/comments/ca6jxv/77_mbtc_quizchain2_block_77_stage_one/eu2tpxo/",
+      date: "2020-07-28T15:44:04Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "grycoin/aoinakamoto-2019-07-28-civj2n",
     url: "https://www.reddit.com/r/Grycoin/comments/civj2n/7_mbtc_grycoin_chain_block_1/",
     author: "u/AoiNakamoto",

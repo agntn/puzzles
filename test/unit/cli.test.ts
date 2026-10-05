@@ -70,7 +70,7 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(539);
+    expect(result.total).toBe(546);
     expect(result.unsolved).toBe(111);
   });
 
