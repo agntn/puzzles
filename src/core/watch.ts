@@ -135,7 +135,7 @@ interface Unrecorded {
   readonly failures: string[];
   readonly findings: TransactionFinding[];
 
-  /** Whether the target address spent, or kept part of its history unread. */
+  /** Whether a transaction read moved coins out of the target, or might have. */
   readonly spent: boolean;
 
   readonly truncated: string[];
@@ -175,8 +175,7 @@ async function unrecorded(puzzle: Puzzle, options: BalanceOptions): Promise<Unre
     spent: histories.some(
       (history) =>
         history.address === target &&
-        (!history.complete ||
-          history.transactions.some((transaction) => transaction.direction !== "in")),
+        history.transactions.some((transaction) => transaction.direction !== "in"),
     ),
     truncated: histories
       .filter((history) => !history.complete && history.failure === undefined)
@@ -234,7 +233,7 @@ const keyedKinds: readonly string[] = [AddressKind.P2PKH, AddressKind.P2WPKH, Ad
  * Whether to ask for the key: a target that never spent has none on chain, so it costs nothing.
  *
  * @param {Puzzle} puzzle - The puzzle.
- * @param {boolean} spent - Whether the history read saw the target spend, or missed some of it.
+ * @param {boolean} spent - Whether the history read saw the target spend.
  * @returns {boolean} Whether to ask the explorer for the key.
  */
 function asksPubkey(puzzle: Puzzle, spent: boolean): boolean {

@@ -252,6 +252,10 @@ describe("watcher", () => {
 
     expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "balance"]);
     expect(urls.filter((url) => url.endsWith(`/address/${target}`))).toHaveLength(1);
+
+    const busy = stubBitcoin(empty(1000), 710191680);
+    await watcher()(b1000.require(71));
+    expect(busy.filter((url) => url.endsWith(`/address/${target}`))).toHaveLength(1);
   });
 
   it("reports a key a spend showed that the record lacks", async () => {
