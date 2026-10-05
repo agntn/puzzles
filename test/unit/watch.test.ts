@@ -44,6 +44,18 @@ const spend = {
   vout: [{ scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 710190680 }],
 };
 
+/* Made up: that spend from a P2PKH input, which shows the key in its scriptSig. */
+const shown = `02${"ab".repeat(32)}`;
+const signed = {
+  ...spend,
+  vin: [
+    {
+      prevout: { scriptpubkey_address: target, scriptpubkey_type: "p2pkh", value: 710191680 },
+      scriptsig_asm: `3044 ${shown}`,
+    },
+  ],
+};
+
 /* `size` made up transactions on the target that move nothing, newest first. */
 function empty(size: number) {
   return Array.from({ length: size }, (_, index) => ({
@@ -81,6 +93,24 @@ function stubBitcoin(
     });
   });
   return urls;
+}
+
+/* mempool.space for an address holding `held` whose every transaction in `history` spends. */
+function stubSpender(address: string, history: readonly unknown[], held: number): void {
+  vi.stubGlobal("fetch", async (input: unknown) => {
+    const url = String(input);
+    if (url.endsWith(`/address/${address}/txs`)) return json(history);
+    if (url.includes(`/address/${address}/txs/chain/`)) return json([]);
+    return json({
+      chain_stats: {
+        funded_txo_sum: held,
+        spent_txo_sum: 0,
+        spent_txo_count: history.length,
+        tx_count: history.length,
+      },
+      mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0, spent_txo_count: 0, tx_count: 0 },
+    });
+  });
 }
 
 afterEach(() => {
@@ -213,6 +243,66 @@ describe("watcher", () => {
       expect.stringMatching(/^Transaction history lookup failed: No response from mempool /u),
     ]);
     expect(formatWatchReport(report)[0]).toMatch(/^FAIL\tb1000\/71\tTransaction history/u);
+  });
+
+  it("asks nothing more of an address that never spent", async () => {
+    const urls = stubBitcoin([deposit, recorded], 710191680 + 666);
+
+    const { findings } = await watcher()(b1000.require(71));
+
+    expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "balance"]);
+    expect(urls.filter((url) => url.endsWith(`/address/${target}`))).toHaveLength(1);
+
+    const busy = stubBitcoin(empty(1000), 710191680);
+    await watcher()(b1000.require(71));
+    expect(busy.filter((url) => url.endsWith(`/address/${target}`))).toHaveLength(1);
+  });
+
+  it("reports a key a spend showed that the record lacks", async () => {
+    stubSpender(target, [signed], 710191680);
+
+    const report = await watcher()(b1000.require(71));
+
+    expect(report.findings.at(-1)).toEqual({
+      kind: "pubkey",
+      address: target,
+      pubkey: shown,
+      txid: signed.txid,
+    });
+    expect(formatWatchReport(report)).toContain(
+      `PUBKEY\tb1000/71\t${shown} shown by ${signed.txid} at ${target}, none recorded`,
+    );
+  });
+
+  it("reports a recorded key the chain spells otherwise, and none when they agree", async () => {
+    const puzzle = b1000.require(140);
+    const address = puzzle.address().value;
+    const recordedKey = puzzle.pubkey()?.value ?? "";
+    const reveal = (key: string) => ({
+      ...spend,
+      txid: "17e4e323cfbc68d7f0071cad09364e8193eedf8fefbcbd8a21b4b65717a4b3d3",
+      status: { confirmed: true, block_height: 578808, block_time: 1559354846 },
+      vin: [
+        {
+          prevout: { scriptpubkey_address: address, scriptpubkey_type: "p2pkh", value: 1000 },
+          scriptsig_asm: `3044 ${key}`,
+        },
+      ],
+    });
+
+    stubSpender(address, [reveal(`03${"cd".repeat(32)}`)], 1400001600);
+    expect((await watcher()(puzzle)).findings).toEqual([
+      {
+        kind: "pubkey",
+        address,
+        pubkey: `03${"cd".repeat(32)}`,
+        recorded: recordedKey,
+        txid: reveal("").txid,
+      },
+    ]);
+
+    stubSpender(address, [reveal(recordedKey)], 1400001600);
+    expect((await watcher()(puzzle)).findings).toEqual([]);
   });
 
   it("rejects a since it can't read before any lookup", () => {

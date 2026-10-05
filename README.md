@@ -24,7 +24,7 @@ Docs, one page per puzzle and a live playground: [puzzles.agntn.dev](https://puz
 - 💤 **Lazy registry.** Importing the package loads no records. `get("b1000/71")` imports one collection module.
 - ✅ **Verification is a value.** A published key derives the address or it doesn't. Nothing throws for a bad record.
 - 💰 **Live balances.** `puzzle.balance()` through `@agntn/explorers`. Base units as `bigint`, API keys redacted from errors.
-- 👀 **A watch on the record.** `puzzles watch` lists the deposits and spends a record misses, a prize that moved, a source page that changed. It never edits a record. You do.
+- 👀 **A watch on the record.** `puzzles watch` lists the deposits and spends a record misses, a prize that moved, a public key a spend gave away, a source page that changed. It never edits a record. You do.
 - 📋 **A checklist before the weekend.** `puzzles eligibility` gathers the source, the address, lifetime totals from the explorer, the status with its evidence and what counts as a solution. Whatever nobody can fill comes back as a `missing` row, never a guess.
 - 🖼️ **The puzzle itself, not a link to it.** `puzzles_assets` hands a model the image, the stage files and the archived posts behind the hints, checked against the SHA-256 the record pins. Links rot. These don't.
 - 🤖 **Fifteen agent tools.** One executor behind MCP, Pi and OMP. Same answer everywhere.

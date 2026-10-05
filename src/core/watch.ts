@@ -1,6 +1,7 @@
 import { BalanceError, type BalanceOptions, HISTORY_LIMIT } from "./balance.ts";
 import { type Chain, chainDecimals, chainSymbol } from "./chains.ts";
 import { InvalidArgumentError, SourceLookupError } from "./errors.ts";
+import { AddressKind, defined } from "./parts.ts";
 import type { ChainTransaction } from "./providers.ts";
 import type { Puzzle } from "./puzzle.ts";
 import type { SourceChange } from "./sources.ts";
@@ -35,13 +36,30 @@ export interface BalanceFinding {
   readonly prize: string;
 }
 
+/** A key a spend from an unsolved target showed that the record lacks or spells otherwise. */
+export interface PubkeyFinding {
+  readonly kind: "pubkey";
+
+  /** The target address that spent. */
+  readonly address: string;
+
+  /** The key the spend showed, in hex. */
+  readonly pubkey: string;
+
+  /** The key the record holds instead, when it holds one. */
+  readonly recorded?: string;
+
+  /** The spend that showed the key. */
+  readonly txid: string;
+}
+
 /** A source page that changed after the cutoff. */
 export interface SourceFinding extends SourceChange {
   readonly kind: "source";
 }
 
 /** One difference between the record and what the chain or the archive says now. */
-export type Finding = TransactionFinding | BalanceFinding | SourceFinding;
+export type Finding = TransactionFinding | BalanceFinding | PubkeyFinding | SourceFinding;
 
 /** What one watch pass found for one puzzle. */
 export interface WatchReport {
@@ -51,7 +69,7 @@ export interface WatchReport {
   /** Checks that could not run, each as its error message. */
   readonly errors: readonly string[];
 
-  /** Every difference found, transactions oldest first, then the balance, then the source. */
+  /** Every difference found: transactions oldest first, then the balance, the key, the source. */
   readonly findings: readonly Finding[];
 
   /** Puzzle identifier. */
@@ -116,8 +134,15 @@ function chronological(left: Readonly<TransactionFinding>, right: Readonly<Trans
 interface Unrecorded {
   readonly failures: string[];
   readonly findings: TransactionFinding[];
+
+  /** Whether a transaction read moved coins out of the target, or might have. */
+  readonly spent: boolean;
+
   readonly truncated: string[];
 }
+
+/** What a history read that failed stands for: nothing read, so nothing to compare. */
+const nothingRead: Unrecorded = { failures: [], findings: [], spent: false, truncated: [] };
 
 /**
  * The transactions on the prize addresses the record lacks. Incoming calls that move no coin stay
@@ -132,6 +157,7 @@ async function unrecorded(puzzle: Puzzle, options: BalanceOptions): Promise<Unre
   const recorded = recordedTxids(puzzle);
   const kinds = { in: "deposit", out: "spend" } as const;
   const histories = await lookupHistory(puzzle, options);
+  const target = puzzle.address().value;
   return {
     failures: histories.flatMap(({ failure }) => (failure === undefined ? [] : [failure])),
     findings: histories
@@ -146,6 +172,11 @@ async function unrecorded(puzzle: Puzzle, options: BalanceOptions): Promise<Unre
         kind: transaction.direction === undefined ? "transaction" : kinds[transaction.direction],
       }))
       .toSorted(chronological),
+    spent: histories.some(
+      (history) =>
+        history.address === target &&
+        history.transactions.some((transaction) => transaction.direction !== "in"),
+    ),
     truncated: histories
       .filter((history) => !history.complete && history.failure === undefined)
       .map(({ address }) => address),
@@ -195,6 +226,37 @@ async function balanceFindings(
     : [{ kind: "balance", balance: balance.total(), prize: decimal(prize) }];
 }
 
+/** Address kinds whose spend shows one key, P2SH for the P2WPKH it may wrap. */
+const keyedKinds: readonly string[] = [AddressKind.P2PKH, AddressKind.P2WPKH, AddressKind.P2SH];
+
+/**
+ * Whether to ask for the key: a target that never spent has none on chain, so it costs nothing.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {boolean} spent - Whether the history read saw the target spend.
+ * @returns {boolean} Whether to ask the explorer for the key.
+ */
+function asksPubkey(puzzle: Puzzle, spent: boolean): boolean {
+  return spent && puzzle.status() === Status.Unsolved && keyedKinds.includes(puzzle.address().kind);
+}
+
+/**
+ * Compares the key the target's spend showed with the record's.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {BalanceOptions} explorer - Explorer options.
+ * @returns {Promise<Finding[]>} A key finding, or none when the chain shows none or the same one.
+ */
+async function pubkeyFindings(puzzle: Puzzle, explorer: BalanceOptions): Promise<Finding[]> {
+  const { lookupPubkey } = await import("./providers.ts");
+  const address = puzzle.address().value;
+  const shown = await lookupPubkey(puzzle.chain(), address, explorer);
+  const recorded = puzzle.pubkey()?.value.toLowerCase();
+  return shown === undefined || shown.pubkey.toLowerCase() === recorded
+    ? []
+    : [defined<PubkeyFinding>({ kind: "pubkey", address, ...shown, recorded })];
+}
+
 /** What one check gave: its value, or the message of the lookup failure that took its place. */
 type Attempt<T> = Readonly<{ value: T; error?: never } | { value?: never; error: string }>;
 
@@ -241,11 +303,15 @@ export function watcher(options: WatchOptions = {}): Watch {
     const explorer: BalanceOptions = { apiKey, baseUrl: options.baseUrl, timeout: options.timeout };
     const prize = expectedPrize(puzzle);
     const history = await attempt(() => unrecorded(puzzle, explorer));
+    const read = history.value ?? nothingRead;
     const attempts = [
-      history.error === undefined ? { value: history.value.findings } : { error: history.error },
+      history.error === undefined ? { value: read.findings } : { error: history.error },
       prize === undefined
         ? undefined
         : await attempt(() => balanceFindings(puzzle, prize, explorer)),
+      asksPubkey(puzzle, read.spent)
+        ? await attempt(() => pubkeyFindings(puzzle, explorer))
+        : undefined,
       since === undefined
         ? undefined
         : await attempt(() => sourceFindings(puzzle.sourceUrl(), since)),
@@ -256,9 +322,9 @@ export function watcher(options: WatchOptions = {}): Watch {
       findings: attempts.flatMap((done) => done.value ?? []),
       errors: [
         ...attempts.flatMap((done) => (done.error === undefined ? [] : [done.error])),
-        ...(history.value?.failures ?? []),
+        ...read.failures,
       ],
-      truncated: history.value?.truncated ?? [],
+      truncated: read.truncated,
     };
   };
 }
@@ -285,6 +351,8 @@ function describe(finding: Readonly<Finding>, chain: Chain): string {
   switch (finding.kind) {
     case "balance":
       return `${amount(finding.balance, chain)} held, ${finding.prize} ${chainSymbol(chain)} recorded as the prize`;
+    case "pubkey":
+      return `${finding.pubkey} shown by ${finding.txid} at ${finding.address}, ${finding.recorded === undefined ? "none recorded" : `${finding.recorded} recorded`}`;
     case "source":
       return `${finding.url} changed, +${finding.additions} -${finding.deletions} lines from ${finding.before.snapshot} to ${finding.after.snapshot}${finding.partial ? ", bodies cut off" : ""}`;
     default:
