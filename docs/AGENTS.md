@@ -89,12 +89,14 @@ On the `cloudflare_module` preset the toolkit hands its server to `createMcpHand
 
 - `seo.schema` in `app/app.config.ts` emits the landing JSON-LD: `WebSite`, the agntn `Organization` as publisher, and a free `SoftwareApplication` with `sameAs` on GitHub and npm. Docs pages get `Article` plus `BreadcrumbList` from Docus on their own; the puzzle pages and the playground call `useSeo` with their breadcrumbs and `defineOgImage` themselves.
 - The Docus sitemap reads content collections only. `server/routes/sitemap.xml.ts` wraps it and appends the playground and one URL per puzzle; a new page under `app/pages/` goes there too, and into `llms.sections` in `nuxt.config.ts`, or it's invisible to crawlers and to `llms.txt`.
+- Point an old page address at its new one with `moved()` in `nuxt.config.ts`. It answers with a 301 from the worker and stays out of the prerender. Prerendered, it'd turn into a refresh page answering 200, and only for whichever routes the crawler happened to pick up.
 - Docus links `/favicon.ico` without shipping one. `public/favicon.svg` is the source, the PNGs come from `rsvg-convert` and the `.ico` from ImageMagick, `app.head` in `nuxt.config.ts` links them with the manifest and theme colours.
 
 ## OG images
 
 - `app/components/OgImage/Docs.takumi.vue` and `Landing.takumi.vue` override the Docus templates of the same name and are rendered by Takumi at build time. Takumi has no CSS variables, so the theme colours from `app.css` are repeated there as literals. A collection page's card looks the collection up by title in `app/utils/puzzles.ts` and shows its blurb and chips; a puzzle page passes its own description, written without commas because the OG pipeline strips them.
 - Font families live in the `@theme` tokens in `app/app.css`. Nuxt UI uses `@nuxt/fonts` to resolve and bundle them; do not maintain font binaries or manual `@font-face` declarations. The OG templates name the same families explicitly because Takumi does not read CSS variables. Check the generated OG images when changing either family.
+- Rendered cards survive between builds in `node_modules/.cache/nuxt/og-image`, the one Nuxt directory Workers Builds restores. A card's key is its props, its template and the files that template imports. The `nuxt-og-image:components` hook in `nuxt.config.ts` adds those files. Change anything else a card shows, a font file or a deeper import, and clear the build cache, or the old card stays for up to three days.
 - The landing OG file is named from the SEO description. Nitro refuses to write a prerender path containing `..`, so a description ending in a period is silently skipped and the landing ships with a dead `og:image`. Keep the description in `content/index.md` without a trailing period.
 
 ## Constraints

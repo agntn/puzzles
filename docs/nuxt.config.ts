@@ -1,9 +1,37 @@
-import { resolve } from "node:path";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { dirname, extname, resolve } from "node:path";
 import { puzzlesTheme } from "./shiki-theme";
 
 /** Bundled from the checkout's sources: a deploy needs neither dist/ nor the root node_modules. */
 const repoRoot = resolve(import.meta.dirname, "..");
 const librarySource = resolve(repoRoot, "src");
+
+/** The library's package names, pointed at the checkout's sources. */
+const libraryAliases: Readonly<Record<string, string>> = {
+  "@agntn/puzzles/mcp": resolve(librarySource, "mcp.ts"),
+  "@agntn/puzzles/tools": resolve(librarySource, "tool-operations.ts"),
+  "@agntn/puzzles": resolve(librarySource, "index.ts"),
+};
+
+/**
+ * Hashes the site and library files an OG template imports, since its card prints what they hold.
+ *
+ * @param {string} template - Path of the template.
+ * @returns {string} Twelve hex characters of SHA-256 over those files.
+ */
+function importsDigest(template: string): string {
+  const digest = createHash("sha256");
+  for (const [, specifier = ""] of readFileSync(template, "utf8").matchAll(
+    /^import\b[^;]*? from "([^"]+)"/gm,
+  )) {
+    const file = specifier.startsWith(".")
+      ? resolve(dirname(template), extname(specifier) === "" ? `${specifier}.ts` : specifier)
+      : libraryAliases[specifier];
+    if (file !== undefined) digest.update(readFileSync(file));
+  }
+  return digest.digest("hex").slice(0, 12);
+}
 
 /** Runtime deps under src/index.ts and src/mcp.ts, installed here so they resolve from docs/node_modules. */
 const libraryDependencies = [
@@ -84,14 +112,30 @@ const renamedIds = [
   "zden/litecoin_segwit",
 ];
 
+/**
+ * A page that moved for good. Prerendered, it'd be a refresh stub answering 200 instead of a 301.
+ *
+ * @param {string} to - Where the page lives now.
+ * @returns {object} Its route rule.
+ */
+function moved(to: string) {
+  return { redirect: { to, statusCode: 301 }, prerender: false } as const;
+}
+
 export default defineNuxtConfig({
   extends: ["docus"],
   /** The repo root is its own pnpm workspace; Nuxt must not treat it as this site's. */
   workspaceDir: import.meta.dirname,
-  alias: {
-    "@agntn/puzzles/mcp": resolve(librarySource, "mcp.ts"),
-    "@agntn/puzzles/tools": resolve(librarySource, "tool-operations.ts"),
-    "@agntn/puzzles": resolve(librarySource, "index.ts"),
+  alias: libraryAliases,
+  /** The OG build cache keys a card on its props and template, so the imports join the hash. */
+  hooks: {
+    "nuxt-og-image:components"({ components }) {
+      for (const component of components) {
+        if (component.category === "app" && component.path !== undefined) {
+          component.hash += importsDigest(component.path);
+        }
+      }
+    },
   },
   vite: {
     /** The library writes key ranges as bigint literals, which have no es2019 form. */
@@ -151,8 +195,10 @@ export default defineNuxtConfig({
       },
     ],
   },
-  /** Docus pages define their own OG images; the alt text is the one thing they leave unset. */
   ogImage: {
+    /** Workers Builds keeps node_modules/.cache/nuxt, so the default nuxt-seo path starts cold. */
+    buildCache: { base: "node_modules/.cache/nuxt/og-image" },
+    /** Docus pages define their own OG images; the alt text is the one thing they leave unset. */
     defaults: {
       alt: "@agntn/puzzles: public crypto bounties and puzzles as typed records",
     },
@@ -243,21 +289,21 @@ export default defineNuxtConfig({
     ...Object.fromEntries(
       renamedIds.map((id) => [
         `/collections/${id}`,
-        { redirect: { to: `/collections/${id.replaceAll("_", "-")}`, statusCode: 301 } },
+        moved(`/collections/${id.replaceAll("_", "-")}`),
       ]),
     ),
     /** The Genesis puzzle's page before the collection became a singleton. */
-    "/collections/genesis/block": { redirect: { to: "/collections/genesis", statusCode: 301 } },
+    "/collections/genesis/block": moved("/collections/genesis"),
     /** kTimesG's challenge before it became the `80-bit` singleton: the collection page and both puzzle ids. */
-    "/collections/ktimesg": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
-    "/collections/ktimesg/80_bit": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
-    "/collections/ktimesg/80-bit": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
+    "/collections/ktimesg": moved("/collections/80-bit"),
+    "/collections/ktimesg/80_bit": moved("/collections/80-bit"),
+    "/collections/ktimesg/80-bit": moved("/collections/80-bit"),
     /** Tiamat's series under the chain's name, before it took the `Puzzle Weave` titles of its own pages. */
-    "/collections/arweave": { redirect: { to: "/collections/weave", statusCode: 301 } },
+    "/collections/arweave": moved("/collections/weave"),
     ...Object.fromEntries(
       [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13].map((n) => [
         `/collections/arweave/weave${n}`,
-        { redirect: { to: `/collections/weave/${n}`, statusCode: 301 } },
+        moved(`/collections/weave/${n}`),
       ]),
     ),
   },
