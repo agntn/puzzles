@@ -2,9 +2,9 @@
 import { existsSync } from "node:fs";
 import { sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { ArgsDef, CommandDef, Resolvable } from "citty";
+import type { ArgsDef, CommandDef, Resolvable, RunMainOptions } from "citty";
 import type McpCommand from "./commands/mcp.ts";
-import { printError } from "./commands/output.ts";
+import { printError, printLine } from "./commands/output.ts";
 import { InvalidArgumentError, PuzzlesError } from "./core/errors.ts";
 import { version } from "./version.ts";
 
@@ -18,7 +18,18 @@ const { stderr, stdout } = process;
 if (!(stdout.isTTY && stdout.hasColors() && stderr.isTTY && stderr.hasColors())) {
   process.env["NO_COLOR"] = "1";
 }
-const { defineCommand, runMain } = await import("citty");
+const { defineCommand, renderUsage, runMain } = await import("citty");
+
+/**
+ * citty pads the last column too, so one long description drags every line past 400 columns.
+ *
+ * @param {CommandDef} cmd - The command whose usage to print.
+ * @param {CommandDef} [parent] - The command above it, which names it.
+ * @returns {Promise<void>} Once the usage is out.
+ */
+const showUsage: NonNullable<RunMainOptions["showUsage"]> = async (cmd, parent) => {
+  printLine(`${(await renderUsage(cmd, parent)).replaceAll(/ +$/gmu, "")}\n`);
+};
 
 /** A closed pipe, `puzzles export | head`, ends the process quietly and keeps the exit code a command set. */
 process.stdout.on("error", (error: Readonly<NodeJS.ErrnoException>) => {
@@ -197,4 +208,4 @@ const main = defineCommand({
   },
 });
 
-await runMain(main);
+await runMain(main, { showUsage });

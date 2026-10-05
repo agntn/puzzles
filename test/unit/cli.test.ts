@@ -1067,6 +1067,18 @@ describe.concurrent("puzzles CLI", () => {
     }
   });
 
+  it("ends every usage line at its last word", async () => {
+    const help = await puzzles("--help");
+    const list = await puzzles("list", "--help");
+    const unknown = await failure("nope");
+
+    expect(list).toContain("--technique=<technique>");
+    expect(unknown.stdout).toContain("USAGE puzzles assets|authors|balance|");
+    for (const usage of [help, list, unknown.stdout]) {
+      expect(usage.split("\n").filter((line) => line.trimEnd() !== line)).toEqual([]);
+    }
+  });
+
   it("keeps an identifier with a line break and an escape on one line", async () => {
     await expect(failure("show", "nope\n\u001B[31mx")).resolves.toEqual({
       code: 1,
