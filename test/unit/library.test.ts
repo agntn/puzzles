@@ -931,6 +931,7 @@ describe("lazy collection registry", () => {
   it("counts an author's techniques over every collection it published", async () => {
     expect((await requireAuthor("aoi-nakamoto")).techniques).toEqual({
       atbash: 14,
+      caesar: 1,
       "md5-to-bip39-entropy": 139,
       "sha256-to-bip39-entropy": 16,
     });
@@ -977,6 +978,7 @@ describe("lazy collection registry", () => {
         beaufort: 1,
         binary: 3,
         bip38: 4,
+        caesar: 1,
         "hash-collision": 5,
         "hidden-seed-words": 16,
         "masked-key-range": 256,
