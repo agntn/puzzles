@@ -29,6 +29,7 @@ const libraryEntries = [
   "@agntn/explorers/providers/mempool",
   "@agntn/keys",
   "@agntn/keys/bip39",
+  "@agntn/keys/brainwallet",
   "@agntn/keys/blockchains/base",
   "@agntn/keys/blockchains/bitcoin",
   "@agntn/keys/blockchains/bitcoincash",
@@ -37,6 +38,7 @@ const libraryEntries = [
   "@agntn/keys/blockchains/ecash",
   "@agntn/keys/blockchains/ethereum",
   "@agntn/keys/blockchains/litecoin",
+  "@agntn/keys/wif",
 ];
 
 /** Pages published under snake_case ids before the switch to kebab-case, moved for good. */
