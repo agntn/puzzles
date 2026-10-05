@@ -84,6 +84,16 @@ const renamedIds = [
   "zden/litecoin_segwit",
 ];
 
+/**
+ * A page that moved for good. Prerendered, it'd be a refresh stub answering 200 instead of a 301.
+ *
+ * @param {string} to - Where the page lives now.
+ * @returns {object} Its route rule.
+ */
+function moved(to: string) {
+  return { redirect: { to, statusCode: 301 }, prerender: false } as const;
+}
+
 export default defineNuxtConfig({
   extends: ["docus"],
   /** The repo root is its own pnpm workspace; Nuxt must not treat it as this site's. */
@@ -243,21 +253,21 @@ export default defineNuxtConfig({
     ...Object.fromEntries(
       renamedIds.map((id) => [
         `/collections/${id}`,
-        { redirect: { to: `/collections/${id.replaceAll("_", "-")}`, statusCode: 301 } },
+        moved(`/collections/${id.replaceAll("_", "-")}`),
       ]),
     ),
     /** The Genesis puzzle's page before the collection became a singleton. */
-    "/collections/genesis/block": { redirect: { to: "/collections/genesis", statusCode: 301 } },
+    "/collections/genesis/block": moved("/collections/genesis"),
     /** kTimesG's challenge before it became the `80-bit` singleton: the collection page and both puzzle ids. */
-    "/collections/ktimesg": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
-    "/collections/ktimesg/80_bit": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
-    "/collections/ktimesg/80-bit": { redirect: { to: "/collections/80-bit", statusCode: 301 } },
+    "/collections/ktimesg": moved("/collections/80-bit"),
+    "/collections/ktimesg/80_bit": moved("/collections/80-bit"),
+    "/collections/ktimesg/80-bit": moved("/collections/80-bit"),
     /** Tiamat's series under the chain's name, before it took the `Puzzle Weave` titles of its own pages. */
-    "/collections/arweave": { redirect: { to: "/collections/weave", statusCode: 301 } },
+    "/collections/arweave": moved("/collections/weave"),
     ...Object.fromEntries(
       [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13].map((n) => [
         `/collections/arweave/weave${n}`,
-        { redirect: { to: `/collections/weave/${n}`, statusCode: 301 } },
+        moved(`/collections/weave/${n}`),
       ]),
     ),
   },

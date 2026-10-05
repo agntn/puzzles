@@ -89,6 +89,7 @@ On the `cloudflare_module` preset the toolkit hands its server to `createMcpHand
 
 - `seo.schema` in `app/app.config.ts` emits the landing JSON-LD: `WebSite`, the agntn `Organization` as publisher, and a free `SoftwareApplication` with `sameAs` on GitHub and npm. Docs pages get `Article` plus `BreadcrumbList` from Docus on their own; the puzzle pages and the playground call `useSeo` with their breadcrumbs and `defineOgImage` themselves.
 - The Docus sitemap reads content collections only. `server/routes/sitemap.xml.ts` wraps it and appends the playground and one URL per puzzle; a new page under `app/pages/` goes there too, and into `llms.sections` in `nuxt.config.ts`, or it's invisible to crawlers and to `llms.txt`.
+- Point an old page address at its new one with `moved()` in `nuxt.config.ts`. It answers with a 301 from the worker and stays out of the prerender. Prerendered, it'd turn into a refresh page answering 200, and only for whichever routes the crawler happened to pick up.
 - Docus links `/favicon.ico` without shipping one. `public/favicon.svg` is the source, the PNGs come from `rsvg-convert` and the `.ico` from ImageMagick, `app.head` in `nuxt.config.ts` links them with the manifest and theme colours.
 
 ## OG images
