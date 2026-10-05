@@ -481,6 +481,23 @@ describe("recipe verification", () => {
     expect(result.recipe?.error).toContain("256 MiB");
   });
 
+  it("rebuilds an entropy key in the uncompressed form its WIF declares", async () => {
+    const record = puzzle({
+      ...synthetic,
+      chain: "bitcoin",
+      address: "1NoeGYFocYg2o7Tq5KKdjPwi9iUYB382G",
+      key: wif("5JrAAmk3paNtF2ha5c2e4SAoChy8rYTNGxtWbcTyS3T7qAW6yaf").entropy(block74.entropy),
+    });
+
+    const result = await verify(record);
+
+    expect(result.verified).toBe(true);
+    expect(result.recipe).toMatchObject({
+      verified: true,
+      derivedAddress: "1NoeGYFocYg2o7Tq5KKdjPwi9iUYB382G",
+    });
+  });
+
   it("fails the recipe, not the key, when the entropy was copied wrong", async () => {
     const record = puzzle({
       ...synthetic,

@@ -214,11 +214,12 @@ function brainwalletOf(
 }
 
 function rebuildFromEntropy(
+  puzzle: Puzzle,
   entropy: Entropy,
   path: string | undefined,
-  chain: Chain,
   decoders: Wallets,
 ): Rebuilt {
+  const chain = puzzle.chain();
   const recipe = "bip39-entropy";
   if (entropy.passphrase === "Required") {
     return { recipe, key: unavailable("Entropy seed requires an unknown passphrase") };
@@ -232,7 +233,11 @@ function rebuildFromEntropy(
     );
     return rebuilt === undefined
       ? { recipe, key: unavailable(`Seed derivation is not supported for ${chain}`) }
-      : { recipe, path: rebuilt.path, key: { hex: rebuilt.hex, format: PubkeyFormat.Compressed } };
+      : {
+          recipe,
+          path: rebuilt.path,
+          key: { hex: rebuilt.hex, format: hexFormat(puzzle, rebuilt.hex, decoders) },
+        };
   } catch (error) {
     return { recipe, key: failed(messageOf(error, "Entropy derivation failed")) };
   }
@@ -263,7 +268,7 @@ function rebuildFromPassphrase(
 async function rebuild(puzzle: Puzzle, decoders: Wallets): Promise<Rebuilt | undefined> {
   const key = puzzle.keyData();
   if (key?.seed?.entropy !== undefined) {
-    return rebuildFromEntropy(key.seed.entropy, key.seed.path, puzzle.chain(), decoders);
+    return rebuildFromEntropy(puzzle, key.seed.entropy, key.seed.path, decoders);
   }
   return key?.wif?.passphrase === undefined
     ? undefined
