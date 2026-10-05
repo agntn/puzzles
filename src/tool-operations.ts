@@ -213,7 +213,7 @@ export const facts = {
       name: "puzzles_watch",
       title: "Watch Puzzle",
       description:
-        "Compare one puzzle with its chain, and with its source page when since is given, and list what the record misses: deposits and spends it doesn't record, an unsolved prize the address no longer holds, a source page that changed after since.",
+        "Compare one puzzle with its chain, and with its source page when since is given, and list what the record misses: deposits and spends it doesn't record, an unsolved prize the address no longer holds, a public key a spend showed that the record lacks or spells otherwise, a source page that changed after since.",
       promptSnippet:
         "Use puzzles_watch to check whether a puzzle's record is still current before relying on its prize or transactions.",
       promptGuidelines: [
@@ -941,7 +941,7 @@ export async function watchTool(id: string, since?: string, apiKey?: string): Pr
     findings: findings.map((finding) =>
       finding.kind === "balance"
         ? { ...finding, balance: finding.balance.toString() }
-        : finding.kind === "source"
+        : finding.kind === "source" || finding.kind === "pubkey"
           ? finding
           : { ...finding, amount: finding.amount.toString() },
     ),

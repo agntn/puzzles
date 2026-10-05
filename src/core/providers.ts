@@ -133,7 +133,7 @@ function redact(message: string, apiKey: string | undefined): string {
 }
 
 /** What one lookup reads, named in the message of its failure. */
-type Lookup = "Balance" | "Transaction history";
+type Lookup = "Balance" | "Public key" | "Transaction history";
 
 /**
  * Maps provider failures onto the balance errors; the original error is dropped so a key never leaks through `cause`.
@@ -452,4 +452,37 @@ export async function lookupHistory(
   const chain = puzzle.chain();
   const config = configOf(options);
   return Promise.all(prizeAddresses(puzzle).map((address) => readHistory(chain, address, config)));
+}
+
+/** A public key an address gave away by spending, and the spend that showed it. */
+export interface PubkeySighting {
+  /** The key in hex, compressed or uncompressed as the spend wrote it. */
+  readonly pubkey: string;
+
+  /** The spend that showed it. */
+  readonly txid: string;
+}
+
+/**
+ * The key a spend from the address showed; a taproot output key is the address, not a reveal.
+ *
+ * @param {Chain} chain - Chain of the address.
+ * @param {string} address - Address to read.
+ * @param {BalanceOptions} options - Lookup options.
+ * @returns {Promise<PubkeySighting | undefined>} The key and its spend, when a spend showed one.
+ */
+export async function lookupPubkey(
+  chain: Chain,
+  address: string,
+  options: BalanceOptions,
+): Promise<PubkeySighting | undefined> {
+  const config = configOf(options);
+  return ask(chain, "Public key", address, config, async (open) => {
+    const provider = open(config);
+    if (!provider.capabilities.pubkeys || provider.getPubkey === undefined) {
+      return undefined;
+    }
+    const { pubkey, source, txid } = await provider.getPubkey(address, chain);
+    return source === "spend" && pubkey !== null && txid !== null ? { pubkey, txid } : undefined;
+  });
 }
