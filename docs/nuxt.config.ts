@@ -1,9 +1,37 @@
-import { resolve } from "node:path";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { dirname, extname, resolve } from "node:path";
 import { puzzlesTheme } from "./shiki-theme";
 
 /** Bundled from the checkout's sources: a deploy needs neither dist/ nor the root node_modules. */
 const repoRoot = resolve(import.meta.dirname, "..");
 const librarySource = resolve(repoRoot, "src");
+
+/** The library's package names, pointed at the checkout's sources. */
+const libraryAliases: Readonly<Record<string, string>> = {
+  "@agntn/puzzles/mcp": resolve(librarySource, "mcp.ts"),
+  "@agntn/puzzles/tools": resolve(librarySource, "tool-operations.ts"),
+  "@agntn/puzzles": resolve(librarySource, "index.ts"),
+};
+
+/**
+ * Hashes the site and library files an OG template imports, since its card prints what they hold.
+ *
+ * @param {string} template - Path of the template.
+ * @returns {string} Twelve hex characters of SHA-256 over those files.
+ */
+function importsDigest(template: string): string {
+  const digest = createHash("sha256");
+  for (const [, specifier = ""] of readFileSync(template, "utf8").matchAll(
+    /^import\b[^;]*? from "([^"]+)"/gm,
+  )) {
+    const file = specifier.startsWith(".")
+      ? resolve(dirname(template), extname(specifier) === "" ? `${specifier}.ts` : specifier)
+      : libraryAliases[specifier];
+    if (file !== undefined) digest.update(readFileSync(file));
+  }
+  return digest.digest("hex").slice(0, 12);
+}
 
 /** Runtime deps under src/index.ts and src/mcp.ts, installed here so they resolve from docs/node_modules. */
 const libraryDependencies = [
@@ -98,10 +126,16 @@ export default defineNuxtConfig({
   extends: ["docus"],
   /** The repo root is its own pnpm workspace; Nuxt must not treat it as this site's. */
   workspaceDir: import.meta.dirname,
-  alias: {
-    "@agntn/puzzles/mcp": resolve(librarySource, "mcp.ts"),
-    "@agntn/puzzles/tools": resolve(librarySource, "tool-operations.ts"),
-    "@agntn/puzzles": resolve(librarySource, "index.ts"),
+  alias: libraryAliases,
+  /** The OG build cache keys a card on its props and template, so the imports join the hash. */
+  hooks: {
+    "nuxt-og-image:components"({ components }) {
+      for (const component of components) {
+        if (component.category === "app" && component.path !== undefined) {
+          component.hash += importsDigest(component.path);
+        }
+      }
+    },
   },
   vite: {
     /** The library writes key ranges as bigint literals, which have no es2019 form. */
@@ -161,8 +195,10 @@ export default defineNuxtConfig({
       },
     ],
   },
-  /** Docus pages define their own OG images; the alt text is the one thing they leave unset. */
   ogImage: {
+    /** Workers Builds keeps node_modules/.cache/nuxt, so the default nuxt-seo path starts cold. */
+    buildCache: { base: "node_modules/.cache/nuxt/og-image" },
+    /** Docus pages define their own OG images; the alt text is the one thing they leave unset. */
     defaults: {
       alt: "@agntn/puzzles: public crypto bounties and puzzles as typed records",
     },
