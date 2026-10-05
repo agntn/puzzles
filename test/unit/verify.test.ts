@@ -3,6 +3,8 @@ import { b1000 } from "../../src/collections/b1000.ts";
 import { ballet } from "../../src/collections/ballet.ts";
 import { bitaps } from "../../src/collections/bitaps.ts";
 import { bitimage } from "../../src/collections/bitimage.ts";
+import { quizchain } from "../../src/collections/quizchain.ts";
+import { warp } from "../../src/collections/warp.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
   type Address,
@@ -17,6 +19,7 @@ import {
   puzzle,
   seed,
   standard,
+  technique,
   verify,
   wif,
 } from "../../src/index.ts";
@@ -421,5 +424,118 @@ describe("Collection.verify", () => {
 
     expect(result).toMatchObject({ verified: false, unavailable: false });
     expect(result.error).toContain("Verification mismatch");
+  });
+});
+
+describe("recipe verification", () => {
+  /** Quizchain block 74's published WIF, the MD5 entropy it came from, and its address. */
+  const block74 = {
+    wif: "L1myU8V1SzKbAvW51KcEaA6EvfpmffqNuTgMdmY45XpH99VyYMAm",
+    entropy: "0a7c902815f9dc9d26057280592b2553",
+    address: "1HbUcHKfpkUSssNtcfS3vKzdTMue3EByMQ",
+  } as const;
+
+  it("rebuilds an entropy key at the first receive address when the record holds no path", async () => {
+    const result = await quizchain.verify(74);
+
+    expect(result.verified).toBe(true);
+    expect(result.recipe).toEqual({
+      recipe: "bip39-entropy",
+      path: "m/44'/0'/0'/0/0",
+      verified: true,
+      unavailable: false,
+      privateKey: result.privateKey,
+      derivedAddress: block74.address,
+      error: null,
+    });
+  });
+
+  it("verifies a puzzle through its recipe when no source printed the key", async () => {
+    const result = await bitimage.verify("kitten");
+
+    expect(result).toMatchObject({ verified: false, unavailable: true });
+    expect(result.recipe).toMatchObject({
+      recipe: "bip39-entropy",
+      path: "m/84'/0'/0'/0/0",
+      verified: true,
+      derivedAddress: "bc1q57euh23y3qs2f9d5mtwpax5lqecfvrdkqce82a",
+    });
+  });
+
+  it("marks an entropy seed with an unknown passphrase as unavailable", async () => {
+    const result = await bitimage.verify("kitten-passphrase");
+
+    expect(result.recipe).toMatchObject({ verified: false, unavailable: true });
+    expect(result.recipe?.error).toContain("unknown passphrase");
+  });
+
+  it("reads WarpWallet off the collection's technique and leaves its scrypt to the data gate", async () => {
+    const result = await warp.verify("challenge-1");
+
+    expect(result.verified).toBe(true);
+    expect(result.recipe).toMatchObject({
+      recipe: "warpwallet",
+      verified: false,
+      unavailable: true,
+    });
+    expect(result.recipe?.error).toContain("256 MiB");
+  });
+
+  it("fails the recipe, not the key, when the entropy was copied wrong", async () => {
+    const record = puzzle({
+      ...synthetic,
+      chain: "bitcoin",
+      address: block74.address,
+      key: wif(block74.wif).entropy(`${block74.entropy.slice(0, -1)}4`),
+    });
+
+    const result = await verify(record);
+
+    expect(result.verified).toBe(true);
+    expect(result.recipe).toMatchObject({
+      recipe: "bip39-entropy",
+      verified: false,
+      unavailable: false,
+      privateKey: null,
+    });
+    expect(result.recipe?.error).toContain("Verification mismatch");
+  });
+
+  it("fails a brainwallet whose passphrase misses the address", async () => {
+    const record = puzzle({
+      ...synthetic,
+      chain: "bitcoin",
+      address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+      key: hex("0000000000000000000000000000000000000000000000000000000000000002").passphrase(
+        "satoshi",
+      ),
+      techniques: [technique("sha256-brainwallet", "https://example.com")],
+    });
+
+    const result = await verify(record);
+
+    expect(result).toMatchObject({ verified: false, unavailable: false });
+    expect(result.recipe).toMatchObject({
+      recipe: "sha256-brainwallet",
+      verified: false,
+      unavailable: false,
+    });
+    expect(result.recipe?.error).toContain("Verification mismatch");
+  });
+
+  it("holds a passphrase without a brainwallet technique to no recipe", async () => {
+    const record = puzzle({
+      ...synthetic,
+      chain: "bitcoin",
+      address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+      key: hex("0000000000000000000000000000000000000000000000000000000000000001").passphrase(
+        "satoshi",
+      ),
+    });
+
+    const result = await verify(record);
+
+    expect(result.verified).toBe(true);
+    expect(result).not.toHaveProperty("recipe");
   });
 });

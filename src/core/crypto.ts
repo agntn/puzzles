@@ -1,4 +1,7 @@
-import { type AbstractBlockchain, decodeWIF, encodeWIF, type WIFChain } from "@agntn/keys";
+import { type AbstractBlockchain, getBlockchainPath } from "@agntn/keys";
+import { entropyToMnemonic } from "@agntn/keys/bip39";
+import { type BrainwalletRecipe, derive } from "@agntn/keys/brainwallet";
+import { decode as decodeWIF, encode as encodeWIF, type WIFChain } from "@agntn/keys/wif";
 import { Base } from "@agntn/keys/blockchains/base";
 import { Bitcoin } from "@agntn/keys/blockchains/bitcoin";
 import { BitcoinCash } from "@agntn/keys/blockchains/bitcoincash";
@@ -159,6 +162,46 @@ export function privateKeyFromSeed(
 }
 
 /**
+ * Rebuilds a key from BIP39 entropy, at the BIP39 tool's default path when the record has none.
+ *
+ * @param {string} hash - Entropy in hex, 16 to 32 bytes.
+ * @param {string | undefined} path - Derivation path the record holds, when it holds one.
+ * @param {Chain} chain - Chain the seed belongs to.
+ * @param {string} [passphrase] - BIP39 passphrase, when the seed has one.
+ * @returns {{ readonly hex: string; readonly path: string } | undefined} The private key in hex and the path it came from, or `undefined` when the chain has no seed derivation.
+ */
+export function privateKeyFromEntropy(
+  hash: string,
+  path: string | undefined,
+  chain: Chain,
+  passphrase?: string,
+): { readonly hex: string; readonly path: string } | undefined {
+  const wallet = walletFor(chain);
+  if (wallet === undefined) {
+    return undefined;
+  }
+  const route = path ?? getBlockchainPath(wallet);
+  const hex = privateKeyFromSeed(
+    entropyToMnemonic(Uint8Array.fromHex(hash)),
+    route,
+    chain,
+    passphrase,
+  );
+  return hex === undefined ? undefined : { hex, path: route };
+}
+
+/**
+ * Rebuilds a brainwallet key from its passphrase.
+ *
+ * @param {string} passphrase - Passphrase as the record holds it.
+ * @param {BrainwalletRecipe} recipe - The KDF, here SHA-256 with its rounds.
+ * @returns {string} The private key in hex.
+ */
+export function privateKeyFromPassphrase(passphrase: string, recipe: BrainwalletRecipe): string {
+  return derive(passphrase, recipe).toHex();
+}
+
+/**
  * Derives the supported chain address for a private key.
  *
  * @param {string} hexKey - Private key as 64 hex characters.
@@ -193,4 +236,14 @@ export function addressFromPrivateKey(
  */
 export function addressesEqual(chain: Chain, left: string, right: string): boolean {
   return isEvm(chain) ? left.toLowerCase() === right.toLowerCase() : left === right;
+}
+
+/**
+ * Tells "keys can't derive this" apart from "this key is wrong".
+ *
+ * @param {unknown} error - The thrown value.
+ * @returns {boolean} Whether the address kind needs more than a private key.
+ */
+export function isUnsupportedAddressKind(error: unknown): boolean {
+  return error instanceof UnsupportedAddressKindError;
 }

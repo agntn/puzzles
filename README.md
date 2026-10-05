@@ -77,7 +77,7 @@ source: https://bitcointalk.org/index.php?topic=293382.0
 | `puzzles stages <id>`         | The stages of a multi-stage puzzle with their pages, files and published answers. `--json` for the list                                |
 | `puzzles assets <id>`         | The files a puzzle ships with SHA-256 and size, and the archived pages it cites. `--read <path>` writes one, `--check`/`--live` verify |
 | `puzzles list [collection]`   | One puzzle per line. `--address`, `--chain`, `--status`, `--technique` and `--with-pubkey` narrow it, `--limit` and `--offset` page it |
-| `puzzles verify [id]`         | A published key against its address. `--all` for every puzzle, exit 1 on a mismatch                                                    |
+| `puzzles verify [id]`         | A published key and its recipe against the address. `--all` for every puzzle, exit 1 on a mismatch                                     |
 | `puzzles balance [id]`        | The live balance. The `list` filters check a whole set, one row each. `--api-key`, or one variable per chain                           |
 | `puzzles watch [id]`          | What the chain knows and the record doesn't. `--since` checks the source pages too, exit 1 on any finding                              |
 | `puzzles eligibility <query>` | The checklist before working on a prize, by id or address. Exit 1 while any field is missing                                           |

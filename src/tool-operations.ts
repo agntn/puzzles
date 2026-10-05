@@ -5,6 +5,7 @@ import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/status.ts";
 import { oneLine } from "./core/text.ts";
 import { type Technique, techniques } from "./core/technique.ts";
+import type { RecipeResult } from "./core/verify.ts";
 
 /** A block of text, what every tool answers with. */
 export interface TextBlock {
@@ -187,9 +188,13 @@ export const facts = {
     verify: {
       name: "puzzles_verify",
       title: "Verify Puzzle Key",
-      description: "Check that a puzzle's recorded key material derives its stored address.",
+      description:
+        "Check that a puzzle's recorded key material derives its stored address, and rerun the recipe it holds: BIP39 entropy or a SHA-256 brainwallet.",
       promptSnippet: "Use puzzles_verify to confirm recorded key material before trusting it.",
-      promptGuidelines: ["An expected failure is a result, not an error."],
+      promptGuidelines: [
+        "An expected failure is a result, not an error.",
+        "The recipe gets its own verdict: one that misses is a data bug, even when the key verifies.",
+      ],
       openWorld: false,
     },
     balance: {
@@ -839,7 +844,26 @@ export async function verifyTool(id: string): Promise<ToolResult> {
     : result.unavailable
       ? `${result.id}: unverifiable (${result.error})`
       : `${result.id}: not verified (${result.error})`;
-  return text(summary, { ...result });
+  return text(summary + recipeSummary(result.recipe), { ...result });
+}
+
+/**
+ * The recipe's half of a verify answer, so a recipe that misses reads as its own data bug.
+ *
+ * @param {RecipeResult | undefined} recipe - The rerun recipe, when the record holds one.
+ * @returns {string} A second line, or nothing for a record without a recipe.
+ */
+function recipeSummary(recipe: RecipeResult | undefined): string {
+  if (recipe === undefined) {
+    return "";
+  }
+  const path = recipe.path === undefined ? "" : ` at ${recipe.path}`;
+  const outcome = recipe.verified
+    ? `derives ${recipe.derivedAddress}`
+    : recipe.unavailable
+      ? `can't run (${recipe.error})`
+      : `misses, a data bug in the record (${recipe.error})`;
+  return `\nRecipe ${recipe.recipe}${path}: ${outcome}`;
 }
 
 /**

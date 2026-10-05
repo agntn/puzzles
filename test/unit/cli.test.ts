@@ -735,6 +735,15 @@ describe.concurrent("puzzles CLI", () => {
     expect(output).toContain("OK\tb1000/1");
   });
 
+  it("prints the recipe's verdict next to the key's", async () => {
+    await expect(puzzles("verify", "quizchain/74")).resolves.toBe(
+      "OK\tquizchain/74\trecipe bip39-entropy OK",
+    );
+    await expect(puzzles("verify", "bitimage/kitten-passphrase")).resolves.toBe(
+      "SKIP\tbitimage/kitten-passphrase\tPuzzle has no private key\trecipe bip39-entropy SKIP (Entropy seed requires an unknown passphrase)",
+    );
+  });
+
   it("exits zero when only unverifiable puzzles remain unchecked", async () => {
     /* execFile rejects on a non-zero exit, so resolving proves the CI gate stays green. */
     await expect(puzzles("verify", "--all", "--quiet")).resolves.toBe("");

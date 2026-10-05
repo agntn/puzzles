@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import { sha256 } from "@agntn/hashes";
+import { derive } from "@agntn/keys/brainwallet";
 import { bech32, createBase58check } from "@scure/base";
 import { describe, expect, it } from "vite-plus/test";
 import {
@@ -1067,6 +1068,51 @@ describe("collection class data", () => {
       }),
     );
     expect(problems).toEqual([]);
+  });
+
+  it("reruns every recipe a record holds through verify and lands on its address", async () => {
+    const results = await Promise.all(puzzles.map((puzzle) => verify(puzzle)));
+    const recipes = results.flatMap((result) =>
+      result.recipe === undefined ? [] : [[result.id, result.recipe] as const],
+    );
+    expect(recipes.filter(([, recipe]) => !recipe.verified && !recipe.unavailable)).toEqual([]);
+    expect(
+      recipes
+        .filter(([, recipe]) => recipe.unavailable && recipe.recipe !== "warpwallet")
+        .map(([id, recipe]) => [id, recipe.error]),
+    ).toEqual([["bitimage/kitten-passphrase", "Entropy seed requires an unknown passphrase"]]);
+    const counts = Object.groupBy(recipes, ([, recipe]) => recipe.recipe);
+    expect(
+      Object.fromEntries(Object.entries(counts).map(([name, items]) => [name, items?.length])),
+    ).toEqual({
+      "bip39-entropy": 152,
+      "sha256-brainwallet": 28,
+      "triple-sha256-brainwallet": 3,
+      warpwallet: 6,
+    });
+  });
+
+  it("rebuilds every WarpWallet key the record holds from its passphrase and salt", () => {
+    const checked = registered.flatMap((collection) =>
+      collection.all().flatMap((item) => {
+        const key = item.keyData();
+        const phrase = key?.wif?.passphrase;
+        const tagged = collection
+          .techniquesById(item.id())
+          .some((tag) => tag.name === "warpwallet");
+        return tagged && key?.hex !== undefined && phrase !== undefined
+          ? [
+              [
+                item.id(),
+                derive(phrase, { kdf: "warpwallet", salt: key.wif?.salt ?? "" }).toHex() ===
+                  key.hex,
+              ] as const,
+            ]
+          : [];
+      }),
+    );
+    expect(checked).toHaveLength(6);
+    expect(checked.filter(([, rebuilt]) => !rebuilt)).toEqual([]);
   });
 
   it("rebuilds every SHA-256 brainwallet key the record holds from its passphrase", () => {

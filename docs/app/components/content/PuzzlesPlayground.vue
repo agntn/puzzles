@@ -31,6 +31,7 @@ import {
   transactionTicks,
 } from "../../utils/record";
 import { statusCountLabels } from "../../../../src/core/utils.ts";
+import type { RecipeResult } from "@agntn/puzzles";
 import { jsonTokens, shellTokens } from "../../utils/tokens";
 import {
   fetchErrorData,
@@ -163,6 +164,7 @@ interface VerifyAnswer {
   verified: boolean;
   unavailable: boolean;
   detail: string;
+  recipe?: RecipeResult;
   text: string;
 }
 interface BalanceAnswerView {
@@ -269,12 +271,14 @@ async function computeVerify(trimmed: string): Promise<VerifyAnswer> {
     unavailable?: boolean;
     error: string | null;
     derivedAddress: string | null;
+    recipe?: RecipeResult;
   };
   return {
     kind: "verify",
     verified: details.verified,
     unavailable: details.unavailable === true,
     detail: details.verified ? (details.derivedAddress ?? "") : (details.error ?? ""),
+    ...(details.recipe === undefined ? {} : { recipe: details.recipe }),
     text: firstText(result),
   };
 }
@@ -1138,6 +1142,20 @@ const responseTitle = computed(() => {
               <template v-else>
                 The key on record doesn't derive the stored address: {{ answer.detail }}. The data
                 gate would've stopped this on main.
+              </template>
+            </p>
+            <p v-if="answer.recipe" class="console-about">
+              <template v-if="answer.recipe.verified">
+                The recipe, {{ answer.recipe.recipe }}, lands on the stored address. Rebuilt from
+                scratch, right here in your tab.
+              </template>
+              <template v-else-if="answer.recipe.unavailable">
+                The recipe, {{ answer.recipe.recipe }}, sits this one out:
+                {{ answer.recipe.error }}.
+              </template>
+              <template v-else>
+                The recipe, {{ answer.recipe.recipe }}, misses: {{ answer.recipe.error }}. Somebody
+                copied it wrong.
               </template>
             </p>
           </div>

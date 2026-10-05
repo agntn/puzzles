@@ -179,6 +179,8 @@ export {
 } from "./core/errors.ts";
 
 export {
+  type RecipeName,
+  type RecipeResult,
   verify,
   type VerifyFailure,
   type VerifyResult,
