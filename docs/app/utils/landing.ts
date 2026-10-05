@@ -50,6 +50,7 @@ export const WALK: readonly string[] = [
   "walking-banks/2",
   "phy",
   "seed-phrase",
+  "grycoin/2",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1390,18 +1391,46 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 2,
     tool: "seed-phrase\tunsolved\t0.01 BTC\tbc1q7x3p3rkmkxgf20n3apkccqcmn5mdtsf8zx5227\nchain: bitcoin  address kind: p2wpkh\nhash160: f1a2188edbb190953e71e86d8c031b9d36d5c127\npublic key: unknown\nprivate key: unknown\nderivation path: m/84'/0'/0'/0/0\nstarted: 2024-07-12 20:06:29\ntransactions: 2\n\tfunding\t2024-07-12 20:06:29\t0.005 BTC\t6cb3e4bab33a9086fbca6250c783c532fed985abc67f52f7205782797b398bac\n\tincrease\t2024-08-14 20:24:59\t0.005 BTC\t221f3d64a45a95d6cf05a3fe5a84fac292790d39b05929ed213a492e02177160\nhint assets: https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/bip-0039-wordlist-en-CN.pdf, https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/whatafeeling.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/SPfavicon-256x256.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/sumofwords.png, https://raw.githubusercontent.com/agntn/puzzles/main/assets/seed-phrase/illusionsmichael.png\nasset source: https://seed-phrase.com/\ntechniques: 2\n\thidden-seed-words\tsource: https://seed-phrase.com/\n\taes\tsource: https://seed-phrase.com/\nhints: 14\n\tofficial\t2024-07-12\tSolve puzzles to uncover a secret recovery phrase that unlocks a Bitcoin wallet. The first person to decode the entire phrase will control its contents. Visit back here for additional clues and updates.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/cc31e9fb06560146aa80c066c1b9467f1de53e10 (The commit that added clue 2024071201 to the site)\n\tofficial\t2024-07-12\tThere will be red herrings.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/cc31e9fb06560146aa80c066c1b9467f1de53e10 (The commit that added clue 2024071201 to the site)\n\tofficial\t2024-07-12\tSpeed is critical. Be the first to discover the seed phrase and then control the 🏆 at the end of the 🌈.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/cc31e9fb06560146aa80c066c1b9467f1de53e10 (The commit that added clue 2024071201 to the site)\n\tofficial\t2024-07-12\tThese words will be useful:\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/8f6324332fd7a5251de39ef23cb915a86d0c300d (The commit that added clue 2024071202 to the site)\n\tofficial\t2024-07-14\tBeneath the surface, truths do sleep, In the dark, their secrets keep. Lift the veil, and you will see, To reveal, expose, and set them free. What word embodies this quest?\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/8e39e894d07fd7eec11215ea0c185ca2a5304dae (The commit that added clue 2024071401 to the site)\n\tofficial\t2024-07-14\tThe link to this clue will only open one time ever.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/061b99f1ae8f9d9e3e5a06a111dd62c6c3dfd1fe (The commit that added clue 2024071402 to the site)\n\tofficial\t2024-07-16\tPicture whatafeeling.png. Alt: You gotta see it to believe it. Title: Don't be shocked, it's a fake.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/22f5c1d32de572197c088512f80fec156d13bbc6 (The commit that added clue 2024071601 to the site)\n\tofficial\t2024-07-19\tThe month in which the world celebrates the harvest and prepares for the coming winter also saw the release of a transformative paper announcing a peer-to-peer electronic cash system.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/472b950d06da06d71dfef5339542d6ee5beb88fa (The commit that added clue 2024071901 to the site)\n\tofficial\t2024-07-20\tweb favorite icon\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/601bcdece6d7d100b989df252172483516760361 (The commit that added clue 2024072001 to the site)\n\tofficial\t2024-07-24\t🤢\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/4a7f6003d9f4ee15775fcd93dcb6100c9d5830d3 (The commit that added clue 2024072401 to the site)\n\tofficial\t2024-07-28\tSummation of x_i from i=1 to n equals 29,045, given that each x_i is between 1 and 2,048.\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/15d33dff96bc4837d98ce77d36826cf2392facf1 (The commit that added clue 2024072801 to the site)\n\tofficial\t2024-07-30\tm/84'/0'/0'/0/0\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/b77ed999cf3596e9f621d41ee0da84294d2d9d5f (The commit that added clue 2024073001 to the site)\n\tofficial\t2024-08-09\tPicture illusionsmichael.png. Alt: Magician pulling back a large black cloth, mid-motion, revealing something hidden, while an astonished audience looks on in wonder. Title: Illusions Michael\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/77ce96e587a35b3a1deed9e45f97805a5a859380 (The commit that added clue 2024080901 to the site)\n\tofficial\t2024-08-14\tEncrypted Text: af12ff6a02e571eae376e579a00bfdd318afee92 IV: 4faf05ee74196a6062d383e6 Password: answer to 2024-07-19 clue (lc) Salt: salt\tsource: https://seed-phrase.com/\tconfirmation: https://github.com/metaneer/seed-phrase/commit/372f4df65f850606c9ccaa59b93840ce60f24c04 (The commit that added clue 2024081401 to the site)\nexplorer: https://blockstream.info/address/bc1q7x3p3rkmkxgf20n3apkccqcmn5mdtsf8zx5227\nsource: https://seed-phrase.com/",
   },
+  {
+    id: "grycoin/2",
+    collection: "grycoin",
+    chain: "bitcoin",
+    status: "claimed",
+    address: "1tzieUfbeQghz2zjDeGHcAEfzCRgX6eLi",
+    kind: "p2pkh",
+    hash160: "09d565074752019721ce68c58548ebc13750d5cc",
+    redeemScript: undefined,
+    prize: "0.007 BTC",
+    prizeAmount: 0.007,
+    currency: undefined,
+    startedAt: "2019-08-01 05:04:38",
+    solvedAt: "2019-08-03 14:02:10",
+    solveTime: "2d 8h 57m",
+    bits: undefined,
+    range: undefined,
+    pubkey: "039ad91b631e5e2f0915b682c6ab8a29d81bb464a2ffc8ebf9702aad7b238192dc",
+    pubkeyFormat: "compressed",
+    secret: "none",
+    keyLiteral: undefined,
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://blockstream.info/address/1tzieUfbeQghz2zjDeGHcAEfzCRgX6eLi",
+    source: "https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/",
+    transactions: 2,
+    tool: 'grycoin/2\tclaimed\t0.007 BTC\t1tzieUfbeQghz2zjDeGHcAEfzCRgX6eLi\nchain: bitcoin  address kind: p2pkh\nhash160: 09d565074752019721ce68c58548ebc13750d5cc\npublic key: 039ad91b631e5e2f0915b682c6ab8a29d81bb464a2ffc8ebf9702aad7b238192dc (compressed)\nprivate key: unknown\nstarted: 2019-08-01 05:04:38\nsolved: 2019-08-03 14:02:10 (2d 8h 57m)\ntransactions: 2\n\tfunding\t2019-08-01 05:04:38\t0.007 BTC\tf11eca9925c7809210796a3c8d95677dfaf0becb4f6df4c74e7261c3011a2e3c\n\tclaim\t2019-08-03 14:02:10\t0.00689594 BTC\t351371588afddbaafe739237392e020e7d5db9f8aef44d655d31c313034e4cc7\nclaim: https://blockstream.info/tx/351371588afddbaafe739237392e020e7d5db9f8aef44d655d31c313034e4cc7\nhints: 10\n\tofficial\t-\tAs is already clear from the reference to block 29, people are supposed to keep the whole long text and change only a couple of letters in their capitalization.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tWhen you do that, you would end up changing "I" to "i" and "himself" to "himselF".\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tWhich would be the solution, once you do that for all the paragraphs where you recognize the signs. And keep the rest completely unchanged.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tFormat: [solution]\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tStart with the first "I" and stop with the period after "method", with no spaces or line breaks before or after that included in the hash.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tAnd for the record, each of these resolves to the combination of the ASCII codes 13 and 10, for 13 10 13 10 meaning two line breaks, or \\r\\n \\r\\n as another way of saying the same thing.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tFirst three digits of MD5 hash are 3c6.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tI am saying copy paste and do not change anything with the line breaks, change only the capitalization of letters in solution.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/comment/evuthpw/\n\tofficial\t-\tThank you for asking. I really like the answer, turns out that the first seven digits of that MD5 hash are 7759227, with three numbers 7 turning up there.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/comment/evv9k37/\n\tofficial\t-\tOne, I actually don\'t know. The question of what letters to change in capitalization is obvious if you know the solution to Satoshi\'s bitcointalk puzzle, which I revealed already. The question of how to go from that to claiming the prize is not, not even to me.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/comment/evwv4rm/\nexplorer: https://blockstream.info/address/1tzieUfbeQghz2zjDeGHcAEfzCRgX6eLi\nsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/',
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "196fcf26a952",
-  total: 537,
-  solved: 310,
+  dataVersion: "cd994eea5539",
+  total: 539,
+  solved: 311,
   unsolved: 111,
-  claimed: 16,
+  claimed: 17,
   swept: 96,
   expired: 4,
-  withPubkey: 424,
+  withPubkey: 426,
   unsolvedPrize: {
     BTC: 909.15402677,
     ETH: 13.171964034825493,
@@ -1409,7 +1438,7 @@ export const STATS_STATIC = {
     AR: 1500.188092936237,
   },
   totalPrize: {
-    BTC: 1068.45756695,
+    BTC: 1068.47156695,
     ETH: 26.81566403482549,
     DOGE: 10000,
     BCH: 5.1,
@@ -1720,6 +1749,27 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 0,
     firstStarted: "2024-02-26 14:17:17",
     lastStarted: "2024-02-26 14:17:17",
+    hints: [],
+  },
+  {
+    key: "grycoin",
+    author: "AoiNakamoto",
+    authorKey: "aoi-nakamoto",
+    authorUrl: "https://www.reddit.com/user/AoiNakamoto/",
+    total: 2,
+    statuses: {
+      solved: 1,
+      claimed: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.014,
+    },
+    unsolvedPrize: {},
+    withPubkey: 2,
+    withKey: 1,
+    firstStarted: "2019-07-28 00:35:31",
+    lastStarted: "2019-08-01 05:04:38",
     hints: [],
   },
   {
@@ -2479,8 +2529,8 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     kind: "person",
     about:
       "Pseudonymous author of the 2019 Quizchain puzzle series on Reddit, who shut it all down in August 2019 and called it a failed experiment.",
-    collections: ["book-quiz", "quizchain", "quizchain2", "satoshi-birthday-quiz"],
-    puzzles: 149,
+    collections: ["book-quiz", "grycoin", "quizchain", "quizchain2", "satoshi-birthday-quiz"],
+    puzzles: 151,
   },
   {
     key: "stsh-n",

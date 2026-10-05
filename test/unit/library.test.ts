@@ -14,6 +14,7 @@ import { DogesGambitCollection } from "../../src/collections/doges-gambit.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { GreatRiddleCollection } from "../../src/collections/great-riddle.ts";
+import { GrycoinCollection } from "../../src/collections/grycoin.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash-collision.ts";
 import { iAmABananaAmaa, IAmABananaAmaaCollection } from "../../src/collections/iamabananaamaa.ts";
@@ -96,6 +97,7 @@ const concreteClasses = [
   DugCollection,
   GenesisCollection,
   GreatRiddleCollection,
+  GrycoinCollection,
   GsmgCollection,
   HashCollisionCollection,
   IAmABananaAmaaCollection,
@@ -590,7 +592,7 @@ describe("lazy collection registry", () => {
       "Puzzle not found: 71. Did you mean b1000/71 or quizchain/71?",
     );
     await expect(miss(requirePuzzle("1"))).resolves.toBe(
-      "Puzzle not found: 1. Did you mean b1000/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1, walking-banks/1 or weave/1?",
+      "Puzzle not found: 1. Did you mean b1000/1, grycoin/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1, walking-banks/1 or weave/1?",
     );
 
     /* A number one digit off is another puzzle, and an unknown collection holds no name. */
@@ -727,11 +729,12 @@ describe("lazy collection registry", () => {
     const aoi = await getAuthor("aoi-nakamoto");
     expect(aoi?.collections).toEqual([
       "book-quiz",
+      "grycoin",
       "quizchain",
       "quizchain2",
       "satoshi-birthday-quiz",
     ]);
-    expect(aoi?.puzzles).toBe(149);
+    expect(aoi?.puzzles).toBe(151);
     expect(await getAuthor("nobody")).toBeUndefined();
     expect(await getAuthor(7 as never)).toBeUndefined();
   });
@@ -928,7 +931,7 @@ describe("lazy collection registry", () => {
   it("counts an author's techniques over every collection it published", async () => {
     expect((await requireAuthor("aoi-nakamoto")).techniques).toEqual({
       atbash: 14,
-      "md5-to-bip39-entropy": 133,
+      "md5-to-bip39-entropy": 134,
       "sha256-to-bip39-entropy": 16,
     });
     expect((await requireAuthor("gsmg")).techniques).toEqual({
@@ -940,21 +943,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(537);
+    expect(await all()).toHaveLength(539);
     expect(await stats()).toEqual({
-      total: 537,
-      claimed: 16,
+      total: 539,
+      claimed: 17,
       expired: 4,
-      solved: 310,
+      solved: 311,
       swept: 96,
       unsolved: 111,
-      with_pubkey: 424,
+      with_pubkey: 426,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1068.45756695,
+        BTC: 1068.47156695,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -977,7 +980,7 @@ describe("lazy collection registry", () => {
         "hash-collision": 5,
         "hidden-seed-words": 16,
         "masked-key-range": 256,
-        "md5-to-bip39-entropy": 133,
+        "md5-to-bip39-entropy": 134,
         morse: 1,
         "openssl-salted-sha256": 1,
         "partial-key": 6,
@@ -1034,7 +1037,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(537);
+    ).toBe(539);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -1061,6 +1064,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(310);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(311);
   });
 });

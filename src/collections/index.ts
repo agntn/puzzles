@@ -21,6 +21,7 @@ export const builtins = [
   { key: "dug", load: () => import("./dug.ts").then((m) => m.dug) },
   { key: "genesis", load: () => import("./genesis.ts").then((m) => m.genesis) },
   { key: "great-riddle", load: () => import("./great-riddle.ts").then((m) => m.greatRiddle) },
+  { key: "grycoin", load: () => import("./grycoin.ts").then((m) => m.grycoin) },
   { key: "gsmg", load: () => import("./gsmg.ts").then((m) => m.gsmg) },
   { key: "hash-collision", load: () => import("./hash-collision.ts").then((m) => m.hashCollision) },
   {

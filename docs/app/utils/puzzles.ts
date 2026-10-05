@@ -90,6 +90,14 @@ const PRESENTATION: Readonly<
     blurb:
       "A seed of 24 words hidden one by one in the original ballpoint drawings of the Genesis Collection. Prints carry nothing, and the 25th word comes from the artist.",
   },
+  grycoin: {
+    icon: "i-lucide-thermometer-sun",
+    title: "Grycoin chain",
+    sample: "grycoin/2",
+    chains: ["bitcoin"],
+    blurb:
+      "Quizchain under a new name, and over within a week. Block 1 was claimed before its post went up, block 2 with a solution its own author admits not knowing.",
+  },
   gsmg: {
     icon: "i-lucide-rabbit",
     title: "GSMG.io puzzle",

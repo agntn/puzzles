@@ -96,6 +96,7 @@ const expectedCollections = [
   "dug",
   "genesis",
   "great-riddle",
+  "grycoin",
   "gsmg",
   "hash-collision",
   "iamabananaamaa",

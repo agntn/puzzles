@@ -1519,6 +1519,18 @@ export const archivedSources = [
     date: "2019-07-16",
   },
   {
+    file: "grycoin/aoinakamoto-2019-07-28-civj2n",
+    url: "https://www.reddit.com/r/Grycoin/comments/civj2n/7_mbtc_grycoin_chain_block_1/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-28",
+  },
+  {
+    file: "grycoin/aoinakamoto-2019-08-03-cleczc",
+    url: "https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/",
+    author: "u/AoiNakamoto",
+    date: "2019-08-03",
+  },
+  {
     file: "iamabananaamaa/iamabananaamaa-2013-12-23",
     url: "https://www.reddit.com/r/bitcoinpuzzles/comments/1ticec/medium_1mbtc_riddle_me_this_for_a_private_key/",
     author: "u/IAMABananaAMAA",
