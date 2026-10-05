@@ -14,6 +14,8 @@ export const Technique = {
   Binary: "binary",
   /** A BIP38 encrypted private key whose passphrase is the secret. */
   Bip38: "bip38",
+  /** A Caesar shift, every letter moved the same distance. ROT13 goes 13, HAL to IBM just 1. */
+  Caesar: "caesar",
   /** Two different preimages with the same hash. */
   HashCollision: "hash-collision",
   /** The words of a BIP39 phrase hidden in a text, an image or a video. */

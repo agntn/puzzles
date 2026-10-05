@@ -232,6 +232,7 @@ describe("docs landing fixtures", () => {
       "md5-to-bip39-entropy",
       "sha256-to-bip39-entropy",
       "atbash",
+      "caesar",
     ]);
     expect(facts.techniques.every((row) => row.count <= facts.puzzles)).toBe(true);
   });

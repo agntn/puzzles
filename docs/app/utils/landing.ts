@@ -1423,7 +1423,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "1ee77d01b0c7",
+  dataVersion: "74a7d2016f25",
   total: 546,
   solved: 316,
   unsolved: 111,

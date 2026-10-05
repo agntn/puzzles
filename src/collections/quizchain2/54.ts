@@ -31,7 +31,7 @@ export const quizchain2Block54 = puzzle({
       source(THREAD, "MD5 of the three letters, TOMI and three words"),
     )
     .derived(),
-  techniques: [technique("md5-to-bip39-entropy", THREAD)],
+  techniques: [technique("md5-to-bip39-entropy", THREAD), technique("caesar", THREAD)],
   prize: 0.007,
   hints: [
     official("Question: What's the S stand for?", THREAD, undefined, {
