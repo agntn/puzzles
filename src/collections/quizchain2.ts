@@ -61,6 +61,13 @@ import { quizchain2Block67 } from "./quizchain2/67.ts";
 import { quizchain2Block68 } from "./quizchain2/68.ts";
 import { quizchain2Block69 } from "./quizchain2/69.ts";
 import { quizchain2Block70 } from "./quizchain2/70.ts";
+import { quizchain2Block71 } from "./quizchain2/71.ts";
+import { quizchain2Block72 } from "./quizchain2/72.ts";
+import { quizchain2Block73 } from "./quizchain2/73.ts";
+import { quizchain2Block74 } from "./quizchain2/74.ts";
+import { quizchain2Block75 } from "./quizchain2/75.ts";
+import { quizchain2Block76 } from "./quizchain2/76.ts";
+import { quizchain2Block77 } from "./quizchain2/77.ts";
 import { quizchain2Block2 } from "./quizchain2/2.ts";
 import { quizchain2Block3 } from "./quizchain2/3.ts";
 import { quizchain2Block4 } from "./quizchain2/4.ts";
@@ -151,6 +158,13 @@ export class Quizchain2Collection extends NumericCollection {
     quizchain2Block68,
     quizchain2Block69,
     quizchain2Block70,
+    quizchain2Block71,
+    quizchain2Block72,
+    quizchain2Block73,
+    quizchain2Block74,
+    quizchain2Block75,
+    quizchain2Block76,
+    quizchain2Block77,
   ];
 
   /** Builds the canonical collection. */

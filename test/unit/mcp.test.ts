@@ -76,7 +76,7 @@ describe("puzzles MCP server", () => {
   it("reports dataset statistics", async () => {
     const result = await client.callTool({ name: "puzzles_stats", arguments: {} });
 
-    expect(firstText(result)).toContain("Total: 539 puzzles in 43 collections");
+    expect(firstText(result)).toContain("Total: 546 puzzles in 43 collections");
     expect(firstText(result)).toMatch(
       /^Techniques: aes 2, ascii-private-key 1, atbash 14, .*, xor 7$/mu,
     );
