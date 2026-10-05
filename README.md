@@ -125,6 +125,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `iamabananaamaa`        | bitcoin                             | A ZIP in a GIF, then a fake Caesar          |
 | `doges-gambit`          | ethereum, dogecoin                  | Two keys read off one chess board video     |
 | `walking-banks`         | bitcoin                             | A seed hidden in a Bitcoin thriller novel   |
+| `grycoin`               | bitcoin                             | Quizchain renamed, days before the shutdown |
 | `bitaps`                | bitcoin                             | A 3 of 5 secret sharing scheme              |
 | `gsmg`                  | bitcoin                             | A multi phase image puzzle                  |
 | `movie-enigma`          | bitcoin                             | Film titles as seed words, solved 2026      |

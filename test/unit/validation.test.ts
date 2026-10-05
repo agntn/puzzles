@@ -712,6 +712,7 @@ describe("collection class data", () => {
     expect(problems.filter((problem) => problem !== undefined)).toEqual([]);
     expect(puzzles.filter((puzzle) => puzzle.hasDerivedKey()).map((puzzle) => puzzle.id())).toEqual(
       [
+        "grycoin/1",
         "iamabananaamaa/gif",
         "move-over-brokers/en-easy-1",
         "move-over-brokers/en-easy-2",
