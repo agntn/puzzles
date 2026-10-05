@@ -1,3 +1,24 @@
+## v0.28.3
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.28.2...v0.28.3)
+
+### 🚀 Enhancements
+
+- **collections:** Add grycoin ([#451](https://github.com/agntn/puzzles/pull/451))
+- Verify the recipe, not just the key ([#452](https://github.com/agntn/puzzles/pull/452))
+- **collections:** Add quizchain2/71 to 77 ([#453](https://github.com/agntn/puzzles/pull/453))
+- Give the Caesar shift a tag of its own ([#456](https://github.com/agntn/puzzles/pull/456))
+- Notice when a spend leaks the key ([#457](https://github.com/agntn/puzzles/pull/457))
+
+### 🔥 Performance
+
+- **docs:** Redraw only the OG cards that change ([#458](https://github.com/agntn/puzzles/pull/458))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.28.2
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.28.1...v0.28.2)
