@@ -156,12 +156,12 @@ export async function readPuzzleFile(
     ]);
   }
   const cap = Math.min(limit, file.bytes ?? limit);
-  const tagged = await readCopy(file, file.url, cap);
-  if (typeof tagged !== "string") {
-    return tagged;
+  const linked = await readCopy(file, file.url, cap);
+  if (typeof linked !== "string") {
+    return linked;
   }
-  const reasons = [tagged];
-  for (const url of laterCopies(file, tagged === `${file.url} answered HTTP 404`)) {
+  const reasons = [linked];
+  for (const url of laterCopies(file, linked === `${file.url} answered HTTP 404`)) {
     const content = await readCopy(file, url, cap);
     if (typeof content !== "string") {
       return content;
@@ -204,11 +204,11 @@ async function readCopy(file: PuzzleFile, url: string, cap: number): Promise<Fil
 }
 
 /**
- * The copies after the release tag's: `main` only when the tag has no such file, since a timeout
- * or a 5xx says nothing about the release, then for a pinned file the author's URL and the archive.
+ * The copies after the one the link names: `main` only when that ref has no such file, since a
+ * timeout or a 5xx says nothing about it, then for a pinned file the author's URL and the archive.
  *
  * @param {PuzzleFile} file - The file.
- * @param {boolean} unreleased - Whether the tag answered 404.
+ * @param {boolean} unreleased - Whether the linked ref answered 404.
  * @returns {string[]} The URLs.
  */
 function laterCopies(file: PuzzleFile, unreleased: boolean): string[] {

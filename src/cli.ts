@@ -4,9 +4,12 @@ import { sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ArgsDef, CommandDef, Resolvable, RunMainOptions } from "citty";
 import type McpCommand from "./commands/mcp.ts";
+import { useCheckoutAssets } from "./checkout.ts";
 import { printError, printLine } from "./commands/output.ts";
 import { InvalidArgumentError, PuzzlesError } from "./core/errors.ts";
 import { version } from "./version.ts";
+
+useCheckoutAssets(fileURLToPath(new URL("..", import.meta.url)));
 
 /**
  * citty colors its usage and its errors even into a pipe, takes `NO_COLOR` only as `1`, and decides

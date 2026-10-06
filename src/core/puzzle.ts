@@ -1,4 +1,4 @@
-import { version } from "../version.ts";
+import { assetRef } from "./asset-ref.ts";
 import type { BalanceOptions } from "./balance.ts";
 import { addressExplorerUrl, Chain, chainSymbol, transactionExplorerUrl } from "./chains.ts";
 import type { Balance } from "./types.ts";
@@ -76,20 +76,14 @@ const NO_HINTS: readonly Hint[] = Object.freeze([]);
 const NO_TECHNIQUES: readonly TechniqueTag[] = Object.freeze([]);
 
 /**
- * Assets under the release tag of this package version, not `main`: a published record keeps
- * pointing at the files it was written against after a later release moves or renames them.
- */
-const RELEASE_REF = `v${version}`;
-
-/**
  * The canonical remote URL of a repository path, encoded segment by segment so a file name that
  * carries a `#` or a `?` still addresses the file rather than a fragment or a query.
  *
  * @param {string} path - The path from the repository root.
- * @param {string} [ref] - The Git ref to read it at; the release tag unless a read asks for `main`.
+ * @param {string} [ref] - The Git ref to read it at; `assetRef()` unless a read asks for `main`.
  * @returns {string} The URL.
  */
-export function assetUrlOf(path: string, ref = RELEASE_REF): string {
+export function assetUrlOf(path: string, ref = assetRef()): string {
   const encoded = path.split("/").map(encodeURIComponent).join("/");
   return `https://raw.githubusercontent.com/agntn/puzzles/${ref}/${encoded}`;
 }

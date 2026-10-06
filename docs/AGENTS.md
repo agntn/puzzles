@@ -23,6 +23,7 @@ docs/
 ├── app/pages/collections/[collection]/[puzzle].vue   # one page per puzzle, prerendered through the links on the collection pages
 ├── server/api/balance/[...id].ts  # puzzle.balance() on the worker, cached five minutes per puzzle
 ├── server/mcp/index.ts            # the Docus MCP handler at /mcp, named and versioned like `puzzles mcp`
+├── server/plugins/asset-commit.ts # hands the library the commit in `runtimeConfig.assetCommit`, so asset links name it instead of the tag
 ├── server/mcp/tools/              # one file per puzzle tool, each `puzzlesMcpTool("<name>")`
 ├── server/utils/puzzles-mcp.ts    # a tool from `@agntn/puzzles/mcp`: its entry in `toolListings` and `callTool`, which checks the arguments itself
 ├── server/routes/sitemap.xml.ts   # Docus sitemap plus the playground, the changelog and every puzzle page
@@ -53,7 +54,7 @@ Deployment: Nitro preset `cloudflare_module`. Nuxt Content wants a D1 binding na
 
 `@agntn/puzzles` is an alias in `nuxt.config.ts` for `../src/index.ts`, and `@agntn/puzzles/tools` for `../src/tool-operations.ts`, so the playground, the puzzle pages and the tool panel run the real executors instead of a copy of their text. Vite and Nitro bundle the checkout's sources into the page and the worker, so `dist/` and the root `node_modules` are never touched. That is what Workers Builds needs: it installs `docs/` alone. The subgraph under `src/index.ts` and `src/tool-operations.ts` imports from npm: `@agntn/archives`, `@agntn/chains`, `@agntn/explorers` and `@agntn/keys`. Each one is a dependency of `docs/package.json`, pinned to the root's version, listed in `vite.resolve.dedupe`, and every subpath `src/` imports, the dynamic ones in `providers.ts`, `sources.ts` and `verify.ts` too, is in `vite.optimizeDeps.include`. A new bare import in `src/` needs all three lines and a check of both the browser bundle and the worker before anyone relies on it. `vite.server.fs.allow` names the repository root, not `src/`, because `src/version.ts` reads `../package.json`.
 
-`nitro.publicAssets` serves the checkout's `assets/` under `/assets`, so the puzzle images on the pages come from this site. The library's `assetUrl()` points at GitHub under the package's release tag and the pages don't use it, because the repository the package lives in can move and the images can't be allowed to 404 with it. The `puzzles_show` text the landing prints names files by repository path, not by that URL, so a version bump leaves the static copy alone.
+`nitro.publicAssets` serves the checkout's `assets/` under `/assets`, so the puzzle images on the pages come from this site. The library's `assetUrl()` points at GitHub, here under the commit the site is built from, which `runtimeConfig.assetCommit` carries and `server/plugins/asset-commit.ts` hands the library. The pages don't use it, because the repository the package lives in can move and the images can't be allowed to 404 with it. The `puzzles_show` text the landing prints names files by repository path, not by that URL, so a version bump leaves the static copy alone.
 
 Two resolution traps, both because the repo root is its own pnpm workspace:
 
@@ -70,7 +71,7 @@ On the `cloudflare_module` preset the toolkit hands its server to `createMcpHand
 
 ## Pages per puzzle
 
-`app/pages/collections/[collection]/[puzzle].vue` renders any `collection/name` id through `PuzzlePage`, which reads the record with `toPuzzleView` inside `useAsyncData`, so the prerender and the browser agree and the payload carries plain data. An unknown id throws a 404. Singletons, such as `gsmg`, `genesis` and `80-bit`, have no `name` segment: their collection pages embed `::puzzle-page{puzzle="gsmg"}` instead, and that's why the prop is called `puzzle`, MDC keeps `id` for the element. The prerender finds every puzzle route by crawling the lists `::collection-puzzles` renders on the collection pages; nothing enumerates them in `nuxt.config.ts`, because that file runs under jiti from `docs/` and can't import the library on Workers Builds. The sitemap route can, through the Nitro alias, and lists them all.
+`app/pages/collections/[collection]/[puzzle].vue` renders any `collection/name` id through `PuzzlePage`, which reads the record with `toPuzzleView` inside `useAsyncData`, so the prerender and the browser agree and the payload carries plain data. An unknown id throws a 404. Singletons, such as `gsmg`, `genesis` and `80-bit`, have no `name` segment: their collection pages embed `::puzzle-page{puzzle="gsmg"}` instead, and that's why the prop is called `puzzle`, MDC keeps `id` for the element. The prerender finds every puzzle route by crawling the lists `::collection-puzzles` renders on the collection pages; nothing enumerates them in `nuxt.config.ts`, because that file runs under jiti from `docs/` and can't import the library on Workers Builds. `src/checkout.ts` is the one exception, because it needs nothing past `node:` and `package.json`. The sitemap route can, through the Nitro alias, and lists them all.
 
 ## Live values
 
