@@ -155,18 +155,18 @@ export async function readPuzzleFile(
       `${file.bytes} bytes is more than the ${limit} a read returns, so download it from ${file.url}`,
     ]);
   }
-  const reasons: string[] = [];
-  for (const url of copiesOf(file)) {
-    const data = await fetchCopy(url, Math.min(limit, file.bytes ?? limit));
-    if (typeof data === "string") {
-      reasons.push(`${url} answered ${data}`);
-      continue;
+  const cap = Math.min(limit, file.bytes ?? limit);
+  const tagged = await readCopy(file, file.url, cap);
+  if (typeof tagged !== "string") {
+    return tagged;
+  }
+  const reasons = [tagged];
+  for (const url of laterCopies(file, tagged === `${file.url} answered HTTP 404`)) {
+    const content = await readCopy(file, url, cap);
+    if (typeof content !== "string") {
+      return content;
     }
-    const digest = hex.encode(new Uint8Array(await crypto.subtle.digest("SHA-256", data)));
-    if (holdsPin(file, data.length, digest)) {
-      return { data, file, servedBy: url, sha256: digest };
-    }
-    reasons.push(`${url} holds other bytes, ${data.length} with SHA-256 ${digest}`);
+    reasons.push(content);
   }
   throw new FileUnavailableError(file.path, reasons);
 }
@@ -184,16 +184,37 @@ function holdsPin(file: PuzzleFile, bytes: number, digest: string): boolean {
 }
 
 /**
- * The repository copy, then for a pinned file the author's URL and the archive capture.
+ * One copy's bytes when they are the file, or why they are not.
  *
  * @param {PuzzleFile} file - The file.
+ * @param {string} url - Where the copy lives.
+ * @param {number} cap - The most bytes to take.
+ * @returns {Promise<FileContent | string>} The content, or the reason with the URL in front.
+ */
+async function readCopy(file: PuzzleFile, url: string, cap: number): Promise<FileContent | string> {
+  const data = await fetchCopy(url, cap);
+  if (typeof data === "string") {
+    return `${url} answered ${data}`;
+  }
+  const digest = hex.encode(new Uint8Array(await crypto.subtle.digest("SHA-256", data)));
+  if (holdsPin(file, data.length, digest)) {
+    return { data, file, servedBy: url, sha256: digest };
+  }
+  return `${url} holds other bytes, ${data.length} with SHA-256 ${digest}`;
+}
+
+/**
+ * The copies after the release tag's: `main` only when the tag has no such file, since a timeout
+ * or a 5xx says nothing about the release, then for a pinned file the author's URL and the archive.
+ *
+ * @param {PuzzleFile} file - The file.
+ * @param {boolean} unreleased - Whether the tag answered 404.
  * @returns {string[]} The URLs.
  */
-function copiesOf(file: PuzzleFile): string[] {
-  if (file.sha256 === undefined) {
-    return [file.url];
-  }
-  return [file.url, file.origin, file.archive].filter((url) => url !== undefined);
+function laterCopies(file: PuzzleFile, unreleased: boolean): string[] {
+  const main = unreleased ? [assetUrlOf(file.path, "main")] : [];
+  const author = file.sha256 === undefined ? [] : [file.origin, file.archive];
+  return [...main, ...author].filter((url) => url !== undefined);
 }
 
 /**

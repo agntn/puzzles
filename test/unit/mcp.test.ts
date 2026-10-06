@@ -230,7 +230,7 @@ describe("puzzles MCP server", () => {
 
   it("reads a file as text or as an image, only with the bytes the record pins", async () => {
     const requested: string[] = [];
-    /* The tag copy of puzzle.png is gone, so the read has to fall back to the author's URL. */
+    /* Neither the tag nor main holds puzzle.png, so the read falls back to the author's URL. */
     vi.stubGlobal("fetch", async (input: unknown) => {
       const url = String(input);
       requested.push(url);
@@ -271,7 +271,11 @@ describe("puzzles MCP server", () => {
     );
     expect(
       requested.filter((url) => url.endsWith("/puzzle.png") || url.endsWith("/puzzle")),
-    ).toHaveLength(2);
+    ).toEqual([
+      expect.stringMatching(/\/v[^/]+\/assets\/gsmg\/puzzle\.png$/),
+      "https://raw.githubusercontent.com/agntn/puzzles/main/assets/gsmg/puzzle.png",
+      "https://gsmg.io/puzzle",
+    ]);
   });
 
   it("refuses a copy with other bytes, a path the listing lacks and a file too large to return", async () => {
