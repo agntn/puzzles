@@ -44,6 +44,9 @@ const COVER = "https://static.wixstatic.com/media/144728_690b95a837b14706a3e8583
 
 const SITE = "https://www.smithlylemoore.com";
 
+/** Where the band's site serves its audio. */
+const MUSIC = "https://music.wixstatic.com/mp3";
+
 /** Smith, Lyle & Moore's first hunt: a trip to the moon through their Born to Be Wild cover. */
 export const smithLyleMooreBornToBeWild = puzzle({
   id: "smith-lyle-moore/born-to-be-wild",
@@ -119,7 +122,9 @@ export const smithLyleMooreBornToBeWild = puzzle({
       "vault",
       "The passage ends at a locked vault, with an alternative mix of the song and a computer inside.",
       [
+        artifact("the passage", `${SITE}/the-passage`),
         artifact("the vault", `${SITE}/the-vault`),
+        artifact("alternative song", `${MUSIC}/144728_5f57f68e07ba4319b9c189fbc61626b9-320.mp3`),
         artifact("the computer", `${SITE}/the-computer`),
       ],
       answer("Password: 4samcodeartist", WRITEUP, SOLVED),
@@ -162,7 +167,10 @@ export const smithLyleMooreBornToBeWild = puzzle({
     stage(
       "wallet password",
       "The final attraction plays an unreleased song, and the wallet's password is the end of it all.",
-      [artifact("final attraction", `${SITE}/illstillbelovinyou`)],
+      [
+        artifact("final attraction", `${SITE}/illstillbelovinyou`),
+        artifact("future song", `${MUSIC}/144728_b22b111462424cf3824203ac3564c2ce-320.mp3`),
+      ],
       answer("Password: supernova", WRITEUP, SOLVED),
     ),
   ],
