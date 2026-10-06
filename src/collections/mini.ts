@@ -17,7 +17,7 @@ export class MiniCollection extends NumericCollection {
   /** Stable collection key used in puzzle identifiers. */
   static readonly key = "mini";
 
-  /** Who posted the mini-puzzles: the solver of b1000/120, 125, 130 and 135. */
+  /** Who posted the mini-puzzles: the solver of bits/120, 125, 130 and 135. */
   static readonly author = party("RetiredCoder", {
     key: "retired-coder",
     kind: PartyKind.Person,

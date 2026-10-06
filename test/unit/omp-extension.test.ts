@@ -115,12 +115,12 @@ describe("OMP extension", () => {
   it("executes list pagination through the shared executor", async () => {
     const { tools } = await registerTools();
     const tool = tools.get("puzzles_list");
-    const result = await tool?.execute("call-page", { collection: "b1000", offset: 1, limit: 1 });
+    const result = await tool?.execute("call-page", { collection: "bits", offset: 1, limit: 1 });
 
     expect(tool?.description).toBe(facts.tools.list.description);
     expect(result?.content[0]?.text.split("\n")).toEqual([
       "1 of 256 matching puzzles (offset 1):",
-      "b1000/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "bits/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
       "Next page: offset=2. Keep the same filters.",
     ]);
     expect(result?.details).toEqual({
@@ -128,14 +128,14 @@ describe("OMP extension", () => {
       returned: 1,
       offset: 1,
       nextOffset: 2,
-      ids: ["b1000/2"],
+      ids: ["bits/2"],
     });
   });
 
   it("renders a call line without terminal control bytes", async () => {
     const { tools } = await registerTools();
     const hostile = [
-      "b1000/1",
+      "bits/1",
       String.fromCodePoint(0x1b),
       "[31m\nforged",
       String.fromCodePoint(0x85),
@@ -149,7 +149,7 @@ describe("OMP extension", () => {
       ?.renderCall?.({ id: hostile }, { isPartial: false }, theme);
 
     expect(rendered?.text).toBe(
-      "success:status.done accent(Show Puzzle): muted(b1000/1 forged 1m line)",
+      "success:status.done accent(Show Puzzle): muted(bits/1 forged 1m line)",
     );
   });
 
@@ -159,8 +159,8 @@ describe("OMP extension", () => {
       tools.get("puzzles_list")?.renderCall?.(args, { isPartial: false }, theme)?.text;
 
     expect(render({})).toBe("success:status.done accent(List Puzzles): muted(all)");
-    expect(render({ collection: "b1000", status: "unsolved" })).toBe(
-      "success:status.done accent(List Puzzles): muted(b1000 unsolved)",
+    expect(render({ collection: "bits", status: "unsolved" })).toBe(
+      "success:status.done accent(List Puzzles): muted(bits unsolved)",
     );
   });
 
@@ -180,13 +180,13 @@ describe("OMP extension", () => {
     const calls: Readonly<Record<string, Readonly<Record<string, unknown>>>> = {
       puzzles_author: { key: "dug", name: "Dug" },
       puzzles_solver: { key: "lia", name: "Lia" },
-      puzzles_show: { id: "b1000/71", name: "71" },
+      puzzles_show: { id: "bits/71", name: "71" },
       puzzles_hints: { id: "gsmg", name: "gsmg" },
       puzzles_stages: { id: "gsmg", name: "gsmg" },
       puzzles_assets: { id: "gsmg", path: "assets/gsmg/phase2.txt" },
-      puzzles_list: { collection: "b1000", with_pubkey: true },
-      puzzles_verify: { id: "b1000/1", name: "1" },
-      puzzles_balance: { id: "b1000/71", api_key: "secret" },
+      puzzles_list: { collection: "bits", with_pubkey: true },
+      puzzles_verify: { id: "bits/1", name: "1" },
+      puzzles_balance: { id: "bits/71", api_key: "secret" },
     };
 
     for (const [name, params] of Object.entries(calls)) {
@@ -201,7 +201,7 @@ describe("OMP extension", () => {
 
   it("executes the verify tool against the library", async () => {
     const { tools } = await registerTools();
-    const result = await tools.get("puzzles_verify")?.execute("call-1", { id: "b1000/1" });
+    const result = await tools.get("puzzles_verify")?.execute("call-1", { id: "bits/1" });
 
     expect(result?.content[0]?.text).toContain("verified");
   });

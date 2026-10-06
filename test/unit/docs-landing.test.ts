@@ -249,9 +249,9 @@ describe("docs landing fixtures", () => {
   });
 
   it("carry the hints every puzzle of the collection shares", () => {
-    const b1000 = FACTS_STATIC.find((row) => row.key === "b1000");
+    const bits = FACTS_STATIC.find((row) => row.key === "bits");
 
-    expect(b1000?.hints.map((hint) => [hint.kind, hint.source])).toEqual([
+    expect(bits?.hints.map((hint) => [hint.kind, hint.source])).toEqual([
       ["official", "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941"],
     ]);
   });

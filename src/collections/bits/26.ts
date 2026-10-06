@@ -1,0 +1,31 @@
+import { puzzle, Status } from "../../core/puzzle.ts";
+import { claim, compressed, funding, hex } from "../../core/parts.ts";
+
+/** Puzzle `bits/26`. */
+export const bits26 = puzzle({
+  id: "bits/26",
+  chain: "bitcoin",
+  address: "1JVnST957hGztonaWK6FougdtjxzHzRMMg",
+  sourceUrl: "https://bitcointalk.org/index.php?topic=5218972",
+  startedAt: "2015-01-15 18:07:14",
+  status: Status.Solved,
+  pubkey: compressed("024e4f50a2a3eccdb368988ae37cd4b611697b26b29696e42e06d71368b4f3840f"),
+  key: hex("000000000000000000000000000000000000000000000000000000000340326e", 26).wif(
+    "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7tefTXkqGMNis",
+  ),
+  prize: 0.026,
+  solvedAt: "2015-01-15 22:15:25",
+  solveTime: 14891,
+  transactions: [
+    funding(
+      "08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",
+      "2015-01-15 18:07:14",
+      0.026,
+    ),
+    claim(
+      "0eb5b5c103e68eb0931430e7786cf1b6962f9eed5a2cb5271d4dd1699b77e86f",
+      "2015-01-15 22:15:25",
+      0.026,
+    ),
+  ],
+});

@@ -5,14 +5,14 @@ const nextPage = "Next page: offset=50. Keep the same filters.";
 
 describe("puzzle list pagination", () => {
   it("keeps the default first page and tells the model where to continue", async () => {
-    const result = await listTool({ collection: "b1000" });
+    const result = await listTool({ collection: "bits" });
 
     expect(result.details).toEqual({
       matched: 256,
       returned: 50,
       offset: 0,
       nextOffset: 50,
-      ids: Array.from({ length: 50 }, (_, index) => `b1000/${index + 1}`),
+      ids: Array.from({ length: 50 }, (_, index) => `bits/${index + 1}`),
     });
     expect(result.content[0]?.text).toMatch(/^50 of 256 matching puzzles:/);
     expect(result.content[0]?.text.endsWith(nextPage)).toBe(true);
@@ -21,7 +21,7 @@ describe("puzzle list pagination", () => {
   it("walks every record once without growing the page size", async () => {
     const ids: unknown[] = [];
     for (let offset = 0; offset < 256; offset += 50) {
-      const result = await listTool({ collection: "b1000", offset, limit: 50 });
+      const result = await listTool({ collection: "bits", offset, limit: 50 });
       const pageIds = result.details["ids"];
       expect(Array.isArray(pageIds)).toBe(true);
       if (Array.isArray(pageIds)) {
@@ -30,7 +30,7 @@ describe("puzzle list pagination", () => {
       expect(result.details["nextOffset"]).toBe(offset < 250 ? offset + 50 : undefined);
       expect(result.content[0]?.text.includes("Next page:")).toBe(offset < 250);
     }
-    expect(ids).toEqual(Array.from({ length: 256 }, (_, index) => `b1000/${index + 1}`));
+    expect(ids).toEqual(Array.from({ length: 256 }, (_, index) => `bits/${index + 1}`));
   });
 
   it("applies the offset after every filter, including a collection alias", async () => {
@@ -70,7 +70,7 @@ describe("puzzle list pagination", () => {
   it("narrows to one chain, across collections and together with the other filters", async () => {
     const chain = await listTool({ chain: "ethereum" });
     const narrowed = await listTool({ chain: "ethereum", status: "solved" });
-    const crossed = await listTool({ chain: "ethereum", collection: "b1000" });
+    const crossed = await listTool({ chain: "ethereum", collection: "bits" });
 
     expect(chain.details).toMatchObject({
       matched: 13,
@@ -105,7 +105,7 @@ describe("puzzle list pagination", () => {
     const checksummed = await listTool({ address: "0x5D663791E869Ca70C71E0A5F4cfD707f596265aa" });
     const shouted = await listTool({ address: "BC1Q94ECSN0QK8LAP2GEFRYCNMS3RUEPY889Z969A6" });
 
-    expect(base58.details).toMatchObject({ matched: 1, returned: 1, ids: ["b1000/1"] });
+    expect(base58.details).toMatchObject({ matched: 1, returned: 1, ids: ["bits/1"] });
     expect(checksummed.details["ids"]).toEqual(["zden/xixoio"]);
     expect(shouted.details["ids"]).toEqual(["movie-enigma"]);
     expect(base58.content[0]?.text).toContain("1 matching puzzles");
@@ -130,18 +130,18 @@ describe("puzzle list pagination", () => {
     });
     const rightCollection = await listTool({
       address: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
-      collection: "b1000",
+      collection: "bits",
     });
 
     expect(wrongChain.details).toMatchObject({ matched: 0, ids: [] });
-    expect(rightCollection.details["ids"]).toEqual(["b1000/1"]);
+    expect(rightCollection.details["ids"]).toEqual(["bits/1"]);
   });
 
   it("names the puzzle behind an address when the other filters left it out", async () => {
     const address = "1crypto24HCr178iMcKd5iUi5D4rsg1nK";
     const elsewhere = await listTool({
       address,
-      collection: "b1000",
+      collection: "bits",
       chain: "bitcoin",
       status: "unsolved",
       withPubkey: false,
@@ -154,7 +154,7 @@ describe("puzzle list pagination", () => {
     });
 
     expect(elsewhere.content[0]?.text).toBe(
-      "0 matching puzzles:\n(none)\nzden/level-halv pays to this address, but its collection is zden (not b1000).",
+      "0 matching puzzles:\n(none)\nzden/level-halv pays to this address, but its collection is zden (not bits).",
     );
     expect(elsewhere.details).toMatchObject({
       matched: 0,

@@ -10,7 +10,7 @@ export default defineCommand({
     description: "Show one puzzle by universal identifier",
   },
   args: {
-    id: { type: "positional", description: "Puzzle identifier, for example b1000/90" },
+    id: { type: "positional", description: "Puzzle identifier, for example bits/90" },
     "all-transactions": {
       type: "boolean",
       description: "List every transaction, not one line per run of small increases",

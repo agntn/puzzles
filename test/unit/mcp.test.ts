@@ -88,7 +88,7 @@ describe("puzzles MCP server", () => {
     expect(rows).toHaveLength(46);
     expect(rows).toContain("weave: 12 puzzles, 0 solved, 3 unsolved, 9 claimed, by Tiamat");
     expect(rows).toContain(
-      "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
+      "bits: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
     );
     expect(rows).toContain("warp: 6 puzzles, 4 solved, 0 unsolved, 2 expired, by Keybase");
     expect(rows).toContain("zden: 16 puzzles, 14 solved, 1 unsolved, 1 claimed, by Zden");
@@ -124,7 +124,7 @@ describe("puzzles MCP server", () => {
     const missing = await client.callTool({ name: "puzzles_author", arguments: { key: "nobody" } });
     expect(missing.isError).toBe(true);
     expect(firstText(missing)).toMatch(
-      /^puzzles_author failed: Unknown author: nobody\. Known authors: ktimesg, saatoshi-rising, /u,
+      /^puzzles_author failed: Unknown author: nobody\. Known authors: ktimesg, bobby-lee, /u,
     );
   });
 
@@ -153,7 +153,7 @@ describe("puzzles MCP server", () => {
   it("shows one puzzle", async () => {
     const result = await client.callTool({
       name: "puzzles_show",
-      arguments: { id: "b1000/1" },
+      arguments: { id: "bits/1" },
     });
 
     expect(firstText(result)).toContain("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH");
@@ -199,12 +199,12 @@ describe("puzzles MCP server", () => {
     const staged = firstText(
       await client.callTool({ name: "puzzles_stages", arguments: { id: "gsmg" } }),
     ).split("\n");
-    const bare = await client.callTool({ name: "puzzles_stages", arguments: { id: "b1000/71" } });
+    const bare = await client.callTool({ name: "puzzles_stages", arguments: { id: "bits/71" } });
 
     expect(staged.slice(0, 2)).toEqual(["gsmg: 7 stages", "stages: 7"]);
     expect(staged.filter((line) => line.startsWith("\t\tanswer: "))).toHaveLength(5);
     expect(staged).toContain("\t\tthe seed is planted\thttps://gsmg.io/theseedisplanted");
-    expect(firstText(bare)).toBe("b1000/71: no stages recorded");
+    expect(firstText(bare)).toBe("bits/71: no stages recorded");
   });
 
   it("lists a puzzle's files and the archived copies of the pages it cites", async () => {
@@ -214,7 +214,7 @@ describe("puzzles MCP server", () => {
     const sources = firstText(
       await client.callTool({ name: "puzzles_assets", arguments: { id: "quizchain2/34" } }),
     ).split("\n");
-    const bare = await client.callTool({ name: "puzzles_assets", arguments: { id: "b1000/71" } });
+    const bare = await client.callTool({ name: "puzzles_assets", arguments: { id: "bits/71" } });
 
     expect(files[0]).toBe("gsmg: 6 files, 0 archived sources");
     expect(files.map((line) => line.split("\t").slice(0, 2).join(" "))).toContain(
@@ -226,7 +226,7 @@ describe("puzzles MCP server", () => {
       "screenshot\tassets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.png",
     ]);
     expect(sources[3]).toMatch(/^source \(author\)\tassets\/sources\/satoshi-birthday-quiz\//);
-    expect(firstText(bare)).toBe("b1000/71: no files and no archived sources");
+    expect(firstText(bare)).toBe("bits/71: no files and no archived sources");
   });
 
   it("reads a file as text or as an image, only with the bytes the record pins", async () => {
@@ -327,7 +327,7 @@ describe("puzzles MCP server", () => {
   it("limits list results and reports the match count", async () => {
     const result = await client.callTool({
       name: "puzzles_list",
-      arguments: { collection: "b1000", status: "unsolved", limit: 3 },
+      arguments: { collection: "bits", status: "unsolved", limit: 3 },
     });
 
     expect(firstText(result)).toMatch(/^3 of \d+ matching puzzles:/);
@@ -341,11 +341,11 @@ describe("puzzles MCP server", () => {
 
     const result = await client.callTool({
       name: "puzzles_list",
-      arguments: { collection: "b1000", offset: 1, limit: 1 },
+      arguments: { collection: "bits", offset: 1, limit: 1 },
     });
     expect(firstText(result).split("\n")).toEqual([
       "1 of 256 matching puzzles (offset 1):",
-      "b1000/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "bits/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
       "Next page: offset=2. Keep the same filters.",
     ]);
     const rejected = await client.callTool({ name: "puzzles_list", arguments: { offset: -1 } });
@@ -363,11 +363,11 @@ describe("puzzles MCP server", () => {
   it("names an argument the tool does not take instead of ignoring it", async () => {
     const misspelled = await client.callTool({
       name: "puzzles_list",
-      arguments: { collection: "b1000", with_pubkey: true },
+      arguments: { collection: "bits", with_pubkey: true },
     });
     const stray = await client.callTool({
       name: "puzzles_show",
-      arguments: { id: "b1000/71", name: "71" },
+      arguments: { id: "bits/71", name: "71" },
     });
 
     expect(misspelled.isError).toBe(true);
@@ -392,7 +392,7 @@ describe("puzzles MCP server", () => {
   it("reports every invalid argument in one answer", async () => {
     const result = await client.callTool({
       name: "puzzles_list",
-      arguments: { colection: "b1000", status: "open", chain: "solana", limit: 0 },
+      arguments: { colection: "bits", status: "open", chain: "solana", limit: 0 },
     });
 
     expect(result.isError).toBe(true);
@@ -426,7 +426,7 @@ describe("puzzles MCP server", () => {
   it("reports an unknown puzzle as a tool error", async () => {
     const result = await client.callTool({
       name: "puzzles_verify",
-      arguments: { id: "b1000/does-not-exist" },
+      arguments: { id: "bits/does-not-exist" },
     });
 
     expect(result.isError).toBe(true);
@@ -443,7 +443,7 @@ describe("puzzles MCP server", () => {
   it("strips control characters from echoed error text", async () => {
     const result = await client.callTool({
       name: "puzzles_show",
-      arguments: { id: "b1000/\nforged line" },
+      arguments: { id: "bits/\nforged line" },
     });
 
     expect(result.isError).toBe(true);
@@ -453,7 +453,7 @@ describe("puzzles MCP server", () => {
 
   it("strips C1 controls, line separators and bidi overrides from echoed error text", async () => {
     const hostile = [
-      "b1000/1",
+      "bits/1",
       String.fromCodePoint(0x9b),
       "31m",
       String.fromCodePoint(0x2028),

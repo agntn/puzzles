@@ -1,0 +1,40 @@
+import { puzzle } from "../../core/puzzle.ts";
+import { bits, funding, increase } from "../../core/parts.ts";
+
+/** Puzzle `bits/77`. */
+export const bits77 = puzzle({
+  id: "bits/77",
+  chain: "bitcoin",
+  address: "1Bxk4CQdqL9p22JEtDfdXMsng1XacifUtE",
+  sourceUrl: "https://bitcointalk.org/index.php?topic=5218972",
+  startedAt: "2015-01-15 18:07:14",
+  key: bits(77),
+  prize: 7.70002426,
+  transactions: [
+    funding(
+      "08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",
+      "2015-01-15 18:07:14",
+      0.077,
+    ),
+    increase(
+      "5d45587cfd1d5b0fb826805541da7d94c61fe432259e68ee26f4a04544384164",
+      "2017-07-11 05:00:53",
+      0.693,
+    ),
+    increase(
+      "12f34b58b04dfb0233ce889f674781c0e0c7ba95482cca469125af41a78d13b3",
+      "2023-04-16 06:29:48",
+      6.93,
+    ),
+    increase(
+      "8c161394a9cd1f201b0f6d4898cb5cfdff9399f618eee6c1ddf1b76b56e96e71",
+      "2023-11-29 09:47:58",
+      0.00001826,
+    ),
+    increase(
+      "599bfd6ded754b082dcff0eec969a436ffa9cc888ac515dfe2d5ad4fa96f287f",
+      "2025-01-27 18:29:28",
+      0.000006,
+    ),
+  ],
+});

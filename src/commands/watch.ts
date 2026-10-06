@@ -61,7 +61,7 @@ export default defineCommand({
   },
   args: {
     id: { type: "positional", required: false, description: "Puzzle identifier" },
-    collection: { type: "string", description: "Filter by collection key, for example b1000" },
+    collection: { type: "string", description: "Filter by collection key, for example bits" },
     ...filterArgs,
     since: {
       type: "string",

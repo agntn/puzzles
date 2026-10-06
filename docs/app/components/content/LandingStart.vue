@@ -6,7 +6,7 @@ import { tokens } from "../../utils/tokens";
 const { copied, copy } = useCopied();
 
 const INSTALL = "pnpm add @agntn/puzzles";
-const SAMPLE = "b1000/71";
+const SAMPLE = "bits/71";
 /** The sample's values as the library computes them, pinned by the landing fixture test. */
 const sample = LANDING_STATIC.find((row) => row.id === SAMPLE);
 

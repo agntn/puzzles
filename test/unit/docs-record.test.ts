@@ -28,7 +28,7 @@ describe("docs record helpers", () => {
   });
 
   it("print the solve time after the date when the record has one", async () => {
-    const view = await viewOf("b1000/66");
+    const view = await viewOf("bits/66");
 
     expect(solvedText(view)).toBe(`${view.solvedAt?.slice(0, 10)} · ${view.solveTime}`);
   });
@@ -47,11 +47,11 @@ describe("docs record helpers", () => {
       '  address: "0x635739254BDE27d28301f25aD57c3cAC3C3468f3",',
       '  escrow: "0x831102C7eb86f9EC8f79dF891bDeA187D54344Dd",',
     ]);
-    expect((await viewOf("b1000/71")).escrow).toBeUndefined();
+    expect((await viewOf("bits/71")).escrow).toBeUndefined();
   });
 
   it("say `not yet` for an open puzzle", async () => {
-    expect(solvedText(await viewOf("b1000/71"))).toBe("not yet");
+    expect(solvedText(await viewOf("bits/71"))).toBe("not yet");
   });
 
   it("open one tick per outgoing transaction", async () => {
@@ -63,7 +63,7 @@ describe("docs record helpers", () => {
   });
 
   it("color the literal without dropping anything but the middle of long values", async () => {
-    const literal = recordLiteral(await viewOf("b1000/66"));
+    const literal = recordLiteral(await viewOf("bits/66"));
     const tokens = literalTokens(literal);
 
     expect(tokens.map((token) => token.text.replace(/"[^"]*"/u, '""')).join("")).toBe(
@@ -75,7 +75,7 @@ describe("docs record helpers", () => {
   it("write the address as a string unless a builder says more", async () => {
     const lines = async (id: string) => recordLiteral(await viewOf(id)).split("\n");
 
-    expect((await lines("b1000/71"))[2]).toBe('  address: "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU",');
+    expect((await lines("bits/71"))[2]).toBe('  address: "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU",');
     expect((await lines("mini/1"))[1]).toBe('  chain: "bitcoincash",');
     expect((await lines("mini/1"))[2]).toMatch(/^ {2}address: p2pkh\("bitcoincash:q/u);
     expect((await lines("hash-collision/sha1"))[2]).toMatch(
@@ -92,7 +92,7 @@ describe("docs record helpers", () => {
       return view.techniques.map((row) => [row.scope, row.name]);
     };
 
-    expect(await scoped("b1000/71")).toEqual([["collection", "masked-key-range"]]);
+    expect(await scoped("bits/71")).toEqual([["collection", "masked-key-range"]]);
     expect(await scoped("gsmg")).toEqual([
       ["stage phase 1", "binary"],
       ["stage phase 2", "openssl-salted-sha256"],

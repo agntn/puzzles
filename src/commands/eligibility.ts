@@ -25,7 +25,7 @@ export default defineCommand({
   args: {
     query: {
       type: "positional",
-      description: "Puzzle identifier or address, for example b1000/71 or one no record holds",
+      description: "Puzzle identifier or address, for example bits/71 or one no record holds",
     },
     chain: {
       type: "string",

@@ -98,7 +98,7 @@ try {
   )) as typeof import("../src/tool-operations.ts");
   assert.equal(listed, Object.keys(facts.tools).length);
   const firstStart = performance.now();
-  const shown = await call("puzzles_show", { id: "b1000/1" });
+  const shown = await call("puzzles_show", { id: "bits/1" });
   assert.match(JSON.stringify(shown), /1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH/u);
   const firstShow = performance.now() - firstStart;
   const stats = await call("puzzles_stats", {});

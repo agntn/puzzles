@@ -452,8 +452,8 @@ export async function get(id: string): Promise<Puzzle | undefined> {
  * Looks up a puzzle or throws a typed not found error. The error says what the identifier's
  * collection does hold, or which collections exist when the identifier named none, so a caller
  * that guessed wrong recovers without a second lookup. When one puzzle explains the miss, the
- * error names it first: `B1000/71` and `b100/71` mean `b1000/71`, and a bare `135` means the one
- * puzzle of that name, `b1000/135`.
+ * error names it first: `BITS/71` and `bit/71` mean `bits/71`, and a bare `135` means the one
+ * puzzle of that name, `bits/135`.
  *
  * @param {string} id - Universal puzzle identifier.
  * @returns {Promise<Puzzle>} The puzzle.

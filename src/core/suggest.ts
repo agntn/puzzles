@@ -63,7 +63,7 @@ export function closestKey(query: string, keys: readonly string[]): string | und
 }
 
 /**
- * Every entry a miss could have meant, as one choice: `b1000/71 or quizchain/71`.
+ * Every entry a miss could have meant, as one choice: `bits/71 or quizchain/71`.
  *
  * @param {string[]} matches - The entries that qualified.
  * @returns {string | undefined} The choice, or `undefined` when nothing qualified.
@@ -77,7 +77,7 @@ function choice(matches: readonly string[]): string | undefined {
  * The puzzle a mistyped name most likely meant, among puzzles of one or more collections. Only case
  * and separators fold here: names such as `71` and `72` sit one edit apart and are different
  * puzzles, so a typo in a number never becomes a suggestion. A name several collections share,
- * such as `71` in `b1000` and `quizchain`, names every puzzle that has it, in registry order.
+ * such as `71` in `bits` and `quizchain`, names every puzzle that has it, in registry order.
  *
  * @param {string} name - The name segment that missed, `level5` in `zden/level5`.
  * @param {readonly Puzzle[]} puzzles - The puzzles the name could belong to.

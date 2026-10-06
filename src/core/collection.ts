@@ -278,7 +278,7 @@ export class NamedCollection extends Collection<string> {
 }
 
 /**
- * A collection addressed by puzzle numbers, `71`, `"71"` or `"b1000/71"`. Only that spelling
+ * A collection addressed by puzzle numbers, `71`, `"71"` or `"bits/71"`. Only that spelling
  * resolves: `Number()` would read `"0x47"`, `" 71 "` and `"71.0"` as 71 and `"7e1"` as 70.
  */
 export class NumericCollection extends Collection<number | string> {
@@ -290,7 +290,7 @@ export class NumericCollection extends Collection<number | string> {
   }
 
   /**
-   * Reads the number off `71` or `b1000/71`, and nothing off any other spelling.
+   * Reads the number off `71` or `bits/71`, and nothing off any other spelling.
    *
    * @param {string} query - Query in the collection's own terms.
    * @returns {number | undefined} The puzzle number, or `undefined` for any other spelling.

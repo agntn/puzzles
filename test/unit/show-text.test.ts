@@ -65,7 +65,7 @@ describe("puzzles_show text", () => {
     }
   });
   it("prints the key, the solve and every transaction of a solved puzzle", async () => {
-    const text = await lines("b1000/1");
+    const text = await lines("bits/1");
 
     expect(text).toContain("hash160: 751e76e8199196d454941c45d1b3a323f1433bd6");
     expect(text).toContain(
@@ -80,7 +80,7 @@ describe("puzzles_show text", () => {
   });
 
   it("folds a run of dust into one line and keeps the author's top ups on their own", async () => {
-    const text = await lines("b1000/71");
+    const text = await lines("bits/71");
     const start = text.indexOf("transactions: 69, 66 small increases folded") + 1;
     const rows = text.slice(start, start + 5);
 
@@ -95,7 +95,7 @@ describe("puzzles_show text", () => {
   });
 
   it("lists every transaction with its txid when asked", async () => {
-    const text = await lines("b1000/71", true);
+    const text = await lines("bits/71", true);
 
     expect(text).toContain("transactions: 69");
     expect(text.filter((line) => /^\t(funding|increase)\t/u.test(line))).toHaveLength(69);
@@ -145,7 +145,7 @@ describe("puzzles_show text", () => {
   });
 
   it("prints a dust amount as a decimal, not an exponent", async () => {
-    const text = (await lines("b1000/71", true)).join("\n");
+    const text = (await lines("bits/71", true)).join("\n");
 
     expect(text).toContain("\tincrease\t2025-05-19 18:56:09\t0.00000001 BTC\t076d820e");
     expect(text).not.toMatch(/\de-\d/u);
@@ -179,8 +179,8 @@ describe("puzzles_show text", () => {
     }
   });
 
-  it("prints the hint every b1000 record inherits from its author", async () => {
-    const text = await lines("b1000/71");
+  it("prints the hint every bits record inherits from its author", async () => {
+    const text = await lines("bits/71");
 
     expect(text).toContain("collection hints: 1");
     expect(text).toContain(
@@ -375,8 +375,8 @@ describe("puzzles_show text", () => {
         `files: 1 file, 1 archived source; ${ASSETS_TOOL} lists them and reads one by its path`,
       );
     }
-    expect((await lines("b1000/71")).some((line) => line.startsWith("files:"))).toBe(false);
-    expect((await stagesTool("b1000/71")).content[0]?.text).toBe("b1000/71: no stages recorded");
+    expect((await lines("bits/71")).some((line) => line.startsWith("files:"))).toBe(false);
+    expect((await stagesTool("bits/71")).content[0]?.text).toBe("bits/71: no stages recorded");
     expect(facts.tools.show.promptSnippet).toContain(ASSETS_TOOL);
   });
 

@@ -21,7 +21,7 @@ Docs, one page per puzzle and a live playground: [puzzles.agntn.dev](https://puz
 - 🧾 **Data as code.** One `PuzzleSpec` literal per puzzle, built by one `puzzle()` factory for every chain. No JSON, no build step.
 - 🕳️ **Absent means absent.** A puzzle without a solver or a prize has no such key. Nothing serializes as null.
 - 🔑 **Key material in every shape.** Hex, WIF, a BIP38 payload, a seed phrase, secret shares, or just a bit width. One builder.
-- 💤 **Lazy registry.** Importing the package loads no records. `get("b1000/71")` imports one collection module.
+- 💤 **Lazy registry.** Importing the package loads no records. `get("bits/71")` imports one collection module.
 - ✅ **Verification is a value.** A published key derives the address or it doesn't. Nothing throws for a bad record.
 - 💰 **Live balances.** `puzzle.balance()` through `@agntn/explorers`. Base units as `bigint`, API keys redacted from errors.
 - 👀 **A watch on the record.** `puzzles watch` lists the deposits and spends a record misses, a prize that moved, a public key a spend gave away, a source page that changed. It never edits a record. You do.
@@ -90,15 +90,15 @@ source: https://bitcointalk.org/index.php?topic=293382.0
 
 ```ts
 import { get, stats, verify } from "@agntn/puzzles";
-import { b1000 } from "@agntn/puzzles/collections/b1000";
+import { bits } from "@agntn/puzzles/collections/bits";
 
-const puzzle = await get("b1000/71"); // loads the b1000 collection, nothing else
+const puzzle = await get("bits/71"); // loads the bits collection, nothing else
 puzzle?.address().value; // "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU"
 puzzle?.keyRange(); // [2n ** 70n, 2n ** 71n - 1n]
 
-(await verify(b1000.require(1))).verified; // true, key 1 derives its address
+(await verify(bits.require(1))).verified; // true, key 1 derives its address
 (await stats()).unsolved; // how many are still waiting for a key
-(await b1000.require(71).balance()).totalUnits(); // 7.10190014 when I ran it, mempool.space decides
+(await bits.require(71).balance()).totalUnits(); // 7.10190014 when I ran it, mempool.space decides
 ```
 
 That's most of it, really. A collection is its own entry and everything on it is synchronous. The views that span collections await a load. Errors descend from `PuzzlesError`, balances have their own family under `BalanceError`. The rest is in the guides: [records](https://puzzles.agntn.dev/guide/records), [registry](https://puzzles.agntn.dev/guide/registry), [lookups](https://puzzles.agntn.dev/guide/lookups), [verification](https://puzzles.agntn.dev/guide/verification), [balances](https://puzzles.agntn.dev/guide/balances).
@@ -107,7 +107,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 
 | Key                     | Chains                              | What it is                                  |
 | ----------------------- | ----------------------------------- | ------------------------------------------- |
-| `b1000`                 | bitcoin                             | Keys of 1 to 256 bits, one address each     |
+| `bits`                  | bitcoin                             | Keys of 1 to 256 bits, one address each     |
 | `quizchain`             | bitcoin                             | Quiz blocks chained by their keys           |
 | `quizchain2`            | bitcoin                             | Quizchain's second run, from May 2019       |
 | `rushwallet`            | bitcoin                             | Brainwallets from a 2014 contest            |

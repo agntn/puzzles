@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, it, vi } from "vite-plus/test";
-import { b1000 } from "../../src/collections/b1000.ts";
+import { bits } from "../../src/collections/bits.ts";
 import { ballet } from "../../src/collections/ballet.ts";
 import { bitaps } from "../../src/collections/bitaps.ts";
 import { bitimage } from "../../src/collections/bitimage.ts";
@@ -37,7 +37,7 @@ const synthetic = {
 
 describe("Collection.verify", () => {
   it("verifies a known direct private key", async () => {
-    const result = await b1000.verify(1);
+    const result = await bits.verify(1);
 
     expect(result.verified).toBe(true);
     expect(result.derivedAddress).toBe("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH");
@@ -657,10 +657,10 @@ describe("verifyTool over filters", () => {
 
   it("refuses an id with filters, neither, filters that match nothing and a flag in text", async () => {
     const refusals = [
-      verifyTool({ id: "b1000/1", collection: "b1000" }),
+      verifyTool({ id: "bits/1", collection: "bits" }),
       verifyTool({}),
       verifyTool({ withPubkey: false }),
-      verifyTool({ collection: "b1000", chain: "ethereum" }),
+      verifyTool({ collection: "bits", chain: "ethereum" }),
       verifyTool({ withPubkey: "true" as unknown as boolean }),
     ];
 

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
-import { b1000 } from "../../src/collections/b1000.ts";
+import { bits } from "../../src/collections/bits.ts";
 import { teikhos } from "../../src/collections/teikhos.ts";
 import { InvalidArgumentError } from "../../src/index.ts";
 import type * as Watch from "../../src/core/watch.ts";
@@ -8,7 +8,7 @@ import { watchTool } from "../../src/tool-operations.ts";
 
 const target = "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU";
 
-/* Made up: a top-up of b1000/71 the record doesn't list. */
+/* Made up: a top-up of bits/71 the record doesn't list. */
 const deposit = {
   txid: "e".repeat(64),
   fee: 66,
@@ -19,7 +19,7 @@ const deposit = {
     { scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 18414 },
   ],
 };
-/* A transaction mempool.space returned for b1000/71, trimmed to the fields the provider reads. */
+/* A transaction mempool.space returned for bits/71, trimmed to the fields the provider reads. */
 const recorded = {
   txid: "a2808acb455f636dc988186219d025e6507bd80640b0056b46583232aee7cfa5",
   fee: 1581,
@@ -69,7 +69,7 @@ function json(body: unknown): Response {
   return new Response(JSON.stringify(body), { headers: { "content-type": "application/json" } });
 }
 
-/* mempool.space for b1000/71: 25 transactions a page like Esplora, 400 from `broken` on. */
+/* mempool.space for bits/71: 25 transactions a page like Esplora, 400 from `broken` on. */
 function stubBitcoin(
   history: readonly Readonly<{ txid: string }>[],
   held: number,
@@ -121,7 +121,7 @@ describe("watcher", () => {
   it("lists a deposit the record misses and the prize it moved", async () => {
     stubBitcoin([deposit, recorded], 710191680 + 666);
 
-    const report = await watcher()(b1000.require(71));
+    const report = await watcher()(bits.require(71));
 
     expect(report.errors).toEqual([]);
     expect(report.findings).toEqual([
@@ -137,17 +137,17 @@ describe("watcher", () => {
       { kind: "balance", balance: 710192346n, prize: "7.1019168" },
     ]);
     expect(formatWatchReport(report)).toEqual([
-      `DEPOSIT\tb1000/71\t${deposit.txid} 0.00000666 BTC 2026-10-02T00:13:20.000Z at ${target}`,
-      "BALANCE\tb1000/71\t7.10192346 BTC held, 7.1019168 BTC recorded as the prize",
+      `DEPOSIT\tbits/71\t${deposit.txid} 0.00000666 BTC 2026-10-02T00:13:20.000Z at ${target}`,
+      "BALANCE\tbits/71\t7.10192346 BTC held, 7.1019168 BTC recorded as the prize",
     ]);
   });
 
   it("puts an unconfirmed spend last and reads OK when nothing else differs", async () => {
     stubBitcoin([recorded], 710191680);
-    expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual(["OK\tb1000/71"]);
+    expect(formatWatchReport(await watcher()(bits.require(71)))).toEqual(["OK\tbits/71"]);
 
     stubBitcoin([spend, deposit, recorded], 710191680);
-    const { findings } = await watcher()(b1000.require(71));
+    const { findings } = await watcher()(bits.require(71));
     expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "spend"]);
     expect(findings[1]).toMatchObject({ pending: true, direction: "out" });
   });
@@ -155,7 +155,7 @@ describe("watcher", () => {
   it("reads past the first 100 transactions to a deposit the record misses", async () => {
     stubBitcoin([...empty(149), deposit], 710191680 + 666);
 
-    const { findings, truncated } = await watcher()(b1000.require(71));
+    const { findings, truncated } = await watcher()(bits.require(71));
 
     expect(truncated).toEqual([]);
     expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "balance"]);
@@ -167,23 +167,23 @@ describe("watcher", () => {
     history.splice(50, 1, deposit);
     stubBitcoin(history, 710191680 + 666, 100);
 
-    const report = await watcher()(b1000.require(71));
+    const report = await watcher()(bits.require(71));
 
     expect(report.truncated).toEqual([]);
     expect(report.findings.map((finding) => finding.kind)).toEqual(["deposit", "balance"]);
     expect(formatWatchReport(report).at(-1)).toBe(
-      `FAIL\tb1000/71\tTransaction history lookup failed: HTTP 400 from https://mempool.space/api/address/${target}/txs/chain/${history[99]?.txid}: Bad Request, past the newest 100 transactions at ${target}`,
+      `FAIL\tbits/71\tTransaction history lookup failed: HTTP 400 from https://mempool.space/api/address/${target}/txs/chain/${history[99]?.txid}: Bad Request, past the newest 100 transactions at ${target}`,
     );
   });
 
   it("names an address busier than 1000 transactions instead of calling it OK", async () => {
     stubBitcoin(empty(1000), 710191680);
-    expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual([
-      `PARTIAL\tb1000/71\tonly the newest 1000 transactions at ${target} read, older ones unchecked`,
+    expect(formatWatchReport(await watcher()(bits.require(71)))).toEqual([
+      `PARTIAL\tbits/71\tonly the newest 1000 transactions at ${target} read, older ones unchecked`,
     ]);
 
     stubBitcoin(empty(999), 710191680);
-    expect(formatWatchReport(await watcher()(b1000.require(71)))).toEqual(["OK\tb1000/71"]);
+    expect(formatWatchReport(await watcher()(bits.require(71)))).toEqual(["OK\tbits/71"]);
   });
 
   it("leaves out a contract call that moves no coin in and a deposit that reverted", async () => {
@@ -236,32 +236,32 @@ describe("watcher", () => {
       });
     });
 
-    const report = await watcher()(b1000.require(71));
+    const report = await watcher()(bits.require(71));
 
     expect(report.findings).toEqual([]);
     expect(report.errors).toEqual([
       expect.stringMatching(/^Transaction history lookup failed: No response from mempool /u),
     ]);
-    expect(formatWatchReport(report)[0]).toMatch(/^FAIL\tb1000\/71\tTransaction history/u);
+    expect(formatWatchReport(report)[0]).toMatch(/^FAIL\tbits\/71\tTransaction history/u);
   });
 
   it("asks nothing more of an address that never spent", async () => {
     const urls = stubBitcoin([deposit, recorded], 710191680 + 666);
 
-    const { findings } = await watcher()(b1000.require(71));
+    const { findings } = await watcher()(bits.require(71));
 
     expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "balance"]);
     expect(urls.filter((url) => url.endsWith(`/address/${target}`))).toHaveLength(1);
 
     const busy = stubBitcoin(empty(1000), 710191680);
-    await watcher()(b1000.require(71));
+    await watcher()(bits.require(71));
     expect(busy.filter((url) => url.endsWith(`/address/${target}`))).toHaveLength(1);
   });
 
   it("reports a key a spend showed that the record lacks", async () => {
     stubSpender(target, [signed], 710191680);
 
-    const report = await watcher()(b1000.require(71));
+    const report = await watcher()(bits.require(71));
 
     expect(report.findings.at(-1)).toEqual({
       kind: "pubkey",
@@ -270,12 +270,12 @@ describe("watcher", () => {
       txid: signed.txid,
     });
     expect(formatWatchReport(report)).toContain(
-      `PUBKEY\tb1000/71\t${shown} shown by ${signed.txid} at ${target}, none recorded`,
+      `PUBKEY\tbits/71\t${shown} shown by ${signed.txid} at ${target}, none recorded`,
     );
   });
 
   it("reports a recorded key the chain spells otherwise, and none when they agree", async () => {
-    const puzzle = b1000.require(140);
+    const puzzle = bits.require(140);
     const address = puzzle.address().value;
     const recordedKey = puzzle.pubkey()?.value ?? "";
     const reveal = (key: string) => ({
@@ -340,7 +340,7 @@ describe("watcher with since", () => {
     };
     const sourceChange = vi.fn(async () => change);
     const { watcher: fresh } = await withSources(sourceChange);
-    const { b1000: fresh1000 } = await import("../../src/collections/b1000.ts");
+    const { bits: fresh1000 } = await import("../../src/collections/bits.ts");
     const check = fresh({ since: "2026-09-01" });
 
     const first = await check(fresh1000.require(71));
@@ -361,7 +361,7 @@ describe("watcher with since", () => {
       const { SourceLookupError } = await import("../../src/core/errors.ts");
       throw new SourceLookupError("Source lookup failed: no capture");
     });
-    const { b1000: fresh1000 } = await import("../../src/collections/b1000.ts");
+    const { bits: fresh1000 } = await import("../../src/collections/bits.ts");
 
     const report = await fresh({ since: "2026-09-01" })(fresh1000.require(71));
 
@@ -373,16 +373,16 @@ describe("puzzles_watch", () => {
   it("leads with the counts and says when the source page was left out", async () => {
     stubBitcoin([deposit, recorded], 710191680 + 666);
 
-    const result = await watchTool("b1000/71");
+    const result = await watchTool("bits/71");
 
     expect(result.content[0]?.text.split("\n")).toEqual([
-      "b1000/71: 2 differences from the record",
-      `DEPOSIT\tb1000/71\t${deposit.txid} 0.00000666 BTC 2026-10-02T00:13:20.000Z at ${target}`,
-      "BALANCE\tb1000/71\t7.10192346 BTC held, 7.1019168 BTC recorded as the prize",
+      "bits/71: 2 differences from the record",
+      `DEPOSIT\tbits/71\t${deposit.txid} 0.00000666 BTC 2026-10-02T00:13:20.000Z at ${target}`,
+      "BALANCE\tbits/71\t7.10192346 BTC held, 7.1019168 BTC recorded as the prize",
       "Source page not checked; pass since to compare its archive captures.",
     ]);
     expect(result.details).toMatchObject({
-      id: "b1000/71",
+      id: "bits/71",
       findings: [
         { kind: "deposit", amount: "666" },
         { kind: "balance", balance: "710192346" },
@@ -394,8 +394,8 @@ describe("puzzles_watch", () => {
   });
 
   it("rejects a since outside its limits as an argument error", async () => {
-    await expect(watchTool("b1000/71", "2026")).rejects.toThrow(InvalidArgumentError);
-    await expect(watchTool("b1000/71", "2026-13-01")).rejects.toThrow(
+    await expect(watchTool("bits/71", "2026")).rejects.toThrow(InvalidArgumentError);
+    await expect(watchTool("bits/71", "2026-13-01")).rejects.toThrow(
       "Invalid since: expected YYYY-MM-DD or an ISO 8601 date and time",
     );
   });
