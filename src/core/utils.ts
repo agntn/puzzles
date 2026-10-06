@@ -401,22 +401,39 @@ function formatTransactions(puzzle: Puzzle, every: boolean): string[] {
   ];
 }
 
+/** A link for a person to click, or a path for a model to hand `puzzles_assets`. */
+export type FileReference = "url" | "path";
+
 /**
- * Every asset as a URL, the hint files and the solution under the same root as the puzzle
- * image.
+ * One file as the reader takes it.
+ *
+ * @param {AssetLink} link - The file.
+ * @param {FileReference} files - URL or repository path.
+ * @returns {string} The URL or the path.
+ */
+function fileOf(link: AssetLink, files: FileReference): string {
+  return files === "path" ? link.path : link.url;
+}
+
+/**
+ * Every asset, the hint files and the solution under the same root as the puzzle image.
  *
  * @param {Puzzle} puzzle - The puzzle.
+ * @param {FileReference} files - URLs or repository paths.
  * @returns {string[]} The asset lines.
  */
-function formatAssets(puzzle: Puzzle): string[] {
+function formatAssets(puzzle: Puzzle, files: FileReference): string[] {
   const assets = puzzle.assets();
   if (assets === undefined) {
     return [];
   }
+  const links = puzzle.assetLinks();
+  const image = links.find((link) => link.kind === "puzzle");
+  const solution = links.find((link) => link.kind === "solution");
   return [
-    ...field("asset", puzzle.assetUrl()),
-    ...formatHintAssets(hintAssets(puzzle)),
-    ...field("solution asset", puzzle.assetLinks().find((link) => link.kind === "solution")?.url),
+    ...field("asset", image, (link) => fileOf(link, files)),
+    ...formatHintAssets(hintAssets(puzzle), files),
+    ...field("solution asset", solution, (link) => fileOf(link, files)),
     ...field("asset source", assets.source_url),
   ];
 }
@@ -426,9 +443,10 @@ function formatAssets(puzzle: Puzzle): string[] {
  * name, where the author published it, the repository copy) and its published answer, if any.
  *
  * @param {Puzzle} puzzle - The puzzle.
+ * @param {FileReference} files - The repository copy as a URL or a path.
  * @returns {string[]} The count line and the artifact lines, or nothing for a single-stage puzzle.
  */
-function formatStages(puzzle: Puzzle): string[] {
+function formatStages(puzzle: Puzzle, files: FileReference): string[] {
   const stages = puzzle.stages();
   if (stages.length === 0) {
     return [];
@@ -441,7 +459,8 @@ function formatStages(puzzle: Puzzle): string[] {
       `\t${stage.name}\t${stage.about}`,
       ...stage.artifacts.map((item) => {
         const path = item.file === undefined ? undefined : `${directory}/${item.file}`;
-        const copy = links.find((link) => link.path === path)?.url;
+        const link = links.find((candidate) => candidate.path === path);
+        const copy = link === undefined ? undefined : fileOf(link, files);
         return `\t\t${[item.name, item.url, ...(copy === undefined ? [] : [copy])].join("\t")}`;
       }),
       ...(stage.answer === undefined ? [] : [`\t\t${formatAnswer(stage.answer)}`]),
@@ -490,15 +509,16 @@ export function hintAssets(puzzle: Puzzle): readonly AssetLink[] {
 }
 
 /**
- * The `hint assets` line `puzzles_show` and `puzzles_hints` share: every hint file as a URL, or
+ * The `hint assets` line `puzzles_show` and `puzzles_hints` share: every hint file, or
  * nothing when the record ships none.
  *
  * @param {readonly AssetLink[]} links - The hint links of the record.
+ * @param {FileReference} files - URLs or repository paths.
  * @returns {string[]} The line, or an empty list.
  */
-function formatHintAssets(links: readonly AssetLink[]): string[] {
+function formatHintAssets(links: readonly AssetLink[], files: FileReference): string[] {
   return field("hint assets", links.length === 0 ? undefined : links, (list) =>
-    list.map((link) => link.url).join(", "),
+    list.map((link) => fileOf(link, files)).join(", "),
   );
 }
 
@@ -561,9 +581,14 @@ function formatHintBlocks(inherited: readonly Hint[], own: readonly Hint[]): str
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @param {readonly Hint[]} inherited - The hints of the puzzle's collection.
+ * @param {FileReference} [files] - The hint files as URLs, or as paths for a model.
  * @returns {string[]} The header, then the hint lines.
  */
-export function formatHintReport(puzzle: Puzzle, inherited: readonly Hint[]): string[] {
+export function formatHintReport(
+  puzzle: Puzzle,
+  inherited: readonly Hint[],
+  files: FileReference = "url",
+): string[] {
   const own = puzzle.hints();
   const assets = hintAssets(puzzle);
   const counts = [
@@ -577,7 +602,7 @@ export function formatHintReport(puzzle: Puzzle, inherited: readonly Hint[]): st
   return [
     `${puzzle.id()}: ${header.length === 0 ? "no hints recorded" : header}`,
     ...formatHintBlocks(inherited, own),
-    ...formatHintAssets(assets),
+    ...formatHintAssets(assets, files),
   ];
 }
 
@@ -586,12 +611,13 @@ export function formatHintReport(puzzle: Puzzle, inherited: readonly Hint[]): st
  * recorded`, then the `stages` block `puzzles_show` prints.
  *
  * @param {Puzzle} puzzle - The puzzle.
+ * @param {FileReference} [files] - The repository copies as URLs, or as paths for a model.
  * @returns {string[]} The header, then the stage lines.
  */
-export function formatStageReport(puzzle: Puzzle): string[] {
+export function formatStageReport(puzzle: Puzzle, files: FileReference = "url"): string[] {
   const count = puzzle.stages().length;
   const header = count === 0 ? "no stages recorded" : countOf(count, "stage");
-  return [`${puzzle.id()}: ${header}`, ...formatStages(puzzle)];
+  return [`${puzzle.id()}: ${header}`, ...formatStages(puzzle, files)];
 }
 
 /**
@@ -604,6 +630,7 @@ export function formatStageReport(puzzle: Puzzle): string[] {
  * @param {readonly Hint[]} [inherited] - The hints of the puzzle's collection.
  * @param {readonly TechniqueTag[]} [inheritedTechniques] - The collection's techniques.
  * @param {boolean} [allTransactions] - List every transaction instead of folding the dust.
+ * @param {FileReference} [files] - The shipped files as URLs, or as paths for a model.
  * @returns {string} The record as lines.
  */
 export function formatPuzzleRecord(
@@ -611,6 +638,7 @@ export function formatPuzzleRecord(
   inherited: readonly Hint[] = [],
   inheritedTechniques: readonly TechniqueTag[] = [],
   allTransactions = false,
+  files: FileReference = "url",
 ): string {
   const address = puzzle.address();
   const key = puzzle.keyData();
@@ -631,8 +659,8 @@ export function formatPuzzleRecord(
     ...(puzzle.preGenesis() ? ["pre-genesis: yes"] : []),
     ...formatTransactions(puzzle, allTransactions),
     ...field("claim", puzzle.claimExplorerUrl()),
-    ...formatAssets(puzzle),
-    ...formatStages(puzzle),
+    ...formatAssets(puzzle, files),
+    ...formatStages(puzzle, files),
     ...formatTechniqueBlocks(inheritedTechniques, puzzle.techniques()),
     ...formatHintBlocks(inherited, puzzle.hints()),
     `explorer: ${puzzle.explorerUrl()}`,

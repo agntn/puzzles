@@ -3,7 +3,6 @@ import { readFileSync } from "node:fs";
 import { beforeAll, describe, expect, it, vi } from "vite-plus/test";
 import { createMcpServer } from "../../src/mcp.ts";
 import { facts } from "../../src/tool-operations.ts";
-import { ASSETS } from "../support/assets.ts";
 import { firstText } from "../support/mcp.ts";
 
 const toolNames = Object.values(facts.tools)
@@ -186,10 +185,12 @@ describe("puzzles MCP server", () => {
       "\tofficial\t2018-12-24 10:19:06\tSum of two consecutive following rectangles areas creates one byte of the private key. Apply more operations to obtain the results in byte range.\tsource: https://twitter.com/Zd3N/status/1077146640090316800\tconfirmation: https://web.archive.org/web/20220129183939/https://twitter.com/Zd3N/status/1077146640090316800 (Wayback capture of the tweet, the BTCrypto L5 part of a hints bundle)",
       "\tofficial\t-\tThe new corrected version including new hints! UNSOLVED for over 3 years because the original release was uncomplete! Relaunched on 12th of December 2021. My excuses to everyone!\tsource: https://crypto.haluska.sk/\tconfirmation: https://web.archive.org/web/20220124172559/https://crypto.haluska.sk/ (Wayback capture of the puzzle page)",
       "\tofficial\t-\t(clarity edit: sum of two ~~consecutive~~ following rectangles...)\tsource: https://crypto.haluska.sk/\tconfirmation: https://web.archive.org/web/20220124172559/https://crypto.haluska.sk/ (Wayback capture of the puzzle page, which strikes consecutive out of the 2018 hint)",
+      "files: 1 file, 1 archived source; puzzles_assets lists them and reads one by its path",
     ]);
     expect(firstText(image).split("\n")).toEqual([
       "gsmg: 1 hint asset",
-      `hint assets: ${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
+      "hint assets: assets/gsmg/follow-the-white-rabbit.png",
+      "files: 6 files, 0 archived sources; puzzles_assets lists them and reads one by its path",
     ]);
     expect(firstText(bare)).toBe("weave/1: no hints recorded");
   });
@@ -319,6 +320,7 @@ describe("puzzles MCP server", () => {
       "\tofficial\t-\tGuess all the 34 movie titles, from the provided movie frames\tsource: https://bitcoinmovieenigma.com/rules",
       '\tofficial\t-\tTransform "somehow" each movie title into an English BIP-0039 seed word\tsource: https://bitcoinmovieenigma.com/rules',
       '\tofficial\t-\tThe seedphrase you have is 34 words long, but we should have a 24 words seedphrase instead. Some movies should not be in the sequence, and should be considered intruders, but which ones ? You will need additional informations about each movie to detect those intruders "somehow". Every information you need can be found on IMBD, on each movie\'s page\tsource: https://bitcoinmovieenigma.com/rules',
+      "files: 1 file, 1 archived source; puzzles_assets lists them and reads one by its path",
     ]);
   });
 

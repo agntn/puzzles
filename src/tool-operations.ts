@@ -3,6 +3,8 @@ import type { Chain } from "./core/chains.ts";
 import type { PuzzleQuery } from "./core/dataset.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/status.ts";
+import type { Puzzle } from "./core/puzzle.ts";
+import type { AnyCollection } from "./core/registry.ts";
 import { oneLine } from "./core/text.ts";
 import { type Technique, techniques } from "./core/technique.ts";
 import type { RecipeResult, VerifyResult } from "./core/verify.ts";
@@ -137,8 +139,9 @@ export const facts = {
       name: "puzzles_show",
       title: "Show Puzzle",
       description:
-        "Show one puzzle's address, status, key material, transactions, techniques, hints, and explorer links.",
-      promptSnippet: "Use puzzles_show to inspect a single puzzle by identifier.",
+        "Show one puzzle's address, status, key material, transactions, techniques, hints, explorer links, and the repository paths of its files.",
+      promptSnippet:
+        "Use puzzles_show to inspect a single puzzle by identifier, then puzzles_assets to read its files by path instead of downloading them.",
       promptGuidelines: [
         "Identifiers are collection/name, for example b1000/90, or gsmg.",
         "More than three increases in a row, each under 1% of the largest transaction, print as one line with their count, dates and total; pass allTransactions for each one with its txid.",
@@ -150,7 +153,7 @@ export const facts = {
       name: "puzzles_hints",
       title: "Puzzle Hints",
       description:
-        "List a puzzle's own and inherited hints with sources, optional confirmations, separately labeled published answers, and hint files.",
+        "List a puzzle's own and inherited hints with sources, optional confirmations, separately labeled published answers, and the paths of its hint files.",
       promptSnippet:
         "Use puzzles_hints for what the author or the community said about a puzzle before searching for its key.",
       promptGuidelines: [
@@ -164,7 +167,7 @@ export const facts = {
       name: "puzzles_stages",
       title: "Puzzle Stages",
       description:
-        "List the stages of a puzzle that runs in several, in the author's order: what each one shows, the pages and files the author published for it, the repository copies, and the published answer when somebody solved it.",
+        "List the stages of a puzzle that runs in several, in the author's order: what each one shows, the pages and files the author published for it, the paths of the repository copies, and the published answer when somebody solved it.",
       promptSnippet:
         "Use puzzles_stages to walk a multi-stage puzzle step by step and see which steps already have a public answer.",
       promptGuidelines: [
@@ -649,6 +652,43 @@ export async function solverTool(key: string): Promise<ToolResult> {
 }
 
 /**
+ * Sends a model to `puzzles_assets`, which hands back only the bytes the record pins.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {AnyCollection} collection - Its collection, whose hints cite archived sources too.
+ * @returns {Promise<string[]>} The line, or nothing when the puzzle has no file to read.
+ */
+async function filesLine(puzzle: Puzzle, collection: AnyCollection): Promise<string[]> {
+  const {
+    utils: { countOf },
+  } = await loadCore();
+  const { citedArchivedSources } = await import("./core/archived-sources.ts");
+  const shipped = puzzle.assetLinks().length;
+  const sources = citedArchivedSources(puzzle, collection).length;
+  if (shipped + sources === 0) {
+    return [];
+  }
+  const counts = `${countOf(shipped, "file")}, ${countOf(sources, "archived source")}`;
+  return [`files: ${counts}; ${facts.tools.assets.name} lists them and reads one by its path`];
+}
+
+/**
+ * A report with the `files` line under it, even under a bare `no hints recorded`.
+ *
+ * @param {readonly string[]} report - The header, then the lines under it.
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {AnyCollection} collection - Its collection.
+ * @returns {Promise<string>} The answer text.
+ */
+async function withFilesLine(
+  report: readonly string[],
+  puzzle: Puzzle,
+  collection: AnyCollection,
+): Promise<string> {
+  return [...report, ...(await filesLine(puzzle, collection))].join("\n");
+}
+
+/**
  * One puzzle's complete record for a model.
  *
  * @param {string} id - Universal puzzle identifier.
@@ -664,8 +704,8 @@ export async function showTool(id: string, allTransactions?: boolean): Promise<T
   const every = assertFlag("allTransactions", allTransactions);
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
-  const record = formatPuzzleRecord(puzzle, collection.hints, collection.techniques, every);
-  return text(record, {
+  const record = formatPuzzleRecord(puzzle, collection.hints, collection.techniques, every, "path");
+  return text(await withFilesLine([record], puzzle, collection), {
     puzzle,
     hints: collection.hintsById(puzzle.id()),
     techniques: collection.techniquesById(puzzle.id()),
@@ -681,10 +721,15 @@ export async function showTool(id: string, allTransactions?: boolean): Promise<T
 export async function stagesTool(id: string): Promise<ToolResult> {
   const {
     dataset: { requirePuzzle },
+    registry: { requireCollection },
     utils: { formatStageReport },
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
-  return text(formatStageReport(puzzle).join("\n"), { id: puzzle.id(), stages: puzzle.stages() });
+  const collection = await requireCollection(puzzle.collection());
+  return text(await withFilesLine(formatStageReport(puzzle, "path"), puzzle, collection), {
+    id: puzzle.id(),
+    stages: puzzle.stages(),
+  });
 }
 
 /**
@@ -748,7 +793,8 @@ export async function hintsTool(id: string): Promise<ToolResult> {
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
-  return text(formatHintReport(puzzle, collection.hints).join("\n"), {
+  const report = formatHintReport(puzzle, collection.hints, "path");
+  return text(await withFilesLine(report, puzzle, collection), {
     id: puzzle.id(),
     hints: collection.hintsById(puzzle.id()),
     hintAssets: hintAssets(puzzle),
