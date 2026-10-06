@@ -5,7 +5,9 @@ import {
   BitcoinPuzzle,
   community,
   confirmation,
+  funding,
   hex,
+  increase,
   official,
   p2pkh,
   puzzle,
@@ -25,8 +27,8 @@ import { ASSETS } from "../support/assets.ts";
  * MCP hands a model `content[0].text` and nothing else, so the record's own fields have to be in
  * it. Every check here is against a bundled record, so a data fix that moves one shows up.
  */
-async function lines(id: string): Promise<string[]> {
-  return (await showTool(id)).content[0]?.text.split("\n") ?? [];
+async function lines(id: string, allTransactions?: boolean): Promise<string[]> {
+  return (await showTool(id, allTransactions)).content[0]?.text.split("\n") ?? [];
 }
 
 describe("puzzles_show text", () => {
@@ -75,8 +77,73 @@ describe("puzzles_show text", () => {
     expect(text).toContain("key range: 1..1 (hex, 1 bit)");
   });
 
+  it("folds a run of dust into one line and keeps the author's top ups on their own", async () => {
+    const text = await lines("b1000/71");
+    const start = text.indexOf("transactions: 69, 66 small increases folded") + 1;
+    const rows = text.slice(start, start + 5);
+
+    expect(start).toBeGreaterThan(0);
+    expect(rows).toEqual([
+      "\tfunding\t2015-01-15 18:07:14\t0.071 BTC\t08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",
+      "\tincrease\t2017-07-11 05:00:53\t0.639 BTC\t5d45587cfd1d5b0fb826805541da7d94c61fe432259e68ee26f4a04544384164",
+      "\tincrease\t2023-04-16 06:29:48\t6.39 BTC\t12f34b58b04dfb0233ce889f674781c0e0c7ba95482cca469125af41a78d13b3",
+      "\t66 small increases\t2023-09-25 15:00:17 to 2026-09-29 22:18:51\t0.0019168 BTC",
+      "collection techniques: 1",
+    ]);
+  });
+
+  it("lists every transaction with its txid when asked", async () => {
+    const text = await lines("b1000/71", true);
+
+    expect(text).toContain("transactions: 69");
+    expect(text.filter((line) => /^\t(funding|increase)\t/u.test(line))).toHaveLength(69);
+    expect(text.join("\n")).not.toContain("small increases");
+  });
+
+  it("lists three small increases in a row, folding starts at four", () => {
+    const deposits = (count: number) =>
+      Array.from({ length: count }, (_, index) =>
+        increase(index.toString(16).padStart(64, "0"), `2026-01-0${index + 1}`, 0.00000546),
+      );
+    const record = (count: number) =>
+      formatPuzzleRecord(
+        puzzle({
+          id: "fixture/dust",
+          chain: "bitcoin",
+          address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+          sourceUrl: "https://example.com/dust",
+          startedAt: "2026-01-01",
+          transactions: [funding("f".repeat(64), "2026-01-01", 1), ...deposits(count)],
+        }),
+      );
+
+    expect(record(3)).toContain("transactions: 4\n");
+    expect(record(4)).toContain(
+      "transactions: 5, 4 small increases folded\n\tfunding\t2026-01-01\t1 BTC\t",
+    );
+    expect(record(4)).toContain("\t4 small increases\t2026-01-01 to 2026-01-04\t0.00002184 BTC");
+  });
+
+  it("folds a history too long to spread into Math.max", () => {
+    const flood = Array.from({ length: 200_000 }, (_, index) =>
+      increase(index.toString(16).padStart(64, "0"), "2026-01-02", 0.00000546),
+    );
+    const text = formatPuzzleRecord(
+      puzzle({
+        id: "fixture/flood",
+        chain: "bitcoin",
+        address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+        sourceUrl: "https://example.com/flood",
+        startedAt: "2026-01-01",
+        transactions: [funding("f".repeat(64), "2026-01-01", 1), ...flood],
+      }),
+    );
+
+    expect(text).toContain("\t200000 small increases\t2026-01-02 to 2026-01-02\t1.092 BTC");
+  });
+
   it("prints a dust amount as a decimal, not an exponent", async () => {
-    const text = (await lines("b1000/71")).join("\n");
+    const text = (await lines("b1000/71", true)).join("\n");
 
     expect(text).toContain("\tincrease\t2025-05-19 18:56:09\t0.00000001 BTC\t076d820e");
     expect(text).not.toMatch(/\de-\d/u);

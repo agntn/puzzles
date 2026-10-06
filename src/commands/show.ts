@@ -11,6 +11,10 @@ export default defineCommand({
   },
   args: {
     id: { type: "positional", description: "Puzzle identifier, for example b1000/90" },
+    "all-transactions": {
+      type: "boolean",
+      description: "List every transaction, not one line per run of small increases",
+    },
     ...jsonArg,
   },
   async run({ args }) {
@@ -20,6 +24,13 @@ export default defineCommand({
       return;
     }
     const collection = await requireCollection(puzzle.collection());
-    printLine(formatPuzzleRecord(puzzle, collection.hints, collection.techniques));
+    printLine(
+      formatPuzzleRecord(
+        puzzle,
+        collection.hints,
+        collection.techniques,
+        args["all-transactions"] === true,
+      ),
+    );
   },
 });

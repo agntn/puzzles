@@ -120,10 +120,11 @@ export const facts = {
       name: "puzzles_show",
       title: "Show Puzzle",
       description:
-        "Show one puzzle's address, status, key material, techniques, hints, and explorer links.",
+        "Show one puzzle's address, status, key material, transactions, techniques, hints, and explorer links.",
       promptSnippet: "Use puzzles_show to inspect a single puzzle by identifier.",
       promptGuidelines: [
         "Identifiers are collection/name, for example b1000/90, or gsmg.",
+        "More than three increases in a row, each under 1% of the largest transaction, print as one line with their count, dates and total; pass allTransactions for each one with its txid.",
         "A technique says how the key or a stage was built, with the page that says so; an unsolved puzzle has one only where its author stated it.",
       ],
       openWorld: false,
@@ -289,6 +290,10 @@ export const facts = {
         "Only puzzles built with this technique, by their collection, their record or one of their stages, for example md5-to-bip39-entropy",
     },
     withPubkey: { description: "Only puzzles with a known public key" },
+    allTransactions: {
+      description:
+        "List every transaction with its txid, instead of folding runs of small increases into one line",
+    },
     limit: {
       minimum: 1,
       maximum: MAX_LIST_LIMIT,
@@ -361,7 +366,7 @@ export const toolArguments = {
   author: ["key"],
   solvers: [],
   solver: ["key"],
-  show: ["id"],
+  show: ["id", "allTransactions"],
   hints: ["id"],
   stages: ["id"],
   assets: ["id", "file"],
@@ -410,6 +415,21 @@ function assertLength(
       argument,
       `expected ${minimum} to ${limits.maxLength ?? "any"} characters`,
     );
+  }
+  return value;
+}
+
+/**
+ * Rejects a flag that isn't a boolean, so `"true"` doesn't quietly read as false.
+ *
+ * @param {string} argument - Name of the flag.
+ * @param {boolean | undefined} value - The flag the caller passed, when it passed one.
+ * @returns {boolean} The flag, or false when it was left out.
+ */
+function assertFlag(argument: string, value: boolean | undefined): boolean {
+  if (value === undefined) return false;
+  if (typeof value !== "boolean") {
+    throw new InvalidArgumentError(argument, "expected true or false");
   }
   return value;
 }
@@ -601,17 +621,20 @@ export async function solverTool(key: string): Promise<ToolResult> {
  * One puzzle's complete record for a model.
  *
  * @param {string} id - Universal puzzle identifier.
+ * @param {boolean} [allTransactions] - List every transaction instead of folding the dust.
  * @returns {Promise<ToolResult>} The record as text; the puzzle, its hints and techniques in `details`.
  */
-export async function showTool(id: string): Promise<ToolResult> {
+export async function showTool(id: string, allTransactions?: boolean): Promise<ToolResult> {
   const {
     dataset: { requirePuzzle },
     registry: { requireCollection },
     utils: { formatPuzzleRecord },
   } = await loadCore();
+  const every = assertFlag("allTransactions", allTransactions);
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
-  return text(formatPuzzleRecord(puzzle, collection.hints, collection.techniques), {
+  const record = formatPuzzleRecord(puzzle, collection.hints, collection.techniques, every);
+  return text(record, {
     puzzle,
     hints: collection.hintsById(puzzle.id()),
     techniques: collection.techniquesById(puzzle.id()),

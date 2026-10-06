@@ -90,8 +90,11 @@ export const solverToolDefinition = defineTool({
 
 export const showToolDefinition = defineTool({
   ...described(facts.tools.show),
-  input: closed({ id: puzzleId }),
-  execute: (params) => showTool(params.id),
+  input: closed({
+    id: puzzleId,
+    allTransactions: Type.Optional(Type.Boolean(parameters.allTransactions)),
+  }),
+  execute: (params) => showTool(params.id, params.allTransactions),
 });
 
 export const hintsToolDefinition = defineTool({

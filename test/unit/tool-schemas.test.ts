@@ -95,6 +95,8 @@ describe("tool schemas and executors share one argument contract", () => {
 
     expect(check("show", { id: "" })).toBe(false);
     expect(check("show", { id: "x".repeat(id.maxLength + 1) })).toBe(false);
+    expect(check("show", { id: "gsmg", allTransactions: true })).toBe(true);
+    expect(check("show", { id: "gsmg", allTransactions: "yes" })).toBe(false);
     expect(check("hints", { id: "" })).toBe(false);
     expect(check("hints", { id: "warp/challenge-1" })).toBe(true);
     expect(check("stages", { id: "" })).toBe(false);
@@ -197,6 +199,7 @@ describe("tool schemas and executors share one argument contract", () => {
     }
     await expect(showTool("")).rejects.toThrow(/id/);
     await expect(showTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
+    await expect(showTool("gsmg", "true" as never)).rejects.toThrow(/allTransactions/);
     await expect(hintsTool("")).rejects.toThrow(/id/);
     await expect(hintsTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
     await expect(stagesTool("")).rejects.toThrow(/id/);
