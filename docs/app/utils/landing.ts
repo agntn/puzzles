@@ -53,6 +53,7 @@ export const WALK: readonly string[] = [
   "grycoin/2",
   "smith-lyle-moore/born-to-be-wild",
   "real-big-block",
+  "school-of-bitcoin",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1479,26 +1480,54 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 1,
     tool: "real-big-block\tunsolved\t0.777 BTC\t14zMkTgaVXJcxdh4JdWi29MLRR44iUSG9W\nchain: bitcoin  address kind: p2pkh\nhash160: 2bc16867479a8d01179a6452651abe14a65eb61a\npublic key: unknown\nprivate key: unknown\nstarted: 2019-07-22 23:10:09\ntransactions: 1\n\tfunding\t2019-07-30 23:49:19\t0.777 BTC\ta1916e7ed9eac3fcc56a55056328cb09d06925e2694f2e6720de12b228514d1f\nhints: 14\n\tofficial\t-\tQuestion: Final version of the second chapter of Wattpad story, which I will publish in a moment.\tsource: https://www.reddit.com/r/Grycoin/comments/cgkpbb/777_mbtc_quizchain_last_block/\n\tofficial\t-\thttps://www.wattpad.com/720888559-second\tsource: https://www.reddit.com/r/Grycoin/comments/cgkpbb/777_mbtc_quizchain_last_block/\n\tofficial\t-\tIt is unlikely that anyone would be able to solve the real big block without hints.\tsource: https://www.reddit.com/r/Grycoin/comments/chn8un/real_big_block_discussion/\n\tofficial\t-\tWhen I posted the real big block at the Wattpad site, I added extra line breaks between paragraphs. This information is needed to solve the block.\tsource: https://www.reddit.com/r/Grycoin/comments/chn8un/comment/euvdqxe/\n\tofficial\t-\tI analyzed them with the tool at asciivalue.com and that shows one 13 and one 10 for each of the line breaks. The solution you need to hash with has only one line break between paragraphs, which is one 13 and one 10 in ASCII according to the asciivalue.com tool.\tsource: https://www.reddit.com/r/Grycoin/comments/chn8un/comment/ev96vwg/\n\tofficial\t-\tOnce someone figures out the format for the first stage, they will also have a big hint for the format of this second stage.\tsource: https://www.reddit.com/r/Grycoin/comments/chn8un/comment/eve843h/\n\tofficial\t-\tUpdate: Took back the funds from the address above and sent them to a new address, funding transaction below, because I wanted to remove one of the twists I had. The block is now slightly easier. It is also hashed with two line breaks between paragraphs now.\tsource: https://www.reddit.com/r/Grycoin/comments/cgkpbb/777_mbtc_quizchain_last_block/\n\tofficial\t-\tI took back the prize for a moment and sent it again to a new address, hashing with a slightly different solution, as explained in update above. That obviously means a hint for the solution: It has multiple paragraphs and two line breaks between each of them.\tsource: https://www.reddit.com/r/Grycoin/comments/chn8un/comment/evj8ls1/\n\tofficial\t-\tI mean the second one. Hit enter twice. This displays in Ascii as 13 10 13 10, according to asciivalue.com.\tsource: https://www.reddit.com/r/Grycoin/comments/chn8un/comment/evn5g4u/\n\tofficial\t-\tThe main point of this block is to give a simple example for the format used in both phases of block 77, slightly developed from what I first used in block 2 and later in block 29 of the first run.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tThere are two expiry conditions. If no one solves this and claims the prize before either condition becomes true, I will send the prize to a climate emergency related charity and disclose the solution.\tsource: https://www.reddit.com/r/Grycoin/comments/cgkpbb/777_mbtc_quizchain_last_block/\n\tofficial\t-\tThe first condition: The 200 day moving average the Mayer Multiple is based on hits $100 per mbtc, which would mean a prize worth $77700. This will obviously happen at some time in the next years, but I am not sure if it takes longer than the second condition.\tsource: https://www.reddit.com/r/Grycoin/comments/cgkpbb/777_mbtc_quizchain_last_block/\n\tofficial\t-\tThe second condition: Tanabata 2022 comes.\tsource: https://www.reddit.com/r/Grycoin/comments/cgkpbb/777_mbtc_quizchain_last_block/\n\tofficial\t-\tPrize will be sent to charity and solution disclosed if not solved before July 7th, 2022 or Mayer multiple goes to $100 per mbtc. Hints will be provided later.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/chf8k2/very_hard_777_mbtc_quizchain_real_big_block/\tconfirmation: https://web.archive.org/web/20230612075600/https://old.reddit.com/r/bitcoinpuzzles/comments/chf8k2/very_hard_777_mbtc_quizchain_real_big_block/ (Wayback capture of the post with the author's comment)\nexplorer: https://blockstream.info/address/14zMkTgaVXJcxdh4JdWi29MLRR44iUSG9W\nsource: https://www.reddit.com/r/Grycoin/comments/cgkpbb/777_mbtc_quizchain_last_block/\nfiles: 0 files, 6 archived sources; puzzles_assets lists them and reads one by its path",
   },
+  {
+    id: "school-of-bitcoin",
+    collection: "school-of-bitcoin",
+    chain: "bitcoin",
+    status: "unsolved",
+    address: "bc1qcsdfkaqgy9ux668vmzflzqsyg0qtspncymt5ed",
+    kind: "p2wpkh",
+    hash160: "c41a9b740821786d68ecd893f1020443c0b80678",
+    redeemScript: undefined,
+    prize: "0.01 BTC",
+    prizeAmount: 0.01,
+    currency: undefined,
+    startedAt: "2024-11-23 05:22:14",
+    solvedAt: undefined,
+    solveTime: undefined,
+    bits: undefined,
+    range: undefined,
+    pubkey: undefined,
+    pubkeyFormat: undefined,
+    secret: "none",
+    keyLiteral: undefined,
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://blockstream.info/address/bc1qcsdfkaqgy9ux668vmzflzqsyg0qtspncymt5ed",
+    source: "https://x.com/schoolofbitcoin/status/1860193190491619457",
+    transactions: 1,
+    tool: "school-of-bitcoin\tunsolved\t0.01 BTC\tbc1qcsdfkaqgy9ux668vmzflzqsyg0qtspncymt5ed\nchain: bitcoin  address kind: p2wpkh\nhash160: c41a9b740821786d68ecd893f1020443c0b80678\npublic key: unknown\nprivate key: unknown\nstarted: 2024-11-23 05:22:14\ntransactions: 1\n\tfunding\t2024-10-12 07:23:20\t0.01 BTC\tbddcb314564eb66215c7aa27a1aad126d5f51240db073adf5eb72382b0044eda\nasset: assets/school-of-bitcoin/puzzle.jpg\nasset source: https://x.com/schoolofbitcoin/status/1860193190491619457\nhints: 8\n\tofficial\t2024-11-23\tHidden on this card... is every clue needed to find a treasure of... 1 Million Sats\tsource: https://x.com/schoolofbitcoin/status/1860193190491619457\n\tofficial\t2024-11-23\tat 2000 followers I said I would share the back of my business card... on which I have hidden all the clues you need to find and claim 1 MILLION sats\tsource: https://x.com/schoolofbitcoin/status/1860193190491619457\n\tofficial\t2024-11-23\tOh, and when I get to 10,000 followers if it hasn't been claimed I will reveal a big clue to the treasure!\tsource: https://x.com/schoolofbitcoin/status/1860193190491619457\n\tofficial\t2025-03-07\tI've designed it to be a.i proof... prove me wrong\tsource: https://x.com/schoolofbitcoin/status/1897907304072171821\n\tofficial\t2025-03-22\tYou need a touchscreen to zoom... either phone, tablet or laptop/desktop with touchscreen\tsource: https://stacker.news/items/921244\n\tcommunity\t2025-03-09\tThe morse code translates to ZEROBONEZEROONEZERO FINGZ KNEE DID 4D A DRESS 2Z PRIES. 0b1010 is binary for decimal 10, so 10 things needed for the address to see prize\tsource: https://stacker.news/items/908393\n\tcommunity\t2025-03-09\tWingdings, what a font! But it is the black characters you want :)\tsource: https://stacker.news/items/908489\n\tcommunity\t2025-03-09\tDecoding it to ASCII characters gives: \"You found a clue to the hidden treasure of 1 FULL BITCOIN! :) abstract\". First seed word is abstract.\tsource: https://stacker.news/items/908556\nexplorer: https://blockstream.info/address/bc1qcsdfkaqgy9ux668vmzflzqsyg0qtspncymt5ed\nsource: https://x.com/schoolofbitcoin/status/1860193190491619457\nfiles: 1 file, 2 archived sources; puzzles_assets lists them and reads one by its path",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "c8c25112aba5",
-  total: 549,
+  dataVersion: "37d23d7ced12",
+  total: 550,
   solved: 317,
-  unsolved: 113,
+  unsolved: 114,
   claimed: 19,
   swept: 96,
   expired: 4,
   withPubkey: 435,
   unsolvedPrize: {
-    BTC: 909.96280377,
+    BTC: 909.97280377,
     ETH: 13.171964034825493,
     LTC: 3.02608794,
     AR: 1500.188092936237,
   },
   totalPrize: {
-    BTC: 1069.50934395,
+    BTC: 1069.51934395,
     ETH: 26.81566403482549,
     DOGE: 10000,
     BCH: 5.1,
@@ -2286,6 +2315,28 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "school-of-bitcoin",
+    author: "School of Bitcoin",
+    authorKey: "school-of-bitcoin",
+    authorUrl: "https://schoolofbitcoin.com/",
+    total: 1,
+    statuses: {
+      unsolved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.01,
+    },
+    unsolvedPrize: {
+      BTC: 0.01,
+    },
+    withPubkey: 0,
+    withKey: 0,
+    firstStarted: "2024-11-23 05:22:14",
+    lastStarted: "2024-11-23 05:22:14",
+    hints: [],
+  },
+  {
     key: "seed-phrase",
     author: "MetaNeer Labs",
     authorKey: "metaneer",
@@ -2862,6 +2913,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     about:
       "Crypto derivatives exchange founded in 2019. It hid a key in Satoshi's portrait to show why private keys belong in cold storage.",
     collections: ["satoshi-maze"],
+    puzzles: 1,
+  },
+  {
+    key: "school-of-bitcoin",
+    to: "/authors/school-of-bitcoin",
+    name: "School of Bitcoin",
+    kind: "organization",
+    about:
+      "Free Bitcoin course at schoolofbitcoin.com that hid 1,000,000 sats behind the back of its own business card.",
+    collections: ["school-of-bitcoin"],
     puzzles: 1,
   },
   {

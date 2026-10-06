@@ -64,6 +64,10 @@ export const builtins = [
     load: () => import("./satoshi-birthday-quiz.ts").then((m) => m.satoshiBirthdayQuiz),
   },
   { key: "satoshi-maze", load: () => import("./satoshi-maze.ts").then((m) => m.satoshiMaze) },
+  {
+    key: "school-of-bitcoin",
+    load: () => import("./school-of-bitcoin.ts").then((m) => m.schoolOfBitcoin),
+  },
   { key: "seed-phrase", load: () => import("./seed-phrase.ts").then((m) => m.seedPhrase) },
   {
     key: "smith-lyle-moore",

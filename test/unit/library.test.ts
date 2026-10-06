@@ -36,6 +36,7 @@ import { RealBigBlockCollection } from "../../src/collections/real-big-block.ts"
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-birthday-quiz.ts";
 import { SatoshiMazeCollection } from "../../src/collections/satoshi-maze.ts";
+import { SchoolOfBitcoinCollection } from "../../src/collections/school-of-bitcoin.ts";
 import { SeedPhraseCollection } from "../../src/collections/seed-phrase.ts";
 import { SmithLyleMooreCollection } from "../../src/collections/smith-lyle-moore.ts";
 import { teikhos, TeikhosCollection } from "../../src/collections/teikhos.ts";
@@ -121,6 +122,7 @@ const concreteClasses = [
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
   SatoshiMazeCollection,
+  SchoolOfBitcoinCollection,
   SeedPhraseCollection,
   SmithLyleMooreCollection,
   TeikhosCollection,
@@ -949,21 +951,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(549);
+    expect(await all()).toHaveLength(550);
     expect(await stats()).toEqual({
-      total: 549,
+      total: 550,
       claimed: 19,
       expired: 4,
       solved: 317,
       swept: 96,
-      unsolved: 113,
+      unsolved: 114,
       with_pubkey: 435,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1069.50934395,
+        BTC: 1069.51934395,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -972,7 +974,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1500.188092936237,
         ETH: 13.171964034825493,
-        BTC: 909.96280377,
+        BTC: 909.97280377,
         LTC: 3.02608794,
       },
       techniques: {
@@ -1044,7 +1046,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(549);
+    ).toBe(550);
   });
 
   it("hands back the memoized views frozen through", async () => {
