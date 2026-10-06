@@ -245,9 +245,9 @@ describe("lazy collection registry", () => {
         amount: 0.00005,
       },
     ]);
-    expect(puzzle.hints()).toHaveLength(32);
+    expect(puzzle.hints()).toHaveLength(35);
     expect(puzzle.hints()[0]?.source).toBe(puzzle.sourceUrl());
-    expect(puzzle.hints().at(-1)?.date).toBe("2026-10-03");
+    expect(puzzle.hints().at(-1)?.date).toBe("2026-10-06");
     expect(puzzle.hints().at(-1)?.confirmation?.description).toContain(
       "paid to the author address",
     );
@@ -258,6 +258,8 @@ describe("lazy collection registry", () => {
     expect(puzzle.hints().some((hint) => hint.text.startsWith("1) Y; cut -b N-M:"))).toBe(true);
     expect(puzzle.hints().some((hint) => hint.text.startsWith("How many keys,"))).toBe(false);
     expect(puzzle.hints().some((hint) => hint.text.startsWith("Shape only,"))).toBe(false);
+    expect(puzzle.hints().some((hint) => hint.text === "1) host; 2) b7f4182b")).toBe(true);
+    expect(puzzle.hints().some((hint) => hint.text.startsWith("We tested 1.8M"))).toBe(false);
   });
 
   it("keeps Movie Enigma's original rules separate from its solution", async () => {
