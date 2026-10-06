@@ -5,7 +5,7 @@ import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/status.ts";
 import { oneLine } from "./core/text.ts";
 import { type Technique, techniques } from "./core/technique.ts";
-import type { RecipeResult } from "./core/verify.ts";
+import type { RecipeResult, VerifyResult } from "./core/verify.ts";
 
 /** A block of text, what every tool answers with. */
 export interface TextBlock {
@@ -190,11 +190,13 @@ export const facts = {
       name: "puzzles_verify",
       title: "Verify Puzzle Key",
       description:
-        "Check that a puzzle's recorded key material derives its stored address, and rerun the recipe it holds: BIP39 entropy or a SHA-256 brainwallet.",
-      promptSnippet: "Use puzzles_verify to confirm recorded key material before trusting it.",
+        "Check that a puzzle's recorded key material derives its stored address, and rerun the recipe it holds: BIP39 entropy or a SHA-256 brainwallet. Takes one id, or the puzzles_list filters to check every puzzle they match in one call.",
+      promptSnippet:
+        "Use puzzles_verify to confirm recorded key material before trusting it, or to replay a whole technique or collection at once.",
       promptGuidelines: [
         "An expected failure is a result, not an error.",
         "The recipe gets its own verdict: one that misses is a data bug, even when the key verifies.",
+        "Pass id or filters, not both. A filtered answer prints every miss in full and folds the rest into ids per reason, so one call replays a technique such as md5-to-bip39-entropy.",
       ],
       openWorld: false,
     },
@@ -354,6 +356,11 @@ export interface ListParams {
   readonly withPubkey?: boolean;
 }
 
+/** Parameters accepted by the verify tool: one id, or the list filters without paging. */
+export interface VerifyParams extends Omit<ListParams, "limit" | "offset"> {
+  readonly id?: string;
+}
+
 /**
  * The arguments each tool takes, in the order an error names them. The tools without arguments
  * take any object, like their open schemas. `test/unit/tool-schemas.test.ts` pins the table to
@@ -380,7 +387,15 @@ export const toolArguments = {
     "technique",
     "withPubkey",
   ] satisfies (keyof ListParams)[],
-  verify: ["id"],
+  verify: [
+    "id",
+    "address",
+    "chain",
+    "collection",
+    "status",
+    "technique",
+    "withPubkey",
+  ] satisfies (keyof VerifyParams)[],
   balance: ["id", "apiKey"],
   watch: ["id", "since", "apiKey"],
   eligibility: ["query", "chain", "apiKey"],
@@ -850,24 +865,152 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
 }
 
 /**
- * Derives the stored address, loading crypto only after the puzzle is found.
+ * Derives the stored address of one puzzle, or of every puzzle the list filters match, loading
+ * crypto only after the puzzles are found.
+ *
+ * @param {string | VerifyParams} query - A puzzle identifier, or `{ id }`, or the list filters.
+ * @returns {Promise<ToolResult>} One outcome, or a summary that prints every miss in full.
+ * @throws {InvalidArgumentError} On an id with filters, on neither, or on filters nothing matches.
+ */
+export async function verifyTool(query: string | VerifyParams): Promise<ToolResult> {
+  const params: VerifyParams = typeof query === "string" ? { id: query } : query;
+  assertArguments("verify", params);
+  const { id, withPubkey, ...rest } = params;
+  const filtered =
+    assertFlag("withPubkey", withPubkey) ||
+    Object.values(rest).some((value) => value !== undefined);
+  if (id !== undefined && filtered) {
+    throw new InvalidArgumentError("id", "pass a puzzle identifier or filters, not both");
+  }
+  if (id !== undefined) {
+    return verifyOne(id);
+  }
+  if (!filtered) {
+    throw new InvalidArgumentError("id", "pass a puzzle identifier, or a filter such as technique");
+  }
+  return verifyMany(await listQuery(params));
+}
+
+/**
+ * One puzzle's verdict, the answer `puzzles_verify` has always given for an id.
  *
  * @param {string} id - Universal puzzle identifier.
- * @returns {Promise<ToolResult>} The verification outcome for the puzzle.
+ * @returns {Promise<ToolResult>} The verdict and the recipe's, with the result in `details`.
  */
-export async function verifyTool(id: string): Promise<ToolResult> {
+async function verifyOne(id: string): Promise<ToolResult> {
   const {
     dataset: { requirePuzzle },
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const { verify } = await import("./core/verify.ts");
   const result = await verify(puzzle);
+  return text(verdictOf(result), { ...result });
+}
+
+/**
+ * Every matching puzzle's verdict. A miss gets its full lines; the rest fold into id lists, so a
+ * replay of a hundred clean seeds stays a few lines long.
+ *
+ * @param {PuzzleQuery} query - The list filters, already validated.
+ * @returns {Promise<ToolResult>} The counts, the misses and the folded ids, every result in `details`.
+ * @throws {InvalidArgumentError} When the filters match no puzzle.
+ */
+async function verifyMany(query: PuzzleQuery): Promise<ToolResult> {
+  const {
+    dataset: { selectPuzzles },
+    utils: { countOf },
+  } = await loadCore();
+  const puzzles = await selectPuzzles(query);
+  if (puzzles.length === 0) {
+    throw new InvalidArgumentError("filters", "no puzzle matches them, so nothing was verified");
+  }
+  const { verify } = await import("./core/verify.ts");
+  const results = await Promise.all(puzzles.map((puzzle) => verify(puzzle)));
+  const misses = results.filter(missed);
+  const clean = results.filter((result) => !missed(result));
+  const verified = clean.filter((result) => result.verified).map((result) => result.id);
+  const unverifiable = Map.groupBy(
+    clean.filter((result) => !result.verified),
+    (result) => result.error ?? "",
+  );
+  const idle = Map.groupBy(
+    clean.filter((result) => result.recipe?.unavailable === true),
+    (result) => result.recipe?.error ?? "",
+  );
+  const lines = [
+    `${countOf(results.length, "puzzle")}: ${tally(results)}`,
+    ...misses.map(verdictOf),
+    ...folded("Unverifiable", unverifiable),
+    ...folded("Recipe can't run", idle),
+    ...(verified.length === 0 ? [] : [`Verified: ${verified.join(", ")}`]),
+  ];
+  return text(lines.join("\n"), { matched: results.length, misses: misses.length, results });
+}
+
+/**
+ * A key or a recipe that ran and derived another address: a data bug, so the batch prints it whole.
+ *
+ * @param {VerifyResult} result - One puzzle's outcome.
+ * @returns {boolean} Whether the batch prints it in full.
+ */
+function missed(result: VerifyResult): boolean {
+  const key = !result.verified && !result.unavailable;
+  const { recipe } = result;
+  return key || (recipe !== undefined && !recipe.verified && !recipe.unavailable);
+}
+
+/**
+ * One line per reason, with the ids that share it.
+ *
+ * @param {string} label - What the ids have in common, such as `Unverifiable`.
+ * @param {ReadonlyMap<string, readonly VerifyResult[]>} groups - The results by reason.
+ * @returns {string[]} The folded lines, in the order the reasons first came up.
+ */
+function folded(label: string, groups: ReadonlyMap<string, readonly VerifyResult[]>): string[] {
+  return [...groups].map(
+    ([reason, group]) => `${label} (${reason}): ${group.map((result) => result.id).join(", ")}`,
+  );
+}
+
+/**
+ * The counts line of a batch: keys first, then recipes when any puzzle holds one.
+ *
+ * @param {readonly VerifyResult[]} results - Every outcome of the batch.
+ * @returns {string} The counts, zeros included, so a clean replay says so.
+ */
+function tally(results: readonly VerifyResult[]): string {
+  const count = (test: (result: VerifyResult) => boolean): number => results.filter(test).length;
+  const keys = [
+    `${count((r) => r.verified)} verified`,
+    `${count((r) => !r.verified && !r.unavailable)} not verified`,
+    `${count((r) => !r.verified && r.unavailable)} unverifiable`,
+  ];
+  const recipes = results.flatMap((r) => (r.recipe === undefined ? [] : [r.recipe]));
+  if (recipes.length === 0) {
+    return keys.join(", ");
+  }
+  const rerun = [
+    `${recipes.filter((r) => r.verified).length} derive their address`,
+    `${recipes.filter((r) => !r.verified && !r.unavailable).length} miss`,
+    `${recipes.filter((r) => r.unavailable).length} can't run`,
+  ];
+  const noun = recipes.length === 1 ? "recipe" : "recipes";
+  return `${keys.join(", ")}; ${recipes.length} ${noun}: ${rerun.join(", ")}`;
+}
+
+/**
+ * One puzzle's verdict, then its recipe's on a second line.
+ *
+ * @param {VerifyResult} result - The puzzle's outcome.
+ * @returns {string} The lines `puzzles_verify` prints for it.
+ */
+function verdictOf(result: VerifyResult): string {
   const summary = result.verified
     ? `${result.id}: verified, derives ${result.derivedAddress}`
     : result.unavailable
       ? `${result.id}: unverifiable (${result.error})`
       : `${result.id}: not verified (${result.error})`;
-  return text(summary + recipeSummary(result.recipe), { ...result });
+  return summary + recipeSummary(result.recipe);
 }
 
 /**

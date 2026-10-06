@@ -115,15 +115,20 @@ export const assetsToolDefinition = defineTool({
   execute: (params) => assetsTool(params.id, params.file),
 });
 
+/** The filters `puzzles_list` and `puzzles_verify` share. */
+const filters = {
+  address: Type.Optional(Type.String(parameters.address)),
+  collection: Type.Optional(Type.String(parameters.collection)),
+  chain: Type.Optional(Type.Enum(chains, parameters.chain)),
+  status: Type.Optional(Type.Enum(statuses, parameters.status)),
+  technique: Type.Optional(Type.Enum(techniques, parameters.technique)),
+  withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
+};
+
 export const listToolDefinition = defineTool({
   ...described(facts.tools.list),
   input: closed({
-    address: Type.Optional(Type.String(parameters.address)),
-    collection: Type.Optional(Type.String(parameters.collection)),
-    chain: Type.Optional(Type.Enum(chains, parameters.chain)),
-    status: Type.Optional(Type.Enum(statuses, parameters.status)),
-    technique: Type.Optional(Type.Enum(techniques, parameters.technique)),
-    withPubkey: Type.Optional(Type.Boolean(parameters.withPubkey)),
+    ...filters,
     limit: Type.Optional(Type.Integer(parameters.limit)),
     offset: Type.Optional(Type.Integer(parameters.offset)),
   }),
@@ -132,8 +137,8 @@ export const listToolDefinition = defineTool({
 
 export const verifyToolDefinition = defineTool({
   ...described(facts.tools.verify),
-  input: closed({ id: puzzleId }),
-  execute: (params) => verifyTool(params.id),
+  input: closed({ id: Type.Optional(puzzleId), ...filters }),
+  execute: (params) => verifyTool(params),
 });
 
 export const balanceToolDefinition = defineTool({
@@ -181,6 +186,23 @@ export const puzzlesTools: readonly ToolDefinition[] = [
   eligibilityToolDefinition,
 ];
 
+/**
+ * The filters a status line shows for a list or a filtered verify, `all` when there are none.
+ *
+ * @param {Readonly<Record<string, unknown>>} args - The call's arguments.
+ * @returns {string} The address, collection or chain, then the status and technique.
+ */
+function listSummary(args: Readonly<Record<string, unknown>>): string {
+  return [
+    args["address"] ?? args["collection"] ?? args["chain"] ?? "all",
+    args["status"],
+    args["technique"],
+  ]
+    .filter((part) => part !== undefined)
+    .map((part) => (typeof part === "string" ? part : JSON.stringify(part)))
+    .join(" ");
+}
+
 /** The argument a status line shows after the tool title, for the tools that take one. */
 export const callSummaries: Readonly<
   Record<string, (args: Readonly<Record<string, unknown>>) => unknown>
@@ -191,16 +213,8 @@ export const callSummaries: Readonly<
   [facts.tools.hints.name]: (args) => args["id"],
   [facts.tools.stages.name]: (args) => args["id"],
   [facts.tools.assets.name]: (args) => args["file"] ?? args["id"],
-  [facts.tools.list.name]: (args) =>
-    [
-      args["address"] ?? args["collection"] ?? args["chain"] ?? "all",
-      args["status"],
-      args["technique"],
-    ]
-      .filter((part) => part !== undefined)
-      .map((part) => (typeof part === "string" ? part : JSON.stringify(part)))
-      .join(" "),
-  [facts.tools.verify.name]: (args) => args["id"],
+  [facts.tools.list.name]: listSummary,
+  [facts.tools.verify.name]: (args) => args["id"] ?? listSummary(args),
   [facts.tools.balance.name]: (args) => args["id"],
   [facts.tools.watch.name]: (args) => args["id"],
   [facts.tools.eligibility.name]: (args) => args["query"],

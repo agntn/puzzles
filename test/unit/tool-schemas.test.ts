@@ -102,6 +102,9 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(check("stages", { id: "" })).toBe(false);
     expect(check("stages", { id: "gsmg" })).toBe(true);
     expect(check("verify", { id: "b1000/1" })).toBe(true);
+    expect(check("verify", { technique: "md5-to-bip39-entropy", status: "solved" })).toBe(true);
+    expect(check("verify", { technique: "bogus" })).toBe(false);
+    expect(check("verify", { id: "" })).toBe(false);
     expect(check("list", { collection: "" })).toBe(false);
     expect(check("list", { collection: "x".repeat(collection.maxLength + 1) })).toBe(false);
     expect(check("balance", { id: "b1000/1", apiKey: "x".repeat(apiKey.maxLength + 1) })).toBe(
