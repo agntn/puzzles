@@ -149,6 +149,7 @@ function seedRows(key: KeyData): KeyRow[] {
   if (seed === undefined) return [];
   return [
     ...row("seed phrase", seed.phrase),
+    ...row("BIP39 passphrase", seed.passphrase),
     ...row("derivation path", seed.path),
     ...row("extended public key", seed.xpub),
     ...entropyRows(seed.entropy),

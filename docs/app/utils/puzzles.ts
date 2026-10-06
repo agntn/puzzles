@@ -302,6 +302,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Clues every few days toward a recovery phrase: a poem, a JAZZ crowd, a nauseous emoji and a box that changes colour with the video speed. Then August 2024 ended and so did the clues. The 0.01 BTC is still waiting.",
   },
+  "smith-lyle-moore": {
+    icon: "i-lucide-disc-3",
+    title: "Smith, Lyle & Moore treasure hunts",
+    sample: "smith-lyle-moore/born-to-be-wild",
+    chains: ["bitcoin"],
+    blurb:
+      "An indie band spent its ad budget on bitcoin and hid it behind riddles on its own website. The moon trip ended in Morse and a password called supernova. The sea voyage is still out there.",
+  },
   "trivia-brainwallet": {
     icon: "i-lucide-lightbulb",
     title: "Brainwallet puzzle, 0.04 BTC",

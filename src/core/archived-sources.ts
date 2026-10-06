@@ -1693,6 +1693,17 @@ export const archivedSources = [
       content: "confirmed",
     },
   },
+  {
+    file: "smith-lyle-moore/26-9-15-20-2021-08-18",
+    url: "https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/",
+    author: "u/26-9-15-20",
+    date: "2021-08-18",
+    archive: {
+      url: "https://web.archive.org/web/20210818182251/https://old.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/",
+      date: "2021-08-18T18:22:51Z",
+      content: "confirmed",
+    },
+  },
 ] as const;
 
 /** One reading copy under `assets/sources/`. */

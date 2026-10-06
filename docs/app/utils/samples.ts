@@ -87,11 +87,27 @@ function encryptedHead(
 function seedHead(key: KeyData): string | undefined {
   const seed = key.seed;
   if (seed?.phrase !== undefined) {
-    return seed.path === undefined
-      ? `seed(${quote(seed.phrase)})`
-      : `seed(${quote(seed.phrase)}, ${quote(seed.path)})`;
+    return `seed(${seedArguments(seed.phrase, seed.path, seed.passphrase).join(", ")})`;
   }
   return seed?.path === undefined ? undefined : `derivation(${quote(seed.path)})`;
+}
+
+/**
+ * The quoted arguments of `seed()`, down to the last one the record has.
+ *
+ * @param {string} phrase - The seed phrase.
+ * @param {string | undefined} path - The derivation path, when the record has one.
+ * @param {string | undefined} passphrase - The BIP39 passphrase, when the record has one.
+ * @returns {string[]} The phrase, then the path and the passphrase that apply.
+ */
+function seedArguments(
+  phrase: string,
+  path: string | undefined,
+  passphrase: string | undefined,
+): string[] {
+  if (passphrase !== undefined)
+    return [quote(phrase), path === undefined ? "undefined" : quote(path), quote(passphrase)];
+  return path === undefined ? [quote(phrase)] : [quote(phrase), quote(path)];
 }
 
 /**

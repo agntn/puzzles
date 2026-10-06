@@ -118,6 +118,7 @@ const expectedCollections = [
   "satoshi-birthday-quiz",
   "satoshi-maze",
   "seed-phrase",
+  "smith-lyle-moore",
   "teikhos",
   "trivia-brainwallet",
   "walking-banks",
