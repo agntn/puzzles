@@ -5,7 +5,6 @@ import { formatPrize } from "./format.ts";
 export interface SampleLibrary {
   readonly secretOf: (key: KeyData | undefined) => { readonly kind: string } | undefined;
   readonly verify: (puzzle: Puzzle) => Promise<VerifyResult>;
-  readonly version: string;
 }
 
 /** What the landing shows about one puzzle: plain data, so a static copy renders before the library loads. */
@@ -177,20 +176,6 @@ export function keyLiteral(key: KeyData | undefined): string | undefined {
   return [head, ...hexTail(key), ...seedTail(key), ...(key.derived ? [".derived()"] : [])].join("");
 }
 
-/**
- * The tool text with asset links on `main`. The library points them at its release tag, while the
- * site deploys from `main` and serves `assets/` from that checkout, so the static copy also stays
- * the same across a version bump.
- *
- * @param {string} tool - What `puzzles_show` prints.
- * @param {string} version - The library version in those links.
- * @returns {string} The same text with the tag replaced by `main`.
- */
-function onMain(tool: string, version: string): string {
-  const root = "https://raw.githubusercontent.com/agntn/puzzles/";
-  return tool.replaceAll(`${root}v${version}/`, `${root}main/`);
-}
-
 function verdictOf(result: VerifyResult): LandingSample["verdict"] {
   if (result.verified) return "verified";
   return result.unavailable ? "unavailable" : "failed";
@@ -200,7 +185,7 @@ function verdictOf(result: VerifyResult): LandingSample["verdict"] {
  * Reads one puzzle into the shape the landing renders. The tool text is passed in because
  * `showTool` is asynchronous, and the library because this file is shared with the root test.
  *
- * @param {SampleLibrary} library - `secretOf`, `verify` and `version`, from `src/` or the alias.
+ * @param {SampleLibrary} library - `secretOf` and `verify`, from `src/` or the alias.
  * @param {Puzzle} puzzle - The puzzle to read.
  * @param {string} tool - What `puzzles_show` prints for it.
  * @returns {Promise<LandingSample>} Plain data for the panels.
@@ -239,7 +224,7 @@ export async function toSample(
     explorer: puzzle.explorerUrl(),
     source: puzzle.sourceUrl(),
     transactions: puzzle.transactions().length,
-    tool: onMain(tool, library.version),
+    tool,
   };
 }
 

@@ -21,6 +21,17 @@ async function json<T>(...args: readonly string[]): Promise<T> {
   return JSON.parse(await puzzles(...args)) as T;
 }
 
+/* A tool answer as the CLI prints it: links for paths, and no files line. */
+async function linked(
+  answer: Promise<{ readonly content: readonly { readonly text: string }[] }>,
+): Promise<string> {
+  const lines = ((await answer).content[0]?.text ?? "").split("\n");
+  return lines
+    .filter((line) => !line.startsWith("files: "))
+    .join("\n")
+    .replaceAll(/(?<=[\t ])assets\//gu, `${ASSETS}/assets/`);
+}
+
 interface Failure {
   readonly code: number;
   readonly stderr: string;
@@ -89,12 +100,12 @@ describe.concurrent("puzzles CLI", () => {
     const derived = await puzzles("show", "quizchain/6");
     const inherited = await puzzles("show", "b1000/71");
 
-    expect(derived.trimEnd()).toBe((await showTool("quizchain/6")).content[0]?.text);
+    expect(derived).toBe(await linked(showTool("quizchain/6")));
     expect(derived).toContain("(wif, derived from the published recipe)");
-    expect(inherited.trimEnd()).toBe((await showTool("b1000/71")).content[0]?.text);
+    expect(inherited).toBe(await linked(showTool("b1000/71")));
     expect(inherited).toContain("collection hints: 1");
-    expect((await puzzles("show", "b1000/71", "--all-transactions")).trimEnd()).toBe(
-      (await showTool("b1000/71", true)).content[0]?.text,
+    expect(await puzzles("show", "b1000/71", "--all-transactions")).toBe(
+      await linked(showTool("b1000/71", true)),
     );
   });
 
@@ -107,7 +118,10 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(output.trimEnd()).toBe((await stagesTool("gsmg")).content[0]?.text);
+    expect(output).toBe(await linked(stagesTool("gsmg")));
+    expect(output).toContain(
+      `\t\tpuzzle image\thttps://gsmg.io/puzzle\t${ASSETS}/assets/gsmg/puzzle.png`,
+    );
     expect(staged.stages.map((stage) => stage.name)).toEqual([
       "phase 1",
       "phase 2",

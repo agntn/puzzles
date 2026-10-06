@@ -20,8 +20,10 @@ import {
   formatPrizeTotals,
   formatPuzzleRecord,
 } from "../../src/core/utils.ts";
-import { showTool } from "../../src/tool-operations.ts";
+import { facts, hintsTool, showTool, stagesTool } from "../../src/tool-operations.ts";
 import { ASSETS } from "../support/assets.ts";
+
+const ASSETS_TOOL = facts.tools.assets.name;
 
 /*
  * MCP hands a model `content[0].text` and nothing else, so the record's own fields have to be in
@@ -191,8 +193,8 @@ describe("puzzles_show text", () => {
     const text = await lines("gsmg");
 
     expect(text).toContain("private key: unknown");
-    expect(text).toContain(`asset: ${ASSETS}/assets/gsmg/puzzle.png`);
-    expect(text).toContain(`hint assets: ${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`);
+    expect(text).toContain("asset: assets/gsmg/puzzle.png");
+    expect(text).toContain("hint assets: assets/gsmg/follow-the-white-rabbit.png");
     expect(text.some((line) => line.startsWith("solved:"))).toBe(false);
     expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
   });
@@ -201,7 +203,7 @@ describe("puzzles_show text", () => {
     const text = await lines("gsmg");
     const choice =
       "https://gsmg.io/choiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself";
-    const copy = `${ASSETS}/assets/gsmg`;
+    const copy = `assets/gsmg`;
     const salphaseion =
       "https://gsmg.io/89727c598b9cd1cf8873f27cb7057f050645ddb6a7a157a110239ac0152f6a32";
     const start = text.indexOf("stages: 7");
@@ -239,7 +241,7 @@ describe("puzzles_show text", () => {
     const text = await lines("zden/litecoin-segwit");
 
     expect(text).toContain(
-      `hint assets: ${ASSETS}/assets/zden/litecoin-segwit/hint-1.svg, ${ASSETS}/assets/zden/litecoin-segwit/hint-2.svg, ${ASSETS}/assets/zden/litecoin-segwit/hint-3.svg`,
+      "hint assets: assets/zden/litecoin-segwit/hint-1.svg, assets/zden/litecoin-segwit/hint-2.svg, assets/zden/litecoin-segwit/hint-3.svg",
     );
     expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
   });
@@ -327,18 +329,45 @@ describe("puzzles_show text", () => {
     );
   });
 
-  it("links the solution of a puzzle that ships no image", async () => {
+  it("names the solution of a puzzle that ships no image", async () => {
     const text = await lines("movie-enigma");
 
-    expect(text).toContain(`solution asset: ${ASSETS}/assets/movie-enigma/solution.md`);
+    expect(text).toContain("solution asset: assets/movie-enigma/solution.md");
     expect(text.some((line) => line.startsWith("asset:"))).toBe(false);
   });
 
-  it("links the solution image next to the puzzle image", async () => {
+  it("names the solution image next to the puzzle image", async () => {
     const text = await lines("zden/level-1");
 
-    expect(text).toContain(`asset: ${ASSETS}/assets/zden/level-1/puzzle.png`);
-    expect(text).toContain(`solution asset: ${ASSETS}/assets/zden/level-1/solver.png`);
+    expect(text).toContain("asset: assets/zden/level-1/puzzle.png");
+    expect(text).toContain("solution asset: assets/zden/level-1/solver.png");
+  });
+
+  it("sends a model to puzzles_assets instead of a download link", async () => {
+    const answers = await Promise.all([
+      showTool("gsmg"),
+      stagesTool("gsmg"),
+      hintsTool("gsmg"),
+      hintsTool("quizchain2/34"),
+    ]);
+    const texts = answers.map((answer) => answer.content[0]?.text ?? "");
+
+    for (const text of texts) {
+      expect(text).not.toContain(ASSETS);
+    }
+    expect(texts.slice(0, 3).map((text) => text.split("\n").at(-1))).toEqual(
+      Array.from(
+        { length: 3 },
+        () =>
+          `files: 6 files, 0 archived sources; ${ASSETS_TOOL} lists them and reads one by its path`,
+      ),
+    );
+    expect(texts[3]?.split("\n").at(-1)).toBe(
+      `files: 0 files, 3 archived sources; ${ASSETS_TOOL} lists them and reads one by its path`,
+    );
+    expect((await lines("b1000/71")).some((line) => line.startsWith("files:"))).toBe(false);
+    expect((await stagesTool("b1000/71")).content[0]?.text).toBe("b1000/71: no stages recorded");
+    expect(facts.tools.show.promptSnippet).toContain(ASSETS_TOOL);
   });
 
   it("prints every key representation a record carries", async () => {
