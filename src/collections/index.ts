@@ -64,6 +64,10 @@ export const builtins = [
   },
   { key: "satoshi-maze", load: () => import("./satoshi-maze.ts").then((m) => m.satoshiMaze) },
   { key: "seed-phrase", load: () => import("./seed-phrase.ts").then((m) => m.seedPhrase) },
+  {
+    key: "smith-lyle-moore",
+    load: () => import("./smith-lyle-moore.ts").then((m) => m.smithLyleMoore),
+  },
   { key: "teikhos", load: () => import("./teikhos.ts").then((m) => m.teikhos) },
   {
     key: "trivia-brainwallet",

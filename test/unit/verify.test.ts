@@ -291,6 +291,22 @@ describe("Collection.verify", () => {
     });
   });
 
+  it("derives a seed behind its BIP39 passphrase, and misses without it", async () => {
+    /* The Born to Be Wild phrase and password, from the winners' write-up. */
+    const phrase = "fortune all man kind one giant step into digital tomorrow virtual moon";
+    const address = p2wpkh("bc1qgtymp8q7hw2k9tewhdq74vdlpkqhflgju69n95");
+    const path = "m/84'/0'/0'/0/0";
+
+    expect(
+      await verify(
+        puzzle({ ...synthetic, chain: "bitcoin", address, key: seed(phrase, path, "supernova") }),
+      ),
+    ).toMatchObject({ verified: true, derivedAddress: address.value });
+    expect(
+      await verify(puzzle({ ...synthetic, chain: "bitcoin", address, key: seed(phrase, path) })),
+    ).toMatchObject({ verified: false });
+  });
+
   it("derives a seed whose BIP39 checksum fails, the way the Bitcoin Movie Enigma phrase does", async () => {
     /* The phrase, the address and the compressed key it spent with are all on chain. */
     const result = await verify(

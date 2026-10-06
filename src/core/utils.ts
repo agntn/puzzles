@@ -275,6 +275,7 @@ function seedLines(key: KeyData, secret: Secret["kind"] | undefined): string[] {
     ...field("derivation path", seed.path),
     ...field("xpub", seed.xpub),
     ...field("entropy", entropy, formatEntropy),
+    ...field("seed passphrase", seed.passphrase),
     ...field("seed passphrase", entropy?.passphrase, formatPassphrase),
     ...field("shares", key.shares, formatShares),
   ];

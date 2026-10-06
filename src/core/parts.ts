@@ -212,6 +212,8 @@ export interface Entropy {
 /** BIP39 seed material and its derivation path. */
 export interface Seed {
   readonly entropy?: Entropy;
+  /** The BIP39 passphrase published with the phrase. */
+  readonly passphrase?: string;
   readonly path?: string;
   readonly phrase?: string;
   readonly xpub?: string;
@@ -295,11 +297,12 @@ function seedSecret(key: KeyData): Secret | undefined {
   if (key.seed?.phrase === undefined) {
     return undefined;
   }
+  const known = key.seed.passphrase;
   return {
     kind: "seed",
     phrase: key.seed.phrase,
     path: key.seed.path,
-    passphrase: key.seed.entropy?.passphrase,
+    passphrase: known === undefined ? key.seed.entropy?.passphrase : { Known: known },
   };
 }
 
@@ -594,14 +597,15 @@ export class Key {
   }
 
   /**
-   * Records a BIP39 seed phrase and its derivation path.
+   * Records a BIP39 seed phrase, its derivation path and the passphrase published with it.
    *
    * @param {string} phrase - BIP39 mnemonic phrase.
    * @param {string} [path] - BIP32 derivation path.
+   * @param {string} [passphrase] - BIP39 passphrase, when the phrase has one.
    * @returns {Key} A new builder with the value recorded.
    */
-  seed(phrase: string, path?: string): Key {
-    return this.#with({ seed: defined({ ...this.#data.seed, phrase, path }) });
+  seed(phrase: string, path?: string, passphrase?: string): Key {
+    return this.#with({ seed: defined({ ...this.#data.seed, phrase, path, passphrase }) });
   }
 
   /**
@@ -740,10 +744,11 @@ export function passphrase(value: string): Key {
  *
  * @param {string} phrase - BIP39 mnemonic phrase.
  * @param {string} [path] - BIP32 derivation path.
+ * @param {string} [passphrase] - BIP39 passphrase, when the phrase has one.
  * @returns {Key} The builder, for chaining.
  */
-export function seed(phrase: string, path?: string): Key {
-  return new Key().seed(phrase, path);
+export function seed(phrase: string, path?: string, passphrase?: string): Key {
+  return new Key().seed(phrase, path, passphrase);
 }
 
 /**

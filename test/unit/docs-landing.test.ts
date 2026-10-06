@@ -104,6 +104,17 @@ describe("docs landing fixtures", () => {
     }
     expect(keyLiteral(undefined)).toBeUndefined();
     expect(keyLiteral({ bits: 71 })).toBe("bits(71)");
+    expect(keyLiteral({ seed: { phrase: "fortune … moon", path: "m/84'/0'/0'/0/0" } })).toBe(
+      `seed("fortune … moon", "m/84'/0'/0'/0/0")`,
+    );
+    expect(
+      keyLiteral({
+        seed: { phrase: "fortune … moon", path: "m/84'/0'/0'/0/0", passphrase: "supernova" },
+      }),
+    ).toBe(`seed("fortune … moon", "m/84'/0'/0'/0/0", "supernova")`);
+    expect(keyLiteral({ seed: { phrase: "fortune … moon", passphrase: "supernova" } })).toBe(
+      `seed("fortune … moon", undefined, "supernova")`,
+    );
   });
 
   it("pin the statistics and the collection facts", async () => {

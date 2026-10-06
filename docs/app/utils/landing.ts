@@ -51,6 +51,7 @@ export const WALK: readonly string[] = [
   "phy",
   "seed-phrase",
   "grycoin/2",
+  "smith-lyle-moore/born-to-be-wild",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1419,26 +1420,56 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 2,
     tool: 'grycoin/2\tclaimed\t0.007 BTC\t1tzieUfbeQghz2zjDeGHcAEfzCRgX6eLi\nchain: bitcoin  address kind: p2pkh\nhash160: 09d565074752019721ce68c58548ebc13750d5cc\npublic key: 039ad91b631e5e2f0915b682c6ab8a29d81bb464a2ffc8ebf9702aad7b238192dc (compressed)\nprivate key: unknown\nstarted: 2019-08-01 05:04:38\nsolved: 2019-08-03 14:02:10 (2d 8h 57m)\ntransactions: 2\n\tfunding\t2019-08-01 05:04:38\t0.007 BTC\tf11eca9925c7809210796a3c8d95677dfaf0becb4f6df4c74e7261c3011a2e3c\n\tclaim\t2019-08-03 14:02:10\t0.00689594 BTC\t351371588afddbaafe739237392e020e7d5db9f8aef44d655d31c313034e4cc7\nclaim: https://blockstream.info/tx/351371588afddbaafe739237392e020e7d5db9f8aef44d655d31c313034e4cc7\nhints: 10\n\tofficial\t-\tAs is already clear from the reference to block 29, people are supposed to keep the whole long text and change only a couple of letters in their capitalization.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tWhen you do that, you would end up changing "I" to "i" and "himself" to "himselF".\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tWhich would be the solution, once you do that for all the paragraphs where you recognize the signs. And keep the rest completely unchanged.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tFormat: [solution]\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tStart with the first "I" and stop with the period after "method", with no spaces or line breaks before or after that included in the hash.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tAnd for the record, each of these resolves to the combination of the ASCII codes 13 and 10, for 13 10 13 10 meaning two line breaks, or \\r\\n \\r\\n as another way of saying the same thing.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tFirst three digits of MD5 hash are 3c6.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/\n\tofficial\t-\tI am saying copy paste and do not change anything with the line breaks, change only the capitalization of letters in solution.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/comment/evuthpw/\n\tofficial\t-\tThank you for asking. I really like the answer, turns out that the first seven digits of that MD5 hash are 7759227, with three numbers 7 turning up there.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/comment/evv9k37/\n\tofficial\t-\tOne, I actually don\'t know. The question of what letters to change in capitalization is obvious if you know the solution to Satoshi\'s bitcointalk puzzle, which I revealed already. The question of how to go from that to claiming the prize is not, not even to me.\tsource: https://www.reddit.com/r/Grycoin/comments/cleczc/comment/evwv4rm/\nexplorer: https://blockstream.info/address/1tzieUfbeQghz2zjDeGHcAEfzCRgX6eLi\nsource: https://www.reddit.com/r/Grycoin/comments/cleczc/grycoin_block_2/',
   },
+  {
+    id: "smith-lyle-moore/born-to-be-wild",
+    collection: "smith-lyle-moore",
+    chain: "bitcoin",
+    status: "solved",
+    address: "bc1qgtymp8q7hw2k9tewhdq74vdlpkqhflgju69n95",
+    kind: "p2wpkh",
+    hash160: "42c9b09c1ebb9562af2ebb41eab1bf0d8174fd12",
+    redeemScript: undefined,
+    prize: "0.025 BTC",
+    prizeAmount: 0.025,
+    currency: undefined,
+    startedAt: "2021-06-25 00:57:33",
+    solvedAt: "2021-08-18 07:33:00",
+    solveTime: "1mo 24d 6h 35m",
+    bits: undefined,
+    range: undefined,
+    pubkey: "032a0aed2948e5b4a5631f60a633b81f38674f16e3b1a8f11120bc1635dc1b4809",
+    pubkeyFormat: "compressed",
+    secret: "seed",
+    keyLiteral:
+      'seed("fortune all man kind one giant step into digital tomorrow virtual moon", "m/84\'/0\'/0\'/0/0", "supernova").xpub("xpub6CdPGtTHU667LydEdcRDwf9UyKAN1n2VHxaFbprMHcbY6GLbSij2zJ5QZxR38nR71T7pvNLBof7Yg9GBqu7QyNNaFshSzNjFhpMTDQNvABg")',
+    verdict: "verified",
+    detail: "bc1qgtymp8q7hw2k9tewhdq74vdlpkqhflgju69n95",
+    explorer: "https://blockstream.info/address/bc1qgtymp8q7hw2k9tewhdq74vdlpkqhflgju69n95",
+    source:
+      "https://web.archive.org/web/20210628003610/https://www.smithlylemoore.com/treasure-hunt",
+    transactions: 2,
+    tool: "smith-lyle-moore/born-to-be-wild\tsolved\t0.025 BTC\tbc1qgtymp8q7hw2k9tewhdq74vdlpkqhflgju69n95\nchain: bitcoin  address kind: p2wpkh\nhash160: 42c9b09c1ebb9562af2ebb41eab1bf0d8174fd12\npublic key: 032a0aed2948e5b4a5631f60a633b81f38674f16e3b1a8f11120bc1635dc1b4809 (compressed)\nprivate key: fortune all man kind one giant step into digital tomorrow virtual moon (seed phrase)\nderivation path: m/84'/0'/0'/0/0\nxpub: xpub6CdPGtTHU667LydEdcRDwf9UyKAN1n2VHxaFbprMHcbY6GLbSij2zJ5QZxR38nR71T7pvNLBof7Yg9GBqu7QyNNaFshSzNjFhpMTDQNvABg\nseed passphrase: supernova\nstarted: 2021-06-25 00:57:33\nsolved: 2021-08-18 07:33:00 (1mo 24d 6h 35m)\nsolver: 26-9-15-20 (26-9-15-20), reddit https://www.reddit.com/user/26-9-15-20/\ntransactions: 2\n\tfunding\t2021-06-25 00:57:33\t0.025 BTC\tb434744d2bc873a82d8965c6de60fc8f11bdb3e6d34f0e61482e95378f0e6507\n\tclaim\t2021-08-18 07:33:00\t0.02499616 BTC\t9dc8110ee73cd415361c23ceeac2a5ea8b01736556bc5f5fcbe11afac7be93a3\nclaim: https://blockstream.info/tx/9dc8110ee73cd415361c23ceeac2a5ea8b01736556bc5f5fcbe11afac7be93a3\nasset: https://raw.githubusercontent.com/agntn/puzzles/main/assets/smith-lyle-moore/born-to-be-wild/puzzle.png\nasset source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\nstages: 12\n\talbum cover\tThe Born to Be Wild cover carries a message past the end of its image data, and the first key check wants the word it names.\n\t\talbum cover\thttps://static.wixstatic.com/media/144728_690b95a837b14706a3e8583e0c5b8056~mv2.png\thttps://raw.githubusercontent.com/agntn/puzzles/main/assets/smith-lyle-moore/born-to-be-wild/puzzle.png\n\t\tkey check 1\thttps://www.smithlylemoore.com/key-check-1\n\t\tanswer: Password: fortune\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\t\ttechnique: steganography\tsource: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\n\tsecret museum\tThe museum behind the hidden door wants an 8-digit pin.\n\t\tsecret museum\thttps://www.smithlylemoore.com/the-secret-museum7\n\t\tanswer: Password: 07201969\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\tkey check 2\tThe museum's gold frames point at the next words of the key.\n\t\tkey check 2\thttps://www.smithlylemoore.com/key-check-2\n\t\tanswer: Password: all man kind\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\tkey check 3\tThe clues on the museum page add up to the words after those.\n\t\tkey check 3\thttps://www.smithlylemoore.com/key-check-3\n\t\tanswer: Password: one giant step\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\tmuseum fire\tThe museum burns down, and the way on past the tragedy takes two passwords in a row.\n\t\tthere's been a fire\thttps://www.smithlylemoore.com/there-s-been-a-fire\n\t\twe will rebuild\thttps://www.smithlylemoore.com/we-will-rebuild-stronger-than-before\n\t\tanswer: Password: FFFFFFFFFFF\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\tvault\tThe passage ends at a locked vault, with an alternative mix of the song and a computer inside.\n\t\tthe vault\thttps://www.smithlylemoore.com/the-vault\n\t\tthe computer\thttps://www.smithlylemoore.com/the-computer\n\t\tanswer: Password: 4samcodeartist\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\tvault password\tThe inverted song cancels the YouTube mix, and the guitar left in the alternative one, 13 seconds after touchdown, is Morse.\n\t\tvault password page\thttps://www.smithlylemoore.com/blank\n\t\tinverted song\thttps://www.youtube.com/watch?v=3we3eotJZHU\n\t\tanswer: Password: into digital\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\t\ttechnique: morse\tsource: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\n\tkey check 4\tThe vault asks which code deciphered the last clue, and hands over the number to append.\n\t\tkey check 4\thttps://www.smithlylemoore.com/key-check-4\n\t\tanswer: Password: morse00100001\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\tkey check 5\tA riddle in ones and zeros, with the number to append after the answer.\n\t\tkey check 5\thttps://www.smithlylemoore.com/key-check-5\n\t\tanswer: Password: tomorrow0010000\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\t\ttechnique: binary\tsource: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\n\tgateway\tAn email to codebreaker@smithlylemoore.com earns the address and password of the gateway.\n\t\tgateway\thttps://www.smithlylemoore.com/gateway\n\t\tanswer: Password: codebreaker11\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\tfinal attraction\tThe ticket to the final attraction is words 11 and 12, the last stop of your journey.\n\t\tfinal attraction\thttps://www.smithlylemoore.com/illstillbelovinyou\n\t\tanswer: Password: virtual moon\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\n\twallet password\tThe final attraction plays an unreleased song, and the wallet's password is the end of it all.\n\t\tfinal attraction\thttps://www.smithlylemoore.com/illstillbelovinyou\n\t\tanswer: Password: supernova\tanswer source: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\tanswer date: 2021-08-18\ntechniques: 1\n\thidden-seed-words\tsource: https://www.reddit.com/r/smithlylemoore/comments/p6wzkk/bitcoin_treasure_hunt_solutionwriteup/\nhints: 6\n\tofficial\t-\tHidden in the Born To Be Wild album cover is a clue. Hidden in the Born To Be Wild music video is a hint about how to access the clue. Follow the clues... they will lead you to .025 Bitcoin.\tsource: https://www.smithlylemoore.com/treasure-hunt\tconfirmation: https://web.archive.org/web/20210628003610/https://www.smithlylemoore.com/treasure-hunt (Wayback capture of the treasure hunt page from June 2021)\n\tofficial\t-\tThis is a digital treasure hunt that will lead you to digital gold. The treasure is buried with riddles, cyphers, analogies and references to historical events.\tsource: https://www.smithlylemoore.com/treasure-hunt\tconfirmation: https://web.archive.org/web/20210628003610/https://www.smithlylemoore.com/treasure-hunt (Wayback capture of the treasure hunt page from June 2021)\n\tofficial\t-\tThere is a treasure map that you can access on this site. The map is very helpful. X marks the spot. Find it.\tsource: https://www.smithlylemoore.com/treasure-hunt\tconfirmation: https://web.archive.org/web/20210628003610/https://www.smithlylemoore.com/treasure-hunt (Wayback capture of the treasure hunt page from June 2021)\n\tofficial\t-\tThere is also a shortcut in this journey if you know where/how to look and are willing to take the baby steps that lead to one giant leap.\tsource: https://www.smithlylemoore.com/treasure-hunt\tconfirmation: https://web.archive.org/web/20210628003610/https://www.smithlylemoore.com/treasure-hunt (Wayback capture of the treasure hunt page from June 2021)\n\tofficial\t-\tWatching the Born to Be Wild music video is important to your success in this puzzle.\tsource: https://www.smithlylemoore.com/treasure-hunt\tconfirmation: https://web.archive.org/web/20210805044449/https://www.smithlylemoore.com/treasure-hunt (Wayback capture of the treasure hunt page from August 2021)\n\tofficial\t-\tIf you think you have discovered part of the key, use the key checker tool to see if you're correct.\tsource: https://www.smithlylemoore.com/treasure-hunt\tconfirmation: https://web.archive.org/web/20210805044449/https://www.smithlylemoore.com/treasure-hunt (Wayback capture of the treasure hunt page from August 2021)\nexplorer: https://blockstream.info/address/bc1qgtymp8q7hw2k9tewhdq74vdlpkqhflgju69n95\nsource: https://web.archive.org/web/20210628003610/https://www.smithlylemoore.com/treasure-hunt",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "74a7d2016f25",
-  total: 546,
-  solved: 316,
-  unsolved: 111,
+  dataVersion: "d2a5e8e8eb90",
+  total: 548,
+  solved: 317,
+  unsolved: 112,
   claimed: 19,
   swept: 96,
   expired: 4,
-  withPubkey: 433,
+  withPubkey: 435,
   unsolvedPrize: {
-    BTC: 909.15402677,
+    BTC: 909.18580377,
     ETH: 13.171964034825493,
     LTC: 3.02608794,
     AR: 1500.188092936237,
   },
   totalPrize: {
-    BTC: 1068.67556695,
+    BTC: 1068.73234395,
     ETH: 26.81566403482549,
     DOGE: 10000,
     BCH: 5.1,
@@ -2226,6 +2257,29 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     hints: [],
   },
   {
+    key: "smith-lyle-moore",
+    author: "Smith, Lyle & Moore",
+    authorKey: "smith-lyle-moore",
+    authorUrl: "https://www.smithlylemoore.com/",
+    total: 2,
+    statuses: {
+      solved: 1,
+      unsolved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.056777,
+    },
+    unsolvedPrize: {
+      BTC: 0.031777,
+    },
+    withPubkey: 2,
+    withKey: 1,
+    firstStarted: "2021-06-25 00:57:33",
+    lastStarted: "2022-07-29 16:22:03",
+    hints: [],
+  },
+  {
     key: "teikhos",
     author: "Johan Nygren",
     authorKey: "johan-nygren",
@@ -2761,6 +2815,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Software studio of one developer whose GitHub organization publishes seed-phrase.com. Put 0.005 BTC behind a recovery phrase in July 2024, doubled it in August and has added no clue since.",
     collections: ["seed-phrase"],
     puzzles: 1,
+  },
+  {
+    key: "smith-lyle-moore",
+    to: "/authors/smith-lyle-moore",
+    name: "Smith, Lyle & Moore",
+    kind: "organization",
+    about:
+      "Indie band that spent its advertising budget on bitcoin and buried it behind riddles on its own website, one treasure hunt per single.",
+    collections: ["smith-lyle-moore"],
+    puzzles: 2,
   },
   {
     key: "johan-nygren",
