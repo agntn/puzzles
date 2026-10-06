@@ -1,6 +1,7 @@
 import { apiKeyVariables } from "./core/balance.ts";
 import type { Chain } from "./core/chains.ts";
 import type { PuzzleQuery } from "./core/dataset.ts";
+import type { Eligibility } from "./core/eligibility.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
 import { Status } from "./core/status.ts";
 import type { Puzzle } from "./core/puzzle.ts";
@@ -247,7 +248,7 @@ export const facts = {
       name: "puzzles_eligibility",
       title: "Puzzle Eligibility",
       description:
-        "Gather what to check before working on a puzzle in one record: identity and source, chain, address and script type, a live read of every prize address with what it received and spent, the status with its evidence, the carriers, what counts as a solution, and every field nobody can fill. Takes an identifier, or an address no record holds.",
+        "Gather what to check before working on a puzzle in one record: identity and source, chain, address and script type, a live read of every prize address with what it received and spent, the status with its evidence, the carriers with the repository paths of its files, what counts as a solution, and every field nobody can fill. Takes an identifier, or an address no record holds.",
       promptSnippet:
         "Use puzzles_eligibility before working on a prize puzzle, instead of assembling the checklist from puzzles_show, puzzles_balance and an explorer.",
       promptGuidelines: [
@@ -1178,6 +1179,29 @@ export async function watchTool(id: string, since?: string, apiKey?: string): Pr
 }
 
 /**
+ * The eligibility rows for a model: a shipped carrier as a path, never a URL to `curl`.
+ *
+ * @param {string} head - The summary line.
+ * @param {Eligibility} record - The record.
+ * @returns {Promise<string>} The answer text.
+ */
+async function eligibilityText(head: string, record: Eligibility): Promise<string> {
+  const { formatEligibility } = await import("./core/eligibility.ts");
+  if (record.id === undefined) {
+    return [head, ...formatEligibility(record)].join("\n");
+  }
+  const {
+    dataset: { requirePuzzle },
+    registry: { requireCollection },
+  } = await loadCore();
+  const puzzle = await requirePuzzle(record.id);
+  const paths = new Map(puzzle.assetLinks().map((link) => [link.url, link.path]));
+  const carriers = record.carriers.map((line) => paths.get(line) ?? line);
+  const rows = formatEligibility({ ...record, carriers });
+  return withFilesLine([head, ...rows], puzzle, await requireCollection(puzzle.collection()));
+}
+
+/**
  * Builds the eligibility record of a puzzle or an address, with a `missing` row per unknown field.
  *
  * @param {string} query - Puzzle identifier or address.
@@ -1193,7 +1217,7 @@ export async function eligibilityTool(
   const checked = assertLength("query", query, facts.parameters.query);
   const key =
     apiKey === undefined ? undefined : assertLength("apiKey", apiKey, facts.parameters.apiKey);
-  const { eligibility, formatEligibility } = await import("./core/eligibility.ts");
+  const { eligibility } = await import("./core/eligibility.ts");
   const record = await eligibility(checked, {
     apiKey: key,
     apiKeyFor: (resolved) => keyFor(resolved, undefined),
@@ -1204,17 +1228,14 @@ export async function eligibilityTool(
     missing.length === 0
       ? "complete"
       : `${missing.length} ${missing.length === 1 ? "field" : "fields"} missing`;
-  return text(
-    [`${record.id ?? record.address}: ${summary}`, ...formatEligibility(record)].join("\n"),
-    {
-      ...record,
-      live: record.live.map((state) => ({
-        ...state,
-        confirmed: state.confirmed.toString(),
-        unconfirmed: state.unconfirmed.toString(),
-        ...(state.funded === undefined ? {} : { funded: state.funded.toString() }),
-        ...(state.spent === undefined ? {} : { spent: state.spent.toString() }),
-      })),
-    },
-  );
+  return text(await eligibilityText(`${record.id ?? record.address}: ${summary}`, record), {
+    ...record,
+    live: record.live.map((state) => ({
+      ...state,
+      confirmed: state.confirmed.toString(),
+      unconfirmed: state.unconfirmed.toString(),
+      ...(state.funded === undefined ? {} : { funded: state.funded.toString() }),
+      ...(state.spent === undefined ? {} : { spent: state.spent.toString() }),
+    })),
+  });
 }

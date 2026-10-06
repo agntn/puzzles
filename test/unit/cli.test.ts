@@ -1019,6 +1019,10 @@ describe.concurrent("puzzles CLI", () => {
       /^live\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe 0\.000011 BTC confirmed, 0 BTC unconfirmed, received 0\.000015 BTC, spent 0\.000004 BTC, read from mempool at /mu,
     );
     expect(complete.stdout).not.toMatch(/^missing\t/mu);
+    expect(complete.stdout).toMatch(
+      /^carrier\thttps:\/\/raw\.githubusercontent\.com\/agntn\/puzzles\/[^/]+\/assets\/gsmg\/puzzle\.png$/mu,
+    );
+    expect(complete.stdout).not.toMatch(/^files: /mu);
 
     const bare = await stubbed(
       "unused",
