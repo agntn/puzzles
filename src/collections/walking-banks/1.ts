@@ -1,4 +1,4 @@
-import { compressed, funding } from "../../core/parts.ts";
+import { compressed, derivation, funding } from "../../core/parts.ts";
 import { puzzle } from "../../core/puzzle.ts";
 
 /** The 100,000 sats lot at m/0/0 of the treasure wallet's published xpub. */
@@ -10,6 +10,9 @@ export const walkingBanks1 = puzzle({
   startedAt: "2024-09-05 13:35:50",
   prize: 0.001,
   pubkey: compressed("027b26f0973f7656d7405ebdc2d7500d855aee346ff4518d61507050254703d8a3"),
+  key: derivation("m/84'/0'/0'/0/0").xpub(
+    "xpub6DWcZA9sqNapeBk9oUtd6Vj1PPAMARX1c6qMeX7VpUWeLZQ93UGDi6G1aSCX5FKt92XrEB5CcUmDHJjUeTTT9cJxV88wZ2vdhNnuY3PSdsV",
+  ),
   transactions: [
     funding(
       "70efe537a71ccbf9fabb603210d732bc3e8da3300976d7a130e7b1766d6e2830",
