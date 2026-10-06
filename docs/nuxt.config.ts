@@ -295,6 +295,9 @@ export default defineNuxtConfig({
         moved(`/collections/${id.replaceAll("_", "-")}`),
       ]),
     ),
+    /** The puzzle transaction under its old key, named after a prize total that kept moving. */
+    "/collections/b1000": moved("/collections/bits"),
+    "/collections/b1000/**": moved("/collections/bits/**"),
     /** The Genesis puzzle's page before the collection became a singleton. */
     "/collections/genesis/block": moved("/collections/genesis"),
     /** kTimesG's challenge before it became the `80-bit` singleton: the collection page and both puzzle ids. */

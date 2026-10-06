@@ -11,7 +11,7 @@ export default defineCommand({
       "List the hints that hold for one puzzle, its collection's and its own, and the hint files it ships",
   },
   args: {
-    id: { type: "positional", description: "Puzzle identifier, for example b1000/90" },
+    id: { type: "positional", description: "Puzzle identifier, for example bits/90" },
     ...jsonArg,
   },
   async run({ args }) {

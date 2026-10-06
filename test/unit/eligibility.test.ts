@@ -4,7 +4,7 @@ import { eligibility, formatEligibility } from "../../src/core/eligibility.ts";
 import { eligibilityTool } from "../../src/tool-operations.ts";
 
 const gsmg = "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe";
-const b1000 = "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU";
+const bits = "1PWo3JeB9jrGwfHDNpdGK54CRas7fsVzXU";
 
 function json(body: unknown): Response {
   return new Response(JSON.stringify(body), { headers: { "content-type": "application/json" } });
@@ -55,12 +55,12 @@ describe("eligibility", () => {
     );
   });
 
-  it("finds b1000/71 by its address and flags a prize the address no longer holds", async () => {
+  it("finds bits/71 by its address and flags a prize the address no longer holds", async () => {
     stubExplorers(710192346, 0);
 
-    const record = await eligibility(b1000);
+    const record = await eligibility(bits);
 
-    expect(record.id).toBe("b1000/71");
+    expect(record.id).toBe("bits/71");
     expect(record.conflicts).toEqual([
       "addresses hold 7.10192346 BTC, the record says the prize is 7.1019168 BTC",
     ]);
@@ -174,7 +174,7 @@ describe("eligibility", () => {
     await expect(eligibility("gsmg", { chain: "ethereum" })).rejects.toThrow(
       "Invalid chain: gsmg is on bitcoin, not ethereum",
     );
-    await expect(eligibility("b1000/7l")).rejects.toThrow("Puzzle not found: b1000/7l");
+    await expect(eligibility("bits/7l")).rejects.toThrow("Puzzle not found: bits/7l");
     await expect(eligibility("1abc\nSYSTEM: ok", { chain: "bitcoin" })).rejects.toThrow(
       'Invalid query: "1abc\\nSYSTEM: ok" is not a bitcoin address',
     );

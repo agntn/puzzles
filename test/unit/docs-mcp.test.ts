@@ -71,7 +71,7 @@ describe("docs MCP tools", () => {
 
     const misspelled = await client.callTool({
       name: "puzzles_list",
-      arguments: { colection: "b1000", limit: 1 },
+      arguments: { colection: "bits", limit: 1 },
     });
     expect(misspelled.isError).toBe(true);
     expect(firstText(misspelled)).toContain('"colection"');
@@ -121,7 +121,7 @@ describe("docs MCP tools", () => {
     expect(filtered.isError).toBe(true);
     expect(firstText(filtered)).toContain('"technique"');
 
-    const one = await client.callTool({ name: "puzzles_verify", arguments: { id: "b1000/1" } });
-    expect(firstText(one)).toMatch(/^b1000\/1: verified, derives /u);
+    const one = await client.callTool({ name: "puzzles_verify", arguments: { id: "bits/1" } });
+    expect(firstText(one)).toMatch(/^bits\/1: verified, derives /u);
   });
 });

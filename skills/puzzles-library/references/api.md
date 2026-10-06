@@ -7,7 +7,7 @@ Every puzzle is a record built by `puzzle()` and read through the abstract `Puzz
 ```ts
 abstract class Puzzle {
   // required, the last one comes from the chain base
-  abstract id(): string; // "b1000/66", "gsmg"
+  abstract id(): string; // "bits/66", "gsmg"
   abstract address(): Address;
   abstract sourceUrl(): string;
   abstract startedAt(): string;
@@ -36,7 +36,7 @@ Per-chain bases fill in `chain()`: `BitcoinPuzzle`, `BitcoinCashPuzzle`, `ECashP
 ### Derived methods
 
 ```ts
-puzzle.collection(); // "b1000"
+puzzle.collection(); // "bits"
 puzzle.name(); // "66"
 puzzle.keyData(); // serializable key material, or undefined
 puzzle.prizeCurrency(); // explicit currency, else the chain symbol
@@ -169,7 +169,7 @@ registerCollection(collection); // an instance, or { key, load } for a lazy one
 // Asynchronous: a collection module is imported on first use.
 await getCollection(name); // Collection | undefined
 await requireCollection(name); // throws UnknownCollectionError
-await requireCollection("b1000"); // built-in keys and aliases are typed: Collection<number | string>, so .get(71) compiles
+await requireCollection("bits"); // built-in keys and aliases are typed: Collection<number | string>, so .get(71) compiles
 await collections(); // every instance, registration order, shared array until the next registration
 await collectionSummaries(); // { key, author, total, claimed, expired, solved, swept, unsolved }[]
 await all(); // every puzzle instance
@@ -181,7 +181,7 @@ await dataVersion(); // deterministic 12-char hash
 await dataset(); // { version, data_version, collections }
 
 // One collection, synchronous, through its own entry.
-import { b1000, B1000Collection } from "@agntn/puzzles/collections/b1000";
+import { bits, BitsCollection } from "@agntn/puzzles/collections/bits";
 ```
 
 ## Errors

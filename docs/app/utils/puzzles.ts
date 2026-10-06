@@ -24,10 +24,10 @@ const PRESENTATION: Readonly<
     chains: ["arweave", "ethereum"],
     blurb: "Tiamat's weave puzzles. Prizes in AR and ETH. Four still open.",
   },
-  b1000: {
+  bits: {
     icon: "i-lucide-binary",
     title: "Bitcoin puzzle transaction",
-    sample: "b1000/71",
+    sample: "bits/71",
     chains: ["bitcoin"],
     blurb: "256 addresses with keys of 1 to 256 bits. The one everybody scans.",
   },

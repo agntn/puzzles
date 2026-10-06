@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { readdirSync } from "node:fs";
 import { describe, expect, expectTypeOf, it, vi } from "vite-plus/test";
 import { eightyBit, EightyBitCollection } from "../../src/collections/80-bit.ts";
-import { b1000, B1000Collection } from "../../src/collections/b1000.ts";
+import { bits, BitsCollection } from "../../src/collections/bits.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitaddressCollection } from "../../src/collections/bitaddress.ts";
 import { BitapsCollection } from "../../src/collections/bitaps.ts";
@@ -88,11 +88,11 @@ import { prizeTotals } from "../../src/core/utils.ts";
 
 const concreteClasses = [
   EightyBitCollection,
-  B1000Collection,
   BalletCollection,
   BitaddressCollection,
   BitapsCollection,
   BitimageCollection,
+  BitsCollection,
   BookQuizCollection,
   BraveNewWorldCollection,
   CoinArtistCollection,
@@ -140,6 +140,7 @@ describe("lazy collection registry", () => {
     expect(collectionKeys()).toEqual(concreteClasses.map((CollectionClass) => CollectionClass.key));
     expect(hasCollection("peter_todd")).toBe(true);
     expect(hasCollection("warpwallet")).toBe(true);
+    expect(hasCollection("b1000")).toBe(true);
     expect(hasCollection("nope")).toBe(false);
   });
 
@@ -289,25 +290,26 @@ describe("lazy collection registry", () => {
   });
 
   it("types a built-in lookup by the queries its collection takes", async () => {
-    const numeric = await requireCollection("b1000");
+    const numeric = await requireCollection("bits");
     expectTypeOf<Parameters<typeof numeric.get>[0]>().toEqualTypeOf<number | string>();
-    expect(numeric.get(71)?.id()).toBe("b1000/71");
+    expect(numeric.get(71)?.id()).toBe("bits/71");
     const singleton = await getCollection("gsmg");
     expect(singleton.get()?.id()).toBe("gsmg");
     const alias = await getCollection("warpwallet");
     expectTypeOf<Parameters<typeof alias.get>[0]>().toEqualTypeOf<string>();
     // @ts-expect-error A named collection takes no number.
     expect(alias.get(1)).toBeUndefined();
-    const key: string = "b1000";
+    const key: string = "bits";
     expectTypeOf(await getCollection(key)).toEqualTypeOf<AnyCollection | undefined>();
   });
 
   it("preserves universal and historical collection lookups", async () => {
-    expect((await get("b1000/90"))?.id()).toBe("b1000/90");
+    expect((await get("bits/90"))?.id()).toBe("bits/90");
     expect((await get("gsmg"))?.id()).toBe("gsmg");
     expect((await get("movie-enigma"))?.id()).toBe("movie-enigma");
     expect((await getCollection("peter_todd"))?.key).toBe("hash-collision");
     expect((await getCollection("warpwallet"))?.key).toBe("warp");
+    expect((await get("b1000/71"))?.id()).toBe("bits/71");
     expect(await get("missing")).toBeUndefined();
     const foreign = [undefined, null, true, 71n, {}] as never[];
     expect(await Promise.all(foreign.map((id) => get(id)))).toEqual(foreign.map(() => undefined));
@@ -455,20 +457,20 @@ describe("lazy collection registry", () => {
   });
 
   it("resolves a collection query only in the spelling its identifier uses", () => {
-    expect([71, "71", "b1000/71"].map((query) => b1000.get(query)?.id())).toEqual([
-      "b1000/71",
-      "b1000/71",
-      "b1000/71",
+    expect([71, "71", "bits/71"].map((query) => bits.get(query)?.id())).toEqual([
+      "bits/71",
+      "bits/71",
+      "bits/71",
     ]);
     /* Number() and replace() used to read all of these as 71 or 70, or die on the foreign types. */
-    const spellings = ["0x47", "0b1000111", " 71 ", "71.0", "+71", "0071", "7e1"];
-    const prefixed = ["b1000/7e1", "b1000/71.0", "b1000/ 71", "71b1000/"];
+    const spellings = ["0x47", "0bits111", " 71 ", "71.0", "+71", "0071", "7e1"];
+    const prefixed = ["bits/7e1", "bits/71.0", "bits/ 71", "71bits/"];
     const foreign = [undefined, null, true, 71n, {}] as never[];
-    expect([...spellings, ...prefixed, ...foreign].map((query) => b1000.get(query))).toEqual(
+    expect([...spellings, ...prefixed, ...foreign].map((query) => bits.get(query))).toEqual(
       [...spellings, ...prefixed, ...foreign].map(() => undefined),
     );
-    expect(() => b1000.require("7e1")).toThrow(PuzzleNotFoundError);
-    expect(() => b1000.require("7e1")).toThrow("Puzzle not found: 7e1");
+    expect(() => bits.require("7e1")).toThrow(PuzzleNotFoundError);
+    expect(() => bits.require("7e1")).toThrow("Puzzle not found: 7e1");
 
     expect([1, "1", "quizchain/1"].map((query) => quizchain.get(query)?.id())).toEqual([
       "quizchain/1",
@@ -540,6 +542,8 @@ describe("lazy collection registry", () => {
     expect(weave.get("weave3")).toBeUndefined();
     expect(hasCollection("arweave")).toBe(false);
 
+    expect(bits.get("b1000/71")).toBeUndefined();
+
     expect(["gif", "iamabananaamaa/gif"].map((query) => iAmABananaAmaa.get(query)?.id())).toEqual([
       "iamabananaamaa/gif",
       "iamabananaamaa/gif",
@@ -568,13 +572,13 @@ describe("lazy collection registry", () => {
 
     /* Case, separators and a bare name each point at exactly one identifier. */
     await expect(miss(requirePuzzle("135"))).resolves.toBe(
-      "Puzzle not found: 135. Did you mean b1000/135?",
+      "Puzzle not found: 135. Did you mean bits/135?",
     );
-    await expect(miss(requirePuzzle("B1000/71"))).resolves.toBe(
-      "Puzzle not found: B1000/71. Did you mean b1000/71?",
+    await expect(miss(requirePuzzle("BITS/71"))).resolves.toBe(
+      "Puzzle not found: BITS/71. Did you mean bits/71?",
     );
-    await expect(miss(requirePuzzle("b100/71"))).resolves.toBe(
-      "Puzzle not found: b100/71. Did you mean b1000/71?",
+    await expect(miss(requirePuzzle("bit/71"))).resolves.toBe(
+      "Puzzle not found: bit/71. Did you mean bits/71?",
     );
     await expect(miss(requirePuzzle("Zden/Level-5"))).resolves.toBe(
       "Puzzle not found: Zden/Level-5. Did you mean zden/level-5?",
@@ -585,8 +589,8 @@ describe("lazy collection registry", () => {
     await expect(miss(requirePuzzle("GSMG"))).resolves.toBe(
       "Puzzle not found: GSMG. Did you mean gsmg?",
     );
-    await expect(miss(requirePuzzle("b100/99999"))).resolves.toBe(
-      "Puzzle not found: b100/99999. Did you mean collection b1000?",
+    await expect(miss(requirePuzzle("bit/99999"))).resolves.toBe(
+      "Puzzle not found: bit/99999. Did you mean collection bits?",
     );
     await expect(miss(requireCollection("hashcollision"))).resolves.toBe(
       "Unknown collection: hashcollision. Did you mean hash-collision?",
@@ -597,14 +601,14 @@ describe("lazy collection registry", () => {
 
     /* A name several collections share names each of them, in registry order. */
     await expect(miss(requirePuzzle("71"))).resolves.toBe(
-      "Puzzle not found: 71. Did you mean b1000/71, quizchain/71 or quizchain2/71?",
+      "Puzzle not found: 71. Did you mean bits/71, quizchain/71 or quizchain2/71?",
     );
     await expect(miss(requirePuzzle("1"))).resolves.toBe(
-      "Puzzle not found: 1. Did you mean b1000/1, grycoin/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1, walking-banks/1 or weave/1?",
+      "Puzzle not found: 1. Did you mean bits/1, grycoin/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1, walking-banks/1 or weave/1?",
     );
 
     /* A number one digit off is another puzzle, and an unknown collection holds no name. */
-    for (const id of ["b1000/999", "b1000/071", "nope/1"]) {
+    for (const id of ["bits/999", "bits/071", "nope/1"]) {
       await expect(miss(requirePuzzle(id))).resolves.toBe(`Puzzle not found: ${id}.`);
     }
     await expect(miss(requireCollection("bitcoin"))).resolves.toBe("Unknown collection: bitcoin.");
@@ -703,8 +707,8 @@ describe("lazy collection registry", () => {
     const summaries = await collectionSummaries();
 
     expect(summaries.map((entry) => entry.key)).toEqual(collectionKeys());
-    expect(summaries.find((entry) => entry.key === "b1000")).toEqual({
-      key: "b1000",
+    expect(summaries.find((entry) => entry.key === "bits")).toEqual({
+      key: "bits",
       author: "saatoshi_rising",
       total: 256,
       claimed: 0,
@@ -778,20 +782,20 @@ describe("lazy collection registry", () => {
 
     const retired = await requireSolver("retired-coder");
     expect(retired.solves.map((solve) => solve.id)).toEqual([
-      "b1000/120",
-      "b1000/125",
-      "b1000/130",
-      "b1000/135",
+      "bits/120",
+      "bits/125",
+      "bits/130",
+      "bits/135",
     ]);
     expect(retired.solves[0]).toEqual({
-      id: "b1000/120",
+      id: "bits/120",
       chain: "bitcoin",
       status: "solved",
       solvedAt: "2023-02-27 09:40:55",
       prize: 1.2,
       currency: "BTC",
     });
-    expect(retired.collections).toEqual(["b1000"]);
+    expect(retired.collections).toEqual(["bits"]);
     expect(retired.authored).toEqual(["mini"]);
     /* The four records repeat the profiles; the joined record keeps each once. */
     expect(retired.solver.profiles).toHaveLength(2);
@@ -812,7 +816,7 @@ describe("lazy collection registry", () => {
 
     /* A solver known only by the address the prize went to has no entry. */
     expect(entries.flatMap((entry) => entry.solves).map((solve) => solve.id)).not.toContain(
-      "b1000/66",
+      "bits/66",
     );
     expect(await getSolver("nobody")).toBeUndefined();
     expect(await getSolver(7 as never)).toBeUndefined();
@@ -829,11 +833,11 @@ describe("lazy collection registry", () => {
     await expect(miss(requireSolver("retiredcoder"))).resolves.toBe(
       "UnknownSolverError: Unknown solver: retiredcoder. Did you mean retired-coder?",
     );
-    await expect(miss(requireSolver("b1000/66"))).resolves.toBe(
-      "UnknownSolverError: Unknown solver: b1000/66. b1000/66 knows its solver by address only.",
+    await expect(miss(requireSolver("bits/66"))).resolves.toBe(
+      "UnknownSolverError: Unknown solver: bits/66. bits/66 knows its solver by address only.",
     );
-    await expect(miss(requireSolver("b1000/71"))).resolves.toBe(
-      "UnknownSolverError: Unknown solver: b1000/71. b1000/71 records no solver.",
+    await expect(miss(requireSolver("bits/71"))).resolves.toBe(
+      "UnknownSolverError: Unknown solver: bits/71. bits/71 records no solver.",
     );
   });
 
@@ -896,9 +900,9 @@ describe("lazy collection registry", () => {
   });
 
   it("joins a puzzle's techniques from its collection, its record and its stages", async () => {
-    const b1000 = await requireCollection("b1000");
-    expect(b1000.techniquesFor(71).map((tag) => tag.name)).toEqual(["masked-key-range"]);
-    expect((await requirePuzzle("b1000/71")).techniques()).toEqual([]);
+    const bits = await requireCollection("bits");
+    expect(bits.techniquesFor(71).map((tag) => tag.name)).toEqual(["masked-key-range"]);
+    expect((await requirePuzzle("bits/71")).techniques()).toEqual([]);
 
     const gsmg = await requireCollection("gsmg");
     expect(gsmg.techniquesById("gsmg").map((tag) => tag.name)).toEqual([
@@ -917,9 +921,7 @@ describe("lazy collection registry", () => {
     ]);
     expect((await requirePuzzle("gsmg")).toJSON()).not.toHaveProperty("techniques");
     const serialized = await datasetCollections();
-    expect(serialized.find((entry) => entry.name === "b1000")?.techniques).toEqual(
-      b1000.techniques,
-    );
+    expect(serialized.find((entry) => entry.name === "bits")?.techniques).toEqual(bits.techniques);
     expect(serialized.find((entry) => entry.name === "gsmg")).not.toHaveProperty("techniques");
   });
 
@@ -934,7 +936,7 @@ describe("lazy collection registry", () => {
     expect(await ids({ technique: "sha256-to-bip39-entropy", collection: "quizchain" })).toEqual(
       Array.from({ length: 14 }, (_, index) => `quizchain/${index + 1}`),
     );
-    expect(await ids({ technique: "xor", collection: "b1000" })).toEqual([]);
+    expect(await ids({ technique: "xor", collection: "bits" })).toEqual([]);
   });
 
   it("counts an author's techniques over every collection it published", async () => {

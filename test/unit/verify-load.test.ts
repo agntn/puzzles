@@ -10,6 +10,6 @@ describe("verify tool module loading", () => {
       timeout: 30_000,
     });
 
-    expect(JSON.parse(output)).toEqual({ miss: "b1000/99999", cryptoOnMiss: 0, verified: true });
+    expect(JSON.parse(output)).toEqual({ miss: "bits/99999", cryptoOnMiss: 0, verified: true });
   });
 });

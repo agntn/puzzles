@@ -35,7 +35,7 @@ export default defineCommand({
     collection: {
       type: "positional",
       required: false,
-      description: "Collection key, for example b1000",
+      description: "Collection key, for example bits",
     },
     ...filterArgs,
     limit: {

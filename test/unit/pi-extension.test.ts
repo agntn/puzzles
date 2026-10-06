@@ -45,13 +45,13 @@ describe("Pi extension", () => {
     const calls: Readonly<Record<string, Readonly<Record<string, unknown>>>> = {
       puzzles_author: { key: "dug", name: "Dug" },
       puzzles_solver: { key: "lia", name: "Lia" },
-      puzzles_show: { id: "b1000/71", name: "71" },
+      puzzles_show: { id: "bits/71", name: "71" },
       puzzles_hints: { id: "gsmg", name: "gsmg" },
       puzzles_stages: { id: "gsmg", name: "gsmg" },
       puzzles_assets: { id: "gsmg", path: "assets/gsmg/phase2.txt" },
-      puzzles_list: { collection: "b1000", with_pubkey: true },
-      puzzles_verify: { id: "b1000/1", name: "1" },
-      puzzles_balance: { id: "b1000/71", api_key: "secret" },
+      puzzles_list: { collection: "bits", with_pubkey: true },
+      puzzles_verify: { id: "bits/1", name: "1" },
+      puzzles_balance: { id: "bits/71", api_key: "secret" },
     };
 
     for (const [name, params] of Object.entries(calls)) {
@@ -87,13 +87,13 @@ describe("Pi extension", () => {
 
   it("advertises and executes list pagination", async () => {
     const tool = (await registerTools()).get("puzzles_list");
-    const result = await tool?.execute("call-2", { collection: "b1000", offset: 1, limit: 1 });
+    const result = await tool?.execute("call-2", { collection: "bits", offset: 1, limit: 1 });
 
     expect(tool?.parameters).toMatchObject({ properties: { offset: facts.parameters.offset } });
     expect(tool?.description).toBe(facts.tools.list.description);
     expect(result?.content[0]?.text.split("\n")).toEqual([
       "1 of 256 matching puzzles (offset 1):",
-      "b1000/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "bits/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
       "Next page: offset=2. Keep the same filters.",
     ]);
     expect(result?.details).toEqual({
@@ -101,7 +101,7 @@ describe("Pi extension", () => {
       returned: 1,
       offset: 1,
       nextOffset: 2,
-      ids: ["b1000/2"],
+      ids: ["bits/2"],
     });
   });
 
@@ -171,7 +171,7 @@ describe("Pi host loader", () => {
       ["puzzles_show", { id: "gsmg" }],
       ["puzzles_hints", { id: "gsmg" }],
       ["puzzles_stages", { id: "gsmg" }],
-      ["puzzles_list", { collection: "b1000", limit: 1 }],
+      ["puzzles_list", { collection: "bits", limit: 1 }],
     ] as const) {
       const result = await hosted.get(name)?.execute("call-1", params);
       expect(result?.content[0]?.text, name).toEqual(
@@ -182,7 +182,7 @@ describe("Pi host loader", () => {
 
   it.each([
     ["puzzles_verify", "doges-gambit/eth", "doges-gambit/doge"],
-    ["puzzles_show", "b1000/1", "gsmg"],
+    ["puzzles_show", "bits/1", "gsmg"],
   ] as const)("answers two first %s calls that start together", async (name, ...ids) => {
     const hosted = await registerThroughHostLoader();
     const direct = await registerTools();

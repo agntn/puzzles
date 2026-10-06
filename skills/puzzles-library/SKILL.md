@@ -25,7 +25,7 @@ collectionKeys(); // synchronous, from the manifest, nothing loaded
 await collectionSummaries(); // { key, author, total, solved, unsolved, ... }[]
 await selectPuzzles({ chain: "ethereum", status: "unsolved" }); // filtered across every collection
 await selectPuzzles({ address: "1FLAMEN6rq2BqMnkUmsJBqCGWdwgVKcegd" }); // the puzzle paying there
-await get("b1000/66"); // Puzzle | undefined, loads one collection
+await get("bits/66"); // Puzzle | undefined, loads one collection
 ```
 
 Importing the package loads no records. The manifest holds keys only, and a collection module is imported on the first lookup for its key. That is why every view that needs instances is async: `all`, `get`, `requirePuzzle`, `selectPuzzles`, `stats`, `collections`, `getCollection`, `collectionSummaries`, `dataVersion`, `dataset`. Only `collectionKeys()` and `hasCollection()` answer synchronously.
@@ -33,13 +33,13 @@ Importing the package loads no records. The manifest holds keys only, and a coll
 A module that works with one collection imports it directly, and from then on the lookups are synchronous:
 
 ```ts
-import { b1000 } from "@agntn/puzzles/collections/b1000";
+import { bits } from "@agntn/puzzles/collections/bits";
 
-const puzzle = b1000.require(66); // throws when missing
-b1000.get(999); // undefined when a miss is normal
+const puzzle = bits.require(66); // throws when missing
+bits.get(999); // undefined when a miss is normal
 ```
 
-The root entry never exports a collection. `import { b1000 } from "@agntn/puzzles"` does not work.
+The root entry never exports a collection. `import { gsmg } from "@agntn/puzzles"` does not work, and the root's `bits` is the record builder `bits(n)`, not the collection.
 
 ## Reading a puzzle
 

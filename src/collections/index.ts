@@ -2,15 +2,15 @@
  * Every collection shipped with the package, in manifest order. Only the key lives here. A module
  * is imported on the first lookup for its key, so importing the package evaluates no records and a
  * bundler splits each collection into its own chunk. The list keeps its literal type, so
- * `getCollection("b1000")` knows the query type of the collection it loads.
+ * `getCollection("bits")` knows the query type of the collection it loads.
  */
 export const builtins = [
   { key: "80-bit", load: () => import("./80-bit.ts").then((m) => m.eightyBit) },
-  { key: "b1000", load: () => import("./b1000.ts").then((m) => m.b1000) },
   { key: "ballet", load: () => import("./ballet.ts").then((m) => m.ballet) },
   { key: "bitaddress", load: () => import("./bitaddress.ts").then((m) => m.bitaddress) },
   { key: "bitaps", load: () => import("./bitaps.ts").then((m) => m.bitaps) },
   { key: "bitimage", load: () => import("./bitimage.ts").then((m) => m.bitimage) },
+  { key: "bits", load: () => import("./bits.ts").then((m) => m.bits) },
   { key: "book-quiz", load: () => import("./book-quiz.ts").then((m) => m.bookQuiz) },
   {
     key: "brave-new-world",

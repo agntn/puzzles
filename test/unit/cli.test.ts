@@ -88,24 +88,24 @@ describe.concurrent("puzzles CLI", () => {
   it("shows a puzzle by universal identifier", async () => {
     const result = await json<{ readonly id: string; readonly status: string }>(
       "show",
-      "b1000/1",
+      "bits/1",
       "--json",
     );
 
-    expect(result).toMatchObject({ id: "b1000/1", status: "solved" });
+    expect(result).toMatchObject({ id: "bits/1", status: "solved" });
   });
 
   it("prints the whole record of a puzzle as the tool does", async () => {
     const { showTool } = await import("../../src/tool-operations.ts");
     const derived = await puzzles("show", "quizchain/6");
-    const inherited = await puzzles("show", "b1000/71");
+    const inherited = await puzzles("show", "bits/71");
 
     expect(derived).toBe(await linked(showTool("quizchain/6")));
     expect(derived).toContain("(wif, derived from the published recipe)");
-    expect(inherited).toBe(await linked(showTool("b1000/71")));
+    expect(inherited).toBe(await linked(showTool("bits/71")));
     expect(inherited).toContain("collection hints: 1");
-    expect(await puzzles("show", "b1000/71", "--all-transactions")).toBe(
-      await linked(showTool("b1000/71", true)),
+    expect(await puzzles("show", "bits/71", "--all-transactions")).toBe(
+      await linked(showTool("bits/71", true)),
     );
   });
 
@@ -131,7 +131,7 @@ describe.concurrent("puzzles CLI", () => {
       "SalPhaseIon",
       "Cosmic Duality",
     ]);
-    expect((await puzzles("stages", "b1000/71")).trim()).toBe("b1000/71: no stages recorded");
+    expect((await puzzles("stages", "bits/71")).trim()).toBe("bits/71: no stages recorded");
   });
 
   it("lists the files a puzzle ships with the digests the record pins", async () => {
@@ -151,7 +151,7 @@ describe.concurrent("puzzles CLI", () => {
         ?.assetLinks()
         .map((link) => ({ ...link, url: link.url.replace(ASSETS, CHECKOUT_ASSETS) })),
     );
-    expect(await puzzles("assets", "b1000/71")).toBe("b1000/71: no files and no archived sources");
+    expect(await puzzles("assets", "bits/71")).toBe("bits/71: no files and no archived sources");
   });
 
   it("lists the archived copies of the pages a puzzle cites, its own before its author's", async () => {
@@ -333,12 +333,8 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("hands a script the collection's hint, which the record alone leaves out", async () => {
-    const record = await json<{ readonly hints?: readonly unknown[] }>(
-      "show",
-      "b1000/71",
-      "--json",
-    );
-    const hints = await json<Record<string, unknown>>("hints", "b1000/71", "--json");
+    const record = await json<{ readonly hints?: readonly unknown[] }>("show", "bits/71", "--json");
+    const hints = await json<Record<string, unknown>>("hints", "bits/71", "--json");
 
     expect(record.hints).toBeUndefined();
     expect(hints).toEqual({
@@ -503,7 +499,7 @@ describe.concurrent("puzzles CLI", () => {
     expect(result.code).toBe(1);
     expect(result.stdout).toBe("");
     expect(result.stderr).toMatch(
-      /^Puzzle not found: nope\/1\. Known collections: 80-bit, b1000, /u,
+      /^Puzzle not found: nope\/1\. Known collections: 80-bit, ballet, /u,
     );
   });
 
@@ -616,15 +612,15 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(base58.map((puzzle) => puzzle.id)).toEqual(["b1000/1"]);
+    expect(base58.map((puzzle) => puzzle.id)).toEqual(["bits/1"]);
     expect(checksummed.map((puzzle) => puzzle.id)).toEqual(["zden/xixoio"]);
   });
 
   it("pages a long collection the way the list tool pages it", async () => {
-    const page = await puzzles("list", "b1000", "--limit", "2", "--offset", "70");
+    const page = await puzzles("list", "bits", "--limit", "2", "--offset", "70");
     const records = await json<readonly { readonly id: string }[]>(
       "list",
-      "b1000",
+      "bits",
       "--limit",
       "2",
       "--offset",
@@ -632,12 +628,12 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(page.split("\n").map((line) => line.split("\t")[0])).toEqual(["b1000/71", "b1000/72"]);
-    expect(records.map((puzzle) => puzzle.id)).toEqual(["b1000/71", "b1000/72"]);
+    expect(page.split("\n").map((line) => line.split("\t")[0])).toEqual(["bits/71", "bits/72"]);
+    expect(records.map((puzzle) => puzzle.id)).toEqual(["bits/71", "bits/72"]);
   });
 
   it("keeps every match when neither flag is given, and ends cleanly past the last one", async () => {
-    const all = await puzzles("list", "b1000");
+    const all = await puzzles("list", "bits");
     const past = await puzzles("list", "gsmg", "--offset", "9999");
 
     expect(all.split("\n")).toHaveLength(256);
@@ -650,7 +646,7 @@ describe.concurrent("puzzles CLI", () => {
     ["--limit", "1.5", "Invalid limit: expected an integer of 1 or more"],
     ["--offset", "-1", "Invalid offset: expected an integer of 0 or more"],
   ])("refuses %s %s instead of paging by NaN", async (flag, value, message) => {
-    await expect(failure("list", "b1000", flag, value)).resolves.toEqual({
+    await expect(failure("list", "bits", flag, value)).resolves.toEqual({
       code: 1,
       stdout: "",
       stderr: `${message}\n`,
@@ -696,22 +692,22 @@ describe.concurrent("puzzles CLI", () => {
     const missing = await failure("authors", "nobody");
     expect(missing.code).toBe(1);
     expect(missing.stderr).toMatch(
-      /^Unknown author: nobody\. Known authors: ktimesg, saatoshi-rising, /u,
+      /^Unknown author: nobody\. Known authors: ktimesg, bobby-lee, /u,
     );
   });
 
   it("lists solvers and shows one, by solver key or puzzle identifier", async () => {
     const rows = (await puzzles("solvers")).split("\n");
     expect(rows).toContain(
-      "retired-coder: RetiredCoder (person), 4 solves: b1000/120, b1000/125, b1000/130, b1000/135, author of mini",
+      "retired-coder: RetiredCoder (person), 4 solves: bits/120, bits/125, bits/130, bits/135, author of mini",
     );
     expect(rows).toContain(
       "wickex: Wickex (person), 1 solve: iamabananaamaa/gif, author of wickex",
     );
 
-    const record = (await puzzles("solvers", "b1000/135")).split("\n");
+    const record = (await puzzles("solvers", "bits/135")).split("\n");
     expect(record[0]).toBe("retired-coder\tRetiredCoder\tperson");
-    expect(record).toContain("\tb1000/130\tsolved\t2024-09-23 08:13:37\t13 BTC");
+    expect(record).toContain("\tbits/130\tsolved\t2024-09-23 08:13:37\t13 BTC");
 
     const entry = await json<{ readonly key: string; readonly authored: readonly string[] }>(
       "solvers",
@@ -720,10 +716,10 @@ describe.concurrent("puzzles CLI", () => {
     );
     expect(entry).toMatchObject({ key: "iamabananaamaa", authored: ["iamabananaamaa"] });
 
-    const missing = await failure("solvers", "b1000/66");
+    const missing = await failure("solvers", "bits/66");
     expect(missing.code).toBe(1);
     expect(missing.stderr).toMatch(
-      /^Unknown solver: b1000\/66\. b1000\/66 knows its solver by address only\. Known solvers: retired-coder, /u,
+      /^Unknown solver: bits\/66\. bits\/66 knows its solver by address only\. Known solvers: retired-coder, /u,
     );
   });
 
@@ -731,7 +727,7 @@ describe.concurrent("puzzles CLI", () => {
     const rows = (await puzzles("collections")).split("\n");
 
     expect(rows).toContain(
-      "b1000: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
+      "bits: 256 puzzles, 83 solved, 77 unsolved, 96 swept, by saatoshi_rising",
     );
     expect(rows).toContain("gsmg: 1 puzzle, 0 solved, 1 unsolved, by GSMG.io");
     expect(rows).toContain(
@@ -751,9 +747,9 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("verifies a solved puzzle", async () => {
-    const output = await puzzles("verify", "b1000/1");
+    const output = await puzzles("verify", "bits/1");
 
-    expect(output).toContain("OK\tb1000/1");
+    expect(output).toContain("OK\tbits/1");
   });
 
   it("prints the recipe's verdict next to the key's", async () => {
@@ -796,16 +792,16 @@ describe.concurrent("puzzles CLI", () => {
 
     expect(result.code).toBe(1);
     expect(result.stderr.trim()).toBe(
-      `Puzzle not found: 135. Did you mean b1000/135? Known collections: ${collectionKeys().join(", ")}`,
+      `Puzzle not found: 135. Did you mean bits/135? Known collections: ${collectionKeys().join(", ")}`,
     );
   });
 
   it("says what the collection holds when only the puzzle is wrong", async () => {
-    const result = await failure("show", "b1000/99999");
+    const result = await failure("show", "bits/99999");
 
     expect(result.code).toBe(1);
     expect(result.stderr.trim()).toMatch(
-      /^Puzzle not found: b1000\/99999\. Collection b1000 holds \d+ puzzles, for example b1000\/1$/u,
+      /^Puzzle not found: bits\/99999\. Collection bits holds \d+ puzzles, for example bits\/1$/u,
     );
   });
 
@@ -828,13 +824,13 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("refuses an option the command does not take instead of running without it", async () => {
-    await expect(failure("verify", "b1000/1", "--key", "abc")).resolves.toEqual({
+    await expect(failure("verify", "bits/1", "--key", "abc")).resolves.toEqual({
       code: 1,
       stdout: "",
       stderr:
         "Invalid option: unknown --key, expected one of --all, --collection, --address, --chain, --status, --technique, --with-pubkey, --quiet, --json\n",
     });
-    await expect(failure("show", "b1000/1", "--jsn")).resolves.toEqual({
+    await expect(failure("show", "bits/1", "--jsn")).resolves.toEqual({
       code: 1,
       stdout: "",
       stderr: "Invalid option: unknown --jsn, expected one of --all-transactions, --json\n",
@@ -854,21 +850,21 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("refuses a positional argument the command has no place for", async () => {
-    await expect(failure("show", "b1000/1", "b1000/2")).resolves.toEqual({
+    await expect(failure("show", "bits/1", "bits/2")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: 'Invalid argument: unexpected "b1000/2", show takes ID\n',
+      stderr: 'Invalid argument: unexpected "bits/2", show takes ID\n',
     });
-    await expect(failure("stats", "b1000")).resolves.toEqual({
+    await expect(failure("stats", "bits")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: 'Invalid argument: unexpected "b1000", stats takes no positional argument\n',
+      stderr: 'Invalid argument: unexpected "bits", stats takes no positional argument\n',
     });
   });
 
   it("still takes every spelling citty accepts for a declared option", async () => {
-    await expect(puzzles("verify", "b1000/1", "-q")).resolves.toBe("");
-    await expect(puzzles("verify", "b1000/1", "--no-json")).resolves.toBe("OK\tb1000/1");
+    await expect(puzzles("verify", "bits/1", "-q")).resolves.toBe("");
+    await expect(puzzles("verify", "bits/1", "--no-json")).resolves.toBe("OK\tbits/1");
     await expect(
       json<readonly unknown[]>("list", "--withPubkey", "--limit=1", "--json"),
     ).resolves.toHaveLength(1);
@@ -1055,7 +1051,7 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("refuses an id and a filter together", async () => {
-    await expect(failure("balance", "b1000/71", "--status", "unsolved")).resolves.toEqual({
+    await expect(failure("balance", "bits/71", "--status", "unsolved")).resolves.toEqual({
       code: 1,
       stdout: "",
       stderr: "Invalid id: pass a puzzle identifier or filters, not both\n",
@@ -1068,18 +1064,18 @@ describe.concurrent("puzzles CLI", () => {
       stdout: "",
       stderr: "Invalid id: pass a puzzle identifier, a filter such as --technique, or --all\n",
     });
-    await expect(failure("verify", "b1000/1", "--collection", "b1000")).resolves.toEqual({
+    await expect(failure("verify", "bits/1", "--collection", "bits")).resolves.toEqual({
       code: 1,
       stdout: "",
       stderr: "Invalid id: pass one of a puzzle identifier, filters or --all\n",
     });
-    await expect(
-      failure("verify", "--collection", "b1000", "--chain", "ethereum"),
-    ).resolves.toEqual({
-      code: 1,
-      stdout: "",
-      stderr: "Invalid filters: no puzzle matches them, so nothing was verified\n",
-    });
+    await expect(failure("verify", "--collection", "bits", "--chain", "ethereum")).resolves.toEqual(
+      {
+        code: 1,
+        stdout: "",
+        stderr: "Invalid filters: no puzzle matches them, so nothing was verified\n",
+      },
+    );
     await expect(failure("verify", "--all", "--status", "solved")).resolves.toEqual({
       code: 1,
       stdout: "",

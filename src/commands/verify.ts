@@ -79,7 +79,7 @@ export default defineCommand({
   args: {
     id: { type: "positional", required: false, description: "Puzzle identifier" },
     all: { type: "boolean", description: "Verify every puzzle" },
-    collection: { type: "string", description: "Filter by collection key, for example b1000" },
+    collection: { type: "string", description: "Filter by collection key, for example bits" },
     ...filterArgs,
     quiet: { type: "boolean", alias: "q", description: "Suppress per-puzzle output" },
     ...jsonArg,

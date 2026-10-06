@@ -81,7 +81,7 @@ export const facts = {
       promptSnippet:
         "Use puzzles_collections to learn which collections exist before listing puzzles.",
       promptGuidelines: [
-        "A collection key is the first segment of a puzzle identifier, for example b1000 in b1000/90.",
+        "A collection key is the first segment of a puzzle identifier, for example bits in bits/90.",
       ],
       openWorld: false,
     },
@@ -143,7 +143,7 @@ export const facts = {
       promptSnippet:
         "Use puzzles_show to inspect a single puzzle by identifier, then puzzles_assets to read its files by path instead of downloading them.",
       promptGuidelines: [
-        "Identifiers are collection/name, for example b1000/90, or gsmg.",
+        "Identifiers are collection/name, for example bits/90, or gsmg.",
         "More than three increases in a row, each under 1% of the largest transaction, print as one line with their count, dates and total; pass allTransactions for each one with its txid.",
         "A technique says how the key or a stage was built, with the page that says so; an unsolved puzzle has one only where its author stated it.",
       ],
@@ -263,7 +263,7 @@ export const facts = {
     id: {
       minLength: 1,
       maxLength: 100,
-      description: "Universal puzzle identifier, for example b1000/90 or gsmg",
+      description: "Universal puzzle identifier, for example bits/90 or gsmg",
     },
     file: {
       minLength: 1,
@@ -285,9 +285,9 @@ export const facts = {
       minLength: 1,
       maxLength: 128,
       description:
-        "Puzzle identifier, for example b1000/71, or an address, whether a record holds it or not",
+        "Puzzle identifier, for example bits/71, or an address, whether a record holds it or not",
     },
-    collection: { minLength: 1, maxLength: 50, description: "Collection key, for example b1000" },
+    collection: { minLength: 1, maxLength: 50, description: "Collection key, for example bits" },
     author: {
       minLength: 1,
       maxLength: 50,
@@ -296,8 +296,7 @@ export const facts = {
     solver: {
       minLength: 1,
       maxLength: 100,
-      description:
-        "Solver key, for example retired-coder, or a puzzle identifier such as b1000/135",
+      description: "Solver key, for example retired-coder, or a puzzle identifier such as bits/135",
     },
     status: {
       description:

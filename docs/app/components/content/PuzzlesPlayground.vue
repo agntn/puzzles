@@ -130,7 +130,7 @@ const route = useRoute();
 const router = useRouter();
 
 const operation = ref<Operation>("show");
-const id = ref("b1000/71");
+const id = ref("bits/71");
 const key = ref("peter-todd");
 const collection = ref("");
 const status = ref("");
@@ -637,7 +637,7 @@ const responseTitle = computed(() => {
                     id="playground-id"
                     v-model="id"
                     type="text"
-                    placeholder="b1000/71, gsmg, zden/decred-janus"
+                    placeholder="bits/71, gsmg, zden/decred-janus"
                     spellcheck="false"
                     autocomplete="off"
                     list="puzzles-ids"

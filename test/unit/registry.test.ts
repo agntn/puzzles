@@ -300,7 +300,7 @@ describe("registry consistency", () => {
     expect(entry?.hints).toEqual([shared]);
     expect(entry?.puzzles[0]?.hints).toEqual([own]);
     expect(serialized.filter((row) => "hints" in row).map((row) => row.name)).toEqual([
-      "b1000",
+      "bits",
       "dug",
       "rushwallet",
       "walking-banks",
@@ -361,13 +361,13 @@ describe("registry consistency", () => {
       },
     });
 
-    const [wrapper, b1000] = await Promise.all([
+    const [wrapper, bits] = await Promise.all([
       lib.requireCollection("wrapper"),
-      lib.requireCollection("b1000"),
+      lib.requireCollection("bits"),
     ]);
 
     expect(wrapper.all()[0]?.id()).toBe("gsmg");
-    expect(b1000.key).toBe("b1000");
+    expect(bits.key).toBe("bits");
   });
 
   it("does not resolve Object prototype properties as historical aliases", async () => {

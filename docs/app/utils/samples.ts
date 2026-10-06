@@ -260,7 +260,7 @@ export function needsBuilder(sample: LandingSample): boolean {
  * The export name a record module uses: `<collection>Puzzle<Name>` in camelCase.
  *
  * @param {string} id - The puzzle identifier.
- * @returns {string} `b1000Puzzle71` for `b1000/71`, `gsmgPuzzle` for the singleton.
+ * @returns {string} `bits71` for `bits/71`, `gsmgPuzzle` for the singleton.
  */
 export function exportName(id: string): string {
   const [collection = "", name = ""] = id.split("/", 2);

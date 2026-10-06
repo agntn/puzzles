@@ -29,7 +29,7 @@ registerHooks({
 });
 
 const { verifyTool } = await import("../src/tool-operations.ts");
-const miss = "b1000/99999";
+const miss = "bits/99999";
 
 try {
   await verifyTool(miss);
@@ -37,14 +37,14 @@ try {
 } catch (error) {
   assert.match(
     error instanceof Error ? error.message : String(error),
-    new RegExp(`^Puzzle not found: ${miss}\\. Collection b1000 holds `, "u"),
+    new RegExp(`^Puzzle not found: ${miss}\\. Collection bits holds `, "u"),
   );
 }
 
 assert.deepEqual([...roots].sort(), [], "a missing puzzle resolved the verification crypto");
 
-const result = await verifyTool("b1000/1");
-assert.match(result.content[0]?.text ?? "", /^b1000\/1: verified,/u);
-assert.ok(roots.has("keys"), "verifying b1000/1 never resolved @agntn/keys");
+const result = await verifyTool("bits/1");
+assert.match(result.content[0]?.text ?? "", /^bits\/1: verified,/u);
+assert.ok(roots.has("keys"), "verifying bits/1 never resolved @agntn/keys");
 
 console.log(JSON.stringify({ miss, cryptoOnMiss: 0, verified: true }));

@@ -10,7 +10,7 @@ Shared rules (panel geometry, the reticle, typography, motion, the response view
 
 ```
 docs/
-├── nuxt.config.ts                 # extends: ['docus'], cloudflare_module preset (Workers), the two aliases into ../src, assets/ served from the checkout, redirects from the old snake_case pages
+├── nuxt.config.ts                 # extends: ['docus'], cloudflare_module preset (Workers), the two aliases into ../src, assets/ served from the checkout, redirects from the old snake_case pages and from b1000
 ├── app/app.config.ts              # title, github, theme
 ├── app/app.css                    # theme tokens (light + .dark), shared `puzzles-*` classes: frames, tags, rows, cells, code cards
 ├── app/components/                # Docus overrides: AppHeaderLogo, AppHeaderCTA (nav), AppFooterLeft, DocsAsideLeftBody; RosterSort, the sortable header of both rosters

@@ -9,7 +9,7 @@ const links = [
 ] as const;
 
 /**
- * Whether the route is inside an area, so /collections/b1000 lights Docs.
+ * Whether the route is inside an area, so /collections/bits lights Docs.
  *
  * @param {readonly string[]} areas - The paths the area covers.
  * @returns {boolean} Whether the route is one of them or a page under one.

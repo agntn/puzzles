@@ -1,5 +1,5 @@
 import { afterAll, afterEach, describe, expect, it, vi } from "vite-plus/test";
-import { b1000 } from "../../src/collections/b1000.ts";
+import { bits } from "../../src/collections/bits.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
   Balance,
@@ -76,7 +76,7 @@ describe("Puzzle.balance", () => {
       }),
     );
 
-    const balance = await b1000.balance(1, { baseUrl: "https://example.test" });
+    const balance = await bits.balance(1, { baseUrl: "https://example.test" });
 
     expect(urls).toEqual(["https://example.test/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"]);
     expect(balance.confirmed).toBe(1100n);
@@ -226,7 +226,7 @@ describe("Puzzle.balance", () => {
       }),
     );
 
-    const balance = await b1000.balance(1, { baseUrl: "https://example.test" });
+    const balance = await bits.balance(1, { baseUrl: "https://example.test" });
 
     expect(balance.totalAmount()).toBe("0.0000112");
     expect(balance.confirmedAmount()).toBe("0.000011");
@@ -240,13 +240,13 @@ describe("Puzzle.balance", () => {
   it("rejects malformed provider data as a provider error", async () => {
     stubFetch(() => json({ chain_stats: null, mempool_stats: {} }));
 
-    await expect(b1000.balance(1)).rejects.toBeInstanceOf(BalanceProviderError);
+    await expect(bits.balance(1)).rejects.toBeInstanceOf(BalanceProviderError);
   });
 
   it("maps a rejected address onto InvalidAddressError", async () => {
     stubFetch(() => new Response("Invalid Bitcoin address", { status: 400 }));
 
-    await expect(b1000.balance(1)).rejects.toBeInstanceOf(InvalidAddressError);
+    await expect(bits.balance(1)).rejects.toBeInstanceOf(InvalidAddressError);
   });
 
   it.each([
@@ -262,7 +262,7 @@ describe("Puzzle.balance", () => {
           }),
     );
 
-    const balance = await b1000.balance(1);
+    const balance = await bits.balance(1);
 
     expect(urls).toEqual([
       "https://mempool.space/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
@@ -281,7 +281,7 @@ describe("Puzzle.balance", () => {
           }),
     );
 
-    const balance = await b1000.balance(1);
+    const balance = await bits.balance(1);
 
     expect(urls.filter((url) => url.startsWith("https://mempool.space/"))).toHaveLength(3);
     expect(urls.at(-1)).toBe(
@@ -293,7 +293,7 @@ describe("Puzzle.balance", () => {
   it("names both hosts when the fallback fails too", async () => {
     stubFetch(() => Promise.reject(new TypeError("fetch failed")));
 
-    const failure = b1000.balance(1);
+    const failure = bits.balance(1);
 
     await expect(failure).rejects.toBeInstanceOf(BalanceProviderError);
     await expect(failure).rejects.toThrow(
@@ -303,7 +303,7 @@ describe("Puzzle.balance", () => {
 
   it("keeps a rejected address and malformed data to the first provider", async () => {
     const urls = stubFetch(() => new Response("Invalid Bitcoin address", { status: 400 }));
-    await expect(b1000.balance(1)).rejects.toBeInstanceOf(InvalidAddressError);
+    await expect(bits.balance(1)).rejects.toBeInstanceOf(InvalidAddressError);
     expect(urls).toHaveLength(1);
 
     urls.length = 0;
@@ -311,14 +311,14 @@ describe("Puzzle.balance", () => {
       urls.push(url);
       return json({ chain_stats: null, mempool_stats: {} });
     });
-    await expect(b1000.balance(1)).rejects.toBeInstanceOf(BalanceProviderError);
+    await expect(bits.balance(1)).rejects.toBeInstanceOf(BalanceProviderError);
     expect(urls).toHaveLength(1);
   });
 
   it("asks no fallback when a baseUrl names the endpoint", async () => {
     const urls = stubFetch(() => Promise.reject(new TypeError("fetch failed")));
 
-    await expect(b1000.balance(1, { baseUrl: "https://example.test" })).rejects.toBeInstanceOf(
+    await expect(bits.balance(1, { baseUrl: "https://example.test" })).rejects.toBeInstanceOf(
       BalanceProviderError,
     );
     expect(urls).toEqual(["https://example.test/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"]);

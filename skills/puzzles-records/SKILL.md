@@ -59,7 +59,7 @@ node src/cli.ts verify <id> # the key you recorded derives the address
 pnpm fixtures --check       # landing samples and counts still match
 ```
 
-Then `pnpm lint`, `pnpm typecheck` and `pnpm test:packed` as the repository's `AGENTS.md` lists them. The commit scope is `collections`, with the identifier in the subject: `feat(collections): add example`, `fix(collections): b1000/135 solved`.
+Then `pnpm lint`, `pnpm typecheck` and `pnpm test:packed` as the repository's `AGENTS.md` lists them. The commit scope is `collections`, with the identifier in the subject: `feat(collections): add example`, `fix(collections): bits/135 solved`.
 
 ## Related
 

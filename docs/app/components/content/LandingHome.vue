@@ -63,13 +63,13 @@ const activeCollection = computed(() => current.value.collection);
       link="Registry and lazy loading"
       :checks="[
         'collectionKeys() and hasCollection() answer from the manifest without loading anything',
-        'get(\'b1000/71\') imports the b1000 module and nothing else; all() loads every collection once',
+        'get(\'bits/71\') imports the bits module and nothing else; all() loads every collection once',
         'registerCollection({ key, load }) adds yours, lazily too, and the aggregate views refresh',
       ]"
     >
       Importing the package evaluates no puzzle records. Each registry key has its own lazy
       <code class="puzzles-code">import()</code>, so a bundler splits each collection into its own
-      chunk. Only ever ask about <code class="puzzles-code">b1000</code>? The other collections stay
+      chunk. Only ever ask about <code class="puzzles-code">bits</code>? The other collections stay
       unloaded. This panel shows the walk loading one collection at a time.
       <template #visual>
         <div @mouseenter="paused = true" @mouseleave="paused = false">

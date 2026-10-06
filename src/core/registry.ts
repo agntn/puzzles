@@ -24,6 +24,7 @@ interface TableEntry extends CollectionEntry {
 const aliasPairs = [
   ["peter_todd", "hash-collision"],
   ["warpwallet", "warp"],
+  ["b1000", "bits"],
   ["book_quiz", "book-quiz"],
   ["brave_new_world", "brave-new-world"],
   ["coin_artist", "coin-artist"],
@@ -43,7 +44,7 @@ type Builtin = (typeof builtins)[number];
 type Alias = (typeof aliasPairs)[number];
 
 /**
- * The collection type behind every built-in key and historical alias, by the query it takes: `b1000`
+ * The collection type behind every built-in key and historical alias, by the query it takes: `bits`
  * is a `Collection<number | string>`, `gsmg` a `Collection<string | void>`. The type stays when a
  * registration replaces a built-in key, so a fork should take the same queries.
  */
@@ -158,7 +159,7 @@ export function hasCollection(name: string): boolean {
 /**
  * Loads a collection by canonical key or historical alias. A built-in's module is imported on the
  * first call for its key, and parallel callers share that one import. A built-in key comes back typed
- * with its query, so `(await getCollection("b1000")).get(71)` compiles.
+ * with its query, so `(await getCollection("bits")).get(71)` compiles.
  *
  * @param {string} name - Collection key or historical alias.
  * @returns {Promise<AnyCollection | undefined>} The collection, or `undefined` when no entry has that key.
@@ -194,7 +195,7 @@ export async function requireCollection(name: string): Promise<AnyCollection> {
  * root entry does not re-export it.
  *
  * @param {string} [miss] - The collection key that missed, when there is one to correct.
- * @returns {string} `Did you mean b1000? Known collections: arweave, b1000, ...`.
+ * @returns {string} `Did you mean bits? Known collections: 80-bit, ballet, ...`.
  */
 export function knownCollections(miss?: string): string {
   const keys = collectionKeys();

@@ -10,7 +10,7 @@ afterEach(() => {
 
 describe("Puzzle.balance, live", () => {
   it("reads a Bitcoin balance through Mempool", async () => {
-    const balance = await (await requirePuzzle("b1000/71")).balance();
+    const balance = await (await requirePuzzle("bits/71")).balance();
 
     expect(balance).toBeInstanceOf(Balance);
     expect(balance.chain).toBe("bitcoin");
@@ -30,7 +30,7 @@ describe("Puzzle.balance, live", () => {
       return network(url, init as RequestInit | undefined);
     });
 
-    const balance = await (await requirePuzzle("b1000/71")).balance();
+    const balance = await (await requirePuzzle("bits/71")).balance();
 
     expect(urls.map((url) => new URL(url).host)).toEqual(["mempool.space", "blockstream.info"]);
     expect(balance.chain).toBe("bitcoin");

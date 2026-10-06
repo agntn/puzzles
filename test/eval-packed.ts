@@ -84,11 +84,11 @@ const execFileAsync = promisify(execFile);
 
 const expectedCollections = [
   "80-bit",
-  "b1000",
   "ballet",
   "bitaddress",
   "bitaps",
   "bitimage",
+  "bits",
   "book-quiz",
   "brave-new-world",
   "coin-artist",
@@ -362,10 +362,10 @@ async function assertPackedLibrary(): Promise<void> {
     },
   );
   assertNotLoaded(collectionModule, "importing the library must not load a collection");
-  const puzzle = await library.get("b1000/1");
-  assert.equal(puzzle?.id(), "b1000/1");
-  assertLoaded(collectionNamed("b1000"), "a lookup loads its collection");
-  assertNotLoaded(otherCollections("b1000"), "a lookup must not load the other collections");
+  const puzzle = await library.get("bits/1");
+  assert.equal(puzzle?.id(), "bits/1");
+  assertLoaded(collectionNamed("bits"), "a lookup loads its collection");
+  assertNotLoaded(otherCollections("bits"), "a lookup must not load the other collections");
   assert.equal(library.hasCollection("peter_todd"), true, "the historical alias survives packing");
   assert.deepEqual(
     loaded.filter(verificationCrypto).map((module) => module.url),
@@ -373,7 +373,7 @@ async function assertPackedLibrary(): Promise<void> {
     "importing the library and looking up a puzzle must not load the verification crypto",
   );
   assert.ok(puzzle !== undefined);
-  assert.equal((await library.verify(puzzle)).verified, true, "b1000/1 verifies once packed");
+  assert.equal((await library.verify(puzzle)).verified, true, "bits/1 verifies once packed");
   assert.ok(loaded.some(verificationCrypto), "the first verification loads the crypto");
 }
 
@@ -399,18 +399,18 @@ async function assertPackedMcpServer(): Promise<void> {
       "the rejection must come from the @agntn/tools validator",
     );
 
-    const shown = await client.callTool({ name: "puzzles_show", arguments: { id: "b1000/1" } });
+    const shown = await client.callTool({ name: "puzzles_show", arguments: { id: "bits/1" } });
     assert.equal(isError(shown), false, firstText(shown));
-    assert.match(firstText(shown), /b1000\/1/u);
-    assertNotLoaded(otherCollections("b1000"), "showing a puzzle must not load other collections");
+    assert.match(firstText(shown), /bits\/1/u);
+    assertNotLoaded(otherCollections("bits"), "showing a puzzle must not load other collections");
 
     const page = await client.callTool({
       name: "puzzles_list",
-      arguments: { collection: "b1000", offset: 1, limit: 1 },
+      arguments: { collection: "bits", offset: 1, limit: 1 },
     });
     assert.deepEqual(firstText(page).split("\n"), [
       "1 of 256 matching puzzles (offset 1):",
-      "b1000/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "bits/2\tsolved\t0.002 BTC\t1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
       "Next page: offset=2. Keep the same filters.",
     ]);
 
@@ -432,18 +432,18 @@ async function assertPackedExtensions(): Promise<void> {
   const ompShow = requireTool(ompTools, "puzzles_show");
   assert.ok(ompShow.renderCall !== undefined, "the OMP tool renders its call line");
   assert.equal(
-    ompShow.renderCall({ id: "b1000/1" }, { isPartial: false }, theme).text,
-    "success:status.done accent(Show Puzzle): muted(b1000/1)",
+    ompShow.renderCall({ id: "bits/1" }, { isPartial: false }, theme).text,
+    "success:status.done accent(Show Puzzle): muted(bits/1)",
   );
-  const result = await piShow.execute("packed-test", { id: "b1000/1" });
-  assert.match(firstText(result), /b1000\/1/u);
+  const result = await piShow.execute("packed-test", { id: "bits/1" });
+  assert.match(firstText(result), /bits\/1/u);
   for (const tools of [piTools, ompTools]) {
     const page = await requireTool(tools, "puzzles_list").execute("packed-page", {
-      collection: "b1000",
+      collection: "bits",
       offset: 255,
       limit: 1,
     });
-    assert.match(firstText(page), /^1 of 256 matching puzzles \(offset 255\):\nb1000\/256\t/u);
+    assert.match(firstText(page), /^1 of 256 matching puzzles \(offset 255\):\nbits\/256\t/u);
     assert.doesNotMatch(firstText(page), /Next page:/u);
   }
   await assert.rejects(

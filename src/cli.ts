@@ -77,7 +77,7 @@ function optionKeys(name: string, def: Declared): string[] {
 
 /**
  * Rejects what the command does not declare, because citty parses without `strict` and would run
- * `verify b1000/1 --key abc` as `verify b1000/1`, or read `list --limitt 3` as the collection `3`.
+ * `verify bits/1 --key abc` as `verify bits/1`, or read `list --limitt 3` as the collection `3`.
  * A command that declares no arguments, `mcp`, stays open.
  *
  * @param {string} name - The command, for the message.

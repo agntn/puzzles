@@ -101,13 +101,13 @@ describe("tool schemas and executors share one argument contract", () => {
     expect(check("hints", { id: "warp/challenge-1" })).toBe(true);
     expect(check("stages", { id: "" })).toBe(false);
     expect(check("stages", { id: "gsmg" })).toBe(true);
-    expect(check("verify", { id: "b1000/1" })).toBe(true);
+    expect(check("verify", { id: "bits/1" })).toBe(true);
     expect(check("verify", { technique: "md5-to-bip39-entropy", status: "solved" })).toBe(true);
     expect(check("verify", { technique: "bogus" })).toBe(false);
     expect(check("verify", { id: "" })).toBe(false);
     expect(check("list", { collection: "" })).toBe(false);
     expect(check("list", { collection: "x".repeat(collection.maxLength + 1) })).toBe(false);
-    expect(check("balance", { id: "b1000/1", apiKey: "x".repeat(apiKey.maxLength + 1) })).toBe(
+    expect(check("balance", { id: "bits/1", apiKey: "x".repeat(apiKey.maxLength + 1) })).toBe(
       false,
     );
   });
@@ -210,7 +210,7 @@ describe("tool schemas and executors share one argument contract", () => {
     await expect(listTool({ with_pubkey: true } as never)).rejects.toThrow(
       'Invalid arguments: unknown property "with_pubkey", expected one of address, chain, collection, limit, offset, status, technique, withPubkey',
     );
-    for (const params of [null, "b1000", ["b1000"]]) {
+    for (const params of [null, "bits", ["bits"]]) {
       await expect(listTool(params as never)).rejects.toThrow(
         "Invalid arguments: expected an object",
       );
