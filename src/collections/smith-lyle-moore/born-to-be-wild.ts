@@ -94,12 +94,19 @@ export const smithLyleMooreBornToBeWild = puzzle({
       answer("Password: one giant step", WRITEUP, SOLVED),
     ),
     stage(
-      "museum fire",
-      "The museum burns down, and the way back from the tragedy asks for a password.",
+      "pyromaniac",
+      "The museum burns down, and the first way on is a red herring the band later changed, ending at a dead end.",
       [
         artifact("there's been a fire", `${SITE}/there-s-been-a-fire`),
-        artifact("we will rebuild", `${SITE}/we-will-rebuild-stronger-than-before`),
+        artifact("i'm a pyromaniac", `${SITE}/im-a-pyromaniac`),
+        artifact("the tragedy", `${SITE}/the-tragedy`),
       ],
+      answer("Password: 01271967", WRITEUP, SOLVED),
+    ),
+    stage(
+      "museum fire",
+      "Back from the tragedy, paying your respects asks for a password.",
+      [artifact("we will rebuild", `${SITE}/we-will-rebuild-stronger-than-before`)],
       answer("Password: fffffffffff", WRITEUP, SOLVED),
     ),
     stage(
