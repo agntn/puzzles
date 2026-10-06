@@ -1,4 +1,4 @@
-import { compressed, confirmation, funding, official } from "../../core/parts.ts";
+import { compressed, confirmation, derivation, funding, official } from "../../core/parts.ts";
 import { puzzle } from "../../core/puzzle.ts";
 
 /** The treasure hunt page, whose flag links the wallet's xpub on CoinTracker. */
@@ -34,6 +34,9 @@ export const smithLyleMooreGlimmer = puzzle({
   startedAt: "2022-07-29 16:22:03",
   prize: 0.031777,
   pubkey: compressed("037e3109f564912f1007912d90f76c7aae43b812d6286d609a86140b746fbc7943"),
+  key: derivation("m/84'/0'/0'/0/0").xpub(
+    "xpub6CpNc58zqQvNGPHDGGTr68wgrmtfFDBWRuSDAxoDdrCE1iRAaZtyAD5T9uCJ3ELUYKCkx8Jkind2kwoR3Uxmg1ycQ6DWyGxZBMFvQqhNqVC",
+  ),
   hints: [
     official(
       "Woven into our next single, Glimmer, is a story. Uncover the story... it will lead you to .031777 Bitcoin.",
