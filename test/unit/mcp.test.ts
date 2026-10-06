@@ -369,7 +369,9 @@ describe("puzzles MCP server", () => {
       'Invalid arguments: unknown property "with_pubkey"; takes address, collection, chain, status, technique, withPubkey, limit, offset',
     );
     expect(stray.isError).toBe(true);
-    expect(firstText(stray)).toBe('Invalid arguments: unknown property "name"; takes id');
+    expect(firstText(stray)).toBe(
+      'Invalid arguments: unknown property "name"; takes id, allTransactions',
+    );
   });
 
   it("names the values an enum takes", async () => {

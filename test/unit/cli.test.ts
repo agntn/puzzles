@@ -93,6 +93,9 @@ describe.concurrent("puzzles CLI", () => {
     expect(derived).toContain("(wif, derived from the published recipe)");
     expect(inherited.trimEnd()).toBe((await showTool("b1000/71")).content[0]?.text);
     expect(inherited).toContain("collection hints: 1");
+    expect((await puzzles("show", "b1000/71", "--all-transactions")).trimEnd()).toBe(
+      (await showTool("b1000/71", true)).content[0]?.text,
+    );
   });
 
   it("prints the stages of a puzzle as the tool does", async () => {
@@ -816,7 +819,7 @@ describe.concurrent("puzzles CLI", () => {
     await expect(failure("show", "b1000/1", "--jsn")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: "Invalid option: unknown --jsn, expected one of --json\n",
+      stderr: "Invalid option: unknown --jsn, expected one of --all-transactions, --json\n",
     });
     await expect(failure("stats", "-x")).resolves.toEqual({
       code: 1,
