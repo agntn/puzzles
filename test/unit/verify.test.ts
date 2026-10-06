@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vite-plus/test";
+import { afterAll, describe, expect, it, vi } from "vite-plus/test";
 import { b1000 } from "../../src/collections/b1000.ts";
 import { ballet } from "../../src/collections/ballet.ts";
 import { bitaps } from "../../src/collections/bitaps.ts";
@@ -23,6 +23,10 @@ import {
   verify,
   wif,
 } from "../../src/index.ts";
+import type * as Library from "../../src/index.ts";
+import { InvalidArgumentError } from "../../src/core/errors.ts";
+import { listTool, verifyTool } from "../../src/tool-operations.ts";
+import type * as Tools from "../../src/tool-operations.ts";
 
 /** The fields every synthetic record below shares; the dataset never exercises these branches. */
 const synthetic = {
@@ -554,5 +558,91 @@ describe("recipe verification", () => {
 
     expect(result.verified).toBe(true);
     expect(result).not.toHaveProperty("recipe");
+  });
+});
+
+describe("verifyTool over filters", () => {
+  /* Registering a fixture mutates the registry, so it runs on a fresh module graph. */
+  afterAll(() => {
+    vi.resetModules();
+  });
+
+  it("replays a whole technique in one call, misses first and the rest folded", async () => {
+    const { details } = await listTool({ technique: "md5-to-bip39-entropy", limit: 500 });
+    const result = await verifyTool({ technique: "md5-to-bip39-entropy" });
+    const [counts, ...rest] = result.content[0]?.text.split("\n") ?? [];
+    const matched = details["matched"] as number;
+
+    expect(counts).toBe(
+      `${matched} puzzles: ${matched} verified, 0 not verified, 0 unverifiable; ${matched} recipes: ${matched} derive their address, 0 miss, 0 can't run`,
+    );
+    expect(rest).toEqual([`Verified: ${(details["ids"] as string[]).join(", ")}`]);
+    expect(result.details).toMatchObject({ matched, misses: 0 });
+  });
+
+  it("prints a miss in full and folds the unverifiable by reason", async () => {
+    vi.resetModules();
+    const lib: typeof Library = await import("../../src/index.ts");
+    const tools: typeof Tools = await import("../../src/tool-operations.ts");
+    const wif = "L1myU8V1SzKbAvW51KcEaA6EvfpmffqNuTgMdmY45XpH99VyYMAm";
+    const address = "1HbUcHKfpkUSssNtcfS3vKzdTMue3EByMQ";
+    const base = {
+      chain: "bitcoin",
+      address,
+      sourceUrl: "https://example.com",
+      startedAt: "2020-01-01 00:00:00",
+    } as const;
+    lib.registerCollection(
+      new lib.NamedCollection("fixture", lib.party("Fixture"), [
+        lib.puzzle({ ...base, id: "fixture/good", key: lib.wif(wif) }),
+        lib.puzzle({ ...base, id: "fixture/open" }),
+        lib.puzzle({
+          ...base,
+          id: "fixture/typo",
+          key: lib.wif(wif).entropy("0a7c902815f9dc9d26057280592b2554"),
+        }),
+        lib.puzzle({ ...base, id: "fixture/shut" }),
+      ]),
+    );
+
+    const result = await tools.verifyTool({ collection: "fixture" });
+    const lines = result.content[0]?.text.split("\n") ?? [];
+
+    expect(lines[0]).toBe(
+      "4 puzzles: 2 verified, 0 not verified, 2 unverifiable; 1 recipe: 0 derive their address, 1 miss, 0 can't run",
+    );
+    expect(lines[1]).toBe(`fixture/typo: verified, derives ${address}`);
+    expect(lines[2]).toMatch(
+      /^Recipe bip39-entropy at m\/44'\/0'\/0'\/0\/0: misses, a data bug in the record \(Verification mismatch/u,
+    );
+    expect(lines.slice(3)).toEqual([
+      "Unverifiable (Puzzle has no private key): fixture/open, fixture/shut",
+      "Verified: fixture/good",
+    ]);
+    expect(result.details).toMatchObject({ matched: 4, misses: 1 });
+  });
+
+  it("answers an id the way it always has, as a string or in an object", async () => {
+    const plain = await verifyTool("quizchain/74");
+
+    expect(await verifyTool({ id: "quizchain/74" })).toEqual(plain);
+    expect(plain.content[0]?.text).toBe(
+      "quizchain/74: verified, derives 1HbUcHKfpkUSssNtcfS3vKzdTMue3EByMQ\nRecipe bip39-entropy at m/44'/0'/0'/0/0: derives 1HbUcHKfpkUSssNtcfS3vKzdTMue3EByMQ",
+    );
+  });
+
+  it("refuses an id with filters, neither, filters that match nothing and a flag in text", async () => {
+    const refusals = [
+      verifyTool({ id: "b1000/1", collection: "b1000" }),
+      verifyTool({}),
+      verifyTool({ withPubkey: false }),
+      verifyTool({ collection: "b1000", chain: "ethereum" }),
+      verifyTool({ withPubkey: "true" as unknown as boolean }),
+    ];
+
+    for (const refusal of refusals) {
+      await expect(refusal).rejects.toBeInstanceOf(InvalidArgumentError);
+    }
+    await expect(refusals[3]).rejects.toThrow("no puzzle matches them, so nothing was verified");
   });
 });

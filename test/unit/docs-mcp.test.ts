@@ -106,4 +106,22 @@ describe("docs MCP tools", () => {
       expect(firstText(served)).not.toContain(String.fromCodePoint(code));
     }
   });
+
+  it("holds puzzles_verify to one id, so a filter can't spend the worker's CPU", async () => {
+    const client = await docsClient();
+    const { tools } = await client.listTools();
+    const verify = tools.find((tool) => tool.name === "puzzles_verify");
+    expect(Object.keys(verify?.inputSchema.properties ?? {})).toEqual(["id"]);
+    expect(verify?.description).not.toContain("filters");
+
+    const filtered = await client.callTool({
+      name: "puzzles_verify",
+      arguments: { technique: "md5-to-bip39-entropy" },
+    });
+    expect(filtered.isError).toBe(true);
+    expect(firstText(filtered)).toContain('"technique"');
+
+    const one = await client.callTool({ name: "puzzles_verify", arguments: { id: "b1000/1" } });
+    expect(firstText(one)).toMatch(/^b1000\/1: verified, derives /u);
+  });
 });

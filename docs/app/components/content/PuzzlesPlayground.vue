@@ -76,7 +76,7 @@ const OPERATIONS: ReadonlyArray<{
     key: "verify",
     label: "Verify",
     tool: facts.tools.verify.name,
-    description: facts.tools.verify.description,
+    description: facts.publicTools.verify.description,
   },
   {
     key: "balance",

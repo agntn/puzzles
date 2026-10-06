@@ -405,6 +405,18 @@ describe("puzzles MCP server", () => {
     expect(firstText(result)).toMatch(/^Total: /u);
   });
 
+  it("verifies every puzzle a filter matches in one call", async () => {
+    const result = await client.callTool({
+      name: "puzzles_verify",
+      arguments: { collection: "doges-gambit" },
+    });
+
+    expect(result.isError).toBeFalsy();
+    expect(firstText(result)).toBe(
+      "2 puzzles: 2 verified, 0 not verified, 0 unverifiable\nVerified: doges-gambit/eth, doges-gambit/doge",
+    );
+  });
+
   it("reports an unknown puzzle as a tool error", async () => {
     const result = await client.callTool({
       name: "puzzles_verify",
