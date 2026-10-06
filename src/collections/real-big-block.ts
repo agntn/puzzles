@@ -1,5 +1,5 @@
 import { SingletonCollection } from "../core/collection.ts";
-import { confirmation, decrease, funding, increase, official } from "../core/parts.ts";
+import { confirmation, funding, official } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 import { QuizchainCollection } from "./quizchain.ts";
 
@@ -92,16 +92,6 @@ export const realBigBlockChapter = puzzle({
   ],
   transactions: [
     funding(
-      "499bcd420c7f662d2513b440aedd29c4fa829d6c9edb90dfc545e9305466d49f",
-      "2019-07-22 23:10:09",
-      0.777,
-    ),
-    decrease(
-      "20c7a3e155586eac333a2e14ad8641c8618c6bf9746475b8fb49eba564b941b1",
-      "2019-07-30 23:40:14",
-      0.776903,
-    ),
-    increase(
       "a1916e7ed9eac3fcc56a55056328cb09d06925e2694f2e6720de12b228514d1f",
       "2019-07-30 23:49:19",
       0.777,
