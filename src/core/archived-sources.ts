@@ -73,6 +73,12 @@ export const archivedSources = [
     archive: { date: "2026-09-24T18:40:09Z", content: "confirmed" },
   },
   {
+    file: "genesis/caesrcd-2026-10-06",
+    tweet: "2107565388527456292",
+    author: "caesrcd",
+    date: "2026-10-06",
+  },
+  {
     file: "movie-enigma/cryptop1r4t3-2022-03-21",
     tweet: "1505915271118262286",
     author: "cryptop1r4t3",

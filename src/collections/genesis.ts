@@ -326,6 +326,33 @@ export const genesisBlock = puzzle({
       ),
       { date: "2026-10-03" },
     ),
+    official(
+      "1) N; 2) d; 3) Y.",
+      "https://mempool.space/tx/221021e681efd10dad0d0988a9e27b937ef1ad1c1f90133f04866746874f4e3b",
+      confirmation(
+        "https://blockstream.info/tx/221021e681efd10dad0d0988a9e27b937ef1ad1c1f90133f04866746874f4e3b",
+        "OP_RETURN spending the 1k output that 44444289a6d96b35e0ae50a4f8b7b99acedb1e2fabcad23ae3b20258d4e43ed8 paid to the author address. It answers that transaction's three questions about cosigner 0852014c: no, the hashed text is not a clean run of 18 to 32 hex digits found as is in the raw block hex, block hash, merkle root, chainwork, nextblockhash, target or an address hash160; d, it comes from one of those places with its length, case or ending changed; yes, the passphrase is two words with one space between them, each a given name or surname of the recipient.",
+      ),
+      { date: "2026-10-05" },
+    ),
+    official(
+      "1) host; 2) b7f4182b",
+      "https://mempool.space/tx/05ab6e90b0aea14b7a24d0a41d54c4aa3eb17239cc033d1c70f15c0259f1aa01",
+      confirmation(
+        "https://blockstream.info/tx/05ab6e90b0aea14b7a24d0a41d54c4aa3eb17239cc033d1c70f15c0259f1aa01",
+        "OP_RETURN spending the 1k output that 10edb8315de15c0aae216198e5128c0a0a28712edde8767d2ca74d0b3d1480af paid to the author address. That transaction asked the author to run the puzzle's own steps on the sample text 000000000019d6689c08: sha256sum, the first 32 hex as Hex entropy in Ian Coleman's tool, 12 words, BIP39 passphrase \"Test Example\". The answer is the first word and the master fingerprint. SHA-256 of the text without a trailing newline gives exactly host and b7f4182b.",
+      ),
+      { date: "2026-10-06" },
+    ),
+    official(
+      "1) a; 2) N; 3) c; 4) a.",
+      "https://mempool.space/tx/3e53ba380eabacce422e278a0916627e42408f4dc11e192c61039647f694b1e1",
+      confirmation(
+        "https://blockstream.info/tx/3e53ba380eabacce422e278a0916627e42408f4dc11e192c61039647f694b1e1",
+        "OP_RETURN spending the 1k output that 8f9e8dd494fd0f51f2ff192d13c57241a2f2b24702ed405e24316943f64fdb80 paid to the author address. It answers that transaction's four questions about the d in 221021e681efd10dad0d0988a9e27b937ef1ad1c1f90133f04866746874f4e3b: a, the hashed text's length falls outside 18 to 32; no, cut -b N-M does not start at byte 1 of the line it cut; c, that line came from an explorer page or API; a, the place is the raw block hex.",
+      ),
+      { date: "2026-10-06" },
+    ),
   ],
 });
 
@@ -390,6 +417,11 @@ export class GenesisCollection extends SingletonCollection {
         "The X account caesrcd posted a screenshot of 0xflorent's OP_RETURN message about brute-forcing the puzzle with Claude ten minutes after the block that confirmed it, announcing a heavyweight white-hat on the puzzle.",
         "https://x.com/caesrcd/status/2103192783779750018",
         { date: "2026-09-24" },
+      ),
+      fact(
+        "The X account caesrcd asked who wants the puzzle's two public keys, saying the encrypted pubkeys and the Genesis Block entropy clue are already on chain. Its image stacks four OP_RETURN messages: the 50k offer, the September 24 terms, a player's 50k request and the encrypted reply to that player.",
+        "https://x.com/caesrcd/status/2107565388527456292",
+        { date: "2026-10-06" },
       ),
     ],
   });
