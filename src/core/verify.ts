@@ -1,6 +1,6 @@
 import type { BrainwalletRecipe } from "@agntn/keys/brainwallet";
 import type { Chain } from "./chains.ts";
-import { type Entropy, PubkeyFormat, type Secret, secretOf } from "./parts.ts";
+import { PubkeyFormat, type Secret, type Seed, secretOf, seedPassphrase } from "./parts.ts";
 import { type Puzzle } from "./puzzle.ts";
 
 /** The recipes `verify` reruns, each named after the technique that marks it on a record. */
@@ -215,21 +215,21 @@ function brainwalletOf(
 
 function rebuildFromEntropy(
   puzzle: Puzzle,
-  entropy: Entropy,
-  path: string | undefined,
+  seed: Seed & { readonly entropy: NonNullable<Seed["entropy"]> },
   decoders: Wallets,
 ): Rebuilt {
   const chain = puzzle.chain();
   const recipe = "bip39-entropy";
-  if (entropy.passphrase === "Required") {
+  const passphrase = seedPassphrase(seed);
+  if (passphrase === "Required") {
     return { recipe, key: unavailable("Entropy seed requires an unknown passphrase") };
   }
   try {
     const rebuilt = decoders.privateKeyFromEntropy(
-      entropy.hash,
-      path,
+      seed.entropy.hash,
+      seed.path,
       chain,
-      entropy.passphrase?.Known,
+      passphrase?.Known,
     );
     return rebuilt === undefined
       ? { recipe, key: unavailable(`Seed derivation is not supported for ${chain}`) }
@@ -267,8 +267,9 @@ function rebuildFromPassphrase(
  */
 async function rebuild(puzzle: Puzzle, decoders: Wallets): Promise<Rebuilt | undefined> {
   const key = puzzle.keyData();
-  if (key?.seed?.entropy !== undefined) {
-    return rebuildFromEntropy(puzzle, key.seed.entropy, key.seed.path, decoders);
+  const entropy = key?.seed?.entropy;
+  if (key?.seed !== undefined && entropy !== undefined) {
+    return rebuildFromEntropy(puzzle, { ...key.seed, entropy }, decoders);
   }
   return key?.wif?.passphrase === undefined
     ? undefined

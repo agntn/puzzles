@@ -297,13 +297,22 @@ function seedSecret(key: KeyData): Secret | undefined {
   if (key.seed?.phrase === undefined) {
     return undefined;
   }
-  const known = key.seed.passphrase;
   return {
     kind: "seed",
     phrase: key.seed.phrase,
     path: key.seed.path,
-    passphrase: known === undefined ? key.seed.entropy?.passphrase : { Known: known },
+    passphrase: seedPassphrase(key.seed),
   };
+}
+
+/**
+ * The BIP39 passphrase a seed derives under: the one published with the phrase, else its entropy's.
+ *
+ * @param {Seed} seed - The seed record.
+ * @returns {Passphrase | undefined} The passphrase, or `undefined` when the seed has none.
+ */
+export function seedPassphrase(seed: Seed): Passphrase | undefined {
+  return seed.passphrase === undefined ? seed.entropy?.passphrase : { Known: seed.passphrase };
 }
 
 function miniSecret(key: KeyData): Secret | undefined {

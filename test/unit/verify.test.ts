@@ -305,6 +305,14 @@ describe("Collection.verify", () => {
     expect(
       await verify(puzzle({ ...synthetic, chain: "bitcoin", address, key: seed(phrase, path) })),
     ).toMatchObject({ verified: false });
+    /* The same passphrase opens the entropy the phrase encodes, so the recipe agrees with the key. */
+    const withRecipe = seed(phrase, path, "supernova").entropy("5b80ce1b3d49aac3755bae3dfc87d1c7");
+    expect(
+      await verify(puzzle({ ...synthetic, chain: "bitcoin", address, key: withRecipe })),
+    ).toMatchObject({
+      verified: true,
+      recipe: { recipe: "bip39-entropy", verified: true, derivedAddress: address.value },
+    });
   });
 
   it("derives a seed whose BIP39 checksum fails, the way the Bitcoin Movie Enigma phrase does", async () => {
