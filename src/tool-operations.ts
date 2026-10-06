@@ -420,6 +420,21 @@ function assertLength(
 }
 
 /**
+ * Rejects a flag that isn't a boolean, so `"true"` doesn't quietly read as false.
+ *
+ * @param {string} argument - Name of the flag.
+ * @param {boolean | undefined} value - The flag the caller passed, when it passed one.
+ * @returns {boolean} The flag, or false when it was left out.
+ */
+function assertFlag(argument: string, value: boolean | undefined): boolean {
+  if (value === undefined) return false;
+  if (typeof value !== "boolean") {
+    throw new InvalidArgumentError(argument, "expected true or false");
+  }
+  return value;
+}
+
+/**
  * Rejects, rather than clamps, a list limit outside the contract the schemas declare.
  *
  * @param {number | undefined} value - Requested limit, when the caller gave one.
@@ -615,14 +630,10 @@ export async function showTool(id: string, allTransactions?: boolean): Promise<T
     registry: { requireCollection },
     utils: { formatPuzzleRecord },
   } = await loadCore();
+  const every = assertFlag("allTransactions", allTransactions);
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
-  const record = formatPuzzleRecord(
-    puzzle,
-    collection.hints,
-    collection.techniques,
-    allTransactions === true,
-  );
+  const record = formatPuzzleRecord(puzzle, collection.hints, collection.techniques, every);
   return text(record, {
     puzzle,
     hints: collection.hintsById(puzzle.id()),

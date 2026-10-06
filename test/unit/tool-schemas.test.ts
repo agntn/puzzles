@@ -199,6 +199,7 @@ describe("tool schemas and executors share one argument contract", () => {
     }
     await expect(showTool("")).rejects.toThrow(/id/);
     await expect(showTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
+    await expect(showTool("gsmg", "true" as never)).rejects.toThrow(/allTransactions/);
     await expect(hintsTool("")).rejects.toThrow(/id/);
     await expect(hintsTool("x".repeat(facts.parameters.id.maxLength + 1))).rejects.toThrow(/id/);
     await expect(stagesTool("")).rejects.toThrow(/id/);
