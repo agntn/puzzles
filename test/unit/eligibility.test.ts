@@ -195,6 +195,29 @@ describe("puzzles_eligibility", () => {
     });
   });
 
+  it("names a shipped carrier by its path and sends the model to puzzles_assets", async () => {
+    stubExplorers(0, 0);
+
+    const lines = (await eligibilityTool("gsmg")).content[0]?.text.split("\n") ?? [];
+
+    expect(lines).toContain("carrier\tassets/gsmg/puzzle.png");
+    expect(lines).toContain("carrier\thttps://gsmg.io/theseedisplanted");
+    expect(lines.filter((line) => line.includes("raw.githubusercontent.com"))).toEqual([]);
+    expect(lines.at(-1)).toBe(
+      "files: 6 files, 0 archived sources; puzzles_assets lists them and reads one by its path",
+    );
+  });
+
+  it("ends a bare address and a range puzzle without a files line", async () => {
+    stubExplorers(0, 0);
+
+    const bare = (await eligibilityTool("1BoatSLRHtKNngkdXEeobR76b53LETtpyT")).content[0]?.text;
+    const range = (await eligibilityTool("bits/71")).content[0]?.text;
+
+    expect(bare).not.toContain("files:");
+    expect(range).not.toContain("files:");
+  });
+
   it("rejects a chain that isn't text as an argument error", async () => {
     const urls = stubExplorers(0, 0);
 
