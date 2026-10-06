@@ -302,6 +302,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Satoshi drawn as a maze by an exchange. Nobody beat the deadline, so the designer published the key: a prime from e times two Base58 words read little endian.",
   },
+  "school-of-bitcoin": {
+    icon: "i-lucide-id-card",
+    title: "School of Bitcoin business card",
+    sample: "school-of-bitcoin",
+    chains: ["bitcoin"],
+    blurb:
+      "A million sats behind a business card, shown once the account hit 2000 followers. Morse, Wingdings and three QR codes on one side, and the coins haven't moved since October 2024.",
+  },
   "seed-phrase": {
     icon: "i-lucide-calendar-days",
     title: "seed-phrase.com",

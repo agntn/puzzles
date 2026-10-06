@@ -118,6 +118,7 @@ const expectedCollections = [
   "rushwallet",
   "satoshi-birthday-quiz",
   "satoshi-maze",
+  "school-of-bitcoin",
   "seed-phrase",
   "smith-lyle-moore",
   "teikhos",

@@ -118,6 +118,20 @@ export const archivedSources = [
     archive: { date: "2026-08-27T17:33:04Z", content: "confirmed" },
   },
   {
+    file: "school-of-bitcoin/schoolofbitcoin-2024-11-23",
+    tweet: "1860193190491619457",
+    author: "schoolofbitcoin",
+    date: "2024-11-23",
+    archive: { date: "2024-11-23T05:26:31Z", content: "confirmed" },
+  },
+  {
+    file: "school-of-bitcoin/schoolofbitcoin-2025-03-07",
+    tweet: "1897907304072171821",
+    author: "schoolofbitcoin",
+    date: "2025-03-07",
+    archive: { date: "2025-03-07T07:08:57Z", content: "confirmed" },
+  },
+  {
     file: "bitaddress/q-2023-10-06",
     url: "https://stacker.news/items/275973",
     author: "q",
