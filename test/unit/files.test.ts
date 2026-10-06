@@ -87,6 +87,22 @@ describe("puzzle files", () => {
     expect(asked).toEqual([assetUrlOf(path)]);
   });
 
+  it("leaves main alone when the tag fails for any reason but a missing file", async () => {
+    const asked: string[] = [];
+    vi.stubGlobal("fetch", async (url: string) => {
+      asked.push(url);
+      return url.includes("/main/")
+        ? new Response("edited on main")
+        : new Response("", { status: 503 });
+    });
+    const path = "assets/sources/x/post.md";
+
+    await expect(readPuzzleFile({ kind: "source", path, url: assetUrlOf(path) })).rejects.toThrow(
+      "answered HTTP 503",
+    );
+    expect(asked).toEqual([assetUrlOf(path)]);
+  });
+
   it("returns an SVG as text and refuses bytes that are neither image nor UTF-8", () => {
     const svg = '<svg xmlns="http://www.w3.org/2000/svg"/>';
     const read = (data: Uint8Array) =>
