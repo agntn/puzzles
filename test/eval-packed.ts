@@ -114,6 +114,7 @@ const expectedCollections = [
   "proof-of-writing",
   "quizchain",
   "quizchain2",
+  "real-big-block",
   "rushwallet",
   "satoshi-birthday-quiz",
   "satoshi-maze",

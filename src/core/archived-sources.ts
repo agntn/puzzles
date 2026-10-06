@@ -1583,6 +1583,29 @@ export const archivedSources = [
     date: "2019-08-03",
   },
   {
+    file: "real-big-block/aoinakamoto-2019-07-22-cgkpbb",
+    url: "https://www.reddit.com/r/Grycoin/comments/cgkpbb/777_mbtc_quizchain_last_block/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-22",
+  },
+  {
+    file: "real-big-block/aoinakamoto-2019-07-24-chf8k2",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/chf8k2/very_hard_777_mbtc_quizchain_real_big_block/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-24",
+    archive: {
+      url: "https://web.archive.org/web/20230612075600/https://old.reddit.com/r/bitcoinpuzzles/comments/chf8k2/very_hard_777_mbtc_quizchain_real_big_block/",
+      date: "2023-06-12T07:56:00Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "real-big-block/aoinakamoto-2019-07-25-chn8un",
+    url: "https://www.reddit.com/r/Grycoin/comments/chn8un/real_big_block_discussion/",
+    author: "u/AoiNakamoto",
+    date: "2019-07-25",
+  },
+  {
     file: "iamabananaamaa/iamabananaamaa-2013-12-23",
     url: "https://www.reddit.com/r/bitcoinpuzzles/comments/1ticec/medium_1mbtc_riddle_me_this_for_a_private_key/",
     author: "u/IAMABananaAMAA",
