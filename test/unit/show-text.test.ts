@@ -365,6 +365,16 @@ describe("puzzles_show text", () => {
     expect(texts[3]?.split("\n").at(-1)).toBe(
       `files: 0 files, 3 archived sources; ${ASSETS_TOOL} lists them and reads one by its path`,
     );
+    for (const answer of [
+      await hintsTool("ballet/AA007448"),
+      await stagesTool("ballet/AA007448"),
+    ]) {
+      const text = answer.content[0]?.text.split("\n") ?? [];
+      expect(text).toHaveLength(2);
+      expect(text[1]).toBe(
+        `files: 1 file, 1 archived source; ${ASSETS_TOOL} lists them and reads one by its path`,
+      );
+    }
     expect((await lines("b1000/71")).some((line) => line.startsWith("files:"))).toBe(false);
     expect((await stagesTool("b1000/71")).content[0]?.text).toBe("b1000/71: no stages recorded");
     expect(facts.tools.show.promptSnippet).toContain(ASSETS_TOOL);

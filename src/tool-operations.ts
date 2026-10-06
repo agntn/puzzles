@@ -673,7 +673,7 @@ async function filesLine(puzzle: Puzzle, collection: AnyCollection): Promise<str
 }
 
 /**
- * The `files` line under a report, except under a bare `nothing recorded` header.
+ * A report with the `files` line under it, even under a bare `no hints recorded`.
  *
  * @param {readonly string[]} report - The header, then the lines under it.
  * @param {Puzzle} puzzle - The puzzle.
@@ -685,8 +685,7 @@ async function withFilesLine(
   puzzle: Puzzle,
   collection: AnyCollection,
 ): Promise<string> {
-  const files = report.length > 1 ? await filesLine(puzzle, collection) : [];
-  return [...report, ...files].join("\n");
+  return [...report, ...(await filesLine(puzzle, collection))].join("\n");
 }
 
 /**
@@ -706,8 +705,7 @@ export async function showTool(id: string, allTransactions?: boolean): Promise<T
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
   const record = formatPuzzleRecord(puzzle, collection.hints, collection.techniques, every, "path");
-  const files = await filesLine(puzzle, collection);
-  return text([record, ...files].join("\n"), {
+  return text(await withFilesLine([record], puzzle, collection), {
     puzzle,
     hints: collection.hintsById(puzzle.id()),
     techniques: collection.techniquesById(puzzle.id()),
