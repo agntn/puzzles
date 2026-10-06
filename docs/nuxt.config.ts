@@ -312,6 +312,17 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: "cloudflare_module",
+    /** The preset's worker without a year of cache on a missing file. Not the prerender's. */
+    modules: [
+      {
+        name: "worker-entry",
+        setup(nitro) {
+          if (nitro.options.preset === "cloudflare-module") {
+            nitro.options.entry = resolve(import.meta.dirname, "server/entry.ts");
+          }
+        },
+      },
+    ],
     /**
      * One MCP SDK in the worker. The toolkit builds its server from one copy and `agents` checks it
      * with `instanceof` against another. pnpm splits them by the `zod` peer each one resolves.
