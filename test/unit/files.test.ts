@@ -1,5 +1,7 @@
+import { hex } from "@scure/base";
 import { describe, expect, it, vi } from "vite-plus/test";
 import { fileBlock, imageType, type PuzzleFile, readPuzzleFile } from "../../src/core/files.ts";
+import { assetUrlOf } from "../../src/core/puzzle.ts";
 import { assetsTool } from "../../src/tool-operations.ts";
 
 const bytes = (...values: readonly number[]): Uint8Array => new Uint8Array(values);
@@ -29,28 +31,60 @@ describe("puzzle files", () => {
   });
 
   it("stops reading a copy once it outgrows the pinned size, long before the host stops streaming", async () => {
-    let pulls = 0;
-    vi.stubGlobal(
-      "fetch",
-      async () =>
-        new Response(
-          new ReadableStream({
-            pull(controller) {
-              pulls += 1;
-              controller.enqueue(new Uint8Array(1024));
-              if (pulls === 1024) {
-                controller.close();
-              }
-            },
-          }),
-        ),
-    );
+    let mostPulls = 0;
+    vi.stubGlobal("fetch", async () => {
+      let pulls = 0;
+      return new Response(
+        new ReadableStream({
+          pull(controller) {
+            pulls += 1;
+            mostPulls = Math.max(mostPulls, pulls);
+            controller.enqueue(new Uint8Array(1024));
+            if (pulls === 1024) {
+              controller.close();
+            }
+          },
+        }),
+      );
+    });
     const pinned: PuzzleFile = { ...file, sha256: "0".repeat(64), bytes: 4096 };
 
     await expect(readPuzzleFile(pinned)).rejects.toThrow(
       "Could not read assets/x/hint.bin: https://example.com/hint.bin answered more than 4096 bytes",
     );
-    expect(pulls).toBeLessThan(10);
+    expect(mostPulls).toBeLessThan(10);
+  });
+
+  it("reads a file merged after the release from main once the tag answers 404", async () => {
+    const data = new TextEncoder().encode("merged after v1");
+    const sha256 = hex.encode(new Uint8Array(await crypto.subtle.digest("SHA-256", data)));
+    const path = "assets/sources/x/post.md";
+    const asked: string[] = [];
+    vi.stubGlobal("fetch", async (url: string) => {
+      asked.push(url);
+      return url.includes("/main/") ? new Response(data) : new Response("", { status: 404 });
+    });
+    const unpinned: PuzzleFile = { kind: "source", path, url: assetUrlOf(path) };
+    const pinned: PuzzleFile = { ...unpinned, kind: "hint", sha256, bytes: data.length };
+
+    for (const target of [unpinned, pinned]) {
+      asked.length = 0;
+      const content = await readPuzzleFile(target);
+      expect(content.servedBy).toBe(assetUrlOf(path, "main"));
+      expect(asked).toEqual([assetUrlOf(path), assetUrlOf(path, "main")]);
+    }
+  });
+
+  it("never asks main when the release tag holds the file", async () => {
+    const asked: string[] = [];
+    vi.stubGlobal("fetch", async (url: string) => {
+      asked.push(url);
+      return new Response("released");
+    });
+    const path = "assets/x/hint.txt";
+
+    await readPuzzleFile({ kind: "hint", path, url: assetUrlOf(path) });
+    expect(asked).toEqual([assetUrlOf(path)]);
   });
 
   it("returns an SVG as text and refuses bytes that are neither image nor UTF-8", () => {

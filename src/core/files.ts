@@ -184,16 +184,18 @@ function holdsPin(file: PuzzleFile, bytes: number, digest: string): boolean {
 }
 
 /**
- * The repository copy, then for a pinned file the author's URL and the archive capture.
+ * The repository copy under the release tag, then on `main`, where a file merged since waits for
+ * the next release, then for a pinned file the author's URL and the archive capture.
  *
  * @param {PuzzleFile} file - The file.
  * @returns {string[]} The URLs.
  */
 function copiesOf(file: PuzzleFile): string[] {
+  const repository = [file.url, assetUrlOf(file.path, "main")];
   if (file.sha256 === undefined) {
-    return [file.url];
+    return repository;
   }
-  return [file.url, file.origin, file.archive].filter((url) => url !== undefined);
+  return [...repository, file.origin, file.archive].filter((url) => url !== undefined);
 }
 
 /**

@@ -181,7 +181,7 @@ export const facts = {
       promptSnippet:
         "Use puzzles_assets to read a puzzle's own files and the archived posts behind its hints and answers, instead of fetching pages that may have changed or vanished.",
       promptGuidelines: [
-        "A read tries the repository copy under this release's tag, then for a pinned file the author's URL and the archive capture, and returns the first copy whose bytes match the record.",
+        "A read tries the repository copy under this release's tag, then on main for a file merged since that release, then for a pinned file the author's URL and the archive capture, and returns the first copy whose bytes match the record.",
         "An archived source is a reading copy of a page the record cites, with its transcript and every comment that survived. Its screenshot is a recent render, not the original image, so analyze the puzzle's own files instead.",
         "A file over 3.75 MiB, or neither an image nor UTF-8 text, can't come back inline. The error names the URL to download it from.",
       ],
