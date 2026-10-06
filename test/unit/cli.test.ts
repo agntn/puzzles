@@ -1052,6 +1052,13 @@ describe.concurrent("puzzles CLI", () => {
       stdout: "",
       stderr: "Invalid id: pass one of a puzzle identifier, filters or --all\n",
     });
+    await expect(
+      failure("verify", "--collection", "b1000", "--chain", "ethereum"),
+    ).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid filters: no puzzle matches them, so nothing was verified\n",
+    });
     await expect(failure("verify", "--all", "--status", "solved")).resolves.toEqual({
       code: 1,
       stdout: "",
