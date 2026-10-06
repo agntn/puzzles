@@ -278,6 +278,14 @@ const PRESENTATION: Readonly<
     blurb:
       "The quizchain's second run, from May 2019. Most blocks stand alone now, an answer and a TOMI field hashed with MD5, and by block 6 the thread is arguing about scripts versus humans.",
   },
+  "real-big-block": {
+    icon: "i-lucide-book-open-text",
+    title: "Quizchain Real Big Block",
+    sample: "real-big-block",
+    chains: ["bitcoin"],
+    blurb:
+      "777 mBTC for the final version of a Wattpad chapter, line breaks and all. The author once rated the odds below humanity passing the reverse Turing test, and so far that holds.",
+  },
   "satoshi-birthday-quiz": {
     icon: "i-lucide-cake",
     title: "Satoshi birthday 7 million quiz",

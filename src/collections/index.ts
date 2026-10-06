@@ -57,6 +57,7 @@ export const builtins = [
   },
   { key: "quizchain", load: () => import("./quizchain.ts").then((m) => m.quizchain) },
   { key: "quizchain2", load: () => import("./quizchain2.ts").then((m) => m.quizchain2) },
+  { key: "real-big-block", load: () => import("./real-big-block.ts").then((m) => m.realBigBlock) },
   { key: "rushwallet", load: () => import("./rushwallet.ts").then((m) => m.rushwallet) },
   {
     key: "satoshi-birthday-quiz",

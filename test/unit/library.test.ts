@@ -32,6 +32,7 @@ import { PowerfulMossCollection } from "../../src/collections/powerful-moss.ts";
 import { ProofOfWritingCollection } from "../../src/collections/proof-of-writing.ts";
 import { quizchain, QuizchainCollection } from "../../src/collections/quizchain.ts";
 import { Quizchain2Collection } from "../../src/collections/quizchain2.ts";
+import { RealBigBlockCollection } from "../../src/collections/real-big-block.ts";
 import { rushwallet, RushwalletCollection } from "../../src/collections/rushwallet.ts";
 import { SatoshiBirthdayQuizCollection } from "../../src/collections/satoshi-birthday-quiz.ts";
 import { SatoshiMazeCollection } from "../../src/collections/satoshi-maze.ts";
@@ -116,6 +117,7 @@ const concreteClasses = [
   ProofOfWritingCollection,
   QuizchainCollection,
   Quizchain2Collection,
+  RealBigBlockCollection,
   RushwalletCollection,
   SatoshiBirthdayQuizCollection,
   SatoshiMazeCollection,
@@ -734,9 +736,10 @@ describe("lazy collection registry", () => {
       "grycoin",
       "quizchain",
       "quizchain2",
+      "real-big-block",
       "satoshi-birthday-quiz",
     ]);
-    expect(aoi?.puzzles).toBe(158);
+    expect(aoi?.puzzles).toBe(159);
     expect(await getAuthor("nobody")).toBeUndefined();
     expect(await getAuthor(7 as never)).toBeUndefined();
   });
@@ -946,21 +949,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(548);
+    expect(await all()).toHaveLength(549);
     expect(await stats()).toEqual({
-      total: 548,
+      total: 549,
       claimed: 19,
       expired: 4,
       solved: 317,
       swept: 96,
-      unsolved: 112,
+      unsolved: 113,
       with_pubkey: 435,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1068.73234395,
+        BTC: 1069.50934395,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -969,7 +972,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1500.188092936237,
         ETH: 13.171964034825493,
-        BTC: 909.18580377,
+        BTC: 909.96280377,
         LTC: 3.02608794,
       },
       techniques: {
@@ -1041,7 +1044,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(548);
+    ).toBe(549);
   });
 
   it("hands back the memoized views frozen through", async () => {
