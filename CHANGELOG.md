@@ -1,3 +1,24 @@
+## v0.28.4
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.28.3...v0.28.4)
+
+### 🚀 Enhancements
+
+- **cli:** Replay a whole technique with verify ([#460](https://github.com/agntn/puzzles/pull/460))
+- Fold the dust in puzzles show ([#461](https://github.com/agntn/puzzles/pull/461))
+- **tools:** Verify every match in one call ([#462](https://github.com/agntn/puzzles/pull/462))
+- **collections:** Add smith-lyle-moore ([#465](https://github.com/agntn/puzzles/pull/465))
+
+### 🩹 Fixes
+
+- **cli:** Cut the 400 spaces off help lines ([#459](https://github.com/agntn/puzzles/pull/459))
+- **assets:** Read unreleased files from main ([#466](https://github.com/agntn/puzzles/pull/466))
+
+### ❤️ Contributors
+
+- Ori ([@oritwoen](https://github.com/oritwoen))
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+
 ## v0.28.3
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.28.2...v0.28.3)
