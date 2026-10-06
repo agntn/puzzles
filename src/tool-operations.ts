@@ -43,6 +43,23 @@ export interface ToolFacts {
   readonly title: string;
 }
 
+/**
+ * `puzzles_verify` for one id, all a public server offers: a filter there would let one request
+ * burn seconds of someone else's CPU.
+ */
+const verifyById = {
+  name: "puzzles_verify",
+  title: "Verify Puzzle Key",
+  description:
+    "Check that a puzzle's recorded key material derives its stored address, and rerun the recipe it holds: BIP39 entropy or a SHA-256 brainwallet.",
+  promptSnippet: "Use puzzles_verify to confirm recorded key material before trusting it.",
+  promptGuidelines: [
+    "An expected failure is a result, not an error.",
+    "The recipe gets its own verdict: one that misses is a data bug, even when the key verifies.",
+  ],
+  openWorld: false,
+} as const satisfies ToolFacts;
+
 /** Names, prose, parameter constraints, and status values shared by MCP, Pi, and OMP. */
 export const facts = {
   tools: {
@@ -187,18 +204,14 @@ export const facts = {
       openWorld: false,
     },
     verify: {
-      name: "puzzles_verify",
-      title: "Verify Puzzle Key",
-      description:
-        "Check that a puzzle's recorded key material derives its stored address, and rerun the recipe it holds: BIP39 entropy or a SHA-256 brainwallet. Takes one id, or the puzzles_list filters to check every puzzle they match in one call.",
+      ...verifyById,
+      description: `${verifyById.description} Takes one id, or the puzzles_list filters to check every puzzle they match in one call.`,
       promptSnippet:
         "Use puzzles_verify to confirm recorded key material before trusting it, or to replay a whole technique or collection at once.",
       promptGuidelines: [
-        "An expected failure is a result, not an error.",
-        "The recipe gets its own verdict: one that misses is a data bug, even when the key verifies.",
+        ...verifyById.promptGuidelines,
         "Pass id or filters, not both. A filtered answer prints every miss in full and folds the rest into ids per reason, so one call replays a technique such as md5-to-bip39-entropy.",
       ],
-      openWorld: false,
     },
     balance: {
       name: "puzzles_balance",
@@ -336,8 +349,11 @@ export const facts = {
   ],
   statuses: Object.values(Status),
   techniques,
+  /** The tools the public server at puzzles.agntn.dev narrows, under the name they keep. */
+  publicTools: { verify: verifyById },
 } as const satisfies {
   tools: Record<string, ToolFacts>;
+  publicTools: Record<string, ToolFacts>;
   parameters: Record<string, object>;
   chains: readonly Chain[];
   statuses: readonly Status[];

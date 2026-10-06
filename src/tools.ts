@@ -167,6 +167,13 @@ export const eligibilityToolDefinition = defineTool({
   execute: (params) => eligibilityTool(params.query, params.chain, params.apiKey),
 });
 
+/** `puzzles_verify` on the public server: one id per call, never a filter. */
+export const publicVerifyToolDefinition = defineTool({
+  ...described(facts.publicTools.verify),
+  input: closed({ id: puzzleId }),
+  execute: (params) => verifyTool(params.id),
+});
+
 /** Every puzzle tool, in the order `tools/list` and the harnesses show them. */
 export const puzzlesTools: readonly ToolDefinition[] = [
   statsToolDefinition,
@@ -202,6 +209,11 @@ function listSummary(args: Readonly<Record<string, unknown>>): string {
     .map((part) => (typeof part === "string" ? part : JSON.stringify(part)))
     .join(" ");
 }
+
+/** The tools the public server at puzzles.agntn.dev serves, with `puzzles_verify` held to one id. */
+export const publicPuzzlesTools: readonly ToolDefinition[] = puzzlesTools.map((tool) =>
+  tool === verifyToolDefinition ? publicVerifyToolDefinition : tool,
+);
 
 /** The argument a status line shows after the tool title, for the tools that take one. */
 export const callSummaries: Readonly<

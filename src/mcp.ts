@@ -5,11 +5,11 @@ import {
   toolAnnotations,
 } from "@agntn/tools/mcp";
 import type { CallToolResult, Server, Tool } from "@modelcontextprotocol/server";
-import { puzzlesTools } from "./tools.ts";
+import { publicPuzzlesTools, puzzlesTools } from "./tools.ts";
 import { version } from "./version.ts";
 
-/** The `tools/list` entries, in order, shared by `puzzles mcp` and the MCP server of the docs site. */
-export const toolListings: readonly Tool[] = puzzlesTools.map((tool) => ({
+/** The `tools/list` entries of the public server at puzzles.agntn.dev, in `puzzles mcp` order. */
+export const toolListings: readonly Tool[] = publicPuzzlesTools.map((tool) => ({
   name: tool.name,
   title: tool.title,
   description: tool.description,
@@ -17,10 +17,10 @@ export const toolListings: readonly Tool[] = puzzlesTools.map((tool) => ({
   annotations: toolAnnotations(tool),
 }));
 
-const toolsByName = indexTools(puzzlesTools);
+const toolsByName = indexTools(publicPuzzlesTools);
 
 /**
- * Runs one tool the way `tools/call` does: an unknown name, a schema miss and an executor failure
+ * Runs one tool of the public server the way `tools/call` does: an unknown name, a schema miss and an executor failure
  * all come back as an error result, never as a throw, so every transport answers with the same text.
  *
  * @param {string} name - The tool's name, such as `puzzles_show`.
