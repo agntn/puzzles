@@ -9,6 +9,7 @@ import {
   party,
   PartyKind,
   profile,
+  technique,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 
@@ -36,6 +37,7 @@ export const businessCard = puzzle({
   sourceUrl: CARD,
   startedAt: "2024-11-23 05:22:14",
   prize: 0.01,
+  techniques: [technique("morse", comment("908393")), technique("binary", comment("908556"))],
   hints: [
     official(
       "Hidden on this card... is every clue needed to find a treasure of... 1 Million Sats",
