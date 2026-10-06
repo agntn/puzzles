@@ -1041,7 +1041,7 @@ describe.concurrent("puzzles CLI", () => {
     });
   });
 
-  it("asks for an id, a filter or --all before verifying", async () => {
+  it("asks for exactly one of an id, filters or --all before verifying", async () => {
     await expect(failure("verify")).resolves.toEqual({
       code: 1,
       stdout: "",
@@ -1050,7 +1050,12 @@ describe.concurrent("puzzles CLI", () => {
     await expect(failure("verify", "b1000/1", "--collection", "b1000")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: "Invalid id: pass a puzzle identifier on its own, without --all or filters\n",
+      stderr: "Invalid id: pass one of a puzzle identifier, filters or --all\n",
+    });
+    await expect(failure("verify", "--all", "--status", "solved")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid id: pass one of a puzzle identifier, filters or --all\n",
     });
   });
 

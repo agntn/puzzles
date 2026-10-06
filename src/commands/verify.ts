@@ -13,26 +13,25 @@ type VerifyArgs = Readonly<
 >;
 
 /**
- * The puzzles one run checks: the one its id names, every one its filters pick, or all of them.
+ * The puzzles one run checks, by an id, filters or `--all`, never two, so no gate passes on a subset.
  *
  * @param {VerifyArgs} args - The parsed flags.
  * @returns {Promise<readonly Puzzle[]>} The puzzles, in dataset order.
  */
 async function selected(args: VerifyArgs): Promise<readonly Puzzle[]> {
+  const id = args.id !== undefined;
   const filtered = hasFilter(args);
+  const everything = args.all === true;
+  if ([id, filtered, everything].filter(Boolean).length > 1) {
+    throw new InvalidArgumentError("id", "pass one of a puzzle identifier, filters or --all");
+  }
   if (args.id !== undefined) {
-    if (filtered || args.all === true) {
-      throw new InvalidArgumentError(
-        "id",
-        "pass a puzzle identifier on its own, without --all or filters",
-      );
-    }
     return [await requirePuzzle(args.id)];
   }
   if (filtered) {
     return selectPuzzles(filterQuery(args));
   }
-  if (args.all === true) {
+  if (everything) {
     return all();
   }
   throw new InvalidArgumentError(
