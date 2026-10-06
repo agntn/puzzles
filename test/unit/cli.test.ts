@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { promisify } from "node:util";
 import { describe, expect, it } from "vite-plus/test";
 import { collectionKeys } from "../../src/core/registry.ts";
-import { ASSETS } from "../support/assets.ts";
+import { ASSETS, CHECKOUT_ASSETS } from "../support/assets.ts";
 
 const execute = promisify(execFile);
 
@@ -29,7 +29,7 @@ async function linked(
   return lines
     .filter((line) => !line.startsWith("files: "))
     .join("\n")
-    .replaceAll(/(?<=[\t ])assets\//gu, `${ASSETS}/assets/`);
+    .replaceAll(/(?<=[\t ])assets\//gu, `${CHECKOUT_ASSETS}/assets/`);
 }
 
 interface Failure {
@@ -120,7 +120,7 @@ describe.concurrent("puzzles CLI", () => {
 
     expect(output).toBe(await linked(stagesTool("gsmg")));
     expect(output).toContain(
-      `\t\tpuzzle image\thttps://gsmg.io/puzzle\t${ASSETS}/assets/gsmg/puzzle.png`,
+      `\t\tpuzzle image\thttps://gsmg.io/puzzle\t${CHECKOUT_ASSETS}/assets/gsmg/puzzle.png`,
     );
     expect(staged.stages.map((stage) => stage.name)).toEqual([
       "phase 1",
@@ -146,7 +146,11 @@ describe.concurrent("puzzles CLI", () => {
       "gsmg: 6 files, 0 archived sources",
       "puzzle\tassets/gsmg/puzzle.png\t29931 bytes\tsha256 38125bbdf1ea58b9b30b075bc6bf71e4089d04bba37098317e47097e2f2a1830\torigin https://gsmg.io/puzzle\tarchive https://web.archive.org/web/20201112011308id_/https://gsmg.io/puzzle",
     ]);
-    expect(listed.assets).toEqual((await get("gsmg"))?.assetLinks());
+    expect(listed.assets).toEqual(
+      (await get("gsmg"))
+        ?.assetLinks()
+        .map((link) => ({ ...link, url: link.url.replace(ASSETS, CHECKOUT_ASSETS) })),
+    );
     expect(await puzzles("assets", "b1000/71")).toBe("b1000/71: no files and no archived sources");
   });
 
@@ -362,7 +366,7 @@ describe.concurrent("puzzles CLI", () => {
       "zden/decred-janus: 1 hint, 1 hint asset",
       "hints: 1",
       "\tofficial\t-\t33*bbb\tsource: https://crypto.haluska.sk/decred_tree_hint.svg\tconfirmation: https://web.archive.org/web/20181219152809/http://crypto.haluska.sk/decred_tree_hint.svg (Wayback capture of the hint SVG)",
-      `hint assets: ${ASSETS}/assets/zden/decred-janus/hint.svg`,
+      `hint assets: ${CHECKOUT_ASSETS}/assets/zden/decred-janus/hint.svg`,
     ]);
     expect(hints).toEqual({
       hints: [
@@ -381,7 +385,7 @@ describe.concurrent("puzzles CLI", () => {
           kind: "hint",
           file: "decred-janus/hint.svg",
           path: "assets/zden/decred-janus/hint.svg",
-          url: `${ASSETS}/assets/zden/decred-janus/hint.svg`,
+          url: `${CHECKOUT_ASSETS}/assets/zden/decred-janus/hint.svg`,
           sha256: "3f518b69e8c447565a8560edb87855d0a186ecc5f99b8c5811f366e51c81efc1",
           bytes: 22761,
           origin: "https://crypto.haluska.sk/decred_tree_hint.svg",
@@ -469,7 +473,7 @@ describe.concurrent("puzzles CLI", () => {
 
     expect(output.split("\n")).toEqual([
       "gsmg: 1 hint asset",
-      `hint assets: ${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
+      `hint assets: ${CHECKOUT_ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
     ]);
     expect(hints).toEqual({
       hints: [],
@@ -478,7 +482,7 @@ describe.concurrent("puzzles CLI", () => {
           kind: "hint",
           file: "follow-the-white-rabbit.png",
           path: "assets/gsmg/follow-the-white-rabbit.png",
-          url: `${ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
+          url: `${CHECKOUT_ASSETS}/assets/gsmg/follow-the-white-rabbit.png`,
           sha256: "5e8d84b88f8f829428df5d2a8bf36c7268346f169b799ac7570b6223990d204f",
           bytes: 1958,
           origin: "https://gsmg.io/img/follow_the_white_rabbit.png",

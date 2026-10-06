@@ -9,16 +9,17 @@ import type * as PuzzlesTools from "../../../src/tools.ts";
 const sourceModulePath = fileURLToPath(new URL("../../../src/tools.ts", import.meta.url));
 
 /**
- * Loads the tool definitions, from `src/` in a checkout and `dist/` once installed.
+ * Loads the tools: `src/` and its commit in a checkout, `dist/` once installed.
  *
  * @returns {Promise<typeof PuzzlesTools>} The tool definitions.
  */
-function loadTools(): Promise<typeof PuzzlesTools> {
-  return (
-    existsSync(sourceModulePath)
-      ? import("../../../src/tools.ts")
-      : import("../../../dist/tools.mjs")
-  ) as Promise<typeof PuzzlesTools>;
+async function loadTools(): Promise<typeof PuzzlesTools> {
+  if (!existsSync(sourceModulePath)) {
+    return import("../../../dist/tools.mjs") as Promise<typeof PuzzlesTools>;
+  }
+  const { useCheckoutAssets } = await import("../../../src/checkout.ts");
+  useCheckoutAssets(fileURLToPath(new URL("../../../", import.meta.url)));
+  return import("../../../src/tools.ts");
 }
 
 /**

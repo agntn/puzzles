@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { dirname, extname, resolve } from "node:path";
+import { checkoutCommit } from "../src/checkout.ts";
 import { puzzlesTheme } from "./shiki-theme";
 
 /** Bundled from the checkout's sources: a deploy needs neither dist/ nor the root node_modules. */
@@ -153,6 +154,8 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    /** The commit for `server/plugins/asset-commit.ts`: Workers Builds names it, Git otherwise. */
+    assetCommit: process.env["WORKERS_CI_COMMIT_SHA"] || checkoutCommit(repoRoot) || "",
     /** The Etherscan key for /api/balance on Ethereum puzzles; NUXT_ETHERSCAN_API_KEY at runtime, the root .env locally. */
     etherscanApiKey: process.env.ETHERSCAN_API_KEY ?? "",
   },
