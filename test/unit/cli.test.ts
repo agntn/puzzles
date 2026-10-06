@@ -744,6 +744,18 @@ describe.concurrent("puzzles CLI", () => {
     );
   });
 
+  it("verifies what the filters pick, so one technique replays as a batch", async () => {
+    const lines = (await puzzles("verify", "--technique", "triple-sha256-brainwallet")).split("\n");
+
+    expect(lines).toHaveLength(3);
+    for (const line of lines) {
+      expect(line).toMatch(/^OK\t\S+\trecipe triple-sha256-brainwallet OK$/u);
+    }
+    await expect(
+      puzzles("verify", "--collection", "rushwallet", "--status", "solved", "-q"),
+    ).resolves.toBe("");
+  });
+
   it("exits zero when only unverifiable puzzles remain unchecked", async () => {
     /* execFile rejects on a non-zero exit, so resolving proves the CI gate stays green. */
     await expect(puzzles("verify", "--all", "--quiet")).resolves.toBe("");
@@ -798,7 +810,8 @@ describe.concurrent("puzzles CLI", () => {
     await expect(failure("verify", "b1000/1", "--key", "abc")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: "Invalid option: unknown --key, expected one of --all, --quiet, --json\n",
+      stderr:
+        "Invalid option: unknown --key, expected one of --all, --collection, --address, --chain, --status, --technique, --with-pubkey, --quiet, --json\n",
     });
     await expect(failure("show", "b1000/1", "--jsn")).resolves.toEqual({
       code: 1,
@@ -1028,11 +1041,28 @@ describe.concurrent("puzzles CLI", () => {
     });
   });
 
-  it("asks for an id or --all before verifying", async () => {
+  it("asks for exactly one of an id, filters or --all before verifying", async () => {
     await expect(failure("verify")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: "Invalid id: pass a puzzle identifier or --all\n",
+      stderr: "Invalid id: pass a puzzle identifier, a filter such as --technique, or --all\n",
+    });
+    await expect(failure("verify", "b1000/1", "--collection", "b1000")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid id: pass one of a puzzle identifier, filters or --all\n",
+    });
+    await expect(
+      failure("verify", "--collection", "b1000", "--chain", "ethereum"),
+    ).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid filters: no puzzle matches them, so nothing was verified\n",
+    });
+    await expect(failure("verify", "--all", "--status", "solved")).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid id: pass one of a puzzle identifier, filters or --all\n",
     });
   });
 

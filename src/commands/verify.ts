@@ -1,21 +1,47 @@
 import { defineCommand } from "citty";
+import { filterArgs, filterQuery, hasFilter } from "./filters.ts";
 import { jsonArg, printLine } from "./output.ts";
-import { all, requirePuzzle } from "../core/dataset.ts";
+import { all, requirePuzzle, selectPuzzles } from "../core/dataset.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
 import type { Puzzle } from "../core/puzzle.ts";
 import { toJson } from "../core/utils.ts";
 import { type RecipeResult, verify, type VerifyResult } from "../core/verify.ts";
 
-async function selectPuzzles(
-  args: Readonly<{ all?: boolean | undefined; id?: string | undefined }>,
-): Promise<readonly Puzzle[]> {
-  if (args.all === true) {
+/** The flags `selected()` reads. */
+type VerifyArgs = Readonly<
+  { all?: boolean | undefined; id?: string | undefined } & Parameters<typeof hasFilter>[0]
+>;
+
+/**
+ * The puzzles one run checks: an id, filters or `--all`, exactly one, and never an empty set.
+ *
+ * @param {VerifyArgs} args - The parsed flags.
+ * @returns {Promise<readonly Puzzle[]>} The puzzles, in dataset order.
+ */
+async function selected(args: VerifyArgs): Promise<readonly Puzzle[]> {
+  const id = args.id !== undefined;
+  const filtered = hasFilter(args);
+  const everything = args.all === true;
+  if ([id, filtered, everything].filter(Boolean).length > 1) {
+    throw new InvalidArgumentError("id", "pass one of a puzzle identifier, filters or --all");
+  }
+  if (args.id !== undefined) {
+    return [await requirePuzzle(args.id)];
+  }
+  if (filtered) {
+    const puzzles = await selectPuzzles(filterQuery(args));
+    if (puzzles.length === 0) {
+      throw new InvalidArgumentError("filters", "no puzzle matches them, so nothing was verified");
+    }
+    return puzzles;
+  }
+  if (everything) {
     return all();
   }
-  if (args.id === undefined) {
-    throw new InvalidArgumentError("id", "pass a puzzle identifier or --all");
-  }
-  return [await requirePuzzle(args.id)];
+  throw new InvalidArgumentError(
+    "id",
+    "pass a puzzle identifier, a filter such as --technique, or --all",
+  );
 }
 
 function labelOf(result: VerifyResult | RecipeResult): string {
@@ -53,11 +79,13 @@ export default defineCommand({
   args: {
     id: { type: "positional", required: false, description: "Puzzle identifier" },
     all: { type: "boolean", description: "Verify every puzzle" },
+    collection: { type: "string", description: "Filter by collection key, for example b1000" },
+    ...filterArgs,
     quiet: { type: "boolean", alias: "q", description: "Suppress per-puzzle output" },
     ...jsonArg,
   },
   async run({ args }) {
-    const puzzles = await selectPuzzles(args);
+    const puzzles = await selected(args);
     const results = await Promise.all(puzzles.map((puzzle) => verify(puzzle)));
     if (args.json) {
       printLine(toJson(results));
