@@ -95,11 +95,17 @@ export const smithLyleMooreBornToBeWild = puzzle({
     ),
     stage(
       "museum fire",
-      "The museum burns down, and the way on past the tragedy takes two passwords in a row.",
+      "The museum burns down, and the way back from the tragedy asks for a password.",
       [
         artifact("there's been a fire", `${SITE}/there-s-been-a-fire`),
         artifact("we will rebuild", `${SITE}/we-will-rebuild-stronger-than-before`),
       ],
+      answer("Password: fffffffffff", WRITEUP, SOLVED),
+    ),
+    stage(
+      "rebuild",
+      "The same page asks for another password right after the first.",
+      [artifact("we will rebuild", `${SITE}/we-will-rebuild-stronger-than-before`)],
       answer("Password: FFFFFFFFFFF", WRITEUP, SOLVED),
     ),
     stage(
