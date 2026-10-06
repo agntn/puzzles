@@ -345,7 +345,7 @@ type IncreaseRun = readonly [Transaction, ...Transaction[]];
  * @returns {(Transaction | IncreaseRun)[]} Transactions and folded runs, in record order.
  */
 function foldIncreases(transactions: readonly Transaction[]): (Transaction | IncreaseRun)[] {
-  const small = SMALL_SHARE * Math.max(0, ...transactions.map((item) => item.amount));
+  const small = SMALL_SHARE * transactions.reduce((top, item) => Math.max(top, item.amount), 0);
   const lines: (Transaction | IncreaseRun)[] = [];
   let run: Transaction[] = [];
   const flush = (): void => {

@@ -124,6 +124,24 @@ describe("puzzles_show text", () => {
     expect(record(4)).toContain("\t4 small increases\t2026-01-01 to 2026-01-04\t0.00002184 BTC");
   });
 
+  it("folds a history too long to spread into Math.max", () => {
+    const flood = Array.from({ length: 200_000 }, (_, index) =>
+      increase(index.toString(16).padStart(64, "0"), "2026-01-02", 0.00000546),
+    );
+    const text = formatPuzzleRecord(
+      puzzle({
+        id: "fixture/flood",
+        chain: "bitcoin",
+        address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+        sourceUrl: "https://example.com/flood",
+        startedAt: "2026-01-01",
+        transactions: [funding("f".repeat(64), "2026-01-01", 1), ...flood],
+      }),
+    );
+
+    expect(text).toContain("\t200000 small increases\t2026-01-02 to 2026-01-02\t1.092 BTC");
+  });
+
   it("prints a dust amount as a decimal, not an exponent", async () => {
     const text = (await lines("b1000/71", true)).join("\n");
 
