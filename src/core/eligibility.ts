@@ -134,7 +134,26 @@ async function bareChain(address: string, chain: Chain | undefined): Promise<Cha
   if (chain !== undefined) {
     throw new InvalidArgumentError("query", `${JSON.stringify(address)} is not a ${chain} address`);
   }
+  if (addressShaped(address)) {
+    throw new InvalidArgumentError(
+      "query",
+      `${oneLine(JSON.stringify(address))} is not an address on any supported chain`,
+    );
+  }
   return (await requirePuzzle(address)).chain();
+}
+
+/** The shortest address a supported chain writes, a base58 P2PKH, beats any dashless key. */
+const SHORTEST_ADDRESS = 25;
+
+/**
+ * Whether a query every chain refused still looks like an address, not a short or dashed key.
+ *
+ * @param {string} query - The query, already refused by every chain.
+ * @returns {boolean} Whether it can't be an identifier.
+ */
+function addressShaped(query: string): boolean {
+  return query.length >= SHORTEST_ADDRESS && !/[/-]/u.test(query);
 }
 
 /**

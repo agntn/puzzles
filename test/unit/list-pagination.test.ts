@@ -119,8 +119,23 @@ describe("puzzle list pagination", () => {
 
     expect(stranger.details).toMatchObject({ matched: 0, returned: 0, ids: [] });
     expect(stranger.details).not.toHaveProperty("outside");
+    expect(stranger.details).not.toHaveProperty("addressValid");
     expect(stranger.content[0]?.text).toBe("0 matching puzzles:\n(none)");
     expect(recased.details["ids"]).toEqual([]);
+  });
+
+  it("tells an address no chain accepts from one nobody pays to", async () => {
+    const recased = await listTool({ address: "1bggz9tcn4rm9kbzdn7kprqz87sz26samh" });
+    const broken = await listTool({
+      address: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96044",
+      chain: "ethereum",
+    });
+
+    expect(recased.content[0]?.text).toBe(
+      "0 matching puzzles:\n(none)\nNo supported chain accepts this address; its checksum or format is off.",
+    );
+    expect(recased.details).toMatchObject({ matched: 0, ids: [], addressValid: false });
+    expect(broken.details["addressValid"]).toBe(false);
   });
 
   it("combines the address with the other filters instead of overriding them", async () => {
