@@ -220,12 +220,12 @@ describe("puzzles MCP server", () => {
     expect(files.map((line) => line.split("\t").slice(0, 2).join(" "))).toContain(
       "artifact assets/gsmg/phase3.txt",
     );
-    expect(sources.slice(0, 3)).toEqual([
+    expect(sources.slice(0, 2)).toEqual([
       "quizchain2/34: 0 files, 3 archived sources",
-      "source\tassets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.md\tpublished 2019-06-09\tcites https://www.reddit.com/r/Grycoin/comments/byqc7s/7_mbtc_quizchain2_block_34/",
-      "screenshot\tassets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.png",
+      "source\tassets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.md\tpublished 2019-06-09\tcites https://www.reddit.com/r/Grycoin/comments/byqc7s/7_mbtc_quizchain2_block_34/\tscreenshot .png",
     ]);
-    expect(sources[3]).toMatch(/^source \(author\)\tassets\/sources\/satoshi-birthday-quiz\//);
+    expect(sources).toHaveLength(4);
+    expect(sources[2]).toMatch(/^source \(author\)\tassets\/sources\/satoshi-birthday-quiz\//);
     expect(firstText(bare)).toBe("bits/71: no files and no archived sources");
   });
 
