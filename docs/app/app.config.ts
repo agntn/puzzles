@@ -111,6 +111,16 @@ export default defineAppConfig({
         modal: "puzzles-search-modal",
       },
     },
+    /** Every UModal on the clipped shell with a bar for a header; app.css, since it's portalled. */
+    modal: {
+      slots: {
+        content: "puzzles-modal",
+        header: "puzzles-modal-header",
+        title: "puzzles-modal-title",
+        description: "puzzles-modal-description",
+        close: "puzzles-modal-close",
+      },
+    },
     commandPalette: {
       slots: {
         root: "puzzles-palette",

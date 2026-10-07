@@ -38,7 +38,7 @@ function capture(open: boolean) {
     :description="description"
     :transition="false"
     :ui="{
-      content: 'max-w-5xl rounded-sm shadow-none',
+      content: 'max-w-5xl',
       header: 'min-h-0 py-4 pr-14',
       title: 'font-mono text-sm font-normal break-all',
       body: 'p-0 sm:p-0 min-h-0 overflow-hidden flex flex-col',
@@ -56,7 +56,7 @@ function capture(open: boolean) {
         <span>{{ source }}</span>
         <UButton
           color="neutral"
-          variant="ghost"
+          variant="chip"
           :icon="copied === 'response' ? 'i-lucide-check' : 'i-lucide-copy'"
           @click="copy('response', captured.text)"
           >{{ copied === "response" ? "Copied" : "Copy response" }}</UButton

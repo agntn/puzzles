@@ -1,6 +1,6 @@
+import type { PuzzleFile } from "../../../src/core/files.ts";
 import type {
   Answer,
-  Assets,
   Chain,
   Entropy,
   Hint,
@@ -26,11 +26,22 @@ export interface TransactionRow {
   readonly url: string;
 }
 
-export interface AssetLink {
+/** How the viewer shows a file: a picture, rendered markdown, plain text or the browser's own. */
+export type FileFormat = "image" | "markdown" | "text" | "document";
+
+/** One file the page lets a reader open: the record's own, or a reading copy of a page it cites. */
+export interface FileRow {
+  readonly kind: PuzzleFile["kind"];
   readonly label: string;
   readonly path: string;
   readonly url: string;
-  readonly image: boolean;
+  readonly format: FileFormat;
+  /** The capture of a cited page, shown beside its transcript. */
+  readonly screenshot?: string;
+  readonly origin?: string;
+  readonly archive?: string;
+  readonly date?: string;
+  readonly bytes?: number;
 }
 
 /** One artifact of a stage: where the author published it and the file the site serves, if any. */
@@ -70,7 +81,6 @@ export interface PuzzleView extends LandingSample {
   readonly derived: boolean;
   readonly keyRows: readonly KeyRow[];
   readonly transactionRows: readonly TransactionRow[];
-  readonly assets: readonly AssetLink[];
   readonly assetSource: string | undefined;
   readonly stages: readonly StageRow[];
   readonly hints: readonly HintRow[];
@@ -192,35 +202,6 @@ export function assetHref(collection: string, file: string): string {
 }
 
 /**
- * Links to the files a record ships. The site serves `assets/` from the checkout, so the
- * links stay local and never depend on which repository the package lives in this week.
- *
- * @param {string} collection - The collection key, the directory under `assets/`.
- * @param {Assets | undefined} assets - The record's asset block.
- * @returns {AssetLink[]} The puzzle image, the hints and the solution, in that order.
- */
-function assetLinks(collection: string, assets: Assets | undefined): AssetLink[] {
-  if (assets === undefined) return [];
-  const entries: [string, string | undefined][] = [
-    ["puzzle", assets.puzzle],
-    ...(assets.hints ?? []).map((hint, index): [string, string] => [`hint ${index + 1}`, hint]),
-    ["solution", assets.solution],
-  ];
-  return entries.flatMap(([label, path]) =>
-    path === undefined
-      ? []
-      : [
-          {
-            label,
-            path: `assets/${collection}/${path}`,
-            url: assetHref(collection, path),
-            image: /\.(?:png|jpe?g|gif|webp|svg)$/iu.test(path),
-          },
-        ],
-  );
-}
-
-/**
  * Reads one puzzle into everything its page renders. Plain data, safe for the Nuxt payload.
  *
  * @param {ViewLibrary} library - `secretOf`, `verify` and the two explorer URL builders.
@@ -262,7 +243,6 @@ export async function toPuzzleView(
       amount: formatPrize(transaction.amount, puzzle.prizeCurrency()),
       url: library.transactionExplorerUrl(puzzle.chain(), transaction.txid),
     })),
-    assets: assetLinks(puzzle.collection(), assets),
     assetSource: assets?.source_url,
     stages: puzzle.stages().map((stage) => ({
       name: stage.name,
@@ -292,5 +272,109 @@ export async function toPuzzleView(
     solverUrl: solver?.profiles?.[0]?.url,
     claimUrl: puzzle.claimExplorerUrl(),
     json: JSON.stringify(puzzle.toJSON(), null, 2),
+  };
+}
+
+/**
+ * The site path of a repository path under `assets/`, encoded like `assetHref`.
+ *
+ * @param {string} path - The path from the repository root.
+ * @returns {string} The site path.
+ */
+function siteHref(path: string): string {
+  return `/${path.split("/").map(encodeURIComponent).join("/")}`;
+}
+
+/**
+ * How a file opens, read off its extension; anything unknown goes to the browser.
+ *
+ * @param {string} path - The file's path.
+ * @returns {FileFormat} The viewer the page picks.
+ */
+export function fileFormat(path: string): FileFormat {
+  if (/\.(?:png|jpe?g|gif|webp|svg)$/iu.test(path)) return "image";
+  if (/\.md$/iu.test(path)) return "markdown";
+  if (/\.(?:txt|asc|csv|json)$/iu.test(path)) return "text";
+  return "document";
+}
+
+/**
+ * The name a file goes by on the page: its role, the hint's number, the artifact's own name.
+ *
+ * @param {PuzzleFile} file - The file.
+ * @param {number} hint - Its position among the hint files, from one.
+ * @param {ReadonlyMap<string, string>} artifacts - Artifact names by repository path.
+ * @returns {string} The label.
+ */
+function fileLabel(file: PuzzleFile, hint: number, artifacts: ReadonlyMap<string, string>): string {
+  switch (file.kind) {
+    case "hint":
+      return `hint ${hint}`;
+    case "artifact":
+      return artifacts.get(file.path) ?? "artifact";
+    case "source":
+      return file.citedBy === "author" ? "author's post" : "source";
+    default:
+      return file.kind;
+  }
+}
+
+/**
+ * Every file `puzzles_assets` lists, a screenshot folded into its transcript like the tool does.
+ *
+ * @param {Puzzle} puzzle - The puzzle, for its stage artifact names.
+ * @param {readonly PuzzleFile[]} files - What `puzzleFiles()` lists for it.
+ * @returns {FileRow[]} One row per file a reader opens.
+ */
+export function toFileRows(puzzle: Puzzle, files: readonly PuzzleFile[]): FileRow[] {
+  const directory = `assets/${puzzle.collection()}`;
+  const artifacts = new Map(
+    puzzle
+      .stages()
+      .flatMap((stage) => stage.artifacts)
+      .flatMap((item) =>
+        item.file === undefined ? [] : [[`${directory}/${item.file}`, item.name]],
+      ),
+  ) as ReadonlyMap<string, string>;
+  const screenshots = new Set(
+    files.filter((file) => file.kind === "screenshot").map((file) => file.path),
+  );
+  const folded = new Set(
+    files
+      .filter((file) => file.kind === "source")
+      .map((file) => file.path.replace(/\.md$/u, ".png"))
+      .filter((path) => screenshots.has(path)),
+  );
+  let hints = 0;
+  return files.flatMap((file): FileRow[] => {
+    if (file.kind === "screenshot" && folded.has(file.path)) return [];
+    if (file.kind === "hint") hints += 1;
+    return [fileRow(file, fileLabel(file, hints, artifacts), folded)];
+  });
+}
+
+/**
+ * One file as the page opens it, with the screenshot of a cited page that has one.
+ *
+ * @param {PuzzleFile} file - The file.
+ * @param {string} label - Its name on the page.
+ * @param {ReadonlySet<string>} folded - The screenshots that ride on their transcript's row.
+ * @returns {FileRow} The row.
+ */
+function fileRow(file: PuzzleFile, label: string, folded: ReadonlySet<string>): FileRow {
+  const screenshot = file.path.replace(/\.md$/u, ".png");
+  return {
+    kind: file.kind,
+    label,
+    path: file.path,
+    url: siteHref(file.path),
+    format: fileFormat(file.path),
+    ...(file.kind === "source" && folded.has(screenshot)
+      ? { screenshot: siteHref(screenshot) }
+      : {}),
+    ...(file.origin === undefined ? {} : { origin: file.origin }),
+    ...(file.archive === undefined ? {} : { archive: file.archive }),
+    ...(file.date === undefined ? {} : { date: file.date }),
+    ...(file.bytes === undefined ? {} : { bytes: file.bytes }),
   };
 }

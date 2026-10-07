@@ -763,8 +763,9 @@ button:not(:disabled),
   outline-color: color-mix(in srgb, var(--console-accent) 45%, var(--console-line));
 }
 
-/* The search modal: the clipped shell with an accent segment, no radius or shadow, like the tooltip and the menu. */
-.puzzles-search-modal {
+/* Every modal, search included: the clipped shell and its accent segment, flat like the tooltip. */
+.puzzles-search-modal,
+.puzzles-modal {
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -772,7 +773,9 @@ button:not(:disabled),
   isolation: isolate;
 }
 .puzzles-search-modal::before,
-.puzzles-search-modal::after {
+.puzzles-search-modal::after,
+.puzzles-modal::before,
+.puzzles-modal::after {
   content: "";
   position: absolute;
   pointer-events: none;
@@ -785,17 +788,60 @@ button:not(:disabled),
     0 calc(100% - 14px)
   );
 }
-.puzzles-search-modal::before {
+.puzzles-search-modal::before,
+.puzzles-modal::before {
   inset: 0;
   z-index: -2;
   background:
     linear-gradient(var(--console-accent), var(--console-accent)) 0 0 / 18px 1px no-repeat,
     color-mix(in srgb, var(--ui-text-muted) 35%, var(--ui-bg));
 }
-.puzzles-search-modal::after {
+.puzzles-search-modal::after,
+.puzzles-modal::after {
   inset: 1px;
   z-index: -1;
   background: var(--ui-bg);
+}
+/* The 1px the shell's edge shows through, as in `.tool-console`; a tinted bar hid it. */
+.puzzles-modal {
+  padding: 1px;
+}
+.puzzles-modal > * + * {
+  border-color: var(--console-line) !important;
+}
+/* The modal header as an instrument bar: tinted, the title in mono, ticks along its foot. */
+.puzzles-modal-header {
+  position: relative;
+  background: color-mix(in srgb, var(--ui-text-muted) 5%, var(--ui-bg));
+}
+.puzzles-modal-header::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, var(--console-corner) 0 1px, transparent 1px 12px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+.puzzles-modal-title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  overflow-wrap: anywhere;
+}
+.puzzles-modal-close {
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+.puzzles-modal-description {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
 }
 .puzzles-palette {
   --tw-divide-opacity: 1;
@@ -827,16 +873,19 @@ button:not(:disabled),
 .puzzles-palette-input [data-slot="leadingIcon"] {
   color: var(--console-accent);
 }
-.puzzles-palette-close {
+.puzzles-palette-close,
+.puzzles-modal-close {
   border-radius: 0;
   background: transparent !important;
   box-shadow: inset 0 0 0 1px var(--console-line);
   color: var(--ui-text-muted) !important;
 }
-.puzzles-palette-close [data-slot="leadingIcon"] {
+.puzzles-palette-close [data-slot="leadingIcon"],
+.puzzles-modal-close [data-slot="leadingIcon"] {
   color: var(--ui-text-muted);
 }
-.puzzles-palette-close:hover [data-slot="leadingIcon"] {
+.puzzles-palette-close:hover [data-slot="leadingIcon"],
+.puzzles-modal-close:hover [data-slot="leadingIcon"] {
   color: var(--console-accent);
 }
 /* Group labels as section titles: mono uppercase, a rule from a dot to the edge. */
