@@ -5,8 +5,8 @@ import {
   toolAnnotations,
 } from "@agntn/tools/mcp";
 import type { CallToolResult, Server, Tool } from "@modelcontextprotocol/server";
+import { serverInfo } from "./server-info.ts";
 import { publicPuzzlesTools, puzzlesTools } from "./tools.ts";
-import { version } from "./version.ts";
 
 /** The `tools/list` entries of the public server at puzzles.agntn.dev, in `puzzles mcp` order. */
 export const toolListings: readonly Tool[] = publicPuzzlesTools.map((tool) => ({
@@ -53,5 +53,5 @@ export async function callTool(
  * @returns {Server} The unconnected MCP server.
  */
 export function createMcpServer(): Server {
-  return createToolServer({ name: "puzzles", version }, puzzlesTools);
+  return createToolServer(serverInfo, puzzlesTools);
 }

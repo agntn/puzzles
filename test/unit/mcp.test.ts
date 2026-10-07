@@ -1,7 +1,8 @@
 import { Client, InMemoryTransport } from "@modelcontextprotocol/client";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { beforeAll, describe, expect, it, vi } from "vite-plus/test";
 import { createMcpServer } from "../../src/mcp.ts";
+import { serverInfo } from "../../src/server-info.ts";
 import { facts } from "../../src/tool-operations.ts";
 import { firstText } from "../support/mcp.ts";
 
@@ -18,6 +19,14 @@ beforeAll(async () => {
 });
 
 describe("puzzles MCP server", () => {
+  it("introduces itself with a description and icons the site serves", () => {
+    expect(client.getServerVersion()).toEqual(serverInfo);
+    for (const icon of serverInfo.icons) {
+      const file = new URL(`../../docs/public${new URL(icon.src).pathname}`, import.meta.url);
+      expect(existsSync(file), icon.src).toBe(true);
+    }
+  });
+
   it("advertises every read-only puzzle tool", async () => {
     const { tools } = await client.listTools();
 

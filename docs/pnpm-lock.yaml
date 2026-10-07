@@ -21,8 +21,8 @@ importers:
         specifier: 0.6.1
         version: 0.6.1(ai@7.0.103(zod@4.4.3))
       '@agntn/tools':
-        specifier: 0.0.0
-        version: 0.0.0(@modelcontextprotocol/server@2.2.0)(ai@7.0.103(zod@4.4.3))
+        specifier: 0.2.1
+        version: 0.2.1(@modelcontextprotocol/server@2.2.0)(ai@7.0.103(zod@4.4.3))
       '@modelcontextprotocol/sdk':
         specifier: 1.30.1
         version: 1.30.1(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)
@@ -213,6 +213,27 @@ packages:
       '@oh-my-pi/pi-coding-agent':
         optional: true
       ai:
+        optional: true
+
+  '@agntn/tools@0.2.1':
+    resolution: {integrity: sha512-+wvN9R6NRozD4Mk9w9I9qJZIUKkPhalwVcAcvvx9lG2Msp0CdOVrVVusPK58MrGBvmUfhJWu+Re4E0ZCmpXU6w==}
+    engines: {node: '>=26'}
+    peerDependencies:
+      '@earendil-works/pi-coding-agent': '>=0.84.2 <2'
+      '@modelcontextprotocol/server': '>=2.2.0 <3'
+      '@oh-my-pi/pi-coding-agent': '>=18.0.0 <19'
+      ai: '>=7.0.0 <8'
+      h3-mcp: '>=0.2.0 <0.3'
+    peerDependenciesMeta:
+      '@earendil-works/pi-coding-agent':
+        optional: true
+      '@modelcontextprotocol/server':
+        optional: true
+      '@oh-my-pi/pi-coding-agent':
+        optional: true
+      ai:
+        optional: true
+      h3-mcp:
         optional: true
 
   '@ai-sdk/gateway@4.0.83':
@@ -7795,6 +7816,11 @@ snapshots:
       - ai
 
   '@agntn/tools@0.0.0(@modelcontextprotocol/server@2.2.0)(ai@7.0.103(zod@4.4.3))':
+    optionalDependencies:
+      '@modelcontextprotocol/server': 2.2.0
+      ai: 7.0.103(zod@4.4.3)
+
+  '@agntn/tools@0.2.1(@modelcontextprotocol/server@2.2.0)(ai@7.0.103(zod@4.4.3))':
     optionalDependencies:
       '@modelcontextprotocol/server': 2.2.0
       ai: 7.0.103(zod@4.4.3)
