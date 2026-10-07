@@ -1,3 +1,34 @@
+## v0.29.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.28.4...v0.29.0)
+
+### 🚀 Enhancements
+
+- **tools:** Point file links at puzzles_assets ([#470](https://github.com/agntn/puzzles/pull/470))
+- **collections:** Add real-big-block ([#473](https://github.com/agntn/puzzles/pull/473))
+- **collections:** Add school-of-bitcoin ([#475](https://github.com/agntn/puzzles/pull/475))
+- **collections:** Add genesis October hints ([#476](https://github.com/agntn/puzzles/pull/476))
+- **collections:** Add walking-banks xpub ([#477](https://github.com/agntn/puzzles/pull/477))
+- **tools:** Name eligibility carriers by path ([#479](https://github.com/agntn/puzzles/pull/479))
+
+### 🩹 Fixes
+
+- **assets:** Link the commit a checkout runs ([#472](https://github.com/agntn/puzzles/pull/472))
+- **docs:** Never cache a missing chunk ([#474](https://github.com/agntn/puzzles/pull/474))
+
+### 💅 Refactors
+
+- ⚠️  Rename b1000 to bits ([#478](https://github.com/agntn/puzzles/pull/478))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Rename b1000 to bits ([#478](https://github.com/agntn/puzzles/pull/478))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.28.4
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.28.3...v0.28.4)
