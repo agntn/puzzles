@@ -16,7 +16,10 @@ import {
   STATS_STATIC,
   WALK,
 } from "../../docs/app/utils/landing.ts";
-import { toPuzzleView } from "../../docs/app/utils/puzzle-view.ts";
+import { resolveFileLinks } from "../../docs/app/utils/files.ts";
+import { toFileRows, toPuzzleView } from "../../docs/app/utils/puzzle-view.ts";
+import { citedArchivedSources } from "../../src/core/archived-sources.ts";
+import { puzzleFiles } from "../../src/core/files.ts";
 import { keyLiteral, toSample } from "../../docs/app/utils/samples.ts";
 
 /*
@@ -44,12 +47,14 @@ describe("docs landing fixtures", () => {
 
     expect(view.solverName).toBe("rabbidbird");
     expect(view.solverUrl).toBe("https://github.com/rabbidbird");
-    expect(view.assets).toEqual([
+    expect(toFileRows(puzzle, puzzleFiles(puzzle.assetLinks(), []))).toEqual([
       {
+        kind: "solution",
         label: "solution",
         path: "assets/movie-enigma/solution.md",
         url: "/assets/movie-enigma/solution.md",
-        image: false,
+        format: "markdown",
+        bytes: 2001,
       },
     ]);
   });
@@ -70,16 +75,60 @@ describe("docs landing fixtures", () => {
       ],
     });
     const view = await toPuzzleView(library, puzzle, "", [], []);
+    const rows = toFileRows(puzzle, puzzleFiles(puzzle.assetLinks(), []));
 
-    expect(view.assets.map((asset) => asset.url)).toEqual([
-      "/assets/fixture/grid%20%231.png",
-      "/assets/fixture/odd/hint%3F.svg",
+    expect(rows.map((row) => [row.label, row.url, row.format])).toEqual([
+      ["puzzle", "/assets/fixture/grid%20%231.png", "image"],
+      ["hint 1", "/assets/fixture/odd/hint%3F.svg", "image"],
+      ["blob", "/assets/fixture/blob%20%232.txt", "text"],
     ]);
-    expect(view.assets.map((asset) => asset.path)).toEqual([
+    expect(rows.map((row) => row.path)).toEqual([
       "assets/fixture/grid #1.png",
       "assets/fixture/odd/hint?.svg",
+      "assets/fixture/blob #2.txt",
     ]);
-    expect(view.stages[0]?.artifacts[0]?.file).toBe("/assets/fixture/blob%20%232.txt");
+    expect(view.stages[0]?.artifacts[0]?.file).toBe(rows[2]?.url);
+  });
+
+  it("opens every cited post as its transcript with the screenshot folded in", async () => {
+    const library = await import("../../src/index.ts");
+    const puzzle = await library.requirePuzzle("genesis");
+    const collection = await library.requireCollection("genesis");
+    const files = puzzleFiles(puzzle.assetLinks(), citedArchivedSources(puzzle, collection));
+    const rows = toFileRows(puzzle, files);
+
+    expect(rows).toHaveLength(files.filter((file) => file.kind === "source").length);
+    expect(rows[0]).toMatchObject({
+      kind: "source",
+      label: "author's post",
+      path: "assets/sources/genesis/caesrcd-2026-08-22.md",
+      url: "/assets/sources/genesis/caesrcd-2026-08-22.md",
+      screenshot: "/assets/sources/genesis/caesrcd-2026-08-22.png",
+      format: "markdown",
+      date: "2026-08-22",
+    });
+  });
+
+  it("points a markdown file's relative links at the site or the repository", () => {
+    const text = [
+      "![shot](caesrcd-2026-09-05.png)",
+      "[quote](caesrcd-2026-08-22.md#top)",
+      "[record](../../../src/collections/genesis.ts)",
+      "[post](https://x.com/caesrcd) [here](#transcript) [root](/guide)",
+    ].join("\n");
+
+    expect(
+      resolveFileLinks(
+        text,
+        "assets/sources/genesis/caesrcd-2026-09-05.md",
+        "https://github.com/agntn/puzzles",
+      ).split("\n"),
+    ).toEqual([
+      "![shot](/assets/sources/genesis/caesrcd-2026-09-05.png)",
+      "[quote](/assets/sources/genesis/caesrcd-2026-08-22.md#top)",
+      "[record](https://github.com/agntn/puzzles/blob/main/src/collections/genesis.ts)",
+      "[post](https://x.com/caesrcd) [here](#transcript) [root](/guide)",
+    ]);
   });
 
   it("cover every collection and every builder the key literal mirrors", async () => {

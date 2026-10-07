@@ -64,6 +64,8 @@ const transactionRows = computed(() =>
 const folded = computed(() => view.value.transactionRows.length - transactionRows.value.length);
 
 const { copied, copy } = useCopied();
+/** The files band, so a stage artifact opens in the same viewer instead of a bare tab. */
+const shelf = useTemplateRef<{ show: (url: string) => void }>("shelf");
 </script>
 
 <template>
@@ -307,37 +309,13 @@ const { copied, copy } = useCopied();
       </button>
     </div>
 
-    <div v-if="view.assets.length > 0" class="console-band">
-      <p class="console-label console-rule-title">
-        <span>Files <span aria-hidden="true">[ shipped with the record ]</span></span>
-        <span class="console-mark" aria-hidden="true" />
-      </p>
-      <ul class="puzzle-assets">
-        <li v-for="asset in view.assets" :key="asset.path">
-          <a :href="asset.url" target="_blank" rel="noopener">
-            <img
-              v-if="asset.image"
-              :src="asset.url"
-              :alt="`${asset.label} for ${view.id}`"
-              loading="lazy"
-            />
-            <span
-              ><span class="console-tag">{{ asset.label }}</span
-              >{{ asset.path }}</span
-            >
-          </a>
-        </li>
-      </ul>
-      <p v-if="view.assetSource" class="console-lead puzzle-asset-source">
-        <span class="console-tag">From</span>
-        <UTooltip :text="view.assetSource">
-          <a :href="view.assetSource" target="_blank" rel="noopener">{{
-            linkText(view.assetSource)
-          }}</a>
-        </UTooltip>
-        <span class="console-leader" aria-hidden="true" />
-      </p>
-    </div>
+    <PuzzleFiles
+      v-if="page.files.length > 0"
+      ref="shelf"
+      :files="page.files"
+      :id="view.id"
+      :source="view.assetSource"
+    />
 
     <div v-if="view.stages.length > 0" class="puzzle-transactions puzzle-stages">
       <p class="console-label console-rule-title">
@@ -389,7 +367,8 @@ const { copied, copy } = useCopied();
               target="_blank"
               rel="noopener"
               class="puzzle-tx-id puzzle-stage-copy"
-              >copy</a
+              @click.prevent="shelf?.show(item.file)"
+              >open</a
             >
             <span v-else aria-hidden="true" />
           </li>
@@ -669,47 +648,6 @@ const { copied, copy } = useCopied();
 }
 .puzzle-unfold:hover {
   color: var(--console-accent);
-}
-.puzzle-assets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.puzzle-assets a {
-  display: flex;
-  flex-direction: column;
-  max-width: 18rem;
-  box-shadow: inset 0 0 0 1px var(--console-line);
-  color: var(--ui-text-muted);
-}
-.puzzle-assets a:hover {
-  color: var(--console-accent);
-  box-shadow: inset 0 0 0 1px var(--console-corner);
-}
-.puzzle-assets img {
-  width: 100%;
-  max-height: 14rem;
-  padding: 1px;
-  object-fit: contain;
-  background: color-mix(in srgb, var(--ui-text-muted) 4%, var(--ui-bg));
-}
-.puzzle-assets a > span {
-  padding: 8px 10px;
-  font-size: 11px;
-  overflow-wrap: anywhere;
-}
-.puzzle-asset-source {
-  flex-wrap: nowrap;
-  margin-top: 12px;
-}
-.puzzle-asset-source > a {
-  overflow: hidden;
-  min-width: 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 @media (width < 900px) {
   .puzzle-trail {
