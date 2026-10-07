@@ -201,7 +201,7 @@ export const facts = {
       promptGuidelines: [
         "Prefer a collection, chain or status filter over listing everything.",
         "Almost every puzzle is on Bitcoin, so a chain filter is the way to find the few that are not.",
-        "Given an address, pass it as address instead of listing the dataset and reading every row. An empty result means no puzzle pays to it, unless the answer names a puzzle the other filters left out.",
+        "Given an address, pass it as address instead of listing the dataset and reading every row. An empty result means no puzzle pays to it, unless the answer names a puzzle the other filters left out or says no chain accepts the address.",
         "Follow the next offset with the same filters instead of raising limit and repeating earlier rows.",
         "A technique filter finds the puzzles built the same way, across collections; puzzles_stats counts each technique.",
       ],
@@ -857,6 +857,31 @@ async function outsideFilters(
   return { lines, outside };
 }
 
+/** The lines under an empty address page, and the fields they add to `details`. */
+interface AddressNotes {
+  readonly lines: readonly string[];
+  readonly details: Readonly<Record<string, unknown>>;
+}
+
+/**
+ * Explains an empty address lookup: a typo when no chain takes it, else what the filters dropped.
+ *
+ * @param {PuzzleQuery} query - The list query, already validated.
+ * @param {string} address - Its address.
+ * @returns {Promise<AddressNotes>} The notes.
+ */
+async function addressNotes(query: PuzzleQuery, address: string): Promise<AddressNotes> {
+  const { chains, isValidAddress } = await import("./core/chains.ts");
+  if (!chains.some((chain) => isValidAddress(chain, address))) {
+    return {
+      lines: ["No supported chain accepts this address; its checksum or format is off."],
+      details: { addressValid: false },
+    };
+  }
+  const { lines, outside } = await outsideFilters(query);
+  return { lines, details: outside.length > 0 ? { outside } : {} };
+}
+
 /**
  * Checks the list filters the way the schema declares them and turns them into a dataset query.
  *
@@ -912,17 +937,17 @@ export async function listTool(params: ListParams): Promise<ToolResult> {
   if (more) {
     lines.push(`Next page: offset=${end}. Keep the same filters.`);
   }
-  const { lines: notes, outside } =
+  const notes =
     filtered.length === 0 && query.address !== undefined
-      ? await outsideFilters(query)
-      : { lines: [], outside: [] };
-  return text([...lines, ...notes].join("\n"), {
+      ? await addressNotes(query, query.address)
+      : { lines: [], details: {} };
+  return text([...lines, ...notes.lines].join("\n"), {
     matched: filtered.length,
     returned: page.length,
     offset,
     ...(more ? { nextOffset: end } : {}),
     ids: page.map((puzzle) => puzzle.id()),
-    ...(outside.length > 0 ? { outside } : {}),
+    ...notes.details,
   });
 }
 
