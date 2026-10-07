@@ -1,4 +1,4 @@
-import { version } from "../../../src/version.ts";
+import { serverInfo } from "../../../src/server-info.ts";
 
-/** The server `puzzles mcp` names over stdio, with the Docus page tools beside the puzzle ones. */
-export default defineMcpHandler({ name: "puzzles", version });
+/** Introduces itself like `puzzles mcp`, with the Docus page tools beside the puzzle ones. */
+export default defineMcpHandler({ ...serverInfo });

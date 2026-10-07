@@ -36,12 +36,5 @@ export default async function puzzlesExtension(pi: ExtensionAPI): Promise<void> 
       { describeCall },
     ]),
   );
-  /** The adapter takes no `loadMode`, and OMP would make the tools discoverable without one. */
-  const host = Object.create(pi, {
-    registerTool: {
-      value: (tool: Parameters<ExtensionAPI["registerTool"]>[0]) =>
-        pi.registerTool({ ...tool, loadMode: "essential" }),
-    },
-  }) as ExtensionAPI;
-  registerOmpTools(host, puzzlesTools, { Text, renderers });
+  registerOmpTools(pi, puzzlesTools, { Text, renderers, loadMode: "essential" });
 }

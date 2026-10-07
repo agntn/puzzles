@@ -23,7 +23,7 @@ docs/
 ├── app/pages/collections/[collection]/[puzzle].vue   # one page per puzzle, prerendered through the links on the collection pages
 ├── server/entry.ts                # the preset's worker; a 4xx or 5xx that the `_headers` rules marked immutable leaves as `no-store`, so the Workers Cache doesn't keep a chunk missing for a year
 ├── server/api/balance/[...id].ts  # puzzle.balance() on the worker, cached five minutes per puzzle
-├── server/mcp/index.ts            # the Docus MCP handler at /mcp, named and versioned like `puzzles mcp`
+├── server/mcp/index.ts            # the Docus MCP handler at /mcp, introduced like `puzzles mcp` by `src/server-info.ts`
 ├── server/plugins/asset-commit.ts # hands the library the commit in `runtimeConfig.assetCommit`, so asset links name it instead of the tag
 ├── server/mcp/tools/              # one file per puzzle tool, each `puzzlesMcpTool("<name>")`
 ├── server/utils/puzzles-mcp.ts    # a tool from `@agntn/puzzles/mcp`: its entry in `toolListings` and `callTool`, which checks the arguments itself
@@ -92,7 +92,7 @@ On the `cloudflare_module` preset the toolkit hands its server to `createMcpHand
 - `seo.schema` in `app/app.config.ts` emits the landing JSON-LD: `WebSite`, the agntn `Organization` as publisher, and a free `SoftwareApplication` with `sameAs` on GitHub and npm. Docs pages get `Article` plus `BreadcrumbList` from Docus on their own; the puzzle pages and the playground call `useSeo` with their breadcrumbs and `defineOgImage` themselves.
 - The Docus sitemap reads content collections only. `server/routes/sitemap.xml.ts` wraps it and appends the playground and one URL per puzzle; a new page under `app/pages/` goes there too, and into `llms.sections` in `nuxt.config.ts`, or it's invisible to crawlers and to `llms.txt`.
 - Point an old page address at its new one with `moved()` in `nuxt.config.ts`. It answers with a 301 from the worker and stays out of the prerender. Prerendered, it'd turn into a refresh page answering 200, and only for whichever routes the crawler happened to pick up.
-- Docus links `/favicon.ico` without shipping one. `public/favicon.svg` is the source, the PNGs come from `rsvg-convert` and the `.ico` from ImageMagick, `app.head` in `nuxt.config.ts` links them with the manifest and theme colours.
+- Docus links `/favicon.ico` without shipping one. `public/favicon.svg` is the source, the PNGs come from `rsvg-convert` and the `.ico` from ImageMagick, `app.head` in `nuxt.config.ts` links them with the manifest and theme colours. Both MCP servers show `favicon.svg` and `icon-512.png` as their icons, so `test/unit/mcp.test.ts` fails when either goes missing.
 
 ## OG images
 
