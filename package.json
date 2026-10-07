@@ -83,11 +83,11 @@
     "citty": "0.2.2"
   },
   "devDependencies": {
+    "@agntn/curves": "0.1.1",
     "@agntn/ox": "0.1.0",
     "@earendil-works/pi-coding-agent": "0.85.1",
     "@modelcontextprotocol/client": "2.2.0",
     "@modelcontextprotocol/sdk": "1.30.1",
-    "@noble/curves": "2.4.0",
     "@oh-my-pi/pi-coding-agent": "18.2.7",
     "@types/node": "26.6.3",
     "changelogen": "0.6.2",
