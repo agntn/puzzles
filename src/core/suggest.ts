@@ -97,3 +97,19 @@ export function closestPuzzle(name: string, puzzles: readonly Puzzle[]): string 
       }),
   );
 }
+
+/**
+ * The tail of a lookup miss: the one fix when a guess fits, the whole roster only when none does.
+ *
+ * @param {string | undefined} guess - The key or identifier the miss most likely meant.
+ * @param {string} kind - What the keys name, such as `collections`.
+ * @param {readonly string[]} keys - The keys that resolve.
+ * @returns {string} `Did you mean bits?`, or `Known collections: 80-bit, ballet, ...`.
+ */
+export function missDetail(
+  guess: string | undefined,
+  kind: string,
+  keys: readonly string[],
+): string {
+  return guess === undefined ? `Known ${kind}: ${keys.join(", ")}` : `Did you mean ${guess}?`;
+}
