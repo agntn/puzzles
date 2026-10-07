@@ -264,7 +264,8 @@ export const facts = {
     id: {
       minLength: 1,
       maxLength: 100,
-      description: "Universal puzzle identifier, for example bits/90 or gsmg",
+      description:
+        "Puzzle identifier, collection/name such as bits/90; only a one-puzzle collection goes by its bare key, such as gsmg",
     },
     file: {
       minLength: 1,
