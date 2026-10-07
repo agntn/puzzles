@@ -1,5 +1,5 @@
 import { createDecipheriv, scryptSync } from "node:crypto";
-import { secp256k1 } from "@noble/curves/secp256k1.js";
+import { multiplyGenerator, secp256k1 } from "@agntn/curves/secp256k1";
 import { sha256 } from "@agntn/hashes";
 import { createBase58check } from "@scure/base";
 import { Chain } from "../../src/core/chains.ts";
@@ -13,9 +13,6 @@ import { AddressKind, PubkeyFormat } from "../../src/core/parts.ts";
  * record cost more than half of the test suite. This follows the decryption steps
  * of BIP-0038 and is pinned to the test vectors of that document.
  */
-
-/** secp256k1 group order, from SEC 2 section 2.4.1. */
-const CURVE_ORDER = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
 
 const base58check = createBase58check(sha256);
 
@@ -105,7 +102,7 @@ function decryptMultiplied(payload: Uint8Array, password: Uint8Array, flag: numb
   const ownerSalt = hasLotSequence ? ownerEntropy.subarray(0, 4) : ownerEntropy;
   const prefactor = scrypt(password, ownerSalt, 32, 16_384, 8, 8);
   const passFactor = hasLotSequence ? sha256d(concatBytes(prefactor, ownerEntropy)) : prefactor;
-  const passPoint = secp256k1.getPublicKey(passFactor, true);
+  const passPoint = Uint8Array.fromHex(multiplyGenerator(passFactor.toHex()));
   const derived = scrypt(passPoint, concatBytes(addressHash, ownerEntropy), 64, 1024, 1, 1);
   const half1 = derived.subarray(0, 32);
   const half2 = derived.subarray(32, 64);
@@ -115,7 +112,7 @@ function decryptMultiplied(payload: Uint8Array, password: Uint8Array, flag: numb
     xor(aesDecrypt(half2, encryptedPart1), half1.subarray(0, 16)),
     tail.subarray(8, 16),
   );
-  const scalar = (bytesToBigInt(passFactor) * bytesToBigInt(sha256d(seedB))) % CURVE_ORDER;
+  const scalar = (bytesToBigInt(passFactor) * bytesToBigInt(sha256d(seedB))) % secp256k1.n;
   return Uint8Array.fromHex(scalar.toString(16).padStart(64, "0"));
 }
 
