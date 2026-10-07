@@ -261,12 +261,23 @@ function pinColumns(file: PuzzleFile): string[] {
 }
 
 /**
+ * Where a reading copy's screenshot sits: the transcript's path, ending in `.png`.
+ *
+ * @param {PuzzleFile} source - The reading copy.
+ * @returns {string} The screenshot's path.
+ */
+function screenshotPath(source: PuzzleFile): string {
+  return source.path.replace(/\.md$/u, ".png");
+}
+
+/**
  * One file as a listing row, marked `(author)` when only the author's record cites it.
  *
  * @param {PuzzleFile} file - The file.
+ * @param {boolean} screenshot - Whether the copy's screenshot rides on this row, not its own.
  * @returns {string} The tab-separated row.
  */
-function formatFileRow(file: PuzzleFile): string {
+function formatFileRow(file: PuzzleFile, screenshot: boolean): string {
   const columns = [
     file.citedBy === "author" ? `${file.kind} (author)` : file.kind,
     file.path,
@@ -276,6 +287,7 @@ function formatFileRow(file: PuzzleFile): string {
       ? []
       : [`${file.kind === "source" ? "cites" : "origin"} ${file.origin}`]),
     ...(file.archive === undefined ? [] : [`archive ${file.archive}`]),
+    ...(screenshot ? ["screenshot .png"] : []),
   ];
   return columns.join("\t");
 }
@@ -293,9 +305,17 @@ export function formatFileReport(id: string, files: readonly PuzzleFile[]): stri
   if (files.length === 0) {
     return [`${id}: no files and no archived sources`];
   }
+  const screenshots = new Set(
+    files.filter((file) => file.kind === "screenshot").map((file) => file.path),
+  );
+  const folded = new Set(copies.map(screenshotPath).filter((path) => screenshots.has(path)));
   return [
     `${id}: ${countOf(shipped.length, "file")}, ${countOf(copies.length, "archived source")}`,
-    ...files.map(formatFileRow),
+    ...files
+      .filter((file) => file.kind !== "screenshot" || !folded.has(file.path))
+      .map((file) =>
+        formatFileRow(file, file.kind === "source" && folded.has(screenshotPath(file))),
+      ),
   ];
 }
 

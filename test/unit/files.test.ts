@@ -1,6 +1,13 @@
 import { hex } from "@scure/base";
+import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vite-plus/test";
-import { fileBlock, imageType, type PuzzleFile, readPuzzleFile } from "../../src/core/files.ts";
+import {
+  fileBlock,
+  formatFileReport,
+  imageType,
+  type PuzzleFile,
+  readPuzzleFile,
+} from "../../src/core/files.ts";
 import { assetUrlOf } from "../../src/core/puzzle.ts";
 import { assetsTool } from "../../src/tool-operations.ts";
 
@@ -112,5 +119,39 @@ describe("puzzle files", () => {
     expect(() => read(bytes(0x00, 0xff, 0xfe))).toThrow(
       "Invalid file: assets/x/hint.bin is neither an image a model reads nor UTF-8 text, so download it from https://example.com/hint.bin",
     );
+  });
+
+  it("folds a screenshot into its source's row and keeps one without a source", () => {
+    const copy = (kind: "source" | "screenshot", path: string): PuzzleFile => ({
+      kind,
+      path,
+      url: `https://example.com/${path}`,
+    });
+
+    expect(
+      formatFileReport("x", [
+        copy("source", "assets/sources/x/a.md"),
+        copy("screenshot", "assets/sources/x/a.png"),
+        copy("screenshot", "assets/sources/x/b.png"),
+      ]),
+    ).toEqual([
+      "x: 0 files, 1 archived source",
+      "source\tassets/sources/x/a.md\tscreenshot .png",
+      "screenshot\tassets/sources/x/b.png",
+    ]);
+  });
+
+  it("still lists and reads a folded screenshot by its path", async () => {
+    const shot = "assets/sources/quizchain2/aoinakamoto-2019-06-09-byqc7s.png";
+    vi.stubGlobal("fetch", async () => new Response(readFileSync(shot)));
+
+    const listing = await assetsTool("quizchain2/34");
+    const read = await assetsTool("quizchain2/34", shot);
+
+    expect(JSON.stringify(listing.content)).not.toContain(shot);
+    expect(
+      (listing.details as { files: readonly PuzzleFile[] }).files.map(({ path }) => path),
+    ).toContain(shot);
+    expect(read.content[1]).toHaveProperty("mimeType", "image/png");
   });
 });

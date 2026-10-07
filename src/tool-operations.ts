@@ -186,7 +186,7 @@ export const facts = {
         "Use puzzles_assets to read a puzzle's own files and the archived posts behind its hints and answers, instead of fetching pages that may have changed or vanished.",
       promptGuidelines: [
         "A read tries the repository copy its link names, this release's tag or the commit a checkout or puzzles.agntn.dev runs, then on main for a file merged since, then for a pinned file the author's URL and the archive capture, and returns the first copy whose bytes match the record.",
-        "An archived source is a reading copy of a page the record cites, with its transcript and every comment that survived. Its screenshot is a recent render, not the original image, so analyze the puzzle's own files instead.",
+        "An archived source is a reading copy of a page the record cites, with its transcript and every comment that survived. The `screenshot .png` on its row is the same path ending in .png: a recent render, not the original image, so analyze the puzzle's own files instead.",
         "A file over 3.75 MiB, or neither an image nor UTF-8 text, can't come back inline. The error names the URL to download it from.",
       ],
       openWorld: true,
