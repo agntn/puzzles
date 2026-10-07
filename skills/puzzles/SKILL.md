@@ -22,7 +22,7 @@ No tools in this harness? The CLI prints the same answers: `puzzles collections`
 
 ## Identifiers
 
-An identifier is `collection/name`, for example `bits/90`. A collection with a single puzzle uses its key alone, like `gsmg`, with no slash. Do not build identifiers from a pattern you expect. Copy them from a `puzzles_list` row. A miss is cheap anyway: it names the known collections, or how many puzzles the collection holds with one real identifier.
+An identifier is `collection/name`, for example `bits/90`. A collection with a single puzzle uses its key alone, like `gsmg`, with no slash. Do not build identifiers from a pattern you expect. Copy them from a `puzzles_list` row. A miss is cheap anyway: it names the known collections, or how many puzzles the collection holds with one real identifier. Ask for a whole collection like `quizchain` and the miss hands back its first and last puzzle, so the next call names one of them.
 
 ## Reading the answers
 

@@ -649,6 +649,28 @@ describe("lazy collection registry", () => {
     );
   });
 
+  it("tells a bare collection key it asked for the whole shelf", async () => {
+    const message = async (lookup: Promise<unknown>): Promise<string> =>
+      lookup.then(
+        () => "",
+        (error: Readonly<Error>) => error.message,
+      );
+
+    await expect(message(requirePuzzle("quizchain"))).resolves.toBe(
+      "Puzzle not found: quizchain. quizchain is a collection of 77 puzzles, so ask for one of them, quizchain/1 to quizchain/77",
+    );
+    await expect(message(requirePuzzle("walking-banks"))).resolves.toBe(
+      "Puzzle not found: walking-banks. walking-banks is a collection of 2 puzzles, so ask for one of them, walking-banks/1 or walking-banks/2",
+    );
+    /* An alias keeps the caller's spelling in the echo and names the key it stands for. */
+    await expect(requirePuzzle("b1000")).rejects.toMatchObject({ puzzleId: "b1000" });
+    await expect(message(requirePuzzle("b1000"))).resolves.toMatch(
+      /^Puzzle not found: b1000\. bits is a collection of /u,
+    );
+    /* A one-puzzle collection still answers to its key. */
+    expect((await requirePuzzle("gsmg")).id()).toBe("gsmg");
+  });
+
   it("shares the archived RushWallet video clue with all 30 wallets", () => {
     const hints = [
       {

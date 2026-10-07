@@ -442,6 +442,15 @@ describe("puzzles MCP server", () => {
     expect(firstText(result)).toContain("Puzzle not found");
   });
 
+  it("points a collection key at the puzzles it holds", async () => {
+    const result = await client.callTool({ name: "puzzles_hints", arguments: { id: "quizchain" } });
+
+    expect(result.isError).toBe(true);
+    expect(firstText(result)).toContain(
+      "quizchain is a collection of 77 puzzles, so ask for one of them, quizchain/1 to quizchain/77",
+    );
+  });
+
   it("treats Object prototype property names as unknown tools", async () => {
     const result = await client.callTool({ name: "toString", arguments: {} });
 

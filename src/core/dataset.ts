@@ -13,7 +13,7 @@ import {
 } from "./registry.ts";
 import { closestKey, closestPuzzle, missDetail } from "./suggest.ts";
 import { type Technique, techniques } from "./technique.ts";
-import { filterPuzzles, prizeTotals, statusCounts } from "./utils.ts";
+import { countOf, filterPuzzles, prizeTotals, statusCounts } from "./utils.ts";
 
 /** Aggregate puzzle statistics. */
 export interface Stats {
@@ -444,11 +444,26 @@ export async function get(id: string): Promise<Puzzle | undefined> {
 }
 
 /**
+ * A bare key misses with the shelf's size and its first and last puzzle, for the next call to name.
+ *
+ * @param {string} key - The collection key.
+ * @param {readonly Puzzle[]} puzzles - Its puzzles in list order, at least two.
+ * @returns {string} `quizchain is a collection of 77 puzzles, ...`, ending in the range to ask for.
+ */
+function wholeCollection(key: string, puzzles: readonly Puzzle[]): string {
+  const first = puzzles.at(0)?.id();
+  const last = puzzles.at(-1)?.id();
+  const joint = puzzles.length === 2 ? "or" : "to";
+  return `${key} is a collection of ${countOf(puzzles.length, "puzzle")}, so ask for one of them, ${first} ${joint} ${last}`;
+}
+
+/**
  * Looks up a puzzle or throws a typed not found error. The error says what the identifier's
  * collection does hold, or which collections exist when the identifier named none, so a caller
  * that guessed wrong recovers without a second lookup. When one puzzle explains the miss, the
  * error names it first: `BITS/71` and `bit/71` mean `bits/71`, and a bare `135` means the one
- * puzzle of that name, `bits/135`.
+ * puzzle of that name, `bits/135`. A bare key of a collection with more than one puzzle names its
+ * first and last, because `quizchain` alone is a shelf, not a puzzle.
  *
  * @param {string} id - Universal puzzle identifier.
  * @returns {Promise<Puzzle>} The puzzle.
@@ -464,6 +479,9 @@ export async function requirePuzzle(id: string): Promise<Puzzle> {
   const [prefix = id, ...rest] = id.split("/");
   const collection = await getCollection(prefix);
   if (collection !== undefined) {
+    if (rest.length === 0 && collection.all().length > 1) {
+      throw new PuzzleNotFoundError(id, wholeCollection(collection.key, collection.all()));
+    }
     /* The collection exists and the identifier is not one of its own, so this throws its shape. */
     return collection.requireId(id);
   }
