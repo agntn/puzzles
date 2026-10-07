@@ -1,7 +1,7 @@
 import { builtins } from "../collections/index.ts";
 import { type Collection } from "./collection.ts";
 import { UnknownCollectionError } from "./errors.ts";
-import { closestKey } from "./suggest.ts";
+import { closestKey, missDetail } from "./suggest.ts";
 
 /** Any concrete collection, regardless of its query type. */
 export type AnyCollection =
@@ -189,19 +189,19 @@ export async function requireCollection(name: string): Promise<AnyCollection> {
 }
 
 /**
- * The keys a caller could have named, listed for the error a miss carries, behind the one key the
- * miss most likely meant when a case, separator or single typo explains it. Nothing loads, so the
- * sentence costs the caller a string rather than the whole dataset. Internal to the package: the
- * root entry does not re-export it.
+ * The tail of a collection miss, read off the manifest so nothing loads. The root entry doesn't
+ * re-export it.
  *
  * @param {string} [miss] - The collection key that missed, when there is one to correct.
- * @returns {string} `Did you mean bits? Known collections: 80-bit, ballet, ...`.
+ * @returns {string} `Did you mean bits?`, or `Known collections: 80-bit, ballet, ...`.
  */
 export function knownCollections(miss?: string): string {
   const keys = collectionKeys();
-  const known = `Known collections: ${keys.join(", ")}`;
-  const guess = typeof miss === "string" ? closestKey(miss, keys) : undefined;
-  return guess === undefined ? known : `Did you mean ${guess}? ${known}`;
+  return missDetail(
+    typeof miss === "string" ? closestKey(miss, keys) : undefined,
+    "collections",
+    keys,
+  );
 }
 
 /**

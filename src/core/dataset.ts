@@ -11,7 +11,7 @@ import {
   knownCollections,
   requireCollection,
 } from "./registry.ts";
-import { closestKey, closestPuzzle } from "./suggest.ts";
+import { closestKey, closestPuzzle, missDetail } from "./suggest.ts";
 import { type Technique, techniques } from "./technique.ts";
 import { filterPuzzles, prizeTotals, statusCounts } from "./utils.ts";
 
@@ -251,12 +251,8 @@ export async function requireAuthor(key: string): Promise<AuthorEntry> {
     return entry;
   }
   const keys = (await authors()).map((row) => row.key);
-  const known = `Known authors: ${keys.join(", ")}`;
   const guess = typeof key === "string" ? closestKey(key, keys) : undefined;
-  throw new UnknownAuthorError(
-    String(key),
-    guess === undefined ? known : `Did you mean ${guess}? ${known}`,
-  );
+  throw new UnknownAuthorError(String(key), missDetail(guess, "authors", keys));
 }
 
 /**
@@ -387,18 +383,17 @@ export async function requireSolver(key: string): Promise<SolverEntry> {
     return entry;
   }
   const keys = (await solvers()).map((row) => row.key);
-  const known = `Known solvers: ${keys.join(", ")}`;
   const puzzle = await get(key);
   if (puzzle !== undefined) {
     const what =
       puzzle.solver() === undefined ? "records no solver" : "knows its solver by address only";
-    throw new UnknownSolverError(key, `${puzzle.id()} ${what}. ${known}`);
+    throw new UnknownSolverError(
+      key,
+      `${puzzle.id()} ${what}. ${missDetail(undefined, "solvers", keys)}`,
+    );
   }
   const guess = typeof key === "string" ? closestKey(key, keys) : undefined;
-  throw new UnknownSolverError(
-    String(key),
-    guess === undefined ? known : `Did you mean ${guess}? ${known}`,
-  );
+  throw new UnknownSolverError(String(key), missDetail(guess, "solvers", keys));
 }
 
 /**
@@ -476,11 +471,7 @@ export async function requirePuzzle(id: string): Promise<Puzzle> {
   const guess =
     (await guessPuzzle(key, prefix, rest.join("/"))) ??
     (key === undefined ? undefined : `collection ${key}`);
-  const known = knownCollections();
-  throw new PuzzleNotFoundError(
-    id,
-    guess === undefined ? known : `Did you mean ${guess}? ${known}`,
-  );
+  throw new PuzzleNotFoundError(id, missDetail(guess, "collections", collectionKeys()));
 }
 
 /**

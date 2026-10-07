@@ -621,6 +621,34 @@ describe("lazy collection registry", () => {
     );
   });
 
+  it("drops the roster once it can name the fix, and keeps it when it can't", async () => {
+    const message = async (lookup: Promise<unknown>): Promise<string> =>
+      lookup.then(
+        () => "",
+        (error: Readonly<Error>) => error.message,
+      );
+
+    await expect(message(requirePuzzle("bit/71"))).resolves.toBe(
+      "Puzzle not found: bit/71. Did you mean bits/71?",
+    );
+    await expect(message(requireCollection("hashcollision"))).resolves.toBe(
+      "Unknown collection: hashcollision. Did you mean hash-collision?",
+    );
+    await expect(message(requireAuthor("peter_todd"))).resolves.toBe(
+      "Unknown author: peter_todd. Did you mean peter-todd?",
+    );
+    await expect(message(requireSolver("retiredcoder"))).resolves.toBe(
+      "Unknown solver: retiredcoder. Did you mean retired-coder?",
+    );
+
+    await expect(message(requirePuzzle("nope/1"))).resolves.toBe(
+      `Puzzle not found: nope/1. Known collections: ${collectionKeys().join(", ")}`,
+    );
+    await expect(message(requireSolver("nobody"))).resolves.toMatch(
+      /^Unknown solver: nobody\. Known solvers: retired-coder, /u,
+    );
+  });
+
   it("shares the archived RushWallet video clue with all 30 wallets", () => {
     const hints = [
       {

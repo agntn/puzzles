@@ -787,13 +787,11 @@ describe.concurrent("puzzles CLI", () => {
     expect(result.stderr).toContain("Puzzle not found: nope/1.");
   });
 
-  it("names the collections a caller could have asked for instead", async () => {
+  it("names the one puzzle a caller most likely meant, without the roster", async () => {
     const result = await failure("show", "135");
 
     expect(result.code).toBe(1);
-    expect(result.stderr.trim()).toBe(
-      `Puzzle not found: 135. Did you mean bits/135? Known collections: ${collectionKeys().join(", ")}`,
-    );
+    expect(result.stderr.trim()).toBe("Puzzle not found: 135. Did you mean bits/135?");
   });
 
   it("says what the collection holds when only the puzzle is wrong", async () => {
