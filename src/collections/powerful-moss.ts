@@ -1,6 +1,7 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
   artifact,
+  claim,
   confirmation,
   decrease,
   fact,
@@ -15,7 +16,7 @@ import {
   transfer,
   uncompressed,
 } from "../core/parts.ts";
-import { puzzle } from "../core/puzzle.ts";
+import { puzzle, Status } from "../core/puzzle.ts";
 
 /** The puzzle page: the album's description, the prize contract, the mint and the winner wallet. */
 const PAGE = "https://logicbeach.xyz/powerfulmoss";
@@ -65,11 +66,14 @@ export const powerfulMossAlbum = puzzle({
   sourceUrl: PAGE,
   startedAt: "2025-01-17 12:55:27",
   preGenesis: true,
+  status: Status.Claimed,
   pubkey: uncompressed(
     "04d8e5d392cb30d9f69334a0bffe3075dff2667cabe758fc53a24aba2c3ed58a6c64bb13365e7faea54a217ab5681c998c0bd1c771e5925858a6657422a8da6604",
   ),
   techniques: [technique("hidden-seed-words", PAGE)],
   prize: 0.5594043765685484,
+  solvedAt: "2026-10-05 17:27:49",
+  solveTime: 54102742,
   stages: [
     stage(
       "seed",
@@ -252,6 +256,21 @@ export const powerfulMossAlbum = puzzle({
       "0x3ec0e9e6bb6c62c248e3ab28656c318d749f101ff1966079ab4d48229680de61",
       "2026-09-17 01:31:37",
       0.001,
+    ),
+    transfer(
+      "0xae42fac96356a739ac387779d66d2386aad1cf868066ab58c7e23f661539f98f",
+      "2026-10-05 17:27:49",
+      0.553,
+    ),
+    claim(
+      "0x430502b769a89003e8514abe07409c23915493159eb7e575e0a61efe54b8d493",
+      "2026-10-05 17:27:51",
+      0.5591761765685483,
+    ),
+    increase(
+      "0x83d21663f37dfad257664387fb768437ee66b4e0c07018310c8a55cf688a8e60",
+      "2026-10-05 17:36:39",
+      0.0000001,
     ),
   ],
 });

@@ -130,7 +130,10 @@ describe("eligibility", () => {
 
     expect(record.live).toMatchObject([{ confirmed: 553000000000000000n }]);
     expect(record.missing[0]).toMatch(/^live: Balance lookup failed: /u);
-    expect(record.evidence).toEqual(["record says unsolved"]);
+    expect(record.evidence).toEqual([
+      "record says claimed",
+      "claim 0x430502b769a89003e8514abe07409c23915493159eb7e575e0a61efe54b8d493 on 2026-10-05 17:27:51",
+    ]);
   });
 
   it("leaves a published solution out of the carriers", async () => {
