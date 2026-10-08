@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vite-plus/test";
+import { describe, expect, it } from "vite-plus/test";
 import { assetRef, useCommitAssets } from "../../src/core/asset-ref.ts";
 import { get } from "../../src/index.ts";
 import { ASSETS } from "../support/assets.ts";
@@ -7,10 +7,6 @@ const COMMIT = "58a044a088d745e44c993194747311c72ae252f2";
 const COMMIT_ASSETS = `https://raw.githubusercontent.com/agntn/puzzles/${COMMIT}`;
 
 describe("asset ref", () => {
-  afterEach(() => {
-    Reflect.deleteProperty(globalThis, "__PUZZLES_COMMIT__");
-  });
-
   it("names the release tag while no commit is set, as in the npm package", async () => {
     const gsmg = await get("gsmg");
 

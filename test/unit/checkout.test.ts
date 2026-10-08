@@ -29,7 +29,6 @@ describe("checkout commit", () => {
   const dirs: string[] = [];
 
   afterEach(() => {
-    Reflect.deleteProperty(globalThis, "__PUZZLES_COMMIT__");
     for (const dir of dirs.splice(0)) {
       rmSync(dir, { recursive: true, force: true });
     }

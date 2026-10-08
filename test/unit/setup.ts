@@ -16,3 +16,8 @@ afterEach(() => {
   vi.unstubAllGlobals();
   forgetFailedHosts();
 });
+
+/* An extension factory in a checkout pins the asset commit for the whole worker, so the next file would link to it. */
+afterEach(() => {
+  Reflect.deleteProperty(globalThis, "__PUZZLES_COMMIT__");
+});
