@@ -1,5 +1,7 @@
 import { type AbstractBlockchain, getBlockchainPath } from "@agntn/keys";
 import { entropyToMnemonic } from "@agntn/keys/bip39";
+
+export { loadWordlist } from "@agntn/keys/bip39";
 import { type BrainwalletRecipe, derive } from "@agntn/keys/brainwallet";
 import { decode as decodeWIF, encode as encodeWIF, type WIFChain } from "@agntn/keys/wif";
 import { Base } from "@agntn/keys/blockchains/base";
@@ -142,6 +144,7 @@ export function wifToPrivateKey(
  * @param {string} path - Derivation path such as `m/44'/0'/0'/0/0`.
  * @param {Chain} chain - Chain the seed belongs to.
  * @param {string} [passphrase] - BIP39 passphrase, when the seed has one.
+ * @param {readonly string[]} [wordlist] - A list other than English, from `loadWordlist`.
  * @returns {string | undefined} The private key in hex, or `undefined` when the chain has no seed derivation: keys refuses Decred, whose HD keys drop leading zeros.
  */
 export function privateKeyFromSeed(
@@ -149,6 +152,7 @@ export function privateKeyFromSeed(
   path: string,
   chain: Chain,
   passphrase?: string,
+  wordlist?: readonly string[],
 ): string | undefined {
   const wallet = walletFor(chain);
   if (wallet === undefined || chain === Chain.Decred) {
@@ -157,6 +161,7 @@ export function privateKeyFromSeed(
   const derived = wallet.deriveHDWallet(phrase, path, {
     allowInvalidChecksum: true,
     ...(passphrase === undefined ? {} : { passphrase }),
+    ...(wordlist === undefined ? {} : { wordlist }),
   });
   return derived.keys.private;
 }

@@ -272,6 +272,7 @@ function seedLines(key: KeyData, secret: Secret["kind"] | undefined): string[] {
   const entropy = seed.entropy;
   return [
     ...field("seed phrase", secret === "seed" ? undefined : seed.phrase),
+    ...field("seed word list", seed.language),
     ...field("derivation path", seed.path),
     ...field("xpub", seed.xpub),
     ...field("entropy", entropy, formatEntropy),

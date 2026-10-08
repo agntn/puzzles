@@ -1,4 +1,4 @@
-import type { Chain, KeyData, Puzzle, Status, VerifyResult } from "../../../src/index.ts";
+import type { Chain, Entropy, KeyData, Puzzle, Status, VerifyResult } from "../../../src/index.ts";
 import { formatPrize } from "./format.ts";
 
 /** The slice of the library a sample needs, passed in so this module never imports it by name. */
@@ -139,22 +139,28 @@ function hexTail(key: KeyData): string[] {
 }
 
 /**
- * The chained calls that describe a seed: the xpub, the entropy and the published shares.
+ * The `.entropy()` call, with its source when the record names one.
+ *
+ * @param {Entropy} entropy - The entropy record of a seed.
+ * @returns {string} The call.
+ */
+function entropyCall(entropy: Entropy): string {
+  return entropy.source?.url === undefined
+    ? `.entropy(${quote(entropy.hash)})`
+    : `.entropy(${quote(entropy.hash)}, source(${quote(entropy.source.url)}))`;
+}
+
+/**
+ * The chained calls that describe a seed: the word list, the xpub, the entropy and the shares.
  *
  * @param {KeyData} key - The serialized key record.
- * @returns {string[]} The `.xpub()`, `.entropy()` and `.shares()` calls that apply.
+ * @returns {string[]} The `.language()`, `.xpub()`, `.entropy()` and `.shares()` calls that apply.
  */
 function seedTail(key: KeyData): string[] {
   const tail: string[] = [];
+  if (key.seed?.language !== undefined) tail.push(`.language(${quote(key.seed.language)})`);
   if (key.seed?.xpub !== undefined) tail.push(`.xpub(${quote(key.seed.xpub)})`);
-  const entropy = key.seed?.entropy;
-  if (entropy !== undefined) {
-    tail.push(
-      entropy.source?.url === undefined
-        ? `.entropy(${quote(entropy.hash)})`
-        : `.entropy(${quote(entropy.hash)}, source(${quote(entropy.source.url)}))`,
-    );
-  }
+  if (key.seed?.entropy !== undefined) tail.push(entropyCall(key.seed.entropy));
   if (key.shares !== undefined) {
     const shares = key.shares.shares.map((share) => `share(${share.index}, ${quote(share.data)})`);
     tail.push(`.shares(${key.shares.threshold}, ${key.shares.total}, [${shares.join(", ")}])`);

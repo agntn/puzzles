@@ -336,6 +336,29 @@ describe("Collection.verify", () => {
     });
   });
 
+  it("derives a French seed through its own word list, and fails it read as English", async () => {
+    /* Pascal Boyart's mural phrase, which the author published after the claim. */
+    const phrase =
+      "banquier usure mensonge peuple combat espoir union citoyen conduire triomphe horizon jaune";
+    const record = (key: Key) =>
+      puzzle({
+        ...synthetic,
+        chain: "bitcoin",
+        address: p2pkh("1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ"),
+        key,
+      });
+
+    expect(await verify(record(seed(phrase, "m/44'/0'/0'/0/0").language("french")))).toMatchObject({
+      verified: true,
+      derivedAddress: "1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ",
+    });
+    expect(await verify(record(seed(phrase, "m/44'/0'/0'/0/0")))).toMatchObject({
+      verified: false,
+      unavailable: false,
+      error: "Invalid BIP39 mnemonic: none of the words is in the English list",
+    });
+  });
+
   it("fails a seed with a word outside the BIP39 list", async () => {
     const result = await verify(
       puzzle({
