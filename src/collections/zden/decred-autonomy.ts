@@ -1,5 +1,5 @@
 import { puzzle, Status } from "../../core/puzzle.ts";
-import { assets, digest, fact, party, PartyKind, profile } from "../../core/parts.ts";
+import { assets, compressed, digest, fact, party, PartyKind, profile } from "../../core/parts.ts";
 
 /** Puzzle `zden/decred-autonomy`, whose archived page links the reward address. */
 export const zdenPuzzleDecredAutonomy = puzzle({
@@ -9,6 +9,7 @@ export const zdenPuzzleDecredAutonomy = puzzle({
   sourceUrl: "https://web.archive.org/web/20170430210807/https://decred.org/autonomy_puzzle/",
   startedAt: "2017-04-25",
   status: Status.Solved,
+  pubkey: compressed("02daa17dcb78cd7befd6986e3af1cc49acdd924f557990680c0b7ffe05ae03e960"),
   solver: party("BlockCrushr Labs", {
     key: "blockcrushr-labs",
     kind: PartyKind.Organization,

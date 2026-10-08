@@ -1,5 +1,5 @@
 import { puzzle } from "../../core/puzzle.ts";
-import { decrease, funding, increase } from "../../core/parts.ts";
+import { decrease, funding, increase, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `rushwallet/30`. */
 export const rushwalletPuzzle30 = puzzle({
@@ -8,6 +8,9 @@ export const rushwalletPuzzle30 = puzzle({
   address: "13Q8hJqagtd77ojTJcEZPjTz2sBFSsYxyj",
   sourceUrl: "https://web.archive.org/web/20150208172337/https://rushwallet.com/contest",
   startedAt: "2014-09-22 20:48:06",
+  pubkey: uncompressed(
+    "04b28d687ff46211d3cf75021db818b86f70addcb42ccedf53f4280926bd2a7fba0784eb6b8d23313c3c85ea1df284cf2844371ca499fcb48ba8a26df651c29a85",
+  ),
   transactions: [
     funding(
       "87fec08c933c04fe5b60c14cc8e5a7dabe10774380e06458c88f1d194e06828c",

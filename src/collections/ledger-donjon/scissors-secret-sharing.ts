@@ -1,4 +1,4 @@
-import { fact, party, PartyKind, seed, technique } from "../../core/parts.ts";
+import { compressed, fact, party, PartyKind, seed, technique } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** Scissors Secret Sharing, a 100-point CTF task rather than a Bitcoin bounty. */
@@ -9,6 +9,7 @@ export const ledgerDonjonPuzzleScissorsSecretSharing = puzzle({
   sourceUrl: "https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup",
   startedAt: "2020-10-28",
   status: Status.Solved,
+  pubkey: compressed("02291add091898d4b2fcddc8a10fbea1435027cb0f3dd291730b59a9c3c4f979e6"),
   key: seed(
     "since desk thrive carbon zone prison leaf depart hobby practice ivory luggage",
     "m/44'/0'/0'/0/0",

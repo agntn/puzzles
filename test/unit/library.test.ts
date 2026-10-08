@@ -1013,7 +1013,7 @@ describe("lazy collection registry", () => {
       solved: 317,
       swept: 96,
       unsolved: 114,
-      with_pubkey: 435,
+      with_pubkey: 442,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
