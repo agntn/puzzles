@@ -55,12 +55,14 @@ function described(tool: ToolFacts) {
 export const statsToolDefinition = defineTool({
   ...described(facts.tools.stats),
   input: Type.Object({}),
+  cli: { description: "Print aggregate statistics for every collection" },
   execute: () => statsTool(),
 });
 
 export const collectionsToolDefinition = defineTool({
   ...described(facts.tools.collections),
   input: Type.Object({}),
+  cli: { description: "List every registered collection" },
   execute: () => collectionsTool(),
 });
 

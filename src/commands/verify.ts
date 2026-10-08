@@ -1,11 +1,9 @@
-import { defineCommand } from "citty";
-import { filterArgs, filterQuery, hasFilter } from "./filters.ts";
-import { jsonArg, printLine } from "./output.ts";
-import { all, requirePuzzle, selectPuzzles } from "../core/dataset.ts";
+import { defineTool, Type } from "@agntn/tools";
+import { closed, collectionArg, filterArgs, filterQuery, hasFilter, plainWord } from "./filters.ts";
+import { lines } from "./output.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
 import type { Puzzle } from "../core/puzzle.ts";
-import { toJson } from "../core/utils.ts";
-import { type RecipeResult, verify, type VerifyResult } from "../core/verify.ts";
+import type { RecipeResult, VerifyResult } from "../core/verify.ts";
 
 /** The flags `selected()` reads. */
 type VerifyArgs = Readonly<
@@ -19,6 +17,7 @@ type VerifyArgs = Readonly<
  * @returns {Promise<readonly Puzzle[]>} The puzzles, in dataset order.
  */
 async function selected(args: VerifyArgs): Promise<readonly Puzzle[]> {
+  const { all, requirePuzzle, selectPuzzles } = await import("../core/dataset.ts");
   const id = args.id !== undefined;
   const filtered = hasFilter(args);
   const everything = args.all === true;
@@ -29,7 +28,7 @@ async function selected(args: VerifyArgs): Promise<readonly Puzzle[]> {
     return [await requirePuzzle(args.id)];
   }
   if (filtered) {
-    const puzzles = await selectPuzzles(filterQuery(args));
+    const puzzles = await selectPuzzles(await filterQuery(args));
     if (puzzles.length === 0) {
       throw new InvalidArgumentError("filters", "no puzzle matches them, so nothing was verified");
     }
@@ -71,29 +70,24 @@ function failed(result: VerifyResult | RecipeResult): boolean {
   return !result.verified && !result.unavailable;
 }
 
-export default defineCommand({
-  meta: {
-    name: "verify",
-    description: "Verify that known key material and its recipe derive the stored address",
-  },
-  args: {
-    id: { type: "positional", required: false, description: "Puzzle identifier" },
-    all: { type: "boolean", description: "Verify every puzzle" },
-    collection: { type: "string", description: "Filter by collection key, for example bits" },
+export default defineTool({
+  name: "puzzles_verify",
+  title: "Verify puzzles",
+  description: "Verify that known key material and its recipe derive the stored address",
+  effect: "read",
+  input: closed({
+    id: Type.Optional(Type.String({ description: "Puzzle identifier" })),
+    all: Type.Optional(Type.Boolean({ description: "Verify every puzzle" })),
+    ...collectionArg,
     ...filterArgs,
-    quiet: { type: "boolean", alias: "q", description: "Suppress per-puzzle output" },
-    ...jsonArg,
-  },
-  async run({ args }) {
+    quiet: Type.Optional(Type.Boolean({ description: "Suppress per-puzzle output" })),
+  }),
+  cli: { command: "verify", positional: ["id"], short: { quiet: "q" } },
+  async execute(args) {
+    plainWord(args.id);
+    const { verify } = await import("../core/verify.ts");
     const puzzles = await selected(args);
     const results = await Promise.all(puzzles.map((puzzle) => verify(puzzle)));
-    if (args.json) {
-      printLine(toJson(results));
-    } else if (args.quiet !== true) {
-      for (const result of results) {
-        printLine(formatResult(result));
-      }
-    }
     if (
       results.some(
         (result) => failed(result) || (result.recipe !== undefined && failed(result.recipe)),
@@ -101,5 +95,6 @@ export default defineCommand({
     ) {
       process.exitCode = 1;
     }
+    return lines(args.quiet === true ? [] : results.map(formatResult), results);
   },
 });

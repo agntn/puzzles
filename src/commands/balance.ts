@@ -1,22 +1,36 @@
 import { setTimeout as sleep } from "node:timers/promises";
-import { defineCommand } from "citty";
-import { filterArgs, filterQuery, hasFilter, pause } from "./filters.ts";
-import { jsonArg, oneLine, printLine } from "./output.ts";
+import { defineTool, Type } from "@agntn/tools";
+import {
+  apiKeyArg,
+  closed,
+  collectionArg,
+  filterArgs,
+  filterQuery,
+  hasFilter,
+  pause,
+  plainWord,
+} from "./filters.ts";
+import { lines, oneLine, printLine, streams } from "./output.ts";
 import { apiKeyVariables, BalanceError, type BalanceOptions } from "../core/balance.ts";
-import { requirePuzzle, selectPuzzles } from "../core/dataset.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
 import type { Puzzle } from "../core/puzzle.ts";
 import type { Balance } from "../core/types.ts";
-import { formatBalance, toJson } from "../core/utils.ts";
 
 /** One puzzle of a filtered pass: its balance, or the error that took its place. */
 type Row = Readonly<
   { puzzle: Puzzle; balance: Balance; error?: never } | { puzzle: Puzzle; error: string }
 >;
 
-function formatRow(row: Row): string {
+/**
+ * One row of a filtered pass as the command prints it.
+ *
+ * @param {Row} row - The puzzle with its balance or its error.
+ * @param {(balance: Balance) => string} format - Writes a balance, from the lazily loaded utils.
+ * @returns {string} The tab-separated line.
+ */
+function formatRow(row: Row, format: (balance: Balance) => string): string {
   return row.error === undefined
-    ? `OK\t${row.puzzle.id()}\t${formatBalance(row.balance)}`
+    ? `OK\t${row.puzzle.id()}\t${format(row.balance)}`
     : `FAIL\t${row.puzzle.id()}\t${oneLine(row.error)}`;
 }
 
@@ -79,48 +93,48 @@ async function lookUp(
   return rows;
 }
 
-export default defineCommand({
-  meta: {
-    name: "balance",
-    description: "Fetch the balance of one puzzle, or of every puzzle the filters pick",
-  },
-  args: {
-    id: { type: "positional", required: false, description: "Puzzle identifier" },
-    collection: { type: "string", description: "Filter by collection key, for example bits" },
+export default defineTool({
+  name: "puzzles_balance",
+  title: "Puzzle balances",
+  description: "Fetch the balance of one puzzle, or of every puzzle the filters pick",
+  effect: "read",
+  openWorld: true,
+  input: closed({
+    id: Type.Optional(Type.String({ description: "Puzzle identifier" })),
+    ...collectionArg,
     ...filterArgs,
-    "api-key": {
-      type: "string",
-      description:
-        "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY, Bitcoin Cash, Dogecoin and eCash to BLOCKCHAIR_API_KEY",
-    },
-    ...jsonArg,
-  },
-  async run({ args }) {
-    const apiKey = args["api-key"];
+    ...apiKeyArg,
+  }),
+  cli: { command: "balance", positional: ["id"] },
+  async execute(args, { host }) {
+    plainWord(args.id);
+    const { requirePuzzle, selectPuzzles } = await import("../core/dataset.ts");
+    const { formatBalance } = await import("../core/utils.ts");
     const filtered = hasFilter(args);
     if (args.id !== undefined && filtered) {
       throw new InvalidArgumentError("id", "pass a puzzle identifier or filters, not both");
     }
     if (args.id !== undefined) {
       const puzzle = await requirePuzzle(args.id);
-      const balance = await puzzle.balance(optionsFor(puzzle, apiKey));
-      printLine(args.json ? toJson(balance) : `${puzzle.id()}: ${formatBalance(balance)}`);
-      return;
+      const balance = await puzzle.balance(optionsFor(puzzle, args.apiKey));
+      return lines([`${puzzle.id()}: ${formatBalance(balance)}`], balance);
     }
     if (!filtered) {
       throw new InvalidArgumentError("id", "pass a puzzle identifier or a filter such as --status");
     }
-    const puzzles = await selectPuzzles(filterQuery(args));
-    const rows = await lookUp(puzzles, apiKey, (row) => {
-      if (!args.json) {
-        printLine(formatRow(row));
+    const live = streams(host);
+    const puzzles = await selectPuzzles(await filterQuery(args));
+    const rows = await lookUp(puzzles, args.apiKey, (row) => {
+      if (live) {
+        printLine(formatRow(row, formatBalance));
       }
     });
-    if (args.json) {
-      printLine(toJson(rows.map((row) => jsonRow(row))));
-    }
     if (rows.some((row) => row.error !== undefined)) {
       process.exitCode = 1;
     }
+    return lines(
+      [],
+      rows.map((row) => jsonRow(row)),
+    );
   },
 });

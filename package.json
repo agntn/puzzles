@@ -77,10 +77,9 @@
     "@agntn/explorers": "0.6.0",
     "@agntn/hashes": "0.4.0",
     "@agntn/keys": "0.6.1",
-    "@agntn/tools": "0.2.1",
+    "@agntn/tools": "0.2.2",
     "@modelcontextprotocol/server": "2.2.0",
-    "@scure/base": "2.4.0",
-    "citty": "0.2.2"
+    "@scure/base": "2.4.0"
   },
   "devDependencies": {
     "@agntn/curves": "0.1.1",
