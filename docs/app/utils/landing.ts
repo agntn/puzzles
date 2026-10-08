@@ -340,8 +340,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     solveTime: undefined,
     bits: undefined,
     range: undefined,
-    pubkey: undefined,
-    pubkeyFormat: undefined,
+    pubkey: "02291add091898d4b2fcddc8a10fbea1435027cb0f3dd291730b59a9c3c4f979e6",
+    pubkeyFormat: "compressed",
     secret: "seed",
     keyLiteral:
       'seed("since desk thrive carbon zone prison leaf depart hobby practice ivory luggage", "m/44\'/0\'/0\'/0/0")',
@@ -350,7 +350,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7",
     source: "https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup",
     transactions: 0,
-    tool: "ledger-donjon/scissors-secret-sharing\tsolved\t-\t1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7\nchain: bitcoin  address kind: p2pkh\nhash160: 91c2d123a7c0b390568f2f1358ead74ff7916ae4\npublic key: unknown\nprivate key: since desk thrive carbon zone prison leaf depart hobby practice ivory luggage (seed phrase)\nderivation path: m/44'/0'/0'/0/0\nstarted: 2020-10-28\nsolver: joachim (joachim)\ntransactions: 0\ntechniques: 1\n\thidden-seed-words\tsource: https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup\nexplorer: https://blockstream.info/address/1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7\nsource: https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup",
+    tool: "ledger-donjon/scissors-secret-sharing\tsolved\t-\t1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7\nchain: bitcoin  address kind: p2pkh\nhash160: 91c2d123a7c0b390568f2f1358ead74ff7916ae4\npublic key: 02291add091898d4b2fcddc8a10fbea1435027cb0f3dd291730b59a9c3c4f979e6 (compressed)\nprivate key: since desk thrive carbon zone prison leaf depart hobby practice ivory luggage (seed phrase)\nderivation path: m/44'/0'/0'/0/0\nstarted: 2020-10-28\nsolver: joachim (joachim)\ntransactions: 0\ntechniques: 1\n\thidden-seed-words\tsource: https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup\nexplorer: https://blockstream.info/address/1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7\nsource: https://blog.cryptohack.org/bruteforcing-bitcoin-bip39-seeds-donjon-ctf-writeup",
   },
   {
     id: "luckylurker/vault-1",
@@ -660,8 +660,9 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     solveTime: undefined,
     bits: undefined,
     range: undefined,
-    pubkey: undefined,
-    pubkeyFormat: undefined,
+    pubkey:
+      "04e1a30fe567710a3592a56eb479d251fe7456e1f0791c39bf54691a50edab08b44904515ff30c07f354815bb2a45d83576ee8e320ab52058b35e715611fbc4f9d",
+    pubkeyFormat: "uncompressed",
     secret: "none",
     keyLiteral: undefined,
     verdict: "unavailable",
@@ -669,7 +670,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://etherscan.io/address/0x9C2F44EFAd0c1E852a09dF9939e6DaF061140CaF",
     source: "https://www.youtube.com/watch?v=w4mpiuBP_aY",
     transactions: 12,
-    tool: "mineshop\tunsolved\t8.612541554256945 ETH\t0x9C2F44EFAd0c1E852a09dF9939e6DaF061140CaF\nchain: ethereum  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2020-02-12 13:17:25\ntransactions: 12\n\tfunding\t2020-02-12 13:17:25\t10 ETH\t0xa0c970e0eacc199d3d8a617af84182861b886958fd4416399e9a7191f9dcfb70\n\tdecrease\t2021-05-05 10:10:38\t0.1 ETH\t0xcf21ccdc94b490435909056531d165ad26eb78b8a2c7ad585376cc5febca0d1a\n\tdecrease\t2021-05-10 11:14:31\t0.1 ETH\t0xd5fa39886433eed6bb2d18f3670ef881a9c7437768070ec3fc1749e5e89f8d7d\n\tdecrease\t2021-05-30 08:24:54\t0.066 ETH\t0x751a87f5a2434a8a359e806fa446cf9873956a73e8c13e2de947fe0cd586c368\n\tincrease\t2021-12-10 10:04:34\t0.00005 ETH\t0x16e05bf1d527b82e1a08b100c7255d9512ac2f989a05a6aec43112fb3bb34adb\n\tdecrease\t2024-01-08 12:38:59\t0.2218436091293082 ETH\t0x459acd3020f1b6ba8b3123a44aa62df802c31641ad5424ecb3a34b2db0482c2b\n\tdecrease\t2024-01-08 12:39:23\t0.22170392770678327 ETH\t0xd53379648d1eadcd779d4546dd877bce6c0ce976777ebe6feaa372df3b9d841e\n\tdecrease\t2024-02-09 15:57:23\t0.4006859743881525 ETH\t0x5ecca9595fa278b7cc348ceecd6bd784be3c13540ece7be9bde4cd611cd243de\n\tincrease\t2024-02-16 13:51:59\t0.000505 ETH\t0xe5e71ab1a3c08c3936926c8b64bff40d4c5db41f228057a1dabab56eb258553c\n\tdecrease\t2024-06-04 09:53:47\t0.2669856254939234 ETH\t0x3131dd70cd075e62d2d790e920f2049b7bb25d2640c8ecf534257aed01aa3134\n\tincrease\t2024-06-04 09:58:11\t0.000026698 ETH\t0xf2debb3bcfd55e1af49593c5ee2e4e88c9f9f48ea6176618361d98b0a6617a7e\n\tincrease\t2026-07-30 09:09:47\t0.000011 ETH\t0xe84fa359e4a901ed3555faf749c27710101ab124bc4395cbbeffe077d953f816\ntechniques: 1\n\thidden-seed-words\tsource: https://www.youtube.com/watch?v=w4mpiuBP_aY\nhints: 1\n\tofficial\t2020-02-12\t12 wallet seed words- 6 are hidden in this video (description, tags, title,video basically could be anywhere in this video) 6.words are hidden in original post. This task will unlock wallet to claim 10 eth.\tsource: https://www.youtube.com/watch?v=w4mpiuBP_aY\tconfirmation: https://mineshop.eu/blog/mineshop-blog-tutorials/crypto-pumping-hardcore-research-portfolio-update-how-are-we-doing (The companion post states the same split: six words in the video, six in the post.)\nexplorer: https://etherscan.io/address/0x9C2F44EFAd0c1E852a09dF9939e6DaF061140CaF\nsource: https://www.youtube.com/watch?v=w4mpiuBP_aY",
+    tool: "mineshop\tunsolved\t8.612541554256945 ETH\t0x9C2F44EFAd0c1E852a09dF9939e6DaF061140CaF\nchain: ethereum  address kind: standard\npublic key: 04e1a30fe567710a3592a56eb479d251fe7456e1f0791c39bf54691a50edab08b44904515ff30c07f354815bb2a45d83576ee8e320ab52058b35e715611fbc4f9d (uncompressed)\nprivate key: unknown\nstarted: 2020-02-12 13:17:25\ntransactions: 12\n\tfunding\t2020-02-12 13:17:25\t10 ETH\t0xa0c970e0eacc199d3d8a617af84182861b886958fd4416399e9a7191f9dcfb70\n\tdecrease\t2021-05-05 10:10:38\t0.1 ETH\t0xcf21ccdc94b490435909056531d165ad26eb78b8a2c7ad585376cc5febca0d1a\n\tdecrease\t2021-05-10 11:14:31\t0.1 ETH\t0xd5fa39886433eed6bb2d18f3670ef881a9c7437768070ec3fc1749e5e89f8d7d\n\tdecrease\t2021-05-30 08:24:54\t0.066 ETH\t0x751a87f5a2434a8a359e806fa446cf9873956a73e8c13e2de947fe0cd586c368\n\tincrease\t2021-12-10 10:04:34\t0.00005 ETH\t0x16e05bf1d527b82e1a08b100c7255d9512ac2f989a05a6aec43112fb3bb34adb\n\tdecrease\t2024-01-08 12:38:59\t0.2218436091293082 ETH\t0x459acd3020f1b6ba8b3123a44aa62df802c31641ad5424ecb3a34b2db0482c2b\n\tdecrease\t2024-01-08 12:39:23\t0.22170392770678327 ETH\t0xd53379648d1eadcd779d4546dd877bce6c0ce976777ebe6feaa372df3b9d841e\n\tdecrease\t2024-02-09 15:57:23\t0.4006859743881525 ETH\t0x5ecca9595fa278b7cc348ceecd6bd784be3c13540ece7be9bde4cd611cd243de\n\tincrease\t2024-02-16 13:51:59\t0.000505 ETH\t0xe5e71ab1a3c08c3936926c8b64bff40d4c5db41f228057a1dabab56eb258553c\n\tdecrease\t2024-06-04 09:53:47\t0.2669856254939234 ETH\t0x3131dd70cd075e62d2d790e920f2049b7bb25d2640c8ecf534257aed01aa3134\n\tincrease\t2024-06-04 09:58:11\t0.000026698 ETH\t0xf2debb3bcfd55e1af49593c5ee2e4e88c9f9f48ea6176618361d98b0a6617a7e\n\tincrease\t2026-07-30 09:09:47\t0.000011 ETH\t0xe84fa359e4a901ed3555faf749c27710101ab124bc4395cbbeffe077d953f816\ntechniques: 1\n\thidden-seed-words\tsource: https://www.youtube.com/watch?v=w4mpiuBP_aY\nhints: 1\n\tofficial\t2020-02-12\t12 wallet seed words- 6 are hidden in this video (description, tags, title,video basically could be anywhere in this video) 6.words are hidden in original post. This task will unlock wallet to claim 10 eth.\tsource: https://www.youtube.com/watch?v=w4mpiuBP_aY\tconfirmation: https://mineshop.eu/blog/mineshop-blog-tutorials/crypto-pumping-hardcore-research-portfolio-update-how-are-we-doing (The companion post states the same split: six words in the video, six in the post.)\nexplorer: https://etherscan.io/address/0x9C2F44EFAd0c1E852a09dF9939e6DaF061140CaF\nsource: https://www.youtube.com/watch?v=w4mpiuBP_aY",
   },
   {
     id: "satoshi-birthday-quiz",
@@ -1513,14 +1514,14 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "7855c9947bf5",
+  dataVersion: "b2dbb460bb74",
   total: 550,
   solved: 317,
   unsolved: 114,
   claimed: 19,
   swept: 96,
   expired: 4,
-  withPubkey: 435,
+  withPubkey: 442,
   unsolvedPrize: {
     BTC: 909.97280377,
     ETH: 13.171964034825493,
@@ -1939,7 +1940,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     chains: ["bitcoin"],
     prize: {},
     unsolvedPrize: {},
-    withPubkey: 0,
+    withPubkey: 1,
     withKey: 1,
     firstStarted: "2020-10-28",
     lastStarted: "2020-10-28",
@@ -1984,7 +1985,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     unsolvedPrize: {
       ETH: 8.612541554256945,
     },
-    withPubkey: 0,
+    withPubkey: 1,
     withKey: 0,
     firstStarted: "2020-02-12 13:17:25",
     lastStarted: "2020-02-12 13:17:25",
@@ -2258,7 +2259,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     chains: ["bitcoin"],
     prize: {},
     unsolvedPrize: {},
-    withPubkey: 29,
+    withPubkey: 30,
     withKey: 28,
     firstStarted: "2014-09-22 17:36:08",
     lastStarted: "2014-09-22 21:24:40",
@@ -2563,7 +2564,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
       AR: 1500.188092936237,
       ETH: 1,
     },
-    withPubkey: 0,
+    withPubkey: 3,
     withKey: 0,
     firstStarted: "2019-05-22 10:27:23",
     lastStarted: "2020-05-18 23:53:09",
@@ -2610,7 +2611,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     unsolvedPrize: {
       BTC: 0.003125,
     },
-    withPubkey: 14,
+    withPubkey: 15,
     withKey: 6,
     firstStarted: "2016-06-07 21:05:42",
     lastStarted: "2024-04-18 10:59:41",

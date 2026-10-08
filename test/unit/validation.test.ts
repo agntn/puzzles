@@ -49,7 +49,6 @@ import { formatUnits } from "../../src/core/types.ts";
 import { decimal } from "../../src/core/utils.ts";
 import { expectedPrize } from "../../src/core/watch.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
-import { WeaveCollection } from "../../src/collections/weave.ts";
 import { TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { NamedCollection } from "../../src/core/collection.ts";
 import { all, collections, verify } from "../../src/index.ts";
@@ -147,7 +146,8 @@ async function derivedKeyProblem(puzzle: Puzzle): Promise<string | undefined> {
 function claimedPubkeyProblem(puzzle: Puzzle): string | undefined {
   if (
     puzzle.status() === Status.Unsolved ||
-    puzzle.collection() === WeaveCollection.key ||
+    // An Arweave owner is an RSA modulus, not a key this record has a format for.
+    puzzle.chain() === "arweave" ||
     // A TeikhosBounty address is a contract: it pays by self-destructing and never signs.
     puzzle.collection() === TeikhosCollection.key ||
     puzzle.address().kind === AddressKind.P2SH

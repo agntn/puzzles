@@ -1,5 +1,5 @@
 import { puzzle, Status } from "../../core/puzzle.ts";
-import { claim, fact, funding, party } from "../../core/parts.ts";
+import { claim, fact, funding, party, uncompressed } from "../../core/parts.ts";
 
 /** Puzzle `weave/13`. */
 export const weave13 = puzzle({
@@ -9,6 +9,9 @@ export const weave13 = puzzle({
   sourceUrl: "https://arweave.net/icRlgZbXVq01wPrFdllafMvKXoQ6Kfo1mQMdmeyX514",
   startedAt: "2020-05-18 23:53:09",
   status: Status.Claimed,
+  pubkey: uncompressed(
+    "048478c17fdc44729e96f3538ef45243210de070feb757f891c18c665396ee29562865e0f0cd72b85438e460c815a80afa650e568074616b85c5c1603e43cb4ea7",
+  ),
   prize: 1,
   solvedAt: "2020-05-23 01:26:15",
   solveTime: 351186,

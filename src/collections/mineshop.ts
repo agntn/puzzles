@@ -10,6 +10,7 @@ import {
   PartyKind,
   profile,
   technique,
+  uncompressed,
 } from "../core/parts.ts";
 import { puzzle } from "../core/puzzle.ts";
 
@@ -24,6 +25,9 @@ export const mineshopPuzzle = puzzle({
   address: "0x9C2F44EFAd0c1E852a09dF9939e6DaF061140CaF",
   sourceUrl: "https://www.youtube.com/watch?v=w4mpiuBP_aY",
   startedAt: "2020-02-12 13:17:25",
+  pubkey: uncompressed(
+    "04e1a30fe567710a3592a56eb479d251fe7456e1f0791c39bf54691a50edab08b44904515ff30c07f354815bb2a45d83576ee8e320ab52058b35e715611fbc4f9d",
+  ),
   techniques: [technique("hidden-seed-words", "https://www.youtube.com/watch?v=w4mpiuBP_aY")],
   prize: 8.612541554256945,
   hints: [
