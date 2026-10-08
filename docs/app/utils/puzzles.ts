@@ -136,6 +136,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Scissors Secret Sharing. Twelve BIP39 words, ten out of order. CTF points, not a BTC prize.",
   },
+  "liberte-guidant-le-peuple": {
+    icon: "i-lucide-brush",
+    title: "La Liberté guidant le peuple 2019",
+    sample: "liberte-guidant-le-peuple",
+    chains: ["bitcoin"],
+    blurb:
+      "Delacroix repainted with yellow vests on a wall in Paris. Half the seed hides in coloured strokes, half glows under black light, all of it in French. Claimed six days in.",
+  },
   luckylurker: {
     icon: "i-lucide-vault",
     title: "LuckyLurker Bitcoin Vault puzzles",

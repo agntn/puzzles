@@ -9,9 +9,13 @@ import { ASSETS, CHECKOUT_ASSETS } from "../support/assets.ts";
 
 const execute = promisify(execFile);
 
+/* The whole export runs past the 1 MiB execFile allows by default. */
+const STDOUT_LIMIT = 16 * 1024 * 1024;
+
 async function puzzles(...args: readonly string[]): Promise<string> {
   const { stdout } = await execute(process.execPath, ["src/cli.ts", ...args], {
     cwd: process.cwd(),
+    maxBuffer: STDOUT_LIMIT,
   });
   return stdout.trim();
 }
@@ -121,7 +125,7 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(550);
+    expect(result.total).toBe(551);
     expect(result.unsolved).toBe(113);
   });
 
@@ -714,13 +718,13 @@ describe.concurrent("puzzles CLI", () => {
       readonly collections: readonly { readonly key: string; readonly total: number }[];
     }>("collections", "--json");
 
-    expect(collections).toHaveLength(46);
+    expect(collections).toHaveLength(47);
     expect(collections.map((entry) => entry.key)).toContain("hash-collision");
   });
 
   it("lists authors and shows one, by author key or collection key", async () => {
     const rows = (await puzzles("authors")).split("\n");
-    expect(rows).toHaveLength(40);
+    expect(rows).toHaveLength(41);
     expect(rows).toContain("zden: Zden (person), 1 collection: zden, 16 puzzles");
 
     const record = (await puzzles("authors", "warp")).split("\n");
@@ -805,7 +809,7 @@ describe.concurrent("puzzles CLI", () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(46);
+    expect(result.collections).toHaveLength(47);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 

@@ -29,6 +29,11 @@ export const builtins = [
     load: () => import("./iamabananaamaa.ts").then((m) => m.iAmABananaAmaa),
   },
   { key: "ledger-donjon", load: () => import("./ledger-donjon.ts").then((m) => m.ledgerDonjon) },
+  {
+    key: "liberte-guidant-le-peuple",
+    load: () =>
+      import("./liberte-guidant-le-peuple.ts").then((m) => m.liberteGuidantLePeupleCollection),
+  },
   { key: "luckylurker", load: () => import("./luckylurker.ts").then((m) => m.luckyLurker) },
   { key: "mineshop", load: () => import("./mineshop.ts").then((m) => m.mineshop) },
   { key: "mini", load: () => import("./mini.ts").then((m) => m.mini) },

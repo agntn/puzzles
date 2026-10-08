@@ -54,6 +54,7 @@ export const WALK: readonly string[] = [
   "smith-lyle-moore/born-to-be-wild",
   "real-big-block",
   "school-of-bitcoin",
+  "liberte-guidant-le-peuple",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1510,18 +1511,48 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 1,
     tool: "school-of-bitcoin\tunsolved\t0.01 BTC\tbc1qcsdfkaqgy9ux668vmzflzqsyg0qtspncymt5ed\nchain: bitcoin  address kind: p2wpkh\nhash160: c41a9b740821786d68ecd893f1020443c0b80678\npublic key: unknown\nprivate key: unknown\nstarted: 2024-11-23 05:22:14\ntransactions: 1\n\tfunding\t2024-10-12 07:23:20\t0.01 BTC\tbddcb314564eb66215c7aa27a1aad126d5f51240db073adf5eb72382b0044eda\nasset: assets/school-of-bitcoin/puzzle.jpg\nasset source: https://x.com/schoolofbitcoin/status/1860193190491619457\ntechniques: 2\n\tmorse\tsource: https://stacker.news/items/908393\n\tbinary\tsource: https://stacker.news/items/908556\nhints: 8\n\tofficial\t2024-11-23\tHidden on this card... is every clue needed to find a treasure of... 1 Million Sats\tsource: https://x.com/schoolofbitcoin/status/1860193190491619457\n\tofficial\t2024-11-23\tat 2000 followers I said I would share the back of my business card... on which I have hidden all the clues you need to find and claim 1 MILLION sats\tsource: https://x.com/schoolofbitcoin/status/1860193190491619457\n\tofficial\t2024-11-23\tOh, and when I get to 10,000 followers if it hasn't been claimed I will reveal a big clue to the treasure!\tsource: https://x.com/schoolofbitcoin/status/1860193190491619457\n\tofficial\t2025-03-07\tI've designed it to be a.i proof... prove me wrong\tsource: https://x.com/schoolofbitcoin/status/1897907304072171821\n\tofficial\t2025-03-22\tYou need a touchscreen to zoom... either phone, tablet or laptop/desktop with touchscreen\tsource: https://stacker.news/items/921244\n\tcommunity\t2025-03-09\tThe morse code translates to ZEROBONEZEROONEZERO FINGZ KNEE DID 4D A DRESS 2Z PRIES. 0b1010 is binary for decimal 10, so 10 things needed for the address to see prize\tsource: https://stacker.news/items/908393\n\tcommunity\t2025-03-09\tWingdings, what a font! But it is the black characters you want :)\tsource: https://stacker.news/items/908489\n\tcommunity\t2025-03-09\tDecoding it to ASCII characters gives: \"You found a clue to the hidden treasure of 1 FULL BITCOIN! :) abstract\". First seed word is abstract.\tsource: https://stacker.news/items/908556\nexplorer: https://blockstream.info/address/bc1qcsdfkaqgy9ux668vmzflzqsyg0qtspncymt5ed\nsource: https://x.com/schoolofbitcoin/status/1860193190491619457\nfiles: 1 file, 2 archived sources; puzzles_assets lists them and reads one by its path",
   },
+  {
+    id: "liberte-guidant-le-peuple",
+    collection: "liberte-guidant-le-peuple",
+    chain: "bitcoin",
+    status: "solved",
+    address: "1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ",
+    kind: "p2pkh",
+    hash160: "ef81c1517b957a012a27cfe5a704e675bca0cde5",
+    redeemScript: undefined,
+    prize: "0.28916308 BTC",
+    prizeAmount: 0.28916308,
+    currency: undefined,
+    startedAt: "2019-01-06 22:42:07",
+    solvedAt: "2019-01-13 12:44:40",
+    solveTime: "6d 14h 2m",
+    bits: undefined,
+    range: undefined,
+    pubkey: "030da6e3531173a850a6613475ba0d9db7af41ff5005d89e73e82089065581655c",
+    pubkeyFormat: "compressed",
+    secret: "seed",
+    keyLiteral:
+      'seed("banquier usure mensonge peuple combat espoir union citoyen conduire triomphe horizon jaune", "m/44\'/0\'/0\'/0/0").language("french")',
+    verdict: "verified",
+    detail: "1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ",
+    explorer: "https://blockstream.info/address/1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ",
+    source:
+      "https://www.pboy-art.com/single-post/2019/01/06/Fresque-Libert%C3%A9-guidant-le-peuple-2019",
+    transactions: 17,
+    tool: "liberte-guidant-le-peuple\tsolved\t0.28916308 BTC\t1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ\nchain: bitcoin  address kind: p2pkh\nhash160: ef81c1517b957a012a27cfe5a704e675bca0cde5\npublic key: 030da6e3531173a850a6613475ba0d9db7af41ff5005d89e73e82089065581655c (compressed)\nprivate key: banquier usure mensonge peuple combat espoir union citoyen conduire triomphe horizon jaune (seed phrase)\nseed word list: french\nderivation path: m/44'/0'/0'/0/0\nstarted: 2019-01-06 22:42:07\nsolved: 2019-01-13 12:44:40 (6d 14h 2m)\nsolver: Antoine Ferron (antoine-ferron), github https://github.com/antonio-fr\npre-genesis: yes\ntransactions: 17, 7 small increases folded\n\tfunding\t2019-01-02 12:15:39\t0.000263 BTC\t86be9365f75ba9d4cb965700518e45f8a5404fcc49b9dba13df3d9da7e2dc30f\n\tincrease\t2019-01-06 21:46:01\t0.25974 BTC\t2628bfbc30fb75614fd9497db7e34aea96753779809da4205ecd518ef60120a3\n\tincrease\t2019-01-07 10:42:19\t0.02492209 BTC\tae46cc481a1b227a2f822f94b52b1743a05e63726bdf38c15494ea138943243c\n\t7 small increases\t2019-01-07 18:26:14 to 2019-01-12 04:14:08\t0.00423799 BTC\n\tclaim\t2019-01-13 12:44:40\t0.28901098 BTC\te467bab977461b61b15d176fd35bdfb8bf2c39ad03fe9fe1072dddc7486b1bf5\n\tincrease\t2019-09-19 09:36:26\t0.00001 BTC\ta116251cc6e2361e22dec2489b4550ee99b115da3e3e70090a32cbd46de9f701\n\tsweep\t2019-09-21 03:57:39\t0.0000081 BTC\t1820b5366eea7ffc4319261aa242bbc49fc2aa001d17d5bb1b0c68345540ae66\n\tincrease\t2019-12-22 11:29:21\t0.05777912 BTC\tc473eb7e1aa75fc6103eda4f6c401d84c089ec5ccce3780112690ce777b2280b\n\tsweep\t2019-12-22 11:29:21\t0.05467909 BTC\tb6a448e3f493ee96f075df5119a81b33ec5d71fcf977f6a5e361844d0116eead\n\tincrease\t2026-05-26 10:16:52\t0.00000791 BTC\t7b6a8ac2ee01a5c696adc04102da0efb8f3d097fccabf447a686c15fba5ce258\n\tsweep\t2026-05-26 10:16:52\t0.0000033 BTC\t1718788379eb5d5d26cbe91f0a79c01a87a96305fb25bc2e2a91e94d4f8aa614\nclaim: https://blockstream.info/tx/e467bab977461b61b15d176fd35bdfb8bf2c39ad03fe9fe1072dddc7486b1bf5\nasset: assets/liberte-guidant-le-peuple/puzzle.jpg\nasset source: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edfn12g/\nstages: 5\n\tseed 12 words\tBlack paint on black at the far right of the mural says what to look for.\n\t\tblack on black inscription\thttps://static.wixstatic.com/media/61405b_e3b80810d6c94564a501350dfd6bc791~mv2.jpg\n\t\tanswer: Tout à droite de la fresque, en noir sur noir, il est écrit \"Seed 12 words\" (en français \"graine 12 mots\"), qui nous indique qu'on doit chercher une \"Seed\" de 12 mots dans l'ordre qui permettent de restaurer un portefeuille Bitcoin afin d'avoir accès aux fonds.\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\tcolour strokes\tSix zones of coloured strokes in the background, six base colours, two strokes per letter.\n\t\tcolour zones 1 to 4\thttps://static.wixstatic.com/media/61405b_c5c174eba24942fdb6da04d873949dce~mv2_d_1649_1291_s_2.jpg\n\t\tcolour zones 5 and 6\thttps://static.wixstatic.com/media/61405b_ac11f93b7bef4f01a43b859fdf910676~mv2_d_1649_1296_s_2.jpg\n\t\tthe author's colour table\thttps://static.wixstatic.com/media/61405b_d363efc4ed9a4a818cfccc2fadee82c5~mv2_d_3024_3336_s_4_2.jpg\n\t\tanswer: banquier usure mensonge peuple combat espoir\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\tcaesar\tATOUT and JPAVFLU, painted in ink that glows under black light above Marianne's head.\n\t\tblack light inscriptions\thttps://static.wixstatic.com/media/61405b_840f53ba499049108fadcd318e035978~mv2_d_3024_2682_s_4_2.jpg\n\t\tanswer: Les deux premiers mots sont codés en chiffrement de César. Avec respectivement un décalage de 20 et 19, ce qui nous donne : union citoyen\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\t\ttechnique: caesar\tsource: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\n\tbase64\tY29uZHVpcmU= and dHJpb21waGU=, in the same fluorescent paint.\n\t\tblack light inscriptions\thttps://static.wixstatic.com/media/61405b_840f53ba499049108fadcd318e035978~mv2_d_3024_2682_s_4_2.jpg\n\t\tanswer: Les deux suivants sont codés en Base64, ce qui nous donne : conduire triomphe\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\t\ttechnique: base64\tsource: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\n\taes\tmq+cC6Ax2+8R8LAnEWgQnA==, AES-128, with a key the author emailed to whoever found the inscriptions.\n\t\tblack light inscriptions\thttps://static.wixstatic.com/media/61405b_840f53ba499049108fadcd318e035978~mv2_d_3024_2682_s_4_2.jpg\n\t\tanswer: Cette clé est : 03012009 (date du Bloc Genesis de Bitcoin). Une fois déchiffré, le code nous donne : horizon jaune\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\t\ttechnique: aes\tsource: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\ntechniques: 1\n\thidden-seed-words\tsource: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\nhints: 6\n\tofficial\t2019-01-06\tPour résoudre l'énigme entièrement, il faut impérativement se trouver devant la fresque.\tsource: https://www.pboy-art.com/single-post/2019/01/06/Fresque-Libert%C3%A9-guidant-le-peuple-2019\tconfirmation: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edfn12g/ (The same rule in English, in the author's first reply under the r/Bitcoin post.)\n\tofficial\t2019-01-07\tI keep it secret but it's in Paris intra muros. And it's not very hard to find\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edgq5nu/\n\tofficial\t2019-01-10\tYou can solve a part from your home\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edp94qu/\n\tofficial\t2019-01-11\tYou can solve a part from your desk and other part you must see the wall in real life\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edu2t6g/\n\tofficial\t2019-01-12\tthere's a clue on the hq pic\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edwblx4/\n\tcommunity\t2019-01-12\tApparently there's some words that are visible when exposed to a blacklight\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edx9qbr/\nexplorer: https://blockstream.info/address/1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ\nsource: https://www.pboy-art.com/single-post/2019/01/06/Fresque-Libert%C3%A9-guidant-le-peuple-2019\nfiles: 1 file, 1 archived source; puzzles_assets lists them and reads one by its path",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "c717ca74e4a1",
-  total: 550,
-  solved: 317,
+  dataVersion: "3dd87c804ae0",
+  total: 551,
+  solved: 318,
   unsolved: 113,
   claimed: 20,
   swept: 96,
   expired: 4,
-  withPubkey: 442,
+  withPubkey: 443,
   unsolvedPrize: {
     BTC: 909.97280377,
     ETH: 12.612559658256945,
@@ -1529,7 +1560,7 @@ export const STATS_STATIC = {
     AR: 1500.188092936237,
   },
   totalPrize: {
-    BTC: 1069.51934395,
+    BTC: 1069.80850703,
     ETH: 26.81566403482549,
     DOGE: 10000,
     BCH: 5.1,
@@ -1944,6 +1975,26 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 1,
     firstStarted: "2020-10-28",
     lastStarted: "2020-10-28",
+    hints: [],
+  },
+  {
+    key: "liberte-guidant-le-peuple",
+    author: "Pascal Boyart",
+    authorKey: "pascal-boyart",
+    authorUrl: "https://www.pboy-art.com/",
+    total: 1,
+    statuses: {
+      solved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.28916308,
+    },
+    unsolvedPrize: {},
+    withPubkey: 1,
+    withKey: 1,
+    firstStarted: "2019-01-06 22:42:07",
+    lastStarted: "2019-01-06 22:42:07",
     hints: [],
   },
   {
@@ -2793,6 +2844,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     kind: "organization",
     about: "Ledger's security research team, which ran the Capture the Fortress CTF in 2020.",
     collections: ["ledger-donjon"],
+    puzzles: 1,
+  },
+  {
+    key: "pascal-boyart",
+    to: "/authors/pascal-boyart",
+    name: "Pascal Boyart",
+    kind: "person",
+    about:
+      "Paris street artist who signs as PBoy and once hid a Bitcoin wallet in a wall in the 19th arrondissement.",
+    collections: ["liberte-guidant-le-peuple"],
     puzzles: 1,
   },
   {

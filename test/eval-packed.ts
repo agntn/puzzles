@@ -101,6 +101,7 @@ const expectedCollections = [
   "hash-collision",
   "iamabananaamaa",
   "ledger-donjon",
+  "liberte-guidant-le-peuple",
   "luckylurker",
   "mineshop",
   "mini",

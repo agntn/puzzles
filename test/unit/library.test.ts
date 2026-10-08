@@ -19,6 +19,7 @@ import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash-collision.ts";
 import { iAmABananaAmaa, IAmABananaAmaaCollection } from "../../src/collections/iamabananaamaa.ts";
 import { LedgerDonjonCollection } from "../../src/collections/ledger-donjon.ts";
+import { LiberteGuidantLePeupleCollection } from "../../src/collections/liberte-guidant-le-peuple.ts";
 import { LuckyLurkerCollection } from "../../src/collections/luckylurker.ts";
 import { MineshopCollection } from "../../src/collections/mineshop.ts";
 import { mini, MiniCollection } from "../../src/collections/mini.ts";
@@ -105,6 +106,7 @@ const concreteClasses = [
   HashCollisionCollection,
   IAmABananaAmaaCollection,
   LedgerDonjonCollection,
+  LiberteGuidantLePeupleCollection,
   LuckyLurkerCollection,
   MineshopCollection,
   MiniCollection,
@@ -1005,21 +1007,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(550);
+    expect(await all()).toHaveLength(551);
     expect(await stats()).toEqual({
-      total: 550,
+      total: 551,
       claimed: 20,
       expired: 4,
-      solved: 317,
+      solved: 318,
       swept: 96,
       unsolved: 113,
-      with_pubkey: 442,
+      with_pubkey: 443,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1069.51934395,
+        BTC: 1069.80850703,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -1032,16 +1034,16 @@ describe("lazy collection registry", () => {
         LTC: 3.02608794,
       },
       techniques: {
-        aes: 2,
+        aes: 3,
         "ascii-private-key": 1,
         atbash: 14,
-        base64: 1,
+        base64: 2,
         beaufort: 1,
         binary: 5,
         bip38: 4,
-        caesar: 1,
+        caesar: 2,
         "hash-collision": 5,
-        "hidden-seed-words": 17,
+        "hidden-seed-words": 18,
         "masked-key-range": 256,
         "md5-to-bip39-entropy": 139,
         morse: 3,
@@ -1100,7 +1102,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(550);
+    ).toBe(551);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -1127,6 +1129,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(317);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(318);
   });
 });
