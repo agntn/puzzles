@@ -252,7 +252,7 @@ const PRESENTATION: Readonly<
     sample: "powerful-moss",
     chains: ["base"],
     blurb:
-      "Twelve songs on Donkey Kong Country 2 soundfonts and a twelve-word seed somewhere in them. The prize waits in a contract on Base that opens only for the wallet the seed derives.",
+      "Twelve songs on Donkey Kong Country 2 soundfonts and a twelve-word seed somewhere in them. The prize sat in a contract on Base that opened only for the wallet the seed derives, until somebody opened it in October 2026.",
   },
   "proof-of-writing": {
     icon: "i-lucide-pen-line",
