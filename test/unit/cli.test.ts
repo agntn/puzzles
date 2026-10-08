@@ -915,6 +915,8 @@ describe.concurrent("puzzles CLI", () => {
       ["list", "--withPubkey"],
       ["show", "--allTransactions"],
       ["verify", "--al"],
+      ["author", "--foo"],
+      ["solver", "--foo"],
     ]) {
       await expect(failure(...args)).resolves.toEqual({
         code: 1,

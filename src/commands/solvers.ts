@@ -1,6 +1,18 @@
 import { defineTool, Type } from "@agntn/tools";
 import { closed, plainWord } from "./filters.ts";
 import { lines } from "./output.ts";
+import { solverTool } from "../tool-operations.ts";
+
+/** `puzzles_solver` itself, with the dashed word refused before it becomes a key. */
+export const solver = defineTool({
+  name: "puzzles_solver",
+  title: "Puzzle solver",
+  description: "Show one solver by solver key or puzzle identifier",
+  effect: "read",
+  input: closed({ key: Type.String({ description: "Solver key, or a puzzle identifier" }) }),
+  cli: { command: "solver", positional: ["key"] },
+  execute: (args) => solverTool(plainWord(args.key)),
+});
 
 export default defineTool({
   name: "puzzles_solvers",

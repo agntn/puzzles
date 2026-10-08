@@ -1,6 +1,18 @@
 import { defineTool, Type } from "@agntn/tools";
 import { closed, plainWord } from "./filters.ts";
 import { lines } from "./output.ts";
+import { authorTool } from "../tool-operations.ts";
+
+/** `puzzles_author` itself, with the dashed word refused before it becomes a key. */
+export const author = defineTool({
+  name: "puzzles_author",
+  title: "Puzzle author",
+  description: "Show one author by author or collection key",
+  effect: "read",
+  input: closed({ key: Type.String({ description: "Author key, or a collection key" }) }),
+  cli: { command: "author", positional: ["key"] },
+  execute: (args) => authorTool(plainWord(args.key)),
+});
 
 export default defineTool({
   name: "puzzles_authors",
