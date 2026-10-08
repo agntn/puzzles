@@ -536,9 +536,9 @@ function loadedUrls(binRun: BinRun, label: string): string[] {
 }
 
 /**
- * citty resolves every subcommand to print the usage, for `--help` and `-h`, and again to look for
- * an alias when the command is unknown, so a static import inside `mcp` or `verify` would load the
- * whole MCP server or the verification crypto on each of those paths. The child runs under the
+ * `runCli` builds every command from its definition before it reads the line, for `--help`, `-h`
+ * and an unknown command alike, so a static import inside a command would load the whole MCP
+ * server, a collection or the verification crypto on each of those paths. The child runs under the
  * load hook and reports every module on exit.
  *
  * @param {string} binPath - The packed bin file.
@@ -553,7 +553,9 @@ async function assertHelpStaysLight(binPath: string): Promise<void> {
     const label = `puzzles ${usage.args.join(" ")}`;
     const binRun = await runBin(binPath, usage.args);
     assert.equal(binRun.code, usage.code, `${label} exited ${binRun.code}`);
-    assert.match(binRun.stdout, /mcp/u, `${label} prints the usage naming the mcp command`);
+    if (usage.code === 0) {
+      assert.match(binRun.stdout, /mcp/u, `${label} prints the usage naming the mcp command`);
+    }
     const strings = loadedUrls(binRun, label);
     assert.deepEqual(
       /* pnpm's store paths carry peer hashes, so only the package directory itself counts as the SDK. */
@@ -565,15 +567,17 @@ async function assertHelpStaysLight(binPath: string): Promise<void> {
       strings.filter(
         (url) =>
           url.startsWith(packageRootUrl) &&
-          /dist\/(?:mcp|tools)\.mjs/u.test(url.slice(packageRootUrl.length)),
+          /dist\/mcp\.mjs/u.test(url.slice(packageRootUrl.length)),
       ),
       [],
-      `${label} must not load the server entry or the tool definitions`,
+      `${label} must not load the server entry`,
     );
     assert.deepEqual(
-      strings.filter((url) => url.includes("/node_modules/@agntn/tools/")),
+      strings.filter((url) =>
+        /\/node_modules\/@agntn\/tools\/dist\/(?:ai|h3|mcp|omp|pi)\.mjs$/u.test(url),
+      ),
       [],
-      `${label} must not load the tool adapters`,
+      `${label} must not load a host adapter`,
     );
     assert.deepEqual(
       strings.filter((url) => url.startsWith(`${packageRootUrl}dist/collections/`)),

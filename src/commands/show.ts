@@ -1,36 +1,34 @@
-import { defineCommand } from "citty";
-import { jsonArg, printLine } from "./output.ts";
-import { requirePuzzle } from "../core/dataset.ts";
-import { requireCollection } from "../core/registry.ts";
-import { formatPuzzleRecord, toJson } from "../core/utils.ts";
+import { defineTool, Type } from "@agntn/tools";
+import { closed, plainWord } from "./filters.ts";
+import { lines } from "./output.ts";
 
-export default defineCommand({
-  meta: {
-    name: "show",
-    description: "Show one puzzle by universal identifier",
-  },
-  args: {
-    id: { type: "positional", description: "Puzzle identifier, for example bits/90" },
-    "all-transactions": {
-      type: "boolean",
-      description: "List every transaction, not one line per run of small increases",
-    },
-    ...jsonArg,
-  },
-  async run({ args }) {
-    const puzzle = await requirePuzzle(args.id ?? "");
-    if (args.json) {
-      printLine(toJson(puzzle));
-      return;
-    }
+export default defineTool({
+  name: "puzzles_show",
+  title: "Show a puzzle",
+  description: "Show one puzzle by universal identifier",
+  effect: "read",
+  input: closed({
+    id: Type.String({ description: "Puzzle identifier, for example bits/90" }),
+    allTransactions: Type.Optional(
+      Type.Boolean({
+        description: "List every transaction, not one line per run of small increases",
+      }),
+    ),
+  }),
+  cli: { command: "show", positional: ["id"] },
+  async execute(args) {
+    plainWord(args.id);
+    const { requirePuzzle } = await import("../core/dataset.ts");
+    const { requireCollection } = await import("../core/registry.ts");
+    const { formatPuzzleRecord } = await import("../core/utils.ts");
+    const puzzle = await requirePuzzle(args.id);
     const collection = await requireCollection(puzzle.collection());
-    printLine(
-      formatPuzzleRecord(
-        puzzle,
-        collection.hints,
-        collection.techniques,
-        args["all-transactions"] === true,
-      ),
+    const record = formatPuzzleRecord(
+      puzzle,
+      collection.hints,
+      collection.techniques,
+      args.allTransactions === true,
     );
+    return lines([record], puzzle);
   },
 });

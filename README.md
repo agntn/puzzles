@@ -68,10 +68,12 @@ source: https://bitcointalk.org/index.php?topic=293382.0
 
 | Command                       | What it prints                                                                                                                         |
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `puzzles stats`               | Totals and status counts. `--json` adds the prize sums                                                                                 |
+| `puzzles stats`               | Totals, status counts, prize sums and the data version                                                                                 |
 | `puzzles collections`         | One row per collection: key, counts, author                                                                                            |
 | `puzzles authors [key]`       | One row per author, or one author's record with its sourced facts                                                                      |
+| `puzzles author <key>`        | One author's record, straight from the `puzzles_author` tool                                                                           |
 | `puzzles solvers [key]`       | One row per named solver, or one solver's record: every solve, profiles and sourced facts                                              |
+| `puzzles solver <key>`        | One solver's record, straight from the `puzzles_solver` tool                                                                           |
 | `puzzles show <id>`           | One puzzle's record: key material, transactions, hints and links. `--json` for the data                                                |
 | `puzzles hints <id>`          | The collection's hints, the puzzle's own, then its hint files. `--json` for both                                                       |
 | `puzzles stages <id>`         | The stages of a multi-stage puzzle with their pages, files and published answers. `--json` for the list                                |
@@ -84,7 +86,7 @@ source: https://bitcointalk.org/index.php?topic=293382.0
 | `puzzles export`              | The whole dataset with its `data_version`                                                                                              |
 | `puzzles mcp`                 | The MCP server over stdio                                                                                                              |
 
-`--json` is the same serializer everywhere, `bigint` as strings and absent fields left out. The flags and exit codes are in the [CLI guide](https://puzzles.agntn.dev/guide/cli).
+`--json` prints the data behind the text, `bigint` as strings and absent fields left out. The commands come from the same tool definitions the agents get, so a typo in a flag fails here just like it fails for a model. The flags and exit codes are in the [CLI guide](https://puzzles.agntn.dev/guide/cli).
 
 ## 🧠 Library
 

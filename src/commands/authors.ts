@@ -1,27 +1,28 @@
-import { defineCommand } from "citty";
-import { jsonArg, printLine } from "./output.ts";
-import { authors, getAuthor, requireAuthor } from "../core/dataset.ts";
-import { getCollection } from "../core/registry.ts";
-import { formatAuthor, formatAuthorRecord, toJson } from "../core/utils.ts";
+import { defineTool, Type } from "@agntn/tools";
+import { closed, plainWord } from "./filters.ts";
+import { lines } from "./output.ts";
 
-export default defineCommand({
-  meta: {
-    name: "authors",
-    description: "List every author, or show one by author or collection key",
-  },
-  args: {
-    key: { type: "positional", description: "Author key, or a collection key", required: false },
-    ...jsonArg,
-  },
-  async run({ args }) {
+export default defineTool({
+  name: "puzzles_authors",
+  title: "Puzzle authors",
+  description: "List every author, or show one by author or collection key",
+  effect: "read",
+  input: closed({
+    key: Type.Optional(Type.String({ description: "Author key, or a collection key" })),
+  }),
+  cli: { command: "authors", positional: ["key"] },
+  async execute(args) {
+    plainWord(args.key);
+    const { authors, getAuthor, requireAuthor } = await import("../core/dataset.ts");
+    const { getCollection } = await import("../core/registry.ts");
+    const { formatAuthor, formatAuthorRecord } = await import("../core/utils.ts");
     if (args.key === undefined) {
       const entries = await authors();
-      printLine(args.json ? toJson(entries) : entries.map(formatAuthor).join("\n"));
-      return;
+      return lines(entries.map(formatAuthor), entries);
     }
     const fallback =
       (await getAuthor(args.key)) === undefined ? await getCollection(args.key) : undefined;
     const entry = await requireAuthor(fallback?.author.key ?? args.key);
-    printLine(args.json ? toJson(entry) : formatAuthorRecord(entry));
+    return lines([formatAuthorRecord(entry)], entry);
   },
 });

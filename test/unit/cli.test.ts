@@ -1,4 +1,4 @@
-import { execFile } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { copyFileSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -71,6 +71,46 @@ async function stubbed(failing: string, ...args: readonly string[]): Promise<Fai
   } catch (error) {
     const { code, stderr, stdout } = error as Failure;
     return { code, stderr, stdout };
+  }
+}
+
+/*
+ * Starts `puzzles mcp` with the given words and answers its `initialize`. Stdin stays open until
+ * the reply, because the SDK 2 transport drops a call once its input closes.
+ */
+async function initialize(
+  ...args: readonly string[]
+): Promise<{ readonly serverInfo: { readonly name: string; readonly description?: string } }> {
+  const child = spawn(process.execPath, ["src/cli.ts", "mcp", ...args], { cwd: process.cwd() });
+  const request = {
+    jsonrpc: "2.0",
+    id: 1,
+    method: "initialize",
+    params: {
+      protocolVersion: "2025-06-18",
+      capabilities: {},
+      clientInfo: { name: "cli-test", version: "0" },
+    },
+  };
+  child.stdout.setEncoding("utf8");
+  child.stdin.write(`${JSON.stringify(request)}\n`);
+  let output = "";
+  try {
+    return await new Promise((resolve, reject) => {
+      child.once("error", reject);
+      child.once("exit", (code) => {
+        reject(new Error(`puzzles mcp exited ${code} before answering`));
+      });
+      child.stdout.on("data", (chunk: string) => {
+        output += chunk;
+        const line = output.split("\n").find((entry) => entry.includes('"id":1'));
+        if (line !== undefined) {
+          resolve((JSON.parse(line) as { result: Awaited<ReturnType<typeof initialize>> }).result);
+        }
+      });
+    });
+  } finally {
+    child.kill();
   }
 }
 
@@ -303,6 +343,16 @@ describe.concurrent("puzzles CLI", () => {
     expect([gone.code, ...statuses(gone)]).toEqual([0, "UNREACHABLE puzzle", "NO_ORIGIN solution"]);
     expect(gone.stdout).toContain("HTTP 404");
     expect(down.stdout).toContain("fetch failed");
+  });
+
+  it("refuses --read with --json before a byte reaches stdout", async () => {
+    await expect(
+      failure("assets", "gsmg", "--read", "assets/gsmg/phase2.txt", "--json"),
+    ).resolves.toEqual({
+      code: 1,
+      stdout: "",
+      stderr: "Invalid read: writes the file's bytes to stdout, so it takes no --json\n",
+    });
   });
 
   it("refuses --check together with --live", async () => {
@@ -641,10 +691,10 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it.each([
-    ["--limit", "0", "Invalid limit: expected an integer of 1 or more"],
-    ["--limit", "two", "Invalid limit: expected an integer of 1 or more"],
-    ["--limit", "1.5", "Invalid limit: expected an integer of 1 or more"],
-    ["--offset", "-1", "Invalid offset: expected an integer of 0 or more"],
+    ["--limit", "0", "Invalid arguments at /limit: must be >= 1"],
+    ["--limit", "two", "Invalid arguments at /limit: must be integer"],
+    ["--limit", "1.5", "Invalid arguments at /limit: must be integer"],
+    ["--offset", "-1", "Invalid arguments at /offset: must be >= 0"],
   ])("refuses %s %s instead of paging by NaN", async (flag, value, message) => {
     await expect(failure("list", "bits", flag, value)).resolves.toEqual({
       code: 1,
@@ -660,13 +710,12 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("lists every registered collection", async () => {
-    const result = await json<readonly { readonly key: string; readonly total: number }[]>(
-      "collections",
-      "--json",
-    );
+    const { collections } = await json<{
+      readonly collections: readonly { readonly key: string; readonly total: number }[];
+    }>("collections", "--json");
 
-    expect(result).toHaveLength(46);
-    expect(result.map((entry) => entry.key)).toContain("hash-collision");
+    expect(collections).toHaveLength(46);
+    expect(collections.map((entry) => entry.key)).toContain("hash-collision");
   });
 
   it("lists authors and shows one, by author key or collection key", async () => {
@@ -693,6 +742,20 @@ describe.concurrent("puzzles CLI", () => {
     expect(missing.code).toBe(1);
     expect(missing.stderr).toMatch(
       /^Unknown author: nobody\. Known authors: ktimesg, bobby-lee, /u,
+    );
+  });
+
+  it("runs the author and solver tools as commands of their own", async () => {
+    const author = (await puzzles("author", "warp")).split("\n");
+    const solver = await json<{ readonly solver: { readonly key: string } }>(
+      "solver",
+      "bits/135",
+      "--json",
+    );
+
+    expect(author[0]).toBe("keybase\tKeybase\torganization");
+    expect(solver.solver.key).toBe(
+      (await json<{ readonly key: string }>("solvers", "bits/135", "--json")).key,
     );
   });
 
@@ -804,7 +867,7 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("names the known collections when a filter is not one", async () => {
-    const result = await failure("list", "--collection", "bitcoin");
+    const result = await failure("list", "bitcoin");
 
     expect(result.code).toBe(1);
     expect(result.stderr.trim()).toBe(
@@ -813,7 +876,7 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("quotes an empty collection filter instead of losing it in the sentence", async () => {
-    const result = await failure("list", "--collection", "");
+    const result = await failure("list", "");
 
     expect(result.code).toBe(1);
     expect(result.stderr.trim()).toBe(
@@ -826,17 +889,17 @@ describe.concurrent("puzzles CLI", () => {
       code: 1,
       stdout: "",
       stderr:
-        "Invalid option: unknown --key, expected one of --all, --collection, --address, --chain, --status, --technique, --with-pubkey, --quiet, --json\n",
+        'Invalid arguments: unknown option "--key"; takes --all, --collection, --address, --chain, --status, --technique, --with-pubkey, --quiet (-q), --json\n',
     });
     await expect(failure("show", "bits/1", "--jsn")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: "Invalid option: unknown --jsn, expected one of --all-transactions, --json\n",
+      stderr: 'Invalid arguments: unknown option "--jsn"; takes --all-transactions, --json\n',
     });
     await expect(failure("stats", "-x")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: "Invalid option: unknown -x, expected one of --json\n",
+      stderr: 'Invalid arguments: unknown option "-x"; takes --json\n',
     });
   });
 
@@ -844,27 +907,41 @@ describe.concurrent("puzzles CLI", () => {
     const result = await failure("list", "--limitt", "3");
 
     expect(result.code).toBe(1);
-    expect(result.stderr).toMatch(/^Invalid option: unknown --limitt, expected one of /u);
+    expect(result.stderr).toMatch(/^Invalid arguments: unknown option "--limitt"; takes /u);
+  });
+
+  it("refuses a misspelled flag that would otherwise land in the positional", async () => {
+    for (const args of [
+      ["list", "--withPubkey"],
+      ["show", "--allTransactions"],
+      ["verify", "--al"],
+    ]) {
+      await expect(failure(...args)).resolves.toEqual({
+        code: 1,
+        stdout: "",
+        stderr: `Invalid arguments: unknown option ${JSON.stringify(args[1])}\n`,
+      });
+    }
   });
 
   it("refuses a positional argument the command has no place for", async () => {
-    await expect(failure("show", "bits/1", "bits/2")).resolves.toEqual({
-      code: 1,
-      stdout: "",
-      stderr: 'Invalid argument: unexpected "bits/2", show takes ID\n',
-    });
-    await expect(failure("stats", "bits")).resolves.toEqual({
-      code: 1,
-      stdout: "",
-      stderr: 'Invalid argument: unexpected "bits", stats takes no positional argument\n',
-    });
+    for (const args of [
+      ["show", "bits/1", "bits/2"],
+      ["stats", "bits"],
+    ]) {
+      await expect(failure(...args)).resolves.toEqual({
+        code: 1,
+        stdout: "",
+        stderr: "Invalid arguments: 1 unexpected positional argument\n",
+      });
+    }
   });
 
-  it("still takes every spelling citty accepts for a declared option", async () => {
+  it("takes a short flag, a negated boolean and an option with its value after =", async () => {
     await expect(puzzles("verify", "bits/1", "-q")).resolves.toBe("");
-    await expect(puzzles("verify", "bits/1", "--no-json")).resolves.toBe("OK\tbits/1");
+    await expect(puzzles("verify", "bits/1", "--no-quiet")).resolves.toBe("OK\tbits/1");
     await expect(
-      json<readonly unknown[]>("list", "--withPubkey", "--limit=1", "--json"),
+      json<readonly unknown[]>("list", "--with-pubkey", "--limit=1", "--json"),
     ).resolves.toHaveLength(1);
   });
 
@@ -1085,7 +1162,7 @@ describe.concurrent("puzzles CLI", () => {
     });
   });
 
-  it("prints the usage and citty's errors without colors into a pipe", async () => {
+  it("prints the usage and its errors without colors, even for a terminal", async () => {
     const switches = new Set(["CI", "FORCE_COLOR", "NO_COLOR", "NODE_DISABLE_COLORS", "TEST"]);
     const env = {
       ...Object.fromEntries(Object.entries(process.env).filter(([key]) => !switches.has(key))),
@@ -1108,9 +1185,13 @@ describe.concurrent("puzzles CLI", () => {
     const usage = await run("verify", "--help");
     const unknown = await run("nope");
 
-    expect(help.stdout).toContain("USAGE puzzles assets|authors|balance|");
-    expect(usage.stdout).toContain("--all    Verify every puzzle");
-    expect(unknown).toMatchObject({ code: 1, stderr: "Unknown command nope\n" });
+    expect(help.stdout).toContain("USAGE puzzles <command> [OPTIONS]");
+    expect(usage.stdout).toContain("--[no-]all                 Verify every puzzle");
+    expect(unknown).toEqual({
+      code: 1,
+      stdout: "",
+      stderr: 'Unknown command "nope"\nRun puzzles --help for the commands\n',
+    });
     for (const output of [help, usage, unknown]) {
       expect(output.stdout + output.stderr).not.toContain("\u001B");
     }
@@ -1119,20 +1200,29 @@ describe.concurrent("puzzles CLI", () => {
   it("ends every usage line at its last word", async () => {
     const help = await puzzles("--help");
     const list = await puzzles("list", "--help");
-    const unknown = await failure("nope");
 
     expect(list).toContain("--technique=<technique>");
-    expect(unknown.stdout).toContain("USAGE puzzles assets|authors|balance|");
-    for (const usage of [help, list, unknown.stdout]) {
+    for (const usage of [help, list]) {
       expect(usage.split("\n").filter((line) => line.trimEnd() !== line)).toEqual([]);
     }
   });
 
-  it("keeps an identifier with a line break and an escape on one line", async () => {
+  it("serves MCP with the site's pitch and shrugs off a stray flag from a client config", async () => {
+    for (const args of [[], ["--stray"]]) {
+      const { serverInfo } = await initialize(...args);
+      expect(serverInfo.name).toBe("puzzles");
+      expect(serverInfo.description).toContain("Check a key before you celebrate");
+    }
+    await expect(puzzles("mcp", "--help")).resolves.toContain(
+      "Run the puzzles MCP server over stdio",
+    );
+  });
+
+  it("keeps an identifier with a line break on one line and drops its escape", async () => {
     await expect(failure("show", "nope\n\u001B[31mx")).resolves.toEqual({
       code: 1,
       stdout: "",
-      stderr: `Puzzle not found: nope  [31mx. Known collections: ${collectionKeys().join(", ")}\n`,
+      stderr: `Puzzle not found: nope x. Known collections: ${collectionKeys().join(", ")}\n`,
     });
   });
 });

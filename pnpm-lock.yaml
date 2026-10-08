@@ -37,17 +37,14 @@ importers:
         specifier: 0.6.1
         version: 0.6.1(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.1(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@oh-my-pi/pi-coding-agent@18.2.7)
       '@agntn/tools':
-        specifier: 0.2.1
-        version: 0.2.1(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.1(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@modelcontextprotocol/server@2.2.0)(@oh-my-pi/pi-coding-agent@18.2.7)
+        specifier: 0.2.2
+        version: 0.2.2(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.1(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@modelcontextprotocol/server@2.2.0)(@oh-my-pi/pi-coding-agent@18.2.7)
       '@modelcontextprotocol/server':
         specifier: 2.2.0
         version: 2.2.0
       '@scure/base':
         specifier: 2.4.0
         version: 2.4.0
-      citty:
-        specifier: 0.2.2
-        version: 0.2.2
     devDependencies:
       '@agntn/curves':
         specifier: 0.1.1
@@ -302,8 +299,8 @@ packages:
       h3-mcp:
         optional: true
 
-  '@agntn/tools@0.2.1':
-    resolution: {integrity: sha512-+wvN9R6NRozD4Mk9w9I9qJZIUKkPhalwVcAcvvx9lG2Msp0CdOVrVVusPK58MrGBvmUfhJWu+Re4E0ZCmpXU6w==}
+  '@agntn/tools@0.2.2':
+    resolution: {integrity: sha512-gTXdnJCsQnjQ5pgmRaWGdSIRkFhKyfiNZvXiTI01Er1Y/NaM24GD+jy3N/5KijBB25gjikIxDg7ZN6z4oxes+A==}
     engines: {node: '>=26'}
     peerDependencies:
       '@earendil-works/pi-coding-agent': '>=0.84.2 <2'
@@ -4243,7 +4240,7 @@ snapshots:
       '@modelcontextprotocol/server': 2.2.0
       '@oh-my-pi/pi-coding-agent': 18.2.7
 
-  '@agntn/tools@0.2.1(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.1(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@modelcontextprotocol/server@2.2.0)(@oh-my-pi/pi-coding-agent@18.2.7)':
+  '@agntn/tools@0.2.2(@earendil-works/pi-coding-agent@0.85.1(@modelcontextprotocol/sdk@1.30.1(zod@4.6.5))(ws@8.21.3)(zod@4.6.5))(@modelcontextprotocol/server@2.2.0)(@oh-my-pi/pi-coding-agent@18.2.7)':
     optionalDependencies:
       '@earendil-works/pi-coding-agent': 0.85.1(@modelcontextprotocol/sdk@1.30.1(zod@4.6.5))(ws@8.21.3)(zod@4.6.5)
       '@modelcontextprotocol/server': 2.2.0

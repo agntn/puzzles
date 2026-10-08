@@ -55,12 +55,14 @@ function described(tool: ToolFacts) {
 export const statsToolDefinition = defineTool({
   ...described(facts.tools.stats),
   input: Type.Object({}),
+  cli: { description: "Print aggregate statistics for every collection" },
   execute: () => statsTool(),
 });
 
 export const collectionsToolDefinition = defineTool({
   ...described(facts.tools.collections),
   input: Type.Object({}),
+  cli: { description: "List every registered collection" },
   execute: () => collectionsTool(),
 });
 
@@ -73,6 +75,7 @@ export const authorsToolDefinition = defineTool({
 export const authorToolDefinition = defineTool({
   ...described(facts.tools.author),
   input: closed({ key: Type.String(parameters.author) }),
+  cli: { description: "Show one author by author or collection key", positional: ["key"] },
   execute: (params) => authorTool(params.key),
 });
 
@@ -85,6 +88,7 @@ export const solversToolDefinition = defineTool({
 export const solverToolDefinition = defineTool({
   ...described(facts.tools.solver),
   input: closed({ key: Type.String(parameters.solver) }),
+  cli: { description: "Show one solver by solver key or puzzle identifier", positional: ["key"] },
   execute: (params) => solverTool(params.key),
 });
 

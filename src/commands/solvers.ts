@@ -1,28 +1,25 @@
-import { defineCommand } from "citty";
-import { jsonArg, printLine } from "./output.ts";
-import { requireSolver, resolveSolverKey, solvers } from "../core/dataset.ts";
-import { formatSolver, formatSolverRecord, toJson } from "../core/utils.ts";
+import { defineTool, Type } from "@agntn/tools";
+import { closed, plainWord } from "./filters.ts";
+import { lines } from "./output.ts";
 
-export default defineCommand({
-  meta: {
-    name: "solvers",
-    description: "List every named solver, or show one by solver key or puzzle identifier",
-  },
-  args: {
-    key: {
-      type: "positional",
-      description: "Solver key, or a puzzle identifier",
-      required: false,
-    },
-    ...jsonArg,
-  },
-  async run({ args }) {
+export default defineTool({
+  name: "puzzles_solvers",
+  title: "Puzzle solvers",
+  description: "List every named solver, or show one by solver key or puzzle identifier",
+  effect: "read",
+  input: closed({
+    key: Type.Optional(Type.String({ description: "Solver key, or a puzzle identifier" })),
+  }),
+  cli: { command: "solvers", positional: ["key"] },
+  async execute(args) {
+    plainWord(args.key);
+    const { requireSolver, resolveSolverKey, solvers } = await import("../core/dataset.ts");
+    const { formatSolver, formatSolverRecord } = await import("../core/utils.ts");
     if (args.key === undefined) {
       const entries = await solvers();
-      printLine(args.json ? toJson(entries) : entries.map(formatSolver).join("\n"));
-      return;
+      return lines(entries.map(formatSolver), entries);
     }
     const entry = await requireSolver(await resolveSolverKey(args.key));
-    printLine(args.json ? toJson(entry) : formatSolverRecord(entry));
+    return lines([formatSolverRecord(entry)], entry);
   },
 });
