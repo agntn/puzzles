@@ -353,6 +353,15 @@ export const genesisBlock = puzzle({
       ),
       { date: "2026-10-06" },
     ),
+    official(
+      "1) b; 2) b; 3) Y; 4) d. 1) Y; 2) -; 3) c; 4) N.",
+      "https://mempool.space/tx/9750cd4ab471da045914e964c7c9100bc6d975426a6e07c22a3194c69fe67e52",
+      confirmation(
+        "https://blockstream.info/tx/9750cd4ab471da045914e964c7c9100bc6d975426a6e07c22a3194c69fe67e52",
+        'OP_RETURN spending the 1k output that e6fd1907568e6afadddc6946837be741b88876d9fcb5fb39e703ba21c4de0270 paid to the author address. Its first line answers that transaction\'s four questions about cosigner 0852014c: b, mempool.space supplied the raw block hex; b, it was copied from a browser HTML page; yes, the hex was one continuous run with no newline inside; d, "other" to how the earlier at most 32 and outside 18 to 32 answers fit together. Its second line answers the four questions of b94390c4f3da104ad344fe29b40b04e37efb578b3589bb84189d5f102ff33ada, which paid 9k and no 1k: yes, the hex was the usual lowercase raw block hex of length 570, the bytes of mempool.space /api/block/.../raw; "-" as asked after a yes; c, the hashed text has an even length of 66 or more; no, the cut -b range did not run past the end of the string. Whitespace normalized.',
+      ),
+      { date: "2026-10-07" },
+    ),
   ],
 });
 
