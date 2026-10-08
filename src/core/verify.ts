@@ -58,6 +58,7 @@ type Wallets = Pick<
   | "addressFromPrivateKey"
   | "addressesEqual"
   | "isUnsupportedAddressKind"
+  | "loadWordlist"
   | "privateKeyFromEntropy"
   | "privateKeyFromPassphrase"
   | "privateKeyFromSeed"
@@ -103,12 +104,12 @@ function messageOf(error: unknown, fallback: string): string {
   return error instanceof Error ? error.message : fallback;
 }
 
-function resolveSeedKey(
+async function resolveSeedKey(
   seed: Extract<Secret, { kind: "seed" }>,
   chain: Chain,
   format: PubkeyFormat,
   decoders: Wallets,
-): ResolvedKey | UnresolvedKey {
+): Promise<ResolvedKey | UnresolvedKey> {
   if (seed.path === undefined) {
     return unavailable("Seed has no derivation path");
   }
@@ -116,7 +117,15 @@ function resolveSeedKey(
     return unavailable("Seed requires an unknown passphrase");
   }
   try {
-    const hex = decoders.privateKeyFromSeed(seed.phrase, seed.path, chain, seed.passphrase?.Known);
+    const wordlist =
+      seed.language === undefined ? undefined : await decoders.loadWordlist(seed.language);
+    const hex = decoders.privateKeyFromSeed(
+      seed.phrase,
+      seed.path,
+      chain,
+      seed.passphrase?.Known,
+      wordlist,
+    );
     if (hex === undefined) {
       return unavailable(`Seed derivation is not supported for ${chain}`);
     }
@@ -153,7 +162,7 @@ function hexFormat(puzzle: Puzzle, hex: string, decoders: Wallets): PubkeyFormat
   return PubkeyFormat.Compressed;
 }
 
-function resolveKey(puzzle: Puzzle, decoders: Wallets): ResolvedKey | UnresolvedKey {
+async function resolveKey(puzzle: Puzzle, decoders: Wallets): Promise<ResolvedKey | UnresolvedKey> {
   const secret = secretOf(puzzle.keyData());
   if (secret === undefined) {
     return unavailable("Puzzle has no private key");
@@ -213,11 +222,11 @@ function brainwalletOf(
   return undefined;
 }
 
-function rebuildFromEntropy(
+async function rebuildFromEntropy(
   puzzle: Puzzle,
   seed: Seed & { readonly entropy: NonNullable<Seed["entropy"]> },
   decoders: Wallets,
-): Rebuilt {
+): Promise<Rebuilt> {
   const chain = puzzle.chain();
   const recipe = "bip39-entropy";
   const passphrase = seedPassphrase(seed);
@@ -225,11 +234,14 @@ function rebuildFromEntropy(
     return { recipe, key: unavailable("Entropy seed requires an unknown passphrase") };
   }
   try {
+    const wordlist =
+      seed.language === undefined ? undefined : await decoders.loadWordlist(seed.language);
     const rebuilt = decoders.privateKeyFromEntropy(
       seed.entropy.hash,
       seed.path,
       chain,
       passphrase?.Known,
+      wordlist,
     );
     return rebuilt === undefined
       ? { recipe, key: unavailable(`Seed derivation is not supported for ${chain}`) }
@@ -353,7 +365,7 @@ function checkRecipe(puzzle: Puzzle, crypto: Wallets, rebuilt: Rebuilt): RecipeR
  */
 export async function verify(puzzle: Puzzle): Promise<VerifyResult> {
   const crypto = await (wallets ??= import("./crypto.ts"));
-  const published = resolveKey(puzzle, crypto);
+  const published = await resolveKey(puzzle, crypto);
   const checked = checkKey(puzzle, crypto, published);
   const rebuilt = await rebuild(puzzle, crypto);
   const id = puzzle.id();

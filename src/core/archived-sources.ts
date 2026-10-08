@@ -149,6 +149,17 @@ export const archivedSources = [
     },
   },
   {
+    file: "liberte-guidant-le-peuple/pascalboyart-2019-01-07",
+    url: "https://www.reddit.com/r/Bitcoin/comments/adc601/street_art_treasure_hunt_with_a_bitcoin_puzzle/",
+    author: "u/Pascalboyart",
+    date: "2019-01-07",
+    archive: {
+      url: "https://web.archive.org/web/20230610212737/https://old.reddit.com/r/Bitcoin/comments/adc601/street_art_treasure_hunt_with_a_bitcoin_puzzle/",
+      date: "2023-06-10T21:27:37Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "doges-gambit/cryptopuzzlers-2020-12-11",
     url: "https://www.reddit.com/r/dogecoin/comments/kbcptp/10000_doge_reward_new_cryptocurrency_video_puzzle/",
     author: "u/CryptoPuzzlers",

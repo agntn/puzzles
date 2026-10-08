@@ -1,3 +1,4 @@
+import type { BIP39Language } from "@agntn/keys/bip39";
 import { base58, bech32 } from "@scure/base";
 import type { Chain } from "./chains.ts";
 import type { Technique } from "./technique.ts";
@@ -212,6 +213,8 @@ export interface Entropy {
 /** BIP39 seed material and its derivation path. */
 export interface Seed {
   readonly entropy?: Entropy;
+  /** The BIP39 word list the phrase comes from, when it isn't English. */
+  readonly language?: BIP39Language;
   /** The BIP39 passphrase published with the phrase. */
   readonly passphrase?: string;
   readonly path?: string;
@@ -262,6 +265,7 @@ export type Secret =
       readonly phrase: string;
       readonly path?: string | undefined;
       readonly passphrase?: Passphrase | undefined;
+      readonly language?: BIP39Language | undefined;
     }
   | { readonly kind: "mini"; readonly mini: string };
 
@@ -302,6 +306,7 @@ function seedSecret(key: KeyData): Secret | undefined {
     phrase: key.seed.phrase,
     path: key.seed.path,
     passphrase: seedPassphrase(key.seed),
+    language: key.seed.language,
   };
 }
 
@@ -615,6 +620,16 @@ export class Key {
    */
   seed(phrase: string, path?: string, passphrase?: string): Key {
     return this.#with({ seed: defined({ ...this.#data.seed, phrase, path, passphrase }) });
+  }
+
+  /**
+   * Records the BIP39 word list a phrase comes from, for a phrase that isn't English.
+   *
+   * @param {BIP39Language} value - Word list name, such as `french`.
+   * @returns {Key} A new builder with the value recorded.
+   */
+  language(value: BIP39Language): Key {
+    return this.#with({ seed: { ...this.#data.seed, language: value } });
   }
 
   /**
