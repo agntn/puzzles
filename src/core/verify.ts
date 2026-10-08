@@ -222,11 +222,11 @@ function brainwalletOf(
   return undefined;
 }
 
-function rebuildFromEntropy(
+async function rebuildFromEntropy(
   puzzle: Puzzle,
   seed: Seed & { readonly entropy: NonNullable<Seed["entropy"]> },
   decoders: Wallets,
-): Rebuilt {
+): Promise<Rebuilt> {
   const chain = puzzle.chain();
   const recipe = "bip39-entropy";
   const passphrase = seedPassphrase(seed);
@@ -234,11 +234,14 @@ function rebuildFromEntropy(
     return { recipe, key: unavailable("Entropy seed requires an unknown passphrase") };
   }
   try {
+    const wordlist =
+      seed.language === undefined ? undefined : await decoders.loadWordlist(seed.language);
     const rebuilt = decoders.privateKeyFromEntropy(
       seed.entropy.hash,
       seed.path,
       chain,
       passphrase?.Known,
+      wordlist,
     );
     return rebuilt === undefined
       ? { recipe, key: unavailable(`Seed derivation is not supported for ${chain}`) }

@@ -1,5 +1,5 @@
 import { type AbstractBlockchain, getBlockchainPath } from "@agntn/keys";
-import { entropyToMnemonic } from "@agntn/keys/bip39";
+import { bip39, entropyToMnemonic } from "@agntn/keys/bip39";
 
 export { loadWordlist } from "@agntn/keys/bip39";
 import { type BrainwalletRecipe, derive } from "@agntn/keys/brainwallet";
@@ -173,6 +173,7 @@ export function privateKeyFromSeed(
  * @param {string | undefined} path - Derivation path the record holds, when it holds one.
  * @param {Chain} chain - Chain the seed belongs to.
  * @param {string} [passphrase] - BIP39 passphrase, when the seed has one.
+ * @param {readonly string[]} [wordlist] - A list other than English, from `loadWordlist`.
  * @returns {{ readonly hex: string; readonly path: string } | undefined} The private key in hex and the path it came from, or `undefined` when the chain has no seed derivation.
  */
 export function privateKeyFromEntropy(
@@ -180,18 +181,19 @@ export function privateKeyFromEntropy(
   path: string | undefined,
   chain: Chain,
   passphrase?: string,
+  wordlist?: readonly string[],
 ): { readonly hex: string; readonly path: string } | undefined {
   const wallet = walletFor(chain);
   if (wallet === undefined) {
     return undefined;
   }
   const route = path ?? getBlockchainPath(wallet);
-  const hex = privateKeyFromSeed(
-    entropyToMnemonic(Uint8Array.fromHex(hash)),
-    route,
-    chain,
-    passphrase,
-  );
+  const entropy = Uint8Array.fromHex(hash);
+  const phrase =
+    wordlist === undefined
+      ? entropyToMnemonic(entropy)
+      : bip39.entropyToMnemonic(entropy, [...wordlist]);
+  const hex = privateKeyFromSeed(phrase, route, chain, passphrase, wordlist);
   return hex === undefined ? undefined : { hex, path: route };
 }
 

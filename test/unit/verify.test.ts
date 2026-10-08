@@ -352,6 +352,16 @@ describe("Collection.verify", () => {
       verified: true,
       derivedAddress: "1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ",
     });
+    /* No source printed this entropy; it is the phrase's own, read back through the French list. */
+    expect(
+      await verify(
+        record(
+          seed(phrase, "m/44'/0'/0'/0/0")
+            .language("french")
+            .entropy("199e96675bf360b47cd99136be09eec3"),
+        ),
+      ),
+    ).toMatchObject({ verified: true, recipe: { recipe: "bip39-entropy", verified: true } });
     expect(await verify(record(seed(phrase, "m/44'/0'/0'/0/0")))).toMatchObject({
       verified: false,
       unavailable: false,
