@@ -290,6 +290,55 @@ describe("Puzzle.balance", () => {
     expect(balance.confirmed).toBe(1100n);
   });
 
+  it("asks Blockstream first for ten minutes after mempool.space misses", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    const urls = stubFetch((url) =>
+      url.startsWith("https://mempool.space/")
+        ? Promise.reject(new TypeError("fetch failed"))
+        : json({
+            chain_stats: { funded_txo_sum: 1500, spent_txo_sum: 400 },
+            mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
+          }),
+    );
+
+    await bits.balance(1);
+    await bits.balance(2);
+    vi.advanceTimersByTime(10 * 60 * 1000);
+    await bits.balance(3).catch(() => undefined);
+    vi.useRealTimers();
+
+    expect(urls).toEqual([
+      "https://mempool.space/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+      "https://blockstream.info/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+      "https://blockstream.info/api/address/1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "https://mempool.space/api/address/19ZewH8Kk1PDbSNdJ97FP4EiCjTRaZMZQA",
+      "https://blockstream.info/api/address/19ZewH8Kk1PDbSNdJ97FP4EiCjTRaZMZQA",
+    ]);
+  });
+
+  it("goes back to mempool.space as soon as Blockstream gets no answer through", async () => {
+    let down = "https://mempool.space/";
+    const urls = stubFetch((url) =>
+      url.startsWith(down)
+        ? Promise.reject(new TypeError("fetch failed"))
+        : json({
+            chain_stats: { funded_txo_sum: 1500, spent_txo_sum: 400 },
+            mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
+          }),
+    );
+
+    await bits.balance(1);
+    down = "https://blockstream.info/";
+    await bits.balance(2);
+    await bits.balance(3);
+
+    expect(urls.slice(2)).toEqual([
+      "https://blockstream.info/api/address/1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "https://mempool.space/api/address/1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+      "https://mempool.space/api/address/19ZewH8Kk1PDbSNdJ97FP4EiCjTRaZMZQA",
+    ]);
+  });
+
   it("names both hosts when the fallback fails too", async () => {
     stubFetch(() => Promise.reject(new TypeError("fetch failed")));
 

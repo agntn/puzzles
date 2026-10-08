@@ -170,6 +170,54 @@ function translate(
   return new BalanceProviderError(`${lookup} lookup failed: ${redact(message, apiKey)}`);
 }
 
+/** How long a primary that missed a read waits behind its fallback, about one long pass. */
+const BENCH_MS = 10 * 60 * 1000;
+
+/** When each chain's primary goes first again, set while its fallback answers in its place. */
+const benched = new Map<Chain, number>();
+
+/** Forgets every primary waiting behind its fallback, so the next read asks it first again. */
+export function forgetFailedHosts(): void {
+  benched.clear();
+}
+
+/**
+ * Asks both hosts, a benched primary last. Missing a read benches it, answering frees it.
+ *
+ * @param {Chain} chain - Chain of the address.
+ * @param {Readonly<[Explorer, Explorer]>} hosts - The chain's primary, then its fallback.
+ * @param {(open: Explorer) => Promise<T>} read - The read itself, given the provider to open.
+ * @param {(error: unknown, first?: unknown) => BalanceError} fail - Turns a failure into its error.
+ * @returns {Promise<T>} What the first host to answer returned.
+ */
+async function inTurn<T>(
+  chain: Chain,
+  [primary, fallback]: Readonly<[Explorer, Explorer]>,
+  read: (open: Explorer) => Promise<T>,
+  fail: (error: unknown, first?: unknown) => BalanceError,
+): Promise<T> {
+  const primaryFirst = (benched.get(chain) ?? 0) <= Date.now();
+  const [first, second] = primaryFirst ? [primary, fallback] : [fallback, primary];
+  try {
+    return await read(first);
+  } catch (error) {
+    if (!isTransient(error)) {
+      throw fail(error);
+    }
+    try {
+      const value = await read(second);
+      if (primaryFirst) {
+        benched.set(chain, Date.now() + BENCH_MS);
+      } else {
+        benched.delete(chain);
+      }
+      return value;
+    } catch (failure) {
+      throw fail(failure, error);
+    }
+  }
+}
+
 /**
  * Reads one address through the chain's provider, and once through its fallback when that provider
  * gets no answer through. A `baseUrl` names one endpoint, so it has no fallback.
@@ -192,18 +240,16 @@ async function ask<T>(
   if (explorer === undefined) {
     throw new UnsupportedChainError(`Unsupported ${lookup.toLowerCase()} chain: ${chain}`);
   }
+  const fail = (error: unknown, first?: unknown) =>
+    translate(lookup, error, address, config.apiKey, first);
+  const fallback = config.baseUrl === undefined ? fallbacks[chain] : undefined;
+  if (fallback !== undefined) {
+    return inTurn(chain, [explorer, fallback], read, fail);
+  }
   try {
     return await read(explorer);
   } catch (error) {
-    const fallback = fallbacks[chain];
-    if (fallback === undefined || config.baseUrl !== undefined || !isTransient(error)) {
-      throw translate(lookup, error, address, config.apiKey);
-    }
-    try {
-      return await read(fallback);
-    } catch (second) {
-      throw translate(lookup, second, address, config.apiKey, error);
-    }
+    throw fail(error);
   }
 }
 
@@ -243,7 +289,7 @@ export interface AddressState {
   /** Everything the address ever received, in base units, when the explorer counts it. */
   readonly funded?: bigint;
 
-  /** The `@agntn/explorers` provider that answered, `mempool` or `blockstream` after a fallback. */
+  /** The `@agntn/explorers` provider that answered, `mempool` or `blockstream` for Bitcoin. */
   readonly provider: string;
 
   /** When the provider completed the read, as ISO 8601. */
