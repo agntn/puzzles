@@ -138,11 +138,11 @@ class Balance {
 }
 
 interface BalanceOptions {
-  apiKey?: string; // Etherscan on Ethereum, Blockchair on Bitcoin Cash and eCash; Ethereum without one reads Blockscout
-  baseUrl?: string; // override the provider endpoint; Bitcoin then skips its Blockstream fallback
+  apiKey?: string; // Etherscan on Ethereum, Blockchair on Bitcoin Cash, Dogecoin, eCash and Litecoin's fallback; Ethereum without one reads Blockscout
+  baseUrl?: string; // override the provider endpoint; Bitcoin and Litecoin then skip their fallback
   timeout?: number; // milliseconds, provider default 15 s
 }
-// Errors: InvalidAddressError, UnsupportedChainError (Dogecoin, Monero), BalanceProviderError; API keys are redacted.
+// Errors: InvalidAddressError, UnsupportedChainError (Monero), BalanceProviderError; API keys are redacted.
 ```
 
 ## Verification

@@ -23,6 +23,7 @@ export const apiKeyVariables: Readonly<Partial<Record<Chain, string>>> = Object.
   dogecoin: "BLOCKCHAIR_API_KEY",
   ecash: "BLOCKCHAIR_API_KEY",
   ethereum: "ETHERSCAN_API_KEY",
+  litecoin: "BLOCKCHAIR_API_KEY",
 });
 
 /** Transactions one history page holds, the page cap of `@agntn/explorers`. */

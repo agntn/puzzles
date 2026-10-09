@@ -74,18 +74,39 @@ const explorers: Readonly<Record<Chain, Explorer | undefined>> = {
   dogecoin: (config) => new Blockchair(config),
   ecash: (config) => new Blockchair(config),
   ethereum: ethereumExplorer,
-  litecoin: (config) => new Mempool(config),
+  litecoin: (config) => new Mempool(keyless(config)),
   monero: undefined,
 };
 
 /**
- * A second provider a chain falls back to once, when the first one gets no answer through: a
- * timeout, a refused connection, a rate limit or a 5xx. mempool.space drops some Bitcoin lookups of
- * a long pass, and Blockstream reads the same Esplora data from another host.
+ * A second provider a chain falls back to once, when the first gets no answer through: a timeout,
+ * a refused connection, a rate limit or a 5xx. Blockstream serves Bitcoin's Esplora from another
+ * host, and Blockchair stands in for litecoinspace.org, which has gone dark more than once.
  */
 const fallbacks: Readonly<Partial<Record<Chain, Explorer>>> = {
   bitcoin: (config) => new Blockstream(config),
+  litecoin: (config) => new Blockchair(config),
 };
+
+/**
+ * The fallback one lookup may use. A `baseUrl` names one endpoint, so it has none, and a fallback
+ * that can't read keys would answer "no key" for a host that never answered.
+ *
+ * @param {Chain} chain - Chain of the address.
+ * @param {Lookup} lookup - What the read is.
+ * @param {Readonly<ProviderConfig>} config - Provider configuration.
+ * @returns {Explorer | undefined} The fallback, when the lookup has one.
+ */
+function fallbackFor(
+  chain: Chain,
+  lookup: Lookup,
+  config: Readonly<ProviderConfig>,
+): Explorer | undefined {
+  const fallback = config.baseUrl === undefined ? fallbacks[chain] : undefined;
+  return lookup === "Public key" && fallback?.(config).capabilities.pubkeys !== true
+    ? undefined
+    : fallback;
+}
 
 /**
  * The failures another host can get past. An answer that rejects the address or the data would
@@ -220,7 +241,7 @@ async function inTurn<T>(
 
 /**
  * Reads one address through the chain's provider, and once through its fallback when that provider
- * gets no answer through. A `baseUrl` names one endpoint, so it has no fallback.
+ * gets no answer through.
  *
  * @param {Chain} chain - Chain of the address.
  * @param {Lookup} lookup - What the read is, for the message of its failure.
@@ -242,7 +263,7 @@ async function ask<T>(
   }
   const fail = (error: unknown, first?: unknown) =>
     translate(lookup, error, address, config.apiKey, first);
-  const fallback = config.baseUrl === undefined ? fallbacks[chain] : undefined;
+  const fallback = fallbackFor(chain, lookup, config);
   if (fallback !== undefined) {
     return inTurn(chain, [explorer, fallback], read, fail);
   }
@@ -289,7 +310,7 @@ export interface AddressState {
   /** Everything the address ever received, in base units, when the explorer counts it. */
   readonly funded?: bigint;
 
-  /** The `@agntn/explorers` provider that answered, `mempool` or `blockstream` for Bitcoin. */
+  /** The `@agntn/explorers` provider that answered: `mempool`, or the fallback that stood in. */
   readonly provider: string;
 
   /** When the provider completed the read, as ISO 8601. */

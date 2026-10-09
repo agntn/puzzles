@@ -46,6 +46,9 @@ const ethereum = puzzle({
 
 const cashAddress = "bitcoincash:qz3yjg59ypg6jqpwhaxgvjj44jm4hdx0w5wsxw2qez";
 
+/* zden/litecoin-segwit, the Litecoin record these tests read. */
+const litecoinAddress = "LartGjF6UjmvmF1JXBhFf5wtM9uZX7LzeS";
+
 const bitcoinCash = {
   id: "test/bitcoincash",
   chain: "bitcoincash",
@@ -373,11 +376,35 @@ describe("Puzzle.balance", () => {
     expect(urls).toEqual(["https://example.test/api/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"]);
   });
 
-  it("leaves Litecoin with its one provider", async () => {
+  it("asks Blockchair once when litecoinspace.org gets no answer", async () => {
+    vi.stubEnv("BLOCKCHAIR_API_KEY", undefined);
+    const urls = stubFetch((url) =>
+      url.startsWith("https://litecoinspace.org/")
+        ? Promise.reject(new TypeError("fetch failed"))
+        : json({
+            data: { [litecoinAddress]: { address: { balance: 2500, received: 2500, spent: 0 } } },
+            context: { state: 3192145 },
+          }),
+    );
+
+    const balance = await zden.balance("litecoin-segwit");
+
+    expect(urls).toEqual([
+      `https://litecoinspace.org/api/address/${litecoinAddress}`,
+      `https://api.blockchair.com/litecoin/dashboards/address/${litecoinAddress}`,
+    ]);
+    expect(balance.chain).toBe("litecoin");
+    expect(balance.confirmed).toBe(2500n);
+  });
+
+  it("asks only litecoinspace.org for the key a Litecoin spend showed", async () => {
+    const { lookupPubkey } = await import("../../src/core/providers.ts");
     const urls = stubFetch(() => Promise.reject(new TypeError("fetch failed")));
 
-    await expect(zden.balance("litecoin-segwit")).rejects.toBeInstanceOf(BalanceProviderError);
-    expect(urls).toHaveLength(1);
+    await expect(lookupPubkey("litecoin", litecoinAddress, {})).rejects.toBeInstanceOf(
+      BalanceProviderError,
+    );
+    expect(urls.every((url) => url.startsWith("https://litecoinspace.org/"))).toBe(true);
   });
 
   it("rejects unsupported chains without touching the network", async () => {
@@ -559,6 +586,25 @@ describe("balanceTool", () => {
     await expect(failure).rejects.toThrow("REDACTED");
     await expect(failure).rejects.not.toThrow("blockchair-secret");
     expect(urls[0]).toContain("key=blockchair-secret");
+  });
+
+  it("hands BLOCKCHAIR_API_KEY to Litecoin's fallback and never to litecoinspace.org", async () => {
+    vi.resetModules();
+    const tools: typeof Tools = await import("../../src/tool-operations.ts");
+    vi.stubEnv("BLOCKCHAIR_API_KEY", "blockchair-secret");
+    const urls = stubFetch((url) =>
+      url.startsWith("https://litecoinspace.org/")
+        ? Promise.reject(new TypeError("fetch failed"))
+        : json({ data: null, context: { code: 402, error: "bad key blockchair-secret" } }, 402),
+    );
+
+    const failure = tools.balanceTool("zden/litecoin-segwit");
+
+    await expect(failure).rejects.toThrow("REDACTED");
+    await expect(failure).rejects.not.toThrow("blockchair-secret");
+    expect(urls).toHaveLength(2);
+    expect(urls[0]).not.toContain("blockchair-secret");
+    expect(urls[1]).toContain("key=blockchair-secret");
   });
 
   it("reads doges-gambit/doge with BLOCKCHAIR_API_KEY and answers in DOGE", async () => {
