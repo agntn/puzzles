@@ -332,7 +332,7 @@ export const facts = {
     apiKey: {
       maxLength: 200,
       description:
-        "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY, Bitcoin Cash, Dogecoin and eCash to BLOCKCHAIR_API_KEY",
+        "Provider API key; Ethereum falls back to ETHERSCAN_API_KEY, Bitcoin Cash, Dogecoin, eCash and the Litecoin fallback to BLOCKCHAIR_API_KEY",
     },
   },
   /**
