@@ -203,7 +203,8 @@ export function forgetFailedHosts(): void {
 }
 
 /**
- * Asks both hosts, a benched primary last. Missing a read benches it, answering frees it.
+ * Asks both hosts, a benched primary last. Missing a read benches it, answering frees it, and any
+ * failure of a fallback that went first sends the read back to the primary.
  *
  * @param {Chain} chain - Chain of the address.
  * @param {Readonly<[Explorer, Explorer]>} hosts - The chain's primary, then its fallback.
@@ -222,7 +223,7 @@ async function inTurn<T>(
   try {
     return await read(first);
   } catch (error) {
-    if (!isTransient(error)) {
+    if (primaryFirst && !isTransient(error)) {
       throw fail(error);
     }
     try {
@@ -310,7 +311,7 @@ export interface AddressState {
   /** Everything the address ever received, in base units, when the explorer counts it. */
   readonly funded?: bigint;
 
-  /** The `@agntn/explorers` provider that answered: `mempool`, or the fallback that stood in. */
+  /** The `@agntn/explorers` provider that answered, a fallback too when it stood in. */
   readonly provider: string;
 
   /** When the provider completed the read, as ISO 8601. */

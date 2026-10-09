@@ -397,6 +397,33 @@ describe("Puzzle.balance", () => {
     expect(balance.confirmed).toBe(2500n);
   });
 
+  it("asks the benched litecoinspace.org when Blockchair turns its key down", async () => {
+    let blockchair = json({
+      data: { [litecoinAddress]: { address: { balance: 2500, received: 2500, spent: 0 } } },
+      context: { state: 3192145 },
+    });
+    let litecoinspace: () => Promise<Response> = () =>
+      Promise.reject(new TypeError("fetch failed"));
+    const urls = stubFetch((url) =>
+      url.startsWith("https://litecoinspace.org/") ? litecoinspace() : blockchair.clone(),
+    );
+
+    await zden.balance("litecoin-segwit");
+    blockchair = json({ data: null, context: { code: 402, error: "Invalid API key" } }, 402);
+    litecoinspace = async () =>
+      json({
+        chain_stats: { funded_txo_sum: 1500, spent_txo_sum: 400 },
+        mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
+      });
+    const balance = await zden.balance("litecoin-segwit", { apiKey: "expired" });
+
+    expect(urls.slice(2).map((url) => new URL(url).host)).toEqual([
+      "api.blockchair.com",
+      "litecoinspace.org",
+    ]);
+    expect(balance.confirmed).toBe(1100n);
+  });
+
   it("asks only litecoinspace.org for the key a Litecoin spend showed", async () => {
     const { lookupPubkey } = await import("../../src/core/providers.ts");
     const urls = stubFetch(() => Promise.reject(new TypeError("fetch failed")));
