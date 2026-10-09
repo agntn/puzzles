@@ -424,6 +424,26 @@ describe("Puzzle.balance", () => {
     expect(balance.confirmed).toBe(1100n);
   });
 
+  it("puts litecoinspace.org back in front once Blockchair misses, even when both did", async () => {
+    let down = ["https://litecoinspace.org/"];
+    const urls = stubFetch((url) =>
+      down.some((host) => url.startsWith(host))
+        ? Promise.reject(new TypeError("fetch failed"))
+        : json({
+            data: { [litecoinAddress]: { address: { balance: 2500, received: 2500, spent: 0 } } },
+            context: { state: 3192145 },
+          }),
+    );
+
+    await zden.balance("litecoin-segwit");
+    down = ["https://litecoinspace.org/", "https://api.blockchair.com/"];
+    await expect(zden.balance("litecoin-segwit")).rejects.toBeInstanceOf(BalanceProviderError);
+    down = ["https://api.blockchair.com/"];
+    await zden.balance("litecoin-segwit").catch(() => undefined);
+
+    expect(new URL(urls[4] ?? "").host).toBe("litecoinspace.org");
+  });
+
   it("asks only litecoinspace.org for the key a Litecoin spend showed", async () => {
     const { lookupPubkey } = await import("../../src/core/providers.ts");
     const urls = stubFetch(() => Promise.reject(new TypeError("fetch failed")));

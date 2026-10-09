@@ -203,8 +203,8 @@ export function forgetFailedHosts(): void {
 }
 
 /**
- * Asks both hosts, a benched primary last. Missing a read benches it, answering frees it, and any
- * failure of a fallback that went first sends the read back to the primary.
+ * Asks both hosts, a benched primary last. Missing a read benches it, and answering frees it, as
+ * does any failure of the fallback that went first.
  *
  * @param {Chain} chain - Chain of the address.
  * @param {Readonly<[Explorer, Explorer]>} hosts - The chain's primary, then its fallback.
@@ -223,15 +223,15 @@ async function inTurn<T>(
   try {
     return await read(first);
   } catch (error) {
-    if (primaryFirst && !isTransient(error)) {
+    if (!primaryFirst) {
+      benched.delete(chain);
+    } else if (!isTransient(error)) {
       throw fail(error);
     }
     try {
       const value = await read(second);
       if (primaryFirst) {
         benched.set(chain, Date.now() + BENCH_MS);
-      } else {
-        benched.delete(chain);
       }
       return value;
     } catch (failure) {
