@@ -112,6 +112,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "Peter Todd's P2SH scripts that pay for a collision. SHA-1 fell in 2017.",
   },
+  "hunting-time": {
+    icon: "i-lucide-book-key",
+    title: "Hunting Time seed phrase hunt",
+    sample: "hunting-time",
+    chains: ["bitcoin"],
+    blurb:
+      "A seed phrase hidden in a thriller. Most words were times in the plot, and the title was the biggest clue. Claimed in seven weeks.",
+  },
   iamabananaamaa: {
     icon: "i-lucide-file-image",
     title: "IAMABananaAMAA's puzzles",

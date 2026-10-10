@@ -17,6 +17,7 @@ import { GreatRiddleCollection } from "../../src/collections/great-riddle.ts";
 import { GrycoinCollection } from "../../src/collections/grycoin.ts";
 import { GsmgCollection } from "../../src/collections/gsmg.ts";
 import { HashCollisionCollection } from "../../src/collections/hash-collision.ts";
+import { HuntingTimeCollection } from "../../src/collections/hunting-time.ts";
 import { iAmABananaAmaa, IAmABananaAmaaCollection } from "../../src/collections/iamabananaamaa.ts";
 import { LedgerDonjonCollection } from "../../src/collections/ledger-donjon.ts";
 import { LiberteGuidantLePeupleCollection } from "../../src/collections/liberte-guidant-le-peuple.ts";
@@ -104,6 +105,7 @@ const concreteClasses = [
   GrycoinCollection,
   GsmgCollection,
   HashCollisionCollection,
+  HuntingTimeCollection,
   IAmABananaAmaaCollection,
   LedgerDonjonCollection,
   LiberteGuidantLePeupleCollection,
@@ -1007,21 +1009,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(551);
+    expect(await all()).toHaveLength(552);
     expect(await stats()).toEqual({
-      total: 551,
+      total: 552,
       claimed: 20,
       expired: 4,
-      solved: 318,
+      solved: 319,
       swept: 96,
       unsolved: 113,
-      with_pubkey: 443,
+      with_pubkey: 444,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1069.80850703,
+        BTC: 1069.81270703,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 460,
@@ -1043,7 +1045,7 @@ describe("lazy collection registry", () => {
         bip38: 4,
         caesar: 2,
         "hash-collision": 5,
-        "hidden-seed-words": 18,
+        "hidden-seed-words": 19,
         "masked-key-range": 256,
         "md5-to-bip39-entropy": 139,
         morse: 3,
@@ -1102,7 +1104,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(551);
+    ).toBe(552);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -1129,6 +1131,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(318);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(319);
   });
 });

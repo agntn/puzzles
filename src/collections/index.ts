@@ -25,6 +25,10 @@ export const builtins = [
   { key: "gsmg", load: () => import("./gsmg.ts").then((m) => m.gsmg) },
   { key: "hash-collision", load: () => import("./hash-collision.ts").then((m) => m.hashCollision) },
   {
+    key: "hunting-time",
+    load: () => import("./hunting-time.ts").then((m) => m.huntingTimeCollection),
+  },
+  {
     key: "iamabananaamaa",
     load: () => import("./iamabananaamaa.ts").then((m) => m.iAmABananaAmaa),
   },
