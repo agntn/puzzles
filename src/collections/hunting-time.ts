@@ -70,7 +70,7 @@ export const huntingTime = puzzle({
   preGenesis: true,
   status: Status.Solved,
   pubkey: compressed("0370f4ef335df0da109a49fdd2627f5fb27c87545e991134ce0cf77291a6d48da4"),
-  key: hex("f760c5b962545d5a44ddf77c8244dc62bd406ea7c890f84a63c555a8debd9686"),
+  key: hex("f760c5b962545d5a44ddf77c8244dc62bd406ea7c890f84a63c555a8debd9686").derived(),
   techniques: [technique("hidden-seed-words", SOLUTION)],
   prize: 0.0042,
   solvedAt: "2026-08-18 02:07:20",
