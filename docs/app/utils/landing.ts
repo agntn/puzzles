@@ -55,6 +55,7 @@ export const WALK: readonly string[] = [
   "real-big-block",
   "school-of-bitcoin",
   "liberte-guidant-le-peuple",
+  "hunting-time",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1541,18 +1542,46 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 17,
     tool: "liberte-guidant-le-peuple\tsolved\t0.28916308 BTC\t1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ\nchain: bitcoin  address kind: p2pkh\nhash160: ef81c1517b957a012a27cfe5a704e675bca0cde5\npublic key: 030da6e3531173a850a6613475ba0d9db7af41ff5005d89e73e82089065581655c (compressed)\nprivate key: banquier usure mensonge peuple combat espoir union citoyen conduire triomphe horizon jaune (seed phrase)\nseed word list: french\nderivation path: m/44'/0'/0'/0/0\nstarted: 2019-01-06 22:42:07\nsolved: 2019-01-13 12:44:40 (6d 14h 2m)\nsolver: Antoine Ferron (antoine-ferron), github https://github.com/antonio-fr\npre-genesis: yes\ntransactions: 17, 7 small increases folded\n\tfunding\t2019-01-02 12:15:39\t0.000263 BTC\t86be9365f75ba9d4cb965700518e45f8a5404fcc49b9dba13df3d9da7e2dc30f\n\tincrease\t2019-01-06 21:46:01\t0.25974 BTC\t2628bfbc30fb75614fd9497db7e34aea96753779809da4205ecd518ef60120a3\n\tincrease\t2019-01-07 10:42:19\t0.02492209 BTC\tae46cc481a1b227a2f822f94b52b1743a05e63726bdf38c15494ea138943243c\n\t7 small increases\t2019-01-07 18:26:14 to 2019-01-12 04:14:08\t0.00423799 BTC\n\tclaim\t2019-01-13 12:44:40\t0.28901098 BTC\te467bab977461b61b15d176fd35bdfb8bf2c39ad03fe9fe1072dddc7486b1bf5\n\tincrease\t2019-09-19 09:36:26\t0.00001 BTC\ta116251cc6e2361e22dec2489b4550ee99b115da3e3e70090a32cbd46de9f701\n\tsweep\t2019-09-21 03:57:39\t0.0000081 BTC\t1820b5366eea7ffc4319261aa242bbc49fc2aa001d17d5bb1b0c68345540ae66\n\tincrease\t2019-12-22 11:29:21\t0.05777912 BTC\tc473eb7e1aa75fc6103eda4f6c401d84c089ec5ccce3780112690ce777b2280b\n\tsweep\t2019-12-22 11:29:21\t0.05467909 BTC\tb6a448e3f493ee96f075df5119a81b33ec5d71fcf977f6a5e361844d0116eead\n\tincrease\t2026-05-26 10:16:52\t0.00000791 BTC\t7b6a8ac2ee01a5c696adc04102da0efb8f3d097fccabf447a686c15fba5ce258\n\tsweep\t2026-05-26 10:16:52\t0.0000033 BTC\t1718788379eb5d5d26cbe91f0a79c01a87a96305fb25bc2e2a91e94d4f8aa614\nclaim: https://blockstream.info/tx/e467bab977461b61b15d176fd35bdfb8bf2c39ad03fe9fe1072dddc7486b1bf5\nasset: assets/liberte-guidant-le-peuple/puzzle.jpg\nasset source: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edfn12g/\nstages: 5\n\tseed 12 words\tBlack paint on black at the far right of the mural says what to look for.\n\t\tblack on black inscription\thttps://static.wixstatic.com/media/61405b_e3b80810d6c94564a501350dfd6bc791~mv2.jpg\n\t\tanswer: Tout à droite de la fresque, en noir sur noir, il est écrit \"Seed 12 words\" (en français \"graine 12 mots\"), qui nous indique qu'on doit chercher une \"Seed\" de 12 mots dans l'ordre qui permettent de restaurer un portefeuille Bitcoin afin d'avoir accès aux fonds.\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\tcolour strokes\tSix zones of coloured strokes in the background, six base colours, two strokes per letter.\n\t\tcolour zones 1 to 4\thttps://static.wixstatic.com/media/61405b_c5c174eba24942fdb6da04d873949dce~mv2_d_1649_1291_s_2.jpg\n\t\tcolour zones 5 and 6\thttps://static.wixstatic.com/media/61405b_ac11f93b7bef4f01a43b859fdf910676~mv2_d_1649_1296_s_2.jpg\n\t\tthe author's colour table\thttps://static.wixstatic.com/media/61405b_d363efc4ed9a4a818cfccc2fadee82c5~mv2_d_3024_3336_s_4_2.jpg\n\t\tanswer: banquier usure mensonge peuple combat espoir\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\tcaesar\tATOUT and JPAVFLU, painted in ink that glows under black light above Marianne's head.\n\t\tblack light inscriptions\thttps://static.wixstatic.com/media/61405b_840f53ba499049108fadcd318e035978~mv2_d_3024_2682_s_4_2.jpg\n\t\tanswer: Les deux premiers mots sont codés en chiffrement de César. Avec respectivement un décalage de 20 et 19, ce qui nous donne : union citoyen\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\t\ttechnique: caesar\tsource: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\n\tbase64\tY29uZHVpcmU= and dHJpb21waGU=, in the same fluorescent paint.\n\t\tblack light inscriptions\thttps://static.wixstatic.com/media/61405b_840f53ba499049108fadcd318e035978~mv2_d_3024_2682_s_4_2.jpg\n\t\tanswer: Les deux suivants sont codés en Base64, ce qui nous donne : conduire triomphe\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\t\ttechnique: base64\tsource: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\n\taes\tmq+cC6Ax2+8R8LAnEWgQnA==, AES-128, with a key the author emailed to whoever found the inscriptions.\n\t\tblack light inscriptions\thttps://static.wixstatic.com/media/61405b_840f53ba499049108fadcd318e035978~mv2_d_3024_2682_s_4_2.jpg\n\t\tanswer: Cette clé est : 03012009 (date du Bloc Genesis de Bitcoin). Une fois déchiffré, le code nous donne : horizon jaune\tanswer source: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\tanswer date: 2019-01-13\n\t\ttechnique: aes\tsource: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\ntechniques: 1\n\thidden-seed-words\tsource: https://www.pboy-art.com/single-post/2019/01/13/Solution-de-l%C3%A9nigme-de-la-fresque-La-Libert%C3%A9-guidant-le-peuple-2019\nhints: 6\n\tofficial\t2019-01-06\tPour résoudre l'énigme entièrement, il faut impérativement se trouver devant la fresque.\tsource: https://www.pboy-art.com/single-post/2019/01/06/Fresque-Libert%C3%A9-guidant-le-peuple-2019\tconfirmation: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edfn12g/ (The same rule in English, in the author's first reply under the r/Bitcoin post.)\n\tofficial\t2019-01-07\tI keep it secret but it's in Paris intra muros. And it's not very hard to find\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edgq5nu/\n\tofficial\t2019-01-10\tYou can solve a part from your home\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edp94qu/\n\tofficial\t2019-01-11\tYou can solve a part from your desk and other part you must see the wall in real life\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edu2t6g/\n\tofficial\t2019-01-12\tthere's a clue on the hq pic\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edwblx4/\n\tcommunity\t2019-01-12\tApparently there's some words that are visible when exposed to a blacklight\tsource: https://www.reddit.com/r/Bitcoin/comments/adc601/comment/edx9qbr/\nexplorer: https://blockstream.info/address/1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ\nsource: https://www.pboy-art.com/single-post/2019/01/06/Fresque-Libert%C3%A9-guidant-le-peuple-2019\nfiles: 1 file, 1 archived source; puzzles_assets lists them and reads one by its path",
   },
+  {
+    id: "hunting-time",
+    collection: "hunting-time",
+    chain: "bitcoin",
+    status: "solved",
+    address: "bc1qhzy6j4amw26z7e694mgfr7kvzl7xteu54f0a85",
+    kind: "p2wpkh",
+    hash160: "b889a957bb72b42f6745aed091facc17fc65e794",
+    redeemScript: undefined,
+    prize: "0.0042 BTC",
+    prizeAmount: 0.0042,
+    currency: undefined,
+    startedAt: "2026-06-29 16:30:00",
+    solvedAt: "2026-08-18 02:07:20",
+    solveTime: "1mo 19d 9h 37m",
+    bits: undefined,
+    range: undefined,
+    pubkey: "0370f4ef335df0da109a49fdd2627f5fb27c87545e991134ce0cf77291a6d48da4",
+    pubkeyFormat: "compressed",
+    secret: "hex",
+    keyLiteral: 'hex("f760c5b962545d5a44ddf77c8244dc62bd406ea7c890f84a63c555a8debd9686")',
+    verdict: "verified",
+    detail: "bc1qhzy6j4amw26z7e694mgfr7kvzl7xteu54f0a85",
+    explorer: "https://blockstream.info/address/bc1qhzy6j4amw26z7e694mgfr7kvzl7xteu54f0a85",
+    source: "https://x.com/VeteranHODL/status/2071632285951226106",
+    transactions: 3,
+    tool: "hunting-time\tsolved\t0.0042 BTC\tbc1qhzy6j4amw26z7e694mgfr7kvzl7xteu54f0a85\nchain: bitcoin  address kind: p2wpkh\nhash160: b889a957bb72b42f6745aed091facc17fc65e794\npublic key: 0370f4ef335df0da109a49fdd2627f5fb27c87545e991134ce0cf77291a6d48da4 (compressed)\nprivate key: f760c5b962545d5a44ddf77c8244dc62bd406ea7c890f84a63c555a8debd9686 (hex)\nstarted: 2026-06-29 16:30:00\nsolved: 2026-08-18 02:07:20 (1mo 19d 9h 37m)\nsolver: _radosinsky (radosinsky)\npre-genesis: yes\ntransactions: 3\n\tfunding\t2023-07-22 09:43:25\t0.0021 BTC\t00a72c1b2bd08db06d4ea7027d4352a3644a9b3a3c81cdacf82379cbff95b33a\n\tincrease\t2026-07-31 23:23:00\t0.0021 BTC\t45ea9718a05f453cf44ccbce9771464f29136bcfc54f62627eca2519f6985a10\n\tclaim\t2026-08-18 02:07:20\t0.00419642 BTC\td3783a1cde2c491a6edfbead81aeebda90257c8c25b4b0c9b2bac89bc5cd607a\nclaim: https://blockstream.info/tx/d3783a1cde2c491a6edfbead81aeebda90257c8c25b4b0c9b2bac89bc5cd607a\nhint assets: assets/hunting-time/cover.jpg, assets/hunting-time/clue-01.jpg, assets/hunting-time/clue-02.jpg, assets/hunting-time/clue-03.jpg, assets/hunting-time/clue-04.jpg, assets/hunting-time/clue-05.jpg, assets/hunting-time/clue-06.jpg, assets/hunting-time/clue-07.jpg, assets/hunting-time/clue-08.jpg, assets/hunting-time/clue-09.jpg, assets/hunting-time/clue-10.jpg, assets/hunting-time/clue-11.jpg, assets/hunting-time/clue-12.jpg\ntechniques: 1\n\thidden-seed-words\tsource: https://x.com/VeteranHODL/status/2090400955707830480\nhints: 17\n\tofficial\t2026-06-15\tI wonder if anyone has found the other hidden code yet...\tsource: https://x.com/VeteranHODL/status/2066614083105738752\n\tofficial\t2026-06-29\tHidden within the pages of Hunting Time is a genuine Bitcoin seed phrase.\tsource: https://x.com/VeteranHODL/status/2071632285951226106\tanswer: 1 - Page 24 → 12:24 → BIP39 #1224 → ocean\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-06\tTime for another clue.\tsource: https://x.com/VeteranHODL/status/2074168998938210563\tanswer: 2 - Electrical panel → electric\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-13\tClue number three.\tsource: https://x.com/VeteranHODL/status/2076705716501610744\tanswer: 3 - Page 19 → 378 meters/connection → connect\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-20\tIt's time for four.\tsource: https://x.com/VeteranHODL/status/2079242430499487893\tanswer: 4 - Page 210 → 07:20 → #720 → fly\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-27\tClue Five.\tsource: https://x.com/VeteranHODL/status/2081779146196439527\tanswer: 5 - Sign → apology\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-29\tSix.\tsource: https://x.com/VeteranHODL/status/2082504700125966650\tanswer: 6 - Page 241 → 16:27 → #1627 → slender\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-01\tThree years ago, when I started writing Hunting Time, I sent 210,000 sats to a fresh electrum wallet.\tsource: https://x.com/VeteranHODL/status/2083486983142142452\n\tofficial\t2026-08-01\tHere is clue number seven.\tsource: https://x.com/VeteranHODL/status/2083486983142142452\tanswer: 7 - 14 + 60 → #1460 → reopen\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-01\tAfter revealing seven seed phrase words, the entropy of the target wallet is 51 bits.\tsource: https://x.com/VeteranHODL/status/2083592109647401333\n\tofficial\t2026-08-03\tTime for clue eight.\tsource: https://x.com/VeteranHODL/status/2084315859770872026\tanswer: 8 - Page 103 → 13:04 → #1304 → pepper\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-06\tClue number nine. Only three clues remaining.\tsource: https://x.com/VeteranHODL/status/2085434753092653555\tanswer: 9 - Page 32 → 06:16 → #616 → erupt\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-09\tClue TEN.\tsource: https://x.com/VeteranHODL/status/2086490186888986672\tanswer: 10 - Hotel-room image → curtain\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-11\tClue ELEVEN.\tsource: https://x.com/VeteranHODL/status/2087297821921640942\tanswer: 11 - Page 103 → 001704 → #1704 → stay\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-13\tFINAL CLUE.\tsource: https://x.com/VeteranHODL/status/2087893684633141356\tanswer: 12 - Page 110 → 1992 → #1992 → wedding\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-15\tThe Sats are still out there ready to be claimed, but you will need the paperback to solve the puzzle\tsource: https://x.com/VeteranHODL/status/2088547059452235917\n\tofficial\t2026-08-18\tA major clue is in the title of the book...\tsource: https://x.com/VeteranHODL/status/2089798740978577809\tanswer: 'Hunting Time' was actually the biggest clue.\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\nexplorer: https://blockstream.info/address/bc1qhzy6j4amw26z7e694mgfr7kvzl7xteu54f0a85\nsource: https://x.com/VeteranHODL/status/2071632285951226106\nfiles: 13 files, 17 archived sources; puzzles_assets lists them and reads one by its path",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "3dd87c804ae0",
-  total: 551,
-  solved: 318,
+  dataVersion: "f22b7bb6f156",
+  total: 552,
+  solved: 319,
   unsolved: 113,
   claimed: 20,
   swept: 96,
   expired: 4,
-  withPubkey: 443,
+  withPubkey: 444,
   unsolvedPrize: {
     BTC: 909.97280377,
     ETH: 12.612559658256945,
@@ -1560,7 +1589,7 @@ export const STATS_STATIC = {
     AR: 1500.188092936237,
   },
   totalPrize: {
-    BTC: 1069.80850703,
+    BTC: 1069.81270703,
     ETH: 26.81566403482549,
     DOGE: 10000,
     BCH: 5.1,
@@ -1937,6 +1966,26 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 0,
     firstStarted: "2013-09-13 04:48:29",
     lastStarted: "2013-09-13 05:59:09",
+    hints: [],
+  },
+  {
+    key: "hunting-time",
+    author: "VeteranHODL",
+    authorKey: "veteranhodl",
+    authorUrl: "https://x.com/VeteranHODL",
+    total: 1,
+    statuses: {
+      solved: 1,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.0042,
+    },
+    unsolvedPrize: {},
+    withPubkey: 1,
+    withKey: 1,
+    firstStarted: "2026-06-29 16:30:00",
+    lastStarted: "2026-06-29 16:30:00",
     hints: [],
   },
   {
@@ -2826,6 +2875,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Bitcoin Core contributor and applied cryptography consultant, creator of OpenTimestamps, who paid for hash collisions with Bitcoin script in 2013.",
     collections: ["hash-collision"],
     puzzles: 6,
+  },
+  {
+    key: "veteranhodl",
+    to: "/authors/veteranhodl",
+    name: "VeteranHODL",
+    kind: "person",
+    about:
+      "Former British Army soldier who writes techno-thrillers about Bitcoin and hid a working seed phrase in the first one.",
+    collections: ["hunting-time"],
+    puzzles: 1,
   },
   {
     key: "iamabananaamaa",

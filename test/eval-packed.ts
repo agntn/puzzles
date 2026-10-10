@@ -99,6 +99,7 @@ const expectedCollections = [
   "grycoin",
   "gsmg",
   "hash-collision",
+  "hunting-time",
   "iamabananaamaa",
   "ledger-donjon",
   "liberte-guidant-le-peuple",
