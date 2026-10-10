@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { defineTool, Type, type ToolResult } from "@agntn/tools";
-import { closed, plainWord } from "./filters.ts";
+import { closed } from "./filters.ts";
 import { lines, oneLine, printError, streams } from "./output.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
 import type { AssetLink, Puzzle } from "../core/puzzle.ts";
@@ -221,9 +221,8 @@ export default defineTool({
       }),
     ),
   }),
-  cli: { command: "assets", positional: ["id"] },
+  cli: { command: "assets", positional: ["id"], plain: ["id"] },
   async execute(args, { host }) {
-    plainWord(args.id);
     const modes = [args.read !== undefined, args.check !== undefined, args.live === true];
     if (modes.filter(Boolean).length > 1) {
       throw new InvalidArgumentError("read", "pass one of --read, --check and --live");

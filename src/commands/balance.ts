@@ -8,7 +8,6 @@ import {
   filterQuery,
   hasFilter,
   pause,
-  plainWord,
 } from "./filters.ts";
 import { lines, oneLine, printLine, streams } from "./output.ts";
 import { apiKeyVariables, BalanceError, type BalanceOptions } from "../core/balance.ts";
@@ -105,9 +104,8 @@ export default defineTool({
     ...filterArgs,
     ...apiKeyArg,
   }),
-  cli: { command: "balance", positional: ["id"] },
+  cli: { command: "balance", positional: ["id"], plain: ["id"] },
   async execute(args, { host }) {
-    plainWord(args.id);
     const { requirePuzzle, selectPuzzles } = await import("../core/dataset.ts");
     const { formatBalance } = await import("../core/utils.ts");
     const filtered = hasFilter(args);

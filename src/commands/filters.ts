@@ -1,4 +1,4 @@
-import { ToolInputError, Type, type TObject, type TProperties } from "@agntn/tools";
+import { Type, type TObject, type TProperties } from "@agntn/tools";
 import type { PuzzleQuery } from "../core/dataset.ts";
 import { facts } from "../tool-operations.ts";
 
@@ -18,20 +18,6 @@ export const pause = 250;
  */
 export function closed<T extends TProperties>(properties: T): TObject<T> {
   return Type.Object(properties, { additionalProperties: false });
-}
-
-/**
- * `runCli` hands a dashed word that spells no option to the positional, and no identifier, key or
- * address starts with a dash, so `list --withPubkey` is a typo, not a collection.
- *
- * @param {string | undefined} value - The positional word, when given.
- * @returns {T} The same word.
- */
-export function plainWord<T extends string | undefined>(value: T): T {
-  if (value?.startsWith("-") === true) {
-    throw new ToolInputError([`Invalid arguments: unknown option ${JSON.stringify(value)}`]);
-  }
-  return value;
 }
 
 /** Strings, not enums: a chain answers to its symbol too, and a miss lists what would match. */

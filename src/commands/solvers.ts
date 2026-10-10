@@ -1,17 +1,17 @@
 import { defineTool, Type } from "@agntn/tools";
-import { closed, plainWord } from "./filters.ts";
+import { closed } from "./filters.ts";
 import { lines } from "./output.ts";
 import { solverTool } from "../tool-operations.ts";
 
-/** `puzzles_solver` itself, with the dashed word refused before it becomes a key. */
+/** `puzzles_solver` itself, with the key as a positional that a mistyped flag can't fill. */
 export const solver = defineTool({
   name: "puzzles_solver",
   title: "Puzzle solver",
   description: "Show one solver by solver key or puzzle identifier",
   effect: "read",
   input: closed({ key: Type.String({ description: "Solver key, or a puzzle identifier" }) }),
-  cli: { command: "solver", positional: ["key"] },
-  execute: (args) => solverTool(plainWord(args.key)),
+  cli: { command: "solver", positional: ["key"], plain: ["key"] },
+  execute: (args) => solverTool(args.key),
 });
 
 export default defineTool({
@@ -22,9 +22,8 @@ export default defineTool({
   input: closed({
     key: Type.Optional(Type.String({ description: "Solver key, or a puzzle identifier" })),
   }),
-  cli: { command: "solvers", positional: ["key"] },
+  cli: { command: "solvers", positional: ["key"], plain: ["key"] },
   async execute(args) {
-    plainWord(args.key);
     const { requireSolver, resolveSolverKey, solvers } = await import("../core/dataset.ts");
     const { formatSolver, formatSolverRecord } = await import("../core/utils.ts");
     if (args.key === undefined) {

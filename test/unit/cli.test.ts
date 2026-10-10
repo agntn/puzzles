@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 import { describe, expect, it } from "vite-plus/test";
+import { cliCommands } from "../../src/commands/index.ts";
 import { collectionKeys } from "../../src/core/registry.ts";
 import { ASSETS, CHECKOUT_ASSETS } from "../support/assets.ts";
 
@@ -915,18 +916,39 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("refuses a misspelled flag that would otherwise land in the positional", async () => {
-    for (const args of [
-      ["list", "--withPubkey"],
-      ["show", "--allTransactions"],
-      ["verify", "--al"],
-      ["author", "--foo"],
-      ["solver", "--foo"],
-    ]) {
+    for (const [args, takes] of [
+      [
+        ["list", "--withPubkey"],
+        "--address, --chain, --status, --technique, --with-pubkey, --limit, --offset, --json",
+      ],
+      [["show", "--allTransactions"], "--all-transactions, --json"],
+      [
+        ["verify", "--al"],
+        "--all, --collection, --address, --chain, --status, --technique, --with-pubkey, --quiet (-q), --json",
+      ],
+      [["author", "--foo"], "--json"],
+      [["solver", "--foo"], "--json"],
+    ] as const) {
       await expect(failure(...args)).resolves.toEqual({
         code: 1,
         stdout: "",
-        stderr: `Invalid arguments: unknown option ${JSON.stringify(args[1])}\n`,
+        stderr: `Invalid arguments: unknown option ${JSON.stringify(args[1])}; takes ${takes}\n`,
       });
+    }
+  });
+
+  it("answers a dashed word in any command's positional as it does one after it", async () => {
+    const commands = cliCommands.flatMap(({ cli }) =>
+      cli?.command === undefined || cli.positional === undefined ? [] : [cli.command],
+    );
+
+    expect(commands).toHaveLength(13);
+    for (const command of commands) {
+      const [first, after] = await Promise.all([
+        failure(command, "--nope"),
+        failure(command, "bits/1", "--nope"),
+      ]);
+      expect(first).toEqual(after);
     }
   });
 

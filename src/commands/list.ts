@@ -1,5 +1,5 @@
 import { defineTool, Type } from "@agntn/tools";
-import { closed, filterArgs, filterQuery, plainWord } from "./filters.ts";
+import { closed, filterArgs, filterQuery } from "./filters.ts";
 import { lines } from "./output.ts";
 
 export default defineTool({
@@ -21,9 +21,8 @@ export default defineTool({
       Type.Integer({ minimum: 0, description: "Skip this many matching puzzles (default 0)" }),
     ),
   }),
-  cli: { command: "list", positional: ["collection"] },
+  cli: { command: "list", positional: ["collection"], plain: ["collection"] },
   async execute(args) {
-    plainWord(args.collection);
     const { selectPuzzles } = await import("../core/dataset.ts");
     const { formatPuzzle } = await import("../core/utils.ts");
     const offset = args.offset ?? 0;

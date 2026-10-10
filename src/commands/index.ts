@@ -2,7 +2,7 @@
  * The commands only the CLI gets. Each takes the place of the tool command with its name, because
  * the command line keeps what the tools leave out: URLs instead of repository paths, every match
  * instead of a page, filtered passes, rows as they land and exit codes a script can read.
- * `author` and `solver` run the tools' own executors behind the dashed word check.
+ * `author` and `solver` run the tools' own executors with the key as a positional, not `--key`.
  */
 
 import type { ToolDefinition } from "@agntn/tools";
