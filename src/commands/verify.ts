@@ -1,5 +1,5 @@
 import { defineTool, Type } from "@agntn/tools";
-import { closed, collectionArg, filterArgs, filterQuery, hasFilter, plainWord } from "./filters.ts";
+import { closed, collectionArg, filterArgs, filterQuery, hasFilter } from "./filters.ts";
 import { lines } from "./output.ts";
 import { InvalidArgumentError } from "../core/errors.ts";
 import type { Puzzle } from "../core/puzzle.ts";
@@ -82,9 +82,8 @@ export default defineTool({
     ...filterArgs,
     quiet: Type.Optional(Type.Boolean({ description: "Suppress per-puzzle output" })),
   }),
-  cli: { command: "verify", positional: ["id"], short: { quiet: "q" } },
+  cli: { command: "verify", positional: ["id"], plain: ["id"], short: { quiet: "q" } },
   async execute(args) {
-    plainWord(args.id);
     const { verify } = await import("../core/verify.ts");
     const puzzles = await selected(args);
     const results = await Promise.all(puzzles.map((puzzle) => verify(puzzle)));

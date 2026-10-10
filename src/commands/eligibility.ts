@@ -1,5 +1,5 @@
 import { defineTool, Type } from "@agntn/tools";
-import { apiKeyArg, closed, plainWord } from "./filters.ts";
+import { apiKeyArg, closed } from "./filters.ts";
 import { lines } from "./output.ts";
 import { apiKeyVariables } from "../core/balance.ts";
 import type { Chain } from "../core/chains.ts";
@@ -33,9 +33,8 @@ export default defineTool({
     ),
     ...apiKeyArg,
   }),
-  cli: { command: "eligibility", positional: ["query"] },
+  cli: { command: "eligibility", positional: ["query"], plain: ["query"] },
   async execute(args) {
-    plainWord(args.query);
     const { eligibility, formatEligibility } = await import("../core/eligibility.ts");
     const record = await eligibility(args.query, {
       apiKey: args.apiKey,

@@ -1,17 +1,17 @@
 import { defineTool, Type } from "@agntn/tools";
-import { closed, plainWord } from "./filters.ts";
+import { closed } from "./filters.ts";
 import { lines } from "./output.ts";
 import { authorTool } from "../tool-operations.ts";
 
-/** `puzzles_author` itself, with the dashed word refused before it becomes a key. */
+/** `puzzles_author` itself, with the key as a positional that a mistyped flag can't fill. */
 export const author = defineTool({
   name: "puzzles_author",
   title: "Puzzle author",
   description: "Show one author by author or collection key",
   effect: "read",
   input: closed({ key: Type.String({ description: "Author key, or a collection key" }) }),
-  cli: { command: "author", positional: ["key"] },
-  execute: (args) => authorTool(plainWord(args.key)),
+  cli: { command: "author", positional: ["key"], plain: ["key"] },
+  execute: (args) => authorTool(args.key),
 });
 
 export default defineTool({
@@ -22,9 +22,8 @@ export default defineTool({
   input: closed({
     key: Type.Optional(Type.String({ description: "Author key, or a collection key" })),
   }),
-  cli: { command: "authors", positional: ["key"] },
+  cli: { command: "authors", positional: ["key"], plain: ["key"] },
   async execute(args) {
-    plainWord(args.key);
     const { authors, getAuthor, requireAuthor } = await import("../core/dataset.ts");
     const { getCollection } = await import("../core/registry.ts");
     const { formatAuthor, formatAuthorRecord } = await import("../core/utils.ts");

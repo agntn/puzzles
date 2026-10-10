@@ -1,5 +1,5 @@
 import { defineTool, Type } from "@agntn/tools";
-import { closed, plainWord } from "./filters.ts";
+import { closed } from "./filters.ts";
 import { lines } from "./output.ts";
 
 export default defineTool({
@@ -15,9 +15,8 @@ export default defineTool({
       }),
     ),
   }),
-  cli: { command: "show", positional: ["id"] },
+  cli: { command: "show", positional: ["id"], plain: ["id"] },
   async execute(args) {
-    plainWord(args.id);
     const { requirePuzzle } = await import("../core/dataset.ts");
     const { requireCollection } = await import("../core/registry.ts");
     const { formatPuzzleRecord } = await import("../core/utils.ts");

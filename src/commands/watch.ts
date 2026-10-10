@@ -8,7 +8,6 @@ import {
   filterQuery,
   hasFilter,
   pause,
-  plainWord,
 } from "./filters.ts";
 import { lines, printLine, streams } from "./output.ts";
 import { apiKeyVariables } from "../core/balance.ts";
@@ -82,9 +81,8 @@ export default defineTool({
     ),
     ...apiKeyArg,
   }),
-  cli: { command: "watch", positional: ["id"] },
+  cli: { command: "watch", positional: ["id"], plain: ["id"] },
   async execute(args, { host }) {
-    plainWord(args.id);
     const { formatWatchReport, watcher } = await import("../core/watch.ts");
     const live = streams(host);
     const puzzles = await selected(args);

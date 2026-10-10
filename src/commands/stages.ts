@@ -1,5 +1,5 @@
 import { defineTool, Type } from "@agntn/tools";
-import { closed, plainWord } from "./filters.ts";
+import { closed } from "./filters.ts";
 import { lines } from "./output.ts";
 
 export default defineTool({
@@ -9,9 +9,8 @@ export default defineTool({
     "List the stages of a puzzle that runs in several, with their pages, files and published answers",
   effect: "read",
   input: closed({ id: Type.String({ description: "Puzzle identifier, for example gsmg" }) }),
-  cli: { command: "stages", positional: ["id"] },
+  cli: { command: "stages", positional: ["id"], plain: ["id"] },
   async execute(args) {
-    plainWord(args.id);
     const { requirePuzzle } = await import("../core/dataset.ts");
     const { formatStageReport } = await import("../core/utils.ts");
     const puzzle = await requirePuzzle(args.id);
