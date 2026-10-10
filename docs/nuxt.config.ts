@@ -10,7 +10,6 @@ const librarySource = resolve(repoRoot, "src");
 
 /** The library's package names, pointed at the checkout's sources. */
 const libraryAliases: Readonly<Record<string, string>> = {
-  "@agntn/puzzles/mcp": resolve(librarySource, "mcp.ts"),
   "@agntn/puzzles/tools": resolve(librarySource, "tool-operations.ts"),
   "@agntn/puzzles": resolve(librarySource, "index.ts"),
 };
@@ -34,14 +33,13 @@ function importsDigest(template: string): string {
   return digest.digest("hex").slice(0, 12);
 }
 
-/** Runtime deps under src/index.ts and src/mcp.ts, installed here so they resolve from docs/node_modules. */
+/** What src/index.ts and src/tools.ts import at runtime, resolved from docs/node_modules. */
 const libraryDependencies = [
   "@agntn/archives",
   "@agntn/chains",
   "@agntn/explorers",
   "@agntn/keys",
   "@agntn/tools",
-  "@modelcontextprotocol/server",
 ];
 
 /** Every subpath src/ imports, dynamic ones too, so dev bundles them up front, not on demand. */
@@ -341,6 +339,17 @@ export default defineNuxtConfig({
      * `nodejs_compat`. `@agntn/archives` reads its config through it on every archive read.
      */
     unenv: { external: ["node:fs"], alias: { fs: "node:fs", "node:fs": "node:fs" } },
+    /** Types only: src/tools.ts and the /mcp adapter see one `ToolDefinition`, the copy here. */
+    typescript: {
+      tsConfig: {
+        compilerOptions: {
+          paths: {
+            "@agntn/tools": ["../node_modules/@agntn/tools/dist/index.d.mts"],
+            "@agntn/tools/toolkit": ["../node_modules/@agntn/tools/dist/toolkit.d.mts"],
+          },
+        },
+      },
+    },
     compatibilityDate: "2026-09-03",
     esbuild: { options: { target: "es2022" } },
     /** The puzzle images and hints, served from the checkout's assets/ under /assets. */

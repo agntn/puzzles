@@ -1,5 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import type { ToolkitTool } from "@agntn/tools/toolkit";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -9,34 +8,38 @@ import { callTool, toolListings } from "../../src/mcp.ts";
 import { firstText } from "../support/mcp.ts";
 
 /*
- * The toolkit's server entry pulls in the Nitro runtime, and `defineMcpTool` hands its definition
- * back as it is. The path is the file `@nuxtjs/mcp-toolkit/server` resolves to from the docs.
+ * The toolkit's server entry pulls in the Nitro runtime, so the handler gets its options back and
+ * two page tools. The path is the file `@nuxtjs/mcp-toolkit/server` resolves to from the docs.
  */
 vi.mock(
   "../../docs/node_modules/@nuxtjs/mcp-toolkit/dist/runtime/server/mcp/definitions/index.js",
   () => ({
-    defineMcpTool: (definition: unknown) => definition,
+    defineMcpHandler: (options: unknown) => options,
+    getMcpTools: async () => [{ name: "list-pages" }, { name: "get-page" }],
   }),
 );
 
-const toolsDir = fileURLToPath(new URL("../../docs/server/mcp/tools/", import.meta.url));
+/* The worker bundles one `@agntn/tools`, so the handler gets the root's copy here too. */
+vi.mock(
+  "../../docs/node_modules/@agntn/tools/dist/toolkit.mjs",
+  async () => await import("@agntn/tools/toolkit"),
+);
 
-/**
- * A client connected to an SDK server that carries every docs tool, registered the way the
- * toolkit's `registerToolFromDefinition` does it.
- *
- * @returns {Promise<Client>} The connected client.
- */
+/* What `server/mcp/index.ts` serves for one request, Docus page tools included. */
+async function docsTools(): Promise<readonly ToolkitTool[]> {
+  const { default: handler } = await import("../../docs/server/mcp/index.ts");
+  const { tools } = handler;
+  if (typeof tools !== "function") throw new TypeError("the handler should resolve its tools");
+  return (await tools(undefined as never)) as ToolkitTool[];
+}
+
+/* An SDK v1 client on every puzzle tool, registered the way the toolkit does it. */
 async function docsClient(): Promise<Client> {
-  const { puzzlesMcpTool } = await import("../../docs/server/utils/puzzles-mcp.ts");
   const server = new McpServer({ name: "docs", version: "0.0.0" });
-  for (const listing of toolListings) {
-    const tool = puzzlesMcpTool(listing.name);
-    // The toolkit types handlers loosely and normalizes their results; this one returns a result as is.
-    const handler = tool.handler as (
-      args: Readonly<Record<string, unknown>>,
-    ) => Promise<CallToolResult>;
-    server.registerTool(listing.name, tool, handler);
+  for (const tool of await docsTools()) {
+    if (!tool.name.startsWith("puzzles_")) continue;
+    const handler = tool.handler as (args: unknown) => Promise<CallToolResult>;
+    server.registerTool(tool.name, tool as never, handler);
   }
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
   const client = new Client({ name: "test", version: "0.0.0" });
@@ -45,17 +48,12 @@ async function docsClient(): Promise<Client> {
 }
 
 describe("docs MCP tools", () => {
-  it("serves every tool `puzzles mcp` lists, one file each", () => {
-    const files = readdirSync(toolsDir).toSorted();
-    expect(files).toEqual(
-      toolListings.map((tool) => `${tool.name.replaceAll("_", "-")}.ts`).toSorted(),
-    );
-    for (const file of files) {
-      const name = file.slice(0, -".ts".length).replaceAll("-", "_");
-      expect(readFileSync(`${toolsDir}${file}`, "utf8")).toBe(
-        `export default puzzlesMcpTool(${JSON.stringify(name)});\n`,
-      );
-    }
+  it("serves every tool `puzzles mcp` lists after the Docus page tools", async () => {
+    expect((await docsTools()).map((tool) => tool.name)).toEqual([
+      "list-pages",
+      "get-page",
+      ...toolListings.map((tool) => tool.name),
+    ]);
   });
 
   /** The SDK stamps its own `$schema` on top, and `toEqual` reads an undefined key as absent. */
@@ -85,11 +83,11 @@ describe("docs MCP tools", () => {
     const client = await docsClient();
     const served = await client.callTool({ name: "puzzles_stats" });
     expect(served.isError).toBeFalsy();
-    expect(served.content).toEqual((await callTool("puzzles_stats", {})).content);
+    expect(served).toEqual(await callTool("puzzles_stats", {}));
 
     const required = await client.callTool({ name: "puzzles_show" });
     expect(required.isError).toBe(true);
-    expect(required.content).toEqual((await callTool("puzzles_show", {})).content);
+    expect(required).toEqual(await callTool("puzzles_show", {}));
   });
 
   it("refuses an unknown key in the words of `puzzles mcp`, sanitized", async () => {
@@ -101,7 +99,7 @@ describe("docs MCP tools", () => {
 
     const served = await client.callTool({ name: "puzzles_list", arguments: args });
     expect(served.isError).toBe(true);
-    expect(served.content).toEqual((await callTool("puzzles_list", args)).content);
+    expect(served).toEqual(await callTool("puzzles_list", args));
     for (const code of [0x202e, 0x2028]) {
       expect(firstText(served)).not.toContain(String.fromCodePoint(code));
     }

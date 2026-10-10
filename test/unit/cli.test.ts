@@ -695,10 +695,10 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it.each([
-    ["--limit", "0", "Invalid arguments at /limit: must be >= 1"],
-    ["--limit", "two", "Invalid arguments at /limit: must be integer"],
-    ["--limit", "1.5", "Invalid arguments at /limit: must be integer"],
-    ["--offset", "-1", "Invalid arguments at /offset: must be >= 0"],
+    ["--limit", "0", "Invalid arguments at --limit: must be >= 1"],
+    ["--limit", "two", "Invalid arguments at --limit: must be integer"],
+    ["--limit", "1.5", "Invalid arguments at --limit: must be integer"],
+    ["--offset", "-1", "Invalid arguments at --offset: must be >= 0"],
   ])("refuses %s %s instead of paging by NaN", async (flag, value, message) => {
     await expect(failure("list", "bits", flag, value)).resolves.toEqual({
       code: 1,

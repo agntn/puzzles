@@ -77,7 +77,7 @@
     "@agntn/explorers": "0.6.0",
     "@agntn/hashes": "0.4.0",
     "@agntn/keys": "0.6.1",
-    "@agntn/tools": "0.2.2",
+    "@agntn/tools": "0.2.3",
     "@modelcontextprotocol/server": "2.2.0",
     "@scure/base": "2.4.0"
   },
