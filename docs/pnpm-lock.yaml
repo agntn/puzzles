@@ -12,8 +12,8 @@ importers:
         specifier: 0.7.0
         version: 0.7.0(@cfworker/json-schema@4.1.1)(ai@7.0.103(zod@4.4.3))(chokidar@5.0.0)(db0@0.3.4(better-sqlite3@12.11.1))(dotenv@17.4.2)(giget@3.3.1)(ioredis@5.11.1(supports-color@10.2.2))(jiti@2.7.0)(magicast@0.5.5)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
       '@agntn/chains':
-        specifier: 0.3.11
-        version: 0.3.11(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
+        specifier: 0.5.0
+        version: 0.5.0(@cfworker/json-schema@4.1.1)(ai@7.0.103(zod@4.4.3))(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
       '@agntn/explorers':
         specifier: 0.6.0
         version: 0.6.0(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)
@@ -95,6 +95,19 @@ packages:
       typebox:
         optional: true
 
+  '@agntn/chains@0.5.0':
+    resolution: {integrity: sha512-5xngkhcO9Oy80iaSLkQRzCqrjE+soFPgQFaHE3gAJKRy8Gj9gEumDPWpL1Uca2n9NDouoFvqQI8gGjnpAwC/kg==}
+    engines: {node: '>=26'}
+    hasBin: true
+    peerDependencies:
+      '@earendil-works/pi-coding-agent': '>=0.84.2 <1'
+      typebox: '*'
+    peerDependenciesMeta:
+      '@earendil-works/pi-coding-agent':
+        optional: true
+      typebox:
+        optional: true
+
   '@agntn/ciphers@0.5.0':
     resolution: {integrity: sha512-Px6MM8BSKh0hujJVUCaTG1QWPuTfuL2anc9zw85W27fklDyoxD5BBvl6Ctusmg1Htb+oMfEg3oBw9p1pFqiYfw==}
     engines: {node: '>=26'}
@@ -102,6 +115,22 @@ packages:
 
   '@agntn/encodings@0.1.0':
     resolution: {integrity: sha512-kPCR2TxPtpt+2CIRlAYHq8V7LwneVBMAp/0geftLkgKcselVI+EYm6dsL1YnZbqw6Cqtl+vHO6u7T5eZ9TTNDQ==}
+    engines: {node: '>=26'}
+    hasBin: true
+    peerDependencies:
+      '@earendil-works/pi-coding-agent': '>=0.84.2 <1'
+      '@oh-my-pi/pi-coding-agent': '>=18.0.0 <19'
+      ai: '>=7.0.0'
+    peerDependenciesMeta:
+      '@earendil-works/pi-coding-agent':
+        optional: true
+      '@oh-my-pi/pi-coding-agent':
+        optional: true
+      ai:
+        optional: true
+
+  '@agntn/encodings@0.1.1':
+    resolution: {integrity: sha512-SvTTLmwEZFSf07N8qQPFLOxgdmbUIcgGU+indCjaBWF/KsL1VyFWeCRWEpJ0f6mLiJhhUyry1zHzDMUnBbQBoA==}
     engines: {node: '>=26'}
     hasBin: true
     peerDependencies:
@@ -175,6 +204,22 @@ packages:
 
   '@agntn/hashes@0.6.1':
     resolution: {integrity: sha512-pakVYxcaOtVUTU9cfssc8S3c5kr7R5w7EhIBKJdhdNkvMeMOs4gU9zCJUamyXbKSvZcI9EYHUFcXWqapVNyW1A==}
+    engines: {node: '>=26'}
+    hasBin: true
+    peerDependencies:
+      '@earendil-works/pi-coding-agent': '>=0.87.1 <1'
+      '@oh-my-pi/pi-coding-agent': '>=18.4.2 <19'
+      ai: '>=7.0.0'
+    peerDependenciesMeta:
+      '@earendil-works/pi-coding-agent':
+        optional: true
+      '@oh-my-pi/pi-coding-agent':
+        optional: true
+      ai:
+        optional: true
+
+  '@agntn/hashes@0.6.3':
+    resolution: {integrity: sha512-/0GejNXPCrSQGge/BoQ5iu2h+hUn9XXEDx/hhrSWKV1RYAuImWtx4WDDnn3LCLIAFzFTPK40RkNhbROExjZxkw==}
     engines: {node: '>=26'}
     hasBin: true
     peerDependencies:
@@ -7723,8 +7768,10 @@ snapshots:
       - supports-color
       - zod
 
-  '@agntn/chains@0.3.11(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)':
+  '@agntn/chains@0.5.0(@cfworker/json-schema@4.1.1)(ai@7.0.103(zod@4.4.3))(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)':
     dependencies:
+      '@agntn/encodings': 0.1.1(ai@7.0.103(zod@4.4.3))
+      '@agntn/hashes': 0.6.3(ai@7.0.103(zod@4.4.3))
       '@modelcontextprotocol/sdk': 1.30.1(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.5)
       citty: 0.2.2
       consola: 3.4.2
@@ -7732,6 +7779,8 @@ snapshots:
       typebox: 1.3.34
     transitivePeerDependencies:
       - '@cfworker/json-schema'
+      - '@oh-my-pi/pi-coding-agent'
+      - ai
       - supports-color
       - zod
 
@@ -7748,6 +7797,16 @@ snapshots:
       - ai
 
   '@agntn/encodings@0.1.0(ai@7.0.103(zod@4.4.3))':
+    dependencies:
+      '@agntn/hashes': 0.6.1(ai@7.0.103(zod@4.4.3))
+      '@agntn/tools': 0.0.0(@modelcontextprotocol/server@2.2.0)(ai@7.0.103(zod@4.4.3))
+      '@modelcontextprotocol/server': 2.2.0
+      citty: 0.2.2
+      consola: 3.4.2
+    optionalDependencies:
+      ai: 7.0.103(zod@4.4.3)
+
+  '@agntn/encodings@0.1.1(ai@7.0.103(zod@4.4.3))':
     dependencies:
       '@agntn/hashes': 0.6.1(ai@7.0.103(zod@4.4.3))
       '@agntn/tools': 0.0.0(@modelcontextprotocol/server@2.2.0)(ai@7.0.103(zod@4.4.3))
@@ -7791,6 +7850,14 @@ snapshots:
       ai: 7.0.103(zod@4.4.3)
 
   '@agntn/hashes@0.6.1(ai@7.0.103(zod@4.4.3))':
+    dependencies:
+      '@agntn/tools': 0.0.0(@modelcontextprotocol/server@2.2.0)(ai@7.0.103(zod@4.4.3))
+      '@modelcontextprotocol/server': 2.2.0
+      citty: 0.2.2
+    optionalDependencies:
+      ai: 7.0.103(zod@4.4.3)
+
+  '@agntn/hashes@0.6.3(ai@7.0.103(zod@4.4.3))':
     dependencies:
       '@agntn/tools': 0.0.0(@modelcontextprotocol/server@2.2.0)(ai@7.0.103(zod@4.4.3))
       '@modelcontextprotocol/server': 2.2.0
