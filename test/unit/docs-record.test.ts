@@ -27,6 +27,37 @@ describe("docs record helpers", () => {
     expect(solvedText(view)).toBe(view.solvedAt?.slice(0, 10));
   });
 
+  it("label an Electrum seed and its extension apart from BIP39", async () => {
+    const library = await import("../../src/index.ts");
+    const view = await viewOf("luckylurker/vault-1");
+    const extended = await toPuzzleView(
+      library,
+      library.puzzle({
+        id: "test/electrum",
+        chain: "bitcoin",
+        address: "bc1q32e3dxcd0n2tlzdmchraf2057d0ax4xdwrk3jq",
+        sourceUrl: "https://example.com",
+        startedAt: "2020-01-01 00:00:00",
+        key: library.seed("visit … spot", "m/0'/0/1", "extension").electrum(),
+      }),
+      "",
+      [],
+      [],
+    );
+
+    expect(view.derived).toBe(false);
+    expect(view.keyRows.map((row) => [row.label, row.value])).toEqual([
+      [
+        "seed phrase",
+        "visit kingdom unveil kangaroo deposit found great grid remind science umbrella spot",
+      ],
+      ["seed scheme", "Electrum, not BIP39"],
+      ["derivation path", "m/0'/0/1"],
+    ]);
+    expect(extended.keyRows.map((row) => row.label)).toContain("Electrum seed extension");
+    expect(extended.keyRows.map((row) => row.label)).not.toContain("BIP39 passphrase");
+  });
+
   it("print the solve time after the date when the record has one", async () => {
     const view = await viewOf("bits/66");
 

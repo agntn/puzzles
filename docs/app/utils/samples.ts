@@ -1,4 +1,12 @@
-import type { Chain, Entropy, KeyData, Puzzle, Status, VerifyResult } from "../../../src/index.ts";
+import type {
+  Chain,
+  Entropy,
+  KeyData,
+  Puzzle,
+  Seed,
+  Status,
+  VerifyResult,
+} from "../../../src/index.ts";
 import { formatPrize } from "./format.ts";
 
 /** The slice of the library a sample needs, passed in so this module never imports it by name. */
@@ -151,16 +159,18 @@ function entropyCall(entropy: Entropy): string {
 }
 
 /**
- * The chained calls that describe a seed: the word list, the xpub, the entropy and the shares.
+ * The chained calls that describe a seed: scheme, word list, xpub, entropy and shares.
  *
  * @param {KeyData} key - The serialized key record.
- * @returns {string[]} The `.language()`, `.xpub()`, `.entropy()` and `.shares()` calls that apply.
+ * @returns {string[]} The `.electrum()`, `.language()` and other seed calls that apply.
  */
 function seedTail(key: KeyData): string[] {
+  const seed: Partial<Seed> = key.seed ?? {};
   const tail: string[] = [];
-  if (key.seed?.language !== undefined) tail.push(`.language(${quote(key.seed.language)})`);
-  if (key.seed?.xpub !== undefined) tail.push(`.xpub(${quote(key.seed.xpub)})`);
-  if (key.seed?.entropy !== undefined) tail.push(entropyCall(key.seed.entropy));
+  if (seed.scheme === "electrum") tail.push(".electrum()");
+  if (seed.language !== undefined) tail.push(`.language(${quote(seed.language)})`);
+  if (seed.xpub !== undefined) tail.push(`.xpub(${quote(seed.xpub)})`);
+  if (seed.entropy !== undefined) tail.push(entropyCall(seed.entropy));
   if (key.shares !== undefined) {
     const shares = key.shares.shares.map((share) => `share(${share.index}, ${quote(share.data)})`);
     tail.push(`.shares(${key.shares.threshold}, ${key.shares.total}, [${shares.join(", ")}])`);

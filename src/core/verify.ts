@@ -59,6 +59,7 @@ type Wallets = Pick<
   | "addressesEqual"
   | "isUnsupportedAddressKind"
   | "loadWordlist"
+  | "privateKeyFromElectrumSeed"
   | "privateKeyFromEntropy"
   | "privateKeyFromPassphrase"
   | "privateKeyFromSeed"
@@ -104,6 +105,31 @@ function messageOf(error: unknown, fallback: string): string {
   return error instanceof Error ? error.message : fallback;
 }
 
+/**
+ * The key at a seed's path, through Electrum's derivation or through BIP39 with the record's list.
+ *
+ * @param {Extract<Secret, { kind: "seed" }>} seed - The seed the record exposes.
+ * @param {string} path - Its derivation path.
+ * @param {Chain} chain - Chain the seed belongs to.
+ * @param {string | undefined} passphrase - The known passphrase, when the seed has one.
+ * @param {Wallets} decoders - The keys wallets.
+ * @returns {Promise<string | undefined>} The key in hex, or `undefined` where the chain has none.
+ */
+async function seedHex(
+  seed: Extract<Secret, { kind: "seed" }>,
+  path: string,
+  chain: Chain,
+  passphrase: string | undefined,
+  decoders: Wallets,
+): Promise<string | undefined> {
+  if (seed.scheme === "electrum") {
+    return decoders.privateKeyFromElectrumSeed(seed.phrase, path, chain, passphrase);
+  }
+  const wordlist =
+    seed.language === undefined ? undefined : await decoders.loadWordlist(seed.language);
+  return decoders.privateKeyFromSeed(seed.phrase, path, chain, passphrase, wordlist);
+}
+
 async function resolveSeedKey(
   seed: Extract<Secret, { kind: "seed" }>,
   chain: Chain,
@@ -117,15 +143,7 @@ async function resolveSeedKey(
     return unavailable("Seed requires an unknown passphrase");
   }
   try {
-    const wordlist =
-      seed.language === undefined ? undefined : await decoders.loadWordlist(seed.language);
-    const hex = decoders.privateKeyFromSeed(
-      seed.phrase,
-      seed.path,
-      chain,
-      seed.passphrase?.Known,
-      wordlist,
-    );
+    const hex = await seedHex(seed, seed.path, chain, seed.passphrase?.Known, decoders);
     if (hex === undefined) {
       return unavailable(`Seed derivation is not supported for ${chain}`);
     }
@@ -229,6 +247,9 @@ async function rebuildFromEntropy(
 ): Promise<Rebuilt> {
   const chain = puzzle.chain();
   const recipe = "bip39-entropy";
+  if (seed.scheme === "electrum") {
+    return { recipe, key: unavailable("BIP39 entropy doesn't rebuild an Electrum seed") };
+  }
   const passphrase = seedPassphrase(seed);
   if (passphrase === "Required") {
     return { recipe, key: unavailable("Entropy seed requires an unknown passphrase") };

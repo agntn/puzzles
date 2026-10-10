@@ -157,10 +157,12 @@ function entropyRows(entropy: Entropy | undefined): KeyRow[] {
 function seedRows(key: KeyData): KeyRow[] {
   const seed = key.seed;
   if (seed === undefined) return [];
+  const electrum = seed.scheme === "electrum";
   return [
     ...row("seed phrase", seed.phrase),
+    ...row("seed scheme", electrum ? "Electrum, not BIP39" : undefined, false),
     ...row("BIP39 word list", seed.language),
-    ...row("BIP39 passphrase", seed.passphrase),
+    ...row(electrum ? "Electrum seed extension" : "BIP39 passphrase", seed.passphrase),
     ...row("derivation path", seed.path),
     ...row("extended public key", seed.xpub),
     ...entropyRows(seed.entropy),

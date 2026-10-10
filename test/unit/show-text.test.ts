@@ -435,6 +435,16 @@ describe("puzzles_show text", () => {
     );
   });
 
+  it("prints an Electrum seed as the published key, with its scheme", async () => {
+    const shown = await lines("luckylurker/vault-1");
+
+    expect(shown).toContain(
+      "private key: visit kingdom unveil kangaroo deposit found great grid remind science umbrella spot (seed phrase)",
+    );
+    expect(shown).toContain("seed scheme: electrum");
+    expect(shown).toContain("derivation path: m/0'/0/1");
+  });
+
   it("prints a range a handwritten puzzle computes without declaring bits", () => {
     class Ranged extends BitcoinPuzzle {
       override id(): string {

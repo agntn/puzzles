@@ -210,15 +210,17 @@ export interface Entropy {
   readonly source?: EntropySource;
 }
 
-/** BIP39 seed material and its derivation path. */
+/** Seed material and its derivation path, BIP39 unless `scheme` names another. */
 export interface Seed {
   readonly entropy?: Entropy;
   /** The BIP39 word list the phrase comes from, when it isn't English. */
   readonly language?: BIP39Language;
-  /** The BIP39 passphrase published with the phrase. */
+  /** The passphrase published with the phrase, BIP39's or Electrum's seed extension. */
   readonly passphrase?: string;
   readonly path?: string;
   readonly phrase?: string;
+  /** An Electrum seed, whose words BIP39 would turn into a different wallet. */
+  readonly scheme?: "electrum";
   readonly xpub?: string;
 }
 
@@ -266,6 +268,7 @@ export type Secret =
       readonly path?: string | undefined;
       readonly passphrase?: Passphrase | undefined;
       readonly language?: BIP39Language | undefined;
+      readonly scheme?: "electrum" | undefined;
     }
   | { readonly kind: "mini"; readonly mini: string };
 
@@ -307,6 +310,7 @@ function seedSecret(key: KeyData): Secret | undefined {
     path: key.seed.path,
     passphrase: seedPassphrase(key.seed),
     language: key.seed.language,
+    scheme: key.seed.scheme,
   };
 }
 
@@ -611,11 +615,11 @@ export class Key {
   }
 
   /**
-   * Records a BIP39 seed phrase, its derivation path and the passphrase published with it.
+   * Records a seed phrase, its path and its passphrase, BIP39 unless `.electrum()` follows.
    *
-   * @param {string} phrase - BIP39 mnemonic phrase.
+   * @param {string} phrase - Mnemonic phrase as published.
    * @param {string} [path] - BIP32 derivation path.
-   * @param {string} [passphrase] - BIP39 passphrase, when the phrase has one.
+   * @param {string} [passphrase] - BIP39 passphrase or Electrum seed extension, when published.
    * @returns {Key} A new builder with the value recorded.
    */
   seed(phrase: string, path?: string, passphrase?: string): Key {
@@ -630,6 +634,15 @@ export class Key {
    */
   language(value: BIP39Language): Key {
     return this.#with({ seed: { ...this.#data.seed, language: value } });
+  }
+
+  /**
+   * Marks the phrase as an Electrum seed, so verification salts it the way Electrum does.
+   *
+   * @returns {Key} A new builder with the scheme recorded.
+   */
+  electrum(): Key {
+    return this.#with({ seed: { ...this.#data.seed, scheme: "electrum" } });
   }
 
   /**
@@ -764,11 +777,11 @@ export function passphrase(value: string): Key {
 }
 
 /**
- * Starts key material from a BIP39 seed phrase.
+ * Starts key material from a seed phrase, BIP39 unless `.electrum()` follows.
  *
- * @param {string} phrase - BIP39 mnemonic phrase.
+ * @param {string} phrase - Mnemonic phrase as published.
  * @param {string} [path] - BIP32 derivation path.
- * @param {string} [passphrase] - BIP39 passphrase, when the phrase has one.
+ * @param {string} [passphrase] - BIP39 passphrase or Electrum seed extension, when published.
  * @returns {Key} The builder, for chaining.
  */
 export function seed(phrase: string, path?: string, passphrase?: string): Key {

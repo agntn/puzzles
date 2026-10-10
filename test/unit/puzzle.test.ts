@@ -22,6 +22,8 @@ import {
   Puzzle,
   puzzle,
   type PuzzleSpec,
+  secretOf,
+  seed,
   stage,
   standard,
   Status,
@@ -91,6 +93,18 @@ describe("puzzle record factories", () => {
     const pathOnly = puzzle({ ...required, key: derivation("m/0").derived() });
     expect(pathOnly.keyData()).toEqual({ seed: { path: "m/0" }, derived: true });
     expect(pathOnly.hasDerivedKey()).toBe(false);
+  });
+
+  it("keeps an Electrum phrase as written and the scheme beside it", () => {
+    const record = puzzle({ ...required, key: seed("visit … spot", "m/0'/0/1").electrum() });
+
+    expect(record.keyData()).toEqual({
+      seed: { phrase: "visit … spot", path: "m/0'/0/1", scheme: "electrum" },
+    });
+    expect(record.toJSON().key).toEqual(record.keyData());
+    expect(secretOf(record.keyData())).toMatchObject({ kind: "seed", scheme: "electrum" });
+    expect(record.hasPrivateKey()).toBe(true);
+    expect(record.hasDerivedKey()).toBe(false);
   });
 
   it("hands back a key builder that leaves the record alone", () => {
