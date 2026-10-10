@@ -420,24 +420,22 @@ describe("Collection.verify", () => {
     });
   });
 
-  it("marks an Electrum seed unavailable where the chain has no key to derive", async () => {
-    const result = await verify(
-      puzzle({
-        ...synthetic,
-        chain: "arweave",
-        address: standard("Kz4n1kXGgWD_qLtiB8xJhFqrcVzy3QJ8AbOWmL58JTg"),
-        key: seed(
-          "visit kingdom unveil kangaroo deposit found great grid remind science umbrella spot",
-          "m/0'/0/1",
-        ).electrum(),
-      }),
-    );
-
-    expect(result).toMatchObject({
-      verified: false,
-      unavailable: true,
-      error: "Seed derivation is not supported for arweave",
-    });
+  it("marks an Electrum seed unavailable where the chain has no HD wallet", async () => {
+    const key = seed(
+      "visit kingdom unveil kangaroo deposit found great grid remind science umbrella spot",
+      "m/0'/0/1",
+    ).electrum();
+    /* Arweave has no wallet here, and Decred HD drops leading zeros where BIP32 keeps them. */
+    for (const [chain, address] of [
+      ["arweave", standard("Kz4n1kXGgWD_qLtiB8xJhFqrcVzy3QJ8AbOWmL58JTg")],
+      ["decred", p2pkh("DsmcYVbP1Nmag2H4AS17UTvmWXmGeA7nLDx")],
+    ] as const) {
+      expect(await verify(puzzle({ ...synthetic, chain, address, key }))).toMatchObject({
+        verified: false,
+        unavailable: true,
+        error: `Seed derivation is not supported for ${chain}`,
+      });
+    }
   });
 
   it("fails a seed with a word outside the BIP39 list", async () => {

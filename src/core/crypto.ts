@@ -175,7 +175,7 @@ export function privateKeyFromSeed(
  * @param {string} path - Derivation path such as `m/0'/0/0`.
  * @param {Chain} chain - Chain the seed belongs to.
  * @param {string} [passphrase] - Electrum seed extension, when the seed has one.
- * @returns {string | undefined} The key in hex, or `undefined` where the chain has no wallet.
+ * @returns {string | undefined} The key in hex, or `undefined` where the chain has no HD wallet.
  */
 export function privateKeyFromElectrumSeed(
   phrase: string,
@@ -183,7 +183,7 @@ export function privateKeyFromElectrumSeed(
   chain: Chain,
   passphrase?: string,
 ): string | undefined {
-  if (walletFor(chain) === undefined) {
+  if (walletFor(chain) === undefined || chain === Chain.Decred) {
     return undefined;
   }
   const { seed } = deriveSeed(phrase, passphrase);
