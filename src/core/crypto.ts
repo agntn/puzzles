@@ -1,5 +1,7 @@
 import { type AbstractBlockchain, getBlockchainPath } from "@agntn/keys";
 import { bip39, entropyToMnemonic } from "@agntn/keys/bip39";
+import { deriveHDKey, getMasterKeyFromSeed } from "@agntn/keys/bip32";
+import { deriveSeed } from "@agntn/keys/electrum";
 
 export { loadWordlist } from "@agntn/keys/bip39";
 import { type BrainwalletRecipe, derive } from "@agntn/keys/brainwallet";
@@ -164,6 +166,32 @@ export function privateKeyFromSeed(
     ...(wordlist === undefined ? {} : { wordlist }),
   });
   return derived.keys.private;
+}
+
+/**
+ * The key at an Electrum seed's path: Electrum's salt, then plain BIP32. Old and 2FA seeds fail.
+ *
+ * @param {string} phrase - Electrum standard or SegWit seed phrase.
+ * @param {string} path - Derivation path such as `m/0'/0/0`.
+ * @param {Chain} chain - Chain the seed belongs to.
+ * @param {string} [passphrase] - Electrum seed extension, when the seed has one.
+ * @returns {string | undefined} The key in hex, or `undefined` where the chain has no HD wallet.
+ */
+export function privateKeyFromElectrumSeed(
+  phrase: string,
+  path: string,
+  chain: Chain,
+  passphrase?: string,
+): string | undefined {
+  if (walletFor(chain) === undefined || chain === Chain.Decred) {
+    return undefined;
+  }
+  const { seed } = deriveSeed(phrase, passphrase);
+  const { privateKey } = deriveHDKey(getMasterKeyFromSeed(seed), path);
+  if (privateKey === null) {
+    throw new TypeError("No private key at the derivation path");
+  }
+  return privateKey.toHex();
 }
 
 /**

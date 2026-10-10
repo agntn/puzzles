@@ -3,8 +3,8 @@ import {
   claim,
   compressed,
   confirmation,
-  hex,
   official,
+  seed,
   technique,
 } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
@@ -18,7 +18,10 @@ export const luckyLurkerVault1 = puzzle({
   startedAt: "2026-03-16 17:54:03",
   status: Status.Solved,
   solvedAt: "2026-08-17 18:08:09",
-  key: hex("d82ce0eaffce690777d571b7943ca782a7c83f48a84269afd26148c3d5816a0a"),
+  key: seed(
+    "visit kingdom unveil kangaroo deposit found great grid remind science umbrella spot",
+    "m/0'/0/1",
+  ).electrum(),
   techniques: [technique("hidden-seed-words", "https://luckylurker.com/bitcoin-vault/")],
   pubkey: compressed("024ad3b398bc9a95b4b8d44310e15a5355402dba3c784e60bf3b14821ca1622adb"),
   prize: 0.0008,

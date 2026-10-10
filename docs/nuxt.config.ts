@@ -55,6 +55,7 @@ const libraryEntries = [
   "@agntn/explorers/providers/etherscan",
   "@agntn/explorers/providers/mempool",
   "@agntn/keys",
+  "@agntn/keys/bip32",
   "@agntn/keys/bip39",
   "@agntn/keys/brainwallet",
   "@agntn/keys/blockchains/base",
@@ -65,6 +66,7 @@ const libraryEntries = [
   "@agntn/keys/blockchains/ecash",
   "@agntn/keys/blockchains/ethereum",
   "@agntn/keys/blockchains/litecoin",
+  "@agntn/keys/electrum",
   "@agntn/keys/wif",
 ];
 

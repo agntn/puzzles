@@ -369,6 +369,75 @@ describe("Collection.verify", () => {
     });
   });
 
+  it("derives an Electrum seed the way Electrum does, and misses it read as BIP39", async () => {
+    /* LuckyLurker's Vault #1: Electrum SegWit, with the prize on the second receive address. */
+    const phrase =
+      "visit kingdom unveil kangaroo deposit found great grid remind science umbrella spot";
+    const address = p2wpkh("bc1q32e3dxcd0n2tlzdmchraf2057d0ax4xdwrk3jq");
+    const record = (key: Key) => puzzle({ ...synthetic, chain: "bitcoin", address, key });
+
+    expect(await verify(record(seed(phrase, "m/0'/0/1").electrum()))).toMatchObject({
+      verified: true,
+      derivedAddress: address.value,
+      privateKey: "d82ce0eaffce690777d571b7943ca782a7c83f48a84269afd26148c3d5816a0a",
+    });
+    expect(await verify(record(seed(phrase, "m/0'/0/1")))).toMatchObject({
+      verified: false,
+      unavailable: false,
+    });
+    /* BIP39 entropy spells another phrase, so the recipe can't speak for an Electrum seed. */
+    expect(
+      await verify(
+        record(seed(phrase, "m/0'/0/1").electrum().entropy("00000000000000000000000000000000")),
+      ),
+    ).toMatchObject({
+      verified: true,
+      recipe: {
+        recipe: "bip39-entropy",
+        verified: false,
+        unavailable: true,
+        error: "BIP39 entropy doesn't rebuild an Electrum seed",
+      },
+    });
+    /* An unpublished extension opens another wallet, so the passphrase reaches Electrum. */
+    expect(await verify(record(seed(phrase, "m/0'/0/1", "extension").electrum()))).toMatchObject({
+      verified: false,
+      unavailable: false,
+    });
+    expect(
+      await verify(
+        record(
+          seed(
+            "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+            "m/0'/0/1",
+          ).electrum(),
+        ),
+      ),
+    ).toMatchObject({
+      verified: false,
+      unavailable: false,
+      error: "Unsupported or unrecognized Electrum seed version",
+    });
+  });
+
+  it("marks an Electrum seed unavailable where the chain has no HD wallet", async () => {
+    const key = seed(
+      "visit kingdom unveil kangaroo deposit found great grid remind science umbrella spot",
+      "m/0'/0/1",
+    ).electrum();
+    /* Arweave has no wallet here, and Decred HD drops leading zeros where BIP32 keeps them. */
+    for (const [chain, address] of [
+      ["arweave", standard("Kz4n1kXGgWD_qLtiB8xJhFqrcVzy3QJ8AbOWmL58JTg")],
+      ["decred", p2pkh("DsmcYVbP1Nmag2H4AS17UTvmWXmGeA7nLDx")],
+    ] as const) {
+      expect(await verify(puzzle({ ...synthetic, chain, address, key }))).toMatchObject({
+        verified: false,
+        unavailable: true,
+        error: `Seed derivation is not supported for ${chain}`,
+      });
+    }
+  });
+
   it("fails a seed with a word outside the BIP39 list", async () => {
     const result = await verify(
       puzzle({

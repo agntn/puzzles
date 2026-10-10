@@ -147,6 +147,7 @@ describe("docs landing fixtures", () => {
       ".xpub(",
       ".entropy(",
       ".shares(",
+      ".electrum(",
       ".derived(",
     ]) {
       expect(literals.some((literal) => literal.includes(builder))).toBe(true);
@@ -164,6 +165,9 @@ describe("docs landing fixtures", () => {
     expect(keyLiteral({ seed: { phrase: "fortune … moon", passphrase: "supernova" } })).toBe(
       `seed("fortune … moon", undefined, "supernova")`,
     );
+    expect(
+      keyLiteral({ seed: { phrase: "visit … spot", path: "m/0'/0/1", scheme: "electrum" } }),
+    ).toBe(`seed("visit … spot", "m/0'/0/1").electrum()`);
   });
 
   it("pin the statistics and the collection facts", async () => {

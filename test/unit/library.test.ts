@@ -376,7 +376,7 @@ describe("lazy collection registry", () => {
     );
   });
 
-  it("records the solved LuckyLurker Vault with its derived key and published answers", async () => {
+  it("records the solved LuckyLurker Vault with its Electrum seed and published answers", async () => {
     const puzzle = await requirePuzzle("luckylurker/vault-1");
 
     expect(puzzle.address().value).toBe("bc1q32e3dxcd0n2tlzdmchraf2057d0ax4xdwrk3jq");
@@ -399,9 +399,17 @@ describe("lazy collection registry", () => {
       source: "https://luckylurker.com/bitcoin-vault/",
     });
     expect(puzzle.hints()[11]?.date).toBe("2026-03-22 18:30:00");
-    expect(puzzle.key()?.data().hex).toBe(
-      "d82ce0eaffce690777d571b7943ca782a7c83f48a84269afd26148c3d5816a0a",
-    );
+    expect(puzzle.keyData()).toEqual({
+      seed: {
+        phrase: puzzle
+          .hints()
+          .map((hint) => hint.answer?.text)
+          .join(" "),
+        path: "m/0'/0/1",
+        scheme: "electrum",
+      },
+    });
+    expect(puzzle.hasDerivedKey()).toBe(false);
     expect(puzzle.startedAt()).toBe("2026-03-16 17:54:03");
     expect(puzzle.solver()).toBeUndefined();
     expect(puzzle.solvedAt()).toBe("2026-08-17 18:08:09");
