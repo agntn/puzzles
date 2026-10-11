@@ -315,13 +315,16 @@ function seedSecret(key: KeyData): Secret | undefined {
 }
 
 /**
- * The BIP39 passphrase a seed derives under: the one published with the phrase, else its entropy's.
+ * The passphrase a seed derives under: its own, else its entropy's, which only a BIP39 seed takes.
  *
  * @param {Seed} seed - The seed record.
  * @returns {Passphrase | undefined} The passphrase, or `undefined` when the seed has none.
  */
 export function seedPassphrase(seed: Seed): Passphrase | undefined {
-  return seed.passphrase === undefined ? seed.entropy?.passphrase : { Known: seed.passphrase };
+  if (seed.passphrase !== undefined) {
+    return { Known: seed.passphrase };
+  }
+  return seed.scheme === "electrum" ? undefined : seed.entropy?.passphrase;
 }
 
 function miniSecret(key: KeyData): Secret | undefined {
