@@ -399,6 +399,13 @@ describe("Collection.verify", () => {
         error: "BIP39 entropy doesn't rebuild an Electrum seed",
       },
     });
+    /* A BIP39 entropy passphrase is no Electrum seed extension, known or required. */
+    for (const passphrase of [{ Known: "extension" }, "Required"] as const) {
+      const withEntropy = seed(phrase, "m/0'/0/1")
+        .electrum()
+        .entropy("00000000000000000000000000000000", undefined, passphrase);
+      expect(await verify(record(withEntropy))).toMatchObject({ verified: true });
+    }
     /* An unpublished extension opens another wallet, so the passphrase reaches Electrum. */
     expect(await verify(record(seed(phrase, "m/0'/0/1", "extension").electrum()))).toMatchObject({
       verified: false,
