@@ -146,6 +146,12 @@ export const phyChallenge = puzzle({
       { date: "2026-09-15" },
     ),
     official("This is a hint.", post("67170689"), undefined, { date: "2026-09-23" }),
+    official(
+      "So what does everyone think about the cracking face emoji?",
+      post("67218400"),
+      undefined,
+      { date: "2026-10-07" },
+    ),
     community("Phyllotaxis ?", post("66855641"), undefined, { date: "2026-06-20" }),
     community(
       "The signature signs the complete OP text with no trailing newline. It recovers the funded SegWit address bc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p, currently holding 800,000 sats.",
