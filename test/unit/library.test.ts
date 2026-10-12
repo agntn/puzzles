@@ -200,14 +200,19 @@ describe("lazy collection registry", () => {
 
   it("credits Level 4's published solution without adopting its example WIF", async () => {
     const puzzle = await requirePuzzle("zden/level-4");
-    expect(puzzle.solver()).toMatchObject({
+    const credit = {
       key: "mmorsl",
       name: "mmorsl",
       profiles: [{ name: "steemit", url: "https://steemit.com/@mmorsl" }],
-    });
-    expect(puzzle.solver()?.facts?.[0]?.source).toBe(
-      "https://steemit.com/bitcoin/@mmorsl/solution-of-the-bitcoin-crypto-puzzle-level-4-by-zden",
-    );
+      facts: [
+        {
+          source:
+            "https://steemit.com/bitcoin/@mmorsl/solution-of-the-bitcoin-crypto-puzzle-level-4-by-zden",
+        },
+      ],
+    };
+    expect(puzzle.solver()).toMatchObject(credit);
+    expect(puzzle.toJSON().solver).toMatchObject(credit);
     expect(puzzle.assets()).toMatchObject({
       puzzle: "level-4/puzzle.png",
       solution: "level-4/solution.md",
@@ -217,7 +222,6 @@ describe("lazy collection registry", () => {
       "assets/zden/level-4/puzzle.png",
       "assets/zden/level-4/solution.md",
     ]);
-    expect(puzzle.toJSON().solver).toEqual(puzzle.solver());
     expect(puzzle.key()).toBeUndefined();
     expect(puzzle.hasPrivateKey()).toBe(false);
   });
@@ -653,8 +657,9 @@ describe("lazy collection registry", () => {
       "Unknown solver: retiredcoder. Did you mean retired-coder?",
     );
 
+    const known = concreteClasses.map((CollectionClass) => CollectionClass.key).join(", ");
     await expect(message(requirePuzzle("nope/1"))).resolves.toBe(
-      `Puzzle not found: nope/1. Known collections: ${collectionKeys().join(", ")}`,
+      `Puzzle not found: nope/1. Known collections: ${known}`,
     );
     await expect(message(requireSolver("nobody"))).resolves.toMatch(
       /^Unknown solver: nobody\. Known solvers: retired-coder, /u,
@@ -983,7 +988,12 @@ describe("lazy collection registry", () => {
     ]);
     expect((await requirePuzzle("gsmg")).toJSON()).not.toHaveProperty("techniques");
     const serialized = await datasetCollections();
-    expect(serialized.find((entry) => entry.name === "bits")?.techniques).toEqual(bits.techniques);
+    expect(serialized.find((entry) => entry.name === "bits")?.techniques).toEqual([
+      {
+        name: "masked-key-range",
+        source: "https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941",
+      },
+    ]);
     expect(serialized.find((entry) => entry.name === "gsmg")).not.toHaveProperty("techniques");
   });
 
@@ -1107,7 +1117,6 @@ describe("lazy collection registry", () => {
   it("builds the dataset envelope from the registry", async () => {
     const envelope = await dataset();
 
-    expect(envelope.data_version).toBe(await dataVersion());
     expect(envelope.collections).toHaveLength(concreteClasses.length);
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(

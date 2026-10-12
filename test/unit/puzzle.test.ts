@@ -97,11 +97,10 @@ describe("puzzle record factories", () => {
 
   it("keeps an Electrum phrase as written and the scheme beside it", () => {
     const record = puzzle({ ...required, key: seed("visit … spot", "m/0'/0/1").electrum() });
+    const key = { seed: { phrase: "visit … spot", path: "m/0'/0/1", scheme: "electrum" } };
 
-    expect(record.keyData()).toEqual({
-      seed: { phrase: "visit … spot", path: "m/0'/0/1", scheme: "electrum" },
-    });
-    expect(record.toJSON().key).toEqual(record.keyData());
+    expect(record.keyData()).toEqual(key);
+    expect(record.toJSON().key).toEqual(key);
     expect(secretOf(record.keyData())).toMatchObject({ kind: "seed", scheme: "electrum" });
     expect(record.hasPrivateKey()).toBe(true);
     expect(record.hasDerivedKey()).toBe(false);
@@ -146,7 +145,7 @@ describe("puzzle record factories", () => {
     expect(parts.map((part) => Object.isFrozen(part))).toEqual(parts.map(() => true));
     expect(Reflect.set(record.address(), "value", "1Mutated")).toBe(false);
     expect(Reflect.set(record.toJSON(), "status", Status.Solved)).toBe(false);
-    expect(record.address().value).toBe(required.address.value);
+    expect(record.address().value).toBe("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH");
   });
 
   it("freezes through what a handwritten subclass hands to toJSON()", () => {
