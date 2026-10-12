@@ -8,11 +8,12 @@ import {
   type PuzzleFile,
   readPuzzleFile,
 } from "../../src/core/files.ts";
-import { assetUrlOf } from "../../src/core/puzzle.ts";
 import { assetsTool } from "../../src/tool-operations.ts";
+import { ASSETS } from "../support/assets.ts";
 
 const bytes = (...values: readonly number[]): Uint8Array => new Uint8Array(values);
 const ascii = (text: string): Uint8Array => new TextEncoder().encode(text);
+const MAIN = "https://raw.githubusercontent.com/agntn/puzzles/main";
 const file: PuzzleFile = {
   kind: "hint",
   path: "assets/x/hint.bin",
@@ -71,14 +72,14 @@ describe("puzzle files", () => {
       asked.push(url);
       return url.includes("/main/") ? new Response(data) : new Response("", { status: 404 });
     });
-    const unpinned: PuzzleFile = { kind: "source", path, url: assetUrlOf(path) };
+    const unpinned: PuzzleFile = { kind: "source", path, url: `${ASSETS}/${path}` };
     const pinned: PuzzleFile = { ...unpinned, kind: "hint", sha256, bytes: data.length };
 
     for (const target of [unpinned, pinned]) {
       asked.length = 0;
       const content = await readPuzzleFile(target);
-      expect(content.servedBy).toBe(assetUrlOf(path, "main"));
-      expect(asked).toEqual([assetUrlOf(path), assetUrlOf(path, "main")]);
+      expect(content.servedBy).toBe(`${MAIN}/${path}`);
+      expect(asked).toEqual([`${ASSETS}/${path}`, `${MAIN}/${path}`]);
     }
   });
 
@@ -90,8 +91,8 @@ describe("puzzle files", () => {
     });
     const path = "assets/x/hint.txt";
 
-    await readPuzzleFile({ kind: "hint", path, url: assetUrlOf(path) });
-    expect(asked).toEqual([assetUrlOf(path)]);
+    await readPuzzleFile({ kind: "hint", path, url: `${ASSETS}/${path}` });
+    expect(asked).toEqual([`${ASSETS}/${path}`]);
   });
 
   it("leaves main alone when the tag fails for any reason but a missing file", async () => {
@@ -104,10 +105,10 @@ describe("puzzle files", () => {
     });
     const path = "assets/sources/x/post.md";
 
-    await expect(readPuzzleFile({ kind: "source", path, url: assetUrlOf(path) })).rejects.toThrow(
-      "answered HTTP 503",
-    );
-    expect(asked).toEqual([assetUrlOf(path)]);
+    await expect(
+      readPuzzleFile({ kind: "source", path, url: `${ASSETS}/${path}` }),
+    ).rejects.toThrow("answered HTTP 503");
+    expect(asked).toEqual([`${ASSETS}/${path}`]);
   });
 
   it("returns an SVG as text and refuses bytes that are neither image nor UTF-8", () => {
