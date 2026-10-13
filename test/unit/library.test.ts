@@ -466,9 +466,12 @@ describe("lazy collection registry", () => {
       "https://medium.com/blockcrushr-labs/solving-decreds-autonomy-puzzle-aedac18f18f3",
     );
     expect(puzzle.assetPath()).toBe("assets/zden/decred-autonomy/puzzle.jpg");
-    expect(puzzle.claimTransaction()).toBeUndefined();
-    expect(puzzle.prize()).toBeUndefined();
-    expect(puzzle.toJSON()).not.toHaveProperty("solve_date");
+    expect(puzzle.claimTransaction()?.txid).toBe(
+      "26315309817926ba860b0b50bd334cadd314b0fd495862bafa85e7597a8d77e2",
+    );
+    expect(puzzle.prize()).toBe(355.85470498);
+    expect(puzzle.solvedAt()).toBe("2017-04-29 23:08:26");
+    /* The launch is known only to the day, so the record can't time the solve. */
     expect(puzzle.toJSON()).not.toHaveProperty("solve_time");
   });
 
@@ -878,7 +881,9 @@ describe("lazy collection registry", () => {
       id: "zden/decred-autonomy",
       chain: "decred",
       status: "solved",
+      prize: 355.85470498,
       currency: "DCR",
+      solvedAt: "2017-04-29 23:08:26",
     });
 
     /* A solver known only by the address the prize went to has no entry. */
@@ -1044,7 +1049,7 @@ describe("lazy collection registry", () => {
         BTC: 1069.81270703,
         BCH: 5.1,
         LTC: 233.85158794,
-        DCR: 460,
+        DCR: 815.85470498,
         XEC: 30068000.94,
       },
       unsolved_prize: {
