@@ -1030,9 +1030,9 @@ describe("lazy collection registry", () => {
     expect(await all()).toHaveLength(552);
     expect(await stats()).toEqual({
       total: 552,
-      claimed: 20,
+      claimed: 19,
       expired: 4,
-      solved: 319,
+      solved: 320,
       swept: 96,
       unsolved: 113,
       with_pubkey: 444,
@@ -1148,6 +1148,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(319);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(320);
   });
 });

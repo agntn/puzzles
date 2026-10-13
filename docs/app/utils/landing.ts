@@ -1576,11 +1576,11 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "dab2cb4d2c24",
+  dataVersion: "c2311a493b63",
   total: 552,
-  solved: 319,
+  solved: 320,
   unsolved: 113,
-  claimed: 20,
+  claimed: 19,
   swept: 96,
   expired: 4,
   withPubkey: 444,
@@ -2697,8 +2697,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     authorUrl: "https://crypto.haluska.sk/",
     total: 16,
     statuses: {
-      solved: 14,
-      claimed: 1,
+      solved: 15,
       unsolved: 1,
     },
     chains: ["bitcoin", "ethereum", "litecoin", "decred"],
@@ -2712,7 +2711,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
       BTC: 0.003125,
     },
     withPubkey: 15,
-    withKey: 6,
+    withKey: 7,
     firstStarted: "2016-06-07 21:05:42",
     lastStarted: "2024-04-18 10:59:41",
     hints: [],

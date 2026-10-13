@@ -4,11 +4,18 @@ import {
   claim,
   confirmation,
   digest,
+  fact,
   funding,
+  hex,
   increase,
   official,
+  party,
+  PartyKind,
+  profile,
   uncompressed,
 } from "../../core/parts.ts";
+
+const SOLUTION = "https://echo.ls/zden-level-5/";
 
 /** Puzzle `zden/level-5`. */
 export const zdenPuzzleLevel5 = puzzle({
@@ -17,13 +24,42 @@ export const zdenPuzzleLevel5 = puzzle({
   address: "1cryptoGeCRiTzVgxBQcKFFjSVydN1GW7",
   sourceUrl: "https://crypto.haluska.sk/crypto5fix.png",
   startedAt: "2018-10-20 18:46:57",
-  status: Status.Claimed,
+  status: Status.Solved,
   pubkey: uncompressed(
     "0488d3d2481ceee8be4372fc4d1ef8451e5b5e1c092728566f5b1bd1a5849ffa870681b60b5e97983e4d027156273b3f81da778005e1104cf3fbc9446e66ccbb9a",
+  ),
+  key: hex("f4bfad68198549d3e5612fa3b1cabad14679c634359e2f5efdd804ddce8a9f51").wif(
+    "5Kg5Mosdn8dbSCsNBVtFHTVMjyfSE8UR2nfLLG8JcjWJNqtBBCG",
   ),
   prize: 0.0055555,
   solvedAt: "2026-09-22 18:34:35",
   solveTime: 250040858,
+  solver: party("echo.ls", {
+    key: "echo-ls",
+    kind: PartyKind.Person,
+    about:
+      "Author of the echo.ls blog, who solved Zden's corrected Level 5 and published the key with the method.",
+    profiles: [profile("website", "https://echo.ls/")],
+    facts: [
+      fact(
+        "Published the private key and the method: each rectangle's area after the transform the corner diagram suggests, summed in pairs into the 32 key bytes.",
+        SOLUTION,
+        { date: "2026-09-27" },
+      ),
+      fact("Wrote that they solved the corrected puzzle on September 22, 2026.", SOLUTION, {
+        date: "2026-09-27",
+      }),
+      fact(
+        "Wrote that they used GPT-6 Astra for quick prototyping and experimentation.",
+        SOLUTION,
+        { date: "2026-09-27" },
+      ),
+      fact(
+        "Zden's catalog links the write-up as the solution written by the winner.",
+        "https://crypto.haluska.sk/",
+      ),
+    ],
+  }),
   transactions: [
     funding(
       "3dde5372e50d314df6e0f46477b99e34a20fbe38721fa9519a2cdf6c51518c38",
