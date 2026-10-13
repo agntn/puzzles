@@ -56,6 +56,7 @@ export const WALK: readonly string[] = [
   "school-of-bitcoin",
   "liberte-guidant-le-peuple",
   "hunting-time",
+  "coin-games/2",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1572,18 +1573,46 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 3,
     tool: "hunting-time\tsolved\t0.0042 BTC\tbc1qhzy6j4amw26z7e694mgfr7kvzl7xteu54f0a85\nchain: bitcoin  address kind: p2wpkh\nhash160: b889a957bb72b42f6745aed091facc17fc65e794\npublic key: 0370f4ef335df0da109a49fdd2627f5fb27c87545e991134ce0cf77291a6d48da4 (compressed)\nprivate key: ocean electric connect fly apology slender reopen pepper erupt curtain stay wedding (seed phrase)\nseed scheme: electrum\nderivation path: m/0'/0/2\nstarted: 2026-06-29 16:30:00\nsolved: 2026-08-18 02:07:20 (1mo 19d 9h 37m)\nsolver: _radosinsky (radosinsky)\npre-genesis: yes\ntransactions: 3\n\tfunding\t2023-07-22 09:43:25\t0.0021 BTC\t00a72c1b2bd08db06d4ea7027d4352a3644a9b3a3c81cdacf82379cbff95b33a\n\tincrease\t2026-07-31 23:23:00\t0.0021 BTC\t45ea9718a05f453cf44ccbce9771464f29136bcfc54f62627eca2519f6985a10\n\tclaim\t2026-08-18 02:07:20\t0.00419642 BTC\td3783a1cde2c491a6edfbead81aeebda90257c8c25b4b0c9b2bac89bc5cd607a\nclaim: https://blockstream.info/tx/d3783a1cde2c491a6edfbead81aeebda90257c8c25b4b0c9b2bac89bc5cd607a\nhint assets: assets/hunting-time/cover.jpg, assets/hunting-time/clue-01.jpg, assets/hunting-time/clue-02.jpg, assets/hunting-time/clue-03.jpg, assets/hunting-time/clue-04.jpg, assets/hunting-time/clue-05.jpg, assets/hunting-time/clue-06.jpg, assets/hunting-time/clue-07.jpg, assets/hunting-time/clue-08.jpg, assets/hunting-time/clue-09.jpg, assets/hunting-time/clue-10.jpg, assets/hunting-time/clue-11.jpg, assets/hunting-time/clue-12.jpg\ntechniques: 1\n\thidden-seed-words\tsource: https://x.com/VeteranHODL/status/2090400955707830480\nhints: 17\n\tofficial\t2026-06-15\tI wonder if anyone has found the other hidden code yet...\tsource: https://x.com/VeteranHODL/status/2066614083105738752\n\tofficial\t2026-06-29\tHidden within the pages of Hunting Time is a genuine Bitcoin seed phrase.\tsource: https://x.com/VeteranHODL/status/2071632285951226106\tanswer: 1 - Page 24 → 12:24 → BIP39 #1224 → ocean\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-06\tTime for another clue.\tsource: https://x.com/VeteranHODL/status/2074168998938210563\tanswer: 2 - Electrical panel → electric\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-13\tClue number three.\tsource: https://x.com/VeteranHODL/status/2076705716501610744\tanswer: 3 - Page 19 → 378 meters/connection → connect\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-20\tIt's time for four.\tsource: https://x.com/VeteranHODL/status/2079242430499487893\tanswer: 4 - Page 210 → 07:20 → #720 → fly\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-27\tClue Five.\tsource: https://x.com/VeteranHODL/status/2081779146196439527\tanswer: 5 - Sign → apology\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-07-29\tSix.\tsource: https://x.com/VeteranHODL/status/2082504700125966650\tanswer: 6 - Page 241 → 16:27 → #1627 → slender\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-01\tThree years ago, when I started writing Hunting Time, I sent 210,000 sats to a fresh electrum wallet.\tsource: https://x.com/VeteranHODL/status/2083486983142142452\n\tofficial\t2026-08-01\tHere is clue number seven.\tsource: https://x.com/VeteranHODL/status/2083486983142142452\tanswer: 7 - 14 + 60 → #1460 → reopen\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-01\tAfter revealing seven seed phrase words, the entropy of the target wallet is 51 bits.\tsource: https://x.com/VeteranHODL/status/2083592109647401333\n\tofficial\t2026-08-03\tTime for clue eight.\tsource: https://x.com/VeteranHODL/status/2084315859770872026\tanswer: 8 - Page 103 → 13:04 → #1304 → pepper\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-06\tClue number nine. Only three clues remaining.\tsource: https://x.com/VeteranHODL/status/2085434753092653555\tanswer: 9 - Page 32 → 06:16 → #616 → erupt\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-09\tClue TEN.\tsource: https://x.com/VeteranHODL/status/2086490186888986672\tanswer: 10 - Hotel-room image → curtain\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-11\tClue ELEVEN.\tsource: https://x.com/VeteranHODL/status/2087297821921640942\tanswer: 11 - Page 103 → 001704 → #1704 → stay\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-13\tFINAL CLUE.\tsource: https://x.com/VeteranHODL/status/2087893684633141356\tanswer: 12 - Page 110 → 1992 → #1992 → wedding\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\n\tofficial\t2026-08-15\tThe Sats are still out there ready to be claimed, but you will need the paperback to solve the puzzle\tsource: https://x.com/VeteranHODL/status/2088547059452235917\n\tofficial\t2026-08-18\tA major clue is in the title of the book...\tsource: https://x.com/VeteranHODL/status/2089798740978577809\tanswer: 'Hunting Time' was actually the biggest clue.\tanswer source: https://x.com/VeteranHODL/status/2090400955707830480\tanswer date: 2026-08-20\nexplorer: https://blockstream.info/address/bc1qhzy6j4amw26z7e694mgfr7kvzl7xteu54f0a85\nsource: https://x.com/VeteranHODL/status/2071632285951226106\nfiles: 13 files, 17 archived sources; puzzles_assets lists them and reads one by its path",
   },
+  {
+    id: "coin-games/2",
+    collection: "coin-games",
+    chain: "bitcoin",
+    status: "claimed",
+    address: "1PMvVyADCztUAWx55AoUiUo9jyB5UA19GL",
+    kind: "p2pkh",
+    hash160: "f547bedddec5041122be6a8a5dfd23203c817db0",
+    redeemScript: undefined,
+    prize: "0.00003301 BTC",
+    prizeAmount: 0.00003301,
+    currency: undefined,
+    startedAt: "2017-11-20 04:47:17",
+    solvedAt: "2018-08-19 21:08:28",
+    solveTime: "9mo 2d 16h 21m",
+    bits: undefined,
+    range: undefined,
+    pubkey: "03c0bd7c4b441e1abe699bb770fe9c47aa3bf20ad791dbf5deea5c210e2d4a6335",
+    pubkeyFormat: "compressed",
+    secret: "none",
+    keyLiteral: undefined,
+    verdict: "unavailable",
+    detail: "Puzzle has no private key",
+    explorer: "https://blockstream.info/address/1PMvVyADCztUAWx55AoUiUo9jyB5UA19GL",
+    source: "https://coingames6.webnode.page/a2/",
+    transactions: 2,
+    tool: "coin-games/2\tclaimed\t0.00003301 BTC\t1PMvVyADCztUAWx55AoUiUo9jyB5UA19GL\nchain: bitcoin  address kind: p2pkh\nhash160: f547bedddec5041122be6a8a5dfd23203c817db0\npublic key: 03c0bd7c4b441e1abe699bb770fe9c47aa3bf20ad791dbf5deea5c210e2d4a6335 (compressed)\nprivate key: unknown\nstarted: 2017-11-20 04:47:17\nsolved: 2018-08-19 21:08:28 (9mo 2d 16h 21m)\nsolver: 1NXB3Mimrpij1HCz2wWJR3tpRcHexsuQM3\ntransactions: 2\n\tfunding\t2017-11-20 04:47:17\t0.00003301 BTC\t15c705bb0d65e7cb800c236cc1f219e4b3db9d5772935d4aea6d3f550f60f54f\n\tclaim\t2018-08-19 21:08:28\t0.0000309 BTC\td5efdb6e62e85f3d603c37d4e3ded82cddbb7e71f8a7d36c9848caa7f9a99157\nclaim: https://blockstream.info/tx/d5efdb6e62e85f3d603c37d4e3ded82cddbb7e71f8a7d36c9848caa7f9a99157\nasset: assets/coin-games/2/puzzle.png\nasset source: https://coingames6.webnode.page/a2/\nhints: 1\n\tofficial\t-\tDifficulty: Medium 16 Words\tsource: https://coingames6.webnode.page/\tconfirmation: https://web.archive.org/web/20220813091533/https://coingames6.webnode.page/ (The home page as it stood in August 2022.)\nexplorer: https://blockstream.info/address/1PMvVyADCztUAWx55AoUiUo9jyB5UA19GL\nsource: https://coingames6.webnode.page/a2/\nfiles: 1 file, 1 archived source; puzzles_assets lists them and reads one by its path",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "cfb8092eb6ec",
-  total: 552,
+  dataVersion: "e3a1cabe7391",
+  total: 555,
   solved: 321,
   unsolved: 113,
-  claimed: 18,
+  claimed: 21,
   swept: 96,
   expired: 4,
-  withPubkey: 444,
+  withPubkey: 447,
   unsolvedPrize: {
     BTC: 909.97280377,
     ETH: 12.612559658256945,
@@ -1591,7 +1620,7 @@ export const STATS_STATIC = {
     AR: 1500.188092936237,
   },
   totalPrize: {
-    BTC: 1069.81270703,
+    BTC: 1069.81282685,
     ETH: 26.81566403482549,
     DOGE: 10000,
     BCH: 5.1,
@@ -1810,6 +1839,26 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 1,
     firstStarted: "2015-04-03",
     lastStarted: "2015-04-03",
+    hints: [],
+  },
+  {
+    key: "coin-games",
+    author: "Coin_Pro",
+    authorKey: "coin-pro",
+    authorUrl: "https://coingames6.webnode.page/",
+    total: 3,
+    statuses: {
+      claimed: 3,
+    },
+    chains: ["bitcoin"],
+    prize: {
+      BTC: 0.00011982,
+    },
+    unsolvedPrize: {},
+    withPubkey: 3,
+    withKey: 0,
+    firstStarted: "2017-11-20 04:37:55",
+    lastStarted: "2017-11-20 04:47:17",
     hints: [],
   },
   {
@@ -2816,6 +2865,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Crypto artist and game designer who painted TORCHED H34R7S with a wallet key inside, and later founded Blockade Games.",
     collections: ["coin-artist"],
     puzzles: 1,
+  },
+  {
+    key: "coin-pro",
+    to: "/authors/coin-pro",
+    name: "Coin_Pro",
+    kind: "person",
+    about:
+      "Drew Bitcoin puzzles as banknotes for Coin_Games in late 2017 and promised a bigger prize every week until the new year.",
+    collections: ["coin-games"],
+    puzzles: 3,
   },
   {
     key: "cryptopuzzlers",

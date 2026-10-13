@@ -10,6 +10,7 @@ import { BitimageCollection } from "../../src/collections/bitimage.ts";
 import { BookQuizCollection } from "../../src/collections/book-quiz.ts";
 import { BraveNewWorldCollection } from "../../src/collections/brave-new-world.ts";
 import { CoinArtistCollection } from "../../src/collections/coin-artist.ts";
+import { CoinGamesCollection } from "../../src/collections/coin-games.ts";
 import { DogesGambitCollection } from "../../src/collections/doges-gambit.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
@@ -98,6 +99,7 @@ const concreteClasses = [
   BookQuizCollection,
   BraveNewWorldCollection,
   CoinArtistCollection,
+  CoinGamesCollection,
   DogesGambitCollection,
   DugCollection,
   GenesisCollection,
@@ -623,7 +625,7 @@ describe("lazy collection registry", () => {
       "Puzzle not found: 71. Did you mean bits/71, quizchain/71 or quizchain2/71?",
     );
     await expect(miss(requirePuzzle("1"))).resolves.toBe(
-      "Puzzle not found: 1. Did you mean bits/1, grycoin/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1, walking-banks/1 or weave/1?",
+      "Puzzle not found: 1. Did you mean bits/1, coin-games/1, grycoin/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1, walking-banks/1 or weave/1?",
     );
 
     /* A number one digit off is another puzzle, and an unknown collection holds no name. */
@@ -1032,21 +1034,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(552);
+    expect(await all()).toHaveLength(555);
     expect(await stats()).toEqual({
-      total: 552,
-      claimed: 18,
+      total: 555,
+      claimed: 21,
       expired: 4,
       solved: 321,
       swept: 96,
       unsolved: 113,
-      with_pubkey: 444,
+      with_pubkey: 447,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1069.81270703,
+        BTC: 1069.81282685,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 815.85470498,
@@ -1126,7 +1128,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(552);
+    ).toBe(555);
   });
 
   it("hands back the memoized views frozen through", async () => {

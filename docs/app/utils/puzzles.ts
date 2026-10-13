@@ -67,6 +67,14 @@ const PRESENTATION: Readonly<
     chains: ["bitcoin"],
     blurb: "TORCHED H34R7S. A Bitcoin key painted into flames and decoded in 2018.",
   },
+  "coin-games": {
+    icon: "i-lucide-banknote",
+    title: "Coin_Games weekly banknote puzzles",
+    sample: "coin-games/2",
+    chains: ["bitcoin"],
+    blurb:
+      "Banknotes stuffed with skulls, lions and statues, a few thousand sats each. Every prize emptied by somebody who never said how.",
+  },
   dug: {
     icon: "i-lucide-graduation-cap",
     title: "Dug's Student Treasure Hunt",
