@@ -1778,6 +1778,17 @@ export const archivedSources = [
     },
   },
   {
+    file: "coin-games/3301j-2017-12-04",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/7hfbar/new_weekly_bitcoin_puzzles_is_it_the_resurrection/",
+    author: "u/3301J",
+    date: "2017-12-04",
+    archive: {
+      url: "https://web.archive.org/web/20230610010609/https://old.reddit.com/r/bitcoinpuzzles/comments/7hfbar/new_weekly_bitcoin_puzzles_is_it_the_resurrection/",
+      date: "2023-06-10T01:06:09Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "satoshi-birthday-quiz/aoinakamoto-2019-04-05",
     url: "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/",
     author: "u/AoiNakamoto",
