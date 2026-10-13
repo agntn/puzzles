@@ -1,4 +1,4 @@
-import { claim, compressed, funding, official } from "../../core/parts.ts";
+import { claim, compressed, funding, official, source, technique, wif } from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The Stage One thread, with the question, the funding txid, three hints and the format update. */
@@ -8,15 +8,29 @@ const THREAD =
 /** The author's reply of July 15, 2019 with the first hash digits, as a prize for the first run's block 77. */
 const HASH_DIGITS = "https://www.reddit.com/r/Grycoin/comments/ca6jxv/comment/etto4a5/";
 
-/** Quizchain2 block 77, Stage One: Hal Finney's Bitcointalk post as a Satoshi puzzle. Claimed, and the solver kept the tricky bits. */
+/** The 2026 GitHub issue where a player, not the 2019 winner, wrote down the Stage One MD5. */
+const REPRODUCTION = "https://github.com/floflo777/open-crypto-puzzles/issues/1";
+
+/**
+ * Quizchain2 block 77, Stage One: Hal Finney's Bitcointalk post as a Satoshi puzzle, hashed with
+ * MD5 into BIP39 entropy, for 77 mBTC. The winner kept the tricky bits, and the hash surfaced seven
+ * years later in a stranger's reproduction. The claim's public key vouches for it.
+ */
 export const quizchain2Block77 = puzzle({
   id: "quizchain2/77",
   chain: "bitcoin",
   address: "19TbyN5KCg1Lg7qHwezifsLVcdSa2Rj5KN",
   sourceUrl: THREAD,
   startedAt: "2019-07-07 09:16:50",
-  status: Status.Claimed,
+  status: Status.Solved,
   pubkey: compressed("02e77b75850c735f8efb1afe8677f007e6d7e82b07bacbd37a0b37712316cd06e2"),
+  key: wif("KwwZ4HGvrpDR6mzXP1m5yK18vWsA7MqWDNoSM9ZgKkeWa62tGor2")
+    .entropy(
+      "9dd2efb9bc976c2095bd534d7b8d431c",
+      source(REPRODUCTION, "MD5 of the case-flipped post, reproduced by a third party in 2026"),
+    )
+    .derived(),
+  techniques: [technique("md5-to-bip39-entropy", REPRODUCTION)],
   prize: 0.077,
   hints: [
     official("Question: https://bitcointalk.org/index.php?topic=155054.0", THREAD),

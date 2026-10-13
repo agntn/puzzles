@@ -1721,6 +1721,17 @@ export const archivedSources = [
     },
   },
   {
+    file: "quizchain2/stakeados-2026-08-18",
+    url: "https://github.com/floflo777/open-crypto-puzzles/issues/1",
+    author: "stakeados",
+    date: "2026-08-18",
+    archive: {
+      url: "https://web.archive.org/web/20260922133556/https://github.com/floflo777/open-crypto-puzzles/issues/1",
+      date: "2026-09-22T13:35:56Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "grycoin/aoinakamoto-2019-07-28-civj2n",
     url: "https://www.reddit.com/r/Grycoin/comments/civj2n/7_mbtc_grycoin_chain_block_1/",
     author: "u/AoiNakamoto",

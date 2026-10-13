@@ -840,6 +840,7 @@ describe("collection class data", () => {
         "quizchain2/73",
         "quizchain2/74",
         "quizchain2/75",
+        "quizchain2/77",
         "satoshi-birthday-quiz",
         "trivia-brainwallet",
       ],
@@ -1090,7 +1091,7 @@ describe("collection class data", () => {
     expect(
       Object.fromEntries(Object.entries(counts).map(([name, items]) => [name, items?.length])),
     ).toEqual({
-      "bip39-entropy": 157,
+      "bip39-entropy": 158,
       "sha256-brainwallet": 28,
       "triple-sha256-brainwallet": 3,
       warpwallet: 6,

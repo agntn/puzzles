@@ -11,7 +11,7 @@ screenshot_sha256: 125fe5e4b5c40e6ba8bb1a855e0c7717f68a5351fe6643396ac023b8cdf58
 
 # [77 mbtc] Quizchain2 Block 77 (Stage One)
 
-[Original thread](https://www.reddit.com/r/Grycoin/comments/ca6jxv/77_mbtc_quizchain2_block_77_stage_one/). The `sourceUrl` of the [quizchain2/77](../../../src/collections/quizchain2/77.ts) record and the source of its question, funding transaction, three hints and the format update. The author's reply with the first hash digits, `9dd`, is in the comments, and so is u/puzzleponky's note that it was solved, with the method kept back. Nobody ever published the solution. The post went up on July 7, 2019, at 12:58:15 UTC, three hours and 41 minutes after the block time of its funding transaction. Its last edit is stamped 23:24:16 UTC on August 3, 2019, so the transcript shows the post as it stood after the claim.
+[Original thread](https://www.reddit.com/r/Grycoin/comments/ca6jxv/77_mbtc_quizchain2_block_77_stage_one/). The `sourceUrl` of the [quizchain2/77](../../../src/collections/quizchain2/77.ts) record and the source of its question, funding transaction, three hints and the format update. The author's reply with the first hash digits, `9dd`, is in the comments, and so is u/puzzleponky's note that it was solved, with the method kept back. The winner never published the solution. The MD5 surfaced only in 2026, in [a GitHub issue by a player who didn't win](stakeados-2026-08-18.md). The post went up on July 7, 2019, at 12:58:15 UTC, three hours and 41 minutes after the block time of its funding transaction. Its last edit is stamped 23:24:16 UTC on August 3, 2019, so the transcript shows the post as it stood after the claim.
 
 ## Historical provenance
 
