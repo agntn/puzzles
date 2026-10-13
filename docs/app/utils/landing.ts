@@ -1585,9 +1585,9 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     prize: "0.00003301 BTC",
     prizeAmount: 0.00003301,
     currency: undefined,
-    startedAt: "2017-11-20 04:47:17",
+    startedAt: "2017-11-26 00:00:00",
     solvedAt: "2018-08-19 21:08:28",
-    solveTime: "9mo 2d 16h 21m",
+    solveTime: "8mo 26d 21h 8m",
     bits: undefined,
     range: undefined,
     pubkey: "03c0bd7c4b441e1abe699bb770fe9c47aa3bf20ad791dbf5deea5c210e2d4a6335",
@@ -1599,13 +1599,13 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/1PMvVyADCztUAWx55AoUiUo9jyB5UA19GL",
     source: "https://coingames6.webnode.page/a2/",
     transactions: 2,
-    tool: "coin-games/2\tclaimed\t0.00003301 BTC\t1PMvVyADCztUAWx55AoUiUo9jyB5UA19GL\nchain: bitcoin  address kind: p2pkh\nhash160: f547bedddec5041122be6a8a5dfd23203c817db0\npublic key: 03c0bd7c4b441e1abe699bb770fe9c47aa3bf20ad791dbf5deea5c210e2d4a6335 (compressed)\nprivate key: unknown\nstarted: 2017-11-20 04:47:17\nsolved: 2018-08-19 21:08:28 (9mo 2d 16h 21m)\nsolver: 1NXB3Mimrpij1HCz2wWJR3tpRcHexsuQM3\ntransactions: 2\n\tfunding\t2017-11-20 04:47:17\t0.00003301 BTC\t15c705bb0d65e7cb800c236cc1f219e4b3db9d5772935d4aea6d3f550f60f54f\n\tclaim\t2018-08-19 21:08:28\t0.0000309 BTC\td5efdb6e62e85f3d603c37d4e3ded82cddbb7e71f8a7d36c9848caa7f9a99157\nclaim: https://blockstream.info/tx/d5efdb6e62e85f3d603c37d4e3ded82cddbb7e71f8a7d36c9848caa7f9a99157\nasset: assets/coin-games/2/puzzle.png\nasset source: https://coingames6.webnode.page/a2/\nhints: 1\n\tofficial\t-\tDifficulty: Medium 16 Words\tsource: https://coingames6.webnode.page/\tconfirmation: https://web.archive.org/web/20220813091533/https://coingames6.webnode.page/ (The home page as it stood in August 2022.)\nexplorer: https://blockstream.info/address/1PMvVyADCztUAWx55AoUiUo9jyB5UA19GL\nsource: https://coingames6.webnode.page/a2/\nfiles: 1 file, 1 archived source; puzzles_assets lists them and reads one by its path",
+    tool: "coin-games/2\tclaimed\t0.00003301 BTC\t1PMvVyADCztUAWx55AoUiUo9jyB5UA19GL\nchain: bitcoin  address kind: p2pkh\nhash160: f547bedddec5041122be6a8a5dfd23203c817db0\npublic key: 03c0bd7c4b441e1abe699bb770fe9c47aa3bf20ad791dbf5deea5c210e2d4a6335 (compressed)\nprivate key: unknown\nstarted: 2017-11-26 00:00:00\nsolved: 2018-08-19 21:08:28 (8mo 26d 21h 8m)\nsolver: 1NXB3Mimrpij1HCz2wWJR3tpRcHexsuQM3\npre-genesis: yes\ntransactions: 2\n\tfunding\t2017-11-20 04:47:17\t0.00003301 BTC\t15c705bb0d65e7cb800c236cc1f219e4b3db9d5772935d4aea6d3f550f60f54f\n\tclaim\t2018-08-19 21:08:28\t0.0000309 BTC\td5efdb6e62e85f3d603c37d4e3ded82cddbb7e71f8a7d36c9848caa7f9a99157\nclaim: https://blockstream.info/tx/d5efdb6e62e85f3d603c37d4e3ded82cddbb7e71f8a7d36c9848caa7f9a99157\nasset: assets/coin-games/2/puzzle.png\nasset source: https://coingames6.webnode.page/a2/\nhints: 1\n\tofficial\t-\tDifficulty: Medium 16 Words\tsource: https://coingames6.webnode.page/\tconfirmation: https://web.archive.org/web/20220813091533/https://coingames6.webnode.page/ (The home page as it stood in August 2022.)\nexplorer: https://blockstream.info/address/1PMvVyADCztUAWx55AoUiUo9jyB5UA19GL\nsource: https://coingames6.webnode.page/a2/\nfiles: 1 file, 1 archived source; puzzles_assets lists them and reads one by its path",
   },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "e3a1cabe7391",
+  dataVersion: "3de08e8ef609",
   total: 555,
   solved: 321,
   unsolved: 113,
@@ -1858,7 +1858,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withPubkey: 3,
     withKey: 0,
     firstStarted: "2017-11-20 04:37:55",
-    lastStarted: "2017-11-20 04:47:17",
+    lastStarted: "2017-12-03 00:00:00",
     hints: [],
   },
   {

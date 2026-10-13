@@ -39,7 +39,7 @@ export class CoinGamesCollection extends NamedCollection {
     ],
   });
 
-  /** One record per funded week, in chain order. */
+  /** One record per funded week, numbered the way the site numbers them. */
   static readonly puzzles = [coinGames1, coinGames2, coinGames3];
 
   /** Builds the canonical collection. */

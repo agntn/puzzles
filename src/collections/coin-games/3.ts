@@ -28,10 +28,11 @@ export const coinGames3 = puzzle({
   chain: "bitcoin",
   address: "1DR2SGyJPFnA5nsCPJqtTUk269wtD3RSo4",
   sourceUrl: PAGE,
-  startedAt: "2017-11-20 04:37:55",
+  startedAt: "2017-12-03 00:00:00",
+  preGenesis: true,
   status: Status.Claimed,
   solvedAt: "2018-03-05 21:56:07",
-  solveTime: 9_134_292,
+  solveTime: 8_027_767,
   prize: 0.00006661,
   pubkey: compressed("0327f5f2a0bd3c21016a9c062d4f4236e6b9f3ab25972c3cd8794a620481547c01"),
   hints: [
