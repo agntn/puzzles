@@ -1,3 +1,67 @@
+## v0.30.0
+
+[compare changes](https://github.com/agntn/puzzles/compare/v0.29.0...v0.30.0)
+
+### 🚀 Enhancements
+
+- Fold screenshot rows into their source ([#480](https://github.com/agntn/puzzles/pull/480))
+- **docs:** Open every puzzle file on the page ([#483](https://github.com/agntn/puzzles/pull/483))
+- Add MCP server description and icons ([#484](https://github.com/agntn/puzzles/pull/484))
+- **collections:** Add known public keys ([#490](https://github.com/agntn/puzzles/pull/490))
+- **collections:** Mark powerful-moss claimed ([#493](https://github.com/agntn/puzzles/pull/493))
+- **collections:** Add genesis October 7 reply ([#495](https://github.com/agntn/puzzles/pull/495))
+- Add liberte-guidant-le-peuple ([#498](https://github.com/agntn/puzzles/pull/498))
+- **balance:** Blockchair spare for Litecoin ([#499](https://github.com/agntn/puzzles/pull/499))
+- Build /mcp with `toToolkitTools` ([#502](https://github.com/agntn/puzzles/pull/502))
+- **cli:** Swap `plainWord()` for `plain` ([#503](https://github.com/agntn/puzzles/pull/503))
+- **collections:** Add hunting-time ([#504](https://github.com/agntn/puzzles/pull/504))
+- Add `.electrum()` for Electrum seeds ([#508](https://github.com/agntn/puzzles/pull/508))
+- **collections:** Add phy October hint ([#510](https://github.com/agntn/puzzles/pull/510))
+- **collections:** Add zden/level-5 key and solver ([#516](https://github.com/agntn/puzzles/pull/516))
+- **collections:** Add quizchain2/77 key ([#517](https://github.com/agntn/puzzles/pull/517))
+- **collections:** Add zden/decred-autonomy claim ([#518](https://github.com/agntn/puzzles/pull/518))
+- **collections:** Add coin-games ([#519](https://github.com/agntn/puzzles/pull/519))
+- Fold long hint lists in puzzles show ([#523](https://github.com/agntn/puzzles/pull/523))
+
+### 🔥 Performance
+
+- **balance:** Bench mempool.space on a miss ([#488](https://github.com/agntn/puzzles/pull/488))
+
+### 🩹 Fixes
+
+- Report a mistyped address as a typo ([#485](https://github.com/agntn/puzzles/pull/485))
+- **errors:** Skip the roster when a guess fits ([#486](https://github.com/agntn/puzzles/pull/486))
+- Point a collection key at its puzzles ([#487](https://github.com/agntn/puzzles/pull/487))
+- **verify:** Skip entropy passphrase on Electrum ([#509](https://github.com/agntn/puzzles/pull/509))
+- Skip watch captures past the cutoff ([#521](https://github.com/agntn/puzzles/pull/521))
+
+### 💅 Refactors
+
+- ⚠️  Build the CLI with runCli ([#494](https://github.com/agntn/puzzles/pull/494))
+
+### 📖 Documentation
+
+- Move AGENTS.md into the code and CONTRIBUTING.md ([#520](https://github.com/agntn/puzzles/pull/520))
+
+### 🏡 Chore
+
+- Drop the `@agntn/tools` type paths ([#522](https://github.com/agntn/puzzles/pull/522))
+
+### ✅ Tests
+
+- Take the pass point from agntn/curves ([#482](https://github.com/agntn/puzzles/pull/482))
+- Clear the asset commit after each test ([#492](https://github.com/agntn/puzzles/pull/492))
+- Replace tautological assertions ([#514](https://github.com/agntn/puzzles/pull/514))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Build the CLI with runCli ([#494](https://github.com/agntn/puzzles/pull/494))
+
+### ❤️ Contributors
+
+- Aeitwoen ([@aeitwoen](https://github.com/aeitwoen))
+- Ori ([@oritwoen](https://github.com/oritwoen))
+
 ## v0.29.0
 
 [compare changes](https://github.com/agntn/puzzles/compare/v0.28.4...v0.29.0)
