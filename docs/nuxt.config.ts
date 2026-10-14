@@ -33,7 +33,11 @@ function importsDigest(template: string): string {
   return digest.digest("hex").slice(0, 12);
 }
 
-/** What src/index.ts and src/tools.ts import at runtime, resolved from docs/node_modules. */
+/**
+ * What src/index.ts and src/tools.ts import at runtime, resolved from docs/node_modules. Workers
+ * Builds installs docs/ alone, so each one is also a dependency of docs/package.json at the root's
+ * version. A new bare import in src/ needs that line, one here and one in `libraryEntries`.
+ */
 const libraryDependencies = [
   "@agntn/archives",
   "@agntn/chains",
@@ -159,6 +163,7 @@ export default defineNuxtConfig({
     /** The Etherscan key for /api/balance on Ethereum puzzles; NUXT_ETHERSCAN_API_KEY at runtime, the root .env locally. */
     etherscanApiKey: process.env.ETHERSCAN_API_KEY ?? "",
   },
+  /** Both would resolve from the repo root's workspace too. */
   devtools: { enabled: false },
   telemetry: false,
   site: {
@@ -328,7 +333,8 @@ export default defineNuxtConfig({
     ],
     /**
      * One MCP SDK in the worker. The toolkit builds its server from one copy and `agents` checks it
-     * with `instanceof` against another. pnpm splits them by the `zod` peer each one resolves.
+     * with `instanceof` against another. pnpm splits them by the `zod` peer each one resolves, and
+     * `@agntn/explorers` pins another `zod` than Docus. Keep this until both resolve the same copy.
      */
     alias: {
       "@modelcontextprotocol/sdk": resolve(
@@ -338,7 +344,8 @@ export default defineNuxtConfig({
     },
     /**
      * Nitro 2 stubs `node:fs` for workerd, which has run it natively since 2025-09-01 under
-     * `nodejs_compat`. `@agntn/archives` reads its config through it on every archive read.
+     * `nodejs_compat`. `@agntn/archives` reads its config through it on every archive read. Drop
+     * this once Nitro stops stubbing it.
      */
     unenv: { external: ["node:fs"], alias: { fs: "node:fs", "node:fs": "node:fs" } },
     /** Types only: src/tools.ts and the /mcp adapter see one `ToolDefinition`, the copy here. */
@@ -359,6 +366,10 @@ export default defineNuxtConfig({
     /** The checkout's CHANGELOG.md, read by /changelog and its feed as `assets:changelog`. */
     serverAssets: [{ baseName: "changelog", dir: repoRoot, pattern: "CHANGELOG.md" }],
     prerender: {
+      /**
+       * Puzzle pages come from the links `::collection-puzzles` renders. Nothing lists them here:
+       * this file runs under jiti from docs/ and can't import the library on Workers Builds.
+       */
       crawlLinks: true,
       routes: [
         "/",

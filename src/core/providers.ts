@@ -194,7 +194,10 @@ function translate(
 /** How long a primary that missed a read waits behind its fallback, about one long pass. */
 const BENCH_MS = 10 * 60 * 1000;
 
-/** When each chain's primary goes first again, set while its fallback answers in its place. */
+/**
+ * When each chain's primary goes first again, set while its fallback answers in its place. It lives
+ * in the module, so it spans every pass and MCP request of one process.
+ */
 const benched = new Map<Chain, number>();
 
 /** Forgets every primary waiting behind its fallback, so the next read asks it first again. */

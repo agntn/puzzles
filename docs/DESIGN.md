@@ -60,6 +60,13 @@ Data comes from the library, never from these files. The sample comes from [samp
 | playground load, answer   | operation leaders draw 60 ms apart once; readout and list rows 45 and 30 ms apart per answer; response cursor loops in flight |
 | reduced motion            | no walk timer, no roll, no wedge turn; manual steps work                                                                      |
 
+## House rules
+
+- **Section headings** stand alone, with no kicker label above them; uppercase mono labels stay inside data cards, where they name fields.
+- **Lists of collections** are roster rows (`UTable` in the clipped shell), never a grid of icon and blurb tiles.
+- **Status tags** are small rectangles in the palette's amber, red and neutrals, with no blue or cyan on the dark theme.
+- **Visitor input** in the playground renders as text, through interpolation or a `<pre>`. Never `v-html`, never evaluated.
+
 ## Differences
 
 - **OG fonts:** puzzles relies on `@nuxt/fonts` alone, so Takumi falls back to Inter. Waits on the family's open decision.

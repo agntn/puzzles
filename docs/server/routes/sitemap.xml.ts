@@ -2,7 +2,10 @@ import { all } from "@agntn/puzzles";
 import docusSitemap from "docus/server/routes/sitemap.xml";
 import { inferSiteURL } from "docus/utils/meta";
 
-/** Pages outside `content/` that the Docus sitemap cannot see. Keep in step with `app/pages/`. */
+/**
+ * Pages outside `content/` that the Docus sitemap cannot see. Keep in step with `app/pages/` and
+ * with `llms.sections` in `nuxt.config.ts`, or a new page is invisible to crawlers and `llms.txt`.
+ */
 const PAGES = ["/playground", "/changelog"];
 
 /**

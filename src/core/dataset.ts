@@ -583,6 +583,7 @@ function serializeSnapshot(snapshot: readonly AnyCollection[]): readonly Dataset
 /**
  * A deterministic 12-character hash of the serialized puzzle data. It changes with the records and
  * nowhere else, so a consumer can cache a snapshot and compare it later without a build step.
+ * It serializes the whole dataset on first use. Nothing time or environment dependent goes in.
  *
  * @returns {Promise<string>} The first 12 hex characters of SHA-256 over the serialized collections.
  */

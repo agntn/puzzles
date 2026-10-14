@@ -52,7 +52,11 @@ export interface VerifyFailure {
 /** Result of verifying a puzzle's known key material. */
 export type VerifyResult = VerifySuccess | VerifyFailure;
 
-/** The keys wallets that `verify` loads on its first call. */
+/**
+ * The keys wallets that `verify` loads on its first call, so `@agntn/keys` stays out of the package
+ * import and of CLI startup. No other module imports `crypto.ts` statically; `test/eval-packed.ts`
+ * checks that a lookup loads no keys and the first verification does.
+ */
 type Wallets = Pick<
   typeof import("./crypto.ts"),
   | "addressFromPrivateKey"
