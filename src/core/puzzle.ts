@@ -179,7 +179,8 @@ const SOLVE_TIME_UNITS = [
 
 /**
  * One crypto puzzle. Subclasses say what the target is, what's known about its key and what
- * happened on chain. Everything computable from those answers lives here.
+ * happened on chain. Everything computable from those answers lives here, rebuilt on every call:
+ * only the instances themselves are cached.
  */
 export abstract class Puzzle {
   /** Universal identifier shaped as `collection/name`, or the bare collection key for singletons. */
@@ -208,7 +209,8 @@ export abstract class Puzzle {
   abstract startedAt(): string;
 
   /**
-   * Lifecycle state. Override for anything that isn't still open.
+   * Lifecycle state. Override for anything that isn't still open. It is stated, never derived: a
+   * claim transaction plus a published key still means `solved`.
    *
    * @returns {Status} Lifecycle state. Override for anything that isn't still open.
    */

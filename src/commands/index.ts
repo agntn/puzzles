@@ -3,6 +3,10 @@
  * the command line keeps what the tools leave out: URLs instead of repository paths, every match
  * instead of a page, filtered passes, rows as they land and exit codes a script can read.
  * `author` and `solver` run the tools' own executors with the key as a positional, not `--key`.
+ *
+ * A command imports the core inside `execute`, because `runCli` builds every definition before it
+ * reads the line. Every positional is `plain` too, since no identifier starts with a dash, so
+ * `list --withPubkey` fails as an unknown option instead of looking up a collection by that name.
  */
 
 import type { ToolDefinition } from "@agntn/tools";

@@ -1,6 +1,8 @@
 packages:
   - .
 
+# Without it docs/node_modules holds only direct dependencies, Node walks up to the root's
+# node_modules, and the server bundle can end up with a second copy of Vue.
 shamefullyHoist: true
 
 allowBuilds:

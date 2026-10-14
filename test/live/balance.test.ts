@@ -1,4 +1,8 @@
-/** Live provider roundtrips for `Puzzle.balance()`. Run with `pnpm test:live`. */
+/**
+ * Live provider roundtrips for `Puzzle.balance()`. Run with `pnpm test:live`, outside `pnpm test`
+ * and CI. They assert shape and chain, never an amount that drifts, and a slow public instance such
+ * as dcrdata gets its own timeout.
+ */
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 import { Balance, requirePuzzle } from "../../src/index.ts";
 

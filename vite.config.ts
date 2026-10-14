@@ -49,6 +49,22 @@ export default defineConfig({
       typeAware: true,
       typeCheck: true,
     },
+    overrides: [
+      {
+        /** The browser bundle and the worker import these; Node APIs belong to the CLI side. */
+        files: ["src/core/**/*.ts", "src/index.ts"],
+        rules: {
+          "no-restricted-imports": [
+            "error",
+            {
+              patterns: [
+                { group: ["node:*"], message: "src/core stays neutral ESM. Move it to the CLI." },
+              ],
+            },
+          ],
+        },
+      },
+    ],
     ignorePatterns: ["dist", "coverage"],
   },
   test: {

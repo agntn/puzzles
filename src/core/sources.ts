@@ -3,7 +3,9 @@ import { SourceLookupError } from "./errors.ts";
 
 /**
  * Wayback reads for `watch()`. The module loads only when a caller asks about source pages, so
- * `@agntn/archives` stays out of the package's load path like the explorers do.
+ * `@agntn/archives` stays out of the package's load path like the explorers do. It is the one core
+ * module that needs more than neutral ESM: `@agntn/archives` reads its config through `c12` and
+ * `node:fs` on every read, so it runs on Node or on a worker that keeps `node:fs` native.
  */
 
 /** One archive capture of a source page. */

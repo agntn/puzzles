@@ -1,4 +1,7 @@
-/** The puzzle tools, declared once for MCP, Pi and OMP. The dataset loads on the first call. */
+/**
+ * The puzzle tools, declared once for MCP, Pi and OMP. The dataset loads on the first call. `Type`
+ * comes from `@agntn/tools`, never a bare `typebox`: OMP rewrites that import to its own facade.
+ */
 
 import { defineTool, Type, type TProperties, type ToolDefinition } from "@agntn/tools";
 import {
@@ -169,7 +172,10 @@ export const eligibilityToolDefinition = defineTool({
   execute: (params) => eligibilityTool(params.query, params.chain, params.apiKey),
 });
 
-/** `puzzles_verify` on the public server: one id per call, never a filter. */
+/**
+ * `puzzles_verify` on the public server: one id per call, never a filter, because a filtered pass
+ * would spend seconds of the worker's CPU on one request.
+ */
 export const publicVerifyToolDefinition = defineTool({
   ...described(facts.publicTools.verify),
   input: closed({ id: puzzleId }),

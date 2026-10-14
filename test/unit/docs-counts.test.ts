@@ -89,7 +89,6 @@ function proseFiles(): string[] {
     .map((name) => path.join("docs/content/1.guide", name));
   return [
     "README.md",
-    "AGENTS.md",
     "docs/AGENTS.md",
     "docs/content/index.md",
     "docs/content/2.collections/00.index.md",

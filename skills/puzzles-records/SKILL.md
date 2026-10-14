@@ -10,7 +10,7 @@ metadata:
 
 A record is one `PuzzleSpec` literal handed to `puzzle()`, with a required `chain` and the address as a plain string the factory reads on that chain. The collection modules are the only copy of the data. There is no JSON to regenerate.
 
-The repository's `AGENTS.md` and `CONTRIBUTING.md` own the invariants. This skill is the path through them.
+The repository's `CONTRIBUTING.md` owns the rules. This skill is the path through them.
 
 ## Before writing anything
 
@@ -59,7 +59,7 @@ node src/cli.ts verify <id> # the key you recorded derives the address
 pnpm fixtures --check       # landing samples and counts still match
 ```
 
-Then `pnpm lint`, `pnpm typecheck` and `pnpm test:packed` as the repository's `AGENTS.md` lists them. The commit scope is `collections`, with the identifier in the subject: `feat(collections): add example`, `fix(collections): bits/135 solved`.
+Then `pnpm lint`, `pnpm typecheck` and `pnpm test:packed` as `CONTRIBUTING.md` lists them. The commit scope is `collections`, with the identifier in the subject: `feat(collections): add example`, `fix(collections): bits/135 solved`.
 
 ## Related
 

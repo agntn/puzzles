@@ -23,7 +23,9 @@ async function loadTools(): Promise<typeof PuzzlesTools> {
 }
 
 /**
- * Registers crypto puzzle and bounty data tools in OMP.
+ * Registers crypto puzzle and bounty data tools in OMP, with `loadMode: "essential"` so they stay in
+ * its top-level list instead of behind discovery. The loader is this wrapper's own, because OMP
+ * cannot re-export another module's extension.
  *
  * @param {ExtensionAPI} pi - The host extension API.
  */
