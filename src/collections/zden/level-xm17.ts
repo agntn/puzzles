@@ -14,7 +14,8 @@ export const zdenPuzzleLevelXm17 = puzzle({
   chain: "bitcoin",
   address: "1cryptozWJAE7UzDZF1eSgsT7mVjUsu7g",
   sourceUrl: THREAD,
-  startedAt: "2017-12-24 18:10:13",
+  startedAt: "2017-12-25 22:09:21",
+  preGenesis: true,
   status: Status.Solved,
   pubkey: uncompressed(
     "04a7daaeb780428349a532386cbe4570c2765265099a5cabb6614abbbc16e0eed968f012d4e999a2726ec101402af57d4d99813d86ca6a1de7bf15ec6ff740ab6e",
@@ -25,7 +26,7 @@ export const zdenPuzzleLevelXm17 = puzzle({
   techniques: [technique("binary", SCHEME)],
   prize: 0.0260414,
   solvedAt: "2017-12-26 19:28:42",
-  solveTime: 177509,
+  solveTime: 76761,
   transactions: [
     funding(
       "b640f0671cb59f47a197584d7a9cf67bdd2f7e6227a74bd4bdae89067e1b34a2",
