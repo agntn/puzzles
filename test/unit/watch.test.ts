@@ -3,6 +3,7 @@ import { bits } from "../../src/collections/bits.ts";
 import { teikhos } from "../../src/collections/teikhos.ts";
 import { InvalidArgumentError } from "../../src/index.ts";
 import type * as Watch from "../../src/core/watch.ts";
+import type * as Sources from "../../src/core/sources.ts";
 import { formatWatchReport, watcher } from "../../src/core/watch.ts";
 import { watchTool } from "../../src/tool-operations.ts";
 
@@ -398,5 +399,56 @@ describe("puzzles_watch", () => {
     await expect(watchTool("bits/71", "2026-13-01")).rejects.toThrow(
       "Invalid since: expected YYYY-MM-DD or an ISO 8601 date and time",
     );
+  });
+});
+
+describe("sourceChange", () => {
+  const page = "https://bitcointalk.org/index.php?topic=5584952.msg66802369";
+  const since = new Date("2026-09-23T00:00:00Z");
+
+  /* Wayback answers a timestamp with the nearest capture, even one taken after it. */
+  async function withCaptures(newest: string, nearest: string): Promise<typeof Sources> {
+    const capture = (timestamp: string) => ({
+      url: page,
+      timestamp,
+      snapshot: `https://web.archive.org/web/${timestamp}/${page}`,
+      content: timestamp,
+      bytes: timestamp.length,
+      truncated: false,
+    });
+    class WaybackProvider {
+      content(_url: string, options: Readonly<{ timestamp?: string }>) {
+        const timestamp = options.timestamp === undefined ? newest : nearest;
+        return Promise.resolve({ success: true, content: capture(timestamp) });
+      }
+    }
+    vi.resetModules();
+    vi.doMock("@agntn/archives", () => ({
+      WaybackProvider,
+      diffArchivedContent: () => ({ identical: false, additions: 2, deletions: 2, partial: false }),
+    }));
+    return import("../../src/core/sources.ts");
+  }
+
+  afterEach(() => {
+    vi.doUnmock("@agntn/archives");
+    vi.resetModules();
+  });
+
+  it("stays quiet when every capture came after the cutoff", async () => {
+    const { sourceChange } = await withCaptures("2026-10-04T22:11:14Z", "2026-10-04T20:52:54Z");
+
+    await expect(sourceChange(page, since)).resolves.toBeUndefined();
+  });
+
+  it("compares the newest capture with the last one before the cutoff", async () => {
+    const { sourceChange } = await withCaptures("2026-10-04T22:11:14Z", "2026-09-20T08:00:00Z");
+
+    await expect(sourceChange(page, since)).resolves.toMatchObject({
+      before: { timestamp: "2026-09-20T08:00:00Z" },
+      after: { timestamp: "2026-10-04T22:11:14Z" },
+      additions: 2,
+      deletions: 2,
+    });
   });
 });

@@ -65,7 +65,8 @@ async function capture(
 
 /**
  * Compares the newest Wayback capture of a source page with the last one at or before `since`.
- * A page with no capture after `since`, or none before it, has nothing to compare.
+ * A page with no capture after `since`, or none before it, has nothing to compare, even when
+ * Wayback hands over a later capture in place of the missing one.
  *
  * @param {string} url - The source page.
  * @param {Readonly<Date>} since - The cutoff.
@@ -83,7 +84,7 @@ export async function sourceChange(
     return undefined;
   }
   const before = await capture(wayback, url, timeout, since.toISOString());
-  if (Date.parse(before.timestamp) >= Date.parse(after.timestamp)) {
+  if (Date.parse(before.timestamp) > since.getTime()) {
     return undefined;
   }
   let diff: ReturnType<typeof diffArchivedContent>;
