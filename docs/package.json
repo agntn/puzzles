@@ -11,10 +11,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@agntn/archives": "0.7.0",
+    "@agntn/archives": "0.7.2",
     "@agntn/chains": "0.5.0",
-    "@agntn/explorers": "0.6.0",
-    "@agntn/keys": "0.6.1",
+    "@agntn/explorers": "0.6.1",
+    "@agntn/keys": "0.6.2",
     "@agntn/tools": "0.2.4",
     "@modelcontextprotocol/sdk": "1.30.1",
     "@scure/base": "2.4.0",
