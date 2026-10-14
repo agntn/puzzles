@@ -2,6 +2,7 @@ import { puzzle, Status } from "../../core/puzzle.ts";
 import {
   assets,
   claim,
+  community,
   confirmation,
   digest,
   funding,
@@ -9,6 +10,10 @@ import {
   official,
   uncompressed,
 } from "../../core/parts.ts";
+
+/** Zden's r/bitcoinpuzzles post: the prize in the title, the PNG behind the link, ten comments. */
+const THREAD =
+  "https://www.reddit.com/r/bitcoinpuzzles/comments/7wcrdz/ongoing_bitcoin_crypto_puzzle_reward_0034_btc/";
 
 /** Puzzle `zden/demobit-2018`. */
 export const zdenPuzzleDemobit2018 = puzzle({
@@ -21,7 +26,7 @@ export const zdenPuzzleDemobit2018 = puzzle({
   pubkey: uncompressed(
     "04fc4f71ab4554b2ea1203b1cf6d0cfaf179213d7fa028be7dda5c183807792b15c5c0146f10be96bebf2fc1fb41637bd0b16d2d534e14b649da6ab7420e143b74",
   ),
-  prize: 0.01500245,
+  prize: 0.05,
   solvedAt: "2018-03-25 16:56:41",
   solveTime: 5277898,
   transactions: [
@@ -59,6 +64,15 @@ export const zdenPuzzleDemobit2018 = puzzle({
   }),
   hints: [
     official(
+      "oh it was just enough to visit the website written at the bottom, there you have also a link to the public address",
+      THREAD,
+      confirmation(
+        "https://web.archive.org/web/20230610082443/https://old.reddit.com/r/bitcoinpuzzles/comments/7wcrdz/ongoing_bitcoin_crypto_puzzle_reward_0034_btc/",
+        "Wayback capture of the thread, with this reply to EugeneJudo",
+      ),
+      { date: "2018-02-13 08:06:12" },
+    ),
+    official(
       "Hint #1 for the unsolved Demobit puzzle is the hash of inner data block with lines overlap. It is not the hash of the private key! SHA-256: 1c10494cf872ac2b896f52b2c93f58c23049f5be9455fef3ed4f9d9bf84fe600",
       "https://twitter.com/Zd3N/status/966275899757879298",
       confirmation(
@@ -66,6 +80,12 @@ export const zdenPuzzleDemobit2018 = puzzle({
         "Wayback capture of the puzzle page, which links Hint #1 to this tweet",
       ),
       { date: "2018-02-21 11:38:21" },
+    ),
+    community(
+      "For me there is 7 characters shown on the sides, and 44 in the middle.",
+      `${THREAD}dv5wgzj/`,
+      undefined,
+      { date: "2018-03-04 13:01:52" },
     ),
   ],
 });

@@ -1048,7 +1048,7 @@ describe("lazy collection registry", () => {
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1069.81282685,
+        BTC: 1069.8478244,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 815.85470498,

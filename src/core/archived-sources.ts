@@ -1800,6 +1800,17 @@ export const archivedSources = [
     },
   },
   {
+    file: "zden/zden-2018-02-09",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/7wcrdz/ongoing_bitcoin_crypto_puzzle_reward_0034_btc/",
+    author: "u/zden",
+    date: "2018-02-09",
+    archive: {
+      url: "https://web.archive.org/web/20230610082443/https://old.reddit.com/r/bitcoinpuzzles/comments/7wcrdz/ongoing_bitcoin_crypto_puzzle_reward_0034_btc/",
+      date: "2023-06-10T08:24:43Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "satoshi-birthday-quiz/aoinakamoto-2019-04-05",
     url: "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/",
     author: "u/AoiNakamoto",

@@ -381,9 +381,11 @@ describe.concurrent("puzzles CLI", () => {
     const output = await puzzles("hints", "zden/demobit-2018");
 
     expect(output.split("\n")).toEqual([
-      "zden/demobit-2018: 1 hint",
-      "hints: 1",
+      "zden/demobit-2018: 3 hints",
+      "hints: 3",
+      "\tofficial\t2018-02-13 08:06:12\toh it was just enough to visit the website written at the bottom, there you have also a link to the public address\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/7wcrdz/ongoing_bitcoin_crypto_puzzle_reward_0034_btc/\tconfirmation: https://web.archive.org/web/20230610082443/https://old.reddit.com/r/bitcoinpuzzles/comments/7wcrdz/ongoing_bitcoin_crypto_puzzle_reward_0034_btc/ (Wayback capture of the thread, with this reply to EugeneJudo)",
       "\tofficial\t2018-02-21 11:38:21\tHint #1 for the unsolved Demobit puzzle is the hash of inner data block with lines overlap. It is not the hash of the private key! SHA-256: 1c10494cf872ac2b896f52b2c93f58c23049f5be9455fef3ed4f9d9bf84fe600\tsource: https://twitter.com/Zd3N/status/966275899757879298\tconfirmation: https://web.archive.org/web/20180316114954/http://crypto.haluska.sk/ (Wayback capture of the puzzle page, which links Hint #1 to this tweet)",
+      "\tcommunity\t2018-03-04 13:01:52\tFor me there is 7 characters shown on the sides, and 44 in the middle.\tsource: https://www.reddit.com/r/bitcoinpuzzles/comments/7wcrdz/ongoing_bitcoin_crypto_puzzle_reward_0034_btc/dv5wgzj/",
     ]);
   });
 
