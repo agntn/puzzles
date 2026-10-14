@@ -348,17 +348,6 @@ export default defineNuxtConfig({
      * this once Nitro stops stubbing it.
      */
     unenv: { external: ["node:fs"], alias: { fs: "node:fs", "node:fs": "node:fs" } },
-    /** Types only: src/tools.ts and the /mcp adapter see one `ToolDefinition`, the copy here. */
-    typescript: {
-      tsConfig: {
-        compilerOptions: {
-          paths: {
-            "@agntn/tools": ["../node_modules/@agntn/tools/dist/index.d.mts"],
-            "@agntn/tools/toolkit": ["../node_modules/@agntn/tools/dist/toolkit.d.mts"],
-          },
-        },
-      },
-    },
     compatibilityDate: "2026-09-03",
     esbuild: { options: { target: "es2022" } },
     /** The puzzle images and hints, served from the checkout's assets/ under /assets. */
