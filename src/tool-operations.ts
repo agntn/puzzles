@@ -140,12 +140,13 @@ export const facts = {
       name: "puzzles_show",
       title: "Show Puzzle",
       description:
-        "Show one puzzle's address, status, key material, transactions, techniques, hints, explorer links, and the repository paths of its files.",
+        "Show one puzzle's address, status, key material, transactions, techniques, up to three hints per block, explorer links, and the repository paths of its files.",
       promptSnippet:
         "Use puzzles_show to inspect a single puzzle by identifier, then puzzles_assets to read its files by path instead of downloading them.",
       promptGuidelines: [
         "Identifiers are collection/name, for example bits/90, or gsmg.",
         "More than three increases in a row, each under 1% of the largest transaction, print as one line with their count, dates and total; pass allTransactions for each one with its txid.",
+        "A block of more than three hints prints as its count; puzzles_hints lists every hint with its source.",
         "A technique says how the key or a stage was built, with the page that says so; an unsolved puzzle has one only where its author stated it.",
       ],
       openWorld: false,

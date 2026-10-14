@@ -35,7 +35,7 @@ async function lines(id: string, allTransactions?: boolean): Promise<string[]> {
 
 describe("puzzles_show text", () => {
   it("labels published answers separately in show and hints output", async () => {
-    const published = (await lines("luckylurker/vault-1")).join("\n");
+    const published = (await hintsTool("luckylurker/vault-1")).content[0]?.text ?? "";
     expect(published).toContain("\tWord #1: Presence without permanence.\tsource:");
     expect(published).toContain(
       "\tanswer: visit\tanswer source: https://luckylurker.com/bitcoin-vault/",
@@ -326,6 +326,45 @@ describe("puzzles_show text", () => {
     expect(text.some((line) => line.startsWith("hints:"))).toBe(false);
     expect(text.indexOf("collection hints: 1")).toBeLessThan(
       text.findIndex((line) => line.startsWith("explorer:")),
+    );
+  });
+
+  it("folds a block of more than three hints into its count and names what lists them", () => {
+    const clues = (count: number, from: string) =>
+      Array.from({ length: count }, (_, index) =>
+        official(`${from} clue ${index}`, `https://example.com/${from}/${index}`),
+      );
+    const record = puzzle({
+      id: "fixture/chatty",
+      chain: "bitcoin",
+      address: p2pkh("1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"),
+      sourceUrl: "https://example.com/puzzle",
+      startedAt: "2026-01-01",
+      hints: clues(4, "own"),
+    });
+    const shared = clues(3, "shared");
+
+    const person = formatPuzzleRecord(record, shared).split("\n");
+    expect(person).toContain("hints: 4, folded, puzzles hints fixture/chatty lists them");
+    expect(person).toContain("collection hints: 3");
+    expect(person).toContain("\tofficial\t-\tshared clue 2\tsource: https://example.com/shared/2");
+    expect(person.some((line) => line.includes("own clue"))).toBe(false);
+
+    const model = formatPuzzleRecord(record, shared, [], false, "path").split("\n");
+    expect(model).toContain(`hints: 4, folded, ${facts.tools.hints.name} lists them`);
+
+    const report = formatHintReport(record, shared);
+    expect(report[0]).toBe("fixture/chatty: 7 hints");
+    expect(report).toContain("\tofficial\t-\town clue 3\tsource: https://example.com/own/3");
+  });
+
+  it("sends a model from a folded show to the hints tool, which still has every hint", async () => {
+    const own = (await hintsTool("genesis")).details["hints"];
+    const count = Array.isArray(own) ? own.length : 0;
+
+    expect(count).toBeGreaterThan(3);
+    expect(await lines("genesis")).toContain(
+      `hints: ${count}, folded, ${facts.tools.hints.name} lists them`,
     );
   });
 

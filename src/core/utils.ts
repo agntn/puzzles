@@ -403,7 +403,7 @@ function formatTransactions(puzzle: Puzzle, every: boolean): string[] {
   ];
 }
 
-/** A link for a person to click, or a path for a model to hand `puzzles_assets`. */
+/** Links and commands for a person, or paths and tool names for a model. */
 export type FileReference = "url" | "path";
 
 /**
@@ -552,16 +552,24 @@ function formatHint(hint: Hint): string {
   return `\t${hint.kind}\t${hint.date ?? "-"}\t${hint.text}\tsource: ${hint.source}${formatConfirmation(hint.confirmation)}${answer}`;
 }
 
+/** The most hints a `puzzles_show` block spells out before it shrinks to a count. */
+const SHOWN_HINTS = 3;
+
 /**
  * The hint count under its label, then one line per hint in record order, or nothing for an
  * empty list.
  *
  * @param {string} label - `collection hints` for the inherited ones, `hints` for the puzzle's own.
  * @param {readonly Hint[]} hints - The hints.
+ * @param {string} [lister] - What lists them all, which folds a block past `SHOWN_HINTS`.
  * @returns {string[]} The count line and the hint lines.
  */
-function formatHints(label: string, hints: readonly Hint[]): string[] {
-  return hints.length === 0 ? [] : [`${label}: ${hints.length}`, ...hints.map(formatHint)];
+function formatHints(label: string, hints: readonly Hint[], lister?: string): string[] {
+  if (hints.length === 0) return [];
+  if (lister !== undefined && hints.length > SHOWN_HINTS) {
+    return [`${label}: ${hints.length}, folded, ${lister} lists them`];
+  }
+  return [`${label}: ${hints.length}`, ...hints.map(formatHint)];
 }
 
 /**
@@ -570,10 +578,29 @@ function formatHints(label: string, hints: readonly Hint[]): string[] {
  *
  * @param {readonly Hint[]} inherited - The hints of the puzzle's collection.
  * @param {readonly Hint[]} own - The puzzle's own hints.
+ * @param {string} [lister] - What lists them all, given only where a long block folds.
  * @returns {string[]} The lines, empty when neither list has a hint.
  */
-function formatHintBlocks(inherited: readonly Hint[], own: readonly Hint[]): string[] {
-  return [...formatHints("collection hints", inherited), ...formatHints("hints", own)];
+function formatHintBlocks(
+  inherited: readonly Hint[],
+  own: readonly Hint[],
+  lister?: string,
+): string[] {
+  return [
+    ...formatHints("collection hints", inherited, lister),
+    ...formatHints("hints", own, lister),
+  ];
+}
+
+/**
+ * Where a folded hint block sends its reader: the tool for a model, the command for a person.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {FileReference} files - Paths for a model, links for a person.
+ * @returns {string} `puzzles_hints`, or `puzzles hints <id>`.
+ */
+function hintLister(puzzle: Puzzle, files: FileReference): string {
+  return files === "path" ? "puzzles_hints" : `puzzles hints ${puzzle.id()}`;
 }
 
 /**
@@ -664,7 +691,7 @@ export function formatPuzzleRecord(
     ...formatAssets(puzzle, files),
     ...formatStages(puzzle, files),
     ...formatTechniqueBlocks(inheritedTechniques, puzzle.techniques()),
-    ...formatHintBlocks(inherited, puzzle.hints()),
+    ...formatHintBlocks(inherited, puzzle.hints(), hintLister(puzzle, files)),
     `explorer: ${puzzle.explorerUrl()}`,
     `source: ${puzzle.sourceUrl()}`,
     ...field("key range", puzzle.keyRange(), (range) => formatRange(range, bits)),
