@@ -1789,6 +1789,17 @@ export const archivedSources = [
     },
   },
   {
+    file: "zden/zden-2017-12-25",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/7m3wbs/this_animation_encodes_the_private_key_for/",
+    author: "u/zden",
+    date: "2017-12-25",
+    archive: {
+      url: "https://web.archive.org/web/20230610011703/https://old.reddit.com/r/bitcoinpuzzles/comments/7m3wbs/this_animation_encodes_the_private_key_for/",
+      date: "2023-06-10T01:17:03Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "satoshi-birthday-quiz/aoinakamoto-2019-04-05",
     url: "https://www.reddit.com/r/Bitcoin/comments/b9peum/satoshi_birthday_7_million_quiz/",
     author: "u/AoiNakamoto",

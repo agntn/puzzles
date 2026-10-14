@@ -1,13 +1,21 @@
 import { puzzle, Status } from "../../core/puzzle.ts";
-import { assets, claim, digest, funding, hex, uncompressed } from "../../core/parts.ts";
+import { assets, claim, digest, funding, hex, technique, uncompressed } from "../../core/parts.ts";
+
+/** Zden's Christmas post: the prize in the title, a link to the GIF, not one word more. */
+const THREAD =
+  "https://www.reddit.com/r/bitcoinpuzzles/comments/7m3wbs/this_animation_encodes_the_private_key_for/";
+
+/** The scheme Zden linked in the thread a day after the prize was gone. */
+const SCHEME = "https://crypto.haluska.sk/cryptoxm17solver.png";
 
 /** Puzzle `zden/level-xm17`. */
 export const zdenPuzzleLevelXm17 = puzzle({
   id: "zden/level-xm17",
   chain: "bitcoin",
   address: "1cryptozWJAE7UzDZF1eSgsT7mVjUsu7g",
-  sourceUrl: "https://crypto.haluska.sk/cryptoxm17.gif",
-  startedAt: "2017-12-24 18:10:13",
+  sourceUrl: THREAD,
+  startedAt: "2017-12-25 22:09:21",
+  preGenesis: true,
   status: Status.Solved,
   pubkey: uncompressed(
     "04a7daaeb780428349a532386cbe4570c2765265099a5cabb6614abbbc16e0eed968f012d4e999a2726ec101402af57d4d99813d86ca6a1de7bf15ec6ff740ab6e",
@@ -15,9 +23,10 @@ export const zdenPuzzleLevelXm17 = puzzle({
   key: hex("f85204261fa2cef0febb7eefc1bf64105e51351039ed4dd26ee6f427cc403e98").wif(
     "5KhebJWTSHq8wpSKKMhxroKuwrCA8UMS4WKSLpTcH4gDGJz1jqo",
   ),
+  techniques: [technique("binary", SCHEME)],
   prize: 0.0260414,
   solvedAt: "2017-12-26 19:28:42",
-  solveTime: 177509,
+  solveTime: 76761,
   transactions: [
     funding(
       "b640f0671cb59f47a197584d7a9cf67bdd2f7e6227a74bd4bdae89067e1b34a2",
@@ -50,7 +59,7 @@ export const zdenPuzzleLevelXm17 = puzzle({
         "7532efab1506bd686135b96e0546cd3d1229702c55cc3b2e74c54773c24a9d0d",
         72267,
         {
-          url: "https://crypto.haluska.sk/cryptoxm17solver.png",
+          url: SCHEME,
           archive:
             "https://web.archive.org/web/20250818085420id_/http://crypto.haluska.sk/cryptoxm17solver.png",
         },

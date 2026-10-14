@@ -1066,7 +1066,7 @@ describe("lazy collection registry", () => {
         atbash: 14,
         base64: 2,
         beaufort: 1,
-        binary: 5,
+        binary: 6,
         bip38: 4,
         caesar: 2,
         "hash-collision": 5,
