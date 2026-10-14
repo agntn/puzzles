@@ -122,8 +122,12 @@ describe("puzzles MCP server", () => {
     expect(byKey.some((line) => line.startsWith("\t2018-06-20\tSigned the Codex Protocol"))).toBe(
       true,
     );
-    expect(byKey.at(-3)).toMatch(/\tsource: https:\/\/crypto\.haluska\.sk\/$/u);
-    expect(byKey.slice(-2)).toEqual(["techniques: 1", "\tsteganography\t16 puzzles"]);
+    expect(byKey.at(-4)).toMatch(/\tsource: https:\/\/crypto\.haluska\.sk\/$/u);
+    expect(byKey.slice(-3)).toEqual([
+      "techniques: 2",
+      "\tbinary\t1 puzzle",
+      "\tsteganography\t16 puzzles",
+    ]);
 
     const byCollection = firstText(
       await client.callTool({ name: "puzzles_author", arguments: { key: "hash-collision" } }),
