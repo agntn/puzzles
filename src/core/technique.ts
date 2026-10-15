@@ -68,7 +68,7 @@ export const techniques: readonly Technique[] = Object.freeze(Object.values(Tech
  */
 export function parseTechnique(value: string | undefined): Technique | undefined {
   if (value === undefined) {
-    return undefined;
+    return value;
   }
   const name = techniques.find((item) => item === value);
   if (name === undefined) {

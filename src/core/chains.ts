@@ -230,7 +230,7 @@ export function sameAddress(chain: Chain, left: string, right: string): boolean 
  */
 export function requireChain(value: string | undefined): Chain | undefined {
   if (value === undefined) {
-    return undefined;
+    return value;
   }
   const chain = typeof value === "string" ? parseChain(value) : undefined;
   if (chain === undefined) {

@@ -20,7 +20,7 @@ export type Status = (typeof Status)[keyof typeof Status];
  */
 export function parseStatus(value: string | undefined): Status | undefined {
   if (value === undefined) {
-    return undefined;
+    return value;
   }
   const status = Object.values(Status).find((item) => item === value);
   if (status === undefined) {
