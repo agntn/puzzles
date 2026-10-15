@@ -5,10 +5,12 @@ import {
   chains,
   chainSymbol,
   isValidAddress,
+  requireChain,
   sameAddress,
 } from "./chains.ts";
 import { get, requirePuzzle, selectPuzzles } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
+import { decimal } from "./format.ts";
 import { type Address, type AddressKind, addressOn, defined } from "./parts.ts";
 import type { AddressState } from "./providers.ts";
 import type { Puzzle } from "./puzzle.ts";
@@ -16,7 +18,6 @@ import { requireCollection } from "./registry.ts";
 import { Status } from "./status.ts";
 import { oneLine } from "./text.ts";
 import { Balance, formatUnits } from "./types.ts";
-import { decimal, requireChain } from "./utils.ts";
 import { expectedPrize, holdsPrize } from "./watch.ts";
 
 /** Options for `eligibility()`: the explorer options, plus the chain of a bare address. */

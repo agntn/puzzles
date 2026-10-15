@@ -19,7 +19,7 @@ export default defineTool({
   async execute(args) {
     const { requirePuzzle } = await import("../core/dataset.ts");
     const { requireCollection } = await import("../core/registry.ts");
-    const { formatPuzzleRecord } = await import("../core/utils.ts");
+    const { formatPuzzleRecord } = await import("../core/format.ts");
     const puzzle = await requirePuzzle(args.id);
     const collection = await requireCollection(puzzle.collection());
     const record = formatPuzzleRecord(

@@ -26,7 +26,7 @@ export default defineTool({
   async execute(args) {
     const { authors, getAuthor, requireAuthor } = await import("../core/dataset.ts");
     const { getCollection } = await import("../core/registry.ts");
-    const { formatAuthor, formatAuthorRecord } = await import("../core/utils.ts");
+    const { formatAuthor, formatAuthorRecord } = await import("../core/format.ts");
     if (args.key === undefined) {
       const entries = await authors();
       return lines(entries.map(formatAuthor), entries);

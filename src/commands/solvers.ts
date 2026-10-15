@@ -25,7 +25,7 @@ export default defineTool({
   cli: { command: "solvers", positional: ["key"], plain: ["key"] },
   async execute(args) {
     const { requireSolver, resolveSolverKey, solvers } = await import("../core/dataset.ts");
-    const { formatSolver, formatSolverRecord } = await import("../core/utils.ts");
+    const { formatSolver, formatSolverRecord } = await import("../core/format.ts");
     if (args.key === undefined) {
       const entries = await solvers();
       return lines(entries.map(formatSolver), entries);

@@ -1,6 +1,12 @@
 import { assetRef } from "./asset-ref.ts";
 import type { BalanceOptions } from "./balance.ts";
-import { addressExplorerUrl, Chain, chainSymbol, transactionExplorerUrl } from "./chains.ts";
+import {
+  addressExplorerUrl,
+  Chain,
+  chainSymbol,
+  sameAddress,
+  transactionExplorerUrl,
+} from "./chains.ts";
 import type { Balance } from "./types.ts";
 import {
   type Address,
@@ -799,4 +805,45 @@ class SpecPuzzle extends Puzzle {
  */
 export function puzzle(spec: PuzzleSpec): Puzzle {
   return new SpecPuzzle(spec);
+}
+
+/**
+ * Whether a puzzle's target address is the one a caller asked about. Each record is compared on
+ * its own chain's terms, so a checksummed Ethereum address and an uppercased bech32 one both find
+ * their puzzle. Anything that is not a string matches nothing, because a host may hand the
+ * executors whatever a model wrote.
+ *
+ * @param {Puzzle} puzzle - Puzzle whose target address is weighed.
+ * @param {string} address - Address text from a caller.
+ * @returns {boolean} `true` when the puzzle pays to that address.
+ */
+function addressMatches(puzzle: Puzzle, address: string): boolean {
+  return (
+    typeof address === "string" && sameAddress(puzzle.chain(), puzzle.address().value, address)
+  );
+}
+
+/**
+ * Filters puzzles by optional address, chain, status and public key constraints.
+ *
+ * @param {readonly Puzzle[]} puzzles - Puzzles to work on.
+ * @param {{ readonly address?: string | undefined; readonly chain?: Chain | undefined; readonly status?: Status | undefined; readonly withPubkey?: boolean | undefined }} options - Lookup options.
+ * @returns {readonly Puzzle[]} The puzzles that pass every given constraint.
+ */
+export function filterPuzzles(
+  puzzles: readonly Puzzle[],
+  options: {
+    readonly address?: string | undefined;
+    readonly chain?: Chain | undefined;
+    readonly status?: Status | undefined;
+    readonly withPubkey?: boolean | undefined;
+  },
+): readonly Puzzle[] {
+  return puzzles.filter(
+    (puzzle) =>
+      (options.address === undefined || addressMatches(puzzle, options.address)) &&
+      (options.chain === undefined || puzzle.chain() === options.chain) &&
+      (options.status === undefined || puzzle.status() === options.status) &&
+      (options.withPubkey !== true || puzzle.hasPubkey()),
+  );
 }

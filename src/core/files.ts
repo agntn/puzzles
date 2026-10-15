@@ -3,8 +3,8 @@
 import { base64, hex } from "@scure/base";
 import { archivedSourceCapture, archivedSourceUrl, type CitedSource } from "./archived-sources.ts";
 import { FileUnavailableError, InvalidArgumentError } from "./errors.ts";
+import { countOf } from "./format.ts";
 import { type AssetLink, assetUrlOf } from "./puzzle.ts";
-import { countOf } from "./utils.ts";
 
 /** One file a puzzle can hand out: one its record ships, or a reading copy of a page it cites. */
 export interface PuzzleFile {

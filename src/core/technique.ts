@@ -1,3 +1,5 @@
+import { InvalidArgumentError } from "./errors.ts";
+
 /** The methods a puzzle's key or one of its stages was built with, one name each. */
 export const Technique = {
   /** AES encryption under a key the solver has to assemble. */
@@ -57,3 +59,20 @@ export type Technique = (typeof Technique)[keyof typeof Technique];
 
 /** Every technique name, sorted. */
 export const techniques: readonly Technique[] = Object.freeze(Object.values(Technique).toSorted());
+
+/**
+ * Parses a technique filter, throwing on a name outside the vocabulary.
+ *
+ * @param {string | undefined} value - Technique text from a caller, when given.
+ * @returns {Technique | undefined} The technique filter.
+ */
+export function parseTechnique(value: string | undefined): Technique | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  const name = techniques.find((item) => item === value);
+  if (name === undefined) {
+    throw new InvalidArgumentError("technique", `expected one of ${techniques.join(", ")}`);
+  }
+  return name;
+}

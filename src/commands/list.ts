@@ -24,7 +24,7 @@ export default defineTool({
   cli: { command: "list", positional: ["collection"], plain: ["collection"] },
   async execute(args) {
     const { selectPuzzles } = await import("../core/dataset.ts");
-    const { formatPuzzle } = await import("../core/utils.ts");
+    const { formatPuzzle } = await import("../core/format.ts");
     const offset = args.offset ?? 0;
     const matched = await selectPuzzles(await filterQuery(args));
     const puzzles = matched.slice(
