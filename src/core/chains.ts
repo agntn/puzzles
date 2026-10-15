@@ -226,14 +226,11 @@ export function sameAddress(chain: Chain, left: string, right: string): boolean 
  * a host may hand the executors whatever a model wrote.
  *
  * @param {string | undefined} value - Chain text from a caller, when given.
- * @returns {Chain | undefined} The chain filter.
+ * @returns {Chain | undefined} The chain filter, or `undefined` when none was given.
  */
 export function requireChain(value: string | undefined): Chain | undefined {
-  if (value === undefined) {
-    return value;
-  }
   const chain = typeof value === "string" ? parseChain(value) : undefined;
-  if (chain === undefined) {
+  if (chain === undefined && value !== undefined) {
     throw new InvalidArgumentError("chain", `expected one of ${chains.join(", ")}`);
   }
   return chain;

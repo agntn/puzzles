@@ -64,14 +64,11 @@ export const techniques: readonly Technique[] = Object.freeze(Object.values(Tech
  * Parses a technique filter, throwing on a name outside the vocabulary.
  *
  * @param {string | undefined} value - Technique text from a caller, when given.
- * @returns {Technique | undefined} The technique filter.
+ * @returns {Technique | undefined} The technique filter, or `undefined` when none was given.
  */
 export function parseTechnique(value: string | undefined): Technique | undefined {
-  if (value === undefined) {
-    return value;
-  }
   const name = techniques.find((item) => item === value);
-  if (name === undefined) {
+  if (name === undefined && value !== undefined) {
     throw new InvalidArgumentError("technique", `expected one of ${techniques.join(", ")}`);
   }
   return name;
