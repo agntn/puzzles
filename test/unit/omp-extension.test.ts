@@ -11,7 +11,7 @@ const puzzlesExtension = await createJiti(import.meta.url, {
     "@oh-my-pi/pi-coding-agent": fileURLToPath(new URL("../support/omp-host.ts", import.meta.url)),
   },
 }).import<(pi: never) => Promise<void>>(
-  fileURLToPath(new URL("../../packages/omp/extensions/puzzles.ts", import.meta.url)),
+  fileURLToPath(new URL("../../extensions/omp/puzzles.ts", import.meta.url)),
   { default: true },
 );
 

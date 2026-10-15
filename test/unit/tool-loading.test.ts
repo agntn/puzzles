@@ -11,14 +11,14 @@ describe("tool discovery in a fresh process", () => {
     (chunk) => {
       const root = mkdtempSync(path.join(tmpdir(), "puzzles-eager-"));
       try {
-        const extensions = path.join(root, "packages/pi/extensions");
+        const extensions = path.join(root, "extensions/pi");
         const chunks = path.join(root, "dist/_chunks");
         mkdirSync(extensions, { recursive: true });
         mkdirSync(chunks, { recursive: true });
         writeFileSync(path.join(chunks, chunk), "export const fixture = true;\n");
         writeFileSync(
           path.join(extensions, "puzzles.ts"),
-          `import "../../../dist/_chunks/${chunk}";
+          `import "../../dist/_chunks/${chunk}";
 export default function extension(api) {
   for (const name of ["puzzles_show", "puzzles_stats", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]) {
     api.registerTool({ name, async execute() {

@@ -3,7 +3,7 @@ import { ToolInputError } from "@agntn/tools";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { createJiti } from "jiti/static";
 import { describe, expect, it } from "vite-plus/test";
-import puzzlesExtension from "../../packages/pi/extensions/puzzles.ts";
+import puzzlesExtension from "../../extensions/pi/puzzles.ts";
 import { facts } from "../../src/tool-operations.ts";
 
 interface RegisteredTool {
@@ -147,7 +147,7 @@ describe("Pi extension", () => {
 async function registerThroughHostLoader(): Promise<Map<string, RegisteredTool>> {
   const jiti = createJiti(import.meta.url, { moduleCache: false });
   const extension = (await jiti.import(
-    fileURLToPath(new URL("../../packages/pi/extensions/puzzles.ts", import.meta.url)),
+    fileURLToPath(new URL("../../extensions/pi/puzzles.ts", import.meta.url)),
     { default: true },
   )) as typeof puzzlesExtension;
   const tools = new Map<string, RegisteredTool>();
