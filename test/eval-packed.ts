@@ -27,8 +27,8 @@ import type { ExtensionAPI as OmpExtensionApi } from "@oh-my-pi/pi-coding-agent"
 
 type Library = typeof import("../src/index.ts");
 type McpEntry = typeof import("../src/mcp.ts");
-type PiExtension = typeof import("../packages/pi/extensions/puzzles.ts");
-type OmpExtension = typeof import("../packages/omp/extensions/puzzles.ts");
+type PiExtension = typeof import("../extensions/pi/puzzles.ts");
+type OmpExtension = typeof import("../extensions/omp/puzzles.ts");
 
 interface Manifest {
   readonly bin: Readonly<Record<string, string>>;
@@ -319,7 +319,7 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
       `collection entry ${key} resolves to a missing file ${file}`,
     );
   }
-  for (const file of ["packages/pi/extensions/puzzles.ts", "packages/omp/extensions/puzzles.ts"]) {
+  for (const file of ["extensions/pi/puzzles.ts", "extensions/omp/puzzles.ts"]) {
     assert.ok(files.includes(file), `${file} is missing from the packed package`);
   }
   await assertPackedSkills(manifest, files);
@@ -427,8 +427,8 @@ async function assertPackedMcpServer(): Promise<void> {
 async function assertPackedExtensions(): Promise<void> {
   const ompApi = { typebox: { Type: { Unsafe: (schema: unknown) => schema } }, setLabel() {} };
   const [piTools, ompTools] = await Promise.all([
-    registerPackedExtension("packages/pi/extensions/puzzles.ts", {}),
-    registerPackedExtension("packages/omp/extensions/puzzles.ts", ompApi),
+    registerPackedExtension("extensions/pi/puzzles.ts", {}),
+    registerPackedExtension("extensions/omp/puzzles.ts", ompApi),
   ]);
   assertLoaded(toolDefinitions, "the extensions register the packed tool definitions");
   const piShow = requireTool(piTools, "puzzles_show");
@@ -644,7 +644,7 @@ async function assertCheckoutBin(): Promise<void> {
   await mkdir(cache, { recursive: true });
   const copy = await mkdtemp(path.join(cache, "puzzles-bin-"));
   try {
-    for (const entry of ["dist", "src", "packages", "package.json"]) {
+    for (const entry of ["dist", "src", "extensions", "package.json"]) {
       await cp(path.join(root, entry), path.join(copy, entry), { recursive: true });
     }
     const installed = await runBin(path.join(copy, "dist/cli.mjs"), ["mcp"]);

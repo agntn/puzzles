@@ -59,7 +59,7 @@ if (surface === "mcp") {
           setLabel() {},
         }
       : {};
-  const extension = (await import(entry(`packages/${surface}/extensions/puzzles.ts`))) as {
+  const extension = (await import(entry(`extensions/${surface}/puzzles.ts`))) as {
     default: (api: PiApi & OmpApi) => Promise<void>;
   };
   await extension.default({
