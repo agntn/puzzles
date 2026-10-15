@@ -1,10 +1,10 @@
 import type { BalanceOptions } from "./balance.ts";
 import { PuzzleNotFoundError } from "./errors.ts";
+import { countOf } from "./format.ts";
 import { frozen, type Hint, type Party, type TechniqueTag } from "./parts.ts";
-import { Puzzle, Status } from "./puzzle.ts";
+import { filterPuzzles, Puzzle, Status } from "./puzzle.ts";
 import { closestPuzzle } from "./suggest.ts";
 import { type Balance } from "./types.ts";
-import { countOf, filterPuzzles } from "./utils.ts";
 import { verify, type VerifyResult } from "./verify.ts";
 
 /**

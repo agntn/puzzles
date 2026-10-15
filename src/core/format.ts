@@ -1,7 +1,6 @@
 import type { AuthorEntry, SolverEntry } from "./dataset.ts";
-import { type Chain, chains, chainSymbol, parseChain, sameAddress } from "./chains.ts";
+import { chainSymbol } from "./chains.ts";
 import type { CollectionSummary, Stats, TechniqueCounts } from "./dataset.ts";
-import { InvalidArgumentError } from "./errors.ts";
 import {
   type Answer,
   type Confirmation,
@@ -868,99 +867,4 @@ export function formatStats(result: Stats): string[] {
 export function formatTechniqueCounts(counts: TechniqueCounts): string {
   const rows = techniqueRows(counts).map(([name, count]) => `${name} ${count}`);
   return rows.length === 0 ? "none" : rows.join(", ");
-}
-
-/**
- * Parses a technique filter, throwing on a name outside the vocabulary.
- *
- * @param {string | undefined} value - Technique text from a caller, when given.
- * @returns {Technique | undefined} The technique filter.
- */
-export function parseTechnique(value: string | undefined): Technique | undefined {
-  if (value === undefined) {
-    return undefined;
-  }
-  const name = techniques.find((item) => item === value);
-  if (name === undefined) {
-    throw new InvalidArgumentError("technique", `expected one of ${techniques.join(", ")}`);
-  }
-  return name;
-}
-
-/**
- * Parses a puzzle status filter, throwing on an unknown value.
- *
- * @param {string | undefined} value - Status text from the command line, when given.
- * @returns {Status | undefined} The puzzle status filter.
- */
-export function parseStatus(value: string | undefined): Status | undefined {
-  if (value === undefined) {
-    return undefined;
-  }
-  const status = Object.values(Status).find((item) => item === value);
-  if (status === undefined) {
-    throw new InvalidArgumentError("status", `expected one of ${Object.values(Status).join(", ")}`);
-  }
-  return status;
-}
-
-/**
- * Parses a chain filter, throwing on a value no supported chain answers to. A key, a display
- * name, a symbol and a `@agntn/chains` alias all resolve, so `bitcoin`, `Bitcoin` and `BTC` name
- * the same chain. Anything that is not a string is a rejected filter, not a `TypeError`, because
- * a host may hand the executors whatever a model wrote.
- *
- * @param {string | undefined} value - Chain text from a caller, when given.
- * @returns {Chain | undefined} The chain filter.
- */
-export function requireChain(value: string | undefined): Chain | undefined {
-  if (value === undefined) {
-    return undefined;
-  }
-  const chain = typeof value === "string" ? parseChain(value) : undefined;
-  if (chain === undefined) {
-    throw new InvalidArgumentError("chain", `expected one of ${chains.join(", ")}`);
-  }
-  return chain;
-}
-
-/**
- * Whether a puzzle's target address is the one a caller asked about. Each record is compared on
- * its own chain's terms, so a checksummed Ethereum address and an uppercased bech32 one both find
- * their puzzle. Anything that is not a string matches nothing, because a host may hand the
- * executors whatever a model wrote.
- *
- * @param {Puzzle} puzzle - Puzzle whose target address is weighed.
- * @param {string} address - Address text from a caller.
- * @returns {boolean} `true` when the puzzle pays to that address.
- */
-function addressMatches(puzzle: Puzzle, address: string): boolean {
-  return (
-    typeof address === "string" && sameAddress(puzzle.chain(), puzzle.address().value, address)
-  );
-}
-
-/**
- * Filters puzzles by optional address, chain, status and public key constraints.
- *
- * @param {readonly Puzzle[]} puzzles - Puzzles to work on.
- * @param {{ readonly address?: string | undefined; readonly chain?: Chain | undefined; readonly status?: Status | undefined; readonly withPubkey?: boolean | undefined }} options - Lookup options.
- * @returns {readonly Puzzle[]} The puzzles that pass every given constraint.
- */
-export function filterPuzzles(
-  puzzles: readonly Puzzle[],
-  options: {
-    readonly address?: string | undefined;
-    readonly chain?: Chain | undefined;
-    readonly status?: Status | undefined;
-    readonly withPubkey?: boolean | undefined;
-  },
-): readonly Puzzle[] {
-  return puzzles.filter(
-    (puzzle) =>
-      (options.address === undefined || addressMatches(puzzle, options.address)) &&
-      (options.chain === undefined || puzzle.chain() === options.chain) &&
-      (options.status === undefined || puzzle.status() === options.status) &&
-      (options.withPubkey !== true || puzzle.hasPubkey()),
-  );
 }

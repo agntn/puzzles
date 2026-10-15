@@ -12,7 +12,7 @@ export default defineTool({
   cli: { command: "stages", positional: ["id"], plain: ["id"] },
   async execute(args) {
     const { requirePuzzle } = await import("../core/dataset.ts");
-    const { formatStageReport } = await import("../core/utils.ts");
+    const { formatStageReport } = await import("../core/format.ts");
     const puzzle = await requirePuzzle(args.id);
     return lines(formatStageReport(puzzle), { stages: puzzle.stages() });
   },

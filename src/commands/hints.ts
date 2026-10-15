@@ -13,7 +13,7 @@ export default defineTool({
   async execute(args) {
     const { requirePuzzle } = await import("../core/dataset.ts");
     const { requireCollection } = await import("../core/registry.ts");
-    const { formatHintReport, hintAssets } = await import("../core/utils.ts");
+    const { formatHintReport, hintAssets } = await import("../core/format.ts");
     const puzzle = await requirePuzzle(args.id);
     const collection = await requireCollection(puzzle.collection());
     return lines(formatHintReport(puzzle, collection.hints), {

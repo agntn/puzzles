@@ -3,11 +3,11 @@ import type { Chain } from "./core/chains.ts";
 import type { PuzzleQuery } from "./core/dataset.ts";
 import type { Eligibility } from "./core/eligibility.ts";
 import { InvalidArgumentError } from "./core/errors.ts";
-import { Status } from "./core/status.ts";
+import { parseStatus, Status } from "./core/status.ts";
 import type { Puzzle } from "./core/puzzle.ts";
 import type { AnyCollection } from "./core/registry.ts";
 import { oneLine } from "./core/text.ts";
-import { type Technique, techniques } from "./core/technique.ts";
+import { parseTechnique, type Technique, techniques } from "./core/technique.ts";
 import type { RecipeResult, VerifyResult } from "./core/verify.ts";
 
 /** A block of text, what every tool answers with. */
@@ -523,11 +523,12 @@ function assertOffset(value: number | undefined): number {
   return value;
 }
 
-/** The three core modules every tool reads, imported once. */
+/** The core modules every tool reads, imported once. */
 interface CoreModules {
   readonly dataset: typeof import("./core/dataset.ts");
   readonly registry: typeof import("./core/registry.ts");
-  readonly utils: typeof import("./core/utils.ts");
+  readonly chains: typeof import("./core/chains.ts");
+  readonly format: typeof import("./core/format.ts");
 }
 
 let core: Promise<CoreModules> | undefined;
@@ -536,19 +537,20 @@ let core: Promise<CoreModules> | undefined;
  * Loads the core modules the tools read, one import after another, and keeps the one namespace
  * object every later call reuses.
  *
- * The imports are serial on purpose. The three modules share a dependency graph, and a host loader
+ * The imports are serial on purpose. These modules share a dependency graph, and a host loader
  * that re-evaluates a module per importer, such as the jiti loader Pi runs extensions under,
  * re-enters those shared modules when the imports overlap: the second importer then reads a
  * half-initialized namespace, and every tool fails or, worse, reports the dataset as empty.
  *
- * @returns {Promise<CoreModules>} The dataset, registry, and formatting modules.
+ * @returns {Promise<CoreModules>} The dataset, registry, chain and formatting modules.
  */
 function loadCore(): Promise<CoreModules> {
   return (core ??= (async (): Promise<CoreModules> => {
     const dataset = await import("./core/dataset.ts");
     const registry = await import("./core/registry.ts");
-    const utils = await import("./core/utils.ts");
-    return { dataset, registry, utils };
+    const chains = await import("./core/chains.ts");
+    const format = await import("./core/format.ts");
+    return { chains, dataset, format, registry };
   })());
 }
 
@@ -561,7 +563,7 @@ export async function statsTool(): Promise<ToolResult> {
   const {
     dataset: { stats, dataVersion },
     registry: { collectionKeys },
-    utils: { countOf, formatPrizeTotals, formatTechniqueCounts },
+    format: { countOf, formatPrizeTotals, formatTechniqueCounts },
   } = await loadCore();
   const [result, version] = await Promise.all([stats(), dataVersion()]);
   const lines = [
@@ -584,7 +586,7 @@ export async function statsTool(): Promise<ToolResult> {
 export async function collectionsTool(): Promise<ToolResult> {
   const {
     dataset: { collectionSummaries },
-    utils: { formatCollection },
+    format: { formatCollection },
   } = await loadCore();
   const summaries = await collectionSummaries();
   return text(summaries.map(formatCollection).join("\n"), { collections: summaries });
@@ -598,7 +600,7 @@ export async function collectionsTool(): Promise<ToolResult> {
 export async function authorsTool(): Promise<ToolResult> {
   const {
     dataset: { authors },
-    utils: { formatAuthor },
+    format: { formatAuthor },
   } = await loadCore();
   const entries = await authors();
   return text(entries.map(formatAuthor).join("\n"), { authors: entries });
@@ -614,7 +616,7 @@ export async function authorTool(key: string): Promise<ToolResult> {
   const {
     dataset: { getAuthor, requireAuthor },
     registry: { getCollection },
-    utils: { formatAuthorRecord },
+    format: { formatAuthorRecord },
   } = await loadCore();
   const wanted = assertLength("key", key, facts.parameters.author);
   const byCollection =
@@ -631,7 +633,7 @@ export async function authorTool(key: string): Promise<ToolResult> {
 export async function solversTool(): Promise<ToolResult> {
   const {
     dataset: { solvers },
-    utils: { formatSolver },
+    format: { formatSolver },
   } = await loadCore();
   const entries = await solvers();
   return text(entries.map(formatSolver).join("\n"), { solvers: entries });
@@ -646,7 +648,7 @@ export async function solversTool(): Promise<ToolResult> {
 export async function solverTool(key: string): Promise<ToolResult> {
   const {
     dataset: { requireSolver, resolveSolverKey },
-    utils: { formatSolverRecord },
+    format: { formatSolverRecord },
   } = await loadCore();
   const wanted = assertLength("key", key, facts.parameters.solver);
   const entry = await requireSolver(await resolveSolverKey(wanted));
@@ -662,7 +664,7 @@ export async function solverTool(key: string): Promise<ToolResult> {
  */
 async function filesLine(puzzle: Puzzle, collection: AnyCollection): Promise<string[]> {
   const {
-    utils: { countOf },
+    format: { countOf },
   } = await loadCore();
   const { citedArchivedSources } = await import("./core/archived-sources.ts");
   const shipped = puzzle.assetLinks().length;
@@ -701,7 +703,7 @@ export async function showTool(id: string, allTransactions?: boolean): Promise<T
   const {
     dataset: { requirePuzzle },
     registry: { requireCollection },
-    utils: { formatPuzzleRecord },
+    format: { formatPuzzleRecord },
   } = await loadCore();
   const every = assertFlag("allTransactions", allTransactions);
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
@@ -724,7 +726,7 @@ export async function stagesTool(id: string): Promise<ToolResult> {
   const {
     dataset: { requirePuzzle },
     registry: { requireCollection },
-    utils: { formatStageReport },
+    format: { formatStageReport },
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
@@ -791,7 +793,7 @@ export async function hintsTool(id: string): Promise<ToolResult> {
   const {
     dataset: { requirePuzzle },
     registry: { requireCollection },
-    utils: { formatHintReport, hintAssets },
+    format: { formatHintReport, hintAssets },
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const collection = await requireCollection(puzzle.collection());
@@ -892,7 +894,7 @@ async function addressNotes(query: PuzzleQuery, address: string): Promise<Addres
  */
 async function listQuery(params: ListParams): Promise<PuzzleQuery> {
   const {
-    utils: { parseStatus, parseTechnique, requireChain },
+    chains: { requireChain },
   } = await loadCore();
   return {
     address:
@@ -921,7 +923,7 @@ async function listQuery(params: ListParams): Promise<PuzzleQuery> {
 export async function listTool(params: ListParams): Promise<ToolResult> {
   const {
     dataset: { selectPuzzles },
-    utils: { formatPuzzle },
+    format: { formatPuzzle },
   } = await loadCore();
   assertArguments("list", params);
   const limit = assertLimit(params.limit);
@@ -1007,7 +1009,7 @@ async function verifyOne(id: string): Promise<ToolResult> {
 async function verifyMany(query: PuzzleQuery): Promise<ToolResult> {
   const {
     dataset: { selectPuzzles },
-    utils: { countOf },
+    format: { countOf },
   } = await loadCore();
   const puzzles = await selectPuzzles(query);
   if (puzzles.length === 0) {
@@ -1131,7 +1133,7 @@ function recipeSummary(recipe: RecipeResult | undefined): string {
 export async function balanceTool(id: string, apiKey?: string): Promise<ToolResult> {
   const {
     dataset: { requirePuzzle },
-    utils: { formatBalance },
+    format: { formatBalance },
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const balance = await puzzle.balance({ apiKey: keyFor(puzzle.chain(), apiKey) });

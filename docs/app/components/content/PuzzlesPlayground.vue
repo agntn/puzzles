@@ -30,7 +30,7 @@ import {
   solvedText,
   transactionTicks,
 } from "../../utils/record";
-import { statusCountLabels } from "../../../../src/core/utils.ts";
+import { statusCountLabels } from "../../../../src/core/format.ts";
 import type { RecipeResult } from "@agntn/puzzles";
 import { jsonTokens, shellTokens } from "../../utils/tokens";
 import {

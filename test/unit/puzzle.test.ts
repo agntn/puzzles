@@ -28,7 +28,7 @@ import {
   standard,
   Status,
 } from "../../src/index.ts";
-import { formatStageReport } from "../../src/core/utils.ts";
+import { formatStageReport } from "../../src/core/format.ts";
 import { ASSETS } from "../support/assets.ts";
 
 const required = {

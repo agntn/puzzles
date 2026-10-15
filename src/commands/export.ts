@@ -13,7 +13,7 @@ export default defineTool({
   cli: { command: "export", json: false },
   async execute(args) {
     const { dataset } = await import("../core/dataset.ts");
-    const { toJson } = await import("../core/utils.ts");
+    const { toJson } = await import("../core/format.ts");
     process.stdout.write(`${toJson(await dataset(), args.compact)}\n`);
     return { content: [], details: null };
   },

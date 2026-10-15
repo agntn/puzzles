@@ -19,7 +19,7 @@ import {
   formatPrize,
   formatPrizeTotals,
   formatPuzzleRecord,
-} from "../../src/core/utils.ts";
+} from "../../src/core/format.ts";
 import { facts, hintsTool, showTool, stagesTool } from "../../src/tool-operations.ts";
 import { ASSETS } from "../support/assets.ts";
 
@@ -166,7 +166,7 @@ describe("puzzles_show text", () => {
     } as typeof NumberFormat;
     vi.resetModules();
     try {
-      const fresh = await import("../../src/core/utils.ts");
+      const fresh = await import("../../src/core/format.ts");
       await import("../../src/index.ts");
       expect(built).toBe(0);
 

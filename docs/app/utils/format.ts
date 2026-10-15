@@ -80,7 +80,7 @@ export function linkText(url: string): string {
   }
 }
 
-export { formatPrize, formatPrizeTotals } from "../../../src/core/utils.ts";
+export { formatPrize, formatPrizeTotals } from "../../../src/core/format.ts";
 
 /**
  * What the worker put in a 4xx or 5xx: the `data` of a failed `$fetch`, or nothing.

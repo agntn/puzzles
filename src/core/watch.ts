@@ -1,6 +1,7 @@
 import { BalanceError, type BalanceOptions, HISTORY_LIMIT } from "./balance.ts";
 import { type Chain, chainDecimals, chainSymbol } from "./chains.ts";
 import { InvalidArgumentError, SourceLookupError } from "./errors.ts";
+import { decimal } from "./format.ts";
 import { AddressKind, defined } from "./parts.ts";
 import type { ChainTransaction } from "./providers.ts";
 import type { Puzzle } from "./puzzle.ts";
@@ -8,7 +9,6 @@ import type { SourceChange } from "./sources.ts";
 import { Status } from "./status.ts";
 import { oneLine } from "./text.ts";
 import { type Balance, formatUnits } from "./types.ts";
-import { decimal } from "./utils.ts";
 
 /** Options for `watcher()`: the explorer options, plus the cutoff that turns on source checks. */
 export interface WatchOptions extends BalanceOptions {

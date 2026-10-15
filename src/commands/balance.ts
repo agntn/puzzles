@@ -24,7 +24,7 @@ type Row = Readonly<
  * One row of a filtered pass as the command prints it.
  *
  * @param {Row} row - The puzzle with its balance or its error.
- * @param {(balance: Balance) => string} format - Writes a balance, from the lazily loaded utils.
+ * @param {(balance: Balance) => string} format - Writes a balance, from the lazily loaded formatter.
  * @returns {string} The tab-separated line.
  */
 function formatRow(row: Row, format: (balance: Balance) => string): string {
@@ -107,7 +107,7 @@ export default defineTool({
   cli: { command: "balance", positional: ["id"], plain: ["id"] },
   async execute(args, { host }) {
     const { requirePuzzle, selectPuzzles } = await import("../core/dataset.ts");
-    const { formatBalance } = await import("../core/utils.ts");
+    const { formatBalance } = await import("../core/format.ts");
     const filtered = hasFilter(args);
     if (args.id !== undefined && filtered) {
       throw new InvalidArgumentError("id", "pass a puzzle identifier or filters, not both");

@@ -16,6 +16,7 @@ import {
   UnknownChainError,
   UnsupportedChainError,
 } from "@agntn/chains";
+import { InvalidArgumentError } from "./errors.ts";
 
 /** Supported blockchain identifiers, a subset of the `@agntn/chains` keys. */
 export const Chain = {
@@ -216,4 +217,21 @@ export function sameAddress(chain: Chain, left: string, right: string): boolean 
       caseFolds(chain, right) &&
       left.toLowerCase() === right.toLowerCase())
   );
+}
+
+/**
+ * Parses a chain filter, throwing on a value no supported chain answers to. A key, a display
+ * name, a symbol and a `@agntn/chains` alias all resolve, so `bitcoin`, `Bitcoin` and `BTC` name
+ * the same chain. Anything that is not a string is a rejected filter, not a `TypeError`, because
+ * a host may hand the executors whatever a model wrote.
+ *
+ * @param {string | undefined} value - Chain text from a caller, when given.
+ * @returns {Chain | undefined} The chain filter, or `undefined` when none was given.
+ */
+export function requireChain(value: string | undefined): Chain | undefined {
+  const chain = typeof value === "string" ? parseChain(value) : undefined;
+  if (chain === undefined && value !== undefined) {
+    throw new InvalidArgumentError("chain", `expected one of ${chains.join(", ")}`);
+  }
+  return chain;
 }

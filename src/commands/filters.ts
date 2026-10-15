@@ -86,7 +86,9 @@ export function hasFilter(args: FilterFlags): boolean {
  * @returns {Promise<PuzzleQuery>} The query `selectPuzzles()` takes.
  */
 export async function filterQuery(args: FilterFlags): Promise<PuzzleQuery> {
-  const { parseStatus, parseTechnique, requireChain } = await import("../core/utils.ts");
+  const { requireChain } = await import("../core/chains.ts");
+  const { parseStatus } = await import("../core/status.ts");
+  const { parseTechnique } = await import("../core/technique.ts");
   return {
     address: args.address,
     chain: requireChain(args.chain),

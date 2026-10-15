@@ -1,8 +1,9 @@
 import { version } from "../version.ts";
 import type { Chain } from "./chains.ts";
 import { PuzzleNotFoundError, UnknownAuthorError, UnknownSolverError } from "./errors.ts";
+import { countOf, prizeTotals, statusCounts } from "./format.ts";
 import { defined, frozen, type Hint, type Party, type TechniqueTag } from "./parts.ts";
-import { type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
+import { filterPuzzles, type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
 import {
   type AnyCollection,
   collectionKeys,
@@ -13,7 +14,6 @@ import {
 } from "./registry.ts";
 import { closestKey, closestPuzzle, missDetail } from "./suggest.ts";
 import { type Technique, techniques } from "./technique.ts";
-import { countOf, filterPuzzles, prizeTotals, statusCounts } from "./utils.ts";
 
 /** Aggregate puzzle statistics. */
 export interface Stats {
