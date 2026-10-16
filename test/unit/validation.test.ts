@@ -46,7 +46,7 @@ import {
 import { type Technique, techniques } from "../../src/core/technique.ts";
 import { type Puzzle, puzzle, Status } from "../../src/core/puzzle.ts";
 import { formatUnits } from "../../src/core/types.ts";
-import { decimal } from "../../src/core/format.ts";
+import { decimal } from "../../src/core/decimal.ts";
 import { expectedPrize } from "../../src/core/watch.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
 import { TeikhosCollection } from "../../src/collections/teikhos.ts";

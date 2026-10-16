@@ -1,5 +1,5 @@
 import type { AnyCollection, AuthorEntry, Fact, Profile } from "../../../src/index.ts";
-import { prizeTotals } from "../../../src/core/format.ts";
+import { prizeTotals } from "../../../src/core/puzzle.ts";
 
 /** One collection row on an author page. */
 export interface AuthorCollectionRow {

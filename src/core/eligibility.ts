@@ -10,7 +10,7 @@ import {
 } from "./chains.ts";
 import { get, requirePuzzle, selectPuzzles } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
-import { decimal } from "./format.ts";
+import { decimal } from "./decimal.ts";
 import { type Address, type AddressKind, addressOn, defined } from "./parts.ts";
 import type { AddressState } from "./providers.ts";
 import type { Puzzle } from "./puzzle.ts";
