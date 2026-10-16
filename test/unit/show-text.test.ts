@@ -11,6 +11,7 @@ import {
   official,
   p2pkh,
   puzzle,
+  requirePuzzle,
   seed,
   standard,
 } from "../../src/index.ts";
@@ -200,7 +201,7 @@ describe("puzzles_show text", () => {
   });
 
   it("lists every stage with its description, artifacts, copies and published answer", async () => {
-    const text = await lines("gsmg");
+    const text = (await stagesTool("gsmg")).content[0]?.text.split("\n") ?? [];
     const choice =
       "https://gsmg.io/choiceisanillusioncreatedbetweenthosewithpowerandthosewithoutaveryspecialdessertiwroteitmyself";
     const copy = `assets/gsmg`;
@@ -229,6 +230,29 @@ describe("puzzles_show text", () => {
     expect(block.find((line) => line.startsWith("\t\tanswer: causality"))).toMatch(
       /\tanswer source: https:\/\/github\.com\/puzzlehunt\/.+\tanswer date: 2020-04-26$/u,
     );
+  });
+
+  it("folds more than three stages into a pointer at what lists them all", async () => {
+    const count = (await stagesTool("gsmg")).details["stages"];
+    const model = await lines("gsmg");
+    const record = await requirePuzzle("gsmg");
+
+    expect(Array.isArray(count) ? count.length : 0).toBe(7);
+    expect(model).toContain(`stages: 7, folded, ${facts.tools.stages.name} lists them`);
+    expect(model.some((line) => line.includes("SalPhaseIon"))).toBe(false);
+    expect(formatPuzzleRecord(record).split("\n")).toContain(
+      "stages: 7, folded, puzzles stages gsmg lists them",
+    );
+  });
+
+  it("spells out a block of three stages in full", async () => {
+    const text = await lines("teikhos/4");
+    const start = text.indexOf("stages: 3");
+    const end = text.findIndex((line, index) => index > start && !line.startsWith("\t"));
+    const stages = text.slice(start + 1, end).filter((line) => /^\t[^\t]/u.test(line));
+
+    expect(start).toBeGreaterThan(-1);
+    expect(stages).toHaveLength(3);
   });
 
   it("prints no stage block for a puzzle that runs in one", async () => {
