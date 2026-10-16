@@ -352,18 +352,49 @@ function formatAssets(puzzle: Puzzle, files: FileReference): string[] {
   ];
 }
 
+/** The most hints or stages a `puzzles_show` block spells out before it shrinks to a count. */
+const SHOWN = 3;
+
+/**
+ * The one line a long `puzzles_show` block shrinks to.
+ *
+ * @param {string} label - The block's label, such as `hints` or `stages`.
+ * @param {number} count - How many entries the block holds.
+ * @param {string} listedBy - What lists them all.
+ * @returns {string} `stages: 7, folded, puzzles_stages lists them`.
+ */
+function folded(label: string, count: number, listedBy: string): string {
+  return `${label}: ${count}, folded, ${listedBy} lists them`;
+}
+
+/**
+ * Where a folded block sends its reader: the tool for a model, the command for a person.
+ *
+ * @param {string} command - The command that lists the block, `hints` or `stages`.
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {FileReference} files - Paths for a model, links for a person.
+ * @returns {string} `puzzles_hints`, or `puzzles hints <id>`.
+ */
+function lister(command: string, puzzle: Puzzle, files: FileReference): string {
+  return files === "path" ? `puzzles_${command}` : `puzzles ${command} ${puzzle.id()}`;
+}
+
 /**
  * The stage count, then each stage with its description on one line, its artifacts under it (the
  * name, where the author published it, the repository copy) and its published answer, if any.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @param {FileReference} files - The repository copy as a URL or a path.
+ * @param {string} [stageLister] - What lists them all, which folds a block past `SHOWN`.
  * @returns {string[]} The count line and the artifact lines, or nothing for a single-stage puzzle.
  */
-function formatStages(puzzle: Puzzle, files: FileReference): string[] {
+function formatStages(puzzle: Puzzle, files: FileReference, stageLister?: string): string[] {
   const stages = puzzle.stages();
   if (stages.length === 0) {
     return [];
+  }
+  if (stageLister !== undefined && stages.length > SHOWN) {
+    return [folded("stages", stages.length, stageLister)];
   }
   const links = puzzle.assetLinks();
   const directory = `assets/${puzzle.collection()}`;
@@ -464,22 +495,19 @@ function formatHint(hint: Hint): string {
   return `\t${hint.kind}\t${hint.date ?? "-"}\t${hint.text}\tsource: ${hint.source}${formatConfirmation(hint.confirmation)}${answer}`;
 }
 
-/** The most hints a `puzzles_show` block spells out before it shrinks to a count. */
-const SHOWN_HINTS = 3;
-
 /**
  * The hint count under its label, then one line per hint in record order, or nothing for an
  * empty list.
  *
  * @param {string} label - `collection hints` for the inherited ones, `hints` for the puzzle's own.
  * @param {readonly Hint[]} hints - The hints.
- * @param {string} [lister] - What lists them all, which folds a block past `SHOWN_HINTS`.
+ * @param {string} [hintLister] - What lists them all, which folds a block past `SHOWN`.
  * @returns {string[]} The count line and the hint lines.
  */
-function formatHints(label: string, hints: readonly Hint[], lister?: string): string[] {
+function formatHints(label: string, hints: readonly Hint[], hintLister?: string): string[] {
   if (hints.length === 0) return [];
-  if (lister !== undefined && hints.length > SHOWN_HINTS) {
-    return [`${label}: ${hints.length}, folded, ${lister} lists them`];
+  if (hintLister !== undefined && hints.length > SHOWN) {
+    return [folded(label, hints.length, hintLister)];
   }
   return [`${label}: ${hints.length}`, ...hints.map(formatHint)];
 }
@@ -490,29 +518,18 @@ function formatHints(label: string, hints: readonly Hint[], lister?: string): st
  *
  * @param {readonly Hint[]} inherited - The hints of the puzzle's collection.
  * @param {readonly Hint[]} own - The puzzle's own hints.
- * @param {string} [lister] - What lists them all, given only where a long block folds.
+ * @param {string} [hintLister] - What lists them all, given only where a long block folds.
  * @returns {string[]} The lines, empty when neither list has a hint.
  */
 function formatHintBlocks(
   inherited: readonly Hint[],
   own: readonly Hint[],
-  lister?: string,
+  hintLister?: string,
 ): string[] {
   return [
-    ...formatHints("collection hints", inherited, lister),
-    ...formatHints("hints", own, lister),
+    ...formatHints("collection hints", inherited, hintLister),
+    ...formatHints("hints", own, hintLister),
   ];
-}
-
-/**
- * Where a folded hint block sends its reader: the tool for a model, the command for a person.
- *
- * @param {Puzzle} puzzle - The puzzle.
- * @param {FileReference} files - Paths for a model, links for a person.
- * @returns {string} `puzzles_hints`, or `puzzles hints <id>`.
- */
-function hintLister(puzzle: Puzzle, files: FileReference): string {
-  return files === "path" ? "puzzles_hints" : `puzzles hints ${puzzle.id()}`;
 }
 
 /**
@@ -549,7 +566,7 @@ export function formatHintReport(
 
 /**
  * The lines `puzzles stages` and `puzzles_stages` print: `id: N stages` or `id: no stages
- * recorded`, then the `stages` block `puzzles_show` prints.
+ * recorded`, then every stage, the whole block `puzzles_show` folds past three.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @param {FileReference} [files] - The repository copies as URLs, or as paths for a model.
@@ -565,7 +582,7 @@ export function formatStageReport(puzzle: Puzzle, files: FileReference = "url"):
  * Formats a puzzle as the lines `puzzles_show` prints: the summary row, then every field the
  * record has as `name: value`, so a client that only sees the text still has the record. The
  * hints the collection shares print as `collection hints` ahead of the puzzle's own, and its
- * techniques as `collection techniques`.
+ * techniques as `collection techniques`. A stage or hint block past three shrinks to its count.
  *
  * @param {Puzzle} puzzle - The puzzle.
  * @param {readonly Hint[]} [inherited] - The hints of the puzzle's collection.
@@ -601,9 +618,9 @@ export function formatPuzzleRecord(
     ...formatTransactions(puzzle, allTransactions),
     ...field("claim", puzzle.claimExplorerUrl()),
     ...formatAssets(puzzle, files),
-    ...formatStages(puzzle, files),
+    ...formatStages(puzzle, files, lister("stages", puzzle, files)),
     ...formatTechniqueBlocks(inheritedTechniques, puzzle.techniques()),
-    ...formatHintBlocks(inherited, puzzle.hints(), hintLister(puzzle, files)),
+    ...formatHintBlocks(inherited, puzzle.hints(), lister("hints", puzzle, files)),
     `explorer: ${puzzle.explorerUrl()}`,
     `source: ${puzzle.sourceUrl()}`,
     ...field("key range", puzzle.keyRange(), (range) => formatRange(range, bits)),
