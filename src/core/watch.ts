@@ -1,14 +1,14 @@
 import { BalanceError, type BalanceOptions, HISTORY_LIMIT } from "./balance.ts";
-import { type Chain, chainDecimals, chainSymbol } from "./chains.ts";
+import { type Chain, chainSymbol } from "./chains.ts";
 import { InvalidArgumentError, SourceLookupError } from "./errors.ts";
-import { decimal } from "./decimal.ts";
+import { coinAmount, decimal } from "./decimal.ts";
 import { AddressKind, defined } from "./parts.ts";
 import type { ChainTransaction } from "./providers.ts";
 import type { Puzzle } from "./puzzle.ts";
 import type { SourceChange } from "./sources.ts";
 import { Status } from "./status.ts";
 import { oneLine } from "./text.ts";
-import { type Balance, formatUnits } from "./types.ts";
+import type { Balance } from "./types.ts";
 
 /** Options for `watcher()`: the explorer options, plus the cutoff that turns on source checks. */
 export interface WatchOptions extends BalanceOptions {
@@ -330,17 +330,6 @@ export function watcher(options: WatchOptions = {}): Watch {
 }
 
 /**
- * An amount with the chain's coin, every digit kept.
- *
- * @param {bigint} units - Base units.
- * @param {Chain} chain - Chain whose coin they count.
- * @returns {string} Such as `0.00000371 BTC`.
- */
-function amount(units: bigint, chain: Chain): string {
-  return `${formatUnits(units, chainDecimals(chain))} ${chainSymbol(chain)}`;
-}
-
-/**
  * What one finding says, for the row that names its kind and puzzle.
  *
  * @param {Readonly<Finding>} finding - The finding.
@@ -350,13 +339,13 @@ function amount(units: bigint, chain: Chain): string {
 function describe(finding: Readonly<Finding>, chain: Chain): string {
   switch (finding.kind) {
     case "balance":
-      return `${amount(finding.balance, chain)} held, ${finding.prize} ${chainSymbol(chain)} recorded as the prize`;
+      return `${coinAmount(finding.balance, chain)} held, ${finding.prize} ${chainSymbol(chain)} recorded as the prize`;
     case "pubkey":
       return `${finding.pubkey} shown by ${finding.txid} at ${finding.address}, ${finding.recorded === undefined ? "none recorded" : `${finding.recorded} recorded`}`;
     case "source":
       return `${finding.url} changed, +${finding.additions} -${finding.deletions} lines from ${finding.before.snapshot} to ${finding.after.snapshot}${finding.partial ? ", bodies cut off" : ""}`;
     default:
-      return `${finding.txid} ${amount(finding.amount, chain)} ${finding.pending ? "unconfirmed" : (finding.date ?? "undated")} at ${finding.address}`;
+      return `${finding.txid} ${coinAmount(finding.amount, chain)} ${finding.pending ? "unconfirmed" : (finding.date ?? "undated")} at ${finding.address}`;
   }
 }
 

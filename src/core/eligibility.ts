@@ -1,7 +1,6 @@
 import { BalanceError, type BalanceOptions } from "./balance.ts";
 import {
   type Chain,
-  chainDecimals,
   chains,
   chainSymbol,
   isValidAddress,
@@ -10,14 +9,14 @@ import {
 } from "./chains.ts";
 import { get, requirePuzzle, selectPuzzles } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
-import { decimal } from "./decimal.ts";
+import { coinAmount, decimal } from "./decimal.ts";
 import { type Address, type AddressKind, addressOn, defined } from "./parts.ts";
 import type { AddressState } from "./providers.ts";
 import type { Puzzle } from "./puzzle.ts";
 import { requireCollection } from "./registry.ts";
 import { Status } from "./status.ts";
 import { oneLine } from "./text.ts";
-import { Balance, formatUnits } from "./types.ts";
+import { Balance } from "./types.ts";
 import { expectedPrize, holdsPrize } from "./watch.ts";
 
 /** Options for `eligibility()`: the explorer options, plus the chain of a bare address. */
@@ -213,17 +212,6 @@ async function readAddresses(
 }
 
 /**
- * An amount with the chain's coin, every digit kept.
- *
- * @param {bigint} units - Base units.
- * @param {Chain} chain - Chain whose coin they count.
- * @returns {string} Such as `0.00000371 BTC`.
- */
-function amount(units: bigint, chain: Chain): string {
-  return `${formatUnits(units, chainDecimals(chain))} ${chainSymbol(chain)}`;
-}
-
-/**
  * What the record leaves for the live part to fill in: the totals the explorer didn't keep.
  *
  * @param {Chain} chain - Chain of the addresses.
@@ -404,12 +392,12 @@ function statusEvidence(
     evidence: [
       `record says ${puzzle.status()}`,
       ...(claim === undefined ? [] : [`claim ${claim.txid} on ${claim.date}`]),
-      ...(read ? [`addresses hold ${amount(held.total(), chain)} now`] : []),
+      ...(read ? [`addresses hold ${coinAmount(held.total(), chain)} now`] : []),
     ],
     conflicts:
       read && prize !== undefined && !holdsPrize(held, prize)
         ? [
-            `addresses hold ${amount(held.total(), chain)}, the record says the prize is ${decimal(prize)} ${chainSymbol(chain)}`,
+            `addresses hold ${coinAmount(held.total(), chain)}, the record says the prize is ${decimal(prize)} ${chainSymbol(chain)}`,
           ]
         : [],
   };
@@ -504,10 +492,10 @@ export async function eligibility(
  */
 function describeState(state: AddressState, chain: Chain): string {
   const parts = [
-    `${state.address} ${amount(state.confirmed, chain)} confirmed`,
-    `${amount(state.unconfirmed, chain)} unconfirmed`,
-    ...(state.funded === undefined ? [] : [`received ${amount(state.funded, chain)}`]),
-    ...(state.spent === undefined ? [] : [`spent ${amount(state.spent, chain)}`]),
+    `${state.address} ${coinAmount(state.confirmed, chain)} confirmed`,
+    `${coinAmount(state.unconfirmed, chain)} unconfirmed`,
+    ...(state.funded === undefined ? [] : [`received ${coinAmount(state.funded, chain)}`]),
+    ...(state.spent === undefined ? [] : [`spent ${coinAmount(state.spent, chain)}`]),
     `read from ${state.provider} at ${state.readAt}`,
   ];
   return parts.join(", ");
