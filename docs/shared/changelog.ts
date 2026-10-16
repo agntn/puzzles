@@ -49,7 +49,9 @@ export function releaseAnchor(version: string): string {
 
 const REPOSITORY = "https://github.com/agntn/puzzles";
 
-const RELEASE_TAG = /^v(\d+)\.(\d+)\.(\d+)(?:-([\w.]+))?$/;
+/** SemVer 2.0.0 with a `v`: dot separated prerelease and build identifiers of `[0-9A-Za-z-]`. */
+const RELEASE_TAG =
+  /^v(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 /** `##` and `###` open a group. `####` is changelogen's repeat of the breaking entries. */
 const GROUP_HEADING = /^#{2,3} (.+)$/;
 const INLINE = /`([^`]+)`|\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)\s]+)\)|\(#(\d+)\)/g;

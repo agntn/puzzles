@@ -32,12 +32,21 @@ describe("docs changelog", () => {
         release("v0.9.0", ""),
         release("v0.10.0", ""),
         release("v0.10.0-beta.1", ""),
+        release("v0.10.0-rc-1", ""),
+        release("v0.9.1+build.5", ""),
         release("v0.11.0", "", { draft: true }),
         release("latest", ""),
+        release("v1.0.0-beta..1", ""),
       ],
       {},
     );
-    expect(listed.map((entry) => entry.version)).toEqual(["0.10.0", "0.10.0-beta.1", "0.9.0"]);
+    expect(listed.map((entry) => entry.version)).toEqual([
+      "0.10.0",
+      "0.10.0-rc-1",
+      "0.10.0-beta.1",
+      "0.9.1+build.5",
+      "0.9.0",
+    ]);
   });
 
   it("orders prereleases of one version by semver precedence, newest first", () => {
