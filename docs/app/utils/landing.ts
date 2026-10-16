@@ -1605,11 +1605,11 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "91841d652c1b",
+  dataVersion: "290275901e3b",
   total: 555,
-  solved: 321,
+  solved: 322,
   unsolved: 113,
-  claimed: 21,
+  claimed: 20,
   swept: 96,
   expired: 4,
   withPubkey: 447,
@@ -2401,15 +2401,14 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     authorUrl: "https://soundcloud.com/thisisarushwalletbrainwalletnooot",
     total: 30,
     statuses: {
-      solved: 28,
-      claimed: 1,
+      solved: 29,
       unsolved: 1,
     },
     chains: ["bitcoin"],
     prize: {},
     unsolvedPrize: {},
     withPubkey: 30,
-    withKey: 28,
+    withKey: 29,
     firstStarted: "2014-09-22 17:36:08",
     lastStarted: "2014-09-22 21:24:40",
     hints: [

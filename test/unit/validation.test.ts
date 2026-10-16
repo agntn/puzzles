@@ -1091,7 +1091,7 @@ describe("collection class data", () => {
       Object.fromEntries(Object.entries(counts).map(([name, items]) => [name, items?.length])),
     ).toEqual({
       "bip39-entropy": 158,
-      "sha256-brainwallet": 28,
+      "sha256-brainwallet": 29,
       "triple-sha256-brainwallet": 3,
       warpwallet: 6,
     });
@@ -1133,7 +1133,7 @@ describe("collection class data", () => {
           : [];
       }),
     );
-    expect(checked).toHaveLength(28);
+    expect(checked).toHaveLength(29);
     expect(checked.filter(([, rebuilt]) => !rebuilt)).toEqual([]);
   });
 
