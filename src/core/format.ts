@@ -1,6 +1,5 @@
 import type { AuthorEntry, SolverEntry } from "./dataset.ts";
-import { chainSymbol } from "./chains.ts";
-import { decimal, exactSum } from "./decimal.ts";
+import { coinAmount, decimal, exactSum } from "./decimal.ts";
 import type { CollectionSummary, Stats, TechniqueCounts } from "./dataset.ts";
 import {
   type Answer,
@@ -59,7 +58,7 @@ export function formatPrize(prize: number | undefined, currency: string): string
  * @returns {string} Every digit of the total and the native symbol.
  */
 export function formatBalance(balance: Balance): string {
-  return `${balance.totalAmount()} ${chainSymbol(balance.chain)}`;
+  return coinAmount(balance.total(), balance.chain);
 }
 
 /**

@@ -1,3 +1,5 @@
+import { type Chain, chainDecimals, chainSymbol } from "./chains.ts";
+
 let amounts: Intl.NumberFormat | undefined;
 
 /**
@@ -11,6 +13,34 @@ let amounts: Intl.NumberFormat | undefined;
 export function decimal(amount: number): string {
   amounts ??= new Intl.NumberFormat("en-US", { maximumFractionDigits: 20, useGrouping: false });
   return amounts.format(amount);
+}
+
+/**
+ * Renders base units as an exact decimal string, because a chain with 18 decimal places
+ * outruns a double: `Number(1n) / 1e18` prints `1e-18`, and a wei precise balance loses
+ * its last digits.
+ *
+ * @param {bigint} units - Signed amount in base units.
+ * @param {number} decimals - Base unit decimal places of the native token.
+ * @returns {string} The amount in whole units, without an exponent.
+ */
+export function formatUnits(units: bigint, decimals: number): string {
+  const sign = units < 0n ? "-" : "";
+  const digits = (units < 0n ? -units : units).toString().padStart(decimals + 1, "0");
+  const whole = digits.slice(0, digits.length - decimals);
+  const fraction = digits.slice(digits.length - decimals).replace(/0+$/u, "");
+  return fraction === "" ? `${sign}${whole}` : `${sign}${whole}.${fraction}`;
+}
+
+/**
+ * An amount with the chain's coin, every digit kept.
+ *
+ * @param {bigint} units - Base units.
+ * @param {Chain} chain - Chain whose coin they count.
+ * @returns {string} Such as `0.00000371 BTC`.
+ */
+export function coinAmount(units: bigint, chain: Chain): string {
+  return `${formatUnits(units, chainDecimals(chain))} ${chainSymbol(chain)}`;
 }
 
 /** An exact decimal: integer units and how many of their digits sit after the point. */

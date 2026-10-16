@@ -1,21 +1,5 @@
 import { type Chain, chainDecimals } from "./chains.ts";
-
-/**
- * Renders base units as an exact decimal string, because a chain with 18 decimal places
- * outruns a double: `Number(1n) / 1e18` prints `1e-18`, and a wei precise balance loses
- * its last digits.
- *
- * @param {bigint} units - Signed amount in base units.
- * @param {number} decimals - Base unit decimal places of the native token.
- * @returns {string} The amount in whole units, without an exponent.
- */
-export function formatUnits(units: bigint, decimals: number): string {
-  const sign = units < 0n ? "-" : "";
-  const digits = (units < 0n ? -units : units).toString().padStart(decimals + 1, "0");
-  const whole = digits.slice(0, digits.length - decimals);
-  const fraction = digits.slice(digits.length - decimals).replace(/0+$/u, "");
-  return fraction === "" ? `${sign}${whole}` : `${sign}${whole}.${fraction}`;
-}
+import { formatUnits } from "./decimal.ts";
 
 /** Immutable native token balance in base units. */
 export class Balance {
