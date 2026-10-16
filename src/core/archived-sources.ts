@@ -91,6 +91,18 @@ export const archivedSources = [
     date: "2019-11-10",
   },
   {
+    file: "weave/arweavep-2019-06-05",
+    tweet: "1136338881593450497",
+    author: "ArweaveP",
+    date: "2019-06-05",
+  },
+  {
+    file: "weave/arweavep-2019-07-01",
+    tweet: "1145585725968125953",
+    author: "ArweaveP",
+    date: "2019-07-01",
+  },
+  {
     file: "dug/0xflorent-2026-05-31",
     tweet: "2061070356564091258",
     author: "0xFlorent_",

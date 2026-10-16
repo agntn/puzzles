@@ -184,7 +184,7 @@ describe("puzzles MCP server", () => {
     const image = await client.callTool({ name: "puzzles_hints", arguments: { id: "gsmg" } });
     const bare = await client.callTool({
       name: "puzzles_hints",
-      arguments: { id: "weave/1" },
+      arguments: { id: "weave/2" },
     });
 
     expect(firstText(hinted).split("\n")).toEqual([
@@ -205,7 +205,7 @@ describe("puzzles MCP server", () => {
       "hint assets: assets/gsmg/follow-the-white-rabbit.png",
       "files: 6 files, 0 archived sources; puzzles_assets lists them and reads one by its path",
     ]);
-    expect(firstText(bare)).toBe("weave/1: no hints recorded");
+    expect(firstText(bare)).toBe("weave/2: no hints recorded");
   });
 
   it("walks the stages of a puzzle with their pages and published answers", async () => {
