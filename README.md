@@ -158,6 +158,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `natasha-otomoski`          | bitcoin                             | Eight camel case words as raw key bytes     |
 | `phy`                       | bitcoin                             | A signed post and a spiral of grey emojis   |
 | `seed-phrase`               | bitcoin                             | Dated clues, then two years of silence      |
+| `9vw04`                     | bitcoin                             | A WIF in one tweet, rainbows not included   |
 
 Identifiers are `collection/name`. A singleton, such as `gsmg`, `genesis` or `80-bit`, is just the key. Each collection has a page with the story, the quirks and every puzzle: [puzzles.agntn.dev/collections](https://puzzles.agntn.dev/collections).
 

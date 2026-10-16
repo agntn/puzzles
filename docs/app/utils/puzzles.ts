@@ -144,6 +144,14 @@ const PRESENTATION: Readonly<
     blurb:
       "80 unknown bits in a 511-bit key. The public key only ever showed up in the mempool. Taken 39 minutes in.",
   },
+  "9vw04": {
+    icon: "i-lucide-rainbow",
+    title: "Gem Finder's 9vw04 puzzle",
+    sample: "9vw04",
+    chains: ["bitcoin"],
+    blurb:
+      "One tweet, five characters and a grid of letters and digits in four colours. Everything for the WIF is in the post, the author says. Rainbows, not so much.",
+  },
   "ledger-donjon": {
     icon: "i-lucide-scissors",
     title: "Ledger Donjon CTF",
