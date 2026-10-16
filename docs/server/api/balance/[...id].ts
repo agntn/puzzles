@@ -5,6 +5,16 @@ import {
   requirePuzzle,
   UnsupportedChainError,
 } from "@agntn/puzzles";
+import {
+  createError,
+  defineEventHandler,
+  getRouterParam,
+  type RequestEvent,
+  useRuntimeConfig,
+} from "nuxt/server";
+
+/** Seconds a balance stays cached per puzzle, in Nitro and in the header alike. */
+const TTL = 300;
 
 /** What the pages render: base units as strings, the whole-unit amount as a decimal string. */
 export interface BalanceAnswer {
@@ -35,23 +45,23 @@ function decodeId(raw: string): string {
 
 /**
  * The one network call on this site, made by the worker so the Etherscan key stays a secret and
- * every explorer sees one caller. Answers are cached five minutes per puzzle. An explorer failure
- * is a 502 with the library's own message.
+ * every explorer sees one caller. An explorer failure is a 502 with the library's own message.
  *
- * @param {import("h3").H3Event} event - The request, with the puzzle id in its path.
+ * @param {RequestEvent} _event - For Nitro, which refreshes a stale entry in its `waitUntil`.
+ * @param {string} id - The puzzle identifier, decoded.
  * @returns {Promise<BalanceAnswer>} The balance in base units and whole units.
  */
-export default defineCachedEventHandler(
-  async (event): Promise<BalanceAnswer> => {
-    const config = useRuntimeConfig(event);
+const balanceOf = defineCachedFunction(
+  async (_event: RequestEvent, id: string): Promise<BalanceAnswer> => {
+    const config = useRuntimeConfig();
     let puzzle;
     try {
-      puzzle = await requirePuzzle(decodeId(getRouterParam(event, "id") ?? ""));
+      puzzle = await requirePuzzle(id);
     } catch (error) {
       if (error instanceof PuzzleNotFoundError) {
         throw createError({
-          statusCode: 404,
-          statusMessage: "Unknown puzzle",
+          status: 404,
+          statusText: "Unknown puzzle",
           message: error.message,
         });
       }
@@ -77,20 +87,28 @@ export default defineCachedEventHandler(
     } catch (error) {
       if (error instanceof UnsupportedChainError) {
         throw createError({
-          statusCode: 422,
-          statusMessage: "No provider",
+          status: 422,
+          statusText: "No provider",
           message: error.message,
         });
       }
       if (error instanceof BalanceError) {
-        throw createError({ statusCode: 502, statusMessage: error.name, message: error.message });
+        throw createError({ status: 502, statusText: error.name, message: error.message });
       }
       throw error;
     }
   },
-  {
-    maxAge: 300,
-    swr: true,
-    getKey: (event) => `balance:${getRouterParam(event, "id") ?? ""}`,
-  },
+  { name: "balance", maxAge: TTL, swr: true, getKey: (_event, id) => id },
 );
+
+/**
+ * The cached balance, with a `Cache-Control` that lets shared caches keep it as long as Nitro does.
+ *
+ * @param {RequestEvent} event - The request, with the puzzle id in its path.
+ * @returns {Promise<BalanceAnswer>} The balance in base units and whole units.
+ */
+export default defineEventHandler(async (event): Promise<BalanceAnswer> => {
+  const balance = await balanceOf(event, decodeId(getRouterParam(event, "id") ?? ""));
+  event.res.headers.set("Cache-Control", `s-maxage=${TTL}, stale-while-revalidate`);
+  return balance;
+});

@@ -1,4 +1,4 @@
-/** Toolkit 0.19 includes `types/hooks` without `.d.ts`, so its hook names load from here. */
+/** Toolkit 0.23 includes `types/hooks` without `.d.ts`, so its hook names load from here. */
 import type {} from "../../node_modules/@nuxtjs/mcp-toolkit/dist/runtime/server/types/hooks.js";
 import { facts } from "../../../src/tool-operations.ts";
 

@@ -170,6 +170,10 @@ export default defineNuxtConfig({
     url: "https://puzzles.agntn.dev",
     name: "@agntn/puzzles",
   },
+  /** The Docus source knows only `content/`; this one brings the Vue pages along. */
+  sitemap: {
+    sources: ["/api/__sitemap__/puzzles"],
+  },
   llms: {
     domain: "https://puzzles.agntn.dev",
     title: "@agntn/puzzles",
@@ -370,36 +374,36 @@ export default defineNuxtConfig({
     esbuild: { options: { target: "es2022" } },
     /** The puzzle images and hints, served from the checkout's assets/ under /assets. */
     publicAssets: [{ dir: resolve(repoRoot, "assets"), baseURL: "/assets", maxAge: 60 * 60 * 24 }],
-    prerender: {
-      /**
-       * Puzzle pages come from the links `::collection-puzzles` renders. Nothing lists them here:
-       * this file runs under jiti from docs/ and can't import the library on Workers Builds.
-       */
-      crawlLinks: true,
-      routes: [
-        "/",
-        "/playground",
-        "/changelog",
-        "/changelog.xml",
-        "/sitemap.xml",
-        "/robots.txt",
-        "/llms.txt",
-        "/llms-full.txt",
-      ],
-      /**
-       * Every puzzle page links the playground with a query; one prerender of the page serves them all.
-       *
-       * @param {string} path - A route the crawler found.
-       * @returns {boolean} Whether to skip it.
-       */
-      ignore: [(path: string): boolean => path.startsWith("/playground?")],
-    },
     cloudflare: {
       deployConfig: true,
       nodeCompat: true,
     },
   },
   compatibilityDate: "2026-09-03",
+  prerender: {
+    /**
+     * Puzzle pages come from the links `::collection-puzzles` renders. Nothing lists them here:
+     * this file runs under jiti from docs/ and can't import the library on Workers Builds.
+     */
+    crawlLinks: true,
+    routes: [
+      "/",
+      "/playground",
+      "/changelog",
+      "/changelog.xml",
+      "/sitemap.xml",
+      "/robots.txt",
+      "/llms.txt",
+      "/llms-full.txt",
+    ],
+    /**
+     * Every puzzle page links the playground with a query; one prerender serves them all.
+     *
+     * @param {string} path - A route the crawler found.
+     * @returns {boolean} Whether to skip it.
+     */
+    ignore: [(path: string): boolean => path.startsWith("/playground?")],
+  },
   content: {
     database: {
       type: "d1",

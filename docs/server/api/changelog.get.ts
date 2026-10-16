@@ -1,3 +1,4 @@
+import { defineEventHandler } from "nuxt/server";
 import type { ChangelogRelease } from "#shared/changelog";
 
 /**
