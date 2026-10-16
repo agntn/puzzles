@@ -4,6 +4,34 @@ import { changelogReleases, type ChangelogRelease, type GitHubRelease } from "#s
 const PACKAGE = "@agntn/puzzles";
 const RELEASES = "https://api.github.com/repos/agntn/puzzles/releases";
 const PAGE = 100;
+/** Statuses worth another try, the same set `ofetch` retries. */
+const RETRY_STATUSES = new Set([408, 409, 425, 429, 500, 502, 503, 504]);
+
+/**
+ * GETs JSON with two retries and ten seconds a try for the headers; a long body may take its time.
+ *
+ * @param {string} url - The URL, query included.
+ * @param {Readonly<Record<string, string>>} headers - Request headers.
+ * @returns {Promise<T>} The parsed body of a 2xx answer.
+ */
+async function getJson<T>(url: string, headers: Readonly<Record<string, string>> = {}): Promise<T> {
+  for (let attempt = 0; ; attempt += 1) {
+    const deadline = new AbortController();
+    const timer = setTimeout(() => deadline.abort(), 10_000);
+    let response: Response | undefined;
+    try {
+      response = await fetch(url, { headers, signal: deadline.signal });
+    } catch (error) {
+      if (attempt < 2) continue;
+      throw new Error(`[GET] "${url}": no answer`, { cause: error });
+    } finally {
+      clearTimeout(timer);
+    }
+    if (response.ok) return (await response.json()) as T;
+    if (attempt < 2 && RETRY_STATUSES.has(response.status)) continue;
+    throw new Error(`[GET] "${url}": ${response.status} ${response.statusText}`);
+  }
+}
 
 /**
  * Publish times from the registry, keyed by version. A release PR merged on GitHub reaches npm
@@ -13,9 +41,8 @@ const PAGE = 100;
  */
 async function publishTimes(): Promise<Record<string, string>> {
   try {
-    const document = await $fetch<{ time?: Record<string, string> }>(
+    const document = await getJson<{ time?: Record<string, string> }>(
       `https://registry.npmjs.org/${PACKAGE.replace("/", "%2F")}`,
-      { timeout: 10_000, retry: 2 },
     );
     return document.time ?? {};
   } catch (error) {
@@ -43,12 +70,10 @@ async function githubReleases(): Promise<GitHubRelease[]> {
   };
   const releases: GitHubRelease[] = [];
   for (let page = 1; ; page += 1) {
-    const batch = await $fetch<GitHubRelease[]>(RELEASES, {
-      query: { per_page: PAGE, page },
+    const batch = await getJson<GitHubRelease[]>(
+      `${RELEASES}?per_page=${PAGE}&page=${page}`,
       headers,
-      timeout: 10_000,
-      retry: 2,
-    });
+    );
     releases.push(...batch);
     if (batch.length < PAGE) return releases;
   }

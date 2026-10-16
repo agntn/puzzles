@@ -74,6 +74,9 @@ const libraryEntries = [
   "@agntn/keys/wif",
 ];
 
+/** Where the site lives: site.url, llms.txt and the feed's links all start here. */
+const siteUrl = "https://puzzles.agntn.dev";
+
 /** Pages published under snake_case ids before the switch to kebab-case, moved for good. */
 const renamedIds = [
   "bitimage/kitten_passphrase",
@@ -162,20 +165,26 @@ export default defineNuxtConfig({
     assetCommit: process.env["WORKERS_CI_COMMIT_SHA"] || checkoutCommit(repoRoot) || "",
     /** The Etherscan key for /api/balance on Ethereum puzzles; NUXT_ETHERSCAN_API_KEY at runtime, the root .env locally. */
     etherscanApiKey: process.env.ETHERSCAN_API_KEY ?? "",
+    /** site.url for /changelog.xml, read through `nuxt/server`; NUXT_SITE_URL sets both. */
+    siteUrl,
   },
   /** Both would resolve from the repo root's workspace too. */
   devtools: { enabled: false },
   telemetry: false,
   site: {
-    url: "https://puzzles.agntn.dev",
+    url: siteUrl,
     name: "@agntn/puzzles",
+  },
+  /** The playground has no markdown twin, so agents get the page itself, not a `/raw` 404. */
+  agentDiscovery: {
+    excludePrefixes: { extend: ["/playground"] },
   },
   /** The Docus source knows only `content/`; this one brings the Vue pages along. */
   sitemap: {
     sources: ["/api/__sitemap__/puzzles"],
   },
   llms: {
-    domain: "https://puzzles.agntn.dev",
+    domain: siteUrl,
     title: "@agntn/puzzles",
     description:
       "Public crypto bounties, puzzles and challenges as typed records, as a library, a CLI, an MCP server and Pi and OMP extensions.",
@@ -204,6 +213,17 @@ export default defineNuxtConfig({
               "The library running in the page: show, list, verify, collections, authors and stats.",
           },
         ],
+      },
+      /** Agent discovery lists no pages once a section links one, so these ask for theirs. */
+      {
+        title: "Docs",
+        contentCollection: "docs",
+        contentFilters: [{ field: "extension", operator: "=", value: "md" }],
+      },
+      {
+        title: "Stories",
+        contentCollection: "stories",
+        contentFilters: [{ field: "extension", operator: "=", value: "md" }],
       },
     ],
   },

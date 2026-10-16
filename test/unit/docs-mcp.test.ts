@@ -8,6 +8,9 @@ import { callTool, toolListings } from "../../src/mcp.ts";
 import { MENTION_LIMIT } from "../../src/tool-operations.ts";
 import { firstText } from "../support/mcp.ts";
 
+/** The module the docs plugins import `defineNitroPlugin` from, as `docs/` resolves it. */
+const NITRO_RUNTIME = "../../docs/node_modules/nitropack/dist/runtime/index.mjs";
+
 /*
  * The toolkit's server entry pulls in the Nitro runtime, so the handler gets its options back and
  * two page tools. The path is the file `@nuxtjs/mcp-toolkit/server` resolves to from the docs.
@@ -169,11 +172,13 @@ describe("docs MCP tools", () => {
   it("names puzzles_mentions in the capability ChatGPT reads", async () => {
     const plugins = vi.fn<(plugin: () => void) => void>();
     const hook = vi.fn<(name: string, handler: (context: ServerCreated) => void) => void>();
-    vi.stubGlobal("defineNitroPlugin", plugins);
-    vi.stubGlobal("useNitroApp", () => ({ hooks: { hook } }));
+    vi.doMock(NITRO_RUNTIME, () => ({
+      defineNitroPlugin: plugins,
+      useNitroApp: () => ({ hooks: { hook } }),
+    }));
     await import("../../docs/server/plugins/mentions.ts");
     plugins.mock.calls[0]?.[0]();
-    vi.unstubAllGlobals();
+    vi.doUnmock(NITRO_RUNTIME);
     const created = hook.mock.calls.find(([name]) => name === "mcp:server:created")?.[1];
 
     const server = new McpServer({ name: "docs", version: "0.0.0" });

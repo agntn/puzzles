@@ -1,4 +1,5 @@
 import { all } from "@agntn/puzzles";
+import { defineEventHandler } from "nuxt/server";
 
 /**
  * Pages outside `content/` that the Docus sitemap cannot see. Keep in step with `app/pages/` and
@@ -11,7 +12,7 @@ const PAGES = ["/playground", "/changelog"];
  *
  * @returns {Promise<string[]>} The paths, which the sitemap module puts under `site.url`.
  */
-export default defineSitemapEventHandler(async () => {
+export default defineEventHandler(async (): Promise<string[]> => {
   const puzzles = (await all())
     .map((puzzle) => puzzle.id())
     .filter((id) => id.includes("/"))

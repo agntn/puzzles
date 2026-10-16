@@ -1,3 +1,4 @@
+import { defineEventHandler, useRuntimeConfig } from "nuxt/server";
 import { releaseAnchor, type ChangelogRelease, type ChangelogSpan } from "#shared/changelog";
 
 /**
@@ -56,14 +57,13 @@ function releaseHtml(release: ChangelogRelease): string {
 /**
  * RSS 2.0 feed of the GitHub releases, prerendered next to /changelog. An item's guid is
  * the version, so a reader never sees a release twice, and its link is the release on the page.
- * It keeps h3's handler, since `getSiteConfig` from nuxt-site-config reads h3's event.
  *
- * @param {import("h3").H3Event} event - The request for `/changelog.xml`.
+ * @param {import("nuxt/server").RequestEvent} event - The request for `/changelog.xml`.
  * @returns {Promise<string>} The feed.
  */
 export default defineEventHandler(async (event) => {
   /** site.url of nuxt.config.ts, so the links are absolute in dev too; readers resolve nothing else. */
-  const siteUrl = getSiteConfig(event).url.replace(/\/$/, "");
+  const siteUrl = useRuntimeConfig().siteUrl.replace(/\/$/, "");
   const releases = await changelog();
   const items = releases.map((release) =>
     [
@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
     ].join("\n"),
   );
   const latest = releases.find((release) => release.date)?.date;
-  setResponseHeader(event, "Content-Type", "application/rss+xml; charset=utf-8");
+  event.res.headers.set("Content-Type", "application/rss+xml; charset=utf-8");
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',

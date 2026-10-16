@@ -12,7 +12,7 @@ const { data } = await useAsyncData(
   async () => {
     const entry = await getAuthor(props.author);
     if (entry === undefined) {
-      throw createError({ statusCode: 404, statusMessage: `Unknown author ${props.author}` });
+      throw createError({ status: 404, statusText: `Unknown author ${props.author}` });
     }
     const collections = await Promise.all(entry.collections.map((key) => requireCollection(key)));
     return {

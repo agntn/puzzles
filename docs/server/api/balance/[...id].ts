@@ -5,6 +5,7 @@ import {
   requirePuzzle,
   UnsupportedChainError,
 } from "@agntn/puzzles";
+import { defineCachedFunction } from "nitropack/runtime";
 import {
   createError,
   defineEventHandler,

@@ -17,8 +17,8 @@ const { data: story } = await usePuzzleStory(() => id.value);
 
 if (data.value === null) {
   throw createError({
-    statusCode: 404,
-    statusMessage: "Puzzle not found",
+    status: 404,
+    statusText: "Puzzle not found",
     message: `No puzzle ${id.value}`,
   });
 }

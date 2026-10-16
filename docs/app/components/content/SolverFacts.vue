@@ -14,7 +14,7 @@ const { data } = await useAsyncData(
   async () => {
     const entry = await getSolver(props.solver);
     if (entry === undefined) {
-      throw createError({ statusCode: 404, statusMessage: `Unknown solver ${props.solver}` });
+      throw createError({ status: 404, statusText: `Unknown solver ${props.solver}` });
     }
     const puzzles = await Promise.all(entry.solves.map((solve) => requirePuzzle(solve.id)));
     return {
