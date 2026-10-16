@@ -35,6 +35,9 @@ export const MAX_LIST_LIMIT = 500;
 /** Default number of puzzles returned by the list tool. */
 export const DEFAULT_LIST_LIMIT = 50;
 
+/** Most picks one `puzzles_mentions` call returns; the picker shows a short list, not a page. */
+export const MENTION_LIMIT = 20;
+
 /** What every tool surface registers about one tool; the schema is built per harness. */
 export interface ToolFacts {
   readonly description: string;
@@ -60,6 +63,16 @@ const verifyById = {
     "An expected failure is a result, not an error.",
     "The recipe gets its own verdict: one that misses is a data bug, even when the key verifies.",
   ],
+  openWorld: false,
+} as const satisfies ToolFacts;
+
+/** ChatGPT's `@` picker asks this as the user types, so no harness gets it. */
+const mentions = {
+  name: "puzzles_mentions",
+  title: "Mention a Puzzle",
+  description: `Fills ChatGPT's @ picker as the user types, nothing more. Returns up to ${MENTION_LIMIT} puzzles whose id holds the query, each a link to its page on puzzles.agntn.dev. To read a record, call puzzles_show.`,
+  promptSnippet: "puzzles_mentions only feeds ChatGPT's @ picker; read a record with puzzles_show.",
+  promptGuidelines: [],
   openWorld: false,
 } as const satisfies ToolFacts;
 
@@ -330,6 +343,10 @@ export const facts = {
       description:
         "Also compare the source page's newest Wayback capture with the last one up to this moment, YYYY-MM-DD or ISO 8601, usually the date of the previous check",
     },
+    mention: {
+      maxLength: 100,
+      description: "What the user typed after @, part of an id such as bits/7; empty is fine",
+    },
     apiKey: {
       maxLength: 200,
       description:
@@ -354,8 +371,8 @@ export const facts = {
   ],
   statuses: Object.values(Status),
   techniques,
-  /** The tools the public server at puzzles.agntn.dev narrows, under the name they keep. */
-  publicTools: { verify: verifyById },
+  /** The tools only the public server at puzzles.agntn.dev serves, or serves narrowed. */
+  publicTools: { verify: verifyById, mentions },
 } as const satisfies {
   tools: Record<string, ToolFacts>;
   publicTools: Record<string, ToolFacts>;
@@ -1266,5 +1283,73 @@ export async function eligibilityTool(
       ...(state.funded === undefined ? {} : { funded: state.funded.toString() }),
       ...(state.spent === undefined ? {} : { spent: state.spent.toString() }),
     })),
+  });
+}
+
+/** Where every puzzle has its page, `/collections/<id>`, singletons included. */
+const pageBase = "https://puzzles.agntn.dev/collections/";
+
+/** One pick in ChatGPT's `@` list: the puzzle's page as an MCP resource link. */
+export interface MentionItem {
+  readonly type: "resource_link";
+  readonly uri: string;
+  readonly name: string;
+  readonly description: string;
+  readonly mimeType: "text/html";
+}
+
+/**
+ * Lower is better: the whole id, the name, a prefix of either, then any substring.
+ *
+ * @param {string} id - The puzzle id, lowercased.
+ * @param {string} query - The typed text, lowercased and trimmed.
+ * @returns {number | undefined} The rank, or nothing for no match.
+ */
+function mentionRank(id: string, query: string): number | undefined {
+  const name = id.slice(id.indexOf("/") + 1);
+  const ranks = [id === query, name === query, id.startsWith(query), name.startsWith(query)];
+  const rank = ranks.indexOf(true);
+  if (rank !== -1) return rank;
+  return id.includes(query) ? ranks.length : undefined;
+}
+
+/**
+ * The picks for ChatGPT's `@` picker. An empty query gets the first ones, unsolved before the rest.
+ *
+ * @param {string} query - What the user typed after `@`.
+ * @returns {Promise<ToolResult>} One `id  url` line per pick, the links in `details.items`.
+ */
+export async function mentionsTool(query: string): Promise<ToolResult> {
+  const {
+    dataset: { all },
+    format: { formatPrize },
+  } = await loadCore();
+  const typed = assertLength("query", query, facts.parameters.mention).trim().toLowerCase();
+  const picks = (await all())
+    .map((puzzle) => ({ puzzle, rank: mentionRank(puzzle.id().toLowerCase(), typed) }))
+    .filter((pick): pick is { puzzle: Puzzle; rank: number } => pick.rank !== undefined)
+    .toSorted(
+      (a, b) =>
+        a.rank - b.rank ||
+        Number(a.puzzle.status() !== Status.Unsolved) -
+          Number(b.puzzle.status() !== Status.Unsolved),
+    )
+    .slice(0, MENTION_LIMIT);
+  const items = picks.map(({ puzzle }): MentionItem => {
+    const prize = puzzle.prize();
+    return {
+      type: "resource_link",
+      uri: `${pageBase}${puzzle.id()}`,
+      name: puzzle.id(),
+      description:
+        prize === undefined
+          ? puzzle.status()
+          : `${puzzle.status()}, ${formatPrize(prize, puzzle.prizeCurrency())}`,
+      mimeType: "text/html",
+    };
+  });
+  const lines = items.map((item) => `${item.name}  ${item.uri}`);
+  return text(lines.length === 0 ? "No puzzle id holds that text." : lines.join("\n"), {
+    items,
   });
 }
