@@ -320,6 +320,24 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: "cloudflare_module",
+    hooks: {
+      /**
+       * Nitro ships a build whose prerender failed, and a GitHub that said no leaves /changelog at
+       * 0 releases. That build stops here, so the last good deploy stays up.
+       *
+       * @param {{ failedRoutes: readonly { route: string }[] }} result - The prerender's outcome.
+       * @returns {void}
+       */
+      "prerender:done"(result) {
+        const changelog = result.failedRoutes.filter((failed) =>
+          failed.route.includes("changelog"),
+        );
+        if (changelog.length > 0)
+          throw new Error(
+            `GitHub Releases did not answer for ${changelog.map((failed) => failed.route).join(", ")}; see the error above, or set GITHUB_TOKEN when it is the rate limit`,
+          );
+      },
+    },
     /** The preset's worker without a year of cache on a missing file. Not the prerender's. */
     modules: [
       {
@@ -352,8 +370,6 @@ export default defineNuxtConfig({
     esbuild: { options: { target: "es2022" } },
     /** The puzzle images and hints, served from the checkout's assets/ under /assets. */
     publicAssets: [{ dir: resolve(repoRoot, "assets"), baseURL: "/assets", maxAge: 60 * 60 * 24 }],
-    /** The checkout's CHANGELOG.md, read by /changelog and its feed as `assets:changelog`. */
-    serverAssets: [{ baseName: "changelog", dir: repoRoot, pattern: "CHANGELOG.md" }],
     prerender: {
       /**
        * Puzzle pages come from the links `::collection-puzzles` renders. Nothing lists them here:

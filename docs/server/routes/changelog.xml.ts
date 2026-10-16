@@ -54,7 +54,7 @@ function releaseHtml(release: ChangelogRelease): string {
 }
 
 /**
- * RSS 2.0 feed of the releases in CHANGELOG.md, prerendered next to /changelog. An item's guid is
+ * RSS 2.0 feed of the GitHub releases, prerendered next to /changelog. An item's guid is
  * the version, so a reader never sees a release twice, and its link is the release on the page.
  *
  * @param {import("h3").H3Event} event - The request for `/changelog.xml`.

@@ -1,6 +1,6 @@
 /**
- * CHANGELOG.md as data: the shape /api/changelog answers and the parser that builds it. No import
- * of the file and no network here, so the page, the server and the tests share it.
+ * GitHub Releases as data: the shape /api/changelog answers and the parser that builds it. No
+ * network here, so the page, the server and the tests share it.
  */
 
 /** One run of text in an entry: plain, inline code, bold, or a link. */
@@ -29,7 +29,7 @@ export interface ChangelogContributor {
 
 export interface ChangelogRelease {
   readonly version: string;
-  /** ISO date: the npm publish time, else the date in the heading; absent when neither exists. */
+  /** ISO date: the npm publish time, else the GitHub release time; absent when neither exists. */
   readonly date?: string;
   readonly url: string;
   readonly compare?: string;
@@ -49,19 +49,24 @@ export function releaseAnchor(version: string): string {
 
 const REPOSITORY = "https://github.com/agntn/puzzles";
 
-/** `## v0.23.0` from changelogen, `## [0.19.0] - 2026-08-01` from the Keep a Changelog years. */
-const RELEASE_HEADING = /^v?\[?(\d+\.\d+\.\d+(?:-[\w.]+)?)\]?(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?$/;
+/** SemVer 2.0.0 with a `v`: dot separated prerelease and build identifiers of `[0-9A-Za-z-]`. */
+const RELEASE_TAG =
+  /^v(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+/** `##` and `###` open a group. `####` is changelogen's repeat of the breaking entries. */
+const GROUP_HEADING = /^#{2,3} (.+)$/;
 const INLINE = /`([^`]+)`|\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)\s]+)\)|\(#(\d+)\)/g;
 const CHANGELOGEN_SCOPE = /^\*\*([^*]+):\*\*\s+/;
 const CLIFF_SCOPE = /^_\(([^)]+)\)_\s+/;
-const BREAKING = /^⚠️\s+/;
+const BREAKING = /^⚠️\s*/;
 const WEB_URL = /^https?:\/\//;
 const CONTRIBUTOR = /^(.+?)\s+\(\[@[^\]]+\]\(([^)\s]+)\)\)$/;
+/** uppt writes `aeitwoen (@aeitwoen)`, the notes written by hand a bare `@oritwoen`. */
+const HANDLE = /^(?:(.+?)\s+\()?@([\w-]+)\)?$/;
 
 /**
- * Splits the text of one entry into plain runs, code, bold and links. A bare `(#71)` from the
- * git-cliff years links to the issue, which GitHub forwards to the pull request of that number.
- * The file is written from commit subjects, so a link that isn't http(s) stays text.
+ * Splits the text of one entry into plain runs, code, bold and links. A bare `(#71)`, as uppt and
+ * the git-cliff years write it, links to the issue, which GitHub forwards to the pull request of
+ * that number. The notes are written from commit subjects, so a link that isn't http(s) stays text.
  *
  * @param {string} text - The entry without its bullet and scope.
  * @returns {ChangelogSpan[]} The runs in order.
@@ -94,28 +99,47 @@ export function parseInline(text: string): ChangelogSpan[] {
   return spans;
 }
 
+/** The fields of a release the log reads, as the GitHub REST API answers them. */
+export interface GitHubRelease {
+  readonly tag_name: string;
+  readonly html_url: string;
+  readonly draft: boolean;
+  readonly published_at: string | null;
+  readonly body: string | null;
+}
+
 /**
- * Reads one bullet: the scope in either format, the breaking mark changelogen puts after it, then
- * the text.
+ * Reads one bullet: the breaking mark uppt puts first, the scope in either format, the breaking
+ * mark changelogen puts after it, then the text.
  *
  * @param {string} line - The bullet without `- `.
  * @returns {ChangelogEntry} The entry.
  */
 function parseEntry(line: string): ChangelogEntry {
-  const scoped = CHANGELOGEN_SCOPE.exec(line) ?? CLIFF_SCOPE.exec(line);
-  let rest = scoped ? line.slice(scoped[0].length) : line;
-  const breaking = BREAKING.test(rest);
-  if (breaking) rest = rest.replace(BREAKING, "");
+  const leading = BREAKING.test(line);
+  let rest = line.replace(BREAKING, "");
+  const scoped = CHANGELOGEN_SCOPE.exec(rest) ?? CLIFF_SCOPE.exec(rest);
+  if (scoped) rest = rest.slice(scoped[0].length);
+  const trailing = BREAKING.test(rest);
   return {
     ...(scoped ? { scope: scoped[1] } : {}),
-    breaking,
-    spans: parseInline(rest),
+    breaking: leading || trailing,
+    spans: parseInline(rest.replace(BREAKING, "")),
   };
 }
 
-/** A release as the file has it: dated by its heading at most, the npm time comes later. */
-export interface ParsedRelease extends Omit<ChangelogRelease, "date"> {
-  readonly headingDate?: string;
+/**
+ * A contributor line in any of the three spellings the notes use, or a bare name.
+ *
+ * @param {string} text - The bullet without `- `.
+ * @returns {ChangelogContributor} The contributor.
+ */
+function parseContributor(text: string): ChangelogContributor {
+  const linked = CONTRIBUTOR.exec(text);
+  if (linked && WEB_URL.test(linked[2]!)) return { name: linked[1]!, url: linked[2] };
+  const handle = HANDLE.exec(text);
+  if (!handle) return { name: text };
+  return { name: handle[1] ?? handle[2]!, url: `https://github.com/${handle[2]!}` };
 }
 
 interface DraftGroup {
@@ -123,109 +147,186 @@ interface DraftGroup {
   entries: ChangelogEntry[];
 }
 
-interface DraftRelease {
-  version: string;
-  url: string;
-  headingDate?: string;
+interface DraftNotes {
   compare?: string;
   groups: DraftGroup[];
   contributors: ChangelogContributor[];
 }
 
-const COMPARE = "[compare changes](";
-
 /**
- * The group a `###` heading opens. A `####` heading is changelogen's repeat of the breaking
- * entries, which keep their mark where they stand, so it opens nothing.
+ * Where the bullets below a heading go. uppt wraps its groups in `## 👉 Changelog`, which opens
+ * nothing, and so do `####` and deeper headings.
  *
- * @param {string} line - The heading line.
- * @returns {DraftGroup | "contributors" | undefined} Where the bullets below it go.
+ * @param {string} line - A line starting with `#`.
+ * @returns {DraftGroup | "contributors" | undefined} The group, the contributors, or nowhere.
  */
 function openGroup(line: string): DraftGroup | "contributors" | undefined {
-  if (!line.startsWith("### ")) return undefined;
-  const title = line.slice(4).replace(/^[^\p{L}]+/u, "");
+  const heading = GROUP_HEADING.exec(line);
+  const title = heading?.[1]?.replace(/^[^\p{L}]+/u, "").trim();
+  if (!title || title === "Changelog") return undefined;
   return title === "Contributors" ? "contributors" : { title, entries: [] };
 }
 
-/**
- * A contributor line, `Name ([@handle](url))` as changelogen writes it, or a bare name.
- *
- * @param {string} text - The bullet without `- `.
- * @returns {ChangelogContributor} The contributor.
- */
-function parseContributor(text: string): ChangelogContributor {
-  const match = CONTRIBUTOR.exec(text);
-  return match && WEB_URL.test(match[2]!) ? { name: match[1]!, url: match[2] } : { name: text };
-}
+const COMPARE = "[compare changes](";
 
 /**
- * Reads the lines of one release section, below its heading.
- *
- * @param {string} version - The version from the heading.
- * @param {string | undefined} headingDate - The day from the heading, if it has one.
- * @param {readonly string[]} lines - The section's lines.
- * @returns {ParsedRelease} The release.
+ * Reads the notes of one release line by line, as changelogen, uppt or a person wrote them. A
+ * heading opens a group, a bullet joins the open one, the compare link is kept, and the rest
+ * (paragraphs, tables, quotes, code blocks) stays on GitHub.
  */
-function parseRelease(
-  version: string,
-  headingDate: string | undefined,
-  lines: readonly string[],
-): ParsedRelease {
-  const release: DraftRelease = {
-    version,
-    ...(headingDate ? { headingDate } : {}),
-    url: `${REPOSITORY}/releases/tag/v${version}`,
-    groups: [],
-    contributors: [],
-  };
-  let group: DraftGroup | "contributors" | undefined;
-  for (const raw of lines) {
+class NotesReader {
+  readonly #notes: DraftNotes = { groups: [], contributors: [] };
+  #group: DraftGroup | "contributors" | undefined;
+  #fenced = false;
+
+  /**
+   * Files one line of the notes.
+   *
+   * @param {string} raw - The line as the body has it.
+   * @returns {void}
+   */
+  read(raw: string): void {
     const line = raw.trimEnd();
-    if (line.startsWith("#")) {
-      group = openGroup(line);
-      if (typeof group === "object") release.groups.push(group);
-    } else if (line.startsWith(COMPARE)) release.compare = line.slice(COMPARE.length, -1);
-    else if (!line.startsWith("- ") || !group) continue;
-    else if (group !== "contributors") group.entries.push(parseEntry(line.slice(2)));
-    else release.contributors.push(parseContributor(line.slice(2)));
+    if (line.startsWith("```")) {
+      this.#fenced = !this.#fenced;
+      return;
+    }
+    if (this.#fenced) return;
+    if (line.startsWith("#")) this.#open(line);
+    else if (line.startsWith(COMPARE)) this.#notes.compare = line.slice(COMPARE.length, -1);
+    else this.#item(line);
   }
-  return release;
+
+  /**
+   * The notes read so far. A group without bullets is dropped, so a highlight told in
+   * paragraphs leaves no empty heading behind.
+   *
+   * @returns {DraftNotes} The compare link, the groups with entries and the contributors.
+   */
+  notes(): DraftNotes {
+    const groups = this.#notes.groups.filter((group) => group.entries.length > 0);
+    return { ...this.#notes, groups };
+  }
+
+  /**
+   * Opens the group of a heading, or closes the open one when the heading opens nothing.
+   *
+   * @param {string} line - The heading.
+   * @returns {void}
+   */
+  #open(line: string): void {
+    this.#group = openGroup(line);
+    if (typeof this.#group === "object") this.#notes.groups.push(this.#group);
+  }
+
+  /**
+   * Adds a bullet to the open group. The notes written by hand sometimes list a contributor as
+   * a bare `@handle` line, which counts as one too.
+   *
+   * @param {string} line - A line that is neither a heading nor the compare link.
+   * @returns {void}
+   */
+  #item(line: string): void {
+    const bullet = line.startsWith("- ") ? line.slice(2) : undefined;
+    if (this.#group === "contributors") {
+      const text = bullet ?? (line.startsWith("@") ? line : undefined);
+      if (text) this.#notes.contributors.push(parseContributor(text));
+    } else if (this.#group && bullet !== undefined) this.#group.entries.push(parseEntry(bullet));
+  }
 }
 
 /**
- * Parses CHANGELOG.md as both tools wrote it: changelogen from v0.20.1 on, Keep a Changelog and
- * git-cliff before. Sections without a version (`[Unreleased]`) are skipped. changelogen repeats
- * the breaking entries under `#### ⚠️ Breaking Changes`; they keep their mark in their own group
- * and the repeat is dropped. The contributors become a list of their own.
+ * Reads the notes of one release.
  *
- * @param {string} markdown - The changelog.
- * @returns {ParsedRelease[]} Releases, newest first, as in the file, dated by their heading only.
+ * @param {string} body - The release notes in Markdown.
+ * @returns {DraftNotes} The compare link, the groups with entries and the contributors.
  */
-export function parseChangelog(markdown: string): ParsedRelease[] {
-  return markdown
-    .split(/^## /m)
-    .slice(1)
-    .flatMap((section) => {
-      const [heading = "", ...lines] = section.split("\n");
-      const match = RELEASE_HEADING.exec(heading.trim());
-      return match ? [parseRelease(match[1]!, match[2], lines)] : [];
-    });
+function parseNotes(body: string): DraftNotes {
+  const reader = new NotesReader();
+  for (const line of body.split(/\r?\n/)) reader.read(line);
+  return reader.notes();
+}
+
+/** A release tag taken apart: `v0.10.0-beta.1` is 0, 10, 0 and `beta.1`. */
+type Tag = Readonly<{ version: string; parts: readonly number[]; pre?: string }>;
+
+/**
+ * Takes a release tag apart.
+ *
+ * @param {string} name - The tag name.
+ * @returns {Tag | undefined} The tag, or nothing when it isn't `vX.Y.Z`.
+ */
+function parseTag(name: string): Tag | undefined {
+  const match = RELEASE_TAG.exec(name);
+  if (!match) return undefined;
+  const parts = [match[1], match[2], match[3]].map(Number);
+  return { version: name.slice(1), parts, ...(match[4] ? { pre: match[4] } : {}) };
+}
+
+const NUMERIC = /^\d+$/;
+
+/**
+ * Compares two dot separated prerelease identifiers by semver precedence: numbers as numbers,
+ * a number below any word, and a shorter list below a longer one it starts.
+ *
+ * @param {string} a - One prerelease, `beta.10`.
+ * @param {string} b - The other, `beta.9`.
+ * @returns {number} Above zero when `a` comes later.
+ */
+function prereleaseOrder(a: string, b: string): number {
+  const left = a.split(".");
+  const right = b.split(".");
+  const at = left.findIndex((part, index) => part !== right[index]);
+  if (at < 0) return left.length - right.length;
+  const [x, y] = [left[at]!, right[at]];
+  if (y === undefined) return 1;
+  if (NUMERIC.test(x) && NUMERIC.test(y)) return Number(x) - Number(y);
+  if (NUMERIC.test(x) !== NUMERIC.test(y)) return NUMERIC.test(x) ? -1 : 1;
+  return x < y ? -1 : 1;
 }
 
 /**
- * Dates the parsed releases: the npm publish time when the registry has one, else the day in the
- * heading, else none.
+ * Orders two versions newest first: by major, minor and patch, then a release before its
+ * prereleases, and those by semver precedence.
  *
- * @param {readonly ParsedRelease[]} drafts - The parsed releases.
+ * @param {Tag} a - One release's tag.
+ * @param {Tag} b - The other's.
+ * @returns {number} Below zero when `a` is newer.
+ */
+function newestFirst(a: Tag, b: Tag): number {
+  const differs = a.parts.findIndex((part, at) => part !== b.parts[at]);
+  if (differs >= 0) return b.parts[differs]! - a.parts[differs]!;
+  if (a.pre === b.pre) return 0;
+  if (a.pre === undefined) return -1;
+  return b.pre === undefined ? 1 : prereleaseOrder(b.pre, a.pre);
+}
+
+/**
+ * Turns the GitHub releases into the log: drafts and tags that aren't `vX.Y.Z` are skipped, the
+ * rest is ordered newest first and dated by npm when the registry has the version, else by GitHub.
+ *
+ * @param {readonly GitHubRelease[]} releases - The releases as the API listed them.
  * @param {Readonly<Record<string, string>>} times - The registry's `time`, keyed by version.
- * @returns {ChangelogRelease[]} The releases with their dates.
+ * @returns {ChangelogRelease[]} The releases.
  */
-export function datedReleases(
-  drafts: readonly ParsedRelease[],
+export function changelogReleases(
+  releases: readonly GitHubRelease[],
   times: Readonly<Record<string, string>>,
 ): ChangelogRelease[] {
-  return drafts.map(({ headingDate, ...release }) => {
-    const date = times[release.version] ?? headingDate;
-    return { ...release, ...(date ? { date } : {}) };
-  });
+  return releases
+    .flatMap((release) => {
+      const tag = release.draft ? undefined : parseTag(release.tag_name);
+      return tag ? [{ release, tag }] : [];
+    })
+    .toSorted((a, b) => newestFirst(a.tag, b.tag))
+    .map(({ release, tag: { version } }) => {
+      const date =
+        (Object.hasOwn(times, version) ? times[version] : undefined) ?? release.published_at;
+      return {
+        version,
+        ...(date ? { date } : {}),
+        url: release.html_url,
+        ...parseNotes(release.body ?? ""),
+      };
+    });
 }

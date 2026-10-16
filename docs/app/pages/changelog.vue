@@ -54,8 +54,9 @@ defineOgImage(
           <span>newest first.</span>
         </h1>
         <p class="hero-lead">
-          New collections and puzzles, solves, fixes and breaking changes, read from CHANGELOG.md
-          when the site builds. A feed reader gets the same list.
+          New collections and puzzles, solves, fixes and breaking changes, read from GitHub Releases
+          when the site builds. Merging a release PR is the whole ritual now. A feed reader gets the
+          same list.
         </p>
 
         <dl class="hero-metrics">
