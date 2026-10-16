@@ -2,7 +2,7 @@
 url: https://x.com/GemfinderOfX/status/1870319691295764655
 author: "@GemfinderOfX"
 date: "2024-12-21"
-archived: "2026-10-17"
+archived: "2026-10-16"
 screenshot_sha256: e8cca0e203b6ae90cd38bd70d2806c1d82d7502676f5fb8ecad71a16ce35738d
 ---
 
@@ -12,7 +12,7 @@ screenshot_sha256: e8cca0e203b6ae90cd38bd70d2806c1d82d7502676f5fb8ecad71a16ce357
 
 ## Historical provenance
 
-No capture found. The Wayback Machine index and the MemGator aggregator were searched on October 17, 2026 for both the `twitter.com` and `x.com` URL, and a prefix query on the author's statuses lists nothing older than February 2026. So the transcript below was checked against X's API text, the current post and the screenshot.
+No capture found. The Wayback Machine index and the MemGator aggregator were searched on October 16, 2026 for both the `twitter.com` and `x.com` URL, and a prefix query on the author's statuses lists nothing older than February 2026. So the transcript below was checked against X's API text, the current post and the screenshot.
 
 ## Transcript
 
