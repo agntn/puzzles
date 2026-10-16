@@ -547,7 +547,7 @@ describe.concurrent("puzzles CLI", () => {
   });
 
   it("says so when a puzzle has no hints and exits 0", async () => {
-    await expect(puzzles("hints", "weave/1")).resolves.toBe("weave/1: no hints recorded");
+    await expect(puzzles("hints", "weave/2")).resolves.toBe("weave/2: no hints recorded");
   });
 
   it("exits 1 on an unknown puzzle like show does", async () => {
