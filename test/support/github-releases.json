@@ -1,0 +1,32 @@
+{
+  "puzzles": [
+    {
+      "tag_name": "v0.23.0",
+      "html_url": "https://github.com/agntn/puzzles/releases/tag/v0.23.0",
+      "draft": false,
+      "published_at": "2026-09-25T15:16:48Z",
+      "body": "[compare changes](https://github.com/agntn/puzzles/compare/v0.22.0...v0.23.0)\r\n\r\n### 🚀 Enhancements\r\n\r\n- **collections:** Archive quizchain blocks 2 to 5 ([#265](https://github.com/agntn/puzzles/pull/265))\r\n- **docs:** Sortable rosters on UTable ([#267](https://github.com/agntn/puzzles/pull/267))\r\n- **errors:** Did you mean b1000/135? ([#268](https://github.com/agntn/puzzles/pull/268))\r\n- **collections:** Add ktimesg ([#271](https://github.com/agntn/puzzles/pull/271))\r\n- **collections:** Iamabananaamaa GIF puzzle ([#273](https://github.com/agntn/puzzles/pull/273))\r\n- **docs:** Landing roster of collections ([#274](https://github.com/agntn/puzzles/pull/274))\r\n- **collections:** Wickex YouTube puzzle ([#275](https://github.com/agntn/puzzles/pull/275))\r\n- **docs:** Verify console on the landing ([#277](https://github.com/agntn/puzzles/pull/277))\r\n- **collections:** Add iamabananaamaa/caesar ([#279](https://github.com/agntn/puzzles/pull/279))\r\n- **cli:** Serve mcp from src inside a checkout ([#281](https://github.com/agntn/puzzles/pull/281))\r\n- **docs:** Record file on the console shell ([#283](https://github.com/agntn/puzzles/pull/283))\r\n- **collections:** Add picture_puzzle ([#284](https://github.com/agntn/puzzles/pull/284))\r\n- **collections:** Add quizchain/6 ([#287](https://github.com/agntn/puzzles/pull/287))\r\n- **collections:** Add quizchain/7 ([#289](https://github.com/agntn/puzzles/pull/289))\r\n- **docs:** Landing registry as a manifest map ([#290](https://github.com/agntn/puzzles/pull/290))\r\n- **collections:** Add quizchain/8 ([#291](https://github.com/agntn/puzzles/pull/291))\r\n- **docs:** Custom collection panel in two files ([#293](https://github.com/agntn/puzzles/pull/293))\r\n- **registry:** Type built-in collection lookups ([#295](https://github.com/agntn/puzzles/pull/295))\r\n- **docs:** One design system across the site ([#296](https://github.com/agntn/puzzles/pull/296))\r\n\r\n### 🩹 Fixes\r\n\r\n- **tools:** Reject an empty collection filter ([#280](https://github.com/agntn/puzzles/pull/280))\r\n- **collections:** AoiNakamoto asked r/Bitcoin ([#282](https://github.com/agntn/puzzles/pull/282))\r\n- **parts:** Mark keys rebuilt from a recipe ([#294](https://github.com/agntn/puzzles/pull/294))\r\n\r\n### 💅 Refactors\r\n\r\n- **dataset:** Drop @noble/hashes ([#269](https://github.com/agntn/puzzles/pull/269))\r\n- **verify:** ⚠️  Rename verifyPuzzle to verify ([#288](https://github.com/agntn/puzzles/pull/288))\r\n\r\n### 🏡 Chore\r\n\r\n- Apply automated updates ([515377e](https://github.com/agntn/puzzles/commit/515377e))\r\n\r\n### ✅ Tests\r\n\r\n- **fixtures:** Give the refresh tests 30 s ([#286](https://github.com/agntn/puzzles/pull/286))\r\n\r\n#### ⚠️ Breaking Changes\r\n\r\n- **verify:** ⚠️  Rename verifyPuzzle to verify ([#288](https://github.com/agntn/puzzles/pull/288))\r\n\r\n### ❤️ Contributors\r\n\r\n- @aeitwoen\r\n- @oritwoen"
+    },
+    {
+      "tag_name": "v0.19.0",
+      "html_url": "https://github.com/agntn/puzzles/releases/tag/v0.19.0",
+      "draft": false,
+      "published_at": "2026-08-01T11:48:04Z",
+      "body": "### Features\n\n- _(rushwallet)_ Add 30 RushWallet brainwallet contest puzzles (#152)\n- _(b1000)_ Change `135` to solved (#159)\n"
+    },
+    {
+      "tag_name": "v0.12.0",
+      "html_url": "https://github.com/agntn/puzzles/releases/tag/v0.12.0",
+      "draft": false,
+      "published_at": "2026-01-05T15:37:03Z",
+      "body": "## Highlights\n\n**Puzzle assets** - Collections can now include associated files (images, documents, encrypted data). For visual puzzles like zden and bitimage, the assets are the puzzle. (#74)\n\n**New solver: retired_coder** - Added profile and solution data for retired_coder, who solved several b1000 puzzles. (#71)\n\n## What's new\n\n- Asset support for puzzle collections\n- `retired_coder` solver profile\n- Related Tools section in docs (vuke, vgen)\n\n## Contributors\n\n@aeitwoen"
+    }
+  ],
+  "archivesUppt": {
+    "tag_name": "v0.7.4",
+    "html_url": "https://github.com/agntn/archives/releases/tag/v0.7.4",
+    "draft": false,
+    "published_at": "2026-10-16T10:58:27Z",
+    "body": "> v0.7.4 is the next minor release.\n\n## 👉 Changelog\n\n[compare changes](https://github.com/agntn/archives/compare/v0.7.3...v0.7.4)\n\n### 🚀 Enhancements\n\n- order snapshots by time (#193)\n- mark captures newer than requested (#179)\n\n### 🔥 Performance\n\n- **tools:** list failures once (#184)\n\n### 🩹 Fixes\n\n- **providers:** quiet retries (#188)\n- **providers:** keep capture URLs as recorded (#187)\n- **tools:** type input errors (#186)\n- **providers:** quiet expected 404s (#177)\n\n### 💅 Refactors\n\n- lift extensions out (#192)\n\n### 📦 Build\n\n- fold docs into the root (#189)\n- give diff its own chunk (#180)\n\n### 🏡 Chore\n\n- **docs:** move to Nuxt 4.6 (#195)\n- update `renovate.json` ([`9a126cb`](https://github.com/agntn/archives/commit/9a126cb))\n- drop the playground (#191)\n\n### 🤖 CI\n\n- release through uppt (#182)\n\n### ❤️ Contributors\n\n- aeitwoen (@aeitwoen)\n- Ori (@oritwoen)"
+  }
+}

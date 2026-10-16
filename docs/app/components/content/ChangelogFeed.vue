@@ -2,7 +2,7 @@
 import { releaseAnchor, type ChangelogRelease } from "#shared/changelog";
 
 /**
- * The release log: every release of CHANGELOG.md on `UChangelogVersions`, date and node on the
+ * The release log: every GitHub release on `UChangelogVersions`, date and node on the
  * left, the version, its groups and their entries on the right, the feed in the footer.
  */
 const props = defineProps<{ releases: readonly ChangelogRelease[] }>();
@@ -25,7 +25,7 @@ function breaking(release: ChangelogRelease): number {
 }
 
 /**
- * The time of day when the date carries one; heading dates are days only.
+ * The time of day when the date carries one.
  *
  * @param {string} date - An ISO date.
  * @returns {string | undefined} `HH:MM` UTC, or nothing for a bare day.
@@ -41,7 +41,7 @@ function time(date: string): string | undefined {
     <span class="console-cross console-cross-br" aria-hidden="true">+</span>
 
     <header class="console-bar">
-      <span class="console-title"><span class="console-tag">Log</span>CHANGELOG.md</span>
+      <span class="console-title"><span class="console-tag">Log</span>GitHub Releases</span>
       <span class="console-meta"
         ><span class="console-ticks-bar" aria-hidden="true"
           ><span
@@ -164,7 +164,7 @@ function time(date: string): string | undefined {
         ><span class="console-tag">RSS</span
         ><a href="/changelog.xml" type="application/rss+xml">/changelog.xml</a></span
       >
-      <span class="console-meta">read from CHANGELOG.md at build · dates from npm</span>
+      <span class="console-meta">read from GitHub Releases at build · dates from npm</span>
     </footer>
   </section>
 </template>

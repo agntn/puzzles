@@ -13,8 +13,7 @@ const [severity, options] = readonlyParams;
 export default defineConfig({
   fmt: {
     ...oxfmt,
-    /** changelogen owns the changelog. Tidying its ⚠️ spacing on main cancels the tag's Publish. */
-    ignorePatterns: ["dist", "coverage", "/CHANGELOG.md"],
+    ignorePatterns: ["dist", "coverage"],
   },
   lint: {
     ...oxlint,
