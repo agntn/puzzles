@@ -1,23 +1,14 @@
-import { indexTools, invokeTool, ToolInputError, wireSchema } from "@agntn/tools";
 import {
+  callTool as callListedTool,
   createMcpServer as createToolServer,
-  errorResult,
-  toolAnnotations,
+  listTools,
 } from "@agntn/tools/mcp";
 import type { CallToolResult, Server, Tool } from "@modelcontextprotocol/server";
 import { serverInfo } from "./server-info.ts";
 import { publicPuzzlesTools, puzzlesTools } from "./tools.ts";
 
 /** The `tools/list` entries of the public server at puzzles.agntn.dev, in `puzzles mcp` order. */
-export const toolListings: readonly Tool[] = publicPuzzlesTools.map((tool) => ({
-  name: tool.name,
-  title: tool.title,
-  description: tool.description,
-  inputSchema: { ...wireSchema(tool), type: "object" },
-  annotations: toolAnnotations(tool),
-}));
-
-const toolsByName = indexTools(publicPuzzlesTools);
+export const toolListings: readonly Tool[] = listTools(publicPuzzlesTools);
 
 /**
  * Runs one tool of the public server the way `tools/call` does: an unknown name, a schema miss and an executor failure
@@ -31,20 +22,7 @@ export async function callTool(
   name: string,
   args: Readonly<Record<string, unknown>>,
 ): Promise<CallToolResult> {
-  const tool = toolsByName.get(name);
-  if (tool === undefined) {
-    return errorResult(`Unknown puzzles tool: ${JSON.stringify(name)}`);
-  }
-  try {
-    return { content: (await invokeTool(tool, args)).content };
-  } catch (error) {
-    if (error instanceof ToolInputError) {
-      return errorResult(...error.lines);
-    }
-    return errorResult(
-      `${tool.name} failed: ${error instanceof Error ? error.message : String(error)}`,
-    );
-  }
+  return await callListedTool(serverInfo, publicPuzzlesTools, name, args);
 }
 
 /**

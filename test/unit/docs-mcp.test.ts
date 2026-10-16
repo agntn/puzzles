@@ -5,6 +5,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { describe, expect, it, vi } from "vite-plus/test";
 import { callTool, toolListings } from "../../src/mcp.ts";
+import { MENTION_LIMIT } from "../../src/tool-operations.ts";
 import { firstText } from "../support/mcp.ts";
 
 /*
@@ -24,6 +25,11 @@ vi.mock(
   "../../docs/node_modules/@agntn/tools/dist/toolkit.mjs",
   async () => await import("@agntn/tools/toolkit"),
 );
+
+/* The part of the toolkit's `mcp:server:created` context the capability plugin touches. */
+interface ServerCreated {
+  readonly server: { readonly server: { readonly registerCapabilities: (added: object) => void } };
+}
 
 /* What `server/mcp/index.ts` serves for one request, Docus page tools included. */
 async function docsTools(): Promise<readonly ToolkitTool[]> {
@@ -121,5 +127,62 @@ describe("docs MCP tools", () => {
 
     const one = await client.callTool({ name: "puzzles_verify", arguments: { id: "bits/1" } });
     expect(firstText(one)).toMatch(/^bits\/1: verified, derives /u);
+  });
+
+  it("fills ChatGPT's @ picker with puzzle pages the model never sees", async () => {
+    const client = await docsClient();
+    const { tools } = await client.listTools();
+    const mentions = tools.find((tool) => tool.name === "puzzles_mentions");
+    expect(mentions?._meta).toEqual({ ui: { visibility: ["app"] } });
+    expect(mentions?.annotations?.readOnlyHint).toBe(true);
+    expect(mentions?.outputSchema?.properties).toHaveProperty("items");
+
+    const served = await client.callTool({ name: "puzzles_mentions", arguments: { query: "71" } });
+    expect(served).toEqual(await callTool("puzzles_mentions", { query: "71" }));
+    const { items } = served.structuredContent as { items: { name: string }[] };
+    expect(items[0]).toEqual({
+      type: "resource_link",
+      uri: "https://puzzles.agntn.dev/collections/bits/71",
+      name: "bits/71",
+      description: expect.stringMatching(/^unsolved, [\d.]+ BTC$/u) as unknown,
+      mimeType: "text/html",
+    });
+    expect(firstText(served).split("\n")[0]).toBe(
+      "bits/71  https://puzzles.agntn.dev/collections/bits/71",
+    );
+  });
+
+  it("answers an empty query with open puzzles and a miss with no picks, never an error", async () => {
+    const empty = await callTool("puzzles_mentions", { query: "" });
+    const { items } = empty.structuredContent as { items: { description: string }[] };
+    expect(items).toHaveLength(MENTION_LIMIT);
+    expect(items[0]?.description).toMatch(/^unsolved/u);
+
+    const miss = await callTool("puzzles_mentions", { query: "no-such-puzzle" });
+    expect(miss.isError).toBeFalsy();
+    expect(miss.structuredContent).toEqual({ items: [] });
+
+    const long = await callTool("puzzles_mentions", { query: "x".repeat(101) });
+    expect(long.isError).toBe(true);
+  });
+
+  it("names puzzles_mentions in the capability ChatGPT reads", async () => {
+    const plugins = vi.fn<(plugin: () => void) => void>();
+    const hook = vi.fn<(name: string, handler: (context: ServerCreated) => void) => void>();
+    vi.stubGlobal("defineNitroPlugin", plugins);
+    vi.stubGlobal("useNitroApp", () => ({ hooks: { hook } }));
+    await import("../../docs/server/plugins/mentions.ts");
+    plugins.mock.calls[0]?.[0]();
+    vi.unstubAllGlobals();
+    const created = hook.mock.calls.find(([name]) => name === "mcp:server:created")?.[1];
+
+    const server = new McpServer({ name: "docs", version: "0.0.0" });
+    created?.({ server });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    const client = new Client({ name: "test", version: "0.0.0" });
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+    expect(client.getServerCapabilities()?.extensions).toEqual({
+      "openai/mentions": { searchTool: "puzzles_mentions" },
+    });
   });
 });

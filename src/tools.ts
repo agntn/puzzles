@@ -14,6 +14,7 @@ import {
   facts,
   hintsTool,
   listTool,
+  mentionsTool,
   showTool,
   solversTool,
   solverTool,
@@ -182,6 +183,25 @@ export const publicVerifyToolDefinition = defineTool({
   execute: (params) => verifyTool(params.id),
 });
 
+/** Visibility `app` hides it from the model; the picker reads links from `structuredContent`. */
+export const mentionsToolDefinition = defineTool({
+  ...described(facts.publicTools.mentions),
+  input: closed({ query: Type.String(parameters.mention) }),
+  output: closed({
+    items: Type.Array(
+      closed({
+        type: Type.Literal("resource_link"),
+        uri: Type.String(),
+        name: Type.String(),
+        description: Type.String(),
+        mimeType: Type.Literal("text/html"),
+      }),
+    ),
+  }),
+  meta: { ui: { visibility: ["app"] } },
+  execute: (params) => mentionsTool(params.query),
+});
+
 /** Every puzzle tool, in the order `tools/list` and the harnesses show them. */
 export const puzzlesTools: readonly ToolDefinition[] = [
   statsToolDefinition,
@@ -218,10 +238,13 @@ function listSummary(args: Readonly<Record<string, unknown>>): string {
     .join(" ");
 }
 
-/** The tools the public server at puzzles.agntn.dev serves, with `puzzles_verify` held to one id. */
-export const publicPuzzlesTools: readonly ToolDefinition[] = puzzlesTools.map((tool) =>
-  tool === verifyToolDefinition ? publicVerifyToolDefinition : tool,
-);
+/** The public server's tools: `puzzles_verify` held to one id, plus `puzzles_mentions`. */
+export const publicPuzzlesTools: readonly ToolDefinition[] = [
+  ...puzzlesTools.map((tool) =>
+    tool === verifyToolDefinition ? publicVerifyToolDefinition : tool,
+  ),
+  mentionsToolDefinition,
+];
 
 /** The argument a status line shows after the tool title, for the tools that take one. */
 export const callSummaries: Readonly<
