@@ -37,6 +37,7 @@ export default defineConfig({
             ...(options?.allow ?? []),
             { from: "lib", name: ["AbortSignal", "Uint8Array"] },
             { from: "package", name: "ContentNavigationItem", package: "@nuxt/content" },
+            { from: "package", name: "RequestEvent", package: "@nuxt/schema" },
             { from: "package", name: "Ref", package: "vue" },
             { from: "package", name: "Ref", package: "@vue/reactivity" },
           ],

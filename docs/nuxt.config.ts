@@ -74,6 +74,9 @@ const libraryEntries = [
   "@agntn/keys/wif",
 ];
 
+/** Where the site lives: site.url, llms.txt and the feed's links all start here. */
+const siteUrl = "https://puzzles.agntn.dev";
+
 /** Pages published under snake_case ids before the switch to kebab-case, moved for good. */
 const renamedIds = [
   "bitimage/kitten_passphrase",
@@ -162,16 +165,26 @@ export default defineNuxtConfig({
     assetCommit: process.env["WORKERS_CI_COMMIT_SHA"] || checkoutCommit(repoRoot) || "",
     /** The Etherscan key for /api/balance on Ethereum puzzles; NUXT_ETHERSCAN_API_KEY at runtime, the root .env locally. */
     etherscanApiKey: process.env.ETHERSCAN_API_KEY ?? "",
+    /** site.url for /changelog.xml, read through `nuxt/server`; NUXT_SITE_URL sets both. */
+    siteUrl,
   },
   /** Both would resolve from the repo root's workspace too. */
   devtools: { enabled: false },
   telemetry: false,
   site: {
-    url: "https://puzzles.agntn.dev",
+    url: siteUrl,
     name: "@agntn/puzzles",
   },
+  /** The playground has no markdown twin, so agents get the page itself, not a `/raw` 404. */
+  agentDiscovery: {
+    excludePrefixes: { extend: ["/playground"] },
+  },
+  /** The Docus source knows only `content/`; this one brings the Vue pages along. */
+  sitemap: {
+    sources: ["/api/__sitemap__/puzzles"],
+  },
   llms: {
-    domain: "https://puzzles.agntn.dev",
+    domain: siteUrl,
     title: "@agntn/puzzles",
     description:
       "Public crypto bounties, puzzles and challenges as typed records, as a library, a CLI, an MCP server and Pi and OMP extensions.",
@@ -200,6 +213,17 @@ export default defineNuxtConfig({
               "The library running in the page: show, list, verify, collections, authors and stats.",
           },
         ],
+      },
+      /** Agent discovery lists no pages once a section links one, so these ask for theirs. */
+      {
+        title: "Docs",
+        contentCollection: "docs",
+        contentFilters: [{ field: "extension", operator: "=", value: "md" }],
+      },
+      {
+        title: "Stories",
+        contentCollection: "stories",
+        contentFilters: [{ field: "extension", operator: "=", value: "md" }],
       },
     ],
   },
@@ -370,36 +394,36 @@ export default defineNuxtConfig({
     esbuild: { options: { target: "es2022" } },
     /** The puzzle images and hints, served from the checkout's assets/ under /assets. */
     publicAssets: [{ dir: resolve(repoRoot, "assets"), baseURL: "/assets", maxAge: 60 * 60 * 24 }],
-    prerender: {
-      /**
-       * Puzzle pages come from the links `::collection-puzzles` renders. Nothing lists them here:
-       * this file runs under jiti from docs/ and can't import the library on Workers Builds.
-       */
-      crawlLinks: true,
-      routes: [
-        "/",
-        "/playground",
-        "/changelog",
-        "/changelog.xml",
-        "/sitemap.xml",
-        "/robots.txt",
-        "/llms.txt",
-        "/llms-full.txt",
-      ],
-      /**
-       * Every puzzle page links the playground with a query; one prerender of the page serves them all.
-       *
-       * @param {string} path - A route the crawler found.
-       * @returns {boolean} Whether to skip it.
-       */
-      ignore: [(path: string): boolean => path.startsWith("/playground?")],
-    },
     cloudflare: {
       deployConfig: true,
       nodeCompat: true,
     },
   },
   compatibilityDate: "2026-09-03",
+  prerender: {
+    /**
+     * Puzzle pages come from the links `::collection-puzzles` renders. Nothing lists them here:
+     * this file runs under jiti from docs/ and can't import the library on Workers Builds.
+     */
+    crawlLinks: true,
+    routes: [
+      "/",
+      "/playground",
+      "/changelog",
+      "/changelog.xml",
+      "/sitemap.xml",
+      "/robots.txt",
+      "/llms.txt",
+      "/llms-full.txt",
+    ],
+    /**
+     * Every puzzle page links the playground with a query; one prerender serves them all.
+     *
+     * @param {string} path - A route the crawler found.
+     * @returns {boolean} Whether to skip it.
+     */
+    ignore: [(path: string): boolean => path.startsWith("/playground?")],
+  },
   content: {
     database: {
       type: "d1",

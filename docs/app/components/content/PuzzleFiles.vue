@@ -56,7 +56,7 @@ async function load(file: FileRow) {
   }
   const body =
     file.format === "markdown"
-      ? resolveFileLinks(read.text, file.path, app.github.url ?? "")
+      ? resolveFileLinks(read.text, file.path, app.github === false ? "" : app.github.url)
       : read.text;
   text.value = { state: "ready", path: file.path, text: body };
 }

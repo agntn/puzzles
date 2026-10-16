@@ -1,5 +1,6 @@
-/** Toolkit 0.19 includes `types/hooks` without `.d.ts`, so its hook names load from here. */
+/** Toolkit 0.23 includes `types/hooks` without `.d.ts`, so its hook names load from here. */
 import type {} from "../../node_modules/@nuxtjs/mcp-toolkit/dist/runtime/server/types/hooks.js";
+import { defineNitroPlugin, useNitroApp } from "nitropack/runtime";
 import { facts } from "../../../src/tool-operations.ts";
 
 /** ChatGPT finds its `@` picker tool in the server capabilities, and the toolkit can't set them. */
