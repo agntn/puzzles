@@ -110,6 +110,6 @@ const balanceOf = defineCachedFunction(
  */
 export default defineEventHandler(async (event): Promise<BalanceAnswer> => {
   const balance = await balanceOf(event, decodeId(getRouterParam(event, "id") ?? ""));
-  event.res.headers.set("Cache-Control", `s-maxage=${TTL}, stale-while-revalidate`);
+  event.res.headers.set("Cache-Control", `s-maxage=${TTL}, stale-while-revalidate=${TTL}`);
   return balance;
 });
