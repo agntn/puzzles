@@ -7,6 +7,7 @@ import {
   sameAddress,
   transactionExplorerUrl,
 } from "./chains.ts";
+import { exactSum } from "./decimal.ts";
 import type { Balance } from "./types.ts";
 import {
   type Address,
@@ -845,5 +846,46 @@ export function filterPuzzles(
       (options.chain === undefined || puzzle.chain() === options.chain) &&
       (options.status === undefined || puzzle.status() === options.status) &&
       (options.withPubkey !== true || puzzle.hasPubkey()),
+  );
+}
+
+/**
+ * Counts the puzzles in each status, every status listed so a zero reads as a zero.
+ *
+ * @param {readonly Puzzle[]} puzzles - The puzzles to count.
+ * @returns {Readonly<Record<Status, number>>} One count per status.
+ */
+export function statusCounts(puzzles: readonly Puzzle[]): Readonly<Record<Status, number>> {
+  const counts: Record<Status, number> = {
+    claimed: 0,
+    expired: 0,
+    solved: 0,
+    swept: 0,
+    unsolved: 0,
+  };
+  for (const puzzle of puzzles) {
+    counts[puzzle.status()] += 1;
+  }
+  return counts;
+}
+
+/**
+ * Sums prizes per currency exactly, so a float carry never prints as `1058.0688491299998`.
+ *
+ * @param {readonly Puzzle[]} puzzles - The puzzles to sum over.
+ * @returns {Record<string, number>} Amounts per currency, in first-seen order.
+ */
+export function prizeTotals(puzzles: readonly Puzzle[]): Record<string, number> {
+  const prizes = new Map<string, number[]>();
+  for (const puzzle of puzzles) {
+    const prize = puzzle.prize();
+    if (prize === undefined) continue;
+    const currency = puzzle.prizeCurrency();
+    const amounts = prizes.get(currency) ?? [];
+    amounts.push(prize);
+    prizes.set(currency, amounts);
+  }
+  return Object.fromEntries(
+    [...prizes].map(([currency, amounts]) => [currency, exactSum(amounts)]),
   );
 }

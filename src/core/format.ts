@@ -1,5 +1,6 @@
 import type { AuthorEntry, SolverEntry } from "./dataset.ts";
 import { chainSymbol } from "./chains.ts";
+import { decimal, exactSum } from "./decimal.ts";
 import type { CollectionSummary, Stats, TechniqueCounts } from "./dataset.ts";
 import {
   type Answer,
@@ -39,21 +40,6 @@ export function toJson(value: unknown, compact = false): string {
   );
 }
 
-let amounts: Intl.NumberFormat | undefined;
-
-/**
- * Writes an amount as a plain decimal, since `String(1e-8)` is `1e-8`. The formatter is built on
- * first use, because the first `Intl` formatter in a process loads ICU data, and importing the
- * package or printing `--help` formats no amount.
- *
- * @param {number} amount - The amount to write.
- * @returns {string} Every digit of the amount, without an exponent or grouping.
- */
-export function decimal(amount: number): string {
-  amounts ??= new Intl.NumberFormat("en-US", { maximumFractionDigits: 20, useGrouping: false });
-  return amounts.format(amount);
-}
-
 /**
  * Formats a prize for display: `0.001 BTC`, or a dash when none is recorded.
  *
@@ -74,78 +60,6 @@ export function formatPrize(prize: number | undefined, currency: string): string
  */
 export function formatBalance(balance: Balance): string {
   return `${balance.totalAmount()} ${chainSymbol(balance.chain)}`;
-}
-
-/** An exact decimal: integer units and how many of their digits sit after the point. */
-interface ExactSum {
-  readonly units: bigint;
-  readonly places: number;
-}
-
-/**
- * Adds an amount to an exact decimal sum.
- *
- * @param {ExactSum} sum - The sum so far.
- * @param {number} amount - The amount to add.
- * @returns {ExactSum} The new sum.
- */
-function addExact(sum: ExactSum, amount: number): ExactSum {
-  const [whole = "0", fraction = ""] = decimal(amount).split(".");
-  const places = Math.max(sum.places, fraction.length);
-  const units =
-    sum.units * 10n ** BigInt(places - sum.places) + BigInt(whole + fraction.padEnd(places, "0"));
-  return { units, places };
-}
-
-/**
- * Rounds an exact decimal sum once to the nearest `number`.
- *
- * @param {ExactSum} sum - The sum.
- * @returns {number} The closest `number`.
- */
-function exactNumber(sum: ExactSum): number {
-  return Number(`${sum.units}e-${sum.places}`);
-}
-
-/**
- * Sums prizes per currency as exact decimals, then rounds once to the nearest `number`. A total
- * keeps the places its prizes carry up to double precision (an ETH prize can have eighteen), and
- * a float carry never prints as `1058.0688491299998`.
- *
- * @param {readonly Puzzle[]} puzzles - The puzzles to sum over.
- * @returns {Record<string, number>} Amounts per currency, in first-seen order.
- */
-export function prizeTotals(puzzles: readonly Puzzle[]): Record<string, number> {
-  const sums: Record<string, ExactSum> = {};
-  for (const puzzle of puzzles) {
-    const prize = puzzle.prize();
-    if (prize === undefined) continue;
-    const currency = puzzle.prizeCurrency();
-    sums[currency] = addExact(sums[currency] ?? { units: 0n, places: 0 }, prize);
-  }
-  return Object.fromEntries(
-    Object.entries(sums).map(([currency, sum]) => [currency, exactNumber(sum)]),
-  );
-}
-
-/**
- * Counts the puzzles in each status, every status listed so a zero reads as a zero.
- *
- * @param {readonly Puzzle[]} puzzles - The puzzles to count.
- * @returns {Readonly<Record<Status, number>>} One count per status.
- */
-export function statusCounts(puzzles: readonly Puzzle[]): Readonly<Record<Status, number>> {
-  const counts: Record<Status, number> = {
-    claimed: 0,
-    expired: 0,
-    solved: 0,
-    swept: 0,
-    unsolved: 0,
-  };
-  for (const puzzle of puzzles) {
-    counts[puzzle.status()] += 1;
-  }
-  return counts;
 }
 
 /**
@@ -379,9 +293,9 @@ function formatTransactionLine(line: Transaction | IncreaseRun, currency: string
   if ("txid" in line) {
     return `\t${line.tx_type}\t${line.date}\t${decimal(line.amount)} ${currency}\t${line.txid}`;
   }
-  const total = line.reduce((sum, item) => addExact(sum, item.amount), { units: 0n, places: 0 });
+  const total = exactSum(line.map((item) => item.amount));
   const dates = `${line[0].date} to ${(line.at(-1) ?? line[0]).date}`;
-  return `\t${line.length} small increases\t${dates}\t${decimal(exactNumber(total))} ${currency}`;
+  return `\t${line.length} small increases\t${dates}\t${decimal(total)} ${currency}`;
 }
 
 /**

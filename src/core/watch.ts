@@ -1,7 +1,7 @@
 import { BalanceError, type BalanceOptions, HISTORY_LIMIT } from "./balance.ts";
 import { type Chain, chainDecimals, chainSymbol } from "./chains.ts";
 import { InvalidArgumentError, SourceLookupError } from "./errors.ts";
-import { decimal } from "./format.ts";
+import { decimal } from "./decimal.ts";
 import { AddressKind, defined } from "./parts.ts";
 import type { ChainTransaction } from "./providers.ts";
 import type { Puzzle } from "./puzzle.ts";

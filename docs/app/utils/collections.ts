@@ -1,5 +1,5 @@
 import type { AnyCollection, Hint } from "../../../src/index.ts";
-import { prizeTotals } from "../../../src/core/format.ts";
+import { prizeTotals } from "../../../src/core/puzzle.ts";
 
 /** The dossier of a collection page: numbers, strings and the hint records, safe for the Nuxt payload. */
 export interface CollectionFactsData {

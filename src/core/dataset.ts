@@ -1,9 +1,16 @@
 import { version } from "../version.ts";
 import type { Chain } from "./chains.ts";
 import { PuzzleNotFoundError, UnknownAuthorError, UnknownSolverError } from "./errors.ts";
-import { countOf, prizeTotals, statusCounts } from "./format.ts";
+import { countOf } from "./format.ts";
 import { defined, frozen, type Hint, type Party, type TechniqueTag } from "./parts.ts";
-import { filterPuzzles, type Puzzle, type PuzzleData, Status } from "./puzzle.ts";
+import {
+  filterPuzzles,
+  prizeTotals,
+  type Puzzle,
+  type PuzzleData,
+  Status,
+  statusCounts,
+} from "./puzzle.ts";
 import {
   type AnyCollection,
   collectionKeys,

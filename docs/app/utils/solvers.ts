@@ -1,5 +1,6 @@
 import type { Fact, Profile, Puzzle, SolverEntry } from "../../../src/index.ts";
-import { formatPrize, prizeTotals } from "../../../src/core/format.ts";
+import { formatPrize } from "../../../src/core/format.ts";
+import { prizeTotals } from "../../../src/core/puzzle.ts";
 
 /** One solve on a solver page. */
 export interface SolveRow {

@@ -87,7 +87,7 @@ import {
   stats,
   Status,
 } from "../../src/index.ts";
-import { prizeTotals } from "../../src/core/format.ts";
+import { prizeTotals } from "../../src/core/puzzle.ts";
 
 const concreteClasses = [
   EightyBitCollection,
