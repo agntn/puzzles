@@ -261,9 +261,31 @@ function parseTag(name: string): Tag | undefined {
   return { version: name.slice(1), parts, ...(match[4] ? { pre: match[4] } : {}) };
 }
 
+const NUMERIC = /^\d+$/;
+
+/**
+ * Compares two dot separated prerelease identifiers by semver precedence: numbers as numbers,
+ * a number below any word, and a shorter list below a longer one it starts.
+ *
+ * @param {string} a - One prerelease, `beta.10`.
+ * @param {string} b - The other, `beta.9`.
+ * @returns {number} Above zero when `a` comes later.
+ */
+function prereleaseOrder(a: string, b: string): number {
+  const left = a.split(".");
+  const right = b.split(".");
+  const at = left.findIndex((part, index) => part !== right[index]);
+  if (at < 0) return left.length - right.length;
+  const [x, y] = [left[at]!, right[at]];
+  if (y === undefined) return 1;
+  if (NUMERIC.test(x) && NUMERIC.test(y)) return Number(x) - Number(y);
+  if (NUMERIC.test(x) !== NUMERIC.test(y)) return NUMERIC.test(x) ? -1 : 1;
+  return x < y ? -1 : 1;
+}
+
 /**
  * Orders two versions newest first: by major, minor and patch, then a release before its
- * prereleases.
+ * prereleases, and those by semver precedence.
  *
  * @param {Tag} a - One release's tag.
  * @param {Tag} b - The other's.
@@ -274,7 +296,7 @@ function newestFirst(a: Tag, b: Tag): number {
   if (differs >= 0) return b.parts[differs]! - a.parts[differs]!;
   if (a.pre === b.pre) return 0;
   if (a.pre === undefined) return -1;
-  return b.pre === undefined ? 1 : a.pre.localeCompare(b.pre);
+  return b.pre === undefined ? 1 : prereleaseOrder(b.pre, a.pre);
 }
 
 /**

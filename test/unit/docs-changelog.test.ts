@@ -40,6 +40,30 @@ describe("docs changelog", () => {
     expect(listed.map((entry) => entry.version)).toEqual(["0.10.0", "0.10.0-beta.1", "0.9.0"]);
   });
 
+  it("orders prereleases of one version by semver precedence, newest first", () => {
+    const tags = [
+      "v1.0.0-0",
+      "v1.0.0-beta.9",
+      "v1.0.0-rc.0",
+      "v1.0.0-1",
+      "v1.0.0-beta.10",
+      "v1.0.0-beta",
+    ];
+    const listed = changelogReleases(
+      [...tags, "v1.0.0"].map((tag) => release(tag, "")),
+      {},
+    );
+    expect(listed.map((entry) => entry.version)).toEqual([
+      "1.0.0",
+      "1.0.0-rc.0",
+      "1.0.0-beta.10",
+      "1.0.0-beta.9",
+      "1.0.0-beta",
+      "1.0.0-1",
+      "1.0.0-0",
+    ]);
+  });
+
   it("reads changelogen notes: compare link, scopes, breaking marks, contributors", () => {
     const notes = releases.find((entry) => entry.version === "0.23.0")!;
     expect(notes.compare).toBe("https://github.com/agntn/puzzles/compare/v0.22.0...v0.23.0");
