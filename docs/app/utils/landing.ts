@@ -91,8 +91,8 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     detail: "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
     explorer: "https://blockstream.info/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
     source: "https://bitcointalk.org/index.php?topic=5218972",
-    transactions: 2,
-    tool: "bits/1\tsolved\t0.001 BTC\t1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH\nchain: bitcoin  address kind: p2pkh\nhash160: 751e76e8199196d454941c45d1b3a323f1433bd6\npublic key: 0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798 (compressed)\nprivate key: 0000000000000000000000000000000000000000000000000000000000000001 (hex)\nwif: KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn\nstarted: 2013-01-09 11:59:15\nsolved: 2013-01-10 02:54:44 (14h 55m)\npre-genesis: yes\ntransactions: 2\n\tfunding\t2013-01-09 11:59:15\t0.03 BTC\t9223da07e858c6f153fbb8a24db52374ca19d2639098207c71710610cfda808e\n\tclaim\t2013-01-10 02:54:44\t0.03 BTC\t3da9b8e4a9c056b22d4fd09784402fd1caab1ecf621ba074efc20dc03ff04277\nclaim: https://blockstream.info/tx/3da9b8e4a9c056b22d4fd09784402fd1caab1ecf621ba074efc20dc03ff04277\ncollection techniques: 1\n\tmasked-key-range\tsource: https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941\ncollection hints: 1\n\tofficial\t2017-04-27 06:41:08\tThere is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).\tsource: https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941\tconfirmation: https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941 (Wayback capture of the thread page)\nexplorer: https://blockstream.info/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH\nsource: https://bitcointalk.org/index.php?topic=5218972\nkey range: 1..1 (hex, 1 bit)",
+    transactions: 4,
+    tool: "bits/1\tsolved\t0.001 BTC\t1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH\nchain: bitcoin  address kind: p2pkh\nhash160: 751e76e8199196d454941c45d1b3a323f1433bd6\npublic key: 0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798 (compressed)\nprivate key: 0000000000000000000000000000000000000000000000000000000000000001 (hex)\nwif: KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn\nstarted: 2013-01-09 11:59:15\nsolved: 2013-01-10 02:54:44 (14h 55m)\npre-genesis: yes\ntransactions: 4\n\tfunding\t2013-01-09 11:59:15\t0.03 BTC\t9223da07e858c6f153fbb8a24db52374ca19d2639098207c71710610cfda808e\n\tclaim\t2013-01-10 02:54:44\t0.03 BTC\t3da9b8e4a9c056b22d4fd09784402fd1caab1ecf621ba074efc20dc03ff04277\n\tincrease\t2015-01-15 18:07:14\t0.001 BTC\t08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15\n\tclaim\t2015-01-15 18:07:14\t0.001 BTC\tad12f6bc9019330dd2407e7ac5bfe7a261c0efe80cb278a6bb0c34f06ec12774\nclaim: https://blockstream.info/tx/3da9b8e4a9c056b22d4fd09784402fd1caab1ecf621ba074efc20dc03ff04277\ncollection techniques: 1\n\tmasked-key-range\tsource: https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941\ncollection hints: 1\n\tofficial\t2017-04-27 06:41:08\tThere is no pattern. It is just consecutive keys from a deterministic wallet (masked with leading 000...0001 to set difficulty).\tsource: https://bitcointalk.org/index.php?topic=1306983.msg18765941#msg18765941\tconfirmation: https://web.archive.org/web/20200509045914/https://bitcointalk.org/index.php?topic=1306983.msg18765941 (Wayback capture of the thread page)\nexplorer: https://blockstream.info/address/1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH\nsource: https://bitcointalk.org/index.php?topic=5218972\nkey range: 1..1 (hex, 1 bit)",
   },
   {
     id: "bits/71",
@@ -1605,7 +1605,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "290275901e3b",
+  dataVersion: "57504f71a235",
   total: 555,
   solved: 322,
   unsolved: 113,
