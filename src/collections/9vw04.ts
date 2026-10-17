@@ -30,7 +30,7 @@ const ANNOUNCEMENT = post("1870319691295764655");
 /** The private key example: 9vw04 twice, everything else masked. */
 const EXAMPLE = post("1874632897459871930");
 
-/** The only post that adds hints to the puzzle itself rather than answering someone. */
+/** The author's January 13 post with additional hints. */
 const ADDITIONAL = post("1878634169410203733");
 
 /** The picture, at the size X stores the upload. The file under `assets/` is these bytes. */
@@ -168,7 +168,7 @@ export class NineVw04Collection extends SingletonCollection {
     kind: PartyKind.Person,
     aliases: ["Gem Finder"],
     about:
-      "X account that put 0.02 BTC behind one post in December 2024 and was still answering players in its replies in 2026.",
+      "Published the 9vw04 Bitcoin puzzle on X in December 2024 and added hints through March 2026.",
     profiles: [profile("twitter", "https://x.com/GemfinderOfX")],
     facts: [
       fact(
@@ -182,7 +182,7 @@ export class NineVw04Collection extends SingletonCollection {
         { date: "2025-01-13" },
       ),
       fact(
-        "Came back in March 2026 with a clue for one persistent player: every Nth character, maybe a fixed interval skip cipher.",
+        "Posted a clue about every Nth character and a possible fixed interval skip cipher.",
         post("2027938957112279215"),
         { date: "2026-03-01" },
       ),

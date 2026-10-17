@@ -1634,7 +1634,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "1b9b98c350f0",
+  dataVersion: "149599af0065",
   total: 556,
   solved: 322,
   unsolved: 114,
@@ -2835,7 +2835,7 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     name: "GemfinderOfX",
     kind: "person",
     about:
-      "X account that put 0.02 BTC behind one post in December 2024 and was still answering players in its replies in 2026.",
+      "Published the 9vw04 Bitcoin puzzle on X in December 2024 and added hints through March 2026.",
     collections: ["9vw04"],
     puzzles: 1,
   },
