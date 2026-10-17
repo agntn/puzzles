@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readdirSync } from "node:fs";
 import { describe, expect, expectTypeOf, it, vi } from "vite-plus/test";
 import { eightyBit, EightyBitCollection } from "../../src/collections/80-bit.ts";
+import { NineVw04Collection } from "../../src/collections/9vw04.ts";
 import { bits, BitsCollection } from "../../src/collections/bits.ts";
 import { BalletCollection } from "../../src/collections/ballet.ts";
 import { BitaddressCollection } from "../../src/collections/bitaddress.ts";
@@ -91,6 +92,7 @@ import { prizeTotals } from "../../src/core/puzzle.ts";
 
 const concreteClasses = [
   EightyBitCollection,
+  NineVw04Collection,
   BalletCollection,
   BitaddressCollection,
   BitapsCollection,
@@ -1034,21 +1036,21 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(555);
+    expect(await all()).toHaveLength(556);
     expect(await stats()).toEqual({
-      total: 555,
+      total: 556,
       claimed: 20,
       expired: 4,
       solved: 322,
       swept: 96,
-      unsolved: 113,
-      with_pubkey: 447,
+      unsolved: 114,
+      with_pubkey: 448,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.81566403482549,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1069.8478244,
+        BTC: 1069.868032,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 815.85470498,
@@ -1057,7 +1059,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1500.188092936237,
         ETH: 12.612559658256945,
-        BTC: 909.97280377,
+        BTC: 909.99301137,
         LTC: 3.02608794,
       },
       techniques: {
@@ -1128,7 +1130,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(555);
+    ).toBe(556);
   });
 
   it("hands back the memoized views frozen through", async () => {

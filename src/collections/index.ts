@@ -6,6 +6,7 @@
  */
 export const builtins = [
   { key: "80-bit", load: () => import("./80-bit.ts").then((m) => m.eightyBit) },
+  { key: "9vw04", load: () => import("./9vw04.ts").then((m) => m.nineVw04) },
   { key: "ballet", load: () => import("./ballet.ts").then((m) => m.ballet) },
   { key: "bitaddress", load: () => import("./bitaddress.ts").then((m) => m.bitaddress) },
   { key: "bitaps", load: () => import("./bitaps.ts").then((m) => m.bitaps) },

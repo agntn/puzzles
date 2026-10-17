@@ -126,8 +126,8 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(555);
-    expect(result.unsolved).toBe(113);
+    expect(result.total).toBe(556);
+    expect(result.unsolved).toBe(114);
   });
 
   it("shows a puzzle by universal identifier", async () => {
@@ -556,7 +556,7 @@ describe.concurrent("puzzles CLI", () => {
     expect(result.code).toBe(1);
     expect(result.stdout).toBe("");
     expect(result.stderr).toMatch(
-      /^Puzzle not found: nope\/1\. Known collections: 80-bit, ballet, /u,
+      /^Puzzle not found: nope\/1\. Known collections: 80-bit, 9vw04, ballet, /u,
     );
   });
 
@@ -721,13 +721,13 @@ describe.concurrent("puzzles CLI", () => {
       readonly collections: readonly { readonly key: string; readonly total: number }[];
     }>("collections", "--json");
 
-    expect(collections).toHaveLength(49);
+    expect(collections).toHaveLength(50);
     expect(collections.map((entry) => entry.key)).toContain("hash-collision");
   });
 
   it("lists authors and shows one, by author key or collection key", async () => {
     const rows = (await puzzles("authors")).split("\n");
-    expect(rows).toHaveLength(43);
+    expect(rows).toHaveLength(44);
     expect(rows).toContain("zden: Zden (person), 1 collection: zden, 16 puzzles");
 
     const record = (await puzzles("authors", "warp")).split("\n");
@@ -748,7 +748,7 @@ describe.concurrent("puzzles CLI", () => {
     const missing = await failure("authors", "nobody");
     expect(missing.code).toBe(1);
     expect(missing.stderr).toMatch(
-      /^Unknown author: nobody\. Known authors: ktimesg, bobby-lee, /u,
+      /^Unknown author: nobody\. Known authors: ktimesg, gemfinderofx, bobby-lee, /u,
     );
   });
 
@@ -812,7 +812,7 @@ describe.concurrent("puzzles CLI", () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(49);
+    expect(result.collections).toHaveLength(50);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 

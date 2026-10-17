@@ -84,6 +84,7 @@ const execFileAsync = promisify(execFile);
 
 const expectedCollections = [
   "80-bit",
+  "9vw04",
   "ballet",
   "bitaddress",
   "bitaps",
