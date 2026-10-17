@@ -74,9 +74,11 @@ describe("puzzles_show text", () => {
     );
     expect(text).toContain("wif: KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn");
     expect(text).toContain("solved: 2013-01-10 02:54:44 (14h 55m)");
-    expect(text).toContain("transactions: 2");
-    expect(text.filter((line) => /^\t(funding|claim)\t/u.test(line))).toHaveLength(2);
-    expect(text.some((line) => line.startsWith("claim: https://blockstream.info/tx/"))).toBe(true);
+    expect(text).toContain("transactions: 4");
+    expect(text.filter((line) => /^\t(funding|increase|claim)\t/u.test(line))).toHaveLength(4);
+    expect(text).toContain(
+      "claim: https://blockstream.info/tx/3da9b8e4a9c056b22d4fd09784402fd1caab1ecf621ba074efc20dc03ff04277",
+    );
     expect(text).toContain("key range: 1..1 (hex, 1 bit)");
   });
 

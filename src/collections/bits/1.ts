@@ -1,5 +1,5 @@
 import { puzzle, Status } from "../../core/puzzle.ts";
-import { claim, compressed, funding, hex } from "../../core/parts.ts";
+import { claim, compressed, funding, hex, increase } from "../../core/parts.ts";
 
 /** Puzzle `bits/1`. */
 export const bits1 = puzzle({
@@ -27,6 +27,16 @@ export const bits1 = puzzle({
       "3da9b8e4a9c056b22d4fd09784402fd1caab1ecf621ba074efc20dc03ff04277",
       "2013-01-10 02:54:44",
       0.03,
+    ),
+    increase(
+      "08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",
+      "2015-01-15 18:07:14",
+      0.001,
+    ),
+    claim(
+      "ad12f6bc9019330dd2407e7ac5bfe7a261c0efe80cb278a6bb0c34f06ec12774",
+      "2015-01-15 18:07:14",
+      0.001,
     ),
   ],
 });
