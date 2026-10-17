@@ -150,7 +150,7 @@ const PRESENTATION: Readonly<
     sample: "9vw04",
     chains: ["bitcoin"],
     blurb:
-      "One tweet, five characters and a grid of letters and digits in four colours. Everything for the WIF is in the post, the author says. Rainbows, not so much.",
+      "One tweet, five characters and a grid of letters and digits in five colours. Everything for the WIF is in the post, the author says. Rainbows, not so much.",
   },
   "ledger-donjon": {
     icon: "i-lucide-scissors",
