@@ -30,7 +30,7 @@
     "@iconify-json/token": "1.2.42",
     "@iconify-json/vscode-icons": "1.2.83",
     "vue-tsc": "3.3.11",
-    "wrangler": "4.135.0"
+    "wrangler": "4.151.0"
   },
   "packageManager": "pnpm@11.22.0"
 }
