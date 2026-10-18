@@ -127,6 +127,7 @@ That's most of it, really. A collection is its own entry and everything on it is
 | `luckylurker`               | bitcoin                             | Two Bitcoin Vault seed challenges           |
 | `iamabananaamaa`            | bitcoin                             | A ZIP in a GIF, then a fake Caesar          |
 | `doges-gambit`              | ethereum, dogecoin                  | Two keys read off one chess board video     |
+| `crypto-puzzles`            | ethereum                            | Raw Ether keys hidden in short videos       |
 | `walking-banks`             | bitcoin                             | A seed hidden in a Bitcoin thriller novel   |
 | `grycoin`                   | bitcoin                             | Quizchain renamed, days before the shutdown |
 | `smith-lyle-moore`          | bitcoin                             | A band's two hunts, one per single          |

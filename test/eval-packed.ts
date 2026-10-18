@@ -94,6 +94,7 @@ const expectedCollections = [
   "brave-new-world",
   "coin-artist",
   "coin-games",
+  "crypto-puzzles",
   "doges-gambit",
   "dug",
   "genesis",

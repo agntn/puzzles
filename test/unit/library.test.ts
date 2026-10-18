@@ -12,6 +12,7 @@ import { BookQuizCollection } from "../../src/collections/book-quiz.ts";
 import { BraveNewWorldCollection } from "../../src/collections/brave-new-world.ts";
 import { CoinArtistCollection } from "../../src/collections/coin-artist.ts";
 import { CoinGamesCollection } from "../../src/collections/coin-games.ts";
+import { CryptoPuzzlesCollection } from "../../src/collections/crypto-puzzles.ts";
 import { DogesGambitCollection } from "../../src/collections/doges-gambit.ts";
 import { DugCollection } from "../../src/collections/dug.ts";
 import { GenesisCollection } from "../../src/collections/genesis.ts";
@@ -102,6 +103,7 @@ const concreteClasses = [
   BraveNewWorldCollection,
   CoinArtistCollection,
   CoinGamesCollection,
+  CryptoPuzzlesCollection,
   DogesGambitCollection,
   DugCollection,
   GenesisCollection,
@@ -627,7 +629,7 @@ describe("lazy collection registry", () => {
       "Puzzle not found: 71. Did you mean bits/71, quizchain/71 or quizchain2/71?",
     );
     await expect(miss(requirePuzzle("1"))).resolves.toBe(
-      "Puzzle not found: 1. Did you mean bits/1, coin-games/1, grycoin/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1, walking-banks/1 or weave/1?",
+      "Puzzle not found: 1. Did you mean bits/1, coin-games/1, crypto-puzzles/1, grycoin/1, mini/1, quizchain/1, quizchain2/1, rushwallet/1, teikhos/1, walking-banks/1 or weave/1?",
     );
 
     /* A number one digit off is another puzzle, and an unknown collection holds no name. */
@@ -1036,18 +1038,18 @@ describe("lazy collection registry", () => {
   });
 
   it("preserves the dataset statistics", async () => {
-    expect(await all()).toHaveLength(556);
+    expect(await all()).toHaveLength(558);
     expect(await stats()).toEqual({
-      total: 556,
+      total: 558,
       claimed: 20,
       expired: 4,
-      solved: 322,
+      solved: 323,
       swept: 96,
-      unsolved: 114,
-      with_pubkey: 448,
+      unsolved: 115,
+      with_pubkey: 449,
       total_prize: {
         AR: 5550.190574146237,
-        ETH: 26.81566403482549,
+        ETH: 26.915664034825493,
         DAI: 100,
         DOGE: 10000,
         BTC: 1069.868032,
@@ -1058,7 +1060,7 @@ describe("lazy collection registry", () => {
       },
       unsolved_prize: {
         AR: 1500.188092936237,
-        ETH: 12.612559658256945,
+        ETH: 12.662559658256946,
         BTC: 909.99301137,
         LTC: 3.02608794,
       },
@@ -1130,7 +1132,7 @@ describe("lazy collection registry", () => {
     expect(envelope.collections.map((collection) => collection.name)).toEqual(collectionKeys());
     expect(
       envelope.collections.reduce((total, collection) => total + collection.puzzles.length, 0),
-    ).toBe(556);
+    ).toBe(558);
   });
 
   it("hands back the memoized views frozen through", async () => {
@@ -1157,6 +1159,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(322);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(323);
   });
 });

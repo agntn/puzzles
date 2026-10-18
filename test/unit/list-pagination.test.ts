@@ -73,9 +73,11 @@ describe("puzzle list pagination", () => {
     const crossed = await listTool({ chain: "ethereum", collection: "bits" });
 
     expect(chain.details).toMatchObject({
-      matched: 13,
-      returned: 13,
+      matched: 15,
+      returned: 15,
       ids: [
+        "crypto-puzzles/1",
+        "crypto-puzzles/2",
         "doges-gambit/eth",
         "mineshop",
         "teikhos/0",
@@ -92,6 +94,7 @@ describe("puzzle list pagination", () => {
       ],
     });
     expect(narrowed.details["ids"]).toEqual([
+      "crypto-puzzles/1",
       "doges-gambit/eth",
       "teikhos/4",
       "zden/xixoio",

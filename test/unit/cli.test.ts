@@ -126,8 +126,8 @@ describe.concurrent("puzzles CLI", () => {
       "--json",
     );
 
-    expect(result.total).toBe(556);
-    expect(result.unsolved).toBe(114);
+    expect(result.total).toBe(558);
+    expect(result.unsolved).toBe(115);
   });
 
   it("shows a puzzle by universal identifier", async () => {
@@ -584,6 +584,8 @@ describe.concurrent("puzzles CLI", () => {
 
     expect(result.every((puzzle) => puzzle.chain === "ethereum")).toBe(true);
     expect(result.map((puzzle) => puzzle.id)).toEqual([
+      "crypto-puzzles/1",
+      "crypto-puzzles/2",
       "doges-gambit/eth",
       "mineshop",
       "teikhos/0",
@@ -721,13 +723,13 @@ describe.concurrent("puzzles CLI", () => {
       readonly collections: readonly { readonly key: string; readonly total: number }[];
     }>("collections", "--json");
 
-    expect(collections).toHaveLength(50);
+    expect(collections).toHaveLength(51);
     expect(collections.map((entry) => entry.key)).toContain("hash-collision");
   });
 
   it("lists authors and shows one, by author key or collection key", async () => {
     const rows = (await puzzles("authors")).split("\n");
-    expect(rows).toHaveLength(44);
+    expect(rows).toHaveLength(45);
     expect(rows).toContain("zden: Zden (person), 1 collection: zden, 16 puzzles");
 
     const record = (await puzzles("authors", "warp")).split("\n");
@@ -812,7 +814,7 @@ describe.concurrent("puzzles CLI", () => {
       readonly data_version: string;
     }>("export", "--compact");
 
-    expect(result.collections).toHaveLength(50);
+    expect(result.collections).toHaveLength(51);
     expect(result.data_version).toMatch(/^[a-f0-9]{12}$/);
   });
 
