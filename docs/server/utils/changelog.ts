@@ -103,6 +103,21 @@ async function githubReleasesIfAny(): Promise<GitHubRelease[] | undefined> {
   }
 }
 
+/**
+ * The releases from GitHub, else the bare versions from npm. With both sources silent there is
+ * nothing to list, so it throws and the prerender hook keeps the last good deploy.
+ *
+ * @returns {Promise<ChangelogRelease[]>} The releases.
+ */
+async function loadChangelog(): Promise<ChangelogRelease[]> {
+  const [releases, times] = await Promise.all([githubReleasesIfAny(), publishTimes()]);
+  if (releases) return changelogReleases(releases, times);
+  const versions = changelogReleases(registryReleases(times), times);
+  if (versions.length === 0)
+    throw new Error("[changelog] neither GitHub Releases nor npm answered; see the warnings above");
+  return versions;
+}
+
 let cached: Promise<ChangelogRelease[]> | undefined;
 
 /**
@@ -112,12 +127,9 @@ let cached: Promise<ChangelogRelease[]> | undefined;
  * @returns {Promise<ChangelogRelease[]>} The releases.
  */
 export function changelog(): Promise<ChangelogRelease[]> {
-  cached ??= Promise.all([githubReleasesIfAny(), publishTimes()]).then(
-    ([releases, times]) => changelogReleases(releases ?? registryReleases(times), times),
-    (error: unknown) => {
-      cached = undefined;
-      throw error;
-    },
-  );
+  cached ??= loadChangelog().catch((error: unknown) => {
+    cached = undefined;
+    throw error;
+  });
   return cached;
 }
