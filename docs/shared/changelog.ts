@@ -330,3 +330,20 @@ export function changelogReleases(
       };
     });
 }
+
+/**
+ * The registry's versions dressed as releases without notes, for a build GitHub turned away. Each
+ * keeps its link to the release; `created` and `modified` ride along and fail the tag check.
+ *
+ * @param {Readonly<Record<string, string>>} times - The registry's `time`, keyed by version.
+ * @returns {GitHubRelease[]} One empty release a version.
+ */
+export function registryReleases(times: Readonly<Record<string, string>>): GitHubRelease[] {
+  return Object.entries(times).map(([version, time]) => ({
+    tag_name: `v${version}`,
+    html_url: `${REPOSITORY}/releases/tag/v${version}`,
+    draft: false,
+    published_at: time,
+    body: null,
+  }));
+}

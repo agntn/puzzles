@@ -3,6 +3,7 @@ import { describe, expect, it } from "vite-plus/test";
 import {
   changelogReleases,
   parseInline,
+  registryReleases,
   releaseAnchor,
   type GitHubRelease,
 } from "../../docs/shared/changelog.ts";
@@ -204,6 +205,34 @@ describe("docs changelog", () => {
       undefined,
     ]);
     expect(dated[2]).not.toHaveProperty("date");
+  });
+
+  it("lists npm's versions as bare releases when GitHub turned the build away", () => {
+    const listed = changelogReleases(
+      registryReleases({
+        created: "2026-01-01T00:00:00.000Z",
+        "0.20.0": "2026-09-01T10:00:00.000Z",
+        "0.21.0": "2026-09-08T10:00:00.000Z",
+        modified: "2026-10-16T10:00:00.000Z",
+      }),
+      {},
+    );
+    expect(listed).toEqual([
+      {
+        version: "0.21.0",
+        date: "2026-09-08T10:00:00.000Z",
+        url: "https://github.com/agntn/puzzles/releases/tag/v0.21.0",
+        groups: [],
+        contributors: [],
+      },
+      {
+        version: "0.20.0",
+        date: "2026-09-01T10:00:00.000Z",
+        url: "https://github.com/agntn/puzzles/releases/tag/v0.20.0",
+        groups: [],
+        contributors: [],
+      },
+    ]);
   });
 
   it("anchors a release by its version", () => {
