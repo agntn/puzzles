@@ -75,6 +75,14 @@ const PRESENTATION: Readonly<
     blurb:
       "Banknotes stuffed with skulls, lions and statues, a few thousand sats each. Every prize emptied by somebody who never said how.",
   },
+  "crypto-puzzles": {
+    icon: "i-lucide-square-play",
+    title: "Crypto Puzzles on YouTube",
+    sample: "crypto-puzzles/1",
+    chains: ["ethereum"],
+    blurb:
+      "Two pairs of short videos with a raw Ether key in the footage. The first was gone within seven hours of its part 2. The second has sat on 0.05 ETH since 2018.",
+  },
   dug: {
     icon: "i-lucide-graduation-cap",
     title: "Dug's Student Treasure Hunt",

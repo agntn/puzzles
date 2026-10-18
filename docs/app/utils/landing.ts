@@ -58,6 +58,7 @@ export const WALK: readonly string[] = [
   "hunting-time",
   "coin-games/2",
   "9vw04",
+  "crypto-puzzles/1",
 ];
 
 /* generated:landing-fixtures:start */
@@ -1630,27 +1631,56 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     transactions: 4,
     tool: "9vw04\tunsolved\t0.0202076 BTC\tbc1qr5mssp6snmduqp9enx4dzmcxvk7qw83lceyy2v\nchain: bitcoin  address kind: p2wpkh\nhash160: 1d370807509edbc004b999aad16f0665bc071e3f\npublic key: 039d7ce87733444acfde33960964344d8201d2d92ccdad0f5045e40fdcf963475b (compressed)\nprivate key: unknown\nstarted: 2024-12-21 04:05:37\npre-genesis: yes\ntransactions: 4\n\tfunding\t2021-01-05 09:52:50\t0.02547616 BTC\t6f2b30df09dacd79249bd16e014141bc9747eff9d39094334181942f3294a76b\n\tdecrease\t2021-10-20 18:11:46\t0.02032356 BTC\t82702e8a59babe3ad12ac5c7246f9ea98ad384860c9bbb119a6aeaf184146cb0\n\tincrease\t2021-11-03 13:51:15\t0.01928356 BTC\t9ca459e7e9172f68a17b6e9bbd418ed2f50479168ad2a3241821a2a8ba74e527\n\tdecrease\t2024-11-28 10:54:45\t0.0042 BTC\t67dbb2436ed6d064b96b5854c31f74856e86152a11a4ea8224bbd3ba78984a21\nasset: assets/9vw04/puzzle.jpg\nasset source: https://pbs.twimg.com/media/GfS12G-WUAE_Lt2.jpg?name=orig\nhints: 15, folded, puzzles_hints lists them\nexplorer: https://blockstream.info/address/bc1qr5mssp6snmduqp9enx4dzmcxvk7qw83lceyy2v\nsource: https://x.com/GemfinderOfX/status/1870319691295764655\nfiles: 1 file, 11 archived sources; puzzles_assets lists them and reads one by its path",
   },
+  {
+    id: "crypto-puzzles/1",
+    collection: "crypto-puzzles",
+    chain: "ethereum",
+    status: "solved",
+    address: "0xc99A54EEA6036115f913A13D6606e935bcA47a8f",
+    kind: "standard",
+    hash160: undefined,
+    redeemScript: undefined,
+    prize: "0.05 ETH",
+    prizeAmount: 0.05,
+    currency: undefined,
+    startedAt: "2018-07-25 06:43:23",
+    solvedAt: "2018-07-26 14:03:08",
+    solveTime: "1d 7h 19m",
+    bits: undefined,
+    range: undefined,
+    pubkey:
+      "046f39574f5df1a4e66b8a81f963847483d3436d2dae753fc517bd30895d7690751724d525b1d5840d20b8fdd541369dc2cbb2a692d654be5c0a4e11f66a3e5734",
+    pubkeyFormat: "uncompressed",
+    secret: "hex",
+    keyLiteral: 'hex("4487fc620ad0c4c67e80be342b2ea1f5a3dc482be6fb9c2451007322ea8be35f")',
+    verdict: "verified",
+    detail: "0xc99A54EEA6036115f913A13D6606e935bcA47a8f",
+    explorer: "https://etherscan.io/address/0xc99A54EEA6036115f913A13D6606e935bcA47a8f",
+    source: "https://www.youtube.com/watch?v=3l1jFa3Mw0s",
+    transactions: 3,
+    tool: "crypto-puzzles/1\tsolved\t0.05 ETH\t0xc99A54EEA6036115f913A13D6606e935bcA47a8f\nchain: ethereum  address kind: standard\npublic key: 046f39574f5df1a4e66b8a81f963847483d3436d2dae753fc517bd30895d7690751724d525b1d5840d20b8fdd541369dc2cbb2a692d654be5c0a4e11f66a3e5734 (uncompressed)\nprivate key: 4487fc620ad0c4c67e80be342b2ea1f5a3dc482be6fb9c2451007322ea8be35f (hex)\nstarted: 2018-07-25 06:43:23\nsolved: 2018-07-26 14:03:08 (1d 7h 19m)\nsolver: 0xc9089cb949ddb182692f29cd57dfe8c3404c8171\ntransactions: 3\n\tfunding\t2018-07-19 05:26:53\t0.05 ETH\t0xa8de9727e5166795b2a2e8d7b61762418dfaf3841dd9055769996bcaff74da46\n\tclaim\t2018-07-26 14:03:08\t0.049682 ETH\t0xab150c5d7a8c1cbf96ac10c259a5d861fa12526d13d2b1b55eecaf6b633dca39\n\tclaim\t2018-07-26 20:03:16\t0.000171 ETH\t0xaf47c9c39f600c114a9778eef9ef2cdc544b3c86b1b246fdac0c6eaf2738face\nclaim: https://etherscan.io/tx/0xab150c5d7a8c1cbf96ac10c259a5d861fa12526d13d2b1b55eecaf6b633dca39\nsolution asset: assets/crypto-puzzles/1/solution.png\nasset source: https://www.youtube.com/watch?v=0jJ6XadOAWk\nhints: 2\n\tofficial\t2018-07-25\tPart 1 of the crypto puzzle. Good luck. Part 2 includes the final part.\tsource: https://www.youtube.com/watch?v=3l1jFa3Mw0s\n\tofficial\t2018-07-26\t2 parts, 1 answer. Do you have the ability to solve the crypto puzzle? Just be the first and you'll win 0.05 Ethereum.\tsource: https://www.youtube.com/watch?v=hX-pOBj8VsI\tanswer: THE SOLUTION: 4487FC620AD0C4C67E80BE342B2EA1F5A3DC482BE6FB9C2451007322EA8BE35F, the private key of the prize address.\tanswer source: https://www.youtube.com/watch?v=0jJ6XadOAWk\tanswer date: 2018-08-01\nexplorer: https://etherscan.io/address/0xc99A54EEA6036115f913A13D6606e935bcA47a8f\nsource: https://www.youtube.com/watch?v=3l1jFa3Mw0s\nfiles: 1 file, 0 archived sources; puzzles_assets lists them and reads one by its path",
+  },
 ];
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "149599af0065",
-  total: 556,
-  solved: 322,
-  unsolved: 114,
+  dataVersion: "4dd8287c2391",
+  total: 558,
+  solved: 323,
+  unsolved: 115,
   claimed: 20,
   swept: 96,
   expired: 4,
-  withPubkey: 448,
+  withPubkey: 449,
   unsolvedPrize: {
     BTC: 909.99301137,
-    ETH: 12.612559658256945,
+    ETH: 12.662559658256946,
     LTC: 3.02608794,
     AR: 1500.188092936237,
   },
   totalPrize: {
     BTC: 1069.868032,
-    ETH: 26.81566403482549,
+    ETH: 26.915664034825493,
     DOGE: 10000,
     BCH: 5.1,
     LTC: 233.85158794,
@@ -1910,6 +1940,29 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     withKey: 0,
     firstStarted: "2017-11-20 04:37:55",
     lastStarted: "2017-12-03 00:00:00",
+    hints: [],
+  },
+  {
+    key: "crypto-puzzles",
+    author: "Crypto Puzzles",
+    authorKey: "crypto-puzzles",
+    authorUrl: "https://www.youtube.com/channel/UCR8-P07nNhxyEr6fwJXvjQQ",
+    total: 2,
+    statuses: {
+      solved: 1,
+      unsolved: 1,
+    },
+    chains: ["ethereum"],
+    prize: {
+      ETH: 0.1,
+    },
+    unsolvedPrize: {
+      ETH: 0.05,
+    },
+    withPubkey: 1,
+    withKey: 1,
+    firstStarted: "2018-07-25 06:43:23",
+    lastStarted: "2018-08-06 06:08:41",
     hints: [],
   },
   {
@@ -2935,6 +2988,16 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
       "Drew Bitcoin puzzles as banknotes for Coin_Games in late 2017 and promised a bigger prize every week until the new year.",
     collections: ["coin-games"],
     puzzles: 3,
+  },
+  {
+    key: "crypto-puzzles",
+    to: "/authors/crypto-puzzles",
+    name: "Crypto Puzzles",
+    kind: undefined,
+    about:
+      "YouTube channel that hid Ethereum private keys in pairs of short videos in 2018 and put 0.05 ETH behind each.",
+    collections: ["crypto-puzzles"],
+    puzzles: 2,
   },
   {
     key: "cryptopuzzlers",
