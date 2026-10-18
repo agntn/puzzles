@@ -346,8 +346,9 @@ export default defineNuxtConfig({
     preset: "cloudflare_module",
     hooks: {
       /**
-       * Nitro ships a build whose prerender failed, and a GitHub that said no leaves /changelog at
-       * 0 releases. That build stops here, so the last good deploy stays up.
+       * Nitro ships a build whose prerender failed, and a GitHub that said no to GITHUB_TOKEN leaves
+       * /changelog at 0 releases. That build stops here, so the last good deploy stays up. Without
+       * the token the route falls back to npm's versions and never lands in this list.
        *
        * @param {{ failedRoutes: readonly { route: string }[] }} result - The prerender's outcome.
        * @returns {void}
@@ -358,7 +359,7 @@ export default defineNuxtConfig({
         );
         if (changelog.length > 0)
           throw new Error(
-            `GitHub Releases did not answer for ${changelog.map((failed) => failed.route).join(", ")}; see the error above, or set GITHUB_TOKEN when it is the rate limit`,
+            `GitHub Releases did not answer for ${changelog.map((failed) => failed.route).join(", ")} with GITHUB_TOKEN set; see the error above, or check that the token can read agntn/puzzles`,
           );
       },
     },

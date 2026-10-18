@@ -1,4 +1,9 @@
-import { changelogReleases, type ChangelogRelease, type GitHubRelease } from "#shared/changelog";
+import {
+  changelogReleases,
+  registryReleases,
+  type ChangelogRelease,
+  type GitHubRelease,
+} from "#shared/changelog";
 
 /** The npm name the releases are published under; its registry document dates them. */
 const PACKAGE = "@agntn/puzzles";
@@ -58,10 +63,10 @@ async function publishTimes(): Promise<Record<string, string>> {
  * address, which a shared build machine can spend before this build asks, so GITHUB_TOKEN is sent
  * when the build has one.
  *
+ * @param {string | undefined} token - GITHUB_TOKEN, when the build has one.
  * @returns {Promise<GitHubRelease[]>} The releases, drafts included when the token can see them.
  */
-async function githubReleases(): Promise<GitHubRelease[]> {
-  const token = process.env["GITHUB_TOKEN"];
+async function githubReleases(token: string | undefined): Promise<GitHubRelease[]> {
   const headers: Record<string, string> = {
     accept: "application/vnd.github+json",
     "user-agent": "puzzles.agntn.dev",
@@ -79,16 +84,36 @@ async function githubReleases(): Promise<GitHubRelease[]> {
   }
 }
 
+/**
+ * The releases on GitHub, or none when GitHub turned away a build without GITHUB_TOKEN. A build
+ * with the token fails instead, so a broken token never swaps the full log for a bare one.
+ *
+ * @returns {Promise<GitHubRelease[] | undefined>} The releases, or none for the npm fallback.
+ */
+async function githubReleasesIfAny(): Promise<GitHubRelease[] | undefined> {
+  const token = process.env["GITHUB_TOKEN"];
+  try {
+    return await githubReleases(token);
+  } catch (error) {
+    if (token) throw error;
+    console.warn(
+      `[changelog] GitHub Releases did not answer and GITHUB_TOKEN is unset, listing npm's versions without notes: ${error instanceof Error ? error.message : String(error)}`,
+    );
+    return undefined;
+  }
+}
+
 let cached: Promise<ChangelogRelease[]> | undefined;
 
 /**
- * Every release of the package, newest first, read from GitHub Releases and dated by npm.
+ * Every release of the package, newest first, read from GitHub Releases and dated by npm. Without
+ * GitHub's answer and a token, the versions npm lists, each linked to its release.
  *
  * @returns {Promise<ChangelogRelease[]>} The releases.
  */
 export function changelog(): Promise<ChangelogRelease[]> {
-  cached ??= Promise.all([githubReleases(), publishTimes()]).then(
-    ([releases, times]) => changelogReleases(releases, times),
+  cached ??= Promise.all([githubReleasesIfAny(), publishTimes()]).then(
+    ([releases, times]) => changelogReleases(releases ?? registryReleases(times), times),
     (error: unknown) => {
       cached = undefined;
       throw error;
