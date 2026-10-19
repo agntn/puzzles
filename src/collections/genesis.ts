@@ -8,6 +8,7 @@ import {
   increase,
   official,
   party,
+  PartyKind,
   profile,
   sweep,
   technique,
@@ -63,8 +64,14 @@ export const genesisBlock = puzzle({
       0.000004,
     ),
   ],
-  solver: party(undefined, {
+  solver: party("Schum", {
+    key: "schum",
+    kind: PartyKind.Person,
+    aliases: ["Schum-io"],
+    about:
+      "Published the Genesis recipe hours after the sweep, round counts and all, and keeps a hint repository for Corey Phillips' BTC puzzle.",
     addresses: ["bc1qdu8mh9qjtjhy89mvhmcgf66ul6ld92rdr6qzad"],
+    profiles: [profile("github", "https://github.com/Schum-io")],
     facts: [
       fact(
         "Asked on September 14, with 10k sats to the puzzle address, whether the passphrase was Genesis data or the author's own word, how long it was and what built the wallet.",
@@ -85,6 +92,20 @@ export const genesisBlock = puzzle({
         'Two hours after the sweep sent 10k sats to the author address and 330 to the puzzle address with "Thank you for the fascinating puzzle!" in OP_RETURN.',
         "https://mempool.space/tx/3367997d30d4b0363ff96e9fb587c28622a691044ab3ea9ce5c30c5d730b422f",
         { date: "2026-10-17" },
+      ),
+      fact(
+        "Published the full recipe in a pull request to floflo777's catalogue, 2 hours 38 minutes after the sweep: the cut, the passphrase, both PBKDF2 round counts and the BIP48 path.",
+        SOLUTION,
+        { date: "2026-10-17" },
+      ),
+      fact(
+        "floflo777's catalogue credits the solution and tools/verify_solution.py to Schum-io.",
+        "https://github.com/floflo777/open-crypto-puzzles/tree/main/4-solved/caesarcoder-genesis-block-wallet-puzzle-947ksats",
+        { date: "2026-10-17" },
+      ),
+      fact(
+        "Keeps a repository with every publicly known hint for Corey Phillips' BTC puzzle.",
+        "https://github.com/Schum-io/BTC-Puzzle-by-Corey-Phillips",
       ),
     ],
   }),

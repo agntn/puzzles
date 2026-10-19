@@ -618,7 +618,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     source:
       "https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
     transactions: 5,
-    tool: "genesis\tsolved\t0.0094654 BTC\tbc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj\nchain: bitcoin  address kind: p2wsh\npublic key: unknown\nprivate key: unknown\nstarted: 2026-08-22 19:45:38\nsolved: 2026-10-17 03:40:20 (1mo 25d 7h 54m)\nsolver: bc1qdu8mh9qjtjhy89mvhmcgf66ul6ld92rdr6qzad\npre-genesis: yes\ntransactions: 5\n\tfunding\t2026-08-22 02:45:22\t0.0002 BTC\te2aaa928a965ee02b9c9a76227383113a62f350701a18d7792372712ce501ac7\n\tincrease\t2026-08-22 19:45:38\t0.00005 BTC\tb691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77\n\tclaim\t2026-10-17 03:40:20\t0.0094654 BTC\t1c70c4745fad5bf891b9ee2a9f8b0b5cd3f328eb847eb09c9bebb92f5f7e900b\n\tsweep\t2026-10-17 10:29:04\t0.0000068 BTC\t4b2d29ec21e2c9a37dae5ca7ddc49d6f34b0efbf4b0aa1afed6405dec8067b78\n\tsweep\t2026-10-17 18:03:12\t0.000004 BTC\td25aa1b7ada019b01ee3228f667d2881f47d7b53492d7b46b836743c1d7062f5\nclaim: https://blockstream.info/tx/1c70c4745fad5bf891b9ee2a9f8b0b5cd3f328eb847eb09c9bebb92f5f7e900b\ntechniques: 1\n\tsha256-to-bip39-entropy\tsource: https://mempool.space/tx/ae906bdebdf7cd2e9b2490a727d5d91eaa203c2ae68f8461ea62e07ffe3b9b1c\nhints: 45, folded, puzzles_hints lists them\nexplorer: https://blockstream.info/address/bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj\nsource: https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77\nfiles: 0 files, 7 archived sources; puzzles_assets lists them and reads one by its path",
+    tool: "genesis\tsolved\t0.0094654 BTC\tbc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj\nchain: bitcoin  address kind: p2wsh\npublic key: unknown\nprivate key: unknown\nstarted: 2026-08-22 19:45:38\nsolved: 2026-10-17 03:40:20 (1mo 25d 7h 54m)\nsolver: Schum (schum), github https://github.com/Schum-io, bc1qdu8mh9qjtjhy89mvhmcgf66ul6ld92rdr6qzad\npre-genesis: yes\ntransactions: 5\n\tfunding\t2026-08-22 02:45:22\t0.0002 BTC\te2aaa928a965ee02b9c9a76227383113a62f350701a18d7792372712ce501ac7\n\tincrease\t2026-08-22 19:45:38\t0.00005 BTC\tb691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77\n\tclaim\t2026-10-17 03:40:20\t0.0094654 BTC\t1c70c4745fad5bf891b9ee2a9f8b0b5cd3f328eb847eb09c9bebb92f5f7e900b\n\tsweep\t2026-10-17 10:29:04\t0.0000068 BTC\t4b2d29ec21e2c9a37dae5ca7ddc49d6f34b0efbf4b0aa1afed6405dec8067b78\n\tsweep\t2026-10-17 18:03:12\t0.000004 BTC\td25aa1b7ada019b01ee3228f667d2881f47d7b53492d7b46b836743c1d7062f5\nclaim: https://blockstream.info/tx/1c70c4745fad5bf891b9ee2a9f8b0b5cd3f328eb847eb09c9bebb92f5f7e900b\ntechniques: 1\n\tsha256-to-bip39-entropy\tsource: https://mempool.space/tx/ae906bdebdf7cd2e9b2490a727d5d91eaa203c2ae68f8461ea62e07ffe3b9b1c\nhints: 45, folded, puzzles_hints lists them\nexplorer: https://blockstream.info/address/bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj\nsource: https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77\nfiles: 0 files, 7 archived sources; puzzles_assets lists them and reads one by its path",
   },
   {
     id: "coin-artist/torched-h34r7s",
@@ -1664,7 +1664,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "1acc1597053b",
+  dataVersion: "b4f7f586503b",
   total: 558,
   solved: 324,
   unsolved: 114,

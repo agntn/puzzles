@@ -304,6 +304,7 @@ describe("lazy collection registry", () => {
     );
     expect(announcement?.answer?.text).toContain("PBKDF2-HMAC-SHA512 runs 181505 rounds");
     expect(puzzle.hints().at(-1)?.text).toBe("1) e4caa034; 2) 9fb54bad; 3) 3bc42789.");
+    expect(puzzle.solver()?.key).toBe("schum");
     expect(puzzle.solver()?.addresses).toEqual(["bc1qdu8mh9qjtjhy89mvhmcgf66ul6ld92rdr6qzad"]);
     expect(GenesisCollection.author.name).toBe("CaesarCoder");
   });
