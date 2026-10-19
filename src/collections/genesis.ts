@@ -99,7 +99,7 @@ export const genesisBlock = puzzle({
       {
         date: "2026-08-22",
         answer: answer(
-          "cut -b 263-400 of the 570-character lowercase raw block hex is the coinbase text as hex, no newline. The first 32 hex digits of its SHA-256 are the BIP39 entropy c020f55f60b8193bd5cac836769dbf76, which gives scan amateur fit scrap light over fire flip cushion reject hurt ugly. The passphrase is Satoshi Nakamoto. The seed step runs PBKDF2-HMAC-SHA512 at 181505 rounds for one cosigner (master fingerprint 0852014c) and 200913 for the other (040e2791), instead of BIP39's 2048. Both keys sit at m/48'/0'/1231006505'/2'/0/0 in a sorted 2-of-2 P2WSH.",
+          "cut -b 263-400 of the 570-character raw block hex, the coinbase text as hex, no newline. SHA-256, first 32 hex digits as BIP39 entropy: c020f55f60b8193bd5cac836769dbf76, scan amateur fit scrap light over fire flip cushion reject hurt ugly. Passphrase Satoshi Nakamoto. PBKDF2-HMAC-SHA512 runs 181505 rounds for cosigner 0852014c and 200913 for 040e2791, not 2048. Both keys at m/48'/0'/1231006505'/2'/0/0, sorted 2-of-2 P2WSH.",
           SOLUTION,
           { date: "2026-10-17" },
         ),

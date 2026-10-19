@@ -1,6 +1,69 @@
 # Archived sources
 
-Local reading copies of the pages the collection records cite and nobody else keeps: fifty-one tweets, one hundred and sixty-eight Reddit threads, one Reddit comment, seven Bitcointalk threads, one Stacker News thread, six Farcaster casts, one web page and one GitHub issue, as of October 19, 2026. The archive keeps the Ballet announcement, Zden's two hints, Tiamat's two Weave 4 hints, the kitten image source used by Bitimage, the three announcements and six later posts the author records cite, School of Bitcoin's pinned business card post and its March 2025 repost, the seventeen VeteranHODL posts behind Hunting Time, from the teaser and the announcement through all twelve clue photos to the claim and the full solution, the eleven GemfinderOfX posts behind 9vw04, from the puzzle itself to the skip cipher clue of March 2026, the six posts the solver records cite, the two AoiNakamoto quiz threads, Kierkegaard_Soren's trivia brainwallet thread and its announcement, the seventy-three Quizchain threads for blocks 1 to 77, the seventy-seven Quizchain2 threads for blocks 1 to 77, the two Grycoin chain threads, the three threads of the Quizchain Real Big Block, the Born to Be Wild solution write-up, AoiNakamoto's question on r/Bitcoin before the birthday quiz, IAMABananaAMAA's Caesar riddle, the r/bitcoinpuzzles post with Coin_Games' first three prize addresses, Zden's Christmas post of Level XM17, whose comments link his encoding scheme, his Demobit repost, where a player counted 51 characters and Zden pointed at the website under the image, q's BIP38 giveaway on Stacker News, the two r/dogecoin posts of Crypto Puzzlers' Doge's Gambit and Pascal Boyart's r/Bitcoin post of La Liberté guidant le peuple 2019, each with every surviving comment. The GitHub issue is where a player wrote down the Quizchain2 block 77 Stage One MD5 in 2026, seven years after somebody else claimed the prize. For Powerful Moss it keeps LogicBeach's puzzle page as it stood in March 2025, before most of its description was cut, and the six casts the record cites, each without the replies around it. The one Reddit comment is the reply where AoiNakamoto names their Twitter feed, kept with the comment it answers. The quiz and riddle threads are where each answer key was published, for the trivia brainwallet in the winner's comment, for the book quiz the prize address too, for Quizchain and Quizchain2 most answers and many of the keys, for the Grycoin chain the one answer anybody ever published, for Born to Be Wild every page password, the twelve words and the wallet password, for the riddle the key itself, and for RetiredCoder's seven mini-puzzles every hint, the key and, for #3, #4, #5 and #7, the author's own explanation. Tweets are archived as single posts: no replies, no quote tweets, no other post about the same puzzle.
+Reading copies of the pages the records cite and nobody else keeps. Tweets get deleted, Reddit posts get edited, a puzzle page loses half its description. The copy here stays put.
+
+As of October 19, 2026:
+
+| Where        | Copies                      |
+| ------------ | --------------------------- |
+| X            | 51 tweets                   |
+| Reddit       | 168 threads and one comment |
+| Bitcointalk  | 7 threads                   |
+| Farcaster    | 6 casts                     |
+| Stacker News | 1 thread                    |
+| GitHub       | 1 issue                     |
+| Web          | 1 page                      |
+
+## Tweets
+
+One post per file. No replies, no quote tweets, no other posts about the same puzzle.
+
+- the Ballet announcement, Zden's two hints, Tiamat's two Weave 4 hints and the kitten image source behind Bitimage
+- three announcements and six later posts that the author records cite
+- School of Bitcoin's pinned business card post and its March 2025 repost
+- seventeen VeteranHODL posts behind Hunting Time, from the teaser and the announcement through all twelve clue photos to the claim and the full solution
+- eleven GemfinderOfX posts behind 9vw04, from the puzzle itself to the skip cipher clue of March 2026
+- six posts that the solver records cite
+
+## Reddit
+
+Every thread comes with every comment that survived.
+
+- the seventy-three Quizchain threads for blocks 1 to 77 and the seventy-seven Quizchain2 threads for blocks 1 to 77
+- the two Grycoin chain threads and the three threads of the Quizchain Real Big Block
+- AoiNakamoto's two quiz threads, plus their question on r/Bitcoin before the birthday quiz
+- Kierkegaard_Soren's trivia brainwallet thread and its announcement
+- the Born to Be Wild solution write-up
+- IAMABananaAMAA's Caesar riddle
+- the r/bitcoinpuzzles post with Coin_Games' first three prize addresses
+- Zden's Christmas post of Level XM17, whose comments link his encoding scheme
+- Zden's Demobit repost, where a player counted 51 characters and Zden pointed at the website under the image
+- the two r/dogecoin posts of Crypto Puzzlers' Doge's Gambit
+- Pascal Boyart's r/Bitcoin post of La Liberté guidant le peuple 2019
+
+The one lone comment is the reply where AoiNakamoto names their Twitter feed. It's kept with the comment it answers.
+
+## Everything else
+
+- RetiredCoder's seven mini-puzzle threads on Bitcointalk
+- LogicBeach's Powerful Moss page as it stood in March 2025, before most of its description was cut
+- the six Powerful Moss casts the record cites, each without the replies around it
+- q's BIP38 giveaway on Stacker News
+- the GitHub issue where a player wrote down the Quizchain2 block 77 Stage One MD5 in 2026, seven years after somebody else claimed the prize
+
+## Where the answers went public
+
+Some of these threads matter for more than a clue. That's where the answer key landed:
+
+- trivia brainwallet: the winner's comment
+- book quiz: the answers, and the prize address too
+- Quizchain and Quizchain2: most answers and many of the keys
+- Grycoin chain: the one answer anybody ever published
+- Born to Be Wild: every page password, the twelve words and the wallet password
+- IAMABananaAMAA's riddle: the key itself
+- RetiredCoder's mini-puzzles: every hint and the key, and for #3, #4, #5 and #7 the author's own explanation
+
+## Every copy
 
 - [Ballet bounty announcement](ballet/bobbyclee-2020-07-31.md)
 - [Bitimage's kitten image source](bitimage/aantonop-2015-05-27.md)
@@ -241,9 +304,47 @@ Local reading copies of the pages the collection records cite and nobody else ke
 
 ## Capture and provenance
 
-Each Markdown file records the original URL, author handle, publication date in UTC, capture date, and SHA-256 of its sibling PNG. `twitter.com` links resolve to the same post IDs as the `x.com` links here. A tweet's publication date comes from its ID timestamp, not the capture browser's local clock; a Reddit entry takes the submission date the thread itself prints.
+Each Markdown file records the original URL, author handle, publication date in UTC, capture date, and SHA-256 of its sibling PNG. `twitter.com` links resolve to the same post IDs as the `x.com` links here. A tweet's publication date comes from its ID timestamp, not the capture browser's clock. A Reddit entry takes the submission date the thread prints.
 
-The pages were fetched and rendered through Steel without account cookies; the two 2026-09-22 author entries, the three 2026-09-25 solver entries, the four 2026-09-27 author entries, two of the 2026-09-29 Proof Of Writing entries, the School of Bitcoin repost, the 2026-10-06 and 2026-10-17 author entries, the two 2026-10-16 Weave 4 hints, the 2026-10-19 Weave 1 solver entry, the thirteen short Hunting Time posts and nine of the 9vw04 posts were rendered from X's public embed in a local headless Chromium, which is why they show Follow buttons and no engagement counts beyond what the embed prints. The Reddit entries are local headless Chromium renders of the Wayback captures themselves, not of the live threads, so they carry the archive banner and Reddit's 2023 chrome. The Doge's Gambit repost is the exception to the year: its only capture of the edited post is from 2026, so it shows today's Reddit, with three comments it no longer renders taken from Arctic Shift. The exceptions are AoiNakamoto's giveaway question, the Twitter feed comment, the Quizchain block 10 thread, the block 42 post, the Quizchain2 threads from block 13 on, both Grycoin chain threads, the Real Big Block's r/Grycoin threads and the Born to Be Wild write-up, which have no readable capture of the whole thread (the write-up's captures came before its first comment): their transcripts come from the Arctic Shift Reddit archive, checked against pullpush, and their screenshots are renders of Arctic Shift's ID lookup. The Bitcointalk entries are local headless Chromium renders of the live threads, every page stacked, and their transcripts come from the same HTML through a parser; each was matched post by post against the Wayback capture where one exists. The Stacker News entry is a render of the live post, and its transcript comes from the site's GraphQL API, matched line by line against the Wayback capture's HTML. Transcripts were checked against both rendered HTML and screenshots. From Quizchain block 11 on, and for every Quizchain2, Grycoin chain and Real Big Block thread, comment text, authors and scores come from Arctic Shift, matched comment by comment against the capture's HTML. Each tweet PNG is a crop of the displayed post: author, text, attached image when present, timestamp, and engagement row. Surrounding navigation and other posts were excluded. Cropping and PNG conversion do not restore the original attachment bytes. Use the puzzle's existing files for image analysis, not these screenshots.
+The pages were fetched and rendered through Steel without account cookies, unless a source below says otherwise. Transcripts were checked against both the rendered HTML and the screenshots.
+
+### Tweet captures
+
+Some tweets were rendered from X's public embed in a local headless Chromium. That's why they show Follow buttons and no engagement counts beyond what the embed prints:
+
+- the two 2026-09-22 author entries and the four 2026-09-27 ones
+- the 2026-10-06 and 2026-10-17 author entries
+- the three 2026-09-25 solver entries and the 2026-10-19 Weave 1 solver entry
+- two of the 2026-09-29 Proof Of Writing entries
+- the School of Bitcoin repost
+- the two 2026-10-16 Weave 4 hints
+- the thirteen short Hunting Time posts and nine of the 9vw04 posts
+
+Each tweet PNG is a crop of the displayed post: author, text, attached image when present, timestamp and engagement row. Navigation and other posts are cut out. Cropping and PNG conversion don't restore the original attachment bytes, so use the puzzle's own files for image analysis, not these screenshots.
+
+### Reddit captures
+
+The Reddit entries are local headless Chromium renders of the Wayback captures, not of the live threads. So they carry the archive banner and Reddit's 2023 chrome.
+
+The Doge's Gambit repost breaks the year. Its only capture of the edited post is from 2026, so it shows today's Reddit. Three comments it no longer renders come from Arctic Shift.
+
+Some threads have no readable capture of the whole thread. Their transcripts come from the Arctic Shift Reddit archive, checked against pullpush, and their screenshots are renders of Arctic Shift's ID lookup:
+
+- AoiNakamoto's giveaway question and the Twitter feed comment
+- the Quizchain block 10 thread and the block 42 post
+- the Quizchain2 threads from block 13 on
+- both Grycoin chain threads and the Real Big Block's r/Grycoin threads
+- the Born to Be Wild write-up, whose captures came before its first comment
+
+Comment text, authors and scores come from Arctic Shift for Quizchain from block 11 on, and for every Quizchain2, Grycoin chain and Real Big Block thread. Each comment was matched against the capture's HTML.
+
+### Bitcointalk and Stacker News captures
+
+The Bitcointalk entries are local headless Chromium renders of the live threads, every page stacked. Their transcripts come from the same HTML through a parser, matched post by post against the Wayback capture where one exists.
+
+The Stacker News entry is a render of the live post. Its transcript comes from the site's GraphQL API, matched line by line against the Wayback capture's HTML.
+
+### Older captures and limits
 
 When an older web archive capture exists, `archive_url` links to that exact capture and `archive_date` records its timestamp. `archive_content: confirmed` means its body was read and the wording matched the transcript. `unverified` means only the archive index was confirmed, not the body. A login screen or an empty page does not confirm a tweet. The individual entries state what was checked, including any limits on attachment evidence.
 
@@ -251,8 +352,13 @@ The local screenshots are captures made in 2026, not proof of how the page looke
 
 ## Adding a source
 
-Keep one `.md` and `.png` pair under the collection directory. Use the author handle and UTC date in the filename, adding the tweet ID or the Reddit thread ID when the author has several posts that day. Retain the URL in the puzzle record; the archive is supporting evidence, not another dataset or a replacement source URL. Copy the frontmatter fields from an existing entry and link its screenshot in the body. Look for an older capture: for a tweet, of both the `twitter.com` and `x.com` URL; for anything else, of every URL the same page answers on, which for Reddit means the `www` and `old` hosts, whose captures differ wildly because one of them renders as an empty app shell. Record the capture's exact URL, date, and content check when found. If none is found, omit the three `archive_` fields and name the searched archive and check date in the entry; do not invent a snapshot URL.
+1. Keep one `.md` and `.png` pair under the collection directory. Name it with the author handle and the UTC date. Add the tweet ID or the Reddit thread ID when the author posted more than once that day.
+2. Keep the URL in the puzzle record. The archive is supporting evidence, not another dataset or a replacement source URL.
+3. Copy the frontmatter fields from an existing entry and link its screenshot in the body.
+4. Look for an older capture. For a tweet, of both the `twitter.com` and `x.com` URL. For anything else, of every URL the same page answers on. On Reddit that means the `www` and `old` hosts, and their captures differ wildly, because one of them renders as an empty app shell.
+5. Record the capture's exact URL, date and content check when you find one. If there's none, leave out the three `archive_` fields and name the searched archive and the check date in the entry. Don't invent a snapshot URL.
+6. Add the entry to `archivedSources` in `src/core/archived-sources.ts`. The test checks it and `puzzles_assets` reads it. A tweet entry gives its ID and handle, and the test derives the rest. Anything else carries its own URL and capture URL, because no other page's archive address is derivable.
+7. Compare the transcript with the image by eye. A login page, a truncated post or an unloaded attachment isn't a capture.
+8. Run `pnpm exec vp test test/unit/source-archives.test.ts`. It checks the screenshot hashes and that the archive covers every tweet ID the collections reference. A non-tweet entry has to archive a URL the records actually cite.
 
-Run `pnpm exec vp test test/unit/source-archives.test.ts` after adding an entry. The test checks screenshot hashes, that the archive covers the tweet IDs referenced by the serialized collections, and that a non-tweet entry archives a URL the records actually cite. A tweet entry gives its ID and handle and the test derives the rest; anything else carries its own URL and its own capture URL, because no other page's archive address is derivable. Add the new entry to `archivedSources` in `src/core/archived-sources.ts`, which the test checks and `puzzles_assets` reads, and compare the transcript with the image by eye. Do not accept a login page, a truncated post, or an unloaded attachment as a capture.
-
-The archive lives in the Git repository. Like the other files under `assets/`, it is not included in the npm tarball.
+The archive lives in the Git repository. Like the rest of `assets/`, it isn't in the npm tarball.
