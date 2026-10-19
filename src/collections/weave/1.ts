@@ -8,11 +8,20 @@ import {
   funding,
   official,
   party,
+  PartyKind,
+  profile,
   type Answer,
+  type HintOptions,
 } from "../../core/parts.ts";
 
 /** The puzzle page, riddles and rules in one immutable transaction. */
 const PAGE = "https://arweave.net/byT7l6tkFq8mzqshwmju8fVi1rp8H9mYanlxzsJ7RjQ";
+
+/** Block time of the page transaction, the moment the riddles went public. */
+const PUBLISHED = "2019-05-23 15:49:53";
+
+/** pogo's reply under the launch tweet, with the whole solution in one line. */
+const SOLVED = "https://x.com/PogoB/status/1131654631250178049";
 
 /** ZorenX's write-up, which answers every riddle on the page. */
 const WRITEUP = "https://zorenx.medium.com/arweave-puzzle-series-puzzle-01-solved-59aa19a0ea2f";
@@ -25,6 +34,16 @@ const WRITEUP = "https://zorenx.medium.com/arweave-puzzle-series-puzzle-01-solve
  */
 function solved(text: string): Answer {
   return answer(text, WRITEUP, { date: "2020-06-09" });
+}
+
+/**
+ * Dates a page hint and attaches its answer, when it has one.
+ *
+ * @param {string} [text] - The answer as the write-up prints it.
+ * @returns {HintOptions} The page's publication time, plus the answer.
+ */
+function dated(text?: string): HintOptions {
+  return text === undefined ? { date: PUBLISHED } : { date: PUBLISHED, answer: solved(text) };
 }
 
 /** Puzzle `weave/1`. */
@@ -45,9 +64,17 @@ export const weave1 = puzzle({
   ],
   solver: party("pogo", {
     key: "pogo",
+    kind: PartyKind.Person,
+    aliases: ["PogoB"],
     about:
-      "Handle credited with the first two Arweave puzzles, each solved within two days of going up.",
+      "Twitter user who solved the first two Arweave puzzles, each within two days of going up, and posted the Weave 1 answer under its launch tweet.",
+    profiles: [profile("twitter", "https://twitter.com/PogoB")],
     facts: [
+      fact(
+        'Replied to @ArweaveP twenty minutes after the claim: Solved! The solution was "5 7 10:01 18 90 Dead Sea Bd6 Apple 039".',
+        SOLVED,
+        { date: "2019-05-23" },
+      ),
       fact(
         "ZorenX's write-up of Puzzle 01 names pogo as the solver: a row of mini riddles typed into the page in the exact format it wanted.",
         WRITEUP,
@@ -58,40 +85,45 @@ export const weave1 = puzzle({
     official(
       "When an answer consists of more than one number, write them in ascending order.",
       PAGE,
+      undefined,
+      dated(),
     ),
     official(
       "Sam and Kyle messed up with their wallet keys and they are only left with a tiny amount of AR. Sam says: -If I give you 1 AR, we'll have the same amount, but if you give me 1 AR, I'll have twice your amount. How much AR does Kyle have and how much AR does Sam have? _   _",
       PAGE,
       undefined,
-      { answer: solved("5 , 7") },
+      dated("5 , 7"),
     ),
     official(
       "A countdown device starts at 99:00. Each time the minutes are the same as the seconds or each time the whole display is a palindrome, the device beeps. What does the device display at 99th beep? _ _ _ _ _",
       PAGE,
       undefined,
-      { answer: solved("10:01") },
+      dated("10:01"),
     ),
     official(
       "A child was visiting a monastery. He was inquiring about the age of the monks and the abbot gave him the following answer: -To find the age of the youngest, take three times his age in three years and subtract three times his age three years ago. To find the age of the oldest, multiply the age of the youngest by five. _ _   _ _",
       PAGE,
       undefined,
-      { answer: solved("18 , 90") },
+      dated("18 , 90"),
     ),
-    official("It is dead... Though it was never alive. _ _ _ _   _ _ _", PAGE, undefined, {
-      answer: solved("Dead Sea"),
-    }),
+    official(
+      "It is dead... Though it was never alive. _ _ _ _   _ _ _",
+      PAGE,
+      undefined,
+      dated("Dead Sea"),
+    ),
     official(
       "Josh was playing chess by correspondence. The letter with the last move got chewed by his dog. However, he managed to find pieces of paper containing 9, B and p. What was the move? _ _ _",
       PAGE,
       undefined,
-      { answer: solved("Bd6") },
+      dated("Bd6"),
     ),
-    official("37.334-122.011 = _ _ _ _ _", PAGE, undefined, { answer: solved("Apple") }),
+    official("37.334-122.011 = _ _ _ _ _", PAGE, undefined, dated("Apple")),
     official(
       "Change the position of as few logos as possible to get the configuration from the right. _ _ _",
       PAGE,
       undefined,
-      { answer: solved("039") },
+      dated("039"),
     ),
   ],
   assets: assets({

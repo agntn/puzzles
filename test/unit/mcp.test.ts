@@ -145,7 +145,7 @@ describe("puzzles MCP server", () => {
     const rows = firstText(await client.callTool({ name: "puzzles_solvers", arguments: {} })).split(
       "\n",
     );
-    expect(rows).toContain("pogo: pogo, 2 solves: weave/1, weave/2");
+    expect(rows).toContain("pogo: pogo (person), 2 solves: weave/1, weave/2");
 
     const byPuzzle = firstText(
       await client.callTool({ name: "puzzles_solver", arguments: { key: "movie-enigma" } }),

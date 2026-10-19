@@ -91,6 +91,12 @@ export const archivedSources = [
     date: "2019-11-10",
   },
   {
+    file: "weave/pogob-2019-05-23",
+    tweet: "1131654631250178049",
+    author: "PogoB",
+    date: "2019-05-23",
+  },
+  {
     file: "weave/arweavep-2019-06-05",
     tweet: "1136338881593450497",
     author: "ArweaveP",
