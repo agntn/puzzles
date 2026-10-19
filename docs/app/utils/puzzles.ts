@@ -96,7 +96,7 @@ const PRESENTATION: Readonly<
     sample: "genesis",
     chains: ["bitcoin"],
     blurb:
-      "Two keys hidden in Genesis block data. Public clues, paid hints, still no verified solution.",
+      "Two keys hidden in Genesis block data, and the PBKDF2 rounds hidden in its timestamp. Solved.",
   },
   "great-riddle": {
     icon: "i-lucide-pen-tool",

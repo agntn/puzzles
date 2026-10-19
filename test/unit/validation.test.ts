@@ -149,7 +149,8 @@ function claimedPubkeyProblem(puzzle: Puzzle): string | undefined {
     puzzle.chain() === "arweave" ||
     // A TeikhosBounty address is a contract: it pays by self-destructing and never signs.
     puzzle.collection() === TeikhosCollection.key ||
-    puzzle.address().kind === AddressKind.P2SH
+    puzzle.address().kind === AddressKind.P2SH ||
+    puzzle.address().kind === AddressKind.P2WSH
   ) {
     return undefined;
   }

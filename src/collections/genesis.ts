@@ -1,14 +1,21 @@
 import { SingletonCollection } from "../core/collection.ts";
 import {
+  answer,
+  claim,
   confirmation,
   fact,
   funding,
   increase,
   official,
   party,
+  profile,
+  sweep,
   technique,
 } from "../core/parts.ts";
-import { puzzle } from "../core/puzzle.ts";
+import { puzzle, Status } from "../core/puzzle.ts";
+
+/** Schum-io's pull request that published the recipe, merged into floflo777's catalogue. */
+const SOLUTION = "https://github.com/floflo777/open-crypto-puzzles/pull/44";
 
 /** The Genesis block puzzle announced through Bitcoin OP_RETURN messages. */
 export const genesisBlock = puzzle({
@@ -18,6 +25,10 @@ export const genesisBlock = puzzle({
   sourceUrl:
     "https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
   startedAt: "2026-08-22 19:45:38",
+  status: Status.Solved,
+  prize: 0.0094654,
+  solvedAt: "2026-10-17 03:40:20",
+  solveTime: 4_780_482,
   preGenesis: true,
   techniques: [
     technique(
@@ -36,7 +47,47 @@ export const genesisBlock = puzzle({
       "2026-08-22 19:45:38",
       0.00005,
     ),
+    claim(
+      "1c70c4745fad5bf891b9ee2a9f8b0b5cd3f328eb847eb09c9bebb92f5f7e900b",
+      "2026-10-17 03:40:20",
+      0.0094654,
+    ),
+    sweep(
+      "4b2d29ec21e2c9a37dae5ca7ddc49d6f34b0efbf4b0aa1afed6405dec8067b78",
+      "2026-10-17 10:29:04",
+      0.0000068,
+    ),
+    sweep(
+      "d25aa1b7ada019b01ee3228f667d2881f47d7b53492d7b46b836743c1d7062f5",
+      "2026-10-17 18:03:12",
+      0.000004,
+    ),
   ],
+  solver: party(undefined, {
+    addresses: ["bc1qdu8mh9qjtjhy89mvhmcgf66ul6ld92rdr6qzad"],
+    facts: [
+      fact(
+        "Asked on September 14, with 10k sats to the puzzle address, whether the passphrase was Genesis data or the author's own word, how long it was and what built the wallet.",
+        "https://mempool.space/tx/e43647274f672f9b4eb42fff1d15f2afcaa8bfd4650823403a18a76774999169",
+        { date: "2026-09-14" },
+      ),
+      fact(
+        "Paid 50k sats to the puzzle address and 1k to the author address on September 24 for the two public keys, Electrum-encrypted to its input key.",
+        "https://mempool.space/tx/040cca803909ca782fe3ba4d197740afc4ff3b353af1c5cbe06de52cfbb99792",
+        { date: "2026-09-24" },
+      ),
+      fact(
+        "Received the only output of the sweep, 935,266 sats from all 117 outputs then on the puzzle address.",
+        "https://mempool.space/tx/1c70c4745fad5bf891b9ee2a9f8b0b5cd3f328eb847eb09c9bebb92f5f7e900b",
+        { date: "2026-10-17" },
+      ),
+      fact(
+        'Two hours after the sweep sent 10k sats to the author address and 330 to the puzzle address with "Thank you for the fascinating puzzle!" in OP_RETURN.',
+        "https://mempool.space/tx/3367997d30d4b0363ff96e9fb587c28622a691044ab3ea9ce5c30c5d730b422f",
+        { date: "2026-10-17" },
+      ),
+    ],
+  }),
   hints: [
     official(
       "I made a Bitcoin puzzle using information contained in the genesis block created by Satoshi to generate the wallet. The entropy is extremely low. I didn't even need to back anything up. Everything I needed was already in the genesis block. Good luck!",
@@ -45,7 +96,14 @@ export const genesisBlock = puzzle({
         "https://blockstream.info/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
         "Announcement in OP_RETURN. Whitespace normalized.",
       ),
-      { date: "2026-08-22" },
+      {
+        date: "2026-08-22",
+        answer: answer(
+          "cut -b 263-400 of the 570-character lowercase raw block hex is the coinbase text as hex, no newline. The first 32 hex digits of its SHA-256 are the BIP39 entropy c020f55f60b8193bd5cac836769dbf76, which gives scan amateur fit scrap light over fire flip cushion reject hurt ugly. The passphrase is Satoshi Nakamoto. The seed step runs PBKDF2-HMAC-SHA512 at 181505 rounds for one cosigner (master fingerprint 0852014c) and 200913 for the other (040e2791), instead of BIP39's 2048. Both keys sit at m/48'/0'/1231006505'/2'/0/0 in a sorted 2-of-2 P2WSH.",
+          SOLUTION,
+          { date: "2026-10-17" },
+        ),
+      },
     ),
     official(
       "If you have a question, you can include it with a transaction sent directly to this address, and I will reply with a hint. Larger payments receive better hints. Dust transactions will be ignored.",
@@ -362,20 +420,106 @@ export const genesisBlock = puzzle({
       ),
       { date: "2026-10-07" },
     ),
+    official(
+      "1) Y; 2) Y; 3) c; 4) N; 5) Y; 6) N.",
+      "https://mempool.space/tx/9d789e14f440e38e131848948ca86af1451969f57450f39d8840ca7920df0135",
+      confirmation(
+        "https://blockstream.info/tx/9d789e14f440e38e131848948ca86af1451969f57450f39d8840ca7920df0135",
+        "OP_RETURN spending a change output of 88fc7fd69dc89b2d716814d2a1ccdc8bdf419f158c7028b37c1cb83230cda4da. It answers the six shorthand questions of 4a197e9b63581bbc8e8b32a65989a76af55c656a1d627768ec4540aca05a13b1, a 15k tip to the author address, about cosigner 040e2791 and the passphrase: yes, the 570-character raw hex; yes, Ian Coleman's Hex entropy type; c, the hashed text is 66 characters or longer; no to \"EOLpast?\"; yes, the passphrase's first word has fewer letters than the second; no, neither word has three letters.",
+      ),
+      { date: "2026-10-09" },
+    ),
+    official(
+      "1) b; 2) Declined: no confirmation of candidates.",
+      "https://mempool.space/tx/c41a5e9c9ccc9e16d52cf25789217dfc057a5b2e8801794854db1c136485a419",
+      confirmation(
+        "https://blockstream.info/tx/c41a5e9c9ccc9e16d52cf25789217dfc057a5b2e8801794854db1c136485a419",
+        "OP_RETURN spending a change output of 9d789e14f440e38e131848948ca86af1451969f57450f39d8840ca7920df0135. It answers the two questions of d1bd1dccbe5f7b31a9f7ffe171f0a73df996db5cf4943be615c689d349a69f4e: b, the 2^23 behind the 2.5E-32 of September 26 counts cut -b ranges times passphrase forms; whether the passphrase is a form of Hal Finney's name, declined.",
+      ),
+      { date: "2026-10-10" },
+    ),
+    official(
+      "tr -d '\\n'",
+      "https://mempool.space/tx/d416a2765ab1a61dfed4d8acb6becb52b8e890db4de6eca9452468c4fa6ca915",
+      confirmation(
+        "https://blockstream.info/tx/d416a2765ab1a61dfed4d8acb6becb52b8e890db4de6eca9452468c4fa6ca915",
+        "OP_RETURN spending the 15k output that 4a197e9b63581bbc8e8b32a65989a76af55c656a1d627768ec4540aca05a13b1 paid to the author address. It answers 6f9fe0aa1f929006de61fd29c67648260b0d5c4feba3416b45362e10fda46363, which asked for the exact tr command with its options and operands.",
+      ),
+      { date: "2026-10-14" },
+    ),
+    official(
+      "1) a; 2) c; 3) Declined; 4) n.",
+      "https://mempool.space/tx/a4db429eadc17e54e73385e0bd06720e8fb91c2d2b0569cef518dde43d0dd8db",
+      confirmation(
+        "https://blockstream.info/tx/a4db429eadc17e54e73385e0bd06720e8fb91c2d2b0569cef518dde43d0dd8db",
+        "OP_RETURN spending a 546-sat output that d72a763128e07d76deb3751b64e4f1fad4546ccb9d62ab6665a1d46ae453f905 paid to the author address. It answers the four questions of b50873ca31a944c0fbf781ebabe6ce6160569b4ff97a52c1b41b6aed8ad1df59 about the 2^23: a, 1 to 32 passphrase forms; c, more than 2^17 cut ranges; whether each word's case is lower, Capitalized or UPPER, declined; no typo in the passphrase.",
+      ),
+      { date: "2026-10-16" },
+    ),
+    official(
+      "1) Y; 2) Declined; 3) d; 4) Y.",
+      "https://mempool.space/tx/3fee7cef9f6ec7b212368e2be38cf71bcb256441f88a3473a99af07182ba43b1",
+      confirmation(
+        "https://blockstream.info/tx/3fee7cef9f6ec7b212368e2be38cf71bcb256441f88a3473a99af07182ba43b1",
+        "OP_RETURN from bc1q7h0hthfvden7nrvms7rncukkjgwh6z36g3uzsk, funded by output 0 of 31ad65376dafa211080f4315cc2d84e947f7cab8242396586787ef1f7853aad1, which split 14,500 sats of the author address into 25 outputs. It answers the four questions of ec831a9d72108dc8f844231cf106ce2029ca648f133a2f5fb4fe6c2c753e7b80 about the two BIP48 account numbers: yes, both come from Genesis data without hashing; whether from one piece or two, declined; d, a named header field's raw value; yes, at least one is 2^22 or more.",
+      ),
+      { date: "2026-10-16" },
+    ),
+    official(
+      "1) Declined; 2) c85bcea3.",
+      "https://mempool.space/tx/439cc93022c7cefda8f9eb43e4f3ad25120ef78c0bb390012a744a7de69627d1",
+      confirmation(
+        "https://blockstream.info/tx/439cc93022c7cefda8f9eb43e4f3ad25120ef78c0bb390012a744a7de69627d1",
+        "OP_RETURN from bc1qauk64tcu4lqeyxcqlua5hfra7ensmn8s7nvyjw, funded by output 2 of 31ad65376dafa211080f4315cc2d84e947f7cab8242396586787ef1f7853aad1. It answers 29d4e3fefd5e9f57b3e50dc3c7121899e1ebf77575418624b67b022f6c7ccb21, a test vector for cosigner 0852014c with cut -b 2-67 and the passphrase Test Example: the first word declined, the master fingerprint c85bcea3. The published recipe gives d463151e for those inputs.",
+      ),
+      { date: "2026-10-16" },
+    ),
+    official(
+      "Declined. For a test vector with predefined inputs, I can only provide the final result. Step-level answers would be the same as uncovering the individual secrets one by one.",
+      "https://mempool.space/tx/3de07be481e97c9ae57e38fcfd52ad40a0c0629d05603c286f47faebd3c462ec",
+      confirmation(
+        "https://blockstream.info/tx/3de07be481e97c9ae57e38fcfd52ad40a0c0629d05603c286f47faebd3c462ec",
+        "OP_RETURN from bc1qsz5930ds6rxh7eqfmcx8ss62n788sztkvw360t, funded by output 3 of 31ad65376dafa211080f4315cc2d84e947f7cab8242396586787ef1f7853aad1. It declines f1027314f59377f908384fcf1d232c7d724a70e240adcc3c4d0f122a2a129873, which asked for the hashed text, its length, the digest and the exact commands behind c85bcea3.",
+      ),
+      { date: "2026-10-16" },
+    ),
+    official(
+      "1) e4caa034; 2) 9fb54bad; 3) e4caa034; 4) e79c9765; 5) 8b9b2fea; 6) 68ab4226; 7) 9290f941.",
+      "https://mempool.space/tx/39a7dd0c74a15d11c2cc301167bcee243f458bdc54f2aa3e6a1426df44d868d6",
+      confirmation(
+        "https://blockstream.info/tx/39a7dd0c74a15d11c2cc301167bcee243f458bdc54f2aa3e6a1426df44d868d6",
+        "OP_RETURN from bc1qrv8nm8s7ldr9m28t6ktkgnw7d43hlshunk3ydw, funded by output 4 of 31ad65376dafa211080f4315cc2d84e947f7cab8242396586787ef1f7853aad1. It answers f1aeed6d1fb79335f62427da1e64f20b9f71030ca1996c2968086fae0f5b5429 with the master fingerprint of cosigner 0852014c under the passphrase Test Example for seven cut -b ranges of the block: 1-1, 2-2, 3-3, 1-4, 1-2000, 263-400 and 1-66.",
+      ),
+      { date: "2026-10-16" },
+    ),
+    official(
+      "1) e4caa034; 2) 9fb54bad; 3) 3bc42789.",
+      "https://mempool.space/tx/484fef192e43bd6c72407ad4382037f6ff3c6df985df165b3a78713bc50aa4d8",
+      confirmation(
+        "https://blockstream.info/tx/484fef192e43bd6c72407ad4382037f6ff3c6df985df165b3a78713bc50aa4d8",
+        "OP_RETURN from bc1qt8z3t8dah970etvvfznet4843neg0qwdt0ql0k, funded by output 5 of 31ad65376dafa211080f4315cc2d84e947f7cab8242396586787ef1f7853aad1. It answers 5b7ff44c779abced7889d70dce5299d3680140bc77f6d54e200c1c55b33ee472 with the master fingerprint of cosigner 0852014c under the passphrase Test Example for the literal texts 0, 1 and 000000000019d6689c08. The October 6 answer for that third text was b7f4182b, which standard BIP39 gives.",
+      ),
+      { date: "2026-10-17" },
+    ),
   ],
 });
 
-/** An anonymous author's puzzle based on data in Bitcoin's Genesis block. */
+/** CaesarCoder's puzzle built from data in Bitcoin's Genesis block. */
 export class GenesisCollection extends SingletonCollection {
   /** Stable collection key used in puzzle identifiers. */
   static readonly key = "genesis";
 
-  /** No public identity is established for the announcer. */
-  static readonly author = party("Anonymous", {
+  /** Anonymous until the hint address signed for a PGP key after the sweep. */
+  static readonly author = party("CaesarCoder", {
     key: "genesis-author",
+    aliases: ["caesrcd"],
     about:
-      "Whoever funded the Genesis Block Wallet Puzzle and answers questions in OP_RETURN. No name, no profile, just transactions and one X account that spoke first.",
+      "Funded the Genesis Block Wallet Puzzle, sold hints in OP_RETURN for eight weeks and only put a name to it once the prize was gone, with a PGP signature from the hint address.",
     addresses: ["bc1qyas2lnfgzjh3lyl4vfhc68daedc890zn8yetaj"],
+    profiles: [
+      profile("github", "https://github.com/caesrcd"),
+      profile("twitter", "https://x.com/caesrcd"),
+    ],
     facts: [
       fact(
         "Announced the puzzle in an OP_RETURN output in block 963629 on 2026-08-22.",
@@ -431,6 +575,30 @@ export class GenesisCollection extends SingletonCollection {
         "The X account caesrcd asked who wants the puzzle's two public keys, saying the encrypted pubkeys and the Genesis Block entropy clue are already on chain. Its image stacks four OP_RETURN messages: the 50k offer, the September 24 terms, a player's 50k request and the encrypted reply to that player.",
         "https://x.com/caesrcd/status/2107565388527456292",
         { date: "2026-10-06" },
+      ),
+      fact(
+        "Split 14,500 sats of the hint address into 25 outputs of 569 sats, then answered the next paid questions from fresh addresses those outputs funded.",
+        "https://mempool.space/tx/31ad65376dafa211080f4315cc2d84e947f7cab8242396586787ef1f7853aad1",
+        { date: "2026-10-15" },
+      ),
+      fact(
+        'Congratulated the solver in OP_RETURN an hour after the sweep, "Shoutout to the player who cracked the puzzle! Thanks to everyone who joined in.", from an address one of those outputs funded.',
+        "https://mempool.space/tx/bcfc8cbeb5498d803dc1b1384233eb5e9f2da79c2077b9a0907bc0187e2e4465",
+        { date: "2026-10-17" },
+      ),
+      fact(
+        "Signed a PGP clearsigned message in OP_RETURN from the hint address naming the handle CaesarCoder, github.com/caesrcd and the key E2A0BF0D72D74483064D4FF9304952407A6E5C38. It verifies against the key GitHub serves for caesrcd.",
+        "https://mempool.space/tx/473a314bcb3f5abc8dc4500e8d0ab80525ff65a846d55406c1e1e10fa8c8e46c",
+        { date: "2026-10-17" },
+      ),
+      fact(
+        "The X account caesrcd posted the bitcoin-cli command that decodes that signed message, quoting its own August 22 pre-announcement.",
+        "https://x.com/caesrcd/status/2111512567294333206",
+        { date: "2026-10-17" },
+      ),
+      fact(
+        "The GitHub account caesrcd, named CaesarCoder, carries the same key fingerprint in its bio and links the X account caesrcd.",
+        "https://github.com/caesrcd",
       ),
     ],
   });
