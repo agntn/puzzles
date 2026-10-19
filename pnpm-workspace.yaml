@@ -31,7 +31,7 @@ minimumReleaseAgeExclude:
 
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@0.3.3
-  vitest: 4.1.11
+  vitest: 4.1.12
   vite-plus: 0.3.3
 overrides:
   vite@*: "catalog:"
