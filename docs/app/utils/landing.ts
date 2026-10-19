@@ -1664,7 +1664,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "9e465afb6d16",
+  dataVersion: "1acc1597053b",
   total: 558,
   solved: 324,
   unsolved: 114,
@@ -2020,7 +2020,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
   {
     key: "genesis",
     author: "CaesarCoder",
-    authorKey: "genesis-author",
+    authorKey: "caesar-coder",
     authorUrl: "https://github.com/caesrcd",
     total: 1,
     statuses: {
@@ -3022,8 +3022,8 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     puzzles: 3,
   },
   {
-    key: "genesis-author",
-    to: "/authors/genesis-author",
+    key: "caesar-coder",
+    to: "/authors/caesar-coder",
     name: "CaesarCoder",
     kind: undefined,
     about:

@@ -511,7 +511,7 @@ export class GenesisCollection extends SingletonCollection {
 
   /** Anonymous until the hint address signed for a PGP key after the sweep. */
   static readonly author = party("CaesarCoder", {
-    key: "genesis-author",
+    key: "caesar-coder",
     aliases: ["caesrcd"],
     about:
       "Funded the Genesis Block Wallet Puzzle, sold hints in OP_RETURN for eight weeks and only put a name to it once the prize was gone, with a PGP signature from the hint address.",
