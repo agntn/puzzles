@@ -329,6 +329,7 @@ export default defineNuxtConfig({
     "/collections/b1000/**": moved("/collections/bits/**"),
     /** The Genesis puzzle's page before the collection became a singleton. */
     "/collections/genesis/block": moved("/collections/genesis"),
+    "/authors/genesis-author": moved("/authors/caesar-coder"),
     /** kTimesG's challenge before it became the `80-bit` singleton: the collection page and both puzzle ids. */
     "/collections/ktimesg": moved("/collections/80-bit"),
     "/collections/ktimesg/80_bit": moved("/collections/80-bit"),

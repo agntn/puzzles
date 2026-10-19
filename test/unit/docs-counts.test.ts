@@ -225,8 +225,10 @@ describe("the prose counts what the registry ships", () => {
         HINTS,
       ),
     ).toEqual(["four", "one"]);
-    expect(live).toContain("docs/content/2.collections/15.genesis.md");
-    expect(live).toContain("docs/content/3.authors/15.genesis-author.md");
+    expect(live).toContain("docs/content/2.collections/51.crypto-puzzles.md");
+    expect(live).toContain("docs/content/3.authors/11.crypto-puzzles.md");
+    expect(live).not.toContain("docs/content/2.collections/15.genesis.md");
+    expect(live).not.toContain("docs/content/3.authors/06.caesar-coder.md");
     const corpus = files.map((file) => readFileSync(path.join(root, file), "utf8"));
     expect(corpus.flatMap((text) => countsIn(text, "tools"))).not.toHaveLength(0);
   });

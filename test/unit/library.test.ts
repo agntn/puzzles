@@ -232,7 +232,7 @@ describe("lazy collection registry", () => {
     expect(puzzle.hasPrivateKey()).toBe(false);
   });
 
-  it("keeps the Genesis announcement without inventing a prize or key", async () => {
+  it("keeps the Genesis announcement and its published solve without inventing a key", async () => {
     const puzzle = await requirePuzzle("genesis");
     expect(await requireCollection("genesis")).toBeInstanceOf(SingletonCollection);
     expect(puzzle.address()).toEqual({
@@ -242,8 +242,9 @@ describe("lazy collection registry", () => {
     expect(puzzle.startedAt()).toBe("2026-08-22 19:45:38");
     expect(puzzle.preGenesis()).toBe(true);
     expect(puzzle.toJSON().pre_genesis).toBe(true);
-    expect(puzzle.status()).toBe(Status.Unsolved);
-    expect(puzzle.prize()).toBeUndefined();
+    expect(puzzle.status()).toBe(Status.Solved);
+    expect(puzzle.prize()).toBe(0.0094654);
+    expect(puzzle.solvedAt()).toBe("2026-10-17 03:40:20");
     expect(puzzle.key()).toBeUndefined();
     expect(puzzle.pubkey()).toBeUndefined();
     expect(puzzle.transactions()).toEqual([
@@ -259,12 +260,30 @@ describe("lazy collection registry", () => {
         date: "2026-08-22 19:45:38",
         amount: 0.00005,
       },
+      {
+        tx_type: "claim",
+        txid: "1c70c4745fad5bf891b9ee2a9f8b0b5cd3f328eb847eb09c9bebb92f5f7e900b",
+        date: "2026-10-17 03:40:20",
+        amount: 0.0094654,
+      },
+      {
+        tx_type: "sweep",
+        txid: "4b2d29ec21e2c9a37dae5ca7ddc49d6f34b0efbf4b0aa1afed6405dec8067b78",
+        date: "2026-10-17 10:29:04",
+        amount: 0.0000068,
+      },
+      {
+        tx_type: "sweep",
+        txid: "d25aa1b7ada019b01ee3228f667d2881f47d7b53492d7b46b836743c1d7062f5",
+        date: "2026-10-17 18:03:12",
+        amount: 0.000004,
+      },
     ]);
-    expect(puzzle.hints()).toHaveLength(36);
+    expect(puzzle.hints()).toHaveLength(45);
     expect(puzzle.hints()[0]?.source).toBe(puzzle.sourceUrl());
-    expect(puzzle.hints().at(-1)?.date).toBe("2026-10-07");
+    expect(puzzle.hints().at(-1)?.date).toBe("2026-10-17");
     expect(puzzle.hints().at(-1)?.confirmation?.description).toContain(
-      "paid to the author address",
+      "31ad65376dafa211080f4315cc2d84e947f7cab8242396586787ef1f7853aad1",
     );
     expect(puzzle.hints().some((hint) => hint.text === "It's a 128-bit digest.")).toBe(true);
     expect(
@@ -275,6 +294,19 @@ describe("lazy collection registry", () => {
     expect(puzzle.hints().some((hint) => hint.text.startsWith("Shape only,"))).toBe(false);
     expect(puzzle.hints().some((hint) => hint.text === "1) host; 2) b7f4182b")).toBe(true);
     expect(puzzle.hints().some((hint) => hint.text.startsWith("We tested 1.8M"))).toBe(false);
+  });
+
+  it("keeps the published Genesis recipe as the announcement's answer, with an address solver", async () => {
+    const puzzle = await requirePuzzle("genesis");
+    const [announcement] = puzzle.hints();
+    expect(announcement?.answer?.source).toBe(
+      "https://github.com/floflo777/open-crypto-puzzles/pull/44",
+    );
+    expect(announcement?.answer?.text).toContain("PBKDF2-HMAC-SHA512 runs 181505 rounds");
+    expect(puzzle.hints().at(-1)?.text).toBe("1) e4caa034; 2) 9fb54bad; 3) 3bc42789.");
+    expect(puzzle.solver()?.key).toBe("schum");
+    expect(puzzle.solver()?.addresses).toEqual(["bc1qdu8mh9qjtjhy89mvhmcgf66ul6ld92rdr6qzad"]);
+    expect(GenesisCollection.author.name).toBe("CaesarCoder");
   });
 
   it("keeps Movie Enigma's original rules separate from its solution", async () => {
@@ -1043,16 +1075,16 @@ describe("lazy collection registry", () => {
       total: 558,
       claimed: 20,
       expired: 4,
-      solved: 323,
+      solved: 324,
       swept: 96,
-      unsolved: 115,
+      unsolved: 114,
       with_pubkey: 449,
       total_prize: {
         AR: 5550.190574146237,
         ETH: 26.915664034825493,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1069.868032,
+        BTC: 1069.8774974,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 815.85470498,
@@ -1159,6 +1191,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(323);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(324);
   });
 });

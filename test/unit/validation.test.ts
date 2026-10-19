@@ -48,6 +48,7 @@ import { type Puzzle, puzzle, Status } from "../../src/core/puzzle.ts";
 import { decimal, formatUnits } from "../../src/core/decimal.ts";
 import { expectedPrize } from "../../src/core/watch.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
+import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { NamedCollection } from "../../src/core/collection.ts";
 import { all, collections, verify } from "../../src/index.ts";
@@ -142,6 +143,7 @@ async function derivedKeyProblem(puzzle: Puzzle): Promise<string | undefined> {
   return result.verified ? undefined : `${puzzle.id()}: derived key does not verify`;
 }
 
+/* Genesis is a 2-of-2 P2WSH, and a record has room for one public key, not two. */
 function claimedPubkeyProblem(puzzle: Puzzle): string | undefined {
   if (
     puzzle.status() === Status.Unsolved ||
@@ -149,6 +151,7 @@ function claimedPubkeyProblem(puzzle: Puzzle): string | undefined {
     puzzle.chain() === "arweave" ||
     // A TeikhosBounty address is a contract: it pays by self-destructing and never signs.
     puzzle.collection() === TeikhosCollection.key ||
+    puzzle.collection() === GenesisCollection.key ||
     puzzle.address().kind === AddressKind.P2SH
   ) {
     return undefined;
