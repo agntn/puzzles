@@ -1,5 +1,5 @@
 import { puzzle, Status } from "../../core/puzzle.ts";
-import { claim, fact, funding, party } from "../../core/parts.ts";
+import { claim, fact, funding, party, PartyKind } from "../../core/parts.ts";
 
 /** Puzzle `weave/2`. */
 export const weave2 = puzzle({
@@ -20,6 +20,7 @@ export const weave2 = puzzle({
   ],
   solver: party("pogo", {
     key: "pogo",
+    kind: PartyKind.Person,
     facts: [
       fact(
         "ZorenX's write-up of Puzzle 02 names pogo as the solver: numbered paper pieces answered with a square count, a chess position and a cryptarithm.",
