@@ -235,6 +235,9 @@ const shelf = useTemplateRef<{ show: (url: string) => void }>("shelf");
         <p v-if="view.redeemScript" class="puzzle-script">
           redeem script {{ view.redeemScript.script }}
         </p>
+        <p v-if="view.witnessScript" class="puzzle-script">
+          witness script {{ view.witnessScript }}
+        </p>
         <p v-if="view.escrow" class="puzzle-script">
           escrow
           <a :href="view.escrow.explorer" target="_blank" rel="noopener">{{

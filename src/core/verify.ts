@@ -1,7 +1,15 @@
 import type { BrainwalletRecipe } from "@agntn/keys/brainwallet";
 import type { Chain } from "./chains.ts";
 import type { OpenedKeyfile } from "./keyfile.ts";
-import { PubkeyFormat, type Secret, type Seed, secretOf, seedPassphrase } from "./parts.ts";
+import {
+  type KeyData,
+  type Pubkey,
+  PubkeyFormat,
+  type Secret,
+  type Seed,
+  secretOf,
+  seedPassphrase,
+} from "./parts.ts";
 import { type Puzzle } from "./puzzle.ts";
 
 /** The recipes `verify` reruns, each named after the technique that marks it on a record. */
@@ -30,7 +38,7 @@ export interface VerifySuccess {
   readonly error: null;
   readonly expectedAddress: string;
   readonly id: string;
-  /** The key in hex, or on Arweave the opened keyfile as JSON. */
+  /** The key in hex, the cosigners' keys joined by spaces, or Arweave's opened keyfile JSON. */
   readonly privateKey: string;
   /** The record's recipe, rerun, when it holds one. */
   readonly recipe?: RecipeResult;
@@ -61,6 +69,7 @@ export type VerifyResult = VerifySuccess | VerifyFailure;
  */
 type Wallets = Pick<
   typeof import("./crypto.ts"),
+  | "addressFromCosigners"
   | "addressFromPrivateKey"
   | "addressesEqual"
   | "isUnsupportedAddressKind"
@@ -71,6 +80,31 @@ type Wallets = Pick<
   | "privateKeyFromSeed"
   | "wifToPrivateKey"
 >;
+
+/** The record a check runs against and the keys wallets it runs with. */
+interface Context {
+  readonly crypto: Wallets;
+  readonly puzzle: Puzzle;
+}
+
+/** The key record a secret came from and its public key: the puzzle's, or a cosigner's. */
+interface Holder {
+  readonly key: KeyData | undefined;
+  readonly pubkey: Pubkey | undefined;
+}
+
+/** A check context that also knows which key record holds the secret being resolved. */
+interface Resolution extends Context {
+  readonly holder: Holder;
+}
+
+/** A seed ready to derive: its secret, the path it checked out with and its chain. */
+interface SeedJob {
+  readonly chain: Chain;
+  readonly passphrase: string | undefined;
+  readonly path: string;
+  readonly seed: Extract<Secret, { kind: "seed" }>;
+}
 
 /** One import shared by overlapping first calls, so Pi's loader can't evaluate it twice. */
 let wallets: Promise<typeof import("./crypto.ts")> | undefined;
@@ -88,11 +122,19 @@ interface UnresolvedKey {
   readonly unavailable: boolean;
 }
 
+/** Every cosigner's key of a multisig, resolved in record order. */
+interface ResolvedCosigners {
+  readonly cosigners: readonly ResolvedKey[];
+}
+
+/** Whatever a record's secret resolves to before the address check. */
+type Resolved = ResolvedKey | ResolvedCosigners | OpenedKeyfile | UnresolvedKey;
+
 /** A key run against the record's address: no error means it derived the address. */
 interface Check {
   readonly derivedAddress: string | null;
   readonly error: string | null;
-  /** The key the address came from: hex, or the keyfile JSON on Arweave. */
+  /** The key the address came from: hex, the cosigners' hex, or the keyfile JSON on Arweave. */
   readonly privateKey?: string;
   readonly unavailable: boolean;
 }
@@ -119,26 +161,24 @@ function messageOf(error: unknown, fallback: string): string {
 /**
  * The key at a seed's path, through Electrum's derivation or through BIP39 with the record's list.
  *
- * @param {Extract<Secret, { kind: "seed" }>} seed - The seed the record exposes.
- * @param {string} path - Its derivation path.
- * @param {Chain} chain - Chain the seed belongs to.
- * @param {string | undefined} passphrase - The known passphrase, when the seed has one.
+ * @param {SeedJob} job - The seed, its path, its chain and the known passphrase.
  * @param {Wallets} decoders - The keys wallets.
  * @returns {Promise<string | undefined>} The key in hex, or `undefined` where the chain has none.
  */
-async function seedHex(
-  seed: Extract<Secret, { kind: "seed" }>,
-  path: string,
-  chain: Chain,
-  passphrase: string | undefined,
-  decoders: Wallets,
-): Promise<string | undefined> {
+async function seedHex(job: SeedJob, decoders: Wallets): Promise<string | undefined> {
+  const { chain, passphrase, path, seed } = job;
   if (seed.scheme === "electrum") {
     return decoders.privateKeyFromElectrumSeed(seed.phrase, path, chain, passphrase);
   }
   const wordlist =
     seed.language === undefined ? undefined : await decoders.loadWordlist(seed.language);
-  return decoders.privateKeyFromSeed(seed.phrase, path, chain, passphrase, wordlist);
+  return decoders.privateKeyFromSeed(seed.phrase, {
+    chain,
+    passphrase,
+    path,
+    rounds: seed.rounds,
+    wordlist,
+  });
 }
 
 async function resolveSeedKey(
@@ -154,7 +194,8 @@ async function resolveSeedKey(
     return unavailable("Seed requires an unknown passphrase");
   }
   try {
-    const hex = await seedHex(seed, seed.path, chain, seed.passphrase?.Known, decoders);
+    const job = { seed, path: seed.path, chain, passphrase: seed.passphrase?.Known };
+    const hex = await seedHex(job, decoders);
     if (hex === undefined) {
       return unavailable(`Seed derivation is not supported for ${chain}`);
     }
@@ -176,12 +217,31 @@ function resolveWifKey(wif: string, chain: Chain, decoders: Wallets): ResolvedKe
   }
 }
 
-function hexFormat(puzzle: Puzzle, hex: string, decoders: Wallets): PubkeyFormat {
-  const format = puzzle.pubkey()?.format;
+/**
+ * The resolution of a puzzle's own key record.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {Wallets} crypto - The keys wallets.
+ * @returns {Resolution} The context, holding the puzzle's key and public key.
+ */
+function topLevel(puzzle: Puzzle, crypto: Wallets): Resolution {
+  return { crypto, puzzle, holder: { key: puzzle.keyData(), pubkey: puzzle.pubkey() } };
+}
+
+/**
+ * A hex key's format: the holder's public key, then its WIF when that decodes to the same key.
+ *
+ * @param {Resolution} resolution - The puzzle, the keys wallets and the record holding the key.
+ * @param {string} hex - The key in hex.
+ * @returns {PubkeyFormat} The format, compressed when nothing says otherwise.
+ */
+function hexFormat(resolution: Resolution, hex: string): PubkeyFormat {
+  const { crypto: decoders, holder, puzzle } = resolution;
+  const format = holder.pubkey?.format;
   if (format !== undefined) {
     return format;
   }
-  const wif = puzzle.keyData()?.wif?.decrypted;
+  const wif = holder.key?.wif?.decrypted;
   if (wif !== undefined) {
     const decoded = resolveWifKey(wif, puzzle.chain(), decoders);
     if ("hex" in decoded && decoded.hex === hex.toLowerCase()) {
@@ -211,39 +271,76 @@ async function resolveKeyfile(
   }
 }
 
-async function resolveKey(
-  puzzle: Puzzle,
-  decoders: Wallets,
-): Promise<ResolvedKey | OpenedKeyfile | UnresolvedKey> {
+async function resolveKey(puzzle: Puzzle, decoders: Wallets): Promise<Resolved> {
   const secret = secretOf(puzzle.keyData());
   return secret === undefined
     ? unavailable("Puzzle has no private key")
-    : resolveSecret(puzzle, secret, decoders);
+    : resolveSecret(topLevel(puzzle, decoders), secret);
 }
 
-async function resolveSecret(
-  puzzle: Puzzle,
-  secret: Secret,
-  decoders: Wallets,
-): Promise<ResolvedKey | OpenedKeyfile | UnresolvedKey> {
+/**
+ * The holder's public key format for a seed's key, else compressed, as HD wallets write it.
+ *
+ * @param {Holder} holder - The key record and its public key.
+ * @returns {PubkeyFormat} The format.
+ */
+function seedFormat(holder: Holder): PubkeyFormat {
+  return holder.pubkey?.format ?? PubkeyFormat.Compressed;
+}
+
+function isResolvedKey(key: Resolved): key is ResolvedKey {
+  return "hex" in key;
+}
+
+function isUnresolved(key: Resolved): key is UnresolvedKey {
+  return "reason" in key;
+}
+
+/**
+ * Resolves every cosigner's secret, each against its own key record and with no public key of
+ * its own. The first one that stays unknown or fails speaks for the lot.
+ *
+ * @param {Resolution} resolution - The puzzle, the keys wallets and the multisig key record.
+ * @param {readonly Secret[]} secrets - The cosigners' secrets in record order.
+ * @returns {Promise<ResolvedCosigners | UnresolvedKey>} The keys, or why one is missing.
+ */
+async function resolveCosigners(
+  resolution: Resolution,
+  secrets: readonly Secret[],
+): Promise<ResolvedCosigners | UnresolvedKey> {
+  const records = resolution.holder.key?.cosigners ?? [];
+  const keys = await Promise.all(
+    secrets.map((secret, index) =>
+      resolveSecret({ ...resolution, holder: { key: records[index], pubkey: undefined } }, secret),
+    ),
+  );
+  const cosigners = keys.filter((key) => isResolvedKey(key));
+  if (cosigners.length === keys.length) {
+    return { cosigners };
+  }
+  return (
+    keys.find((key) => isUnresolved(key)) ??
+    failed("Each cosigner needs a key of its own, not a keyfile or another script")
+  );
+}
+
+async function resolveSecret(resolution: Resolution, secret: Secret): Promise<Resolved> {
+  const { crypto: decoders, holder, puzzle } = resolution;
   switch (secret.kind) {
     case "hex":
-      return { hex: secret.hex, format: hexFormat(puzzle, secret.hex, decoders) };
+      return { hex: secret.hex, format: hexFormat(resolution, secret.hex) };
     case "wif":
       return resolveWifKey(secret.wif, puzzle.chain(), decoders);
     case "encrypted":
       return unavailable("WIF is encrypted");
     case "seed":
-      return resolveSeedKey(
-        secret,
-        puzzle.chain(),
-        puzzle.pubkey()?.format ?? PubkeyFormat.Compressed,
-        decoders,
-      );
+      return resolveSeedKey(secret, puzzle.chain(), seedFormat(holder), decoders);
     case "mini":
       return unavailable("Mini private keys are not verified");
     case "keyfile":
       return resolveKeyfile(secret);
+    case "cosigners":
+      return resolveCosigners(resolution, secret.cosigners);
   }
 }
 
@@ -300,19 +397,19 @@ async function rebuildFromEntropy(
   try {
     const wordlist =
       seed.language === undefined ? undefined : await decoders.loadWordlist(seed.language);
-    const rebuilt = decoders.privateKeyFromEntropy(
-      seed.entropy.hash,
-      seed.path,
+    const rebuilt = decoders.privateKeyFromEntropy(seed.entropy.hash, {
       chain,
-      passphrase?.Known,
+      passphrase: passphrase?.Known,
+      path: seed.path,
+      rounds: seed.rounds,
       wordlist,
-    );
+    });
     return rebuilt === undefined
       ? { recipe, key: unavailable(`Seed derivation is not supported for ${chain}`) }
       : {
           recipe,
           path: rebuilt.path,
-          key: { hex: rebuilt.hex, format: hexFormat(puzzle, rebuilt.hex, decoders) },
+          key: { hex: rebuilt.hex, format: hexFormat(topLevel(puzzle, decoders), rebuilt.hex) },
         };
   } catch (error) {
     return { recipe, key: failed(messageOf(error, "Entropy derivation failed")) };
@@ -328,7 +425,7 @@ function rebuildFromPassphrase(
   const [name, options] = recipe;
   try {
     const hex = decoders.privateKeyFromPassphrase(passphrase, options);
-    return { recipe: name, key: { hex, format: hexFormat(puzzle, hex, decoders) } };
+    return { recipe: name, key: { hex, format: hexFormat(topLevel(puzzle, decoders), hex) } };
   } catch (error) {
     return { recipe: name, key: failed(messageOf(error, "Brainwallet derivation failed")) };
   }
@@ -383,21 +480,27 @@ function checkKeyfile(puzzle: Puzzle, key: OpenedKeyfile): Check {
   return { derivedAddress: key.address, error, unavailable: false, privateKey: key.keyfile };
 }
 
-function checkKey(
-  puzzle: Puzzle,
-  crypto: Wallets,
-  key: ResolvedKey | OpenedKeyfile | UnresolvedKey,
-): Check {
-  if ("keyfile" in key) {
-    return checkKeyfile(puzzle, key);
-  }
-  if (!("hex" in key)) {
-    return { derivedAddress: null, error: key.reason, unavailable: key.unavailable };
-  }
+/** A derivation to run and the key material it started from, as `verify` returns it. */
+interface Attempt {
+  /** `undefined` where the chain has no derivation. */
+  readonly derive: () => string | undefined;
+  readonly privateKey: string;
+}
+
+/**
+ * Runs a derivation and holds what it gives against the record's address.
+ *
+ * @param {Context} context - The puzzle and the keys wallets.
+ * @param {Attempt} attempt - The derivation and its key material.
+ * @returns {Check} The verdict.
+ */
+function compareDerived(context: Context, attempt: Attempt): Check {
+  const { crypto, puzzle } = context;
+  const { derive, privateKey } = attempt;
   const chain = puzzle.chain();
-  const address = puzzle.address();
+  const expected = puzzle.address().value;
   try {
-    const derivedAddress = crypto.addressFromPrivateKey(key.hex, chain, key.format, address.kind);
+    const derivedAddress = derive();
     if (derivedAddress === undefined) {
       return {
         derivedAddress: null,
@@ -405,10 +508,10 @@ function checkKey(
         unavailable: true,
       };
     }
-    const error = crypto.addressesEqual(chain, derivedAddress, address.value)
+    const error = crypto.addressesEqual(chain, derivedAddress, expected)
       ? null
-      : `Verification mismatch: expected ${address.value}, got ${derivedAddress}`;
-    return { derivedAddress, error, unavailable: false, privateKey: key.hex };
+      : `Verification mismatch: expected ${expected}, got ${derivedAddress}`;
+    return { derivedAddress, error, unavailable: false, privateKey };
   } catch (error) {
     return {
       derivedAddress: null,
@@ -416,6 +519,48 @@ function checkKey(
       unavailable: crypto.isUnsupportedAddressKind(error),
     };
   }
+}
+
+/**
+ * Rebuilds the witness script from the cosigners' keys, with the recorded script's threshold.
+ *
+ * @param {Context} context - The puzzle and the keys wallets.
+ * @param {ResolvedCosigners} key - Every cosigner's key.
+ * @returns {Check} The verdict, with the cosigners' keys joined by spaces.
+ */
+function checkCosigners(context: Context, key: ResolvedCosigners): Check {
+  const { crypto, puzzle } = context;
+  const script = puzzle.address().witness_script;
+  if (script === undefined) {
+    return {
+      derivedAddress: null,
+      error: "Cosigner keys need the witness script the address hashes",
+      unavailable: true,
+    };
+  }
+  const witness = { chain: puzzle.chain(), script };
+  return compareDerived(context, {
+    derive: () => crypto.addressFromCosigners(key.cosigners, witness),
+    privateKey: key.cosigners.map((cosigner) => cosigner.hex).join(" "),
+  });
+}
+
+function checkKey(context: Context, key: Resolved): Check {
+  const { crypto, puzzle } = context;
+  if ("keyfile" in key) {
+    return checkKeyfile(puzzle, key);
+  }
+  if ("cosigners" in key) {
+    return checkCosigners(context, key);
+  }
+  if (!("hex" in key)) {
+    return { derivedAddress: null, error: key.reason, unavailable: key.unavailable };
+  }
+  const { kind } = puzzle.address();
+  return compareDerived(context, {
+    derive: () => crypto.addressFromPrivateKey(key.hex, puzzle.chain(), key.format, kind),
+    privateKey: key.hex,
+  });
 }
 
 /**
@@ -427,7 +572,7 @@ function checkKey(
  * @returns {RecipeResult} The recipe's own verdict.
  */
 function checkRecipe(puzzle: Puzzle, crypto: Wallets, rebuilt: Rebuilt): RecipeResult {
-  const checked = checkKey(puzzle, crypto, rebuilt.key);
+  const checked = checkKey({ puzzle, crypto }, rebuilt.key);
   return {
     recipe: rebuilt.recipe,
     ...(rebuilt.path === undefined ? {} : { path: rebuilt.path }),
@@ -449,7 +594,7 @@ function checkRecipe(puzzle: Puzzle, crypto: Wallets, rebuilt: Rebuilt): RecipeR
 export async function verify(puzzle: Puzzle): Promise<VerifyResult> {
   const crypto = await (wallets ??= import("./crypto.ts"));
   const published = await resolveKey(puzzle, crypto);
-  const checked = checkKey(puzzle, crypto, published);
+  const checked = checkKey({ puzzle, crypto }, published);
   const rebuilt = await rebuild(puzzle, crypto);
   const id = puzzle.id();
   const expectedAddress = puzzle.address().value;

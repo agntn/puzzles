@@ -2,12 +2,12 @@
 
 The constructors in `src/core/parts.ts`, exported from the package root too. They keep optional fields absent instead of empty, so build every address, key, transaction, asset, stage, party and hint with them.
 
-An address is a string the factory reads on the record's `chain`. The builders below are for what a string can't carry: a published redeem script, or a CashAddr the factory doesn't decode.
+An address is a string the factory reads on the record's `chain`. The builders below are for what a string can't carry: a published redeem or witness script, or a CashAddr the factory doesn't decode.
 
 ```ts
 p2pkh(value, hash160?);
 p2wpkh(value, hash160?);
-p2wsh(value);
+p2wsh(value, witnessScript?); // the script a spend revealed, in hex
 p2sh(value, hash160, redeemScript(hash, script)?);
 standard(value, hash160?); // Ethereum, Arweave
 
@@ -55,4 +55,6 @@ mini("S6c56bnX…");
 keyfile("U2FsdGVkX1…", { passphrase: "…" }); // Arweave keyfile sealed on a Puzzle Weave page
 seed("…", "m/44'/0'/0'/0/0").entropy("1808d3…", source(url, "kitten tweet"), "Required");
 wif("L2Z1…").entropy("8d00…", source(url, "recipe")).derived(); // nobody printed it, the record ran the recipe
+seed("…", "m/48'/0'/1231006505'/2'/0/0", "…").rounds(181505); // PBKDF2 rounds other than 2048
+cosigners(seed("…", path).rounds(181505), seed("…", path).rounds(200913)); // one key per cosigner of a p2wsh witness script
 ```

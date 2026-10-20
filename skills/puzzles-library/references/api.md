@@ -66,13 +66,15 @@ interface Address {
   kind: "p2pkh" | "p2sh" | "p2wpkh" | "p2wsh" | "standard";
   hash160?: string;
   redeem_script?: RedeemScript;
+  witness_script?: string; // p2wsh only, hex
 }
 
 interface KeyData {
   hex?: string; // 64-character hex
   bits?: number; // search-space width
   wif?: Wif; // encrypted / decrypted / passphrase / salt
-  seed?: Seed; // phrase, path, xpub, entropy
+  seed?: Seed; // phrase, path, xpub, entropy, rounds
+  cosigners?: KeyData[]; // one per cosigner of a multisig witness script
   mini?: string;
   shares?: Shares;
   keyfile?: Keyfile; // encrypted (the page's var msg) / passphrase
@@ -151,7 +153,7 @@ interface BalanceOptions {
 ```ts
 await verify(puzzle); // VerifyResult, loads the crypto on first use
 await collection.verify(query); // VerifyResult, the same through the collection's lookup
-secretOf(puzzle.keyData()); // Secret | undefined: hex, wif, encrypted, seed (with a phrase), mini, or keyfile
+secretOf(puzzle.keyData()); // Secret | undefined: hex, wif, encrypted, seed (with a phrase), mini, keyfile, or cosigners (each with a secret)
 
 type VerifyResult = VerifySuccess | VerifyFailure;
 // success: { verified: true, privateKey, derivedAddress, expectedAddress, error: null }

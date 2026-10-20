@@ -3,13 +3,16 @@ import {
   answer,
   claim,
   confirmation,
+  cosigners,
   fact,
   funding,
   increase,
   official,
+  p2wsh,
   party,
   PartyKind,
   profile,
+  seed,
   sweep,
   technique,
 } from "../core/parts.ts";
@@ -18,15 +21,26 @@ import { puzzle, Status } from "../core/puzzle.ts";
 /** Schum-io's pull request that published the recipe, merged into floflo777's catalogue. */
 const SOLUTION = "https://github.com/floflo777/open-crypto-puzzles/pull/44";
 
+/** One phrase, one passphrase and one path for both cosigners. Only the PBKDF2 rounds differ. */
+const PHRASE = "scan amateur fit scrap light over fire flip cushion reject hurt ugly";
+const PATH = "m/48'/0'/1231006505'/2'/0/0";
+
 /** The Genesis block puzzle announced through Bitcoin OP_RETURN messages. */
 export const genesisBlock = puzzle({
   id: "genesis",
   chain: "bitcoin",
-  address: "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj",
+  address: p2wsh(
+    "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj",
+    "5221027b497b1d82986ebe11bca71108ca43446c00edb069cc839638a0b7652913090621033614b02e8e3aeeed9e14ac67839f85d54b694eafd91ca07f1afeb06510832ec152ae",
+  ),
   sourceUrl:
     "https://mempool.space/tx/b691de3657880d9a1eabd2783b1a9fa8c5313ced338495bf10e85727012d7a77",
   startedAt: "2026-08-22 19:45:38",
   status: Status.Solved,
+  key: cosigners(
+    seed(PHRASE, PATH, "Satoshi Nakamoto").rounds(181_505),
+    seed(PHRASE, PATH, "Satoshi Nakamoto").rounds(200_913),
+  ),
   prize: 0.0094654,
   solvedAt: "2026-10-17 03:40:20",
   solveTime: 4_780_482,

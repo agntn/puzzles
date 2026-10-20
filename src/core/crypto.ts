@@ -1,7 +1,8 @@
 import { type AbstractBlockchain, getBlockchainPath } from "@agntn/keys";
-import { bip39, entropyToMnemonic } from "@agntn/keys/bip39";
+import { bip39, entropyToMnemonic, mnemonicToSeed } from "@agntn/keys/bip39";
 import { deriveHDKey, getMasterKeyFromSeed } from "@agntn/keys/bip32";
 import { deriveSeed } from "@agntn/keys/electrum";
+import { address as scriptAddress, multisig } from "@agntn/keys/script";
 
 export { loadWordlist } from "@agntn/keys/bip39";
 import { type BrainwalletRecipe, derive } from "@agntn/keys/brainwallet";
@@ -137,25 +138,29 @@ export function wifToPrivateKey(
   return { compressed: decoded.compressed, hex: decoded.privateKey };
 }
 
+/** Where a BIP39 seed derives and what it takes besides its words. */
+export interface SeedOptions {
+  readonly chain: Chain;
+  readonly passphrase?: string | undefined;
+  /** Derivation path such as `m/44'/0'/0'/0/0`. */
+  readonly path: string;
+  /** PBKDF2 rounds, BIP39's 2048 when absent. */
+  readonly rounds?: number | undefined;
+  /** A list other than English, from `loadWordlist`. */
+  readonly wordlist?: readonly string[] | undefined;
+}
+
 /**
- * Derives the private key at a BIP39 seed's derivation path. The checksum isn't enforced: the seed
- * is PBKDF2 over the words, a puzzle can publish a phrase whose checksum fails, and the address
- * comparison decides. Keys still refuses a word outside the list.
+ * Derives the key at a BIP39 seed's path. The checksum isn't enforced, the address decides, but a
+ * word off the list fails in keys. Other rounds run after the standard 2048, which carry that
+ * check: `mnemonicToSeed` counts the words and reads no list.
  *
  * @param {string} phrase - BIP39 mnemonic.
- * @param {string} path - Derivation path such as `m/44'/0'/0'/0/0`.
- * @param {Chain} chain - Chain the seed belongs to.
- * @param {string} [passphrase] - BIP39 passphrase, when the seed has one.
- * @param {readonly string[]} [wordlist] - A list other than English, from `loadWordlist`.
+ * @param {SeedOptions} options - Chain, path, passphrase, rounds and word list.
  * @returns {string | undefined} The private key in hex, or `undefined` when the chain has no seed derivation: keys refuses Decred, whose HD keys drop leading zeros.
  */
-export function privateKeyFromSeed(
-  phrase: string,
-  path: string,
-  chain: Chain,
-  passphrase?: string,
-  wordlist?: readonly string[],
-): string | undefined {
+export function privateKeyFromSeed(phrase: string, options: SeedOptions): string | undefined {
+  const { chain, passphrase, path, rounds, wordlist } = options;
   const wallet = walletFor(chain);
   if (wallet === undefined || chain === Chain.Decred) {
     return undefined;
@@ -166,7 +171,14 @@ export function privateKeyFromSeed(
     ...(passphrase === undefined ? {} : { passphrase }),
     ...(wordlist === undefined ? {} : { wordlist }),
   });
-  return derived.keys.private;
+  if (rounds === undefined) {
+    return derived.keys.private;
+  }
+  const seed = mnemonicToSeed(
+    phrase,
+    passphrase === undefined ? { rounds } : { passphrase, rounds },
+  );
+  return privateKeyAt(seed, path);
 }
 
 /**
@@ -187,7 +199,10 @@ export function privateKeyFromElectrumSeed(
   if (walletFor(chain) === undefined || chain === Chain.Decred) {
     return undefined;
   }
-  const { seed } = deriveSeed(phrase, passphrase);
+  return privateKeyAt(deriveSeed(phrase, passphrase).seed, path);
+}
+
+function privateKeyAt(seed: Uint8Array, path: string): string {
   const { privateKey } = deriveHDKey(getMasterKeyFromSeed(seed), path);
   if (privateKey === null) {
     throw new TypeError("No private key at the derivation path");
@@ -199,31 +214,30 @@ export function privateKeyFromElectrumSeed(
  * Rebuilds a key from BIP39 entropy, at the BIP39 tool's default path when the record has none.
  *
  * @param {string} hash - Entropy in hex, 16 to 32 bytes.
- * @param {string | undefined} path - Derivation path the record holds, when it holds one.
- * @param {Chain} chain - Chain the seed belongs to.
- * @param {string} [passphrase] - BIP39 passphrase, when the seed has one.
- * @param {readonly string[]} [wordlist] - A list other than English, from `loadWordlist`.
+ * @param {EntropyOptions} options - Chain, path if any, passphrase, rounds and word list.
  * @returns {{ readonly hex: string; readonly path: string } | undefined} The private key in hex and the path it came from, or `undefined` when the chain has no seed derivation.
  */
 export function privateKeyFromEntropy(
   hash: string,
-  path: string | undefined,
-  chain: Chain,
-  passphrase?: string,
-  wordlist?: readonly string[],
+  options: EntropyOptions,
 ): { readonly hex: string; readonly path: string } | undefined {
-  const wallet = walletFor(chain);
+  const wallet = walletFor(options.chain);
   if (wallet === undefined) {
     return undefined;
   }
-  const route = path ?? getBlockchainPath(wallet);
+  const path = options.path ?? getBlockchainPath(wallet);
   const entropy = Uint8Array.fromHex(hash);
   const phrase =
-    wordlist === undefined
+    options.wordlist === undefined
       ? entropyToMnemonic(entropy)
-      : bip39.entropyToMnemonic(entropy, [...wordlist]);
-  const hex = privateKeyFromSeed(phrase, route, chain, passphrase, wordlist);
-  return hex === undefined ? undefined : { hex, path: route };
+      : bip39.entropyToMnemonic(entropy, [...options.wordlist]);
+  const hex = privateKeyFromSeed(phrase, { ...options, path });
+  return hex === undefined ? undefined : { hex, path };
+}
+
+/** A seed rebuilt from entropy, which may leave the path to the chain's first receive address. */
+export interface EntropyOptions extends Omit<SeedOptions, "path"> {
+  readonly path?: string | undefined;
 }
 
 /**
@@ -260,6 +274,49 @@ export function addressFromPrivateKey(
     compressed: format === PubkeyFormat.Compressed,
   });
   return wallet.getAddress(publicKey, addressType(chain, kind));
+}
+
+/** One cosigner's private key and the serialization of its public key in the script. */
+export interface CosignerKey {
+  readonly format: PubkeyFormat;
+  readonly hex: string;
+}
+
+/** The chain and the witness script the record holds for a multisig address. */
+export interface WitnessScript {
+  /** Keys writes script addresses for Bitcoin only. */
+  readonly chain: Chain;
+  /** In hex. */
+  readonly script: string;
+}
+
+/** `OP_1`, where the opcodes that push a multisig threshold start. */
+const OP_1 = 0x51;
+
+/**
+ * The P2WSH address of the multisig the keys rebuild, in the recorded script's threshold and order.
+ *
+ * @param {readonly CosignerKey[]} keys - Every cosigner's key.
+ * @param {WitnessScript} witness - The chain and the recorded witness script.
+ * @returns {string} The address the rebuilt script hashes to.
+ * @throws {UnsupportedAddressKindError} On a chain other than Bitcoin.
+ */
+export function addressFromCosigners(keys: readonly CosignerKey[], witness: WitnessScript): string {
+  const { chain, script: witnessScript } = witness;
+  const wallet = walletFor(chain);
+  if (chain !== Chain.Bitcoin || wallet === undefined) {
+    throw new UnsupportedAddressKindError(`Cannot derive a p2wsh address on ${chain}`);
+  }
+  const publicKeys = keys.map((key) =>
+    wallet.getKeyPublic(key.hex, { compressed: key.format === PubkeyFormat.Compressed }),
+  );
+  const threshold = Number.parseInt(witnessScript.slice(0, 2), 16) - OP_1 + 1;
+  const listed = multisig(publicKeys, { threshold });
+  const script =
+    listed.toHex() === witnessScript.toLowerCase()
+      ? listed
+      : multisig(publicKeys, { threshold, sorted: true });
+  return scriptAddress(script, { addressType: "p2wsh" });
 }
 
 /**
