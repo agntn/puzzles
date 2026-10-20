@@ -3,6 +3,7 @@ import { bits } from "../../src/collections/bits.ts";
 import { ballet } from "../../src/collections/ballet.ts";
 import { bitaps } from "../../src/collections/bitaps.ts";
 import { bitimage } from "../../src/collections/bitimage.ts";
+import { genesis } from "../../src/collections/genesis.ts";
 import { quizchain } from "../../src/collections/quizchain.ts";
 import { warp } from "../../src/collections/warp.ts";
 import { weave } from "../../src/collections/weave.ts";
@@ -11,6 +12,8 @@ import {
   type Address,
   BitcoinPuzzle,
   compressed,
+  cosigners,
+  derivation,
   hex,
   type Key,
   keyfile,
@@ -36,6 +39,17 @@ const synthetic = {
   sourceUrl: "https://example.com",
   startedAt: "2020-01-01 00:00:00",
 } as const;
+
+/* Genesis's published recipe, and the two keys it gives at 181505 and 200913 rounds. */
+const GENESIS_PHRASE = "scan amateur fit scrap light over fire flip cushion reject hurt ugly";
+const GENESIS_PATH = "m/48'/0'/1231006505'/2'/0/0";
+const GENESIS_ADDRESS = "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj";
+const GENESIS_SCRIPT =
+  "5221027b497b1d82986ebe11bca71108ca43446c00edb069cc839638a0b7652913090621033614b02e8e3aeeed9e14ac67839f85d54b694eafd91ca07f1afeb06510832ec152ae";
+const GENESIS_KEYS = [
+  "60d09998a128dcd2642cc7f16db24f1525cf18564e976a3e87fa5e48e24874e9",
+  "4b18979d14cb062679c4b16a9b04bd163138720aa4ffc4c6245e9cb8203b93c6",
+] as const;
 
 describe("Collection.verify", () => {
   it("verifies a known direct private key", async () => {
@@ -550,6 +564,182 @@ describe("Collection.verify", () => {
       derivedAddress: "PbdTDYikdddWfNFlDt2aZokALXKe1mJVSC9TALUBNv8",
       error:
         "Verification mismatch: expected 2pwE_LEzD0z6m_ENCDIta9YTBKXW9FFCURrx1yJoO7w, got PbdTDYikdddWfNFlDt2aZokALXKe1mJVSC9TALUBNv8",
+    });
+  });
+
+  it("rebuilds Genesis's 2-of-2 from one phrase at two PBKDF2 round counts", async () => {
+    const result = await genesis.verify();
+
+    expect(genesis.require().hasPrivateKey()).toBe(true);
+    expect(result).toEqual({
+      id: "genesis",
+      verified: true,
+      privateKey: `${GENESIS_KEYS[0]} ${GENESIS_KEYS[1]}`,
+      expectedAddress: GENESIS_ADDRESS,
+      derivedAddress: GENESIS_ADDRESS,
+      error: null,
+    });
+  });
+
+  it("fails cosigners whose rounds are back at BIP39's 2048", async () => {
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "bitcoin",
+        address: p2wsh(GENESIS_ADDRESS, GENESIS_SCRIPT),
+        key: cosigners(
+          seed(GENESIS_PHRASE, GENESIS_PATH, "Satoshi Nakamoto"),
+          seed(GENESIS_PHRASE, GENESIS_PATH, "Satoshi Nakamoto").rounds(200_913),
+        ),
+      }),
+    );
+
+    expect(result).toMatchObject({ verified: false, unavailable: false, privateKey: null });
+    expect(result.error).toMatch(/^Verification mismatch: expected bc1qfkhx/u);
+  });
+
+  it("takes the cosigners in either order when the script sorts them", async () => {
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "bitcoin",
+        address: p2wsh(GENESIS_ADDRESS, GENESIS_SCRIPT),
+        key: cosigners(hex(GENESIS_KEYS[1]), hex(GENESIS_KEYS[0])),
+      }),
+    );
+
+    expect(result).toMatchObject({ verified: true, derivedAddress: GENESIS_ADDRESS });
+  });
+
+  it("keeps the record's order when the script doesn't sort its keys", async () => {
+    const unsorted = "bc1qj9k0f8h2kt8cwucnnzpy0fan2mcqzehfrux893k8jv5y8sy86mpqg0mxwk";
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "bitcoin",
+        address: p2wsh(
+          unsorted,
+          "5221033614b02e8e3aeeed9e14ac67839f85d54b694eafd91ca07f1afeb06510832ec121027b497b1d82986ebe11bca71108ca43446c00edb069cc839638a0b7652913090652ae",
+        ),
+        key: cosigners(hex(GENESIS_KEYS[1]), hex(GENESIS_KEYS[0])),
+      }),
+    );
+
+    expect(result).toMatchObject({ verified: true, derivedAddress: unsorted });
+  });
+
+  it.each([
+    {
+      name: "without the witness script",
+      chain: "bitcoin",
+      address: p2wsh(GENESIS_ADDRESS),
+      error: "Cosigner keys need the witness script the address hashes",
+    },
+    {
+      name: "on Litecoin",
+      chain: "litecoin",
+      address: p2wsh(
+        "ltc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesskx65h",
+        GENESIS_SCRIPT,
+      ),
+      error: "Cannot derive a p2wsh address on litecoin",
+    },
+  ] as const)("skips cosigners $name", async ({ chain, address, error }) => {
+    const key = cosigners(hex(GENESIS_KEYS[0]), hex(GENESIS_KEYS[1]));
+    expect(await verify(puzzle({ ...synthetic, chain, address, key }))).toMatchObject({
+      verified: false,
+      unavailable: true,
+      error,
+    });
+  });
+
+  it("lands where the standard path does at 2048 rounds, on a French phrase too", async () => {
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "bitcoin",
+        address: "1NqPwPp7hEXZ3Atj77Ue11xAEMmXqAXwrQ",
+        key: seed(
+          "banquier usure mensonge peuple combat espoir union citoyen conduire triomphe horizon jaune",
+          "m/44'/0'/0'/0/0",
+        )
+          .language("french")
+          .rounds(2048),
+      }),
+    );
+
+    expect(result).toMatchObject({ verified: true });
+  });
+
+  it("refuses a word off the list at any rounds, with keys' own message", async () => {
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "bitcoin",
+        address: p2pkh("1EHiMwCPzcvMdeGowsowVF2X2PgLo67Qj7"),
+        key: seed(
+          "since desk thrive carbon zone prison leaf depart hobby practice ivory nope",
+          "m/44'/0'/0'/0/0",
+        ).rounds(181_505),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: false,
+      unavailable: false,
+      error: "Invalid BIP39 mnemonic: word 12 is not in the English list",
+    });
+  });
+
+  it("reruns an entropy recipe at the record's rounds", async () => {
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "bitcoin",
+        address: "bc1q9svch6mtjq22qlzk4famj2hgw9rnsmwft2mkt5",
+        key: derivation(GENESIS_PATH)
+          .entropy("c020f55f60b8193bd5cac836769dbf76", undefined, { Known: "Satoshi Nakamoto" })
+          .rounds(181_505),
+      }),
+    );
+
+    expect(result.recipe).toMatchObject({ recipe: "bip39-entropy", verified: true });
+  });
+
+  it("counts no key until every cosigner has one", async () => {
+    const half = puzzle({
+      ...synthetic,
+      chain: "bitcoin",
+      address: p2wsh(GENESIS_ADDRESS, GENESIS_SCRIPT),
+      key: cosigners(hex(GENESIS_KEYS[0]), derivation(GENESIS_PATH)),
+    });
+
+    expect(half.hasPrivateKey()).toBe(false);
+    expect(await verify(half)).toMatchObject({
+      verified: false,
+      unavailable: true,
+      error: "Puzzle has no private key",
+    });
+  });
+
+  it("refuses a keyfile as a cosigner", async () => {
+    const sealed = weave.require(1).keyData()?.keyfile;
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "bitcoin",
+        address: p2wsh(GENESIS_ADDRESS, GENESIS_SCRIPT),
+        key: cosigners(
+          hex(GENESIS_KEYS[0]),
+          keyfile(sealed?.encrypted ?? "", { passphrase: sealed?.passphrase ?? "" }),
+        ),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: false,
+      unavailable: false,
+      error: "Each cosigner needs a key of its own, not a keyfile or another script",
     });
   });
 

@@ -39,6 +39,7 @@ export {
   claim,
   community,
   confirmation,
+  cosigners,
   decrease,
   derivation,
   digest,

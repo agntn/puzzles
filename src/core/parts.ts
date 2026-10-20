@@ -27,6 +27,8 @@ export interface Address {
   readonly kind: AddressKind;
   readonly redeem_script?: RedeemScript;
   readonly value: string;
+  /** A P2WSH witness script in hex, as the spend that revealed it carries it. */
+  readonly witness_script?: string;
 }
 
 /** Public key serializations. */
@@ -219,6 +221,8 @@ export interface Seed {
   readonly passphrase?: string;
   readonly path?: string;
   readonly phrase?: string;
+  /** PBKDF2 rounds of the BIP39 seed, set only when the author moved them off 2048. */
+  readonly rounds?: number;
   /** An Electrum seed, whose words BIP39 would turn into a different wallet. */
   readonly scheme?: "electrum";
   readonly xpub?: string;
@@ -256,6 +260,8 @@ export interface Shares {
 /** Serialized private key material. */
 export interface KeyData {
   readonly bits?: number;
+  /** One key per cosigner of a multisig witness script, each a record of its own. */
+  readonly cosigners?: readonly KeyData[];
   /** No source printed the secret; the record rebuilt it from a published recipe. */
   readonly derived?: true;
   readonly hex?: string;
@@ -277,6 +283,7 @@ export type Secret =
       readonly path?: string | undefined;
       readonly passphrase?: Passphrase | undefined;
       readonly language?: BIP39Language | undefined;
+      readonly rounds?: number | undefined;
       readonly scheme?: "electrum" | undefined;
     }
   | { readonly kind: "mini"; readonly mini: string }
@@ -284,7 +291,8 @@ export type Secret =
       readonly kind: "keyfile";
       readonly encrypted: string;
       readonly passphrase?: string | undefined;
-    };
+    }
+  | { readonly kind: "cosigners"; readonly cosigners: readonly Secret[] };
 
 /**
  * The private key representation a key record exposes. `hasPrivateKey()` and verification read the
@@ -298,7 +306,12 @@ export function secretOf(key: KeyData | undefined): Secret | undefined {
     return undefined;
   }
   return (
-    hexSecret(key) ?? wifSecret(key) ?? seedSecret(key) ?? miniSecret(key) ?? keyfileSecret(key)
+    hexSecret(key) ??
+    wifSecret(key) ??
+    seedSecret(key) ??
+    miniSecret(key) ??
+    keyfileSecret(key) ??
+    cosignersSecret(key)
   );
 }
 
@@ -326,6 +339,7 @@ function seedSecret(key: KeyData): Secret | undefined {
     path: key.seed.path,
     passphrase: seedPassphrase(key.seed),
     language: key.seed.language,
+    rounds: key.seed.rounds,
     scheme: key.seed.scheme,
   };
 }
@@ -349,6 +363,20 @@ function miniSecret(key: KeyData): Secret | undefined {
 
 function keyfileSecret(key: KeyData): Secret | undefined {
   return key.keyfile === undefined ? undefined : { kind: "keyfile", ...key.keyfile };
+}
+
+/**
+ * Every cosigner's secret, or none while one is missing. Half a multisig spends nothing.
+ *
+ * @param {KeyData} key - Serialized key material.
+ * @returns {Secret | undefined} Every cosigner's secret in record order, or `undefined`.
+ */
+function cosignersSecret(key: KeyData): Secret | undefined {
+  const secrets = (key.cosigners ?? []).map((cosigner) => secretOf(cosigner));
+  const known = secrets.filter((secret) => secret !== undefined);
+  return known.length === 0 || known.length < secrets.length
+    ? undefined
+    : { kind: "cosigners", cosigners: known };
 }
 
 /**
@@ -496,13 +524,14 @@ export function p2wpkh(value: string, hash160?: string): Address {
 }
 
 /**
- * Records a P2WSH address without assuming a witness script.
+ * Records a P2WSH address, with its witness script once a spend has shown it.
  *
  * @param {string} value - Encoded address.
+ * @param {string} [witnessScript] - Witness script in hex, from the spend that revealed it.
  * @returns {Address} The P2WSH address record.
  */
-export function p2wsh(value: string): Address {
-  return address(AddressKind.P2WSH, value);
+export function p2wsh(value: string, witnessScript?: string): Address {
+  return defined({ value, kind: AddressKind.P2WSH, witness_script: witnessScript });
 }
 
 /**
@@ -657,6 +686,16 @@ export class Key {
    */
   language(value: BIP39Language): Key {
     return this.#with({ seed: { ...this.#data.seed, language: value } });
+  }
+
+  /**
+   * Records the PBKDF2 rounds of a BIP39 seed that doesn't run the standard 2048.
+   *
+   * @param {number} value - Rounds the author ran, such as 181505.
+   * @returns {Key} A new builder with the value recorded.
+   */
+  rounds(value: number): Key {
+    return this.#with({ seed: { ...this.#data.seed, rounds: value } });
   }
 
   /**
@@ -820,6 +859,16 @@ export function passphrase(value: string): Key {
  */
 export function seed(phrase: string, path?: string, passphrase?: string): Key {
   return new Key().seed(phrase, path, passphrase);
+}
+
+/**
+ * Starts key material from the cosigners of a multisig witness script, one key each.
+ *
+ * @param {readonly Key[]} keys - Each cosigner's key, in the script's order unless it sorts them.
+ * @returns {Key} The builder, for chaining.
+ */
+export function cosigners(...keys: readonly Key[]): Key {
+  return new Key({ cosigners: keys.map((key) => key.data()) });
 }
 
 /**

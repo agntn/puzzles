@@ -76,6 +76,7 @@ const libraryEntries = [
   "@agntn/keys/blockchains/ethereum",
   "@agntn/keys/blockchains/litecoin",
   "@agntn/keys/electrum",
+  "@agntn/keys/script",
   "@agntn/keys/wif",
 ];
 

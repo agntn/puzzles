@@ -48,7 +48,6 @@ import { type Puzzle, puzzle, Status } from "../../src/core/puzzle.ts";
 import { decimal, formatUnits } from "../../src/core/decimal.ts";
 import { expectedPrize } from "../../src/core/watch.ts";
 import type { AnyCollection } from "../../src/core/registry.ts";
-import { GenesisCollection } from "../../src/collections/genesis.ts";
 import { TeikhosCollection } from "../../src/collections/teikhos.ts";
 import { NamedCollection } from "../../src/core/collection.ts";
 import { all, collections, verify } from "../../src/index.ts";
@@ -157,7 +156,6 @@ async function derivedKeyProblem(puzzle: Puzzle): Promise<string | undefined> {
   return result.verified ? undefined : `${puzzle.id()}: derived key does not verify`;
 }
 
-/* Genesis is a 2-of-2 P2WSH, and a record has room for one public key, not two. */
 function claimedPubkeyProblem(puzzle: Puzzle): string | undefined {
   if (
     puzzle.status() === Status.Unsolved ||
@@ -165,8 +163,9 @@ function claimedPubkeyProblem(puzzle: Puzzle): string | undefined {
     puzzle.chain() === "arweave" ||
     // A TeikhosBounty address is a contract: it pays by self-destructing and never signs.
     puzzle.collection() === TeikhosCollection.key ||
-    puzzle.collection() === GenesisCollection.key ||
-    puzzle.address().kind === AddressKind.P2SH
+    puzzle.address().kind === AddressKind.P2SH ||
+    /* A multisig keeps its keys in the witness script, more than the one pubkey slot holds. */
+    puzzle.address().witness_script !== undefined
   ) {
     return undefined;
   }
@@ -587,6 +586,20 @@ function encodedHash(address: string): string {
   return base58check.decode(address).slice(1).toHex();
 }
 
+/* A P2WSH program is the SHA-256 of its witness script, so a recorded script has to hash to it. */
+function witnessScriptProblem(puzzle: Puzzle): string | undefined {
+  const { kind, value, witness_script: script } = puzzle.address();
+  if (script === undefined) {
+    return undefined;
+  }
+  if (kind !== AddressKind.P2WSH) {
+    return `${puzzle.id()}: witness script on a ${kind} address`;
+  }
+  return sha256(Uint8Array.fromHex(script)).toHex() === encodedHash(value)
+    ? undefined
+    : `${puzzle.id()}: witness script does not hash to its address`;
+}
+
 function hash160Problem(puzzle: Puzzle): string | undefined {
   const { hash160, value } = puzzle.address();
   if (hash160 === undefined) {
@@ -679,6 +692,15 @@ describe("collection class data", () => {
     expect(addressProblems(record(target.toLowerCase()))).toEqual([
       "fixture/escrow: escrow is the target address",
     ]);
+  });
+
+  it("keeps every witness script hashing to its P2WSH address", () => {
+    expect(collect(witnessScriptProblem)).toEqual([]);
+    expect(
+      puzzles
+        .filter((item) => item.address().witness_script !== undefined)
+        .map((item) => item.id()),
+    ).toEqual(["genesis"]);
   });
 
   it("keeps every hash160 equal to the hash its address encodes", () => {

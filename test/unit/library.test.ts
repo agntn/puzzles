@@ -232,12 +232,14 @@ describe("lazy collection registry", () => {
     expect(puzzle.hasPrivateKey()).toBe(false);
   });
 
-  it("keeps the Genesis announcement and its published solve without inventing a key", async () => {
+  it("keeps the Genesis announcement and the two cosigner seeds its published solve gives", async () => {
     const puzzle = await requirePuzzle("genesis");
     expect(await requireCollection("genesis")).toBeInstanceOf(SingletonCollection);
     expect(puzzle.address()).toEqual({
       kind: "p2wsh",
       value: "bc1qfkhx02v89u2qyyyljeczw6hu9sr437y44t7ae5yf09thrdukfqesnjg2wj",
+      witness_script:
+        "5221027b497b1d82986ebe11bca71108ca43446c00edb069cc839638a0b7652913090621033614b02e8e3aeeed9e14ac67839f85d54b694eafd91ca07f1afeb06510832ec152ae",
     });
     expect(puzzle.startedAt()).toBe("2026-08-22 19:45:38");
     expect(puzzle.preGenesis()).toBe(true);
@@ -245,7 +247,10 @@ describe("lazy collection registry", () => {
     expect(puzzle.status()).toBe(Status.Solved);
     expect(puzzle.prize()).toBe(0.0094654);
     expect(puzzle.solvedAt()).toBe("2026-10-17 03:40:20");
-    expect(puzzle.key()).toBeUndefined();
+    expect(puzzle.keyData()?.cosigners?.map((cosigner) => cosigner.seed?.rounds)).toEqual([
+      181_505, 200_913,
+    ]);
+    expect(puzzle.hasDerivedKey()).toBe(false);
     expect(puzzle.pubkey()).toBeUndefined();
     expect(puzzle.transactions()).toEqual([
       {

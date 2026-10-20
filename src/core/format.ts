@@ -130,6 +130,8 @@ function secretParts(secret: Secret): readonly [value: string, kind: string] {
       return [secret.mini, "mini"];
     case "keyfile":
       return [sealed(secret.encrypted), `encrypted keyfile, ${secret.encrypted.length} characters`];
+    case "cosigners":
+      return [`${secret.cosigners.length} keys`, "cosigners, one per key below"];
   }
 }
 
@@ -202,6 +204,7 @@ function seedLines(key: KeyData, secret: Secret["kind"] | undefined): string[] {
     ...field("seed scheme", seed.scheme),
     ...field("seed word list", seed.language),
     ...field("derivation path", seed.path),
+    ...field("pbkdf2 rounds", seed.rounds),
     ...field("xpub", seed.xpub),
     ...field("entropy", entropy, formatEntropy),
     ...field("seed passphrase", seed.passphrase),
@@ -227,7 +230,20 @@ function keyLines(key: KeyData | undefined): string[] {
         ...wifLines(key, kind),
         ...seedLines(key, kind),
         ...field("keyfile passphrase", key.keyfile?.passphrase),
+        ...cosignerLines(key.cosigners ?? []),
       ];
+}
+
+/**
+ * Each cosigner's key lines under its number, the same lines a single key record prints.
+ *
+ * @param {readonly KeyData[]} cosigners - The cosigners' key records.
+ * @returns {string[]} The lines, `cosigner 1 private key: ...` first.
+ */
+function cosignerLines(cosigners: readonly KeyData[]): string[] {
+  return cosigners.flatMap((cosigner, index) =>
+    keyLines(cosigner).map((line) => `cosigner ${index + 1} ${line}`),
+  );
 }
 
 function formatPubkey(pubkey: Pubkey | undefined): string {
@@ -629,6 +645,7 @@ export function formatPuzzleRecord(
     ...field("escrow", puzzle.escrow()?.value),
     ...field("hash160", address.hash160),
     ...field("redeem script", address.redeem_script, formatRedeemScript),
+    ...field("witness script", address.witness_script),
     `public key: ${formatPubkey(puzzle.pubkey())}`,
     ...keyLines(key),
     `started: ${puzzle.startedAt()}`,

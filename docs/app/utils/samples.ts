@@ -25,6 +25,7 @@ export interface LandingSample {
   readonly kind: string;
   readonly hash160: string | undefined;
   readonly redeemScript: { readonly hash: string; readonly script: string } | undefined;
+  readonly witnessScript: string | undefined;
   readonly prize: string;
   readonly prizeAmount: number | undefined;
   readonly currency: string | undefined;
@@ -183,6 +184,7 @@ function seedTail(key: KeyData): string[] {
   const tail: string[] = [];
   if (seed.scheme === "electrum") tail.push(".electrum()");
   if (seed.language !== undefined) tail.push(`.language(${quote(seed.language)})`);
+  if (seed.rounds !== undefined) tail.push(`.rounds(${seed.rounds})`);
   if (seed.xpub !== undefined) tail.push(`.xpub(${quote(seed.xpub)})`);
   if (seed.entropy !== undefined) tail.push(entropyCall(seed.entropy));
   if (key.shares !== undefined) {
@@ -201,6 +203,9 @@ function seedTail(key: KeyData): string[] {
  */
 export function keyLiteral(key: KeyData | undefined): string | undefined {
   if (key === undefined) return undefined;
+  if (key.cosigners !== undefined) {
+    return `cosigners(${key.cosigners.map((cosigner) => keyLiteral(cosigner) ?? "").join(", ")})`;
+  }
   const head = keyHead(key);
   if (head === undefined) return undefined;
   return [head, ...hexTail(key), ...seedTail(key), ...(key.derived ? [".derived()"] : [])].join("");
@@ -237,6 +242,7 @@ export async function toSample(
     kind: address.kind,
     hash160: address.hash160,
     redeemScript: address.redeem_script,
+    witnessScript: address.witness_script,
     prize: formatPrize(puzzle.prize(), puzzle.prizeCurrency()),
     prizeAmount: puzzle.prize(),
     currency: puzzle.currency(),
@@ -262,7 +268,7 @@ export async function toSample(
  * The address as the record writes it: a plain string, or a builder for what a string can't carry.
  *
  * @param {LandingSample} sample - The sample whose address to write out.
- * @returns {string} A quoted address, or a `p2pkh(...)` or `p2sh(...)` call.
+ * @returns {string} A quoted address, or a `p2pkh(...)`, `p2sh(...)` or `p2wsh(...)` call.
  */
 export function addressLiteral(sample: LandingSample): string {
   if (!needsBuilder(sample)) return quote(sample.address);
@@ -273,17 +279,22 @@ export function addressLiteral(sample: LandingSample): string {
       `redeemScript(${quote(sample.redeemScript.hash)}, ${quote(sample.redeemScript.script)})`,
     );
   }
+  if (sample.witnessScript !== undefined) args.push(quote(sample.witnessScript));
   return `${sample.kind}(${args.join(", ")})`;
 }
 
 /**
- * Whether the address needs a builder: a published redeem script, or a CashAddr.
+ * Whether the address needs a builder: a published redeem or witness script, or a CashAddr.
  *
  * @param {LandingSample} sample - The sample whose address to check.
  * @returns {boolean} True when a plain string would lose part of the address.
  */
 export function needsBuilder(sample: LandingSample): boolean {
-  return sample.redeemScript !== undefined || sample.address.includes(":");
+  return (
+    sample.redeemScript !== undefined ||
+    sample.witnessScript !== undefined ||
+    sample.address.includes(":")
+  );
 }
 
 /**

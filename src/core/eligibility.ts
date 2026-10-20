@@ -249,10 +249,13 @@ function keyVerifier(
     case "p2wpkh":
       return hashVerifier(target, puzzle);
     case "p2sh":
-    case "p2wsh":
       return target.redeem_script === undefined
         ? undefined
         : `a spend that satisfies redeem script ${target.redeem_script.script}`;
+    case "p2wsh":
+      return target.witness_script === undefined
+        ? undefined
+        : `a spend that satisfies witness script ${target.witness_script}`;
     default:
       return standardVerifier(chain, target.value, puzzle);
   }

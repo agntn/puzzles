@@ -164,6 +164,7 @@ function seedRows(key: KeyData): KeyRow[] {
     ...row("BIP39 word list", seed.language),
     ...row(electrum ? "Electrum seed extension" : "BIP39 passphrase", seed.passphrase),
     ...row("derivation path", seed.path),
+    ...row("PBKDF2 rounds", seed.rounds?.toString()),
     ...row("extended public key", seed.xpub),
     ...entropyRows(seed.entropy),
   ];
@@ -188,8 +189,18 @@ function shareRows(key: KeyData): KeyRow[] {
   ];
 }
 
+/**
+ * Every row of a key record, and each cosigner's rows under its number.
+ *
+ * @param {KeyData | undefined} key - The serialized key record.
+ * @returns {KeyRow[]} One row per present field.
+ */
 function keyRows(key: KeyData | undefined): KeyRow[] {
-  return key === undefined ? [] : [...wifRows(key), ...seedRows(key), ...shareRows(key)];
+  if (key === undefined) return [];
+  const cosigners = (key.cosigners ?? []).flatMap((cosigner, index) =>
+    keyRows(cosigner).map((item) => ({ ...item, label: `cosigner ${index + 1} · ${item.label}` })),
+  );
+  return [...wifRows(key), ...seedRows(key), ...shareRows(key), ...cosigners];
 }
 
 /**

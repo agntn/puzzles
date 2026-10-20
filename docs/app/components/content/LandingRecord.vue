@@ -24,6 +24,7 @@ interface Line {
 }
 
 const BUILDERS = [
+  "cosigners",
   "hex",
   "wif",
   "encryptedWif",
