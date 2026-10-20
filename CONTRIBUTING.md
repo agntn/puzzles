@@ -47,6 +47,7 @@ Fragile sources have [local reading copies with screenshots](assets/sources/READ
 
 - **A new puzzle field** gets a method on `Puzzle` with a safe default, a line in `toJSON()`, a field in `PuzzleSpec` and the spec-backed puzzle, and a constructor in `parts.ts`.
 - **A new agent tool** gets its executor and `facts` entry in `src/tool-operations.ts` and its `defineTool` in `puzzlesTools` in `src/tools.ts`. MCP, the remote server and both extensions pick it up without an edit. Extend the tool tests.
+- **A tool with its own page** (an MCP App) is one `docs/app/mcp/<name>.vue` under `defineMcpApp`. The toolkit builds the tool and its `ui://` page from that file, and only the remote server serves it. Extend `test/unit/docs-mcp.test.ts`.
 - **A command only the CLI needs** goes into `src/commands/<name>.ts` as a `defineTool` with its `cli` hint, into the list in `src/commands/index.ts`, and into `test/unit/cli.test.ts`.
 - **A new public export** goes into `src/index.ts`. Build before checking the extensions, because they resolve `dist/index.d.mts`.
 

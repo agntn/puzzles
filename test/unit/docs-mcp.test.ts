@@ -12,14 +12,16 @@ import { firstText } from "../support/mcp.ts";
 const NITRO_RUNTIME = "../../docs/node_modules/nitropack/dist/runtime/index.mjs";
 
 /*
- * The toolkit's server entry pulls in the Nitro runtime, so the handler gets its options back and
- * two page tools. The path is the file `@nuxtjs/mcp-toolkit/server` resolves to from the docs.
+ * The toolkit's server entry pulls in the Nitro runtime, so the handler gets its options back, two
+ * page tools and the resource pool it was asked for. The path is the file
+ * `@nuxtjs/mcp-toolkit/server` resolves to from the docs.
  */
 vi.mock(
   "../../docs/node_modules/@nuxtjs/mcp-toolkit/dist/runtime/server/mcp/definitions/index.js",
   () => ({
     defineMcpHandler: (options: unknown) => options,
     getMcpTools: async () => [{ name: "list-pages" }, { name: "get-page" }],
+    getMcpResources: async (options: object) => [{ uri: "ui://mcp-app/registry", options }],
   }),
 );
 
@@ -62,6 +64,17 @@ describe("docs MCP tools", () => {
       "list-pages",
       "get-page",
       ...toolListings.map((tool) => tool.name),
+    ]);
+  });
+
+  /* The toolkit tags the app's page with its folder, and `orphansOnly` would drop it from `/mcp`. */
+  it("serves the registry app's page with every other resource, not only the untagged ones", async () => {
+    const { default: handler } = await import("../../docs/server/mcp/index.ts");
+    const { resources } = handler;
+    if (typeof resources !== "function")
+      throw new TypeError("the handler should resolve its resources");
+    expect(await resources(undefined as never)).toEqual([
+      { uri: "ui://mcp-app/registry", options: { event: undefined } },
     ]);
   });
 
