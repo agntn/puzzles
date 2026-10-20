@@ -118,13 +118,27 @@ function seedArguments(
 }
 
 /**
+ * The head of a record that holds a sealed Arweave keyfile, with its answer once a source printed it.
+ *
+ * @param {KeyData} key - The serialized key record.
+ * @returns {string | undefined} `keyfile(...)`, or nothing.
+ */
+function keyfileHead(key: KeyData): string | undefined {
+  if (key.keyfile === undefined) return undefined;
+  const { encrypted, passphrase } = key.keyfile;
+  return passphrase === undefined
+    ? `keyfile(${quote(encrypted)})`
+    : `keyfile(${quote(encrypted)}, { passphrase: ${quote(passphrase)} })`;
+}
+
+/**
  * The first builder call of a key record, or nothing when the record has no key at all.
  *
  * @param {KeyData} key - The serialized key record.
  * @returns {string | undefined} The head call, down to `mini(...)`, `passphrase(...)` or `bits(...)`.
  */
 function keyHead(key: KeyData): string | undefined {
-  const head = wifHead(key) ?? seedHead(key);
+  const head = wifHead(key) ?? seedHead(key) ?? keyfileHead(key);
   if (head !== undefined) return head;
   if (key.mini !== undefined) return `mini(${quote(key.mini)})`;
   if (key.wif?.passphrase !== undefined) return `passphrase(${quote(key.wif.passphrase)})`;

@@ -30,6 +30,7 @@ const BUILDERS = [
   "seed",
   "derivation",
   "mini",
+  "keyfile",
   "bits",
   "share",
   "source",
@@ -70,7 +71,7 @@ function importsOf(sample: LandingSample): string {
  */
 function short(literal: string): string {
   return literal.replaceAll(
-    /"([0-9a-fA-F]{40,}|[135KLbczDx][A-Za-z0-9_'-]{30,})"/gu,
+    /"([0-9a-fA-F]{40,}|[135KLbczDx][A-Za-z0-9_'-]{30,}|U2FsdGVkX1[A-Za-z0-9+/=]{30,})"/gu,
     (_match, value: string) => `"${shorten(value, 10, 6)}"`,
   );
 }

@@ -41,7 +41,9 @@ function importsDigest(template: string): string {
 const libraryDependencies = [
   "@agntn/archives",
   "@agntn/chains",
+  "@agntn/ciphers",
   "@agntn/explorers",
+  "@agntn/hashes",
   "@agntn/keys",
   "@agntn/tools",
 ];
@@ -50,6 +52,7 @@ const libraryDependencies = [
 const libraryEntries = [
   "@agntn/archives",
   "@agntn/chains",
+  "@agntn/ciphers",
   "@agntn/explorers",
   "@agntn/explorers/providers/arweave",
   "@agntn/explorers/providers/blockchair",
@@ -58,7 +61,9 @@ const libraryEntries = [
   "@agntn/explorers/providers/dcrdata",
   "@agntn/explorers/providers/etherscan",
   "@agntn/explorers/providers/mempool",
+  "@agntn/hashes",
   "@agntn/keys",
+  "@agntn/keys/arweave",
   "@agntn/keys/bip32",
   "@agntn/keys/bip39",
   "@agntn/keys/brainwallet",

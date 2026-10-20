@@ -149,6 +149,7 @@ describe("docs landing fixtures", () => {
       ".shares(",
       ".electrum(",
       ".derived(",
+      "keyfile(",
     ]) {
       expect(literals.some((literal) => literal.includes(builder))).toBe(true);
     }
@@ -168,6 +169,9 @@ describe("docs landing fixtures", () => {
     expect(
       keyLiteral({ seed: { phrase: "visit … spot", path: "m/0'/0/1", scheme: "electrum" } }),
     ).toBe(`seed("visit … spot", "m/0'/0/1").electrum()`);
+    expect(
+      keyLiteral({ keyfile: { encrypted: "U2FsdGVkX1…", passphrase: "RasputinWilhelmAlekhine" } }),
+    ).toBe(`keyfile("U2FsdGVkX1…", { passphrase: "RasputinWilhelmAlekhine" })`);
   });
 
   it("pin the statistics and the collection facts", async () => {
