@@ -706,6 +706,26 @@ describe("Collection.verify", () => {
     expect(result.recipe).toMatchObject({ recipe: "bip39-entropy", verified: true });
   });
 
+  it("reads each cosigner's own WIF for the format of its hex key", async () => {
+    const mixed = "bc1q0surc6w5gen6236up5x3ecuyrt5tply8xnakdxaall6tvpjqk78skfrz4p";
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "bitcoin",
+        address: p2wsh(
+          mixed,
+          "5221033614b02e8e3aeeed9e14ac67839f85d54b694eafd91ca07f1afeb06510832ec141047b497b1d82986ebe11bca71108ca43446c00edb069cc839638a0b7652913090639ccc0414b71b6f2784e600f5b05747d93a311a578fc71bd4a141e981e13830052ae",
+        ),
+        key: cosigners(
+          hex(GENESIS_KEYS[0]).wif("5JYvaz62oUm84MkC7eUEJxHCuF5TfKcNF9bRR6wLDxtBpWvdoDk"),
+          hex(GENESIS_KEYS[1]),
+        ),
+      }),
+    );
+
+    expect(result).toMatchObject({ verified: true, derivedAddress: mixed });
+  });
+
   it("counts no key until every cosigner has one", async () => {
     const half = puzzle({
       ...synthetic,

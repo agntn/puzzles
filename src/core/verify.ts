@@ -1,7 +1,15 @@
 import type { BrainwalletRecipe } from "@agntn/keys/brainwallet";
 import type { Chain } from "./chains.ts";
 import type { OpenedKeyfile } from "./keyfile.ts";
-import { PubkeyFormat, type Secret, type Seed, secretOf, seedPassphrase } from "./parts.ts";
+import {
+  type KeyData,
+  type Pubkey,
+  PubkeyFormat,
+  type Secret,
+  type Seed,
+  secretOf,
+  seedPassphrase,
+} from "./parts.ts";
 import { type Puzzle } from "./puzzle.ts";
 
 /** The recipes `verify` reruns, each named after the technique that marks it on a record. */
@@ -77,6 +85,17 @@ type Wallets = Pick<
 interface Context {
   readonly crypto: Wallets;
   readonly puzzle: Puzzle;
+}
+
+/** The key record a secret came from and its public key: the puzzle's, or a cosigner's. */
+interface Holder {
+  readonly key: KeyData | undefined;
+  readonly pubkey: Pubkey | undefined;
+}
+
+/** A check context that also knows which key record holds the secret being resolved. */
+interface Resolution extends Context {
+  readonly holder: Holder;
 }
 
 /** A seed ready to derive: its secret, the path it checked out with and its chain. */
@@ -198,12 +217,31 @@ function resolveWifKey(wif: string, chain: Chain, decoders: Wallets): ResolvedKe
   }
 }
 
-function hexFormat(puzzle: Puzzle, hex: string, decoders: Wallets): PubkeyFormat {
-  const format = puzzle.pubkey()?.format;
+/**
+ * The resolution of a puzzle's own key record.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {Wallets} crypto - The keys wallets.
+ * @returns {Resolution} The context, holding the puzzle's key and public key.
+ */
+function topLevel(puzzle: Puzzle, crypto: Wallets): Resolution {
+  return { crypto, puzzle, holder: { key: puzzle.keyData(), pubkey: puzzle.pubkey() } };
+}
+
+/**
+ * A hex key's format: the holder's public key, then its WIF when that decodes to the same key.
+ *
+ * @param {Resolution} resolution - The puzzle, the keys wallets and the record holding the key.
+ * @param {string} hex - The key in hex.
+ * @returns {PubkeyFormat} The format, compressed when nothing says otherwise.
+ */
+function hexFormat(resolution: Resolution, hex: string): PubkeyFormat {
+  const { crypto: decoders, holder, puzzle } = resolution;
+  const format = holder.pubkey?.format;
   if (format !== undefined) {
     return format;
   }
-  const wif = puzzle.keyData()?.wif?.decrypted;
+  const wif = holder.key?.wif?.decrypted;
   if (wif !== undefined) {
     const decoded = resolveWifKey(wif, puzzle.chain(), decoders);
     if ("hex" in decoded && decoded.hex === hex.toLowerCase()) {
@@ -237,17 +275,17 @@ async function resolveKey(puzzle: Puzzle, decoders: Wallets): Promise<Resolved> 
   const secret = secretOf(puzzle.keyData());
   return secret === undefined
     ? unavailable("Puzzle has no private key")
-    : resolveSecret({ puzzle, crypto: decoders }, secret);
+    : resolveSecret(topLevel(puzzle, decoders), secret);
 }
 
 /**
- * The recorded public key format of a seed's key, else compressed, as HD wallets write it.
+ * The holder's public key format for a seed's key, else compressed, as HD wallets write it.
  *
- * @param {Puzzle} puzzle - The puzzle.
+ * @param {Holder} holder - The key record and its public key.
  * @returns {PubkeyFormat} The format.
  */
-function seedFormat(puzzle: Puzzle): PubkeyFormat {
-  return puzzle.pubkey()?.format ?? PubkeyFormat.Compressed;
+function seedFormat(holder: Holder): PubkeyFormat {
+  return holder.pubkey?.format ?? PubkeyFormat.Compressed;
 }
 
 function isResolvedKey(key: Resolved): key is ResolvedKey {
@@ -259,17 +297,23 @@ function isUnresolved(key: Resolved): key is UnresolvedKey {
 }
 
 /**
- * Resolves every cosigner's secret. The first one that stays unknown or fails speaks for the lot.
+ * Resolves every cosigner's secret, each against its own key record and with no public key of
+ * its own. The first one that stays unknown or fails speaks for the lot.
  *
- * @param {Context} context - The puzzle and the keys wallets.
+ * @param {Resolution} resolution - The puzzle, the keys wallets and the multisig key record.
  * @param {readonly Secret[]} secrets - The cosigners' secrets in record order.
  * @returns {Promise<ResolvedCosigners | UnresolvedKey>} The keys, or why one is missing.
  */
 async function resolveCosigners(
-  context: Context,
+  resolution: Resolution,
   secrets: readonly Secret[],
 ): Promise<ResolvedCosigners | UnresolvedKey> {
-  const keys = await Promise.all(secrets.map((secret) => resolveSecret(context, secret)));
+  const records = resolution.holder.key?.cosigners ?? [];
+  const keys = await Promise.all(
+    secrets.map((secret, index) =>
+      resolveSecret({ ...resolution, holder: { key: records[index], pubkey: undefined } }, secret),
+    ),
+  );
   const cosigners = keys.filter((key) => isResolvedKey(key));
   if (cosigners.length === keys.length) {
     return { cosigners };
@@ -280,23 +324,23 @@ async function resolveCosigners(
   );
 }
 
-async function resolveSecret(context: Context, secret: Secret): Promise<Resolved> {
-  const { crypto: decoders, puzzle } = context;
+async function resolveSecret(resolution: Resolution, secret: Secret): Promise<Resolved> {
+  const { crypto: decoders, holder, puzzle } = resolution;
   switch (secret.kind) {
     case "hex":
-      return { hex: secret.hex, format: hexFormat(puzzle, secret.hex, decoders) };
+      return { hex: secret.hex, format: hexFormat(resolution, secret.hex) };
     case "wif":
       return resolveWifKey(secret.wif, puzzle.chain(), decoders);
     case "encrypted":
       return unavailable("WIF is encrypted");
     case "seed":
-      return resolveSeedKey(secret, puzzle.chain(), seedFormat(puzzle), decoders);
+      return resolveSeedKey(secret, puzzle.chain(), seedFormat(holder), decoders);
     case "mini":
       return unavailable("Mini private keys are not verified");
     case "keyfile":
       return resolveKeyfile(secret);
     case "cosigners":
-      return resolveCosigners(context, secret.cosigners);
+      return resolveCosigners(resolution, secret.cosigners);
   }
 }
 
@@ -365,7 +409,7 @@ async function rebuildFromEntropy(
       : {
           recipe,
           path: rebuilt.path,
-          key: { hex: rebuilt.hex, format: hexFormat(puzzle, rebuilt.hex, decoders) },
+          key: { hex: rebuilt.hex, format: hexFormat(topLevel(puzzle, decoders), rebuilt.hex) },
         };
   } catch (error) {
     return { recipe, key: failed(messageOf(error, "Entropy derivation failed")) };
@@ -381,7 +425,7 @@ function rebuildFromPassphrase(
   const [name, options] = recipe;
   try {
     const hex = decoders.privateKeyFromPassphrase(passphrase, options);
-    return { recipe: name, key: { hex, format: hexFormat(puzzle, hex, decoders) } };
+    return { recipe: name, key: { hex, format: hexFormat(topLevel(puzzle, decoders), hex) } };
   } catch (error) {
     return { recipe: name, key: failed(messageOf(error, "Brainwallet derivation failed")) };
   }
