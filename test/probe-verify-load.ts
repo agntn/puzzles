@@ -17,6 +17,8 @@ function note(url: string): void {
     roots.add("keys");
   } else if (url.includes("/node_modules/@noble/curves/")) {
     roots.add("curves");
+  } else if (url.includes("/node_modules/@agntn/ciphers/")) {
+    roots.add("ciphers");
   }
 }
 
@@ -46,5 +48,10 @@ assert.deepEqual([...roots].sort(), [], "a missing puzzle resolved the verificat
 const result = await verifyTool("bits/1");
 assert.match(result.content[0]?.text ?? "", /^bits\/1: verified,/u);
 assert.ok(roots.has("keys"), "verifying bits/1 never resolved @agntn/keys");
+assert.ok(!roots.has("ciphers"), "verifying bits/1 resolved the keyfile cipher");
+
+const weave = await verifyTool("weave/1");
+assert.match(weave.content[0]?.text ?? "", /^weave\/1: verified,/u);
+assert.ok(roots.has("ciphers"), "opening the weave/1 keyfile never resolved @agntn/ciphers");
 
 console.log(JSON.stringify({ miss, cryptoOnMiss: 0, verified: true }));

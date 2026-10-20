@@ -160,7 +160,8 @@ export function privateKeyFromSeed(
   if (wallet === undefined || chain === Chain.Decred) {
     return undefined;
   }
-  const derived = wallet.deriveHDWallet(phrase, path, {
+  const derived = wallet.deriveHDWallet(phrase, {
+    path,
     allowInvalidChecksum: true,
     ...(passphrase === undefined ? {} : { passphrase }),
     ...(wordlist === undefined ? {} : { wordlist }),

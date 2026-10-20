@@ -232,14 +232,14 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     range: undefined,
     pubkey: undefined,
     pubkeyFormat: undefined,
-    secret: "none",
+    secret: "keyfile",
     keyLiteral: undefined,
     verdict: "unavailable",
-    detail: "Puzzle has no private key",
+    detail: "Keyfile passphrase is unknown",
     explorer: "https://viewblock.io/arweave/address/wHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0",
     source: "https://ur42unm2jhdm.arweave.net/VLJIGuTJewofKx8ad4JYQs93nEuGnkgjrIt_Sd2QPYw",
     transactions: 29,
-    tool: "weave/3\tunsolved\t1000.165838006237 AR\twHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0\nchain: arweave  address kind: standard\npublic key: unknown\nprivate key: unknown\nstarted: 2019-05-25 13:07:33\ntransactions: 29, 26 small increases folded\n\tfunding\t2019-05-25 13:07:33\t250 AR\thTB5Ouv5nY11pQiGFXCJQZxNOkVlgPAAJ9IYSRu8v0E\n\tfunding\t2019-05-27 08:30:39\t500 AR\t_Aa5au3qzhCSIPxj5RfLkF_eSUuxAcnqoWY3PeKTaRg\n\tfunding\t2019-08-28 14:09:38\t250 AR\t7-sWojFc0sG3mTr34YGBGssYDvXjOPZf-xik8v1Ct24\n\t26 small increases\t2021-12-21 01:58:12 to 2025-09-26 17:18:50\t0.165838006237 AR\nexplorer: https://viewblock.io/arweave/address/wHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0\nsource: https://ur42unm2jhdm.arweave.net/VLJIGuTJewofKx8ad4JYQs93nEuGnkgjrIt_Sd2QPYw",
+    tool: "weave/3\tunsolved\t1000.165838006237 AR\twHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0\nchain: arweave  address kind: standard\npublic key: unknown\nprivate key: U2FsdGVkX18fDwMiir2vqpWN… (encrypted keyfile, 4248 characters)\nstarted: 2019-05-25 13:07:33\ntransactions: 29, 26 small increases folded\n\tfunding\t2019-05-25 13:07:33\t250 AR\thTB5Ouv5nY11pQiGFXCJQZxNOkVlgPAAJ9IYSRu8v0E\n\tfunding\t2019-05-27 08:30:39\t500 AR\t_Aa5au3qzhCSIPxj5RfLkF_eSUuxAcnqoWY3PeKTaRg\n\tfunding\t2019-08-28 14:09:38\t250 AR\t7-sWojFc0sG3mTr34YGBGssYDvXjOPZf-xik8v1Ct24\n\t26 small increases\t2021-12-21 01:58:12 to 2025-09-26 17:18:50\t0.165838006237 AR\nexplorer: https://viewblock.io/arweave/address/wHP6OPG5GMF5dedo_CD8AAy6x8La-gfI5b5pk65Tx_0\nsource: https://ur42unm2jhdm.arweave.net/VLJIGuTJewofKx8ad4JYQs93nEuGnkgjrIt_Sd2QPYw",
   },
   {
     id: "ballet/AA007448",
@@ -1664,7 +1664,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "b4f7f586503b",
+  dataVersion: "09b18e4c2800",
   total: 558,
   solved: 324,
   unsolved: 114,
@@ -2819,7 +2819,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
       ETH: 1,
     },
     withPubkey: 3,
-    withKey: 0,
+    withKey: 8,
     firstStarted: "2019-05-22 10:27:23",
     lastStarted: "2020-05-18 23:53:09",
     hints: [],

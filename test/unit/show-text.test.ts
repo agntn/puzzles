@@ -464,6 +464,18 @@ describe("puzzles_show text", () => {
     expect(movieEnigma).toContain("derivation path: m/84'/0'/0'/0/0");
   });
 
+  it("shortens a sealed keyfile and prints the answer that opens it", async () => {
+    const weave = await lines("weave/2");
+
+    expect(weave).toContain(
+      "private key: U2FsdGVkX1+FId6tbfQ33ek3… (encrypted keyfile, 4248 characters)",
+    );
+    expect(weave).toContain("keyfile passphrase: 1111:51Nfg368+96938=97006");
+    expect((await lines("weave/3")).some((line) => line.startsWith("keyfile passphrase"))).toBe(
+      false,
+    );
+  });
+
   it("keeps the seed phrase when a WIF outranks it", () => {
     const record = puzzle({
       id: "fixture/seed",

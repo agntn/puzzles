@@ -94,6 +94,20 @@ function encryptedWifProblem(puzzle: Puzzle): string | undefined {
     : bip38KeyProblem(puzzle, wif.encrypted, wif.passphrase);
 }
 
+/* A Puzzle Weave keyfile is CryptoJS's Salted__ base64, and only Arweave has keyfiles to seal. */
+function keyfileProblem(puzzle: Puzzle): string | undefined {
+  const keyfile = puzzle.keyData()?.keyfile;
+  if (keyfile === undefined) {
+    return undefined;
+  }
+  if (puzzle.chain() !== "arweave") {
+    return `${puzzle.id()}: keyfile on a ${puzzle.chain()} record`;
+  }
+  return /^U2FsdGVkX1[\d+/A-Za-z]+={0,2}$/u.test(keyfile.encrypted)
+    ? undefined
+    : `${puzzle.id()}: keyfile is not CryptoJS passphrase output`;
+}
+
 function declaredKeyProblem(puzzle: Puzzle, key: KeyData, hexKey: string): string | undefined {
   if (key.bits !== undefined && key.bits !== privateKeyBits(hexKey)) {
     return `${puzzle.id()}: declared bit length does not match the key`;
@@ -704,6 +718,21 @@ describe("collection class data", () => {
 
   it("keeps encrypted WIF material consistent", () => {
     expect(collect(encryptedWifProblem)).toEqual([]);
+  });
+
+  it("opens every keyfile whose answer a source printed", async () => {
+    expect(collect(keyfileProblem)).toEqual([]);
+    const answered = puzzles.filter(
+      (puzzle) => puzzle.keyData()?.keyfile?.passphrase !== undefined,
+    );
+    const results = await Promise.all(answered.map((puzzle) => verify(puzzle)));
+    expect(results.filter((result) => !result.verified).map((result) => result.id)).toEqual([]);
+    expect(results.map((result) => result.id)).toEqual([
+      "weave/1",
+      "weave/2",
+      "weave/4",
+      "weave/8",
+    ]);
   });
 
   it("derives every stored address from its recorded private key", () => {

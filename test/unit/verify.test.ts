@@ -5,6 +5,7 @@ import { bitaps } from "../../src/collections/bitaps.ts";
 import { bitimage } from "../../src/collections/bitimage.ts";
 import { quizchain } from "../../src/collections/quizchain.ts";
 import { warp } from "../../src/collections/warp.ts";
+import { weave } from "../../src/collections/weave.ts";
 import { zden } from "../../src/collections/zden.ts";
 import {
   type Address,
@@ -12,6 +13,7 @@ import {
   compressed,
   hex,
   type Key,
+  keyfile,
   p2pkh,
   p2sh,
   p2wpkh,
@@ -489,6 +491,66 @@ describe("Collection.verify", () => {
     const result = await ballet.verify("AA009926");
 
     expect(result).toMatchObject({ verified: false, unavailable: true, error: "WIF is encrypted" });
+  });
+
+  it("opens an Arweave keyfile with its answer and derives the address from the modulus", async () => {
+    const result = await weave.verify(4);
+
+    expect(result).toMatchObject({
+      verified: true,
+      derivedAddress: "2pwE_LEzD0z6m_ENCDIta9YTBKXW9FFCURrx1yJoO7w",
+      error: null,
+    });
+    expect(result.verified && JSON.parse(result.privateKey)).toMatchObject({ kty: "RSA" });
+  });
+
+  it("leaves a keyfile without its answer unavailable", async () => {
+    const result = await weave.verify(3);
+
+    expect(result).toMatchObject({
+      verified: false,
+      unavailable: true,
+      error: "Keyfile passphrase is unknown",
+    });
+  });
+
+  it("fails a keyfile whose recorded answer doesn't open it", async () => {
+    const sealed = weave.require(1).keyData()?.keyfile?.encrypted ?? "";
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "arweave",
+        address: "PbdTDYikdddWfNFlDt2aZokALXKe1mJVSC9TALUBNv8",
+        key: keyfile(sealed, { passphrase: "5710:011890Dead SeaBd6Apple039" }),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: false,
+      unavailable: false,
+      privateKey: null,
+      error: "The recorded passphrase doesn't open the keyfile",
+    });
+  });
+
+  it("fails a keyfile that opens to another wallet", async () => {
+    const sealed = weave.require(1).keyData()?.keyfile;
+    const result = await verify(
+      puzzle({
+        ...synthetic,
+        chain: "arweave",
+        address: "2pwE_LEzD0z6m_ENCDIta9YTBKXW9FFCURrx1yJoO7w",
+        key: keyfile(sealed?.encrypted ?? "", { passphrase: sealed?.passphrase ?? "" }),
+      }),
+    );
+
+    expect(result).toMatchObject({
+      verified: false,
+      unavailable: false,
+      derivedAddress: "PbdTDYikdddWfNFlDt2aZokALXKe1mJVSC9TALUBNv8",
+      error:
+        "Verification mismatch: expected 2pwE_LEzD0z6m_ENCDIta9YTBKXW9FFCURrx1yJoO7w, got PbdTDYikdddWfNFlDt2aZokALXKe1mJVSC9TALUBNv8",
+    });
   });
 
   it.each([

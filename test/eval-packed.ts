@@ -226,6 +226,11 @@ const toolDefinitions: ModuleMatcher = (module) => module.url === `${packageRoot
 /* Dependencies resolve from the checkout's node_modules, outside the packed root. */
 const verificationCryptoUrl = /\/node_modules\/(?:@agntn\/keys|@noble\/curves)\//u;
 const verificationCrypto: ModuleMatcher = (module) => verificationCryptoUrl.test(module.url);
+/* Only an Arweave keyfile needs its recipe chunk and the CryptoJS cipher behind it. */
+const keyfileChunk: ModuleMatcher = (module) =>
+  module.url === `${packageRootUrl}dist/_chunks/keyfile.mjs`;
+const keyfileCipher: ModuleMatcher = (module) =>
+  module.url.includes("/node_modules/@agntn/ciphers/");
 
 /**
  * Imports a packed entry under a unique URL, so every step evaluates its own copy
@@ -380,6 +385,21 @@ async function assertPackedLibrary(): Promise<void> {
   assert.ok(puzzle !== undefined);
   assert.equal((await library.verify(puzzle)).verified, true, "bits/1 verifies once packed");
   assert.ok(loaded.some(verificationCrypto), "the first verification loads the crypto");
+  assertNotLoaded(keyfileChunk, "a Bitcoin key must not load the keyfile recipe");
+  assert.ok(!loaded.some(keyfileCipher), "a Bitcoin key must not load the keyfile cipher");
+}
+
+/* Last, because looking up weave/1 loads a collection the earlier steps must not see. */
+async function assertPackedKeyfile(): Promise<void> {
+  const library = await importPacked<Library>("dist/index.mjs");
+  const weave = await library.requirePuzzle("weave/1");
+  assert.equal(
+    (await library.verify(weave)).verified,
+    true,
+    "weave/1 opens its keyfile once packed",
+  );
+  assertLoaded(keyfileChunk, "an Arweave keyfile loads its recipe");
+  assert.ok(loaded.some(keyfileCipher), "an Arweave keyfile loads the cipher");
 }
 
 /**
@@ -680,6 +700,7 @@ try {
   await assertPackedExtensions();
   await assertPackedBin(manifest);
   await assertCheckoutBin();
+  await assertPackedKeyfile();
 
   console.log(
     `Packed ${manifest.name}@${manifest.version}: ${expectedCollections.length} lazy collection entries, ${expectedToolNames.length} tools over MCP, Pi and OMP without src/, and ${manifest.bin["puzzles"]} ran as a command`,

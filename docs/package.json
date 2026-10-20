@@ -13,8 +13,9 @@
   "dependencies": {
     "@agntn/archives": "0.7.2",
     "@agntn/chains": "0.5.0",
+    "@agntn/ciphers": "0.7.0",
     "@agntn/explorers": "0.6.1",
-    "@agntn/keys": "0.6.2",
+    "@agntn/keys": "0.8.1",
     "@agntn/tools": "0.2.4",
     "@modelcontextprotocol/sdk": "1.32.1",
     "@scure/base": "2.4.0",
