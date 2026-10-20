@@ -128,7 +128,22 @@ function secretParts(secret: Secret): readonly [value: string, kind: string] {
       return [secret.phrase, "seed phrase"];
     case "mini":
       return [secret.mini, "mini"];
+    case "keyfile":
+      return [sealed(secret.encrypted), `encrypted keyfile, ${secret.encrypted.length} characters`];
   }
+}
+
+/** How much of a sealed keyfile the text shows; the full blob stays in the record and its JSON. */
+const SEALED_PREFIX = 24;
+
+/**
+ * The head of a sealed keyfile, enough to tell one page's blob from another's.
+ *
+ * @param {string} encrypted - The keyfile as the page publishes it.
+ * @returns {string} Its first characters and an ellipsis.
+ */
+function sealed(encrypted: string): string {
+  return `${encrypted.slice(0, SEALED_PREFIX)}…`;
 }
 
 /**
@@ -205,7 +220,14 @@ function keyLines(key: KeyData | undefined): string[] {
   const secret = secretOf(key);
   const lines = [`private key: ${formatSecret(secret, key?.derived === true)}`];
   const kind = secret?.kind;
-  return key === undefined ? lines : [...lines, ...wifLines(key, kind), ...seedLines(key, kind)];
+  return key === undefined
+    ? lines
+    : [
+        ...lines,
+        ...wifLines(key, kind),
+        ...seedLines(key, kind),
+        ...field("keyfile passphrase", key.keyfile?.passphrase),
+      ];
 }
 
 function formatPubkey(pubkey: Pubkey | undefined): string {

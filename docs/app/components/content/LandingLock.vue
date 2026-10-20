@@ -162,6 +162,7 @@ const SECRET_TEXT: Readonly<Record<string, string>> = {
   encrypted: "BIP38, sealed",
   seed: "seed phrase published",
   mini: "mini key published",
+  keyfile: "keyfile on the page, sealed",
   none: "not published",
 };
 const key = computed(() => {
@@ -177,6 +178,8 @@ const about = computed(() => {
   if (bits !== undefined) return `${where} The private key is a ${bits}-bit number.`;
   if (secret === "none") return `${where} No private key has been published.`;
   if (secret === "encrypted") return `${where} Its key is published, sealed with BIP38.`;
+  if (secret === "keyfile")
+    return `${where} Its keyfile sits right there on the page. Bring the answer.`;
   return `${where} Its private key has been published.`;
 });
 

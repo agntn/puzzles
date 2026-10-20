@@ -1,5 +1,6 @@
 import type { BrainwalletRecipe } from "@agntn/keys/brainwallet";
 import type { Chain } from "./chains.ts";
+import type { OpenedKeyfile } from "./keyfile.ts";
 import { PubkeyFormat, type Secret, type Seed, secretOf, seedPassphrase } from "./parts.ts";
 import { type Puzzle } from "./puzzle.ts";
 
@@ -29,6 +30,7 @@ export interface VerifySuccess {
   readonly error: null;
   readonly expectedAddress: string;
   readonly id: string;
+  /** The key in hex, or on Arweave the opened keyfile as JSON. */
   readonly privateKey: string;
   /** The record's recipe, rerun, when it holds one. */
   readonly recipe?: RecipeResult;
@@ -73,6 +75,9 @@ type Wallets = Pick<
 /** One import shared by overlapping first calls, so Pi's loader can't evaluate it twice. */
 let wallets: Promise<typeof import("./crypto.ts")> | undefined;
 
+/** The same for the keyfile recipe, which only Arweave records ever load. */
+let keyfiles: Promise<typeof import("./keyfile.ts")> | undefined;
+
 interface ResolvedKey {
   readonly format: PubkeyFormat;
   readonly hex: string;
@@ -87,6 +92,8 @@ interface UnresolvedKey {
 interface Check {
   readonly derivedAddress: string | null;
   readonly error: string | null;
+  /** The key the address came from: hex, or the keyfile JSON on Arweave. */
+  readonly privateKey?: string;
   readonly unavailable: boolean;
 }
 
@@ -184,11 +191,41 @@ function hexFormat(puzzle: Puzzle, hex: string, decoders: Wallets): PubkeyFormat
   return PubkeyFormat.Compressed;
 }
 
-async function resolveKey(puzzle: Puzzle, decoders: Wallets): Promise<ResolvedKey | UnresolvedKey> {
-  const secret = secretOf(puzzle.keyData());
-  if (secret === undefined) {
-    return unavailable("Puzzle has no private key");
+/**
+ * Opens a sealed Arweave keyfile with the answer the record holds, the way the puzzle page does.
+ *
+ * @param {Extract<Secret, { kind: "keyfile" }>} secret - The keyfile the record exposes.
+ * @returns {Promise<OpenedKeyfile | UnresolvedKey>} The opened keyfile, or why it stays shut.
+ */
+async function resolveKeyfile(
+  secret: Extract<Secret, { kind: "keyfile" }>,
+): Promise<OpenedKeyfile | UnresolvedKey> {
+  if (secret.passphrase === undefined) {
+    return unavailable("Keyfile passphrase is unknown");
   }
+  const { openKeyfile } = await (keyfiles ??= import("./keyfile.ts"));
+  try {
+    return openKeyfile(secret.encrypted, secret.passphrase);
+  } catch {
+    return failed("The recorded passphrase doesn't open the keyfile");
+  }
+}
+
+async function resolveKey(
+  puzzle: Puzzle,
+  decoders: Wallets,
+): Promise<ResolvedKey | OpenedKeyfile | UnresolvedKey> {
+  const secret = secretOf(puzzle.keyData());
+  return secret === undefined
+    ? unavailable("Puzzle has no private key")
+    : resolveSecret(puzzle, secret, decoders);
+}
+
+async function resolveSecret(
+  puzzle: Puzzle,
+  secret: Secret,
+  decoders: Wallets,
+): Promise<ResolvedKey | OpenedKeyfile | UnresolvedKey> {
   switch (secret.kind) {
     case "hex":
       return { hex: secret.hex, format: hexFormat(puzzle, secret.hex, decoders) };
@@ -205,6 +242,8 @@ async function resolveKey(puzzle: Puzzle, decoders: Wallets): Promise<ResolvedKe
       );
     case "mini":
       return unavailable("Mini private keys are not verified");
+    case "keyfile":
+      return resolveKeyfile(secret);
   }
 }
 
@@ -328,11 +367,30 @@ async function rebuildBrainwallet(
     : rebuildFromPassphrase(puzzle, recipe, passphrase, decoders);
 }
 
+/**
+ * Compares the address an opened keyfile gives with the record's, byte for byte as Arweave writes it.
+ *
+ * @param {Puzzle} puzzle - The puzzle.
+ * @param {OpenedKeyfile} key - The opened keyfile.
+ * @returns {Check} The verdict, with the keyfile as the private key.
+ */
+function checkKeyfile(puzzle: Puzzle, key: OpenedKeyfile): Check {
+  const expected = puzzle.address().value;
+  const error =
+    key.address === expected
+      ? null
+      : `Verification mismatch: expected ${expected}, got ${key.address}`;
+  return { derivedAddress: key.address, error, unavailable: false, privateKey: key.keyfile };
+}
+
 function checkKey(
   puzzle: Puzzle,
   crypto: Wallets,
-  key: ResolvedKey | UnresolvedKey,
-): Check & { readonly hex?: string } {
+  key: ResolvedKey | OpenedKeyfile | UnresolvedKey,
+): Check {
+  if ("keyfile" in key) {
+    return checkKeyfile(puzzle, key);
+  }
   if (!("hex" in key)) {
     return { derivedAddress: null, error: key.reason, unavailable: key.unavailable };
   }
@@ -350,7 +408,7 @@ function checkKey(
     const error = crypto.addressesEqual(chain, derivedAddress, address.value)
       ? null
       : `Verification mismatch: expected ${address.value}, got ${derivedAddress}`;
-    return { derivedAddress, error, unavailable: false, hex: key.hex };
+    return { derivedAddress, error, unavailable: false, privateKey: key.hex };
   } catch (error) {
     return {
       derivedAddress: null,
@@ -375,7 +433,7 @@ function checkRecipe(puzzle: Puzzle, crypto: Wallets, rebuilt: Rebuilt): RecipeR
     ...(rebuilt.path === undefined ? {} : { path: rebuilt.path }),
     verified: checked.error === null,
     unavailable: checked.unavailable,
-    privateKey: checked.error === null ? (checked.hex ?? null) : null,
+    privateKey: checked.error === null ? (checked.privateKey ?? null) : null,
     derivedAddress: checked.derivedAddress,
     error: checked.error,
   };
@@ -396,11 +454,15 @@ export async function verify(puzzle: Puzzle): Promise<VerifyResult> {
   const id = puzzle.id();
   const expectedAddress = puzzle.address().value;
   const recipe = rebuilt === undefined ? {} : { recipe: checkRecipe(puzzle, crypto, rebuilt) };
-  if (checked.error === null && checked.derivedAddress !== null && checked.hex !== undefined) {
+  if (
+    checked.error === null &&
+    checked.derivedAddress !== null &&
+    checked.privateKey !== undefined
+  ) {
     return {
       id,
       verified: true,
-      privateKey: checked.hex,
+      privateKey: checked.privateKey,
       expectedAddress,
       derivedAddress: checked.derivedAddress,
       error: null,

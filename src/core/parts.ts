@@ -232,6 +232,14 @@ export interface Wif {
   readonly salt?: string;
 }
 
+/** An Arweave keyfile sealed the Puzzle Weave way: CryptoJS AES under the answer. */
+export interface Keyfile {
+  /** The page's `var msg`, base64 starting `U2FsdGVkX1`. */
+  readonly encrypted: string;
+  /** The answer exactly as the page hashes it, once a source prints it. */
+  readonly passphrase?: string;
+}
+
 /** One published secret sharing share. */
 export interface Share {
   readonly data: string;
@@ -251,6 +259,7 @@ export interface KeyData {
   /** No source printed the secret; the record rebuilt it from a published recipe. */
   readonly derived?: true;
   readonly hex?: string;
+  readonly keyfile?: Keyfile;
   readonly mini?: string;
   readonly seed?: Seed;
   readonly shares?: Shares;
@@ -270,7 +279,12 @@ export type Secret =
       readonly language?: BIP39Language | undefined;
       readonly scheme?: "electrum" | undefined;
     }
-  | { readonly kind: "mini"; readonly mini: string };
+  | { readonly kind: "mini"; readonly mini: string }
+  | {
+      readonly kind: "keyfile";
+      readonly encrypted: string;
+      readonly passphrase?: string | undefined;
+    };
 
 /**
  * The private key representation a key record exposes. `hasPrivateKey()` and verification read the
@@ -283,7 +297,9 @@ export function secretOf(key: KeyData | undefined): Secret | undefined {
   if (key === undefined) {
     return undefined;
   }
-  return hexSecret(key) ?? wifSecret(key) ?? seedSecret(key) ?? miniSecret(key);
+  return (
+    hexSecret(key) ?? wifSecret(key) ?? seedSecret(key) ?? miniSecret(key) ?? keyfileSecret(key)
+  );
 }
 
 function hexSecret(key: KeyData): Secret | undefined {
@@ -329,6 +345,10 @@ export function seedPassphrase(seed: Seed): Passphrase | undefined {
 
 function miniSecret(key: KeyData): Secret | undefined {
   return key.mini === undefined ? undefined : { kind: "mini", mini: key.mini };
+}
+
+function keyfileSecret(key: KeyData): Secret | undefined {
+  return key.keyfile === undefined ? undefined : { kind: "keyfile", ...key.keyfile };
 }
 
 /**
@@ -703,6 +723,17 @@ export class Key {
   }
 
   /**
+   * Records a sealed Arweave keyfile and, once a source prints it, the answer that opens it.
+   *
+   * @param {string} encrypted - The page's `var msg`, base64 starting `U2FsdGVkX1`.
+   * @param {Readonly<{ passphrase?: string }>} [options] - The answer exactly as the page hashes it.
+   * @returns {Key} A new builder with the value recorded.
+   */
+  keyfile(encrypted: string, options: Readonly<{ passphrase?: string }> = {}): Key {
+    return this.#with({ keyfile: defined({ encrypted, ...options }) });
+  }
+
+  /**
    * Records a secret sharing scheme and its published shares.
    *
    * @param {number} threshold - Shares needed to recover the key.
@@ -809,6 +840,17 @@ export function derivation(path: string): Key {
  */
 export function mini(value: string): Key {
   return new Key().mini(value);
+}
+
+/**
+ * Starts key material from a sealed Arweave keyfile, the Puzzle Weave way.
+ *
+ * @param {string} encrypted - The page's `var msg`, base64 starting `U2FsdGVkX1`.
+ * @param {Readonly<{ passphrase?: string }>} [options] - The answer exactly as the page hashes it.
+ * @returns {Key} The builder, for chaining.
+ */
+export function keyfile(encrypted: string, options: Readonly<{ passphrase?: string }> = {}): Key {
+  return new Key().keyfile(encrypted, options);
 }
 
 /**

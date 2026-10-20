@@ -75,6 +75,7 @@ interface KeyData {
   seed?: Seed; // phrase, path, xpub, entropy
   mini?: string;
   shares?: Shares;
+  keyfile?: Keyfile; // encrypted (the page's var msg) / passphrase
 }
 
 interface Transaction {
@@ -150,7 +151,7 @@ interface BalanceOptions {
 ```ts
 await verify(puzzle); // VerifyResult, loads the crypto on first use
 await collection.verify(query); // VerifyResult, the same through the collection's lookup
-secretOf(puzzle.keyData()); // Secret | undefined: hex, wif, encrypted, seed (with a phrase), or mini
+secretOf(puzzle.keyData()); // Secret | undefined: hex, wif, encrypted, seed (with a phrase), mini, or keyfile
 
 type VerifyResult = VerifySuccess | VerifyFailure;
 // success: { verified: true, privateKey, derivedAddress, expectedAddress, error: null }
