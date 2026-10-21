@@ -241,6 +241,10 @@ export default defineNuxtConfig({
       alt: "@agntn/puzzles: public crypto bounties and puzzles as typed records",
     },
   },
+  /** The registry app builds as its own Vue bundle, so it takes the site's styles from here. */
+  mcp: {
+    apps: { css: ["~/app.css"] },
+  },
   icon: {
     clientBundle: {
       icons: [
