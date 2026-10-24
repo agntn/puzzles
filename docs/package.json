@@ -20,7 +20,7 @@
     "@agntn/tools": "0.2.4",
     "@modelcontextprotocol/sdk": "1.32.1",
     "@scure/base": "2.4.0",
-    "agents": "0.28.1",
+    "agents": "0.29.0",
     "better-sqlite3": "12.11.1",
     "docus": "5.15.0",
     "nuxt": "4.6.1",
@@ -32,7 +32,7 @@
     "@iconify-json/token": "1.2.42",
     "@iconify-json/vscode-icons": "1.2.83",
     "vue-tsc": "3.3.11",
-    "wrangler": "4.135.0"
+    "wrangler": "4.151.3"
   },
   "packageManager": "pnpm@11.22.0"
 }
