@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@agntn/archives':
-        specifier: 0.7.2
-        version: 0.7.2(@cfworker/json-schema@4.1.1)(ai@7.0.141(zod@4.6.5))(chokidar@5.0.0)(db0@0.3.4(better-sqlite3@12.11.1))(dotenv@17.4.2)(giget@3.3.1)(ioredis@5.11.1(supports-color@10.2.2))(jiti@2.7.0)(magicast@0.5.5)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
+        specifier: 0.7.4
+        version: 0.7.4(@cfworker/json-schema@4.1.1)(ai@7.0.141(zod@4.6.5))(chokidar@5.0.0)(db0@0.3.4(better-sqlite3@12.11.1))(dotenv@17.4.2)(giget@3.3.1)(ioredis@5.11.1(supports-color@10.2.2))(jiti@2.7.0)(magicast@0.5.5)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
       '@agntn/chains':
         specifier: 0.5.0
         version: 0.5.0(@cfworker/json-schema@4.1.1)(ai@7.0.141(zod@4.6.5))(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
@@ -21,8 +21,8 @@ importers:
         specifier: 0.6.1
         version: 0.6.1(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(typebox@1.3.34)
       '@agntn/hashes':
-        specifier: 0.7.0
-        version: 0.7.0(ai@7.0.141(zod@4.6.5))(zod@4.6.5)
+        specifier: 0.7.2
+        version: 0.7.2(ai@7.0.141(zod@4.6.5))(zod@4.6.5)
       '@agntn/keys':
         specifier: 0.8.1
         version: 0.8.1(ai@7.0.141(zod@4.6.5))(zod@4.6.5)
@@ -72,8 +72,8 @@ importers:
 
 packages:
 
-  '@agntn/archives@0.7.2':
-    resolution: {integrity: sha512-YVYN76ZABzkJlSSpE5VvAvFzFjBGIPJid1ptDcJw+8/WUsCEhCEEUfulPhDw+i544wuLqPEVnCsqH3oZj4uu1w==}
+  '@agntn/archives@0.7.4':
+    resolution: {integrity: sha512-8m3CxUQlqTbBHLAaub7dVRP1d/Pzse0dXLlUu4rz5FMQGaUhyickJbgM+6XvF6zP9160ltJqG/M+tHqkL7+IvQ==}
     engines: {node: '>=26'}
     hasBin: true
     peerDependencies:
@@ -341,8 +341,8 @@ packages:
       ai:
         optional: true
 
-  '@agntn/hashes@0.7.0':
-    resolution: {integrity: sha512-vHW12yljmFmfN7Z3c5JEdmr+yS9wA7T3RyKgh81Sg/WzUo7wmFyVy5Z8EpPfDxgDQqUkgJe8quWA5pKCsQOlEQ==}
+  '@agntn/hashes@0.7.1':
+    resolution: {integrity: sha512-VspWveoZuOs7Qh0JI/+Wx3dV6sMdgbZNIANBjfvsnWJwH2sJETH9pyYO/fxponmz+Eco2dvpSfqLljwwVYP0dg==}
     engines: {node: '>=26'}
     hasBin: true
     peerDependencies:
@@ -357,13 +357,13 @@ packages:
       ai:
         optional: true
 
-  '@agntn/hashes@0.7.1':
-    resolution: {integrity: sha512-VspWveoZuOs7Qh0JI/+Wx3dV6sMdgbZNIANBjfvsnWJwH2sJETH9pyYO/fxponmz+Eco2dvpSfqLljwwVYP0dg==}
+  '@agntn/hashes@0.7.2':
+    resolution: {integrity: sha512-yrhws6tj5nNqnDXSTti+bIfqq4zEnt/3KPkYhduCHorX4U82UtaFulSf4tkvcCn8zmF1jVNnJH23NuOMOMFEWg==}
     engines: {node: '>=26'}
     hasBin: true
     peerDependencies:
-      '@earendil-works/pi-coding-agent': '>=0.87.1 <2'
-      '@oh-my-pi/pi-coding-agent': '>=18.4.2 <19'
+      '@earendil-works/pi-coding-agent': '>=0.84.2 <2'
+      '@oh-my-pi/pi-coding-agent': '>=18.0.0 <19'
       ai: '>=7.0.0'
     peerDependenciesMeta:
       '@earendil-works/pi-coding-agent':
@@ -4891,6 +4891,10 @@ packages:
     resolution: {integrity: sha512-DPi0FmjiSU5EvQV0++GFDOJ9ASQUVFh5kD+OzOnYdi7n3Wpm9hWWGfB/O2blfHcMVTL5WkQXSnRiK9makhrcnw==}
     engines: {node: '>=0.3.1'}
 
+  diff@9.0.0:
+    resolution: {integrity: sha512-svtcdpS8CgJyqAjEQIXdb3OjhFVVYjzGAPO8WGCmRbrml64SPw/jJD4GoE98aR7r25A0XcgrK3F02yw9R/vhQw==}
+    engines: {node: '>=0.3.1'}
+
   docus@5.15.0:
     resolution: {integrity: sha512-BpxKFAHRofgojds9s2O+2SPAZREYj9Jbf2bh5l0OL4IJb45JHohYiMad1gszkVtrH7kXrbTzAVe/p2OOvgdm9Q==}
     peerDependencies:
@@ -8424,16 +8428,14 @@ packages:
 
 snapshots:
 
-  '@agntn/archives@0.7.2(@cfworker/json-schema@4.1.1)(ai@7.0.141(zod@4.6.5))(chokidar@5.0.0)(db0@0.3.4(better-sqlite3@12.11.1))(dotenv@17.4.2)(giget@3.3.1)(ioredis@5.11.1(supports-color@10.2.2))(jiti@2.7.0)(magicast@0.5.5)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)':
+  '@agntn/archives@0.7.4(@cfworker/json-schema@4.1.1)(ai@7.0.141(zod@4.6.5))(chokidar@5.0.0)(db0@0.3.4(better-sqlite3@12.11.1))(dotenv@17.4.2)(giget@3.3.1)(ioredis@5.11.1(supports-color@10.2.2))(jiti@2.7.0)(magicast@0.5.5)(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)':
     dependencies:
       '@agntn/compressions': 0.1.0(ai@7.0.141(zod@4.6.5))
       '@agntn/hashes': 0.5.0(@cfworker/json-schema@4.1.1)(ai@7.0.141(zod@4.6.5))(supports-color@10.2.2)(typebox@1.3.34)(zod@4.6.5)
-      '@agntn/tools': 0.0.0(@modelcontextprotocol/server@2.2.0)(ai@7.0.141(zod@4.6.5))
+      '@agntn/tools': 0.2.4(@modelcontextprotocol/server@2.2.0)(ai@7.0.141(zod@4.6.5))(zod@4.6.5)
       '@modelcontextprotocol/server': 2.2.0
       c12: 4.0.0-beta.5(chokidar@5.0.0)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5)
-      citty: 0.2.2
-      consola: 3.4.2
-      diff: 8.0.4
+      diff: 9.0.0
       ufo: 1.6.4
       unstorage: 1.17.5(db0@0.3.4(better-sqlite3@12.11.1))(ioredis@5.11.1(supports-color@10.2.2))
     transitivePeerDependencies:
@@ -8458,6 +8460,7 @@ snapshots:
       - db0
       - dotenv
       - giget
+      - h3-mcp
       - idb-keyval
       - ioredis
       - jiti
@@ -8648,9 +8651,9 @@ snapshots:
     transitivePeerDependencies:
       - h3-mcp
 
-  '@agntn/hashes@0.7.0(ai@7.0.141(zod@4.6.5))(zod@4.6.5)':
+  '@agntn/hashes@0.7.1(ai@7.0.141(zod@4.6.5))(zod@4.6.5)':
     dependencies:
-      '@agntn/tools': 0.2.3(@modelcontextprotocol/server@2.2.0)(ai@7.0.141(zod@4.6.5))(zod@4.6.5)
+      '@agntn/tools': 0.2.4(@modelcontextprotocol/server@2.2.0)(ai@7.0.141(zod@4.6.5))(zod@4.6.5)
       '@modelcontextprotocol/server': 2.2.0
     optionalDependencies:
       ai: 7.0.141(zod@4.6.5)
@@ -8658,7 +8661,7 @@ snapshots:
       - h3-mcp
       - zod
 
-  '@agntn/hashes@0.7.1(ai@7.0.141(zod@4.6.5))(zod@4.6.5)':
+  '@agntn/hashes@0.7.2(ai@7.0.141(zod@4.6.5))(zod@4.6.5)':
     dependencies:
       '@agntn/tools': 0.2.4(@modelcontextprotocol/server@2.2.0)(ai@7.0.141(zod@4.6.5))(zod@4.6.5)
       '@modelcontextprotocol/server': 2.2.0
@@ -10422,7 +10425,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.1.2
-      exsolve: 1.1.1
+      exsolve: 1.1.3
       ignore: 7.0.9
       jiti: 2.7.0
       klona: 2.0.6
@@ -10452,7 +10455,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.1.2
-      exsolve: 1.1.1
+      exsolve: 1.1.3
       ignore: 7.0.9
       jiti: 2.7.0
       klona: 2.0.6
@@ -10482,7 +10485,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.1.2
-      exsolve: 1.1.1
+      exsolve: 1.1.3
       ignore: 7.0.9
       jiti: 2.7.0
       klona: 2.0.6
@@ -10512,7 +10515,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.1.2
-      exsolve: 1.1.1
+      exsolve: 1.1.3
       ignore: 7.0.9
       jiti: 2.7.0
       klona: 2.0.6
@@ -10542,7 +10545,7 @@ snapshots:
       defu: 6.1.7
       destr: 2.0.5
       errx: 0.1.2
-      exsolve: 1.1.1
+      exsolve: 1.1.3
       ignore: 7.0.9
       jiti: 2.7.0
       klona: 2.0.6
@@ -12959,7 +12962,7 @@ snapshots:
     dependencies:
       confbox: 0.2.4
       defu: 6.1.7
-      exsolve: 1.1.1
+      exsolve: 1.1.3
       pathe: 2.0.3
       pkg-types: 2.3.3
       rc9: 3.1.0
@@ -13275,6 +13278,8 @@ snapshots:
   diff3@0.0.3: {}
 
   diff@8.0.4: {}
+
+  diff@9.0.0: {}
 
   docus@5.15.0(cba363a9ada7905b0c23f5d7f95c96b6):
     dependencies:
@@ -17768,7 +17773,7 @@ snapshots:
   vite-plugin-vue-tracer@1.5.0(vite@8.3.4(@types/node@26.6.1)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))(vue@3.5.44(typescript@5.9.3)):
     dependencies:
       estree-walker: 3.0.3
-      exsolve: 1.1.1
+      exsolve: 1.1.3
       magic-string: 1.4.1
       pathe: 2.0.3
       source-map-js: 1.2.1
