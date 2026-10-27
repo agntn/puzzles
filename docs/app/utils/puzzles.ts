@@ -364,7 +364,7 @@ const PRESENTATION: Readonly<
     sample: "smith-lyle-moore/born-to-be-wild",
     chains: ["bitcoin"],
     blurb:
-      "An indie band spent its ad budget on bitcoin and hid it behind riddles on its own website. The moon trip ended in Morse and a password called supernova. The sea voyage is still out there.",
+      "An indie band spent its ad budget on bitcoin and hid it behind riddles on its own website. The moon trip ended in Morse and a password called supernova. The sea voyage ended with a failed checksum.",
   },
   "trivia-brainwallet": {
     icon: "i-lucide-lightbulb",

@@ -1823,6 +1823,23 @@ export const archivedSources = [
     },
   },
   {
+    file: "smith-lyle-moore/btcxanter-2026-10-06",
+    url: "https://github.com/floflo777/open-crypto-puzzles/issues/41#issuecomment-6333713021",
+    author: "BTCxanter",
+    date: "2026-10-06",
+    archive: {
+      url: "https://web.archive.org/web/20261027131059/https://github.com/floflo777/open-crypto-puzzles/issues/41",
+      date: "2026-10-27T13:10:59Z",
+      content: "confirmed",
+    },
+  },
+  {
+    file: "smith-lyle-moore/saffar488-2026-10-26",
+    url: "https://github.com/agntn/puzzles/issues/555",
+    author: "saffar488",
+    date: "2026-10-26",
+  },
+  {
     file: "grycoin/aoinakamoto-2019-07-28-civj2n",
     url: "https://www.reddit.com/r/Grycoin/comments/civj2n/7_mbtc_grycoin_chain_block_1/",
     author: "u/AoiNakamoto",

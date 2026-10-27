@@ -1080,9 +1080,9 @@ describe("lazy collection registry", () => {
       total: 558,
       claimed: 20,
       expired: 4,
-      solved: 324,
+      solved: 325,
       swept: 96,
-      unsolved: 114,
+      unsolved: 113,
       with_pubkey: 449,
       total_prize: {
         AR: 5550.190574146237,
@@ -1098,7 +1098,7 @@ describe("lazy collection registry", () => {
       unsolved_prize: {
         AR: 1500.188092936237,
         ETH: 12.662559658256946,
-        BTC: 909.99301137,
+        BTC: 909.96123437,
         LTC: 3.02608794,
       },
       techniques: {
@@ -1111,7 +1111,7 @@ describe("lazy collection registry", () => {
         bip38: 4,
         caesar: 2,
         "hash-collision": 5,
-        "hidden-seed-words": 19,
+        "hidden-seed-words": 20,
         "masked-key-range": 256,
         "md5-to-bip39-entropy": 140,
         morse: 3,
@@ -1196,6 +1196,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(324);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(325);
   });
 });
