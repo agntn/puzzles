@@ -198,8 +198,10 @@ pnpm lint         # vp lint and vp fmt, docs included
 pnpm typecheck    # builds first, then checks src, Pi and OMP
 pnpm test         # unit tests and the data gate
 pnpm test:packed  # packs the tarball and runs every published entry without src/
-pnpm docs         # the Docus site on localhost
+pnpm run docs     # the Docus site on localhost
 ```
+
+The `run` in that last line isn't decoration. pnpm 12 has a `docs` command of its own, and it wants a package name, not our site.
 
 ## 💛 Thanks
 
