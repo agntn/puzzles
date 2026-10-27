@@ -622,7 +622,7 @@ describe.concurrent("puzzles CLI", () => {
 
   it("lists the puzzles built with one technique, from a stage or a collection too", async () => {
     await expect(puzzles("list", "--technique", "beaufort")).resolves.toBe(
-      "gsmg\tunsolved\t1.25636967 BTC\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+      "gsmg\tunsolved\t1.25649674 BTC\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
     );
     const atbash = await puzzles("list", "quizchain2", "--technique", "atbash");
     expect(atbash.split("\n").map((line) => line.split("\t")[0])).toEqual([

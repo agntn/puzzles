@@ -34,7 +34,7 @@ afterEach(() => {
 
 describe("eligibility", () => {
   it("fills every field of gsmg from the record and the explorer's lifetime totals", async () => {
-    stubExplorers(875990465, 750353498);
+    stubExplorers(876003172, 750353498);
 
     const record = await eligibility("gsmg");
 
@@ -47,24 +47,24 @@ describe("eligibility", () => {
       kind: "p2pkh",
       status: "unsolved",
       unclaimed: true,
-      live: [{ address: gsmg, confirmed: 125636967n, funded: 875990465n, spent: 750353498n }],
+      live: [{ address: gsmg, confirmed: 125649674n, funded: 876003172n, spent: 750353498n }],
       conflicts: [],
       missing: [],
     });
     expect(record.verifier).toMatch(/^the private key of public key 04f4d1bb.+, which hashes to /u);
     expect(formatEligibility(record)).toContain(
-      `live\t${gsmg} 1.25636967 BTC confirmed, 0 BTC unconfirmed, received 8.75990465 BTC, spent 7.50353498 BTC, read from mempool at ${record.live[0]?.readAt}`,
+      `live\t${gsmg} 1.25649674 BTC confirmed, 0 BTC unconfirmed, received 8.76003172 BTC, spent 7.50353498 BTC, read from mempool at ${record.live[0]?.readAt}`,
     );
   });
 
   it("finds bits/71 by its address and flags a prize the address no longer holds", async () => {
-    stubExplorers(710192346, 0);
+    stubExplorers(710196652, 0);
 
     const record = await eligibility(bits);
 
     expect(record.id).toBe("bits/71");
     expect(record.conflicts).toEqual([
-      "addresses hold 7.10192346 BTC, the record says the prize is 7.1019168 BTC",
+      "addresses hold 7.10196652 BTC, the record says the prize is 7.10195986 BTC",
     ]);
     expect(record.carriers).toEqual(["key range 0x400000000000000000 to 0x7fffffffffffffffff"]);
     expect(record.missing).toEqual([]);

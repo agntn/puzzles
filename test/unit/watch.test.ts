@@ -41,8 +41,8 @@ const spend = {
   txid: "f".repeat(64),
   fee: 1000,
   status: { confirmed: false },
-  vin: [{ prevout: { scriptpubkey_address: target, value: 710191680 } }],
-  vout: [{ scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 710190680 }],
+  vin: [{ prevout: { scriptpubkey_address: target, value: 710195986 } }],
+  vout: [{ scriptpubkey_address: "18GD2392ZAQEBv3FHGxQ9Zk3RR7yyVcRLN", value: 710194986 }],
 };
 
 /* Made up: that spend from a P2PKH input, which shows the key in its scriptSig. */
@@ -51,7 +51,7 @@ const signed = {
   ...spend,
   vin: [
     {
-      prevout: { scriptpubkey_address: target, scriptpubkey_type: "p2pkh", value: 710191680 },
+      prevout: { scriptpubkey_address: target, scriptpubkey_type: "p2pkh", value: 710195986 },
       scriptsig_asm: `3044 ${shown}`,
     },
   ],
@@ -120,7 +120,7 @@ afterEach(() => {
 
 describe("watcher", () => {
   it("lists a deposit the record misses and the prize it moved", async () => {
-    stubBitcoin([deposit, recorded], 710191680 + 666);
+    stubBitcoin([deposit, recorded], 710195986 + 666);
 
     const report = await watcher()(bits.require(71));
 
@@ -135,26 +135,26 @@ describe("watcher", () => {
         direction: "in",
         pending: false,
       },
-      { kind: "balance", balance: 710192346n, prize: "7.1019168" },
+      { kind: "balance", balance: 710196652n, prize: "7.10195986" },
     ]);
     expect(formatWatchReport(report)).toEqual([
       `DEPOSIT\tbits/71\t${deposit.txid} 0.00000666 BTC 2026-10-02T00:13:20.000Z at ${target}`,
-      "BALANCE\tbits/71\t7.10192346 BTC held, 7.1019168 BTC recorded as the prize",
+      "BALANCE\tbits/71\t7.10196652 BTC held, 7.10195986 BTC recorded as the prize",
     ]);
   });
 
   it("puts an unconfirmed spend last and reads OK when nothing else differs", async () => {
-    stubBitcoin([recorded], 710191680);
+    stubBitcoin([recorded], 710195986);
     expect(formatWatchReport(await watcher()(bits.require(71)))).toEqual(["OK\tbits/71"]);
 
-    stubBitcoin([spend, deposit, recorded], 710191680);
+    stubBitcoin([spend, deposit, recorded], 710195986);
     const { findings } = await watcher()(bits.require(71));
     expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "spend"]);
     expect(findings[1]).toMatchObject({ pending: true, direction: "out" });
   });
 
   it("reads past the first 100 transactions to a deposit the record misses", async () => {
-    stubBitcoin([...empty(149), deposit], 710191680 + 666);
+    stubBitcoin([...empty(149), deposit], 710195986 + 666);
 
     const { findings, truncated } = await watcher()(bits.require(71));
 
@@ -166,7 +166,7 @@ describe("watcher", () => {
   it("keeps the pages it read when a later one fails", async () => {
     const history = empty(150);
     history.splice(50, 1, deposit);
-    stubBitcoin(history, 710191680 + 666, 100);
+    stubBitcoin(history, 710195986 + 666, 100);
 
     const report = await watcher()(bits.require(71));
 
@@ -178,12 +178,12 @@ describe("watcher", () => {
   });
 
   it("names an address busier than 1000 transactions instead of calling it OK", async () => {
-    stubBitcoin(empty(1000), 710191680);
+    stubBitcoin(empty(1000), 710195986);
     expect(formatWatchReport(await watcher()(bits.require(71)))).toEqual([
       `PARTIAL\tbits/71\tonly the newest 1000 transactions at ${target} read, older ones unchecked`,
     ]);
 
-    stubBitcoin(empty(999), 710191680);
+    stubBitcoin(empty(999), 710195986);
     expect(formatWatchReport(await watcher()(bits.require(71)))).toEqual(["OK\tbits/71"]);
   });
 
@@ -232,7 +232,7 @@ describe("watcher", () => {
     vi.stubGlobal("fetch", async (input: unknown) => {
       if (String(input).includes("/txs")) throw new TypeError("fetch failed");
       return json({
-        chain_stats: { funded_txo_sum: 710191680, spent_txo_sum: 0 },
+        chain_stats: { funded_txo_sum: 710195986, spent_txo_sum: 0 },
         mempool_stats: { funded_txo_sum: 0, spent_txo_sum: 0 },
       });
     });
@@ -247,20 +247,20 @@ describe("watcher", () => {
   });
 
   it("asks nothing more of an address that never spent", async () => {
-    const urls = stubBitcoin([deposit, recorded], 710191680 + 666);
+    const urls = stubBitcoin([deposit, recorded], 710195986 + 666);
 
     const { findings } = await watcher()(bits.require(71));
 
     expect(findings.map((finding) => finding.kind)).toEqual(["deposit", "balance"]);
     expect(urls.filter((url) => url.endsWith(`/address/${target}`))).toHaveLength(1);
 
-    const busy = stubBitcoin(empty(1000), 710191680);
+    const busy = stubBitcoin(empty(1000), 710195986);
     await watcher()(bits.require(71));
     expect(busy.filter((url) => url.endsWith(`/address/${target}`))).toHaveLength(1);
   });
 
   it("reports a key a spend showed that the record lacks", async () => {
-    stubSpender(target, [signed], 710191680);
+    stubSpender(target, [signed], 710195986);
 
     const report = await watcher()(bits.require(71));
 
@@ -291,7 +291,7 @@ describe("watcher", () => {
       ],
     });
 
-    stubSpender(address, [reveal(`03${"cd".repeat(32)}`)], 1400001600);
+    stubSpender(address, [reveal(`03${"cd".repeat(32)}`)], 1400002240);
     expect((await watcher()(puzzle)).findings).toEqual([
       {
         kind: "pubkey",
@@ -302,7 +302,7 @@ describe("watcher", () => {
       },
     ]);
 
-    stubSpender(address, [reveal(recordedKey)], 1400001600);
+    stubSpender(address, [reveal(recordedKey)], 1400002240);
     expect((await watcher()(puzzle)).findings).toEqual([]);
   });
 
@@ -330,7 +330,7 @@ describe("watcher with since", () => {
   });
 
   it("reads a source page that two puzzles share once per pass", async () => {
-    stubBitcoin([recorded], 710191680);
+    stubBitcoin([recorded], 710195986);
     const change = {
       url: "https://privatekeys.pw/puzzles/bitcoin-puzzle-tx",
       before: { timestamp: "2026-08-01T00:00:00Z", snapshot: "https://web.archive.org/web/1/x" },
@@ -357,7 +357,7 @@ describe("watcher with since", () => {
   });
 
   it("reports an archive failure as an error, not a finding", async () => {
-    stubBitcoin([recorded], 710191680);
+    stubBitcoin([recorded], 710195986);
     const { watcher: fresh } = await withSources(async () => {
       const { SourceLookupError } = await import("../../src/core/errors.ts");
       throw new SourceLookupError("Source lookup failed: no capture");
@@ -372,21 +372,21 @@ describe("watcher with since", () => {
 
 describe("puzzles_watch", () => {
   it("leads with the counts and says when the source page was left out", async () => {
-    stubBitcoin([deposit, recorded], 710191680 + 666);
+    stubBitcoin([deposit, recorded], 710195986 + 666);
 
     const result = await watchTool("bits/71");
 
     expect(result.content[0]?.text.split("\n")).toEqual([
       "bits/71: 2 differences from the record",
       `DEPOSIT\tbits/71\t${deposit.txid} 0.00000666 BTC 2026-10-02T00:13:20.000Z at ${target}`,
-      "BALANCE\tbits/71\t7.10192346 BTC held, 7.1019168 BTC recorded as the prize",
+      "BALANCE\tbits/71\t7.10196652 BTC held, 7.10195986 BTC recorded as the prize",
       "Source page not checked; pass since to compare its archive captures.",
     ]);
     expect(result.details).toMatchObject({
       id: "bits/71",
       findings: [
         { kind: "deposit", amount: "666" },
-        { kind: "balance", balance: "710192346" },
+        { kind: "balance", balance: "710196652" },
       ],
       errors: [],
       truncated: [],

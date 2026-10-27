@@ -84,7 +84,7 @@ describe("puzzles_show text", () => {
 
   it("folds a run of dust into one line and keeps the author's top ups on their own", async () => {
     const text = await lines("bits/71");
-    const start = text.indexOf("transactions: 69, 66 small increases folded") + 1;
+    const start = text.indexOf("transactions: 72, 69 small increases folded") + 1;
     const rows = text.slice(start, start + 5);
 
     expect(start).toBeGreaterThan(0);
@@ -92,7 +92,7 @@ describe("puzzles_show text", () => {
       "\tfunding\t2015-01-15 18:07:14\t0.071 BTC\t08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",
       "\tincrease\t2017-07-11 05:00:53\t0.639 BTC\t5d45587cfd1d5b0fb826805541da7d94c61fe432259e68ee26f4a04544384164",
       "\tincrease\t2023-04-16 06:29:48\t6.39 BTC\t12f34b58b04dfb0233ce889f674781c0e0c7ba95482cca469125af41a78d13b3",
-      "\t66 small increases\t2023-09-25 15:00:17 to 2026-09-29 22:18:51\t0.0019168 BTC",
+      "\t69 small increases\t2023-09-25 15:00:17 to 2026-10-23 02:51:12\t0.00195986 BTC",
       "collection techniques: 1",
     ]);
   });
@@ -100,8 +100,8 @@ describe("puzzles_show text", () => {
   it("lists every transaction with its txid when asked", async () => {
     const text = await lines("bits/71", true);
 
-    expect(text).toContain("transactions: 69");
-    expect(text.filter((line) => /^\t(funding|increase)\t/u.test(line))).toHaveLength(69);
+    expect(text).toContain("transactions: 72");
+    expect(text.filter((line) => /^\t(funding|increase)\t/u.test(line))).toHaveLength(72);
     expect(text.join("\n")).not.toContain("small increases");
   });
 

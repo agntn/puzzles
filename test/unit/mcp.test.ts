@@ -69,7 +69,7 @@ describe("puzzles MCP server", () => {
     });
     expect(firstText(result).split("\n")).toEqual([
       "1 matching puzzles:",
-      "gsmg\tunsolved\t1.25636967 BTC\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+      "gsmg\tunsolved\t1.25649674 BTC\t1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
     ]);
 
     const outside = await client.callTool({

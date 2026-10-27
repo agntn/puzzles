@@ -42,7 +42,7 @@ export const gsmgPuzzle = puzzle({
   pubkey: uncompressed(
     "04f4d1bbd91e65e2a019566a17574e97dae908b784b388891848007e4f55d5a4649c73d25fc5ed8fd7227cab0be4e576c0c6404db5aa546286563e4be12bf33559",
   ),
-  prize: 1.25636967,
+  prize: 1.25649674,
   transactions: [
     funding(
       "73e48ff571a7e9a4387574a50cf2fcb7b21b6ea5702c777a035664df57cbce02",
@@ -678,6 +678,16 @@ export const gsmgPuzzle = puzzle({
       "da062cd8135128e0301724e96f7a1ac544deb026a6604fe68e449b6ca1329d6a",
       "2026-09-25 18:04:42",
       0.00001593,
+    ),
+    increase(
+      "be5c8947a6f245c029a155c1d6fe2ea16d683482f87cadddc5e25c69ab14be9e",
+      "2026-10-13 14:29:05",
+      0.00001337,
+    ),
+    increase(
+      "91b0f7e46c68a5f912eaf4e558f1e3fc1475a20a5c7c64918f30b8163636b5b9",
+      "2026-10-13 22:38:17",
+      0.0001137,
     ),
   ],
   assets: assets({
