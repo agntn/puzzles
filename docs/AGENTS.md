@@ -2,6 +2,8 @@
 
 Cloudflare Workers Builds deploys this site to puzzles.agntn.dev. It installs `docs/` alone, so the root `node_modules` and `dist/` never exist there, and takes Node.js from the root `.node-version`.
 
+Its build command is a bare `pnpm run build`, so production builds with exactly what the `package.json` scripts say. They skip the `--extends docus` the Docus docs suggest. `nuxt.config.ts` extends it already, and on Nuxt 4.6 the flag stacks the layer on itself: `robots.txt` got two `User-agent: *` groups out of it.
+
 Resources on the Cloudflare account, bound by id in `wrangler.jsonc`:
 
 - D1 `agntn-puzzles` as `DB` for Nuxt Content, with its own database for branch previews
