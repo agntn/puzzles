@@ -32,7 +32,12 @@ export const filterArgs = {
   technique: Type.Optional(
     Type.String({ description: `Filter by technique: ${techniques.join(", ")}` }),
   ),
-  withPubkey: Type.Optional(Type.Boolean({ description: "Only puzzles with a known public key" })),
+  withPubkey: Type.Optional(
+    Type.Boolean({
+      description:
+        "Only puzzles with a known public key, or with --no-with-pubkey only the ones without",
+    }),
+  ),
 };
 
 /** `--collection` for the commands whose positional is a puzzle identifier. */
@@ -75,7 +80,7 @@ export function hasFilter(args: FilterFlags): boolean {
     args.collection !== undefined ||
     args.status !== undefined ||
     args.technique !== undefined ||
-    args.withPubkey === true
+    args.withPubkey !== undefined
   );
 }
 

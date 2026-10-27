@@ -108,6 +108,7 @@ export interface PuzzleQuery {
   readonly collection?: string | undefined;
   readonly status?: Status | undefined;
   readonly technique?: Technique | undefined;
+  /** True keeps the puzzles with a known public key, false the ones still hiding it. */
   readonly withPubkey?: boolean | undefined;
 }
 

@@ -975,6 +975,11 @@ describe.concurrent("puzzles CLI", () => {
     await expect(
       json<readonly unknown[]>("list", "--with-pubkey", "--limit=1", "--json"),
     ).resolves.toHaveLength(1);
+    const without = await puzzles("list", "ballet", "--no-with-pubkey");
+    expect(without.split("\n").map((line) => line.split("\t")[0])).toEqual([
+      "ballet/AA009926",
+      "ballet/AA012381",
+    ]);
   });
 
   it("names the accepted statuses when the filter is not one", async () => {

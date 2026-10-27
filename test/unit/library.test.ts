@@ -1059,6 +1059,17 @@ describe("lazy collection registry", () => {
     expect(await ids({ technique: "xor", collection: "bits" })).toEqual([]);
   });
 
+  it("splits a collection by whether its public keys are known", async () => {
+    const ids = async (query: PuzzleQuery) =>
+      (await selectPuzzles(query)).map((puzzle) => puzzle.id());
+    expect(await ids({ collection: "ballet", withPubkey: true })).toEqual(["ballet/AA007448"]);
+    expect(await ids({ collection: "ballet", withPubkey: false })).toEqual([
+      "ballet/AA009926",
+      "ballet/AA012381",
+    ]);
+    expect(await ids({ collection: "ballet" })).toHaveLength(3);
+  });
+
   it("counts an author's techniques over every collection it published", async () => {
     expect((await requireAuthor("aoi-nakamoto")).techniques).toEqual({
       atbash: 14,

@@ -323,7 +323,10 @@ export const facts = {
       description:
         "Only puzzles built with this technique, by their collection, their record or one of their stages, for example md5-to-bip39-entropy",
     },
-    withPubkey: { description: "Only puzzles with a known public key" },
+    withPubkey: {
+      description:
+        "true for only the puzzles with a known public key, false for only the ones without, left out for both",
+    },
     allTransactions: {
       description:
         "List every transaction with its txid, instead of folding runs of small increases into one line",
@@ -474,6 +477,20 @@ function assertLength(
 }
 
 /**
+ * Rejects a flag that isn't a boolean and keeps a left out one apart from false.
+ *
+ * @param {string} argument - Name of the flag.
+ * @param {boolean | undefined} value - The flag the caller passed, when it passed one.
+ * @returns {boolean | undefined} The flag, or undefined when it was left out.
+ */
+function optionalFlag(argument: string, value: boolean | undefined): boolean | undefined {
+  if (value !== undefined && typeof value !== "boolean") {
+    throw new InvalidArgumentError(argument, "expected true or false");
+  }
+  return value;
+}
+
+/**
  * Rejects a flag that isn't a boolean, so `"true"` doesn't quietly read as false.
  *
  * @param {string} argument - Name of the flag.
@@ -481,11 +498,7 @@ function assertLength(
  * @returns {boolean} The flag, or false when it was left out.
  */
 function assertFlag(argument: string, value: boolean | undefined): boolean {
-  if (value === undefined) return false;
-  if (typeof value !== "boolean") {
-    throw new InvalidArgumentError(argument, "expected true or false");
-  }
-  return value;
+  return optionalFlag(argument, value) ?? false;
 }
 
 /**
@@ -856,8 +869,11 @@ async function outsideFilters(
         filter,
         `its ${filter} is ${actual[filter as keyof typeof actual]} (not ${value})`,
       ]);
-    if (query.withPubkey === true && !puzzle.hasPubkey()) {
-      reasons.push(["withPubkey", "it has no public key recorded"]);
+    if (query.withPubkey !== undefined && puzzle.hasPubkey() !== query.withPubkey) {
+      reasons.push([
+        "withPubkey",
+        query.withPubkey ? "it has no public key recorded" : "it has a public key recorded",
+      ]);
     }
     const { technique } = query;
     const tags = (await requireCollection(puzzle.collection())).techniquesById(puzzle.id());
@@ -921,7 +937,7 @@ async function listQuery(params: ListParams): Promise<PuzzleQuery> {
         : assertLength("collection", params.collection, facts.parameters.collection),
     status: parseStatus(params.status),
     technique: parseTechnique(params.technique),
-    withPubkey: params.withPubkey,
+    withPubkey: optionalFlag("withPubkey", params.withPubkey),
   };
 }
 
@@ -981,7 +997,7 @@ export async function verifyTool(query: string | VerifyParams): Promise<ToolResu
   assertArguments("verify", params);
   const { id, withPubkey, ...rest } = params;
   const filtered =
-    assertFlag("withPubkey", withPubkey) ||
+    optionalFlag("withPubkey", withPubkey) !== undefined ||
     Object.values(rest).some((value) => value !== undefined);
   if (id !== undefined && filtered) {
     throw new InvalidArgumentError("id", "pass a puzzle identifier or filters, not both");
