@@ -4,7 +4,7 @@ import { dirname, extname, resolve } from "node:path";
 import { checkoutCommit } from "../src/checkout.ts";
 import { puzzlesTheme } from "./shiki-theme";
 
-/** Bundled from the checkout's sources: a deploy needs neither dist/ nor the root node_modules. */
+/** Bundled from the checkout's sources: no dist/, and its imports resolve from the root. */
 const repoRoot = resolve(import.meta.dirname, "..");
 const librarySource = resolve(repoRoot, "src");
 
@@ -34,9 +34,9 @@ function importsDigest(template: string): string {
 }
 
 /**
- * What src/index.ts and src/tools.ts import at runtime, resolved from docs/node_modules. Workers
- * Builds installs docs/ alone, so each one is also a dependency of docs/package.json at the root's
- * version. A new bare import in src/ needs that line, one here and one in `libraryEntries`.
+ * What src/index.ts and src/tools.ts import at runtime, pinned to the site's own copy. Each one is
+ * also a `catalog:deps` dependency of docs/package.json, so a new bare import in src/ needs that
+ * line, one here and one in `libraryEntries`.
  */
 const libraryDependencies = [
   "@agntn/archives",
@@ -138,8 +138,6 @@ function moved(to: string) {
 
 export default defineNuxtConfig({
   extends: ["docus"],
-  /** The repo root is its own pnpm workspace; Nuxt must not treat it as this site's. */
-  workspaceDir: import.meta.dirname,
   alias: libraryAliases,
   /** The OG build cache keys a card on its props and template, so the imports join the hash. */
   hooks: {
@@ -160,10 +158,6 @@ export default defineNuxtConfig({
     },
     optimizeDeps: {
       include: libraryEntries,
-    },
-    server: {
-      /** Dev serves the library from outside the workspace; src/version.ts reads ../package.json. */
-      fs: { allow: [repoRoot] },
     },
   },
   runtimeConfig: {

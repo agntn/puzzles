@@ -6,7 +6,6 @@ Code fixes, new puzzle collections, and evidence-backed data updates are welcome
 
 ```bash
 pnpm install
-pnpm --dir docs install
 pnpm fixtures --check
 pnpm lint
 pnpm typecheck
@@ -15,7 +14,7 @@ pnpm test:packed
 node src/cli.ts collections
 ```
 
-The docs site is its own pnpm workspace whose postinstall runs `nuxt prepare`. `pnpm lint` and `pnpm test` both read what it generates: the linter type checks the docs through `.nuxt/`, and the landing test imports `docs/app/utils`, which vite compiles through the Nuxt tsconfig. `pnpm typecheck` builds the package first, then checks the library, the Pi extension, and the OMP extension. `pnpm test:packed` packs the tarball and runs every published entry without `src/`. Node.js 26 or newer runs the TypeScript sources directly, so `node src/cli.ts collections` works without a loader and must list every collection in the manifest.
+The docs site is a member of the root pnpm workspace, so the same install sets it up. Its postinstall runs `nuxt prepare`. `pnpm lint` and `pnpm test` both read what it generates: the linter type checks the docs through `.nuxt/`, and the landing test imports `docs/app/utils`, which vite compiles through the Nuxt tsconfig. `pnpm typecheck` builds the package first, then checks the library, the Pi extension, and the OMP extension. `pnpm test:packed` packs the tarball and runs every published entry without `src/`. Node.js 26 or newer runs the TypeScript sources directly, so `node src/cli.ts collections` works without a loader and must list every collection in the manifest.
 
 `pnpm test:live` runs the roundtrips against public explorers in `test/live/`, which stay out of CI. The Etherscan case needs `ETHERSCAN_API_KEY` and skips without it.
 
@@ -53,8 +52,9 @@ Fragile sources have [local reading copies with screenshots](assets/sources/READ
 
 ## Docs site
 
-`pnpm --dir docs dev` serves it on port 3000. `pnpm exec nuxt typecheck` in `docs/` also checks the `.vue` files; read the `app/` and `server/` lines only, since Docus's own sources report errors under this config.
+`pnpm run docs` serves it on port 3000. `pnpm exec nuxt typecheck` in `docs/` also checks the `.vue` files; read the `app/` and `server/` lines only, since Docus's own sources report errors under this config.
 
+- Versions live in the `deps` and `dev` catalogs of `pnpm-workspace.yaml`, so one line moves the library and the site together. Nothing is hoisted: every package the site imports sits in `docs/package.json`, and `test/unit/docs-dependencies.test.ts` names the one you forgot.
 - A count in prose comes from the library through `:dataset-count` or `::dataset-stats`, never typed in. README, frontmatter and config files don't quote a dataset count at all; `test/unit/docs-counts.test.ts` fails when one comes back.
 - A record quoted in `content/` is a record from `src/collections/`, checked against the file.
 - A frontmatter `description` has no `: `, which takes the page out of the prerender with a silent 500, and no commas, which the OG pipeline strips.

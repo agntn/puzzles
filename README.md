@@ -192,8 +192,7 @@ One record file under `src/collections/<key>/` and one line in the collection mo
 ## 🛠️ Development
 
 ```bash
-pnpm install
-pnpm --dir docs install   # the docs site; lint and test read the Nuxt types it generates
+pnpm install      # the library and the docs site, one lockfile
 pnpm lint         # vp lint and vp fmt, docs included
 pnpm typecheck    # builds first, then checks src, Pi and OMP
 pnpm test         # unit tests and the data gate
@@ -201,7 +200,7 @@ pnpm test:packed  # packs the tarball and runs every published entry without src
 pnpm run docs     # the Docus site on localhost
 ```
 
-The `run` in that last line isn't decoration. pnpm 12 has a `docs` command of its own, and it wants a package name, not our site.
+One install covers the site too. No second trip into `docs/`, no second lockfile quietly drifting away from the first. And the `run` in that last line isn't decoration. pnpm 12 has a `docs` command of its own, and it wants a package name, not our site.
 
 ## 💛 Thanks
 

@@ -20,7 +20,6 @@ jobs:
           cache: true
           run-install: |
             - cwd: .
-            - cwd: docs
 
       - name: Fix lint issues
         run: pnpm run lint:fix
