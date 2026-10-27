@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { globSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vite-plus/test";
 
 /**
@@ -36,11 +36,42 @@ function configList(name: string): string[] {
   return [...body.matchAll(/"([^"]+)"/gu)].map((match) => match[1] ?? "");
 }
 
+/* Bare specifiers after `from` or in `import()`, never `#imports`, `~/` or template text. */
+const SPECIFIER = /(?:\bfrom\s*|\bimport\s*\(\s*)["']([@a-z][^"'\s]*)["']/gu;
+
+/* Every package the site's own sources import, without `node:` builtins and the library alias. */
+function siteImports(): string[] {
+  const docs = new URL("../../docs/", import.meta.url);
+  const files = globSync(["app/**/*.{ts,vue}", "server/**/*.ts", "shared/**/*.ts", "*.ts"], {
+    cwd: docs,
+  });
+  const names = files.flatMap((file) =>
+    [...readFileSync(new URL(file, docs), "utf8").matchAll(SPECIFIER)].map((match) => {
+      const parts = (match[1] ?? "").split("/");
+      return parts.slice(0, parts[0]?.startsWith("@") === true ? 2 : 1).join("/");
+    }),
+  );
+  return [...new Set(names)].filter(
+    (name) => !name.startsWith("node:") && !name.startsWith("@agntn/puzzles"),
+  );
+}
+
 /*
- * The site bundles the checkout's src/, but Workers Builds installs docs/ alone, so docs/package.json
- * repeats what src/ imports. Another version there runs code the library was never tested against.
+ * The site bundles the checkout's src/ through the same pnpm workspace, so docs/package.json
+ * names what src/ imports from the same catalog. Another version there runs code the library was
+ * never tested against.
  */
 describe("docs dependencies", () => {
+  it("declare every package the site imports, since the workspace hoists nothing", () => {
+    const manifest = JSON.parse(
+      readFileSync(new URL("../../docs/package.json", import.meta.url), "utf8"),
+    ) as { dependencies?: Record<string, string>; devDependencies?: Record<string, string> };
+    const declared = { ...manifest.dependencies, ...manifest.devDependencies };
+    const imported = siteImports();
+    expect(imported).toContain("@nuxt/content");
+    expect(imported.filter((name) => declared[name] === undefined)).toEqual([]);
+  });
+
   it("pin every shared @agntn package at the library's version", () => {
     const library = dependencies("../../package.json");
     const site = dependencies("../../docs/package.json");

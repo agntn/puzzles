@@ -1,11 +1,18 @@
+packages:
+  - docs
+
 gitChecks: false
 
 allowBuilds:
   "@google/genai": false
+  better-sqlite3: true
+  core-js-pure: false
   esbuild: true
   onnxruntime-node: false
   protobufjs: false
   sharp: false
+  vue-demi: true
+  workerd: true
 
 minimumReleaseAgeExclude:
   - "@oh-my-pi/omp-stats@18.2.4"
@@ -33,6 +40,56 @@ catalog:
   vite: npm:@voidzero-dev/vite-plus-core@0.3.3
   vitest: 4.1.12
   vite-plus: 0.3.3
+
+# One version per name for the library and docs/, which bundles the library from ../src.
+catalogs:
+  deps:
+    "@agntn/archives": 0.7.2
+    "@agntn/chains": 0.5.0
+    "@agntn/ciphers": 0.7.0
+    "@agntn/explorers": 0.6.1
+    "@agntn/hashes": 0.7.0
+    "@agntn/keys": 0.8.1
+    "@agntn/tools": 0.2.4
+    "@modelcontextprotocol/sdk": 1.32.1
+    "@modelcontextprotocol/server": 2.2.0
+    "@nuxtjs/mcp-toolkit": 0.23.0
+    "@scure/base": 2.4.0
+    "@vueuse/core": 15.0.0
+    agents: 0.28.1
+    better-sqlite3: 12.11.1
+    docus: 5.15.0
+    nitropack: 2.13.4
+    nuxt: 4.6.1
+    ufo: 1.6.4
+    zod: 4.6.5
+  dev:
+    "@agntn/curves": 0.2.0
+    "@agntn/ox": 0.1.0
+    "@earendil-works/pi-coding-agent": 0.99.2
+    "@iconify-json/lucide": 1.2.138
+    "@iconify-json/simple-icons": 1.2.98
+    "@iconify-json/token": 1.2.42
+    "@iconify-json/vscode-icons": 1.2.83
+    "@modelcontextprotocol/client": 2.2.0
+    "@nuxt/content": 3.16.2
+    "@nuxt/ui": 4.11.3
+    "@oh-my-pi/pi-coding-agent": 18.8.9
+    "@types/node": 26.6.3
+    jiti: 2.7.0
+    nuxt-og-image: 6.10.4
+    obuild: 0.4.43
+    shiki: 4.5.0
+    typescript: 7.0.2
+    vue: 3.5.44
+    vue-tsc: 3.3.11
+    wrangler: 4.135.0
+  # vue-tsc and Nuxt's type generation still need the TypeScript 5 API, which 7 no longer ships.
+  nuxt:
+    typescript: 5.9.3
+
+cleanupUnusedCatalogs: true
+
 overrides:
   vite@*: "catalog:"
   vitest@*: "catalog:"
@@ -43,3 +100,6 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
     vitest: "*"
+
+# Keeps pnpm 12's env document out of the lockfile. GitHub reads that one as zero dependencies.
+pmOnFail: ignore
