@@ -6,6 +6,7 @@ import { InvalidArgumentError } from "./core/errors.ts";
 import { parseStatus, Status } from "./core/status.ts";
 import type { Puzzle } from "./core/puzzle.ts";
 import type { AnyCollection } from "./core/registry.ts";
+import { once } from "./core/imports.ts";
 import { oneLine } from "./core/text.ts";
 import { parseTechnique, type Technique, techniques } from "./core/technique.ts";
 import type { RecipeResult, VerifyResult } from "./core/verify.ts";
@@ -548,28 +549,21 @@ interface CoreModules {
   readonly format: typeof import("./core/format.ts");
 }
 
-let core: Promise<CoreModules> | undefined;
+/** The core modules every tool reads, loaded once and in order, as `./core/imports.ts` explains. */
+const loadCore = once(async (): Promise<CoreModules> => {
+  const dataset = await import("./core/dataset.ts");
+  const registry = await import("./core/registry.ts");
+  const chains = await import("./core/chains.ts");
+  const format = await import("./core/format.ts");
+  return { chains, dataset, format, registry };
+});
 
-/**
- * Loads the core modules the tools read, one import after another, and keeps the one namespace
- * object every later call reuses.
- *
- * The imports are serial on purpose. These modules share a dependency graph, and a host loader
- * that re-evaluates a module per importer, such as the jiti loader Pi runs extensions under,
- * re-enters those shared modules when the imports overlap: the second importer then reads a
- * half-initialized namespace, and every tool fails or, worse, reports the dataset as empty.
- *
- * @returns {Promise<CoreModules>} The dataset, registry, chain and formatting modules.
- */
-function loadCore(): Promise<CoreModules> {
-  return (core ??= (async (): Promise<CoreModules> => {
-    const dataset = await import("./core/dataset.ts");
-    const registry = await import("./core/registry.ts");
-    const chains = await import("./core/chains.ts");
-    const format = await import("./core/format.ts");
-    return { chains, dataset, format, registry };
-  })());
-}
+/** The modules only some tools need, each loaded on first use through the same queue. */
+const loadArchivedSources = once(() => import("./core/archived-sources.ts"));
+const loadFiles = once(() => import("./core/files.ts"));
+const loadVerify = once(() => import("./core/verify.ts"));
+const loadWatch = once(() => import("./core/watch.ts"));
+const loadEligibility = once(() => import("./core/eligibility.ts"));
 
 /**
  * Dataset-wide puzzle statistics for a model.
@@ -683,7 +677,7 @@ async function filesLine(puzzle: Puzzle, collection: AnyCollection): Promise<str
   const {
     format: { countOf },
   } = await loadCore();
-  const { citedArchivedSources } = await import("./core/archived-sources.ts");
+  const { citedArchivedSources } = await loadArchivedSources();
   const shipped = puzzle.assetLinks().length;
   const sources = citedArchivedSources(puzzle, collection).length;
   if (shipped + sources === 0) {
@@ -771,9 +765,9 @@ export async function assetsTool(
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const wanted = file === undefined ? undefined : assertLength("file", file, facts.parameters.file);
-  const { citedArchivedSources } = await import("./core/archived-sources.ts");
+  const { citedArchivedSources } = await loadArchivedSources();
   const { fileBlock, formatFileRead, formatFileReport, puzzleFiles, readPuzzleFile } =
-    await import("./core/files.ts");
+    await loadFiles();
   const collection = await requireCollection(puzzle.collection());
   const files = puzzleFiles(puzzle.assetLinks(), citedArchivedSources(puzzle, collection));
   if (wanted === undefined) {
@@ -892,7 +886,9 @@ interface AddressNotes {
  * @returns {Promise<AddressNotes>} The notes.
  */
 async function addressNotes(query: PuzzleQuery, address: string): Promise<AddressNotes> {
-  const { chains, isValidAddress } = await import("./core/chains.ts");
+  const {
+    chains: { chains, isValidAddress },
+  } = await loadCore();
   if (!chains.some((chain) => isValidAddress(chain, address))) {
     return {
       lines: ["No supported chain accepts this address; its checksum or format is off."],
@@ -1010,7 +1006,7 @@ async function verifyOne(id: string): Promise<ToolResult> {
     dataset: { requirePuzzle },
   } = await loadCore();
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
-  const { verify } = await import("./core/verify.ts");
+  const { verify } = await loadVerify();
   const result = await verify(puzzle);
   return text(verdictOf(result), { ...result });
 }
@@ -1032,7 +1028,7 @@ async function verifyMany(query: PuzzleQuery): Promise<ToolResult> {
   if (puzzles.length === 0) {
     throw new InvalidArgumentError("filters", "no puzzle matches them, so nothing was verified");
   }
-  const { verify } = await import("./core/verify.ts");
+  const { verify } = await loadVerify();
   const results = await Promise.all(puzzles.map((puzzle) => verify(puzzle)));
   const misses = results.filter(missed);
   const clean = results.filter((result) => !missed(result));
@@ -1193,7 +1189,7 @@ export async function watchTool(id: string, since?: string, apiKey?: string): Pr
   const puzzle = await requirePuzzle(assertLength("id", id, facts.parameters.id));
   const cutoff =
     since === undefined ? undefined : assertLength("since", since, facts.parameters.since);
-  const { formatWatchReport, watcher } = await import("./core/watch.ts");
+  const { formatWatchReport, watcher } = await loadWatch();
   const report = await watcher({ since: cutoff })(puzzle, keyFor(puzzle.chain(), apiKey));
   const { findings, errors } = report;
   const counts = [
@@ -1232,7 +1228,7 @@ export async function watchTool(id: string, since?: string, apiKey?: string): Pr
  * @returns {Promise<string>} The answer text.
  */
 async function eligibilityText(head: string, record: Eligibility): Promise<string> {
-  const { formatEligibility } = await import("./core/eligibility.ts");
+  const { formatEligibility } = await loadEligibility();
   if (record.id === undefined) {
     return [head, ...formatEligibility(record)].join("\n");
   }
@@ -1263,7 +1259,7 @@ export async function eligibilityTool(
   const checked = assertLength("query", query, facts.parameters.query);
   const key =
     apiKey === undefined ? undefined : assertLength("apiKey", apiKey, facts.parameters.apiKey);
-  const { eligibility } = await import("./core/eligibility.ts");
+  const { eligibility } = await loadEligibility();
   const record = await eligibility(checked, {
     apiKey: key,
     apiKeyFor: (resolved) => keyFor(resolved, undefined),

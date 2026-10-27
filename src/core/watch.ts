@@ -1,6 +1,7 @@
 import { BalanceError, type BalanceOptions, HISTORY_LIMIT } from "./balance.ts";
 import { type Chain, chainSymbol } from "./chains.ts";
 import { InvalidArgumentError, SourceLookupError } from "./errors.ts";
+import { once } from "./imports.ts";
 import { coinAmount, decimal } from "./decimal.ts";
 import { AddressKind, defined } from "./parts.ts";
 import type { ChainTransaction } from "./providers.ts";
@@ -9,6 +10,12 @@ import type { SourceChange } from "./sources.ts";
 import { Status } from "./status.ts";
 import { oneLine } from "./text.ts";
 import type { Balance } from "./types.ts";
+
+/** The explorer providers, loaded on the first lookup. */
+const loadProviders = once(() => import("./providers.ts"));
+
+/** The source page reader, loaded only when a watch has a cutoff. */
+const loadSources = once(() => import("./sources.ts"));
 
 /** Options for `watcher()`: the explorer options, plus the cutoff that turns on source checks. */
 export interface WatchOptions extends BalanceOptions {
@@ -153,7 +160,7 @@ const nothingRead: Unrecorded = { failures: [], findings: [], spent: false, trun
  * @returns {Promise<Unrecorded>} The unrecorded transactions, oldest first, and the cut addresses.
  */
 async function unrecorded(puzzle: Puzzle, options: BalanceOptions): Promise<Unrecorded> {
-  const { lookupHistory } = await import("./providers.ts");
+  const { lookupHistory } = await loadProviders();
   const recorded = recordedTxids(puzzle);
   const kinds = { in: "deposit", out: "spend" } as const;
   const histories = await lookupHistory(puzzle, options);
@@ -248,7 +255,7 @@ function asksPubkey(puzzle: Puzzle, spent: boolean): boolean {
  * @returns {Promise<Finding[]>} A key finding, or none when the chain shows none or the same one.
  */
 async function pubkeyFindings(puzzle: Puzzle, explorer: BalanceOptions): Promise<Finding[]> {
-  const { lookupPubkey } = await import("./providers.ts");
+  const { lookupPubkey } = await loadProviders();
   const address = puzzle.address().value;
   const shown = await lookupPubkey(puzzle.chain(), address, explorer);
   const recorded = puzzle.pubkey()?.value.toLowerCase();
@@ -291,9 +298,7 @@ export function watcher(options: WatchOptions = {}): Watch {
   const sourceFindings = async (url: string, cutoff: Readonly<Date>): Promise<Finding[]> => {
     let read = sources.get(url);
     if (read === undefined) {
-      read = import("./sources.ts").then(({ sourceChange }) =>
-        sourceChange(url, cutoff, options.timeout),
-      );
+      read = loadSources().then(({ sourceChange }) => sourceChange(url, cutoff, options.timeout));
       sources.set(url, read);
     }
     const change = await read;

@@ -1,5 +1,6 @@
 import type { BrainwalletRecipe } from "@agntn/keys/brainwallet";
 import type { Chain } from "./chains.ts";
+import { once } from "./imports.ts";
 import type { OpenedKeyfile } from "./keyfile.ts";
 import {
   type KeyData,
@@ -106,11 +107,14 @@ interface SeedJob {
   readonly seed: Extract<Secret, { kind: "seed" }>;
 }
 
-/** One import shared by overlapping first calls, so Pi's loader can't evaluate it twice. */
-let wallets: Promise<typeof import("./crypto.ts")> | undefined;
+/** The keys wallets, loaded on the first check. */
+const loadWallets = once(() => import("./crypto.ts"));
 
-/** The same for the keyfile recipe, which only Arweave records ever load. */
-let keyfiles: Promise<typeof import("./keyfile.ts")> | undefined;
+/** The keyfile recipe, which only Arweave records ever load. */
+const loadKeyfiles = once(() => import("./keyfile.ts"));
+
+/** The registry, for the collection's technique tags. */
+const loadRegistry = once(() => import("./registry.ts"));
 
 interface ResolvedKey {
   readonly format: PubkeyFormat;
@@ -263,7 +267,7 @@ async function resolveKeyfile(
   if (secret.passphrase === undefined) {
     return unavailable("Keyfile passphrase is unknown");
   }
-  const { openKeyfile } = await (keyfiles ??= import("./keyfile.ts"));
+  const { openKeyfile } = await loadKeyfiles();
   try {
     return openKeyfile(secret.encrypted, secret.passphrase);
   } catch {
@@ -351,7 +355,7 @@ async function resolveSecret(resolution: Resolution, secret: Secret): Promise<Re
  * @returns {Promise<readonly string[]>} The technique names.
  */
 async function techniqueNames(puzzle: Puzzle): Promise<readonly string[]> {
-  const { getCollection } = await import("./registry.ts");
+  const { getCollection } = await loadRegistry();
   const collection = await getCollection(puzzle.collection());
   const tags = collection?.all().includes(puzzle)
     ? collection.techniquesById(puzzle.id())
@@ -592,7 +596,7 @@ function checkRecipe(puzzle: Puzzle, crypto: Wallets, rebuilt: Rebuilt): RecipeR
  * @returns {Promise<VerifyResult>} The outcome, with the derived address when a key was available.
  */
 export async function verify(puzzle: Puzzle): Promise<VerifyResult> {
-  const crypto = await (wallets ??= import("./crypto.ts"));
+  const crypto = await loadWallets();
   const published = await resolveKey(puzzle, crypto);
   const checked = checkKey({ puzzle, crypto }, published);
   const rebuilt = await rebuild(puzzle, crypto);

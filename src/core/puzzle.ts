@@ -8,6 +8,7 @@ import {
   transactionExplorerUrl,
 } from "./chains.ts";
 import { exactSum } from "./decimal.ts";
+import { once } from "./imports.ts";
 import type { Balance } from "./types.ts";
 import {
   type Address,
@@ -30,6 +31,9 @@ import {
 import { Status } from "./status.ts";
 
 export { Status } from "./status.ts";
+
+/** The explorer providers, loaded on the first lookup. */
+const loadProviders = once(() => import("./providers.ts"));
 
 /** Serialized puzzle record. Absent fields are omitted, never null. */
 export interface PuzzleData {
@@ -421,7 +425,7 @@ export abstract class Puzzle {
    * @returns {Promise<Balance>} The current native token balance of the target address.
    */
   async balance(options: BalanceOptions = {}): Promise<Balance> {
-    const { lookupBalance } = await import("./providers.ts");
+    const { lookupBalance } = await loadProviders();
     return lookupBalance(this, options);
   }
 
