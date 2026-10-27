@@ -2,7 +2,7 @@
 
 Reading copies of the pages the records cite and nobody else keeps. Tweets get deleted, Reddit posts get edited, a puzzle page loses half its description. The copy here stays put.
 
-As of October 19, 2026:
+As of October 27, 2026:
 
 | Where        | Copies                      |
 | ------------ | --------------------------- |
@@ -11,7 +11,7 @@ As of October 19, 2026:
 | Bitcointalk  | 7 threads                   |
 | Farcaster    | 6 casts                     |
 | Stacker News | 1 thread                    |
-| GitHub       | 1 issue                     |
+| GitHub       | 3 issues                    |
 | Web          | 1 page                      |
 
 ## Tweets
@@ -50,6 +50,7 @@ The one lone comment is the reply where AoiNakamoto names their Twitter feed. It
 - the six Powerful Moss casts the record cites, each without the replies around it
 - q's BIP38 giveaway on Stacker News
 - the GitHub issue where a player wrote down the Quizchain2 block 77 Stage One MD5 in 2026, seven years after somebody else claimed the prize
+- the Glimmer discussion where Schum published the mnemonic and passphrase, and the later issue that published the WIF
 
 ## Where the answers went public
 
@@ -60,6 +61,7 @@ Some of these threads matter for more than a clue. That's where the answer key l
 - Quizchain and Quizchain2: most answers and many of the keys
 - Grycoin chain: the one answer anybody ever published
 - Born to Be Wild: every page password, the twelve words and the wallet password
+- Glimmer: the twelve words, passphrase and later WIF
 - IAMABananaAMAA's riddle: the key itself
 - RetiredCoder's mini-puzzles: every hint and the key, and for #3, #4, #5 and #7 the author's own explanation
 
@@ -301,6 +303,8 @@ Some of these threads matter for more than a clue. That's where the answer key l
 - [AoiNakamoto's giveaway question on r/Bitcoin](satoshi-birthday-quiz/aoinakamoto-2019-04-05-b9l37o.md)
 - [AoiNakamoto's comment naming @NakamotoAoi](satoshi-birthday-quiz/aoinakamoto-2019-04-10-ekjcc1k.md)
 - [Born to Be Wild solution write-up](smith-lyle-moore/26-9-15-20-2021-08-18.md)
+- [Glimmer discussion and solution](smith-lyle-moore/btcxanter-2026-10-06.md)
+- [Glimmer WIF](smith-lyle-moore/saffar488-2026-10-26.md)
 
 ## Capture and provenance
 

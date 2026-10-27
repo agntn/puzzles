@@ -1,5 +1,24 @@
-import { compressed, confirmation, derivation, funding, official } from "../../core/parts.ts";
-import { puzzle } from "../../core/puzzle.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  confirmation,
+  fact,
+  funding,
+  official,
+  party,
+  PartyKind,
+  profile,
+  seed,
+  technique,
+} from "../../core/parts.ts";
+import { puzzle, Status } from "../../core/puzzle.ts";
+
+const SOLUTION =
+  "https://github.com/floflo777/open-crypto-puzzles/issues/41#issuecomment-6333713021";
+const WRITEUP =
+  "https://github.com/floflo777/open-crypto-puzzles/issues/41#issuecomment-6334009124";
+const WIF_SOURCE = "https://github.com/agntn/puzzles/issues/555";
 
 /** The treasure hunt page, whose flag links the wallet's xpub on CoinTracker. */
 const PAGE = "https://www.smithlylemoore.com/treasure-hunt";
@@ -32,16 +51,53 @@ export const smithLyleMooreGlimmer = puzzle({
   address: "bc1q0akdjvrc2csau2n3gyxa3xcq0fss852x997m9y",
   sourceUrl: PAGE,
   startedAt: "2022-07-29 16:22:03",
+  status: Status.Solved,
+  solvedAt: "2026-10-22 00:10:14",
   prize: 0.031777,
   pubkey: compressed("037e3109f564912f1007912d90f76c7aae43b812d6286d609a86140b746fbc7943"),
-  key: derivation("m/84'/0'/0'/0/0").xpub(
-    "xpub6CpNc58zqQvNGPHDGGTr68wgrmtfFDBWRuSDAxoDdrCE1iRAaZtyAD5T9uCJ3ELUYKCkx8Jkind2kwoR3Uxmg1ycQ6DWyGxZBMFvQqhNqVC",
-  ),
+  key: seed(
+    "when you depart find mystery discover music need love fortune safe sea",
+    "m/84'/0'/0'/0/0",
+    "immortal",
+  )
+    .xpub(
+      "xpub6CpNc58zqQvNGPHDGGTr68wgrmtfFDBWRuSDAxoDdrCE1iRAaZtyAD5T9uCJ3ELUYKCkx8Jkind2kwoR3Uxmg1ycQ6DWyGxZBMFvQqhNqVC",
+    )
+    .wif("L2EFUhRi2Z8ZTqER7TZtxBLWFyL3RJao7ak4bm4sihKrLEterVkT"),
+  techniques: [technique("hidden-seed-words", SOLUTION)],
+  solver: party("Schum", {
+    key: "schum",
+    kind: PartyKind.Person,
+    aliases: ["Schum-io"],
+    profiles: [profile("github", "https://github.com/Schum-io")],
+    facts: [
+      fact(
+        "Published the Glimmer mnemonic and passphrase on October 22, after the prize was spent.",
+        SOLUTION,
+        { date: "2026-10-22" },
+      ),
+      fact(
+        "Shared a write-up crediting the solution to the AI team Hunter, Zippy and Nemo.",
+        WRITEUP,
+        { date: "2026-10-22" },
+      ),
+      fact("A later issue published the WIF for the same address.", WIF_SOURCE, {
+        date: "2026-10-26",
+      }),
+    ],
+  }),
   hints: [
     official(
       "Woven into our next single, Glimmer, is a story. Uncover the story... it will lead you to .031777 Bitcoin.",
       MORE_INFO,
       FIRST_MORE_INFO,
+      {
+        answer: answer(
+          "Mnemonic: when you depart find mystery discover music need love fortune safe sea. Passphrase: immortal. The phrase fails the BIP39 checksum.",
+          SOLUTION,
+          { date: "2026-10-22" },
+        ),
+      },
     ),
     official(
       "This is a digital treasure hunt. The treasure is buried with riddles, cyphers, analogies and references to historical events or epic nautical stories.",
@@ -78,6 +134,11 @@ export const smithLyleMooreGlimmer = puzzle({
     funding(
       "977a42e5c9e9ee5fbcde9264ac05b4dc192b8330fc6e0ce56e89cf99772eb2fe",
       "2022-07-29 16:22:03",
+      0.031777,
+    ),
+    claim(
+      "8232754516a50aa917984fbe147431675ead1306cfb2597a0e0b21670a495c44",
+      "2026-10-22 00:10:14",
       0.031777,
     ),
   ],

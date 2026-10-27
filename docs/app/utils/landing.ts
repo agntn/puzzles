@@ -1722,16 +1722,16 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "36065119561b",
+  dataVersion: "0baacbc60e15",
   total: 558,
-  solved: 324,
-  unsolved: 114,
+  solved: 325,
+  unsolved: 113,
   claimed: 20,
   swept: 96,
   expired: 4,
   withPubkey: 449,
   unsolvedPrize: {
-    BTC: 909.99301137,
+    BTC: 909.96123437,
     ETH: 12.662559658256946,
     LTC: 3.02608794,
     AR: 1500.188092936237,
@@ -2679,18 +2679,15 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     authorUrl: "https://www.smithlylemoore.com/",
     total: 2,
     statuses: {
-      solved: 1,
-      unsolved: 1,
+      solved: 2,
     },
     chains: ["bitcoin"],
     prize: {
       BTC: 0.056777,
     },
-    unsolvedPrize: {
-      BTC: 0.031777,
-    },
+    unsolvedPrize: {},
     withPubkey: 2,
-    withKey: 1,
+    withKey: 2,
     firstStarted: "2021-06-25 00:57:33",
     lastStarted: "2022-07-29 16:22:03",
     hints: [],
