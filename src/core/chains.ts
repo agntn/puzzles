@@ -3,6 +3,7 @@ import {
   Base,
   Bitcoin,
   BitcoinCash,
+  type Chain as ChainClass,
   type ChainKey,
   Decred,
   Dogecoin,
@@ -38,19 +39,61 @@ export type Chain = (typeof Chain)[keyof typeof Chain];
 /** Every supported blockchain identifier. */
 export const chains = Object.freeze(Object.values(Chain));
 
-/** Chain metadata, address and txid format checks, and explorer bases come from `@agntn/chains`. */
-const metadata = Object.freeze({
-  arweave: new Arweave(),
-  base: new Base(),
-  bitcoin: new Bitcoin(),
-  bitcoincash: new BitcoinCash(),
-  decred: new Decred(),
-  dogecoin: new Dogecoin(),
-  ecash: new Ecash(),
-  ethereum: new Ethereum(),
-  litecoin: new Litecoin(),
-  monero: new Monero(),
-}) satisfies Readonly<Record<Chain, unknown>>;
+/** What a reader sees of a chain, kept equal to `@agntn/chains` by a test. */
+interface ChainInfo {
+  readonly name: string;
+  readonly symbol: string;
+  readonly decimals: number;
+  readonly explorer: string;
+}
+
+/** Copied, not read off instances: one `new Decred()` drags BLAKE-256 in just to print `DCR`. */
+const metadata: Readonly<Record<Chain, ChainInfo>> = Object.freeze({
+  arweave: {
+    name: "Arweave",
+    symbol: "AR",
+    decimals: 12,
+    explorer: "https://viewblock.io/arweave",
+  },
+  base: { name: "Base", symbol: "ETH", decimals: 18, explorer: "https://basescan.org" },
+  bitcoin: { name: "Bitcoin", symbol: "BTC", decimals: 8, explorer: "https://blockstream.info" },
+  bitcoincash: {
+    name: "Bitcoin Cash",
+    symbol: "BCH",
+    decimals: 8,
+    explorer: "https://blockchair.com/bitcoin-cash",
+  },
+  decred: { name: "Decred", symbol: "DCR", decimals: 8, explorer: "https://dcrdata.decred.org" },
+  dogecoin: {
+    name: "Dogecoin",
+    symbol: "DOGE",
+    decimals: 8,
+    explorer: "https://blockchair.com/dogecoin",
+  },
+  ecash: { name: "eCash", symbol: "XEC", decimals: 2, explorer: "https://explorer.e.cash" },
+  ethereum: { name: "Ethereum", symbol: "ETH", decimals: 18, explorer: "https://etherscan.io" },
+  litecoin: { name: "Litecoin", symbol: "LTC", decimals: 8, explorer: "https://litecoinspace.org" },
+  monero: { name: "Monero", symbol: "XMR", decimals: 12, explorer: "https://xmrchain.net" },
+});
+
+/** Format checks, built on first use, so a bundle that never checks skips every chain class. */
+let checkers: Readonly<Record<Chain, ChainClass>> | undefined;
+
+function checker(chain: Chain): ChainClass {
+  checkers ??= Object.freeze({
+    arweave: new Arweave(),
+    base: new Base(),
+    bitcoin: new Bitcoin(),
+    bitcoincash: new BitcoinCash(),
+    decred: new Decred(),
+    dogecoin: new Dogecoin(),
+    ecash: new Ecash(),
+    ethereum: new Ethereum(),
+    litecoin: new Litecoin(),
+    monero: new Monero(),
+  });
+  return checkers[chain];
+}
 
 function isSupported(key: string): key is Chain {
   return Object.hasOwn(metadata, key);
@@ -137,7 +180,7 @@ export function addressExplorerUrl(chain: Chain, address: string): string {
  */
 export function isValidAddress(chain: Chain, address: string): boolean {
   try {
-    metadata[chain].assertAddress(address);
+    checker(chain).assertAddress(address);
     return true;
   } catch (error) {
     if (error instanceof InvalidAddressError) {
@@ -156,7 +199,7 @@ export function isValidAddress(chain: Chain, address: string): boolean {
  */
 export function isValidTransactionId(chain: Chain, txid: string): boolean {
   try {
-    metadata[chain].assertTxid(txid);
+    checker(chain).assertTxid(txid);
     return true;
   } catch (error) {
     if (error instanceof InvalidTxidError) {
