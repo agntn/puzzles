@@ -60,7 +60,7 @@ catalogs:
     better-sqlite3: 12.11.1
     docus: 5.15.0
     nitropack: 2.13.4
-    nuxt: 4.6.1
+    nuxt: 4.6.2
     ufo: 1.6.4
     zod: 4.6.5
   dev:
