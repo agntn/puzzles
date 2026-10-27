@@ -10,7 +10,7 @@ export const bits140 = puzzle({
   startedAt: "2015-01-15 18:07:14",
   pubkey: compressed("031f6a332d3c5c4f2de2378c012f429cd109ba07d69690c6c701b6bb87860d6640"),
   key: bits(140),
-  prize: 14.000016,
+  prize: 14.0000224,
   transactions: [
     funding(
       "08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",
@@ -46,6 +46,11 @@ export const bits140 = puzzle({
       "dd23b1079095ec6821f003b5a1acd5942152f478411157d717c8bddf8f67fb94",
       "2025-01-28 07:26:00",
       0.000006,
+    ),
+    increase(
+      "2b4f5f05b1377845ff0f8c1552dc901172ee2da9508b08d5c951366f74fbbf63",
+      "2026-10-12 21:57:51",
+      0.0000064,
     ),
   ],
 });

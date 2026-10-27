@@ -9,7 +9,7 @@ export const bits71 = puzzle({
   sourceUrl: "https://bitcointalk.org/index.php?topic=5218972",
   startedAt: "2015-01-15 18:07:14",
   key: bits(71),
-  prize: 7.1019168,
+  prize: 7.10195986,
   transactions: [
     funding(
       "08389f34c98c606322740c0be6a7125d9860bb8d5cb182c02f98461e5fa6cd15",
@@ -355,6 +355,21 @@ export const bits71 = puzzle({
       "572001d88e5c3030a89fe119e62cf80892876b59dcb9efe91348dd38745147e1",
       "2026-09-29 22:18:51",
       0.00000666,
+    ),
+    increase(
+      "5055925971fea6c54cd33c610419b159ec57ccd6a55cf9b45cba8e8050241d5c",
+      "2026-10-12 21:47:21",
+      0.00000711,
+    ),
+    increase(
+      "f84cf092b1449ab7f921e1b1aa4b0dec197d0988fe14fd58222ab736f8616b51",
+      "2026-10-17 20:16:46",
+      0.00002727,
+    ),
+    increase(
+      "20b79499438694873b023595c3729172a6f7b55f974d7113731f5d41bc986c53",
+      "2026-10-23 02:51:12",
+      0.00000868,
     ),
   ],
 });

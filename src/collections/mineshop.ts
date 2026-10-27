@@ -29,7 +29,7 @@ export const mineshopPuzzle = puzzle({
     "04e1a30fe567710a3592a56eb479d251fe7456e1f0791c39bf54691a50edab08b44904515ff30c07f354815bb2a45d83576ee8e320ab52058b35e715611fbc4f9d",
   ),
   techniques: [technique("hidden-seed-words", "https://www.youtube.com/watch?v=w4mpiuBP_aY")],
-  prize: 8.612541554256945,
+  prize: 8.61254155426562,
   hints: [
     official(
       "12 wallet seed words- 6 are hidden in this video (description, tags, title,video basically could be anywhere in this video) 6.words are hidden in original post. This task will unlock wallet to claim 10 eth.",
@@ -101,6 +101,11 @@ export const mineshopPuzzle = puzzle({
       "0xe84fa359e4a901ed3555faf749c27710101ab124bc4395cbbeffe077d953f816",
       "2026-07-30 09:09:47",
       0.000011,
+    ),
+    increase(
+      "0xfe3d0b81a5c8b62138a825cd90906fc2d3fa205a1abe4c2d4fe1e74df032b491",
+      "2026-10-15 22:58:59",
+      0.000000000008675309,
     ),
   ],
 });

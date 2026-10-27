@@ -1086,10 +1086,10 @@ describe("lazy collection registry", () => {
       with_pubkey: 449,
       total_prize: {
         AR: 5550.190574146237,
-        ETH: 26.915664034825493,
+        ETH: 26.91566403483417,
         DAI: 100,
         DOGE: 10000,
-        BTC: 1069.8774974,
+        BTC: 1069.87771393,
         BCH: 5.1,
         LTC: 233.85158794,
         DCR: 815.85470498,
@@ -1097,8 +1097,8 @@ describe("lazy collection registry", () => {
       },
       unsolved_prize: {
         AR: 1500.188092936237,
-        ETH: 12.662559658256946,
-        BTC: 909.96123437,
+        ETH: 12.66255965826562,
+        BTC: 909.9614509,
         LTC: 3.02608794,
       },
       techniques: {
@@ -1142,7 +1142,7 @@ describe("lazy collection registry", () => {
         prize,
       });
 
-    expect(prizeTotals([await requirePuzzle("mineshop")])).toEqual({ ETH: 8.612541554256945 });
+    expect(prizeTotals([await requirePuzzle("mineshop")])).toEqual({ ETH: 8.61254155426562 });
     expect(prizeTotals([prized("sum/1", 0.1), prized("sum/2", 0.2)])).toEqual({ BTC: 0.3 });
     expect(prizeTotals([prized("sum/1", 1e-8), prized("sum/2", 1057.06884912)])).toEqual({
       BTC: 1057.06884913,
