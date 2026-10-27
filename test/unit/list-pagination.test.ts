@@ -187,6 +187,26 @@ describe("puzzle list pagination", () => {
     ]);
   });
 
+  it("keeps only the puzzles without a public key when withPubkey is false", async () => {
+    const without = await listTool({ collection: "ballet", withPubkey: false });
+    const known = await listTool({
+      address: "1LL6Xy92LwGDRfQP9fBU7f1477cEKctr7c",
+      withPubkey: false,
+    });
+
+    expect(without.details["ids"]).toEqual(["ballet/AA009926", "ballet/AA012381"]);
+    expect(known.content[0]?.text).toBe(
+      "0 matching puzzles:\n(none)\nballet/AA007448 pays to this address, but it has a public key recorded.",
+    );
+    expect(known.details["outside"]).toEqual([{ id: "ballet/AA007448", filters: ["withPubkey"] }]);
+  });
+
+  it("refuses a public key filter that is not a boolean", async () => {
+    await expect(
+      listTool({ collection: "ballet", withPubkey: "false" as unknown as boolean }),
+    ).rejects.toThrow("Invalid withPubkey: expected true or false");
+  });
+
   it("reads a collection alias as the collection it names", async () => {
     const result = await listTool({
       address: "37k7toV1Nv4DfmQbmZ8KuZDQCYK9x5KpzP",

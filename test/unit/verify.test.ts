@@ -1040,7 +1040,7 @@ describe("verifyTool over filters", () => {
     const refusals = [
       verifyTool({ id: "bits/1", collection: "bits" }),
       verifyTool({}),
-      verifyTool({ withPubkey: false }),
+      verifyTool({ id: "bits/1", withPubkey: false }),
       verifyTool({ collection: "bits", chain: "ethereum" }),
       verifyTool({ withPubkey: "true" as unknown as boolean }),
     ];

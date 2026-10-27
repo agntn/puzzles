@@ -829,7 +829,7 @@ function addressMatches(puzzle: Puzzle, address: string): boolean {
 }
 
 /**
- * Filters puzzles by optional address, chain, status and public key constraints.
+ * Filters puzzles by the given constraints. `withPubkey: false` keeps the ones without a key.
  *
  * @param {readonly Puzzle[]} puzzles - Puzzles to work on.
  * @param {{ readonly address?: string | undefined; readonly chain?: Chain | undefined; readonly status?: Status | undefined; readonly withPubkey?: boolean | undefined }} options - Lookup options.
@@ -849,7 +849,7 @@ export function filterPuzzles(
       (options.address === undefined || addressMatches(puzzle, options.address)) &&
       (options.chain === undefined || puzzle.chain() === options.chain) &&
       (options.status === undefined || puzzle.status() === options.status) &&
-      (options.withPubkey !== true || puzzle.hasPubkey()),
+      (options.withPubkey === undefined || puzzle.hasPubkey() === options.withPubkey),
   );
 }
 
