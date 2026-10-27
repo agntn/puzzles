@@ -1,8 +1,9 @@
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { ToolInputError } from "@agntn/tools";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { createJiti } from "jiti/static";
-import { describe, expect, it } from "vite-plus/test";
+import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 import puzzlesExtension from "../../extensions/pi/puzzles.ts";
 import { facts } from "../../src/tool-operations.ts";
 
@@ -145,7 +146,7 @@ describe("Pi extension", () => {
  * @returns {Promise<Map<string, RegisteredTool>>} The tools the extension registered.
  */
 async function registerThroughHostLoader(): Promise<Map<string, RegisteredTool>> {
-  const jiti = createJiti(import.meta.url, { moduleCache: false });
+  const jiti = createJiti(import.meta.url, { moduleCache: false, tryNative: false });
   const extension = (await jiti.import(
     fileURLToPath(new URL("../../extensions/pi/puzzles.ts", import.meta.url)),
     { default: true },
@@ -160,6 +161,10 @@ async function registerThroughHostLoader(): Promise<Map<string, RegisteredTool>>
 }
 
 describe("Pi host loader", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("answers every tool with the dataset the in-process run sees", async () => {
     const hosted = await registerThroughHostLoader();
     const direct = await registerTools();
@@ -180,20 +185,67 @@ describe("Pi host loader", () => {
     }
   });
 
-  it.each([
-    ["puzzles_verify", "doges-gambit/eth", "doges-gambit/doge"],
-    ["puzzles_show", "bits/1", "gsmg"],
-  ] as const)("answers two first %s calls that start together", async (name, ...ids) => {
+  it.each<readonly [string, readonly Readonly<Record<string, string>>[]]>([
+    ["puzzles_verify", [{ id: "doges-gambit/eth" }, { id: "doges-gambit/doge" }]],
+    ["puzzles_show", [{ id: "bits/1" }, { id: "gsmg" }]],
+    [
+      "puzzles_assets",
+      [
+        { id: "doges-gambit/doge", file: "assets/doges-gambit/puzzle.jpg" },
+        { id: "doges-gambit/doge", file: "assets/doges-gambit/doge-key.png" },
+        { id: "doges-gambit/eth", file: "assets/doges-gambit/eth-key.png" },
+      ],
+    ],
+  ])("answers first %s calls that start together", async (name, calls) => {
+    vi.stubGlobal("fetch", async (url: string) => {
+      return new Response(readFileSync(url.slice(url.indexOf("/assets/") + 1)));
+    });
     const hosted = await registerThroughHostLoader();
     const direct = await registerTools();
     const results = await Promise.all(
-      ids.map(async (id) => hosted.get(name)?.execute("call-1", { id })),
+      calls.map(async (params) => hosted.get(name)?.execute("call-1", params)),
     );
 
-    for (const [index, id] of ids.entries()) {
-      expect(results[index]?.content[0]?.text, id).toEqual(
-        (await direct.get(name)?.execute("call-1", { id }))?.content[0]?.text,
+    for (const [index, params] of calls.entries()) {
+      expect(results[index]?.content[0]?.text, JSON.stringify(params)).toEqual(
+        (await direct.get(name)?.execute("call-1", params))?.content[0]?.text,
       );
     }
   });
+
+  it.each([
+    ["puzzles_balance", "id"],
+    ["puzzles_watch", "id"],
+    ["puzzles_eligibility", "query"],
+  ] as const)(
+    "answers first %s calls that start together with the network down",
+    async (name, field) => {
+      vi.stubGlobal("fetch", async () => {
+        throw new TypeError("offline");
+      });
+      const hosted = await registerThroughHostLoader();
+      const direct = await registerTools();
+      const ids = ["bits/71", "bits/72", "bits/73"];
+      const results = await Promise.all(
+        ids.map(async (id) => outcome(hosted, name, { [field]: id })),
+      );
+
+      for (const [index, id] of ids.entries()) {
+        expect(results[index], id).toEqual(await outcome(direct, name, { [field]: id }));
+      }
+    },
+  );
 });
+
+/* The answer text, or the message a failed call rejects with. */
+async function outcome(
+  tools: ReadonlyMap<string, RegisteredTool>,
+  name: string,
+  params: Readonly<Record<string, string>>,
+): Promise<string | undefined> {
+  try {
+    return (await tools.get(name)?.execute("call-1", params))?.content[0]?.text;
+  } catch (error) {
+    return error instanceof Error ? `rejected: ${error.message}` : "rejected";
+  }
+}

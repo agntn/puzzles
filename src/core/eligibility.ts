@@ -9,6 +9,7 @@ import {
 } from "./chains.ts";
 import { get, requirePuzzle, selectPuzzles } from "./dataset.ts";
 import { InvalidArgumentError } from "./errors.ts";
+import { once } from "./imports.ts";
 import { coinAmount, decimal } from "./decimal.ts";
 import { type Address, type AddressKind, addressOn, defined } from "./parts.ts";
 import type { AddressState } from "./providers.ts";
@@ -18,6 +19,9 @@ import { Status } from "./status.ts";
 import { oneLine } from "./text.ts";
 import { Balance } from "./types.ts";
 import { expectedPrize, holdsPrize } from "./watch.ts";
+
+/** The explorer providers, loaded on the first lookup. */
+const loadProviders = once(() => import("./providers.ts"));
 
 /** Options for `eligibility()`: the explorer options, plus the chain of a bare address. */
 export interface EligibilityOptions extends BalanceOptions {
@@ -192,7 +196,7 @@ async function readAddresses(
   addresses: readonly string[],
   options: BalanceOptions,
 ): Promise<Reading> {
-  const { lookupAddress } = await import("./providers.ts");
+  const { lookupAddress } = await loadProviders();
   const reads = await Promise.all(
     addresses.map(async (address) => {
       try {
@@ -466,7 +470,7 @@ export async function eligibility(
 ): Promise<Eligibility> {
   const target = await resolve(query, requireChain(options.chain));
   const { chain, puzzle, value } = target;
-  const { prizeAddresses } = await import("./providers.ts");
+  const { prizeAddresses } = await loadProviders();
   const reading = await readAddresses(
     chain,
     puzzle === undefined ? [value] : prizeAddresses(puzzle),

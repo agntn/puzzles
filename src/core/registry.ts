@@ -1,6 +1,7 @@
 import { builtins } from "../collections/index.ts";
 import { type Collection } from "./collection.ts";
 import { UnknownCollectionError } from "./errors.ts";
+import { inLine } from "./imports.ts";
 import { closestKey, missDetail } from "./suggest.ts";
 
 /** Any concrete collection, regardless of its query type. */
@@ -62,7 +63,6 @@ export type BuiltinKey = keyof BuiltinCollections;
 let entries: Map<string, TableEntry> | undefined;
 let snapshot: Promise<readonly AnyCollection[]> | undefined;
 const pending = new Map<string, Promise<AnyCollection>>();
-let importing: Promise<unknown> = Promise.resolve();
 
 /**
  * The registry table, seeded from the built-in manifest on first use rather than at module scope,
@@ -89,7 +89,7 @@ function isEntry(value: AnyCollection | CollectionEntry): value is CollectionEnt
  * loader that builds an instance runs once, a rejected load is forgotten so the next call retries,
  * and a loader that replaces its own key while running leaves nothing cached for the old entry.
  *
- * Built-ins import one at a time, as `collections()` explains; a custom loader starts at once.
+ * Built-ins wait their turn in the import queue of `./imports.ts`; a custom loader starts at once.
  *
  * @param {TableEntry} entry - The entry to resolve.
  * @returns {Promise<AnyCollection>} The collection instance.
@@ -104,10 +104,7 @@ function load(entry: TableEntry): Promise<AnyCollection> {
   }
   const manifest: readonly CollectionEntry[] = builtins;
   const builtin = manifest.includes(entry);
-  const promise = (builtin ? importing : Promise.resolve()).then(() => entry.load());
-  if (builtin) {
-    importing = promise.catch(() => undefined);
-  }
+  const promise = builtin ? inLine(() => entry.load()) : Promise.resolve().then(() => entry.load());
   if (table().get(entry.key) === entry) {
     pending.set(entry.key, promise);
     promise.catch(() => {
