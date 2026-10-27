@@ -1,3 +1,4 @@
+import { create } from "@agntn/chains";
 import { describe, expect, it } from "vite-plus/test";
 import {
   addressExplorerUrl,
@@ -29,6 +30,18 @@ describe("chain metadata", () => {
       ["litecoin", "LTC", "Litecoin", 8],
       ["monero", "XMR", "Monero", 12],
     ]);
+  });
+
+  it("keeps its copy of names, symbols, decimals, and explorers equal to @agntn/chains", () => {
+    for (const chain of chains) {
+      const source = create(chain);
+      expect([
+        chainName(chain),
+        chainSymbol(chain),
+        chainDecimals(chain),
+        transactionExplorerUrl(chain, "t"),
+      ]).toEqual([source.name, source.symbol, source.decimals, `${source.explorer}/tx/t`]);
+    }
   });
 
   it("parses keys, symbols, names, and aliases into supported chains only", () => {
