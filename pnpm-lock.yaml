@@ -81,17 +81,17 @@ catalogs:
       specifier: 0.99.2
       version: 0.99.2
     '@iconify-json/lucide':
-      specifier: 1.2.138
-      version: 1.2.138
+      specifier: 1.2.147
+      version: 1.2.147
     '@iconify-json/simple-icons':
-      specifier: 1.2.98
-      version: 1.2.98
+      specifier: 1.2.100
+      version: 1.2.100
     '@iconify-json/token':
       specifier: 1.2.42
       version: 1.2.42
     '@iconify-json/vscode-icons':
-      specifier: 1.2.83
-      version: 1.2.83
+      specifier: 1.2.93
+      version: 1.2.93
     '@modelcontextprotocol/client':
       specifier: 2.2.0
       version: 2.2.0
@@ -268,16 +268,16 @@ importers:
     devDependencies:
       '@iconify-json/lucide':
         specifier: catalog:dev
-        version: 1.2.138
+        version: 1.2.147
       '@iconify-json/simple-icons':
         specifier: catalog:dev
-        version: 1.2.98
+        version: 1.2.100
       '@iconify-json/token':
         specifier: catalog:dev
         version: 1.2.42
       '@iconify-json/vscode-icons':
         specifier: catalog:dev
-        version: 1.2.83
+        version: 1.2.93
       '@nuxt/content':
         specifier: catalog:dev
         version: 3.16.2(@nuxt/schema@4.6.2)(@oxc-project/types@0.151.0)(@types/node@26.6.3)(better-sqlite3@12.11.1)(confbox@0.2.4)(dotenv@17.4.2)(esbuild@0.28.2)(giget@3.3.1)(magic-string@1.4.3)(magicast@0.5.5)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.11)(rollup@4.63.3)(supports-color@10.2.2)(terser@5.51.2)(tsx@4.23.12)(typescript@5.9.3)(yaml@2.9.1)
@@ -1982,26 +1982,17 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@iconify-json/lucide@1.2.138':
-    resolution: {integrity: sha512-+J5+/6HOZsN6sG5PGNxGLcB0UCJtKrH2TPTNeSeXukRzR1C9QRocHaFjLRhoc14zE+XS2ss1i7QWPfunKpYHaQ==}
-
-  '@iconify-json/lucide@1.2.144':
-    resolution: {integrity: sha512-b1+e91RGPd4lLck6nTXeoQFiu8z/G3pXNl/tbsqfleTSzDdI9hUzKYQSGiA6T86NmaI0FtrCDM9MjMhoCwtTMg==}
+  '@iconify-json/lucide@1.2.147':
+    resolution: {integrity: sha512-7Qqa/joSBeUxihWsQJx5nKcqMWtV3YrH90Jldxcx4J9ciTLavRUlpexQwRTcx9dcb7CJpISfjZTj42zD/30sqA==}
 
   '@iconify-json/simple-icons@1.2.100':
     resolution: {integrity: sha512-536pN2RCEQyy5bYwzayrs4e9egr8cmtVcbdSHLaQl/ULUsihzn1eZ0+Hhn50zgz9cbEotiynKsKQSEjFJ7qKmw==}
 
-  '@iconify-json/simple-icons@1.2.98':
-    resolution: {integrity: sha512-35CEBG1H/3nsohVgJaRWtOZ/P5syRTL++ZXTISdQSC76o1mAFXngFoSm9EOnnBiDApKPu8WN/DY+z69yCycL9A==}
-
   '@iconify-json/token@1.2.42':
     resolution: {integrity: sha512-ErtdswYUO7uo68kRDq2HN7vTkJtjoqodSsaQCO8V1cz9tnPlXiO+/u5ACnupEYTGlGReLDpZJtC0QtTV3e49aQ==}
 
-  '@iconify-json/vscode-icons@1.2.83':
-    resolution: {integrity: sha512-bIc27MPRsG9d9Ikmlk4E8jNxMygvLmXY4Rx8Ti8Ur3kZbOE0faoUljL9l2Y5BtKK5J4G7URn4FS4NXVAEuO0fA==}
-
-  '@iconify-json/vscode-icons@1.2.89':
-    resolution: {integrity: sha512-MnSIh0h8Wf4w/nooxQXo3LxOsK0D+YsW9DGd8Ypf1+jtyGLqVW+W7l71+Xxf74CficCf+L22C3gNiWpSvTXZ/w==}
+  '@iconify-json/vscode-icons@1.2.93':
+    resolution: {integrity: sha512-szVltJlV2sLZViLp4QFL9Oc2ojnVw2YN7Dqt0adj8+4DOwCjEYu2pwx6nZDP2OAfKMRj+IFqoMqDHxT0F4P/OQ==}
 
   '@iconify/collections@1.0.737':
     resolution: {integrity: sha512-FdxmDmfTOhBdfhs3JbUPkMSFMToSIKCKmagdQPpiHk5NHVzFepZsn9dxt5rGmFxtXEV0zCAULkI3aY645lNXyg==}
@@ -12014,11 +12005,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@iconify-json/lucide@1.2.138':
-    dependencies:
-      '@iconify/types': 2.0.0
-
-  '@iconify-json/lucide@1.2.144':
+  '@iconify-json/lucide@1.2.147':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -12026,19 +12013,11 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/simple-icons@1.2.98':
-    dependencies:
-      '@iconify/types': 2.0.0
-
   '@iconify-json/token@1.2.42':
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/vscode-icons@1.2.83':
-    dependencies:
-      '@iconify/types': 2.0.0
-
-  '@iconify-json/vscode-icons@1.2.89':
+  '@iconify-json/vscode-icons@1.2.93':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -16763,9 +16742,9 @@ snapshots:
       '@ai-sdk/mcp': 2.0.74(zod@4.6.5)
       '@ai-sdk/vue': 4.0.140(vue@3.5.44(typescript@5.9.3))(zod@4.6.5)
       '@comark/vue': 0.7.0(shiki@4.5.0)(vue@3.5.44(typescript@5.9.3))
-      '@iconify-json/lucide': 1.2.144
+      '@iconify-json/lucide': 1.2.147
       '@iconify-json/simple-icons': 1.2.100
-      '@iconify-json/vscode-icons': 1.2.89
+      '@iconify-json/vscode-icons': 1.2.93
       '@nuxt/content': 3.16.2(@nuxt/schema@4.6.2)(@oxc-project/types@0.151.0)(@types/node@26.6.3)(better-sqlite3@12.11.1)(confbox@0.2.4)(dotenv@17.4.2)(esbuild@0.28.2)(giget@3.3.1)(magic-string@1.4.3)(magicast@0.5.5)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.11)(rollup@4.63.3)(supports-color@10.2.2)(terser@5.51.2)(tsx@4.23.12)(typescript@5.9.3)(yaml@2.9.1)
       '@nuxt/image': 2.1.0(@nuxt/schema@4.6.2)(@types/node@26.6.3)(confbox@0.2.4)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.11)(unplugin@3.4.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@2.7.0)(rolldown@1.2.11)(rollup@4.63.3)(terser@5.51.2)(tsx@4.23.12)(typescript@5.9.3)(yaml@2.9.1))(unstorage@1.17.5(db0@0.3.4(better-sqlite3@12.11.1))(ioredis@5.11.1(supports-color@10.2.2)))
       '@nuxt/kit': 4.6.2(@nuxt/schema@4.6.2)(confbox@0.2.4)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.11)(unplugin@3.4.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@2.7.0)(rolldown@1.2.11)(rollup@4.63.3)(terser@5.51.2)(tsx@4.23.12)(typescript@5.9.3)(yaml@2.9.1))
