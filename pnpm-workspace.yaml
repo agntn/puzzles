@@ -67,10 +67,10 @@ catalogs:
     "@agntn/curves": 0.2.0
     "@agntn/ox": 0.1.0
     "@earendil-works/pi-coding-agent": 0.99.2
-    "@iconify-json/lucide": 1.2.138
-    "@iconify-json/simple-icons": 1.2.98
+    "@iconify-json/lucide": 1.2.147
+    "@iconify-json/simple-icons": 1.2.100
     "@iconify-json/token": 1.2.42
-    "@iconify-json/vscode-icons": 1.2.83
+    "@iconify-json/vscode-icons": 1.2.93
     "@modelcontextprotocol/client": 2.2.0
     "@nuxt/content": 3.16.2
     "@nuxt/ui": 4.11.3
