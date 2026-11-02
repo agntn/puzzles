@@ -81,17 +81,17 @@ catalogs:
       specifier: 0.99.2
       version: 0.99.2
     '@iconify-json/lucide':
-      specifier: 1.2.147
-      version: 1.2.147
+      specifier: 1.2.149
+      version: 1.2.149
     '@iconify-json/simple-icons':
-      specifier: 1.2.100
-      version: 1.2.100
+      specifier: 1.2.101
+      version: 1.2.101
     '@iconify-json/token':
       specifier: 1.2.42
       version: 1.2.42
     '@iconify-json/vscode-icons':
-      specifier: 1.2.93
-      version: 1.2.93
+      specifier: 1.2.94
+      version: 1.2.94
     '@modelcontextprotocol/client':
       specifier: 2.2.0
       version: 2.2.0
@@ -268,16 +268,16 @@ importers:
     devDependencies:
       '@iconify-json/lucide':
         specifier: catalog:dev
-        version: 1.2.147
+        version: 1.2.149
       '@iconify-json/simple-icons':
         specifier: catalog:dev
-        version: 1.2.100
+        version: 1.2.101
       '@iconify-json/token':
         specifier: catalog:dev
         version: 1.2.42
       '@iconify-json/vscode-icons':
         specifier: catalog:dev
-        version: 1.2.93
+        version: 1.2.94
       '@nuxt/content':
         specifier: catalog:dev
         version: 3.16.2(@nuxt/schema@4.6.3)(@oxc-project/types@0.151.0)(@types/node@26.6.6)(better-sqlite3@12.11.1)(confbox@0.2.4)(dotenv@17.4.2)(esbuild@0.28.2)(giget@3.3.1)(magic-string@1.4.3)(magicast@0.5.5)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.16)(rollup@4.67.3)(supports-color@10.2.2)(terser@5.51.2)(tsx@4.23.12)(typescript@5.9.3)(yaml@2.9.1)
@@ -1982,17 +1982,17 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@iconify-json/lucide@1.2.147':
-    resolution: {integrity: sha512-7Qqa/joSBeUxihWsQJx5nKcqMWtV3YrH90Jldxcx4J9ciTLavRUlpexQwRTcx9dcb7CJpISfjZTj42zD/30sqA==}
+  '@iconify-json/lucide@1.2.149':
+    resolution: {integrity: sha512-5NG9YdbtRS03hG1A+EIE6nLhhdAYsf0mKu1ZRi6kLMlCG8DxmDsRM6DAhwlNMLiSiQKFbHpKTJ2VddZdwUkUyw==}
 
-  '@iconify-json/simple-icons@1.2.100':
-    resolution: {integrity: sha512-536pN2RCEQyy5bYwzayrs4e9egr8cmtVcbdSHLaQl/ULUsihzn1eZ0+Hhn50zgz9cbEotiynKsKQSEjFJ7qKmw==}
+  '@iconify-json/simple-icons@1.2.101':
+    resolution: {integrity: sha512-MXJkMZDancJ/9I+Bgdthi9kXvn3AwWStxoTHwEPwAFQ9kMLBASO1BSstg52fNtjXeizm1Wi91R+QnWxNGkWHPQ==}
 
   '@iconify-json/token@1.2.42':
     resolution: {integrity: sha512-ErtdswYUO7uo68kRDq2HN7vTkJtjoqodSsaQCO8V1cz9tnPlXiO+/u5ACnupEYTGlGReLDpZJtC0QtTV3e49aQ==}
 
-  '@iconify-json/vscode-icons@1.2.93':
-    resolution: {integrity: sha512-szVltJlV2sLZViLp4QFL9Oc2ojnVw2YN7Dqt0adj8+4DOwCjEYu2pwx6nZDP2OAfKMRj+IFqoMqDHxT0F4P/OQ==}
+  '@iconify-json/vscode-icons@1.2.94':
+    resolution: {integrity: sha512-xn64Tfi1b+MYTcL3XSsAv3gWxrBesCnA0I442xJGgoSg76X2GhojXACnZjJu7FaNB5PCxaDVaZmULHKut4VNvw==}
 
   '@iconify/collections@1.0.737':
     resolution: {integrity: sha512-FdxmDmfTOhBdfhs3JbUPkMSFMToSIKCKmagdQPpiHk5NHVzFepZsn9dxt5rGmFxtXEV0zCAULkI3aY645lNXyg==}
@@ -11925,11 +11925,11 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@iconify-json/lucide@1.2.147':
+  '@iconify-json/lucide@1.2.149':
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/simple-icons@1.2.100':
+  '@iconify-json/simple-icons@1.2.101':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -11937,7 +11937,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify-json/vscode-icons@1.2.93':
+  '@iconify-json/vscode-icons@1.2.94':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -15629,7 +15629,7 @@ snapshots:
       '@oxc-project/runtime': 0.150.0
       '@oxc-project/types': 0.150.0
       lightningcss: 1.33.0
-      postcss: 8.5.30
+      postcss: 8.5.32
       yuku-codegen: 0.9.5
       yuku-parser: 0.9.5
     optionalDependencies:
@@ -15655,7 +15655,7 @@ snapshots:
       '@oxc-project/runtime': 0.150.0
       '@oxc-project/types': 0.150.0
       lightningcss: 1.33.0
-      postcss: 8.5.30
+      postcss: 8.5.32
       yuku-codegen: 0.9.5
       yuku-parser: 0.9.5
     optionalDependencies:
@@ -16746,9 +16746,9 @@ snapshots:
       '@ai-sdk/mcp': 2.0.74(zod@4.6.7)
       '@ai-sdk/vue': 4.0.140(vue@3.5.44(typescript@5.9.3))(zod@4.6.7)
       '@comark/vue': 0.7.0(shiki@4.5.0)(vue@3.5.44(typescript@5.9.3))
-      '@iconify-json/lucide': 1.2.147
-      '@iconify-json/simple-icons': 1.2.100
-      '@iconify-json/vscode-icons': 1.2.93
+      '@iconify-json/lucide': 1.2.149
+      '@iconify-json/simple-icons': 1.2.101
+      '@iconify-json/vscode-icons': 1.2.94
       '@nuxt/content': 3.16.2(@nuxt/schema@4.6.3)(@oxc-project/types@0.151.0)(@types/node@26.6.6)(better-sqlite3@12.11.1)(confbox@0.2.4)(dotenv@17.4.2)(esbuild@0.28.2)(giget@3.3.1)(magic-string@1.4.3)(magicast@0.5.5)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.16)(rollup@4.67.3)(supports-color@10.2.2)(terser@5.51.2)(tsx@4.23.12)(typescript@5.9.3)(yaml@2.9.1)
       '@nuxt/image': 2.1.0(@nuxt/schema@4.6.3)(@types/node@26.6.6)(confbox@0.2.4)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.16)(unplugin@3.4.0(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(rolldown@1.2.16)(rollup@4.67.3)(terser@5.51.2)(tsx@4.23.12)(typescript@5.9.3)(yaml@2.9.1))(unstorage@1.17.6(db0@0.3.4(better-sqlite3@12.11.1))(ioredis@5.11.1(supports-color@10.2.2)))
       '@nuxt/kit': 4.6.2(@nuxt/schema@4.6.3)(confbox@0.2.4)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.16)(unplugin@3.4.0(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(rolldown@1.2.16)(rollup@4.67.3)(terser@5.51.2)(tsx@4.23.12)(typescript@5.9.3)(yaml@2.9.1))
@@ -17201,7 +17201,7 @@ snapshots:
   eslint-scope@9.1.2:
     dependencies:
       '@types/esrecurse': 4.3.1
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
@@ -17220,7 +17220,7 @@ snapshots:
       '@humanfs/node': 0.16.8
       '@humanwhocodes/module-importer': 1.0.1
       '@humanwhocodes/retry': 0.4.3
-      '@types/estree': 1.0.9
+      '@types/estree': 1.0.10
       ajv: 6.15.0
       cross-spawn: 7.0.6
       debug: 4.4.3(supports-color@10.2.2)
