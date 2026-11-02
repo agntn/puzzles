@@ -47,7 +47,7 @@ jobs:
       contents: write # push release/vX.Y.Z and delete superseded branches
       pull-requests: write # open, update and close release PRs
     steps:
-      - uses: danielroe/uppt/pr@6ec27140623aa835e362f866d8ab0018ab057f4d # v0.6.11
+      - uses: danielroe/uppt/pr@6c1a9b480b0f02a3f535dedaf1a113f590aa56f2 # v0.6.12
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: ${{ inputs.prerelease }}
@@ -68,7 +68,7 @@ jobs:
       contents: write # push the vX.Y.Z tag and cut the GitHub release
       actions: write # dispatch the publish run on that tag
     steps:
-      - uses: danielroe/uppt/release@6ec27140623aa835e362f866d8ab0018ab057f4d # v0.6.11
+      - uses: danielroe/uppt/release@6c1a9b480b0f02a3f535dedaf1a113f590aa56f2 # v0.6.12
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -83,7 +83,7 @@ jobs:
         with:
           persist-credentials: false
       # One install covers docs/ too, and its postinstall writes the tsconfig the landing test reads.
-      - uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
+      - uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
           node-version: v26.10.0
           run-install: |
@@ -108,14 +108,14 @@ jobs:
         with:
           persist-credentials: false
       # uppt installs through corepack, which Node 26 no longer ships, and the package needs Node 26.
-      - uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
+      - uses: voidzero-dev/setup-vp@68f39c78aaf39be468cabd2afb09c162574c84af # v1.21.2
         with:
           node-version: v26.10.0
           run-install: |
             - cwd: .
               args: ['--frozen-lockfile', '--ignore-scripts', '--filter', '@agntn/puzzles']
       - id: pack
-        uses: danielroe/uppt/pack@6ec27140623aa835e362f866d8ab0018ab057f4d # v0.6.11
+        uses: danielroe/uppt/pack@6c1a9b480b0f02a3f535dedaf1a113f590aa56f2 # v0.6.12
         with:
           checkout: false
           install: false
@@ -135,7 +135,7 @@ jobs:
       id-token: write # OIDC claim for the npm trusted publisher
     environment: npm # must match the trusted publisher entry on npmjs.com
     steps:
-      - uses: danielroe/uppt/publish@6ec27140623aa835e362f866d8ab0018ab057f4d # v0.6.11
+      - uses: danielroe/uppt/publish@6c1a9b480b0f02a3f535dedaf1a113f590aa56f2 # v0.6.12
         with:
           files: ${{ needs.pack.outputs.files }}
           npm-tag: ${{ inputs.npm-tag }}
