@@ -1823,6 +1823,12 @@ export const archivedSources = [
     },
   },
   {
+    file: "quizchain2/eyaler-2026-10-31",
+    url: "https://github.com/floflo777/open-crypto-puzzles/pull/49#issuecomment-6542211466",
+    author: "eyaler",
+    date: "2026-10-31",
+  },
+  {
     file: "smith-lyle-moore/btcxanter-2026-10-06",
     url: "https://github.com/floflo777/open-crypto-puzzles/issues/41#issuecomment-6333713021",
     author: "BTCxanter",

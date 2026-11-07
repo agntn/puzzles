@@ -1,4 +1,13 @@
-import { claim, compressed, funding, official } from "../../core/parts.ts";
+import {
+  answer,
+  claim,
+  compressed,
+  funding,
+  official,
+  source,
+  technique,
+  wif,
+} from "../../core/parts.ts";
 import { puzzle, Status } from "../../core/puzzle.ts";
 
 /** The block 76 thread, with the question, the funding txid, the hash digits and the one hint. */
@@ -7,18 +16,39 @@ const THREAD = "https://www.reddit.com/r/Grycoin/comments/cgcv9i/77_mbtc_quizcha
 /** The author's one-word reply of August 3, 2019, when a player asked `"to" or "two"?`. */
 const TO_NOT_TWO = "https://www.reddit.com/r/Grycoin/comments/cgcv9i/comment/evwxwvw/";
 
-/** Quizchain2 block 76: `change to`, later `from change to`. Seven years unclaimed, then swept, and nobody has said how. */
+/** The 2026 GitHub comment where a player, not the one who swept the prize, wrote down the string. */
+const REPRODUCTION =
+  "https://github.com/floflo777/open-crypto-puzzles/pull/49#issuecomment-6542211466";
+
+/**
+ * Quizchain2 block 76: `change to`, later `from change to`, and the answer is where the climate
+ * talk of 2019 went next, `EMERGENCY TOMI climate EMERGENCY`. Swept in 2026 by somebody who kept
+ * quiet. The string surfaced weeks later in a stranger's reproduction, and the claim's public key
+ * vouches for it.
+ */
 export const quizchain2Block76 = puzzle({
   id: "quizchain2/76",
   chain: "bitcoin",
   address: "13Cv6SXUnzGDT8JHqzzJ8xMPtsSdhJA4wd",
   sourceUrl: THREAD,
   startedAt: "2019-07-22 03:12:48",
-  status: Status.Claimed,
+  status: Status.Solved,
   pubkey: compressed("02291e71f75948c21e03c9a2faba367129f1a4e75086a780440e0d9b2a6213e0e9"),
+  key: wif("L5h7ptMonsAHscBD6HFtWDBNnq6cfe79MaNi7Qx1PK4sz4LshRTL")
+    .entropy(
+      "f8e5edbcfc77003adb199519f0bee51c",
+      source(
+        REPRODUCTION,
+        "MD5 of the solution, TOMI and two words, reproduced by a third party in 2026",
+      ),
+    )
+    .derived(),
+  techniques: [technique("md5-to-bip39-entropy", REPRODUCTION)],
   prize: 0.077,
   hints: [
-    official("Question: change to", THREAD),
+    official("Question: change to", THREAD, undefined, {
+      answer: answer("EMERGENCY TOMI climate EMERGENCY", REPRODUCTION),
+    }),
     official("Format: [solution] TOMI [TOMI]", THREAD),
     official("First three digits of MD5 hash are f8e (copypasted).", THREAD),
     official(
