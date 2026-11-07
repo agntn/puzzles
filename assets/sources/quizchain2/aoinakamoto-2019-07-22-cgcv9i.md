@@ -8,7 +8,7 @@ screenshot_sha256: b5faefaf65387abed69c145c1bbcd0824a1def44e26a0cb58a68f0e346686
 
 # [77 mbtc] Quizchain2 Block 76
 
-[Original thread](https://www.reddit.com/r/Grycoin/comments/cgcv9i/77_mbtc_quizchain2_block_76/). The `sourceUrl` of the [quizchain2/76](../../../src/collections/quizchain2/76.ts) record and the source of its question, format, hash digits, funding transaction, the partial hash and the one hint. The author's one-word answer to `"to" or "two"?` is in the comments. Nobody ever published the solution. The post went up on July 22, 2019, at 12:57:09 UTC, nine hours and 44 minutes after the block time of its funding transaction. Its last edit is stamped 03:59:02 UTC on August 3, 2019, so the transcript shows the post as it stood seven years before the claim.
+[Original thread](https://www.reddit.com/r/Grycoin/comments/cgcv9i/77_mbtc_quizchain2_block_76/). The `sourceUrl` of the [quizchain2/76](../../../src/collections/quizchain2/76.ts) record and the source of its question, format, hash digits, funding transaction, the partial hash and the one hint. The author's one-word answer to `"to" or "two"?` is in the comments. Nobody in the thread ever published the solution, and the 2026 sweeper kept quiet too. The string surfaced only in October 2026, in [a typo fix to a third party's script](eyaler-2026-10-31.md). The post went up on July 22, 2019, at 12:57:09 UTC, nine hours and 44 minutes after the block time of its funding transaction. Its last edit is stamped 03:59:02 UTC on August 3, 2019, so the transcript shows the post as it stood seven years before the claim.
 
 ## Historical provenance
 

@@ -1074,7 +1074,7 @@ describe("lazy collection registry", () => {
     expect((await requireAuthor("aoi-nakamoto")).techniques).toEqual({
       atbash: 14,
       caesar: 1,
-      "md5-to-bip39-entropy": 140,
+      "md5-to-bip39-entropy": 141,
       "sha256-to-bip39-entropy": 16,
     });
     expect((await requireAuthor("gsmg")).techniques).toEqual({
@@ -1089,9 +1089,9 @@ describe("lazy collection registry", () => {
     expect(await all()).toHaveLength(558);
     expect(await stats()).toEqual({
       total: 558,
-      claimed: 20,
+      claimed: 19,
       expired: 4,
-      solved: 325,
+      solved: 326,
       swept: 96,
       unsolved: 113,
       with_pubkey: 449,
@@ -1124,7 +1124,7 @@ describe("lazy collection registry", () => {
         "hash-collision": 5,
         "hidden-seed-words": 20,
         "masked-key-range": 256,
-        "md5-to-bip39-entropy": 140,
+        "md5-to-bip39-entropy": 141,
         morse: 3,
         "openssl-salted-sha256": 1,
         "partial-key": 6,
@@ -1207,6 +1207,6 @@ describe("lazy collection registry", () => {
     expect(summaries.map((row) => row.total)).toEqual(
       concreteClasses.map((CollectionClass) => CollectionClass.puzzles.length),
     );
-    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(325);
+    expect(records.filter((record) => record.status === Status.Solved)).toHaveLength(326);
   });
 });

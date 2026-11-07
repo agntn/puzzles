@@ -2,7 +2,7 @@
 
 Reading copies of the pages the records cite and nobody else keeps. Tweets get deleted, Reddit posts get edited, a puzzle page loses half its description. The copy here stays put.
 
-As of October 27, 2026:
+As of November 7, 2026:
 
 | Where        | Copies                      |
 | ------------ | --------------------------- |
@@ -11,7 +11,7 @@ As of October 27, 2026:
 | Bitcointalk  | 7 threads                   |
 | Farcaster    | 6 casts                     |
 | Stacker News | 1 thread                    |
-| GitHub       | 3 issues                    |
+| GitHub       | 3 issues and one PR comment |
 | Web          | 1 page                      |
 
 ## Tweets
@@ -50,6 +50,7 @@ The one lone comment is the reply where AoiNakamoto names their Twitter feed. It
 - the six Powerful Moss casts the record cites, each without the replies around it
 - q's BIP38 giveaway on Stacker News
 - the GitHub issue where a player wrote down the Quizchain2 block 77 Stage One MD5 in 2026, seven years after somebody else claimed the prize
+- the pull request comment where a typo fix gave away the Quizchain2 block 76 string, weeks after the silent sweep
 - the Glimmer discussion where Schum published the mnemonic and passphrase, and the later issue that published the WIF
 
 ## Where the answers went public
@@ -283,6 +284,7 @@ Some of these threads matter for more than a clue. That's where the answer key l
 - [Quizchain2 block 76 thread](quizchain2/aoinakamoto-2019-07-22-cgcv9i.md)
 - [Quizchain2 block 77 thread](quizchain2/aoinakamoto-2019-07-07-ca6jxv.md)
 - [Quizchain2 block 77 MD5, written down in 2026](quizchain2/stakeados-2026-08-18.md)
+- [Quizchain2 block 76 string, corrected in 2026](quizchain2/eyaler-2026-10-31.md)
 - [Grycoin chain block 1 thread](grycoin/aoinakamoto-2019-07-28-civj2n.md)
 - [Grycoin chain block 2 thread](grycoin/aoinakamoto-2019-08-03-cleczc.md)
 - [Quizchain last block thread](real-big-block/aoinakamoto-2019-07-22-cgkpbb.md)

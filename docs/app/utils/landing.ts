@@ -1722,11 +1722,11 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "a747e6ab583e",
+  dataVersion: "c260a9606b7c",
   total: 558,
-  solved: 325,
+  solved: 326,
   unsolved: 113,
-  claimed: 20,
+  claimed: 19,
   swept: 96,
   expired: 4,
   withPubkey: 449,
@@ -2522,8 +2522,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     authorUrl: "https://www.reddit.com/user/AoiNakamoto/",
     total: 77,
     statuses: {
-      solved: 76,
-      claimed: 1,
+      solved: 77,
     },
     chains: ["bitcoin"],
     prize: {
@@ -2531,7 +2530,7 @@ export const FACTS_STATIC: readonly CollectionFactsData[] = [
     },
     unsolvedPrize: {},
     withPubkey: 77,
-    withKey: 76,
+    withKey: 77,
     firstStarted: "2019-05-11 00:21:12",
     lastStarted: "2019-07-22 03:12:48",
     hints: [],
