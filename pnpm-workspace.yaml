@@ -44,12 +44,12 @@ catalog:
 # One version per name for the library and docs/, which bundles the library from ../src.
 catalogs:
   deps:
-    "@agntn/archives": 0.7.2
+    "@agntn/archives": 0.7.4
     "@agntn/chains": 0.5.0
     "@agntn/ciphers": 0.7.0
     "@agntn/explorers": 0.6.1
-    "@agntn/hashes": 0.7.0
-    "@agntn/keys": 0.8.1
+    "@agntn/hashes": 0.7.2
+    "@agntn/keys": 0.8.2
     "@agntn/tools": 0.2.4
     "@modelcontextprotocol/sdk": 1.32.2
     "@modelcontextprotocol/server": 2.2.0
@@ -64,7 +64,7 @@ catalogs:
     ufo: 1.6.4
     zod: 4.6.7
   dev:
-    "@agntn/curves": 0.2.0
+    "@agntn/curves": 0.2.2
     "@agntn/ox": 0.1.0
     "@earendil-works/pi-coding-agent": 0.99.2
     "@iconify-json/lucide": 1.2.149
