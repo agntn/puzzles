@@ -42,9 +42,9 @@ function closed<T extends TProperties>(properties: T) {
  * The fields every definition takes from the facts table.
  *
  * @param {ToolFacts} tool - The tool's entry in `facts.tools`.
- * @returns {object} The name, prose and effect for `defineTool`.
+ * @returns {object} The literal name, prose and effect for `defineTool`.
  */
-function described(tool: ToolFacts) {
+function described<Name extends string>(tool: ToolFacts & { readonly name: Name }) {
   return {
     name: tool.name,
     title: tool.title,
@@ -203,7 +203,7 @@ export const mentionsToolDefinition = defineTool({
 });
 
 /** Every puzzle tool, in the order `tools/list` and the harnesses show them. */
-export const puzzlesTools: readonly ToolDefinition[] = [
+export const puzzlesTools = [
   statsToolDefinition,
   collectionsToolDefinition,
   authorsToolDefinition,
@@ -219,7 +219,7 @@ export const puzzlesTools: readonly ToolDefinition[] = [
   balanceToolDefinition,
   watchToolDefinition,
   eligibilityToolDefinition,
-];
+] as const satisfies readonly ToolDefinition[];
 
 /**
  * The filters a status line shows for a list or a filtered verify, `all` when there are none.
@@ -239,7 +239,11 @@ function listSummary(args: Readonly<Record<string, unknown>>): string {
 }
 
 /** The public server's tools: `puzzles_verify` held to one id, plus `puzzles_mentions`. */
-export const publicPuzzlesTools: readonly ToolDefinition[] = [
+export const publicPuzzlesTools: readonly (
+  | Exclude<(typeof puzzlesTools)[number], typeof verifyToolDefinition>
+  | typeof publicVerifyToolDefinition
+  | typeof mentionsToolDefinition
+)[] = [
   ...puzzlesTools.map((tool) =>
     tool === verifyToolDefinition ? publicVerifyToolDefinition : tool,
   ),

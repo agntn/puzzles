@@ -5,10 +5,10 @@
  * `pnpm publish` does, unpacks it inside the checkout so the packed files resolve their
  * dependencies from the repository's node_modules, and exercises every published entry from
  * there: the library and its lazy collections, the MCP server over an in-memory transport, the
- * Pi and OMP extensions without any src/ next to them, and the CLI bin run as a command. It also
- * runs `mcp` from the checkout's own `dist/cli.mjs`, which serves src/ there and the bundle
- * everywhere else. The load hook in record-loads.ts records which packed modules each step pulled
- * in, so the lazy manifest is checked on the published layout, not only on the sources.
+ * AI SDK tools, the Pi and OMP extensions without any src/ next to them, and the CLI bin run as a
+ * command. It also runs `mcp` from the checkout's own `dist/cli.mjs`, which serves src/ there and
+ * the bundle everywhere else. The load hook in record-loads.ts records which packed modules each
+ * step pulled in, so the lazy manifest is checked on the published layout, not only on the sources.
  * Run: pnpm test:packed
  */
 
@@ -27,6 +27,7 @@ import type { ExtensionAPI as OmpExtensionApi } from "@oh-my-pi/pi-coding-agent"
 
 type Library = typeof import("../src/index.ts");
 type McpEntry = typeof import("../src/mcp.ts");
+type AiEntry = typeof import("../src/ai.ts");
 type PiExtension = typeof import("../extensions/pi/puzzles.ts");
 type OmpExtension = typeof import("../extensions/omp/puzzles.ts");
 
@@ -283,7 +284,7 @@ async function assertPackedLayout(manifest: Manifest): Promise<void> {
   assert.equal(manifest.name, "@agntn/puzzles");
   assert.match(manifest.version, /^\d+\.\d+\.\d+/u);
   assert.equal(typeof manifest.bin["puzzles"], "string", "the packed package declares no bin");
-  for (const entry of [".", "./collections/*", "./tools", "./mcp", "./package.json"]) {
+  for (const entry of [".", "./ai", "./collections/*", "./tools", "./mcp", "./package.json"]) {
     assert.ok(entry in manifest.exports, `export ${entry} is missing from the packed package.json`);
   }
   assert.deepEqual(
@@ -400,6 +401,21 @@ async function assertPackedKeyfile(): Promise<void> {
   );
   assertLoaded(keyfileChunk, "an Arweave keyfile loads its recipe");
   assert.ok(loaded.some(keyfileCipher), "an Arweave keyfile loads the cipher");
+}
+
+/** The AI SDK maps, keyed by tool name and callable from the tarball. */
+async function assertPackedAiTools(): Promise<void> {
+  const { publicPuzzlesAiTools, puzzlesAiTools } = await importPacked<AiEntry>("dist/ai.mjs");
+  assert.deepEqual(Object.keys(puzzlesAiTools).sort(), expectedToolNames);
+  assert.deepEqual(
+    Object.keys(publicPuzzlesAiTools).sort(),
+    [...expectedToolNames, "puzzles_mentions"].sort(),
+  );
+  const shown: unknown = await puzzlesAiTools.puzzles_show.execute?.(
+    { id: "bits/1" },
+    { toolCallId: "packed", messages: [], context: {} },
+  );
+  assert.match((shown as { text: string }).text, /bits\/1/u);
 }
 
 /**
@@ -697,13 +713,14 @@ try {
   await assertPackedLayout(manifest);
   await assertPackedLibrary();
   await assertPackedMcpServer();
+  await assertPackedAiTools();
   await assertPackedExtensions();
   await assertPackedBin(manifest);
   await assertCheckoutBin();
   await assertPackedKeyfile();
 
   console.log(
-    `Packed ${manifest.name}@${manifest.version}: ${expectedCollections.length} lazy collection entries, ${expectedToolNames.length} tools over MCP, Pi and OMP without src/, and ${manifest.bin["puzzles"]} ran as a command`,
+    `Packed ${manifest.name}@${manifest.version}: ${expectedCollections.length} lazy collection entries, ${expectedToolNames.length} tools over MCP, Pi, OMP and the AI SDK without src/, and ${manifest.bin["puzzles"]} ran as a command`,
   );
 } finally {
   await rm(temporaryRoot, { recursive: true, force: true });
