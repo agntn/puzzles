@@ -51,14 +51,14 @@ describe.skipIf(!existsSync(entry))("a Vite app bundling the package", () => {
   it("prints a prize and its explorer link without any chain class", async () => {
     const packages = await bundledPackages(["puzzle", "chainSymbol", "addressExplorerUrl"]);
 
-    expect(packages).not.toContain("@agntn/chains");
     expect(packages).not.toContain("@agntn/hashes");
+    expect(packages).not.toContain("@agntn/encodings");
   });
 
-  it("still brings @agntn/chains along for an address check", async () => {
+  it("still brings the chain classes along for an address check", async () => {
     const packages = await bundledPackages(["isValidAddress"]);
 
-    expect(packages).toContain("@agntn/chains");
     expect(packages).toContain("@agntn/hashes");
+    expect(packages).toContain("@agntn/encodings");
   });
 });

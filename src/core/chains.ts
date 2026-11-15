@@ -13,6 +13,7 @@ import {
   InvalidAddressError,
   InvalidTxidError,
   Litecoin,
+  metadata,
   Monero,
   UnknownChainError,
   UnsupportedChainError,
@@ -39,43 +40,6 @@ export type Chain = (typeof Chain)[keyof typeof Chain];
 /** Every supported blockchain identifier. */
 export const chains = Object.freeze(Object.values(Chain));
 
-/** What a reader sees of a chain, kept equal to `@agntn/chains` by a test. */
-interface ChainInfo {
-  readonly name: string;
-  readonly symbol: string;
-  readonly decimals: number;
-  readonly explorer: string;
-}
-
-/** Copied, not read off instances: one `new Decred()` drags BLAKE-256 in just to print `DCR`. */
-const metadata: Readonly<Record<Chain, ChainInfo>> = Object.freeze({
-  arweave: {
-    name: "Arweave",
-    symbol: "AR",
-    decimals: 12,
-    explorer: "https://viewblock.io/arweave",
-  },
-  base: { name: "Base", symbol: "ETH", decimals: 18, explorer: "https://basescan.org" },
-  bitcoin: { name: "Bitcoin", symbol: "BTC", decimals: 8, explorer: "https://blockstream.info" },
-  bitcoincash: {
-    name: "Bitcoin Cash",
-    symbol: "BCH",
-    decimals: 8,
-    explorer: "https://blockchair.com/bitcoin-cash",
-  },
-  decred: { name: "Decred", symbol: "DCR", decimals: 8, explorer: "https://dcrdata.decred.org" },
-  dogecoin: {
-    name: "Dogecoin",
-    symbol: "DOGE",
-    decimals: 8,
-    explorer: "https://blockchair.com/dogecoin",
-  },
-  ecash: { name: "eCash", symbol: "XEC", decimals: 2, explorer: "https://explorer.e.cash" },
-  ethereum: { name: "Ethereum", symbol: "ETH", decimals: 18, explorer: "https://etherscan.io" },
-  litecoin: { name: "Litecoin", symbol: "LTC", decimals: 8, explorer: "https://litecoinspace.org" },
-  monero: { name: "Monero", symbol: "XMR", decimals: 12, explorer: "https://xmrchain.net" },
-});
-
 /** Format checks, built on first use, so a bundle that never checks skips every chain class. */
 let checkers: Readonly<Record<Chain, ChainClass>> | undefined;
 
@@ -96,7 +60,7 @@ function checker(chain: Chain): ChainClass {
 }
 
 function isSupported(key: string): key is Chain {
-  return Object.hasOwn(metadata, key);
+  return chains.some((chain) => chain === key);
 }
 
 /**
@@ -106,7 +70,7 @@ function isSupported(key: string): key is Chain {
  * @returns {string} `BTC`, `ETH` and so on.
  */
 export function chainSymbol(chain: Chain): string {
-  return metadata[chain].symbol;
+  return metadata(chain).symbol;
 }
 
 /**
@@ -116,7 +80,7 @@ export function chainSymbol(chain: Chain): string {
  * @returns {number} 8 for Bitcoin, 18 for Ethereum.
  */
 export function chainDecimals(chain: Chain): number {
-  return metadata[chain].decimals;
+  return metadata(chain).decimals;
 }
 
 /**
@@ -126,7 +90,7 @@ export function chainDecimals(chain: Chain): number {
  * @returns {string} `Bitcoin`, `Ethereum` and so on.
  */
 export function chainName(chain: Chain): string {
-  return metadata[chain].name;
+  return metadata(chain).name;
 }
 
 /**
@@ -155,7 +119,7 @@ export function parseChain(value: string): Chain | undefined {
  * @returns {string} The transaction explorer URL.
  */
 export function transactionExplorerUrl(chain: Chain, txid: string): string {
-  return `${metadata[chain].explorer}/tx/${encodeURIComponent(txid)}`;
+  return `${metadata(chain).explorer}/tx/${encodeURIComponent(txid)}`;
 }
 
 /**
@@ -167,7 +131,7 @@ export function transactionExplorerUrl(chain: Chain, txid: string): string {
  */
 export function addressExplorerUrl(chain: Chain, address: string): string {
   const encoded = encodeURIComponent(address);
-  const base = metadata[chain].explorer;
+  const base = metadata(chain).explorer;
   return chain === Chain.Monero ? `${base}/search?value=${encoded}` : `${base}/address/${encoded}`;
 }
 
