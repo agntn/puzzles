@@ -45,7 +45,7 @@ catalog:
 catalogs:
   deps:
     "@agntn/archives": 0.7.4
-    "@agntn/chains": 0.5.0
+    "@agntn/chains": 0.6.0
     "@agntn/ciphers": 0.7.0
     "@agntn/explorers": 0.6.1
     "@agntn/hashes": 0.7.2
