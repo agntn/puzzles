@@ -27,7 +27,7 @@ Docs, one page per puzzle and a live playground: [puzzles.agntn.dev](https://puz
 - 👀 **A watch on the record.** `puzzles watch` lists the deposits and spends a record misses, a prize that moved, a public key a spend gave away, a source page that changed. It never edits a record. You do.
 - 📋 **A checklist before the weekend.** `puzzles eligibility` gathers the source, the address, lifetime totals from the explorer, the status with its evidence and what counts as a solution. Whatever nobody can fill comes back as a `missing` row, never a guess.
 - 🖼️ **The puzzle itself, not a link to it.** `puzzles_assets` hands a model the image, the stage files and the archived posts behind the hints, checked against the SHA-256 the record pins. Links rot. These don't.
-- 🤖 **Fifteen agent tools.** One executor behind MCP, Pi and OMP. Same answer everywhere.
+- 🤖 **Fifteen agent tools.** One executor behind MCP, Pi, OMP and the AI SDK. Same answer everywhere.
 - 🌐 **Runs anywhere.** Neutral ESM on the Fetch API. Node, browsers, edge workers.
 
 ## 📦 Install
@@ -180,6 +180,29 @@ pi install npm:@agntn/puzzles
 ```
 
 Fifteen tools: `puzzles_stats`, `puzzles_collections`, `puzzles_authors`, `puzzles_author`, `puzzles_solvers`, `puzzles_solver`, `puzzles_show`, `puzzles_hints`, `puzzles_stages`, `puzzles_assets`, `puzzles_list`, `puzzles_verify`, `puzzles_balance`, `puzzles_watch` and `puzzles_eligibility`. The last three leave the process, and so does `puzzles_assets` when it reads a file. Their annotations say so. What the text carries and where the limits live: the [agents guide](https://puzzles.agntn.dev/guide/agents).
+
+### AI SDK
+
+Fifteen puzzle tools for a `generateText` loop, and not one wrapper to write.
+
+```bash
+pnpm add @agntn/puzzles ai @ai-sdk/anthropic
+```
+
+```ts
+import { anthropic } from "@ai-sdk/anthropic";
+import { puzzlesAiTools } from "@agntn/puzzles/ai";
+import { generateText, isStepCount } from "ai";
+
+const { text } = await generateText({
+  model: anthropic("claude-sonnet-5-5"),
+  tools: puzzlesAiTools,
+  stopWhen: isStepCount(5),
+  prompt: "Which bits puzzles are still unsolved, and what's the smallest prize?",
+});
+```
+
+`publicPuzzlesAiTools` is the set puzzles.agntn.dev serves. Images from `puzzles_assets` reach the model as images, so a picture riddle stays a picture. And every tool only reads, so nothing waits for an approval. Details in the [agents guide](https://puzzles.agntn.dev/guide/agents#ai-sdk).
 
 ## 🚫 What this does not do
 
