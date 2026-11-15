@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { NumericCollection, requireCollection } from "@agntn/puzzles";
 import { formatPrize, shorten } from "../../utils/format";
+import { hasKnownPrivateKey } from "../../utils/collections";
 
 const props = defineProps<{ collection: string }>();
 
@@ -18,7 +19,7 @@ const { data } = await useAsyncData(
         prize: formatPrize(puzzle.prize(), puzzle.prizeCurrency()),
         address: puzzle.address().value,
         pubkey: puzzle.hasPubkey(),
-        key: puzzle.hasPrivateKey(),
+        key: hasKnownPrivateKey(puzzle),
         derived: puzzle.hasDerivedKey(),
         bits: puzzle.keyData()?.bits,
       })),
