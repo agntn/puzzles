@@ -3,6 +3,7 @@ import { describe, expect, it } from "vite-plus/test";
 import { authorFacts, authorRows } from "../../docs/app/utils/authors.ts";
 import {
   collectionFacts,
+  hasKnownPrivateKey,
   collectionFilterQuery,
   collectionRows,
   matchesCollection,
@@ -28,6 +29,19 @@ import { keyLiteral, toSample } from "../../docs/app/utils/samples.ts";
  * static copy fails here, before the landing ships a stale value.
  */
 describe("docs landing fixtures", () => {
+  it("distinguishes sealed keyfiles from available private keys", async () => {
+    const library = await import("../../src/index.ts");
+    const weave = await library.requireCollection("weave");
+    expect([1, 3, 5, 10, 12].map((id) => hasKnownPrivateKey(weave.require(id)))).toEqual([
+      true,
+      false,
+      false,
+      false,
+      false,
+    ]);
+    expect(collectionFacts(weave).withKey).toBe(4);
+  });
+
   it("match what the library computes for every puzzle in the walk", async () => {
     const library = await import("../../src/index.ts");
     const { showTool } = await import("../../src/tool-operations.ts");
