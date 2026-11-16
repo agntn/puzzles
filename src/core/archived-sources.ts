@@ -1892,6 +1892,17 @@ export const archivedSources = [
     },
   },
   {
+    file: "wickex/wickex-2013-12-23",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/medium_1mbtc_find_the_private_key/",
+    author: "u/Wickex",
+    date: "2013-12-23",
+    archive: {
+      url: "https://web.archive.org/web/20230601031146/https://old.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/medium_1mbtc_find_the_private_key/",
+      date: "2023-06-01T03:11:46Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "iamabananaamaa/iamabananaamaa-2013-12-23",
     url: "https://www.reddit.com/r/bitcoinpuzzles/comments/1ticec/medium_1mbtc_riddle_me_this_for_a_private_key/",
     author: "u/IAMABananaAMAA",
