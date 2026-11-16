@@ -291,6 +291,7 @@ Some of these threads matter for more than a clue. That's where the answer key l
 - [Quizchain Real Big Block announcement](real-big-block/aoinakamoto-2019-07-24-chf8k2.md)
 - [Real Big Block discussion thread](real-big-block/aoinakamoto-2019-07-25-chn8un.md)
 - [iamabananaamaa GIF thread archive](iamabananaamaa/iamabananaamaa-2013-12-22.md)
+- [Wickex's YouTube puzzle thread](wickex/wickex-2013-12-23.md)
 - [IAMABananaAMAA's Caesar riddle thread](iamabananaamaa/iamabananaamaa-2013-12-23.md)
 - [Coin_Games weekly puzzles announcement](coin-games/3301j-2017-12-04.md)
 - [Level XM17 on r/bitcoinpuzzles](zden/zden-2017-12-25.md)

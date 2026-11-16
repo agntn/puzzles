@@ -113,6 +113,29 @@ describe("archived sources", () => {
     );
   });
 
+  it("keeps the Wickex thread's 29 comments without inventing the missing key", () => {
+    const markdown = readFileSync(path.join(root, "wickex/wickex-2013-12-23.md"), "utf8");
+    const ids = [...markdown.matchAll(/^\*\*.+, \[(\w+)\]\(/gm)].map((match) => match[1]);
+    expect(ids).toHaveLength(29);
+    expect(new Set(ids).size).toBe(29);
+    expect(markdown.match(/^> \[deleted\]$/gm)).toHaveLength(4);
+    expect(markdown).toContain("STI...I5Z");
+    const method = markdown.split("[ce87ss1]")[1]?.split("\n**")[0];
+    expect(method).toContain("Hex -> Text -> Youtube URL");
+    expect(method).toContain("loaded the Youtube video into Audacity");
+    expect(method).toContain("loaded into Sonic Visualiser");
+    expect(method).toContain("That string in Brainwallet.org was the private key.");
+  });
+
+  it("hands the Wickex thread archive to its puzzle without adding a private key", async () => {
+    const puzzle = await requirePuzzle("wickex/youtube");
+    const collection = await requireCollection(puzzle.collection());
+    expect(citedArchivedSources(puzzle, collection).map(({ source }) => source.file)).toContain(
+      "wickex/wickex-2013-12-23",
+    );
+    expect(puzzle.toJSON()).not.toHaveProperty("key");
+  });
+
   it("matches the URL a record cites, not a page whose URL starts with it", async () => {
     const puzzle = await requirePuzzle("satoshi-birthday-quiz");
     const files = citedArchivedSources(puzzle, await requireCollection(puzzle.collection())).map(
