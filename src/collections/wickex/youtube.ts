@@ -1,5 +1,6 @@
 import {
   answer,
+  artifact,
   claim,
   community,
   fact,
@@ -9,6 +10,7 @@ import {
   party,
   PartyKind,
   profile,
+  stage,
   sweep,
   technique,
   uncompressed,
@@ -56,6 +58,45 @@ export const wickexYouTube = puzzle({
     technique("steganography", THREAD),
   ],
   prize: 0.001,
+  stages: [
+    stage(
+      "Hex",
+      "A line of hex in the opening post.",
+      [artifact("opening code", THREAD)],
+      answer("Hex -> Text -> Youtube URL", METHOD, { date: "2013-12-23" }),
+    ),
+    stage(
+      "Morse",
+      "The first video's audio, with an all-caps hint from the author.",
+      [artifact("Morse hint", comment("ce86ukc"))],
+      answer(
+        "I personally loaded the Youtube video into Audacity to make it more clear, but it was morse code -> text.",
+        METHOD,
+        { date: "2013-12-23" },
+      ),
+      [technique("morse", METHOD)],
+    ),
+    stage(
+      "Second video",
+      "A case-sensitive short link and audio in a second video.",
+      [artifact("short link hint", comment("ce86v8h"))],
+      answer(
+        "That was a bit.ly which went to the second video. That video was loaded into Sonic Visualiser and that had a string encoded into the sound.",
+        METHOD,
+        { date: "2013-12-23" },
+      ),
+      [technique("steganography", METHOD)],
+    ),
+    stage(
+      "Brainwallet.org",
+      "The string from the audio and the author's Brainwallet.org hint. The full string isn't published in the thread.",
+      [artifact("brainwallet hint", comment("ce86xa9"))],
+      answer("That string in Brainwallet.org was the private key.", METHOD, {
+        date: "2013-12-23",
+      }),
+      [technique("sha256-brainwallet", METHOD)],
+    ),
+  ],
   hints: [
     official(
       "I'll start you all off with the following code: 68 74 74 70 3a 2f 2f 77 77 77 2e 79 6f 75 74 75 62 65 2e 63 6f 6d 2f 77 61 74 63 68 3f 76 3d 71 59 78 38 46 76 58 39 69 62 30",
