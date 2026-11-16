@@ -94,6 +94,7 @@ export const wickexYouTube = puzzle({
       answer("That string in Brainwallet.org was the private key.", METHOD, {
         date: "2013-12-23",
       }),
+      [technique("sha256-brainwallet", METHOD)],
     ),
   ],
   hints: [

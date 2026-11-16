@@ -155,6 +155,12 @@ describe("archived sources", () => {
     expect(stages?.map(({ answer }) => [answer?.source, answer?.date])).toEqual(
       Array.from({ length: 4 }, () => [method, "2013-12-23"]),
     );
+    expect(stages?.map(({ techniques }) => techniques ?? [])).toEqual([
+      [],
+      [{ name: "morse", source: method }],
+      [{ name: "steganography", source: method }],
+      [{ name: "sha256-brainwallet", source: method }],
+    ]);
     expect(stages?.flatMap(({ artifacts }) => artifacts.map(({ url }) => url))).toEqual([
       puzzle.sourceUrl(),
       "https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86ukc/",
@@ -162,6 +168,20 @@ describe("archived sources", () => {
       "https://www.reddit.com/r/bitcoinpuzzles/comments/1ti0uw/comment/ce86xa9/",
     ]);
     expect(puzzle.toJSON()).not.toHaveProperty("key");
+  });
+
+  it("anchors Wickex's stage answers and artifacts in the thread archive", async () => {
+    const puzzle = await requirePuzzle("wickex/youtube");
+    const archive = readFileSync(path.join(root, "wickex/wickex-2013-12-23.md"), "utf8");
+    const publishedMethod = archive.split("[ce87ss1]")[1]?.split("\n**")[0];
+    expect(puzzle.stages()).toHaveLength(4);
+    for (const entry of puzzle.stages()) {
+      expect(publishedMethod).toContain(entry.answer?.text);
+      expect(archive).toContain(entry.answer?.source);
+      for (const item of entry.artifacts) {
+        expect(archive).toContain(item.url);
+      }
+    }
   });
 
   it("matches the URL a record cites, not a page whose URL starts with it", async () => {
