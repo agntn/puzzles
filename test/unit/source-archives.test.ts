@@ -82,6 +82,37 @@ describe("archived sources", () => {
     expect(sources.map((source) => source.file).filter((file) => !reached.has(file))).toEqual([]);
   });
 
+  it("keeps the GIF thread's 63 distinct comments and expanded method spoiler", () => {
+    const markdown = readFileSync(
+      path.join(root, "iamabananaamaa/iamabananaamaa-2013-12-22.md"),
+      "utf8",
+    );
+    const ids = [...markdown.matchAll(/^\*\*.+, \[(\w+)\]\(/gm)].map((match) => match[1]);
+    expect(ids).toHaveLength(63);
+    expect(new Set(ids).size).toBe(63);
+    expect(markdown.match(/^> \[deleted\]$/gm)).toHaveLength(6);
+    expect(ids).toContain("ce82k33");
+    expect(ids).toContain("ce84vn6");
+    const method = markdown.split("[ce86ejm]")[1]?.split("\n**")[0];
+    expect(method).toContain("images can be 'merged' with ZIP/RAR files");
+    expect(method).toContain("a file called MEGAN.txt, with a string inside of it");
+    expect(method).toContain("referring to MEGAN-35, a kind of hash");
+    expect(method).toContain("which turned out to be an ATOM-128 hash");
+    expect(method).toContain("When decrypted, it gave you the private key!");
+    expect(markdown).not.toContain("](#s ");
+  });
+
+  it("hands the GIF thread archive to its puzzle, not the neighboring Caesar puzzle", async () => {
+    const file = "iamabananaamaa/iamabananaamaa-2013-12-22";
+    const gif = await requirePuzzle("iamabananaamaa/gif");
+    const caesar = await requirePuzzle("iamabananaamaa/caesar");
+    const collection = await requireCollection(gif.collection());
+    expect(citedArchivedSources(gif, collection).map(({ source }) => source.file)).toContain(file);
+    expect(citedArchivedSources(caesar, collection).map(({ source }) => source.file)).not.toContain(
+      file,
+    );
+  });
+
   it("matches the URL a record cites, not a page whose URL starts with it", async () => {
     const puzzle = await requirePuzzle("satoshi-birthday-quiz");
     const files = citedArchivedSources(puzzle, await requireCollection(puzzle.collection())).map(

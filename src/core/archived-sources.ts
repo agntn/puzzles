@@ -1881,6 +1881,17 @@ export const archivedSources = [
     date: "2019-07-25",
   },
   {
+    file: "iamabananaamaa/iamabananaamaa-2013-12-22",
+    url: "https://www.reddit.com/r/bitcoinpuzzles/comments/1thjjq/easy_1mbtc_find_the_private_key_in_this_gif/",
+    author: "u/IAMABananaAMAA",
+    date: "2013-12-22",
+    archive: {
+      url: "https://web.archive.org/web/20230601041023/https://old.reddit.com/r/bitcoinpuzzles/comments/1thjjq/easy_1mbtc_find_the_private_key_in_this_gif/",
+      date: "2023-06-01T04:10:23Z",
+      content: "confirmed",
+    },
+  },
+  {
     file: "iamabananaamaa/iamabananaamaa-2013-12-23",
     url: "https://www.reddit.com/r/bitcoinpuzzles/comments/1ticec/medium_1mbtc_riddle_me_this_for_a_private_key/",
     author: "u/IAMABananaAMAA",
