@@ -23,6 +23,7 @@ import {
   type Party,
   type Pubkey,
   secretOf,
+  usableSecret,
   type Stage,
   type TechniqueTag,
   type Transaction,
@@ -401,6 +402,15 @@ export abstract class Puzzle {
    */
   hasPrivateKey(): boolean {
     return secretOf(this.keyData()) !== undefined;
+  }
+
+  /**
+   * Whether the recorded key signs as it stands. A sealed keyfile or BIP38 payload doesn't.
+   *
+   * @returns {boolean} Whether the record holds a key nothing locks.
+   */
+  hasUsableKey(): boolean {
+    return usableSecret(secretOf(this.keyData()));
   }
 
   /**

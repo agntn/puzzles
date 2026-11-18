@@ -42,6 +42,7 @@ puzzle.keyData(); // serializable key material, or undefined
 puzzle.prizeCurrency(); // explicit currency, else the chain symbol
 puzzle.hasPubkey();
 puzzle.hasPrivateKey();
+puzzle.hasUsableKey(); // the recorded key can sign as it stands
 puzzle.hasDerivedKey(); // the record rebuilt the key from a published recipe, nobody printed it
 puzzle.keyRange(); // readonly [bigint, bigint] | undefined
 puzzle.transaction(type);
