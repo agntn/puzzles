@@ -10,8 +10,13 @@ import {
   community,
   compressed,
   confirmation,
+  cosigners,
   derivation,
+  encryptedWif,
   hex,
+  type Key,
+  keyfile,
+  mini,
   official,
   p2pkh,
   party,
@@ -27,6 +32,7 @@ import {
   stage,
   standard,
   Status,
+  wif,
 } from "../../src/index.ts";
 import { formatStageReport } from "../../src/core/format.ts";
 import { ASSETS } from "../support/assets.ts";
@@ -104,6 +110,36 @@ describe("puzzle record factories", () => {
     expect(secretOf(record.keyData())).toMatchObject({ kind: "seed", scheme: "electrum" });
     expect(record.hasPrivateKey()).toBe(true);
     expect(record.hasDerivedKey()).toBe(false);
+  });
+
+  it("tells a key that signs from one still sealed", () => {
+    const usable = (key: Key): boolean => puzzle({ ...required, key }).hasUsableKey();
+    const open = hex("1".padStart(64, "0"));
+    const phrase = seed("public fixture", "m/0");
+
+    expect(puzzle(required).hasUsableKey()).toBe(false);
+    expect([open, wif("fixture"), mini("fixture"), phrase].map(usable)).toEqual([
+      true,
+      true,
+      true,
+      true,
+    ]);
+    expect(usable(keyfile("U2FsdGVkX1"))).toBe(false);
+    expect(usable(keyfile("U2FsdGVkX1", { passphrase: "answer" }))).toBe(true);
+    expect(usable(phrase.entropy("00", undefined, "Required"))).toBe(false);
+    expect(usable(cosigners(open, encryptedWif("6P")))).toBe(false);
+    expect(usable(cosigners(open, derivation("m/0")))).toBe(false);
+    expect(usable(cosigners(open, phrase))).toBe(true);
+  });
+
+  it("keeps a sealed payload a private key and not a usable one", () => {
+    const sealed = puzzle({ ...required, key: encryptedWif("6P") });
+
+    expect(sealed.hasPrivateKey()).toBe(true);
+    expect(sealed.hasUsableKey()).toBe(false);
+    expect(puzzle({ ...required, key: encryptedWif("6P").wif("fixture") }).hasUsableKey()).toBe(
+      true,
+    );
   });
 
   it("hands back a key builder that leaves the record alone", () => {

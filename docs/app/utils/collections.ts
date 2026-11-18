@@ -1,27 +1,5 @@
-import type { AnyCollection, Hint, Puzzle, Secret } from "../../../src/index.ts";
-import { secretOf } from "../../../src/core/parts.ts";
+import type { AnyCollection, Hint } from "../../../src/index.ts";
 import { prizeTotals } from "../../../src/core/puzzle.ts";
-
-/**
- * A keyfile without its passphrase is still a locked door.
- * @param {Secret | undefined} secret - The recorded material.
- * @returns {boolean} Whether the key is known.
- */
-function knownSecret(secret: Secret | undefined): boolean {
-  if (secret === undefined || secret.kind === "encrypted") return false;
-  if (secret.kind === "keyfile") return secret.passphrase !== undefined;
-  if (secret.kind === "cosigners") return secret.cosigners.every(knownSecret);
-  return true;
-}
-
-/**
- * Whether the record holds a key you could sign with today.
- * @param {Puzzle} puzzle - The puzzle.
- * @returns {boolean} Whether the key is known.
- */
-export function hasKnownPrivateKey(puzzle: Puzzle): boolean {
-  return knownSecret(secretOf(puzzle.keyData()));
-}
 
 /** The dossier of a collection page: numbers, strings and the hint records, safe for the Nuxt payload. */
 export interface CollectionFactsData {
@@ -66,7 +44,7 @@ export function collectionFacts(collection: AnyCollection): CollectionFactsData 
     prize: prizeTotals(puzzles),
     unsolvedPrize: prizeTotals(collection.unsolved()),
     withPubkey: collection.withPubkey().length,
-    withKey: puzzles.filter(hasKnownPrivateKey).length,
+    withKey: puzzles.filter((puzzle) => puzzle.hasUsableKey()).length,
     firstStarted: started[0] ?? "",
     lastStarted: started.at(-1) ?? "",
     hints: collection.hints,

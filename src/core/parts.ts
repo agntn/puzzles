@@ -315,6 +315,28 @@ export function secretOf(key: KeyData | undefined): Secret | undefined {
   );
 }
 
+/**
+ * Whether a secret signs as recorded, with no passphrase still missing.
+ *
+ * @param {Secret | undefined} secret - The secret a key record exposes.
+ * @returns {boolean} Whether no unpublished passphrase locks it.
+ */
+export function usableSecret(secret: Secret | undefined): boolean {
+  switch (secret?.kind) {
+    case undefined:
+    case "encrypted":
+      return false;
+    case "keyfile":
+      return secret.passphrase !== undefined;
+    case "seed":
+      return secret.passphrase !== "Required";
+    case "cosigners":
+      return secret.cosigners.every(usableSecret);
+    default:
+      return true;
+  }
+}
+
 function hexSecret(key: KeyData): Secret | undefined {
   return key.hex === undefined ? undefined : { kind: "hex", hex: key.hex };
 }
