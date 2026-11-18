@@ -7,8 +7,10 @@
  * there: the library and its lazy collections, the MCP server over an in-memory transport, the
  * AI SDK tools, the Pi and OMP extensions without any src/ next to them, and the CLI bin run as a
  * command. It also runs `mcp` from the checkout's own `dist/cli.mjs`, which serves src/ there and
- * the bundle everywhere else. The load hook in record-loads.ts records which packed modules each
- * step pulled in, so the lazy manifest is checked on the published layout, not only on the sources.
+ * the bundle everywhere else. Before any of that, npm resolves the tarball next to the hosts at
+ * their dev pins, which needs the registry. The load hook in record-loads.ts records which packed
+ * modules each step pulled in, so the lazy manifest is checked on the published layout, not only on
+ * the sources.
  * Run: pnpm test:packed
  */
 
@@ -16,7 +18,7 @@ import { loaded, recordSourcesUnder, type LoadedModule } from "./record-loads.ts
 import assert from "node:assert/strict";
 import { execFile, execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { cp, mkdir, mkdtemp, readdir, readFile, rm, stat } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { registerHooks } from "node:module";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -278,6 +280,47 @@ function requireTool(
   const tool = tools[name];
   assert.ok(tool, `${name} was not registered`);
   return tool;
+}
+
+/**
+ * Names a peer host at its dev pin, the version the checkout installed.
+ *
+ * @param {string} name - A key of `peerDependencies`.
+ * @returns {Promise<string>} The npm spec, such as `ai@7.0.141`.
+ */
+async function pinnedHost(name: string): Promise<string> {
+  const installed = path.join(root, "node_modules", name, "package.json");
+  assert.ok(existsSync(installed), `peer host ${name} is not a devDependency of the checkout`);
+  const { version } = JSON.parse(await readFile(installed, "utf8")) as { readonly version: string };
+  return `${name}@${version}`;
+}
+
+/**
+ * Gives npm's peer resolver a vote no npmrc can waive: the tarball next to each pinned host.
+ *
+ * @param {string} tarball - The packed tarball.
+ * @param {Manifest} manifest - The packed package.json.
+ */
+async function assertPeerHostsResolve(tarball: string, manifest: Manifest): Promise<void> {
+  const hosts = await Promise.all(Object.keys(manifest.peerDependencies).map(pinnedHost));
+  assert.ok(hosts.length > 0, "the packed package declares no peer hosts");
+  const consumer = path.join(temporaryRoot, "consumer");
+  await mkdir(consumer);
+  await writeFile(path.join(consumer, "package.json"), '{ "private": true }\n');
+  await execFileAsync(
+    "npm",
+    [
+      "install",
+      "--dry-run",
+      "--legacy-peer-deps=false",
+      "--strict-peer-deps=false",
+      "--no-audit",
+      "--no-fund",
+      tarball,
+      ...hosts,
+    ],
+    { cwd: consumer, timeout: 120_000 },
+  );
 }
 
 async function assertPackedLayout(manifest: Manifest): Promise<void> {
@@ -707,6 +750,7 @@ try {
     await readFile(path.join(packageRoot, "package.json"), "utf8"),
   ) as Manifest;
 
+  await assertPeerHostsResolve(tarball, manifest);
   for (const surface of ["pi", "omp", "mcp"]) {
     run(process.execPath, ["test/probe-tools.ts", packageRoot, surface, "dist"]);
   }

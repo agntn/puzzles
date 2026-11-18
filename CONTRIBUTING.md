@@ -14,7 +14,7 @@ pnpm test:packed
 node src/cli.ts collections
 ```
 
-The docs site is a member of the root pnpm workspace, so the same install sets it up. Its postinstall runs `nuxt prepare`. `pnpm lint` and `pnpm test` both read what it generates: the linter type checks the docs through `.nuxt/`, and the landing test imports `docs/app/utils`, which vite compiles through the Nuxt tsconfig. `pnpm typecheck` builds the package first, then checks the library, the Pi extension, and the OMP extension. `pnpm test:packed` packs the tarball and runs every published entry without `src/`. Node.js 26 or newer runs the TypeScript sources directly, so `node src/cli.ts collections` works without a loader and must list every collection in the manifest.
+The docs site is a member of the root pnpm workspace, so the same install sets it up. Its postinstall runs `nuxt prepare`. `pnpm lint` and `pnpm test` both read what it generates: the linter type checks the docs through `.nuxt/`, and the landing test imports `docs/app/utils`, which vite compiles through the Nuxt tsconfig. `pnpm typecheck` builds the package first, then checks the library, the Pi extension, and the OMP extension. `pnpm test:packed` packs the tarball and runs every published entry without `src/`. Then npm gets a vote: it resolves that tarball next to the Pi, OMP and AI SDK versions from the `dev` catalog, so this one needs the registry. Node.js 26 or newer runs the TypeScript sources directly, so `node src/cli.ts collections` works without a loader and must list every collection in the manifest.
 
 `pnpm test:live` runs the roundtrips against public explorers in `test/live/`, which stay out of CI. The Etherscan case needs `ETHERSCAN_API_KEY` and skips without it.
 
