@@ -410,7 +410,7 @@ const PRESENTATION: Readonly<
     title: "Zden's puzzles",
     sample: "zden/decred-janus",
     chains: ["bitcoin", "ethereum", "litecoin", "decred"],
-    blurb: "Fifteen visual puzzles on four chains, most of them solved.",
+    blurb: "Pictures with keys in them, on four chains. Level HALV fell last.",
   },
 };
 

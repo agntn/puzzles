@@ -230,7 +230,7 @@ describe("docs landing fixtures", () => {
     expect(Object.fromEntries(rows.map((row) => [row.key, row.open]))).toMatchObject({
       bits: 77,
       quizchain: 0,
-      zden: 1,
+      zden: 0,
     });
   });
 

@@ -897,6 +897,7 @@ describe("collection class data", () => {
         "quizchain2/77",
         "satoshi-birthday-quiz",
         "trivia-brainwallet",
+        "zden/level-halv",
       ],
     );
   });
