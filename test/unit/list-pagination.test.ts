@@ -156,7 +156,7 @@ describe("puzzle list pagination", () => {
   });
 
   it("names the puzzle behind an address when the other filters left it out", async () => {
-    const address = "1crypto24HCr178iMcKd5iUi5D4rsg1nK";
+    const address = "1KfZGvwZxsvSmemoCmEV75uqcNzYBHjkHZ";
     const elsewhere = await listTool({
       address,
       collection: "bits",
@@ -172,18 +172,18 @@ describe("puzzle list pagination", () => {
     });
 
     expect(elsewhere.content[0]?.text).toBe(
-      "0 matching puzzles:\n(none)\nzden/level-halv pays to this address, but its collection is zden (not bits).",
+      "0 matching puzzles:\n(none)\nbrave-new-world pays to this address, but its collection is brave-new-world (not bits).",
     );
     expect(elsewhere.details).toMatchObject({
       matched: 0,
       ids: [],
-      outside: [{ id: "zden/level-halv", filters: ["collection"] }],
+      outside: [{ id: "brave-new-world", filters: ["collection"] }],
     });
     expect(everything.content[0]?.text).toContain(
       "but its chain is bitcoin (not ethereum) and its status is unsolved (not solved) and it has no public key recorded.",
     );
     expect(everything.details["outside"]).toEqual([
-      { id: "zden/level-halv", filters: ["chain", "status", "withPubkey"] },
+      { id: "brave-new-world", filters: ["chain", "status", "withPubkey"] },
     ]);
   });
 

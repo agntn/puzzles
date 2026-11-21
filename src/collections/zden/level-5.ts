@@ -38,7 +38,7 @@ export const zdenPuzzleLevel5 = puzzle({
     key: "echo-ls",
     kind: PartyKind.Person,
     about:
-      "Author of the echo.ls blog, who solved Zden's corrected Level 5 and published the key with the method.",
+      "Author of the echo.ls blog, who solved Zden's corrected Level 5 and Level HALV and published the method for both.",
     profiles: [profile("website", "https://echo.ls/")],
     facts: [
       fact(
