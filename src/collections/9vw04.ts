@@ -154,11 +154,11 @@ export const gemfinderOfX9vw04 = puzzle({
       { date: "2026-03-01" },
     ),
     official(
-      "Yes",
-      post("2122360200921550936"),
+      "A rainbow over a sea of clouds (GIF)",
+      post("2122181658984284485"),
       confirmation(
-        post("2122181658984284485"),
-        "The rainbow GIF this answers, asked if it was a new hint",
+        post("2122360200921550936"),
+        "The author's Yes when asked if the GIF was a new hint",
       ),
       { date: "2026-11-16" },
     ),
