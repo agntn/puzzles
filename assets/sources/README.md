@@ -2,11 +2,11 @@
 
 Reading copies of the pages the records cite and nobody else keeps. Tweets get deleted, Reddit posts get edited, a puzzle page loses half its description. The copy here stays put.
 
-As of November 7, 2026:
+As of November 27, 2026:
 
 | Where        | Copies                      |
 | ------------ | --------------------------- |
-| X            | 51 tweets                   |
+| X            | 60 tweets                   |
 | Reddit       | 168 threads and one comment |
 | Bitcointalk  | 7 threads                   |
 | Farcaster    | 6 casts                     |
@@ -22,7 +22,7 @@ One post per file. No replies, no quote tweets, no other posts about the same pu
 - three announcements and six later posts that the author records cite
 - School of Bitcoin's pinned business card post and its March 2025 repost
 - seventeen VeteranHODL posts behind Hunting Time, from the teaser and the announcement through all twelve clue photos to the claim and the full solution
-- eleven GemfinderOfX posts behind 9vw04, from the puzzle itself to the skip cipher clue of March 2026
+- twenty GemfinderOfX posts behind 9vw04, from the puzzle itself to the rainbow table of November 2026
 - six posts that the solver records cite
 
 ## Reddit
@@ -112,13 +112,22 @@ Some of these threads matter for more than a clue. That's where the answer key l
 - [I don't really like rainbows](9vw04/gemfinderofx-2024-12-22.md)
 - [All the clues are in the post](9vw04/gemfinderofx-2025-01-01.md)
 - [The private key example](9vw04/gemfinderofx-2025-01-02.md)
-- [Look in the mirror](9vw04/gemfinderofx-2025-01-04.md)
+- [Look in the mirror](9vw04/gemfinderofx-2025-01-04-1875410257754882121.md)
+- [Everything else is in the post](9vw04/gemfinderofx-2025-01-04-1875574373853360303.md)
 - [The small thing everybody overlooked](9vw04/gemfinderofx-2025-01-05-1875737695177339343.md)
 - [WIF](9vw04/gemfinderofx-2025-01-05-1875982446598181044.md)
+- [The face you make when people overlook the obvious](9vw04/gemfinderofx-2025-01-06.md)
 - [Just your Brian](9vw04/gemfinderofx-2025-01-09.md)
 - [Additional hints: WIF, rainbows and Daniel Shanks](9vw04/gemfinderofx-2025-01-13-1878634169410203733.md)
 - [The spelling is incorrect on purpose](9vw04/gemfinderofx-2025-01-13-1878635172754788512.md)
+- [The Bitcoin is still there](9vw04/gemfinderofx-2026-02-13.md)
 - [Every Nth character](9vw04/gemfinderofx-2026-03-01.md)
+- [A rainbow over the clouds](9vw04/gemfinderofx-2026-11-16-2122181658984284485.md)
+- [Yes, a new hint](9vw04/gemfinderofx-2026-11-16-2122360200921550936.md)
+- [A zero, not an o](9vw04/gemfinderofx-2026-11-16-2122436606015713739.md)
+- [Not taking things at face value](9vw04/gemfinderofx-2026-11-21.md)
+- [A rainbow table with a hash on the plate](9vw04/gemfinderofx-2026-11-24-2125092863038124541.md)
+- [The utility of the repeated rainbow hints](9vw04/gemfinderofx-2026-11-24-2125356189613781186.md)
 - [Brute force and the coins are yours](bitaddress/q-2023-10-06.md)
 - [Doge's Gambit launch post](doges-gambit/cryptopuzzlers-2020-12-11.md)
 - [La Liberté guidant le peuple 2019 on r/Bitcoin](liberte-guidant-le-peuple/pascalboyart-2019-01-07.md)
@@ -326,7 +335,7 @@ Some tweets were rendered from X's public embed in a local headless Chromium. Th
 - two of the 2026-09-29 Proof Of Writing entries
 - the School of Bitcoin repost
 - the two 2026-10-16 Weave 4 hints
-- the thirteen short Hunting Time posts and nine of the 9vw04 posts
+- the thirteen short Hunting Time posts and eighteen of the 9vw04 posts
 
 Each tweet PNG is a crop of the displayed post: author, text, attached image when present, timestamp and engagement row. Navigation and other posts are cut out. Cropping and PNG conversion don't restore the original attachment bytes, so use the puzzle's own files for image analysis, not these screenshots.
 
@@ -363,9 +372,9 @@ The local screenshots are captures made in 2026, not proof of how the page looke
 1. Keep one `.md` and `.png` pair under the collection directory. Name it with the author handle and the UTC date. Add the tweet ID or the Reddit thread ID when the author posted more than once that day.
 2. Keep the URL in the puzzle record. The archive is supporting evidence, not another dataset or a replacement source URL.
 3. Copy the frontmatter fields from an existing entry and link its screenshot in the body.
-4. Look for an older capture. For a tweet, of both the `twitter.com` and `x.com` URL. For anything else, of every URL the same page answers on. On Reddit that means the `www` and `old` hosts, and their captures differ wildly, because one of them renders as an empty app shell.
+4. Look for an older capture. For a tweet, of both the `twitter.com` and `x.com` URL, under every handle the account has had. Wayback files a capture under the name the account had that day, so GemfinderOfX's January 2025 posts sit under IrrationalLibs. For anything else, of every URL the same page answers on. On Reddit that means the `www` and `old` hosts, and their captures differ wildly, because one of them renders as an empty app shell.
 5. Record the capture's exact URL, date and content check when you find one. If there's none, leave out the three `archive_` fields and name the searched archive and the check date in the entry. Don't invent a snapshot URL.
-6. Add the entry to `archivedSources` in `src/core/archived-sources.ts`. The test checks it and `puzzles_assets` reads it. A tweet entry gives its ID and handle, and the test derives the rest. Anything else carries its own URL and capture URL, because no other page's archive address is derivable.
+6. Add the entry to `archivedSources` in `src/core/archived-sources.ts`. The test checks it and `puzzles_assets` reads it. A tweet entry gives its ID and handle, and the test derives the rest. A capture taken under an older handle names it in `archive.handle`. Anything else carries its own URL and capture URL, because no other page's archive address is derivable.
 7. Compare the transcript with the image by eye. A login page, a truncated post or an unloaded attachment isn't a capture.
 8. Run `pnpm exec vp test test/unit/source-archives.test.ts`. It checks the screenshot hashes and that the archive covers every tweet ID the collections reference. A non-tweet entry has to archive a URL the records actually cite.
 

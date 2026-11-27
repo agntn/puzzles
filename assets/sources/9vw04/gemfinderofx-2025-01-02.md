@@ -3,6 +3,9 @@ url: https://x.com/GemfinderOfX/status/1874632897459871930
 author: "@GemfinderOfX"
 date: "2025-01-02"
 archived: "2026-10-16"
+archive_url: https://web.archive.org/web/20250102014446/https://twitter.com/IrrationalLibs/status/1874632897459871930
+archive_date: "2025-01-02T01:44:46Z"
+archive_content: confirmed
 screenshot_sha256: 84ba49d45b9ba19cbc1c537571cd0670f1158634f2c86f52cf3c35287637f717
 ---
 
@@ -12,7 +15,7 @@ screenshot_sha256: 84ba49d45b9ba19cbc1c537571cd0670f1158634f2c86f52cf3c35287637f
 
 ## Historical provenance
 
-No capture found. The Wayback Machine index and the MemGator aggregator were searched on October 16, 2026 for both the `twitter.com` and `x.com` URL, and a prefix query on the author's statuses lists nothing older than February 2026. So the transcript below was checked against X's API text, the current post and the screenshot.
+[Wayback capture from January 2, 2025, 01:44:46 UTC](https://web.archive.org/web/20250102014446/https://twitter.com/IrrationalLibs/status/1874632897459871930) is X's JSON payload for the post, taken under the account's old name, IrrationalLibs. Its `text` field carries the same wording as the transcript below, apart from the leading @world73413383 mention. The author ID, 1478800308889395208, is the GemfinderOfX account.
 
 ## Transcript
 

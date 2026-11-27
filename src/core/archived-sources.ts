@@ -297,30 +297,49 @@ export const archivedSources = [
     tweet: "1874575103230652759",
     author: "GemfinderOfX",
     date: "2025-01-01",
+    archive: { date: "2025-01-01T21:55:07Z", content: "confirmed", handle: "IrrationalLibs" },
   },
   {
     file: "9vw04/gemfinderofx-2025-01-02",
     tweet: "1874632897459871930",
     author: "GemfinderOfX",
     date: "2025-01-02",
+    archive: { date: "2025-01-02T01:44:46Z", content: "confirmed", handle: "IrrationalLibs" },
   },
   {
-    file: "9vw04/gemfinderofx-2025-01-04",
+    file: "9vw04/gemfinderofx-2025-01-04-1875410257754882121",
     tweet: "1875410257754882121",
     author: "GemfinderOfX",
     date: "2025-01-04",
+    archive: { date: "2025-01-04T05:13:43Z", content: "confirmed", handle: "IrrationalLibs" },
+  },
+  {
+    file: "9vw04/gemfinderofx-2025-01-04-1875574373853360303",
+    tweet: "1875574373853360303",
+    author: "GemfinderOfX",
+    date: "2025-01-04",
+    archive: { date: "2025-01-04T16:05:51Z", content: "confirmed", handle: "IrrationalLibs" },
   },
   {
     file: "9vw04/gemfinderofx-2025-01-05-1875737695177339343",
     tweet: "1875737695177339343",
     author: "GemfinderOfX",
     date: "2025-01-05",
+    archive: { date: "2025-01-05T02:54:50Z", content: "confirmed", handle: "IrrationalLibs" },
   },
   {
     file: "9vw04/gemfinderofx-2025-01-05-1875982446598181044",
     tweet: "1875982446598181044",
     author: "GemfinderOfX",
     date: "2025-01-05",
+    archive: { date: "2025-01-05T19:07:23Z", content: "confirmed", handle: "IrrationalLibs" },
+  },
+  {
+    file: "9vw04/gemfinderofx-2025-01-06",
+    tweet: "1876302447796486163",
+    author: "GemfinderOfX",
+    date: "2025-01-06",
+    archive: { date: "2025-01-06T16:18:58Z", content: "confirmed", handle: "IrrationalLibs" },
   },
   {
     file: "9vw04/gemfinderofx-2025-01-09",
@@ -333,12 +352,21 @@ export const archivedSources = [
     tweet: "1878634169410203733",
     author: "GemfinderOfX",
     date: "2025-01-13",
+    archive: { date: "2025-01-13T02:44:23Z", content: "confirmed", handle: "IrrationalLibs" },
   },
   {
     file: "9vw04/gemfinderofx-2025-01-13-1878635172754788512",
     tweet: "1878635172754788512",
     author: "GemfinderOfX",
     date: "2025-01-13",
+    archive: { date: "2025-01-13T02:48:23Z", content: "confirmed", handle: "IrrationalLibs" },
+  },
+  {
+    file: "9vw04/gemfinderofx-2026-02-13",
+    tweet: "2022387091565613567",
+    author: "GemfinderOfX",
+    date: "2026-02-13",
+    archive: { date: "2026-02-13T19:07:11Z", content: "confirmed" },
   },
   {
     file: "9vw04/gemfinderofx-2026-03-01",
@@ -346,6 +374,43 @@ export const archivedSources = [
     author: "GemfinderOfX",
     date: "2026-03-01",
     archive: { date: "2026-03-01T02:48:19Z", content: "confirmed" },
+  },
+  {
+    file: "9vw04/gemfinderofx-2026-11-16-2122181658984284485",
+    tweet: "2122181658984284485",
+    author: "GemfinderOfX",
+    date: "2026-11-16",
+  },
+  {
+    file: "9vw04/gemfinderofx-2026-11-16-2122360200921550936",
+    tweet: "2122360200921550936",
+    author: "GemfinderOfX",
+    date: "2026-11-16",
+  },
+  {
+    file: "9vw04/gemfinderofx-2026-11-16-2122436606015713739",
+    tweet: "2122436606015713739",
+    author: "GemfinderOfX",
+    date: "2026-11-16",
+    archive: { date: "2026-11-16T21:08:14Z", content: "confirmed" },
+  },
+  {
+    file: "9vw04/gemfinderofx-2026-11-21",
+    tweet: "2124012727668748461",
+    author: "GemfinderOfX",
+    date: "2026-11-21",
+  },
+  {
+    file: "9vw04/gemfinderofx-2026-11-24-2125092863038124541",
+    tweet: "2125092863038124541",
+    author: "GemfinderOfX",
+    date: "2026-11-24",
+  },
+  {
+    file: "9vw04/gemfinderofx-2026-11-24-2125356189613781186",
+    tweet: "2125356189613781186",
+    author: "GemfinderOfX",
+    date: "2026-11-24",
   },
   {
     file: "bitaddress/q-2023-10-06",
@@ -2076,8 +2141,8 @@ export function archivedSourceUrl(source: ArchivedSource): string {
 }
 
 /**
- * The capture the entry links. A tweet's Wayback address follows from its ID and the capture
- * timestamp; any other page carries the capture URL on the entry.
+ * The capture the entry links. A tweet's Wayback address follows from its ID, the capture
+ * timestamp and the handle it had then; any other page carries the capture URL on the entry.
  *
  * @param {ArchivedSource} source - The archived source.
  * @returns {string | undefined} The capture URL, or nothing when no archive kept the page.
@@ -2087,9 +2152,11 @@ export function archivedSourceCapture(source: ArchivedSource): string | undefine
     return undefined;
   }
   const timestamp = source.archive.date.replaceAll(/\D/g, "");
-  return "tweet" in source
-    ? `https://web.archive.org/web/${timestamp}/https://twitter.com/${source.author}/status/${source.tweet}`
-    : source.archive.url;
+  if (!("tweet" in source)) {
+    return source.archive.url;
+  }
+  const handle = "handle" in source.archive ? source.archive.handle : source.author;
+  return `https://web.archive.org/web/${timestamp}/https://twitter.com/${handle}/status/${source.tweet}`;
 }
 
 /**

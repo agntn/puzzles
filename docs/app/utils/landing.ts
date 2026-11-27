@@ -1686,7 +1686,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/bc1qr5mssp6snmduqp9enx4dzmcxvk7qw83lceyy2v",
     source: "https://x.com/GemfinderOfX/status/1870319691295764655",
     transactions: 4,
-    tool: "9vw04\tunsolved\t0.0202076 BTC\tbc1qr5mssp6snmduqp9enx4dzmcxvk7qw83lceyy2v\nchain: bitcoin  address kind: p2wpkh\nhash160: 1d370807509edbc004b999aad16f0665bc071e3f\npublic key: 039d7ce87733444acfde33960964344d8201d2d92ccdad0f5045e40fdcf963475b (compressed)\nprivate key: unknown\nstarted: 2024-12-21 04:05:37\npre-genesis: yes\ntransactions: 4\n\tfunding\t2021-01-05 09:52:50\t0.02547616 BTC\t6f2b30df09dacd79249bd16e014141bc9747eff9d39094334181942f3294a76b\n\tdecrease\t2021-10-20 18:11:46\t0.02032356 BTC\t82702e8a59babe3ad12ac5c7246f9ea98ad384860c9bbb119a6aeaf184146cb0\n\tincrease\t2021-11-03 13:51:15\t0.01928356 BTC\t9ca459e7e9172f68a17b6e9bbd418ed2f50479168ad2a3241821a2a8ba74e527\n\tdecrease\t2024-11-28 10:54:45\t0.0042 BTC\t67dbb2436ed6d064b96b5854c31f74856e86152a11a4ea8224bbd3ba78984a21\nasset: assets/9vw04/puzzle.jpg\nasset source: https://pbs.twimg.com/media/GfS12G-WUAE_Lt2.jpg?name=orig\nhints: 15, folded, puzzles_hints lists them\nexplorer: https://blockstream.info/address/bc1qr5mssp6snmduqp9enx4dzmcxvk7qw83lceyy2v\nsource: https://x.com/GemfinderOfX/status/1870319691295764655\nfiles: 1 file, 11 archived sources; puzzles_assets lists them and reads one by its path",
+    tool: "9vw04\tunsolved\t0.0202076 BTC\tbc1qr5mssp6snmduqp9enx4dzmcxvk7qw83lceyy2v\nchain: bitcoin  address kind: p2wpkh\nhash160: 1d370807509edbc004b999aad16f0665bc071e3f\npublic key: 039d7ce87733444acfde33960964344d8201d2d92ccdad0f5045e40fdcf963475b (compressed)\nprivate key: unknown\nstarted: 2024-12-21 04:05:37\npre-genesis: yes\ntransactions: 4\n\tfunding\t2021-01-05 09:52:50\t0.02547616 BTC\t6f2b30df09dacd79249bd16e014141bc9747eff9d39094334181942f3294a76b\n\tdecrease\t2021-10-20 18:11:46\t0.02032356 BTC\t82702e8a59babe3ad12ac5c7246f9ea98ad384860c9bbb119a6aeaf184146cb0\n\tincrease\t2021-11-03 13:51:15\t0.01928356 BTC\t9ca459e7e9172f68a17b6e9bbd418ed2f50479168ad2a3241821a2a8ba74e527\n\tdecrease\t2024-11-28 10:54:45\t0.0042 BTC\t67dbb2436ed6d064b96b5854c31f74856e86152a11a4ea8224bbd3ba78984a21\nasset: assets/9vw04/puzzle.jpg\nhint assets: assets/9vw04/shanks.jpg, assets/9vw04/rainbow.mp4, assets/9vw04/table.jpg\nasset source: https://pbs.twimg.com/media/GfS12G-WUAE_Lt2.jpg?name=orig\nhints: 24, folded, puzzles_hints lists them\nexplorer: https://blockstream.info/address/bc1qr5mssp6snmduqp9enx4dzmcxvk7qw83lceyy2v\nsource: https://x.com/GemfinderOfX/status/1870319691295764655\nfiles: 4 files, 20 archived sources; puzzles_assets lists them and reads one by its path",
   },
   {
     id: "crypto-puzzles/1",
@@ -1722,7 +1722,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "78fa5f021adc",
+  dataVersion: "61b6befa9d24",
   total: 558,
   solved: 327,
   unsolved: 112,
@@ -2941,7 +2941,7 @@ export const AUTHORS_STATIC: readonly AuthorRow[] = [
     name: "GemfinderOfX",
     kind: "person",
     about:
-      "Published the 9vw04 Bitcoin puzzle on X in December 2024 and added hints through March 2026.",
+      "Published the 9vw04 Bitcoin puzzle on X in December 2024 and added hints through November 2026.",
     collections: ["9vw04"],
     puzzles: 1,
   },
