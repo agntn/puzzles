@@ -2,6 +2,7 @@ import { SingletonCollection } from "../core/collection.ts";
 import {
   assets,
   compressed,
+  confirmation,
   decrease,
   digest,
   fact,
@@ -35,6 +36,18 @@ const ADDITIONAL = post("1878634169410203733");
 
 /** The picture, at the size X stores the upload. The file under `assets/` is these bytes. */
 const PICTURE = "https://pbs.twimg.com/media/GfS12G-WUAE_Lt2.jpg?name=orig";
+
+/** The Daniel Shanks meme from January 6, 2025. */
+const SHANKS = "https://pbs.twimg.com/media/Ggn3IcdXIAgCAME.jpg";
+
+/** The rainbow GIF the author confirmed as a new hint, November 16, 2026. */
+const RAINBOW = "https://video.twimg.com/tweet_video/HXOA-CObYAADAp2.mp4";
+
+/** The rainbow table with a hash on its plate, November 24, 2026. */
+const TABLE = "https://pbs.twimg.com/media/HX3YslUaAAE5Viu.jpg?name=orig";
+
+/** The November 21, 2026 reply about the zero Base58 doesn't have. */
+const FACE_VALUE = post("2124012727668748461");
 
 /** A WIF hidden in one post, which holds everything for the key, the author says, rainbows aside. */
 export const gemfinderOfX9vw04 = puzzle({
@@ -79,12 +92,28 @@ export const gemfinderOfX9vw04 = puzzle({
       { date: "2025-01-04" },
     ),
     official(
+      "I don’t like rainbows. Everything else is in the post",
+      post("1875574373853360303"),
+      undefined,
+      {
+        date: "2025-01-04",
+      },
+    ),
+    official(
       "It’s there you just need to find the small thing everybody has overlooked so far",
       post("1875737695177339343"),
       undefined,
       { date: "2025-01-05" },
     ),
     official("WIF", post("1875982446598181044"), undefined, { date: "2025-01-05" }),
+    official(
+      "THE FACE YOU MAKE WHEN PPL OVERLOOK THE OBVIOUS",
+      post("1876302447796486163"),
+      undefined,
+      {
+        date: "2025-01-06",
+      },
+    ),
     official(
       "Nope just your Brian and everything in the post",
       post("1877378647050338548"),
@@ -111,10 +140,54 @@ export const gemfinderOfX9vw04 = puzzle({
       { date: "2025-01-13" },
     ),
     official(
+      "The Bitcoin is still there. All the clues are too. Grind",
+      post("2022387091565613567"),
+      undefined,
+      {
+        date: "2026-02-13",
+      },
+    ),
+    official(
       "Every Nth character has something to say there could be a fixed interval skip cipher hidden in the sequence",
       post("2027938957112279215"),
       undefined,
       { date: "2026-03-01" },
+    ),
+    official(
+      "A rainbow over a sea of clouds (GIF)",
+      post("2122181658984284485"),
+      confirmation(
+        post("2122360200921550936"),
+        "The author's Yes when asked if the GIF was a new hint",
+      ),
+      { date: "2026-11-16" },
+    ),
+    official(
+      "Yes it is a 0 ( zero ) not a “o” and yes it appears as is in the WIF",
+      post("2122436606015713739"),
+      undefined,
+      { date: "2026-11-16" },
+    ),
+    official(
+      "Yes you are correct, it’s meant to be a puzzle remember? I’ve given a lot of clues and 1 person was really close. Everything I’ve said and wrote has a reason even if technically not “correct”",
+      FACE_VALUE,
+      undefined,
+      { date: "2026-11-21" },
+    ),
+    official("The main idea of this is not taking things at face value.", FACE_VALUE, undefined, {
+      date: "2026-11-21",
+    }),
+    official(
+      "Good luck to all of you still working on this. I’ve seen a handful of you guys making some leeway.",
+      post("2125092863038124541"),
+      undefined,
+      { date: "2026-11-24" },
+    ),
+    official(
+      "I’d say a little bit of understanding with math would be helpful (ai can do it if you couldn’t) but the main thing is utility of the repeated hints “🌈”",
+      post("2125356189613781186"),
+      undefined,
+      { date: "2026-11-24" },
     ),
   ],
   transactions: [
@@ -141,6 +214,7 @@ export const gemfinderOfX9vw04 = puzzle({
   ],
   assets: assets({
     puzzle: "puzzle.jpg",
+    hints: ["shanks.jpg", "rainbow.mp4", "table.jpg"],
     sourceUrl: PICTURE,
     digests: [
       digest(
@@ -152,6 +226,24 @@ export const gemfinderOfX9vw04 = puzzle({
           archive:
             "https://web.archive.org/web/20250303015335id_/https://pbs.twimg.com/media/GfS12G-WUAE_Lt2?format=jpg&name=orig",
         },
+      ),
+      digest(
+        "shanks.jpg",
+        "11a3662a732c212bc12b9f96f77291ceda9628a9cf8c65eec9a2e08999bc3bdc",
+        45880,
+        { url: SHANKS },
+      ),
+      digest(
+        "rainbow.mp4",
+        "668c25d21aaf741f2658fed756a85a87494f99ddacb037405df42d4e2f52b67a",
+        90838,
+        { url: RAINBOW },
+      ),
+      digest(
+        "table.jpg",
+        "318cbca20201ec9385a4e5eb436e528db1fd81875a4bfd7484dececbfd9543e7",
+        75172,
+        { url: TABLE },
       ),
     ],
   }),
@@ -166,9 +258,9 @@ export class NineVw04Collection extends SingletonCollection {
   static readonly author = party("GemfinderOfX", {
     key: "gemfinderofx",
     kind: PartyKind.Person,
-    aliases: ["Gem Finder"],
+    aliases: ["Gem Finder", "IrrationalLibs"],
     about:
-      "Published the 9vw04 Bitcoin puzzle on X in December 2024 and added hints through March 2026.",
+      "Published the 9vw04 Bitcoin puzzle on X in December 2024 and added hints through November 2026.",
     profiles: [profile("twitter", "https://x.com/GemfinderOfX")],
     facts: [
       fact(
