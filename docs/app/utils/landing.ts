@@ -1420,7 +1420,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
     explorer: "https://blockstream.info/address/bc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p",
     source: "https://bitcointalk.org/index.php?topic=5584952.msg66802369#msg66802369",
     transactions: 1,
-    tool: "phy\tunsolved\t0.008 BTC\tbc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p\nchain: bitcoin  address kind: p2wpkh\nhash160: 1866a383a757092447cd64051779c1dc6c16e7a5\npublic key: 02425afdd1716149faf414b6fdb96d5e7afc8ce42496042f4df559c80a7c6650eb (compressed)\nprivate key: unknown\nstarted: 2026-06-05 19:15:46\ntransactions: 1\n\tfunding\t2026-06-21 18:08:38\t0.008 BTC\t2ba79d0b377ab2c41f3508e91e84d0b2aff771fd81b97b8e85c24788795964d3\nasset: assets/phy/puzzle.png\nasset source: https://www.talkimg.com/images/2026/06/05/UrS0Mq.png\nhints: 19, folded, puzzles_hints lists them\nexplorer: https://blockstream.info/address/bc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p\nsource: https://bitcointalk.org/index.php?topic=5584952.msg66802369#msg66802369\nfiles: 1 file, 0 archived sources; puzzles_assets lists them and reads one by its path",
+    tool: "phy\tunsolved\t0.008 BTC\tbc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p\nchain: bitcoin  address kind: p2wpkh\nhash160: 1866a383a757092447cd64051779c1dc6c16e7a5\npublic key: 02425afdd1716149faf414b6fdb96d5e7afc8ce42496042f4df559c80a7c6650eb (compressed)\nprivate key: unknown\nstarted: 2026-06-05 19:15:46\ntransactions: 1\n\tfunding\t2026-06-21 18:08:38\t0.008 BTC\t2ba79d0b377ab2c41f3508e91e84d0b2aff771fd81b97b8e85c24788795964d3\nasset: assets/phy/puzzle.png\nasset source: https://www.talkimg.com/images/2026/06/05/UrS0Mq.png\nhints: 20, folded, puzzles_hints lists them\nexplorer: https://blockstream.info/address/bc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p\nsource: https://bitcointalk.org/index.php?topic=5584952.msg66802369#msg66802369\nfiles: 1 file, 0 archived sources; puzzles_assets lists them and reads one by its path",
   },
   {
     id: "seed-phrase",
@@ -1722,7 +1722,7 @@ export const LANDING_STATIC: readonly LandingSample[] = [
 
 /** `stats()` at the landing's data version: the hero figure and the walk. */
 export const STATS_STATIC = {
-  dataVersion: "900a2a58d526",
+  dataVersion: "78fa5f021adc",
   total: 558,
   solved: 327,
   unsolved: 112,

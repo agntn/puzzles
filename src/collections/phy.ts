@@ -152,6 +152,12 @@ export const phyChallenge = puzzle({
       undefined,
       { date: "2026-10-07" },
     ),
+    official(
+      "There's nothing weird you need to assume when solving, everything is very logical and self-contained. Though one needs to 🤔 out of the 📦.",
+      post("67359054"),
+      undefined,
+      { date: "2026-11-18" },
+    ),
     community("Phyllotaxis ?", post("66855641"), undefined, { date: "2026-06-20" }),
     community(
       "The signature signs the complete OP text with no trailing newline. It recovers the funded SegWit address bc1qrpn28qa82uyjg37dvsz3w7wpm3kpdea957nm9p, currently holding 800,000 sats.",
