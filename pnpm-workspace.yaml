@@ -50,7 +50,7 @@ catalogs:
     "@agntn/explorers": 0.6.1
     "@agntn/hashes": 0.7.3
     "@agntn/keys": 0.8.2
-    "@agntn/tools": 0.3.1
+    "@agntn/tools": 0.4.1
     "@modelcontextprotocol/sdk": 1.32.2
     "@modelcontextprotocol/server": 2.4.0
     "@nuxtjs/mcp-toolkit": 0.24.3
