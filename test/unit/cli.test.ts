@@ -3,9 +3,12 @@ import { copyFileSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
+import { Client } from "@modelcontextprotocol/client";
+import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 import { describe, expect, it } from "vite-plus/test";
 import { cliCommands } from "../../src/commands/index.ts";
 import { collectionKeys } from "../../src/core/registry.ts";
+import { puzzlesTools } from "../../src/tools.ts";
 import { ASSETS, CHECKOUT_ASSETS } from "../support/assets.ts";
 
 const execute = promisify(execFile);
@@ -1261,5 +1264,62 @@ describe.concurrent("puzzles CLI", () => {
       stdout: "",
       stderr: `Puzzle not found: nope x. Known collections: ${collectionKeys().join(", ")}\n`,
     });
+  });
+});
+
+/* Connects to the built `puzzles mcp`, where `dist: false` lets the checkout serve `src/`. */
+async function connect(
+  dist: boolean,
+  mode: "legacy" | Readonly<{ pin: "2026-07-28" }>,
+): Promise<Client> {
+  const env = Object.fromEntries(
+    Object.entries(process.env).filter(
+      (entry): entry is [string, string] =>
+        entry[0] !== "PUZZLES_DIST" && entry[0] !== "NODE_OPTIONS" && entry[1] !== undefined,
+    ),
+  );
+  const client = new Client(
+    { name: "puzzles-test", version: "1.0.0" },
+    { versionNegotiation: { mode } },
+  );
+  await client.connect(
+    new StdioClientTransport({
+      command: process.execPath,
+      args: ["dist/cli.mjs", "mcp"],
+      cwd: process.cwd(),
+      env: dist ? { ...env, PUZZLES_DIST: "1" } : env,
+      stderr: "ignore",
+    }),
+  );
+  return client;
+}
+
+describe("puzzles mcp protocol versions", () => {
+  const builds = [
+    { from: "source", dist: false },
+    { from: "bundle", dist: true },
+  ];
+  const toolNames = puzzlesTools.map((tool) => tool.name);
+
+  it.each(builds)("lets a client pinned to 2026 listen, from the $from", async ({ dist }) => {
+    const client = await connect(dist, { pin: "2026-07-28" });
+    try {
+      expect(client.getNegotiatedProtocolVersion()).toBe("2026-07-28");
+      const subscription = await client.listen({ toolsListChanged: true });
+      expect((await client.listTools()).tools.map((tool) => tool.name)).toEqual(toolNames);
+      await subscription.close();
+    } finally {
+      await client.close();
+    }
+  });
+
+  it.each(builds)("still opens a 2025 client with initialize, from the $from", async ({ dist }) => {
+    const client = await connect(dist, "legacy");
+    try {
+      expect(client.getNegotiatedProtocolVersion()).toMatch(/^2025-/u);
+      expect((await client.listTools()).tools.map((tool) => tool.name)).toEqual(toolNames);
+    } finally {
+      await client.close();
+    }
   });
 });

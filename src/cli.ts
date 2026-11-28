@@ -47,15 +47,15 @@ function servesSource(): boolean {
 /**
  * Serves `createMcpServer` itself, since the `mcp` of `runCli` always runs the bundle.
  *
- * @returns {Promise<void>} Once the server is connected.
+ * @returns {Promise<void>} Once the server listens.
  */
 async function serveMcp(): Promise<void> {
   const module: unknown = servesSource() ? await import(sourceMcp.href) : await import("./mcp.ts");
   if (!isMcpModule(module)) {
     throw new TypeError(`${sourceMcpPath} has no createMcpServer`);
   }
-  const { StdioServerTransport } = await import("@modelcontextprotocol/server/stdio");
-  await module.createMcpServer().connect(new StdioServerTransport());
+  const { serveStdio } = await import("@agntn/tools/stdio");
+  serveStdio(() => module.createMcpServer());
 }
 
 /**
