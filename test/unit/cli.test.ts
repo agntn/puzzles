@@ -1288,7 +1288,6 @@ async function connect(
       args: ["dist/cli.mjs", "mcp"],
       cwd: process.cwd(),
       env: dist ? { ...env, PUZZLES_DIST: "1" } : env,
-      stderr: "ignore",
     }),
   );
   return client;
